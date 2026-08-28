@@ -338,20 +338,224 @@ html.n4k-leave body{opacity:.15;transition:opacity .3s}
 
 /* ============================================================
    13 · card background images — image de fond pour CHAQUE carte
-   Un calque photo par carte (.n4k-cb, derrière le contenu,
-   voilé pour la lisibilité) + un éditeur (bouton, panneau,
-   pop-over) persistant dans localStorage, page par page.
+   Rendu photographique net, haute fidélité, marié au texte sans
+   dégradation mutuelle (scrim directionnel, dépoli, ombres douces).
    Équivalent statique : attributs data-card-bg / data-card-bg-op.
    ============================================================ */
-.n4k-cb-on{position:relative;isolation:isolate}
-.n4k-cb-on > *:not(.n4k-cb):not(.n4k-thumb){position:relative;z-index:1}
-.n4k-cb{position:absolute;inset:0;z-index:0;border-radius:inherit;pointer-events:none;
-  background-size:cover;background-position:center;background-repeat:no-repeat;opacity:0;
-  transition:opacity 1.1s var(--n4k-e);will-change:opacity}
+.n4k-cb-on{
+  position:relative;
+  isolation:isolate;
+  overflow:hidden!important;
+  transition:transform .45s var(--n4k-e),box-shadow .45s var(--n4k-e),border-color .4s;
+}
+.n4k-cb-on > *:not(.n4k-cb):not(.n4k-thumb){
+  position:relative;
+  z-index:2;
+}
+
+/* masque les vignettes rondes quand l'image de fond est active pour éviter la redondance */
+.n4k-cb-on .n4k-thumb{display:none!important}
+.n4k-cb-on.n4k-hasthumb{padding-right:24px!important}
+.p2f-chain-card.n4k-cb-on.n4k-hasthumb{padding:22px 17px!important}
+
+/* Calque photo d'arrière-plan */
+.n4k-cb{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  border-radius:inherit;
+  pointer-events:none;
+  overflow:hidden;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  opacity:0;
+  transition:opacity .9s var(--n4k-e);
+  will-change:opacity;
+}
 .n4k-card > .n4k-cb{position:absolute;inset:0;z-index:0}
 .n4k-cb.n4k-cb-in{opacity:var(--n4k-cbo,1)}
-.n4k-cb:after{content:"";position:absolute;inset:0;
-  background:var(--n4k-cbsh,linear-gradient(180deg,#04170cdc,#04170c99))}
+
+/* Rendu ultra net, contrasté et vibrant de l'image de fond */
+.n4k-cb-img{
+  position:absolute;
+  inset:-3%;
+  width:106%;
+  height:106%;
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  image-rendering:-webkit-optimize-contrast;
+  image-rendering:crisp-edges;
+  filter:contrast(1.08) saturate(1.15) brightness(1.03);
+  transform:translate3d(0,0,0) scale(1);
+  transition:transform 1s cubic-bezier(.16,1,.3,1),filter .7s ease;
+  will-change:transform,filter;
+}
+.n4k-cb-on:hover .n4k-cb-img{
+  transform:translate3d(0,0,0) scale(1.05);
+  filter:contrast(1.12) saturate(1.2) brightness(1.06);
+}
+
+/* Scrim directionnel doux : laisse le haut de l'image net et lumineux (sujet/ciel)
+   tout en assurant un contraste velouté et protecteur sous le texte */
+.n4k-cb-shade,
+.n4k-cb:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:var(--n4k-cbsh,linear-gradient(180deg,rgba(3,18,11,.12) 0%,rgba(3,18,11,.24) 28%,rgba(4,23,14,.58) 60%,rgba(3,18,11,.85) 82%,rgba(2,14,8,.95) 100%));
+  transition:background .4s ease,opacity .4s ease;
+}
+
+/* Nuance ambiante émeraude/or subtile pour fusionner la photo dans la charte graphique */
+.n4k-cb:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 85% 15%,rgba(41,207,112,.18) 0%,transparent 60%),
+             radial-gradient(ellipse at 15% 85%,rgba(229,184,90,.12) 0%,transparent 55%);
+  mix-blend-mode:screen;
+  opacity:.85;
+}
+
+/* --- Typographie mariée avec l'image sur cartes sombres --- */
+.n4k-cb-on.dark,
+.dark .n4k-cb-on,
+.p2f-dark .n4k-cb-on,
+.p2x-dark .n4k-cb-on,
+.n4k-cb-dark.n4k-cb-on{
+  background-color:#051b11!important;
+  border-color:rgba(41,207,112,.3)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 18px 46px rgba(2,14,8,.55);
+}
+.n4k-cb-on.dark:hover,
+.dark .n4k-cb-on:hover,
+.p2f-dark .n4k-cb-on:hover,
+.p2x-dark .n4k-cb-on:hover,
+.n4k-cb-dark.n4k-cb-on:hover{
+  border-color:rgba(41,207,112,.7)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),0 28px 65px rgba(2,14,8,.75),0 0 26px rgba(41,207,112,.3);
+}
+
+.dark .n4k-cb-on h3,
+.p2f-dark .n4k-cb-on h3,
+.p2x-dark .n4k-cb-on h3,
+.n4k-cb-dark.n4k-cb-on h3,
+.n4k-cb-dark.n4k-cb-on h2,
+.n4k-cb-dark.n4k-cb-on strong{
+  color:#ffffff!important;
+  font-weight:900!important;
+  letter-spacing:-.02em;
+  text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 8px rgba(0,0,0,.7),0 0 18px rgba(4,23,14,.9);
+  transition:color .3s ease,text-shadow .3s ease;
+}
+.dark .n4k-cb-on:hover h3,
+.p2f-dark .n4k-cb-on:hover h3,
+.p2x-dark .n4k-cb-on:hover h3,
+.n4k-cb-dark.n4k-cb-on:hover h3,
+.n4k-cb-dark.n4k-cb-on:hover strong{
+  color:#d4fee2!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 14px rgba(41,207,112,.5);
+}
+
+.dark .n4k-cb-on p,
+.p2f-dark .n4k-cb-on p,
+.p2x-dark .n4k-cb-on p,
+.n4k-cb-dark.n4k-cb-on p{
+  color:#e2f2e8!important;
+  font-weight:460;
+  line-height:1.6;
+  text-shadow:0 1px 2px rgba(0,0,0,.9),0 2px 6px rgba(0,0,0,.75);
+  transition:color .3s ease;
+}
+.dark .n4k-cb-on:hover p,
+.p2f-dark .n4k-cb-on:hover p,
+.p2x-dark .n4k-cb-on:hover p,
+.n4k-cb-dark.n4k-cb-on:hover p{
+  color:#ffffff!important;
+}
+
+/* Badges / numéros façon cristal émeraude dépoli */
+.n4k-cb-on .ico,
+.n4k-cb-on .p2f-num,
+.n4k-cb-on .p2x-num{
+  background:rgba(4,23,14,.68)!important;
+  backdrop-filter:blur(12px) saturate(180%);
+  -webkit-backdrop-filter:blur(12px) saturate(180%);
+  border:1px solid rgba(41,207,112,.48)!important;
+  color:#42e787!important;
+  box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 0 12px rgba(41,207,112,.22)!important;
+  text-shadow:0 0 10px rgba(41,207,112,.6);
+  transition:all .35s var(--n4k-e);
+}
+.n4k-cb-on:hover .ico,
+.n4k-cb-on:hover .p2f-num,
+.n4k-cb-on:hover .p2x-num{
+  background:rgba(8,38,24,.88)!important;
+  border-color:#38e27e!important;
+  color:#aaffd0!important;
+  box-shadow:0 10px 28px rgba(41,207,112,.4),inset 0 0 16px rgba(41,207,112,.35)!important;
+}
+
+/* Cartes chaîne (01 HARVEST, 02 COLLECT...) */
+.p2f-chain-card.n4k-cb-on b{
+  color:#a5f5c2!important;
+  font-weight:900;
+  text-shadow:0 1px 3px rgba(0,0,0,.85);
+}
+.p2f-chain-card.n4k-cb-on strong{
+  color:#ffffff!important;
+  text-shadow:0 2px 6px rgba(0,0,0,.9),0 0 16px rgba(41,207,112,.45);
+}
+.p2f-chain-card.n4k-cb-on p{
+  color:#e4f4ea!important;
+  text-shadow:0 1px 3px rgba(0,0,0,.85);
+}
+
+/* --- Typographie sur cartes claires (fond crème) --- */
+.light .n4k-cb-on,
+.p2f-light .n4k-cb-on,
+.n4k-cb-light.n4k-cb-on{
+  background-color:#f5f6ef!important;
+  border-color:rgba(10,107,61,.28)!important;
+  box-shadow:0 18px 45px rgba(10,107,61,.1),0 1px 3px rgba(0,0,0,.04);
+}
+.light .n4k-cb-on:hover,
+.p2f-light .n4k-cb-on:hover,
+.n4k-cb-light.n4k-cb-on:hover{
+  border-color:rgba(10,107,61,.65)!important;
+  box-shadow:0 24px 60px rgba(10,107,61,.18),0 0 20px rgba(41,207,112,.18);
+}
+.light .n4k-cb-on h3,
+.p2f-light .n4k-cb-on h3,
+.n4k-cb-light.n4k-cb-on h3{
+  color:#042114!important;
+  font-weight:950!important;
+  text-shadow:0 1px 2px rgba(255,255,255,.98),0 0 14px rgba(255,255,255,.9);
+}
+.light .n4k-cb-on p,
+.p2f-light .n4k-cb-on p,
+.n4k-cb-light.n4k-cb-on p{
+  color:#0c301e!important;
+  font-weight:520;
+  line-height:1.6;
+  text-shadow:0 1px 2px rgba(255,255,255,.95);
+}
+.light .n4k-cb-on .ico,
+.p2f-light .n4k-cb-on .p2f-num,
+.n4k-cb-light.n4k-cb-on .ico{
+  background:rgba(255,255,255,.88)!important;
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(10,107,61,.3)!important;
+  color:#0a6b3d!important;
+  box-shadow:0 6px 16px rgba(0,0,0,.08);
+}
 
 /* --- 13.1 chrome de l'éditeur : bascule, panneau, fab, pop-over --- */
 #n4k-cb-toggle{position:fixed;left:16px;bottom:16px;z-index:95;display:flex;align-items:center;gap:9px;
