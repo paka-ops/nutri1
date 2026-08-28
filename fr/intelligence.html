@@ -988,6 +988,469 @@
                 font-size: 80px
             }
         }
+
+        /* ============================================================
+           E-commerce Product Cards: Six Assets Build The Moat
+           ============================================================ */
+        .cloud {
+            display: grid;
+            grid-template-columns: 0.9fr 1.1fr;
+            gap: 36px;
+            align-items: start;
+        }
+
+        .cloudVisual {
+            position: sticky;
+            top: 96px;
+            align-self: start;
+            min-height: 480px;
+        }
+
+        .moat-col {
+            min-width: 0;
+        }
+
+        .moat-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .moat-card {
+            padding: 0 !important;
+            overflow: hidden !important;
+            display: flex;
+            flex-direction: column;
+            border-radius: 22px !important;
+            background: #ffffff !important;
+            border: 1px solid rgba(6, 27, 19, 0.09) !important;
+            box-shadow: 0 4px 20px -2px rgba(6, 27, 19, 0.05), 0 1px 3px rgba(6, 27, 19, 0.03) !important;
+            transition: transform 0.4s cubic-bezier(.16, 1, .3, 1), box-shadow 0.4s cubic-bezier(.16, 1, .3, 1), border-color 0.3s ease !important;
+            position: relative;
+            cursor: pointer;
+            text-align: left;
+            user-select: none;
+        }
+
+        .moat-card:hover {
+            transform: translateY(-6px) !important;
+            box-shadow: 0 24px 48px -12px rgba(6, 27, 19, 0.16), 0 2px 8px rgba(6, 27, 19, 0.04) !important;
+            border-color: rgba(41, 207, 112, 0.5) !important;
+        }
+
+        .moat-card:focus-visible {
+            outline: 2px solid var(--g);
+            outline-offset: 3px;
+        }
+
+        /* Disable nutri4k thumb/cb injection on moat-card */
+        .moat-card .n4k-thumb {
+            display: none !important;
+        }
+        .moat-card.n4k-hasthumb {
+            padding-right: 0 !important;
+        }
+        .moat-card .n4k-cb {
+            display: none !important;
+        }
+
+        .moat-card-media {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16 / 10;
+            background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%);
+            border-bottom: 1px solid rgba(6, 27, 19, 0.07);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .moat-card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            padding: 10px 14px;
+            transition: transform 0.5s cubic-bezier(.16, 1, .3, 1), filter 0.3s ease;
+            display: block;
+        }
+
+        .moat-card:hover .moat-card-img {
+            transform: scale(1.06);
+        }
+
+        .moat-card-media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(41, 207, 112, 0.04) 0%, rgba(6, 27, 19, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+
+        .moat-card:hover .moat-card-media::after {
+            opacity: 1;
+        }
+
+        .moat-card-badge {
+            position: absolute;
+            top: 11px;
+            left: 11px;
+            z-index: 3;
+            background: rgba(6, 27, 19, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: #29cf70;
+            font-size: 9.5px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 9px;
+            border-radius: 99px;
+            border: 1px solid rgba(41, 207, 112, 0.35);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+            pointer-events: none;
+        }
+
+        .moat-card-zoom {
+            position: absolute;
+            top: 11px;
+            right: 11px;
+            z-index: 3;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(6, 27, 19, 0.12);
+            color: #061b13;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.25s cubic-bezier(.16, 1, .3, 1);
+            opacity: 0.9;
+        }
+
+        .moat-card:hover .moat-card-zoom {
+            opacity: 1;
+            transform: scale(1.06);
+        }
+
+        .moat-card-zoom:hover {
+            background: var(--g) !important;
+            color: #042414 !important;
+            border-color: var(--g) !important;
+            transform: scale(1.15) !important;
+            box-shadow: 0 6px 18px rgba(41, 207, 112, 0.45) !important;
+        }
+
+        .moat-card-body {
+            padding: 18px 20px 20px;
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            background: #ffffff;
+        }
+
+        .moat-card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .moat-card-cat {
+            font-size: 9.5px;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #138b4d;
+        }
+
+        .moat-card-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 9.5px;
+            font-weight: 800;
+            color: #496355;
+            letter-spacing: 0.04em;
+        }
+
+        .moat-status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #29cf70;
+            box-shadow: 0 0 8px #29cf70;
+            animation: moat-dot-pulse 2s infinite;
+        }
+
+        @keyframes moat-dot-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.85); }
+        }
+
+        .moat-card-title {
+            font-size: 19px !important;
+            font-weight: 900 !important;
+            color: #061b13 !important;
+            margin: 0 0 7px !important;
+            line-height: 1.25 !important;
+            letter-spacing: -0.025em !important;
+        }
+
+        .moat-card-desc {
+            font-size: 13.5px !important;
+            color: #556c60 !important;
+            line-height: 1.5 !important;
+            margin: 0 0 16px !important;
+            flex: 1;
+        }
+
+        .moat-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .moat-tag {
+            font-size: 9.5px;
+            font-weight: 750;
+            color: #135e38;
+            background: #edf7f1;
+            border: 1px solid rgba(41, 207, 112, 0.28);
+            padding: 3px 8px;
+            border-radius: 6px;
+            letter-spacing: 0.02em;
+        }
+
+        .moat-card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 13px;
+            border-top: 1px solid #edf2ee;
+            margin-top: auto;
+        }
+
+        .moat-card-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 850;
+            color: #0d4a2d;
+            transition: color 0.2s ease;
+        }
+
+        .moat-arrow {
+            font-style: normal;
+            font-weight: 900;
+            color: #29cf70;
+            transition: transform 0.25s cubic-bezier(.16, 1, .3, 1);
+            display: inline-block;
+        }
+
+        .moat-card:hover .moat-card-cta {
+            color: #096839;
+        }
+
+        .moat-card:hover .moat-arrow {
+            transform: translateX(4px);
+        }
+
+        .moat-card-rating {
+            font-size: 10px;
+            font-weight: 850;
+            color: #9a6f17;
+            background: #fcf7e9;
+            border: 1px solid rgba(229, 184, 90, 0.4);
+            padding: 2px 8px;
+            border-radius: 99px;
+            letter-spacing: 0.02em;
+        }
+
+        /* Lightbox modal for visual assets */
+        .moat-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: rgba(3, 18, 11, 0.88);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            display: none;
+            place-items: center;
+            padding: 24px;
+            opacity: 0;
+            transition: opacity 0.3s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .moat-modal.active {
+            display: grid;
+            opacity: 1;
+        }
+
+        .moat-modal-card {
+            background: #ffffff;
+            border-radius: 24px;
+            max-width: 1040px;
+            width: 100%;
+            max-height: 92vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12);
+            transform: scale(0.95);
+            transition: transform 0.35s cubic-bezier(.16, 1, .3, 1);
+        }
+
+        .moat-modal.active .moat-modal-card {
+            transform: scale(1);
+        }
+
+        .moat-modal-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 22px;
+            border-bottom: 1px solid #edf2ee;
+            background: #fafbf9;
+        }
+
+        .moat-modal-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .moat-modal-badge {
+            background: #061b13;
+            color: #29cf70;
+            font-size: 10px;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 99px;
+            border: 1px solid rgba(41, 207, 112, 0.3);
+        }
+
+        .moat-modal-title {
+            font-size: 17px;
+            font-weight: 900;
+            color: #061b13;
+        }
+
+        .moat-modal-close {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid #dfe8e1;
+            background: #ffffff;
+            color: #496355;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 19px;
+            line-height: 1;
+            transition: all 0.2s ease;
+        }
+
+        .moat-modal-close:hover {
+            background: #061b13;
+            color: #ffffff;
+            border-color: #061b13;
+            transform: scale(1.06);
+        }
+
+        .moat-modal-imgwrap {
+            flex: 1;
+            overflow: auto;
+            background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .moat-modal-img {
+            max-width: 100%;
+            max-height: 68vh;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
+            background: #fff;
+        }
+
+        .moat-modal-footer {
+            padding: 14px 22px;
+            background: #ffffff;
+            border-top: 1px solid #edf2ee;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .moat-modal-desc {
+            font-size: 13.5px;
+            color: #496355;
+            margin: 0;
+            font-weight: 550;
+        }
+
+        .moat-modal-hint {
+            font-size: 11px;
+            color: #8c9e94;
+            letter-spacing: 0.02em;
+            white-space: nowrap;
+        }
+
+        @media(max-width: 960px) {
+            .cloud {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .cloudVisual {
+                position: static;
+                min-height: 420px;
+                max-width: 580px;
+                margin: 0 auto 20px;
+                width: 100%;
+            }
+            .moat-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        @media(max-width: 640px) {
+            .moat-grid {
+                grid-template-columns: 1fr;
+            }
+            .moat-card-media {
+                aspect-ratio: 16 / 10;
+            }
+            .moat-modal {
+                padding: 12px;
+            }
+            .moat-modal-card {
+                max-height: 96vh;
+            }
+            .moat-modal-imgwrap {
+                padding: 12px;
+            }
+            .moat-modal-footer {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+        }
     </style>
     <link rel="stylesheet" href="../assets/nutri4k.css">
     <link rel="preload" as="image" href="../assets/img/market-stall.jpg">
@@ -1035,34 +1498,177 @@
                 <div class="node n5"><b>✦</b>Preuves scientifiques</div>
                 <div class="node n6"><b>⌖</b>Intelligence par pays</div>
             </div>
-            <div>
+            <div class="moat-col">
                 <div class="kicker">Actifs stratégiques</div>
-                <h2 style="font-size:48px;line-height:1;letter-spacing:-.06em">Six actifs constituent notre avantage
+                <h2 style="font-size:48px;line-height:1;letter-spacing:-.06em;margin:10px 0 14px">Six actifs constituent notre avantage
                     stratégique.</h2>
-                <div class="grid" style="grid-template-columns:1fr 1fr">
-                    <div class="card v4-reveal  >
-                        <h3>Ontologie alimentaire</h3>
-                        <p>Vocabulaire structuré des aliments africains.</p>
+                <div class="grid moat-grid" style="grid-template-columns:1fr 1fr">
+                    <!-- Actif 01: Ontologie alimentaire -->
+                    <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Consulter l'actif Ontologie alimentaire" data-title="Ontologie alimentaire" data-badge="Actif 01" data-cat="Ontologie &amp; Taxonomie" data-desc="Vocabulaire structuré des aliments africains." data-img="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Food%20Ontology.png">
+                        <div class="moat-card-media">
+                            <span class="moat-card-badge">Actif 01</span>
+                            <button type="button" class="moat-card-zoom" aria-label="Agrandir le schéma d'ontologie alimentaire" title="Aperçu rapide">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                            </button>
+                            <img src="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Food%20Ontology.png" alt="Schéma d'ontologie alimentaire" loading="lazy" class="moat-card-img">
+                        </div>
+                        <div class="moat-card-body">
+                            <div class="moat-card-top">
+                                <span class="moat-card-cat">Ontologie &amp; Taxonomie</span>
+                                <span class="moat-card-status"><span class="moat-status-dot"></span>Actif</span>
+                            </div>
+                            <h3 class="moat-card-title">Ontologie alimentaire</h3>
+                            <p class="moat-card-desc">Vocabulaire structuré des aliments africains.</p>
+                            <div class="moat-card-tags">
+                                <span class="moat-tag">54 Pays</span>
+                                <span class="moat-tag">Noms locaux</span>
+                                <span class="moat-tag">Standardisé</span>
+                            </div>
+                            <div class="moat-card-footer">
+                                <span class="moat-card-cta">Consulter l'actif <i class="moat-arrow">→</i></span>
+                                <span class="moat-card-rating">★ Actif Clé</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card v4-reveal">
-                        <h3>Base de données de composition</h3>
-                        <p>Composition nutritionnelle à l’échelle des pays.</p>
+
+                    <!-- Actif 02: Base de données de composition -->
+                    <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Consulter l'actif Base de données de composition" data-title="Base de données de composition" data-badge="Actif 02" data-cat="Matrice Nutritionnelle" data-desc="Composition nutritionnelle à l’échelle des pays." data-img="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Composition_DB.png">
+                        <div class="moat-card-media">
+                            <span class="moat-card-badge">Actif 02</span>
+                            <button type="button" class="moat-card-zoom" aria-label="Agrandir le schéma de base de données de composition" title="Aperçu rapide">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                            </button>
+                            <img src="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Composition_DB.png" alt="Schéma de base de données de composition" loading="lazy" class="moat-card-img">
+                        </div>
+                        <div class="moat-card-body">
+                            <div class="moat-card-top">
+                                <span class="moat-card-cat">Matrice Nutritionnelle</span>
+                                <span class="moat-card-status"><span class="moat-status-dot"></span>Actif</span>
+                            </div>
+                            <h3 class="moat-card-title">Base de données de composition</h3>
+                            <p class="moat-card-desc">Composition nutritionnelle à l’échelle des pays.</p>
+                            <div class="moat-card-tags">
+                                <span class="moat-tag">Macro &amp; Micro</span>
+                                <span class="moat-tag">Données régionales</span>
+                                <span class="moat-tag">Validé labo</span>
+                            </div>
+                            <div class="moat-card-footer">
+                                <span class="moat-card-cta">Consulter l'actif <i class="moat-arrow">→</i></span>
+                                <span class="moat-card-rating">★ Actif Clé</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card v4-reveal">
-                        <h3>Base de données des recettes</h3>
-                        <p>Ingrédients, portions et préparation.</p>
+
+                    <!-- Actif 03: Base de données des recettes -->
+                    <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Consulter l'actif Base de données des recettes" data-title="Base de données des recettes" data-badge="Actif 03" data-cat="Savoir Culinaire" data-desc="Ingrédients, portions et préparation." data-img="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Recipe%20DB.png">
+                        <div class="moat-card-media">
+                            <span class="moat-card-badge">Actif 03</span>
+                            <button type="button" class="moat-card-zoom" aria-label="Agrandir le schéma de base de données des recettes" title="Aperçu rapide">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                            </button>
+                            <img src="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Recipe%20DB.png" alt="Schéma de base de données des recettes" loading="lazy" class="moat-card-img">
+                        </div>
+                        <div class="moat-card-body">
+                            <div class="moat-card-top">
+                                <span class="moat-card-cat">Savoir Culinaire</span>
+                                <span class="moat-card-status"><span class="moat-status-dot"></span>Actif</span>
+                            </div>
+                            <h3 class="moat-card-title">Base de données des recettes</h3>
+                            <p class="moat-card-desc">Ingrédients, portions et préparation.</p>
+                            <div class="moat-card-tags">
+                                <span class="moat-tag">Portions standard</span>
+                                <span class="moat-tag">Étapes cuisson</span>
+                                <span class="moat-tag">Biodisponibilité</span>
+                            </div>
+                            <div class="moat-card-footer">
+                                <span class="moat-card-cta">Consulter l'actif <i class="moat-arrow">→</i></span>
+                                <span class="moat-card-rating">★ Actif Clé</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card v4-reveal">
-                        <h3>Base de données de consommation</h3>
-                        <p>Ce que les populations consomment réellement.</p>
+
+                    <!-- Actif 04: Base de données de consommation -->
+                    <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Consulter l'actif Base de données de consommation" data-title="Base de données de consommation" data-badge="Actif 04" data-cat="Nutrition des Populations" data-desc="Ce que les populations consomment réellement." data-img="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Consumption%20DB.png">
+                        <div class="moat-card-media">
+                            <span class="moat-card-badge">Actif 04</span>
+                            <button type="button" class="moat-card-zoom" aria-label="Agrandir le schéma de base de données de consommation" title="Aperçu rapide">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                            </button>
+                            <img src="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Consumption%20DB.png" alt="Schéma de base de données de consommation" loading="lazy" class="moat-card-img">
+                        </div>
+                        <div class="moat-card-body">
+                            <div class="moat-card-top">
+                                <span class="moat-card-cat">Nutrition des Populations</span>
+                                <span class="moat-card-status"><span class="moat-status-dot"></span>Actif</span>
+                            </div>
+                            <h3 class="moat-card-title">Base de données de consommation</h3>
+                            <p class="moat-card-desc">Ce que les populations consomment réellement.</p>
+                            <div class="moat-card-tags">
+                                <span class="moat-tag">Démographie</span>
+                                <span class="moat-tag">Apports réels</span>
+                                <span class="moat-tag">Profils saisonniers</span>
+                            </div>
+                            <div class="moat-card-footer">
+                                <span class="moat-card-cta">Consulter l'actif <i class="moat-arrow">→</i></span>
+                                <span class="moat-card-rating">★ Actif Clé</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card v4-reveal">
-                        <h3>Graphe des preuves scientifiques</h3>
-                        <p>Alimentation → santé → preuves scientifiques.</p>
+
+                    <!-- Actif 05: Graphe des preuves scientifiques -->
+                    <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Consulter l'actif Graphe des preuves scientifiques" data-title="Graphe des preuves scientifiques" data-badge="Actif 05" data-cat="Graphe Scientifique" data-desc="Alimentation → santé → preuves scientifiques." data-img="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Evidence%20Graph.png">
+                        <div class="moat-card-media">
+                            <span class="moat-card-badge">Actif 05</span>
+                            <button type="button" class="moat-card-zoom" aria-label="Agrandir le graphe des preuves scientifiques" title="Aperçu rapide">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                            </button>
+                            <img src="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Evidence%20Graph.png" alt="Schéma du graphe des preuves scientifiques" loading="lazy" class="moat-card-img">
+                        </div>
+                        <div class="moat-card-body">
+                            <div class="moat-card-top">
+                                <span class="moat-card-cat">Graphe Scientifique</span>
+                                <span class="moat-card-status"><span class="moat-status-dot"></span>Actif</span>
+                            </div>
+                            <h3 class="moat-card-title">Graphe des preuves scientifiques</h3>
+                            <p class="moat-card-desc">Alimentation → santé → preuves scientifiques.</p>
+                            <div class="moat-card-tags">
+                                <span class="moat-tag">Biomarqueurs cliniques</span>
+                                <span class="moat-tag">Validé par pairs</span>
+                                <span class="moat-tag">Prêt pour RAG</span>
+                            </div>
+                            <div class="moat-card-footer">
+                                <span class="moat-card-cta">Consulter l'actif <i class="moat-arrow">→</i></span>
+                                <span class="moat-card-rating">★ Actif Clé</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="card v4-reveal">
-                        <h3>IA nutritionnelle</h3>
-                        <p>Intelligence et personnalisation.</p>
+
+                    <!-- Actif 06: IA nutritionnelle -->
+                    <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Consulter l'actif IA nutritionnelle" data-title="IA nutritionnelle" data-badge="Actif 06" data-cat="IA &amp; Personnalisation" data-desc="Intelligence et personnalisation." data-img="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Nutrition.AI.png">
+                        <div class="moat-card-media">
+                            <span class="moat-card-badge">Actif 06</span>
+                            <button type="button" class="moat-card-zoom" aria-label="Agrandir le schéma d'IA nutritionnelle" title="Aperçu rapide">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                            </button>
+                            <img src="../assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Nutrition.AI.png" alt="Schéma d'IA nutritionnelle" loading="lazy" class="moat-card-img">
+                        </div>
+                        <div class="moat-card-body">
+                            <div class="moat-card-top">
+                                <span class="moat-card-cat">IA &amp; Personnalisation</span>
+                                <span class="moat-card-status"><span class="moat-status-dot"></span>Actif</span>
+                            </div>
+                            <h3 class="moat-card-title">IA nutritionnelle</h3>
+                            <p class="moat-card-desc">Intelligence et personnalisation.</p>
+                            <div class="moat-card-tags">
+                                <span class="moat-tag">Vision par ordinateur</span>
+                                <span class="moat-tag">Moteur d'action</span>
+                                <span class="moat-tag">Edge &amp; Cloud</span>
+                            </div>
+                            <div class="moat-card-footer">
+                                <span class="moat-card-cta">Consulter l'actif <i class="moat-arrow">→</i></span>
+                                <span class="moat-card-rating">★ Actif Clé</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1127,6 +1733,86 @@
         <div class="wrap copy"><span>© 2026 NUTRI.N°1</span><span>Conçue en Afrique de l’Ouest • Pensée pour
                 l’Afrique</span></div>
     </footer>
+    <!-- Lightbox Modal pour l'inspection visuelle en haute résolution -->
+    <div id="moat-modal" class="moat-modal" role="dialog" aria-modal="true" aria-hidden="true">
+        <div class="moat-modal-card">
+            <div class="moat-modal-bar">
+                <div class="moat-modal-bar-left">
+                    <span class="moat-modal-badge">Actif</span>
+                    <span class="moat-modal-title">Titre de l'actif</span>
+                </div>
+                <button type="button" class="moat-modal-close" aria-label="Fermer l'aperçu">×</button>
+            </div>
+            <div class="moat-modal-imgwrap">
+                <img src="" alt="" class="moat-modal-img">
+            </div>
+            <div class="moat-modal-footer">
+                <p class="moat-modal-desc"></p>
+                <span class="moat-modal-hint">ÉCHAP ou clic arrière-plan pour fermer</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        var modal = document.getElementById('moat-modal');
+        if (!modal) return;
+        var modalImg = modal.querySelector('.moat-modal-img');
+        var modalTitle = modal.querySelector('.moat-modal-title');
+        var modalBadge = modal.querySelector('.moat-modal-badge');
+        var modalDesc = modal.querySelector('.moat-modal-desc');
+        var closeBtn = modal.querySelector('.moat-modal-close');
+
+        function openModal(card) {
+            var img = card.querySelector('.moat-card-img');
+            var title = card.getAttribute('data-title') || (card.querySelector('.moat-card-title') ? card.querySelector('.moat-card-title').textContent : '');
+            var badge = card.getAttribute('data-badge') || (card.querySelector('.moat-card-badge') ? card.querySelector('.moat-card-badge').textContent : '');
+            var desc = card.getAttribute('data-desc') || (card.querySelector('.moat-card-desc') ? card.querySelector('.moat-card-desc').textContent : '');
+            if (!img) return;
+            modalImg.src = img.src;
+            modalImg.alt = img.alt || '';
+            modalTitle.textContent = title;
+            modalBadge.textContent = badge;
+            modalDesc.textContent = desc;
+            modal.classList.add('active');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.moat-card').forEach(function(card) {
+            card.addEventListener('click', function(e) {
+                openModal(card);
+            });
+            card.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    openModal(card);
+                }
+            });
+        });
+
+        if (closeBtn) closeBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            closeModal();
+        });
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+    })();
+    </script>
     <script>const o = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && (x.target.style.opacity = 1)), { threshold: .1 }); document.querySelectorAll(".card,.box,.person,.loopbox").forEach(x => { x.style.opacity = 0; x.style.transition = "opacity .7s,transform .7s"; o.observe(x) })</script>
     <script src="../assets/nutri4k.js" defer></script>
 </body>
