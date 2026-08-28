@@ -1,0 +1,54 @@
+NUTRI.N°1 V6 — Couche d'immersion "4K" pour présentation investisseurs
+=======================================================================
+
+Objectif : garder le design, les couleurs et chaque mot existants intacts, et
+pousser uniquement le rendu graphique (animation, profondeur, cinéma).
+
+AUCUN TEXTE MODIFIÉ / AJOUTÉ
+- Le contenu des 12 pages (EN + FR) est vérifié automatiquement comme identique
+  au contenu d'origine : node tools/n4k-copy-check.js  (après npm i -D jsdom).
+- Aucune couleur de la charte n'a été changée. La couche ajoute utilise exactement
+  les tokens déjà présents : #29cf70 / #36dc7b / #38e27e / #9be766, or #e5b85a /
+  #e9c568, sombres #061b13 / #03140c, crèmes #f5f4ed / #f5f6ef.
+
+FICHIERS AJOUTÉS (1 seul point d'entrée par page, rien d'autre n'est réécrit)
+- assets/nutri4k.css   : couche visuelle (superposée après vos styles existants)
+- assets/nutri4k.js    : moteur d'animation (décoratif, aria-hidden, sans texte)
+- assets/img/*.jpg     : 10 visuels (champs de cultivateurs, plats togolais,
+                         transformation, solaire) — 2048px, progressifs
+- tools/n4k-copy-check.js : contrôle que le texte n'a pas bougé
+
+CE QUI EST ANIMÉ
+- Héros : photo de champ en Ken Burns + parallaxe à la souris + grille bleuprint,
+  halo rotatif du noyau orbital, satellites reliés au noyau par des flux lumineux,
+  révélation mot-à-mot masquée des titres, indicateur de défilement.
+- Schémas animés : chaque pipeline (Food → Data → AI → Nutrition → Prevention,
+  chaînes HARVEST → … → DISTRIBUTE, boucles du système alimentaire, hub de
+  l'African Food Cloud) reçoit des liaisons SVG qui se dessinent, des paquets de
+  données qui circulent en continu et des nœuds qui s'allument à leur passage,
+  plus un balayage radar sur le cloud.
+- Cartes : inclinaison 3D suivant le curseur, spot lumineux, bordure dorée/verte
+  animée, révélation en cascade, badge numéroté qui se redresse, vignettes photo
+  (champs et plats) dans les cartes éditoriales.
+- Sections : coutines lumineuses entre chapitres, halos ambiants sur les fonds
+  crème, fond photographique très atténué sous les sections sombres, bandeau du
+  bloc final « Join » avec plat togolais en fondu.
+- Navigation : barre de progression, pastilles latérales par section, indicateur
+  glissant sous le lien actif, nav qui se compacte au scroll, boutons magnétiques,
+  curseur lumineux, transition-rideau entre les pages, scan d'ouverture.
+- Accessibilité / perf : tout se désactive si « prefers-reduced-motion » est actif,
+  effets souris désactivés sur mobile, canvas limité à ~30 fps, animations GPU only.
+
+CORRECTION DE ROUTING (aucun mot touché, uniquement des href)
+- Les pages FR pointaient leurs liens de menu/footer « Plateforme »,
+  « Intelligence », « Écosystème », « Agro-industrie », « Équipe » vers les pages
+  ANGLAISES. Elles restent désormais en français (le sélecteur EN/FR continue de
+  basculer vers la version anglaise).
+
+À FAIRE ÉVENTUELLEMENT
+- Remplacer les visuels générés par vos propres photos (mêmes noms de fichiers
+  dans assets/img/ : field-sunrise, field-aerial, field-harvest-hands,
+  market-stall, plate-fufu, plate-grilled-fish, plate-kenkey, plate-vegetable,
+  processing-line, solar-roof).
+- Ajouter les 2-3 visuels restants (chambre froide, champ irrigué, science/lab)
+  si vous voulez densifier la Phase 02.
