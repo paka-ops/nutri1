@@ -24,22 +24,37 @@
       hero: { img: 'field-sunrise', pos: '62% 42%' },
       dark: ['field-aerial'], wash: true, cta: 'plate-fufu',
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
-      thumbSize: 'lg'
+      thumbSize: 'lg',
+      cardBg: {
+        '.arch .box': ['field-sunrise', 'processing-line'],
+        '.grid .card': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
+        '.loop .loopbox': ['field-harvest-hands', 'market-stall'],
+        '.ctaBox': ['plate-fufu']
+      }
     },
     platform: {
       hero: { img: 'field-aerial', pos: '50% 52%' },
       dark: ['market-stall'], wash: true,
-      thumbs: { '.card': ['null', 'null', 'null', 'plate-kenkey', 'plate-vegetable', 'null'] }
+      thumbs: { '.card': ['null', 'null', 'null', 'plate-kenkey', 'plate-vegetable', 'null'] },
+      cardBg: {
+        '.grid .card': ['field-sunrise', 'field-aerial', 'solar-roof', 'plate-vegetable', 'field-harvest-hands', 'processing-line', 'plate-kenkey', 'plate-fufu', 'plate-grilled-fish']
+      }
     },
     intelligence: {
       hero: { img: 'market-stall', pos: '50% 45%' },
       dark: ['field-aerial'], wash: true,
-      thumbs: { '.card': ['plate-vegetable', 'market-stall', 'plate-kenkey', 'field-harvest-hands', 'plate-fufu', 'plate-grilled-fish'] }
+      thumbs: { '.card': ['plate-vegetable', 'market-stall', 'plate-kenkey', 'field-harvest-hands', 'plate-fufu', 'plate-grilled-fish'] },
+      cardBg: {
+        '.grid .card': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'market-stall', 'solar-roof', 'processing-line', 'plate-vegetable', 'plate-kenkey', 'plate-grilled-fish']
+      }
     },
     ecosystem: {
       hero: { img: 'field-sunrise', pos: '45% 50%' },
       dark: ['field-aerial', 'processing-line'], wash: true,
-      thumbs: { '.card': ['field-harvest-hands', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'solar-roof'] }
+      thumbs: { '.card': ['field-harvest-hands', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'solar-roof'] },
+      cardBg: {
+        '.grid .card': ['field-harvest-hands', 'solar-roof', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'field-sunrise']
+      }
     },
     agribusiness: {
       hero: { img: 'field-aerial', pos: '50% 40%' },
@@ -49,11 +64,25 @@
           'plate-kenkey', 'processing-line', 'solar-roof', 'processing-line', 'plate-vegetable', 'market-stall',
           'market-stall', 'plate-fufu', 'plate-grilled-fish', 'field-aerial', 'processing-line', 'plate-vegetable'],
         '.p2f-chain-card': ['field-harvest-hands', 'market-stall', 'processing-line', 'solar-roof', 'plate-grilled-fish']
+      },
+      cardBg: {
+        '.p2f-cards .p2f-card': [
+          'field-sunrise', 'field-aerial', 'solar-roof', 'field-harvest-hands', 'market-stall', 'processing-line',
+          'plate-vegetable', 'processing-line', 'solar-roof', 'solar-roof', 'plate-kenkey', 'plate-grilled-fish',
+          'market-stall', 'field-aerial', 'plate-fufu', 'processing-line', 'plate-grilled-fish', 'plate-vegetable'
+        ],
+        '.p2f-chain .p2f-chain-card': [
+          'field-harvest-hands', 'market-stall', 'solar-roof', 'processing-line', 'plate-grilled-fish'
+        ],
+        '.p2f-panel': ['field-harvest-hands', 'market-stall', 'solar-roof', 'processing-line']
       }
     },
     team: {
       hero: { img: 'field-sunrise', pos: '50% 40%' },
-      dark: ['processing-line'], wash: true
+      dark: ['processing-line'], wash: true,
+      cardBg: {
+        '.grid .card': ['field-harvest-hands', 'processing-line', 'field-aerial', 'field-sunrise', 'plate-vegetable', 'market-stall']
+      }
     }
   };
   var PAGE = (location.pathname.split('/').pop() || 'index.html').replace(/\.html?.*$/, '') || 'index';
@@ -649,8 +678,8 @@
     if (p.length === 1) p.unshift('root');
     return p.join('/');
   })();
-  var CB_SHADE_DARK = 'linear-gradient(180deg,#04170cdc 0%,#04170c99 55%,#04170ca6 100%)';
-  var CB_SHADE_LIGHT = 'linear-gradient(180deg,#f5f6efdf 0%,#f5f6efad 55%,#f5f6efbc 100%)';
+  var CB_SHADE_DARK = 'linear-gradient(180deg, rgba(3,18,11,0.12) 0%, rgba(3,18,11,0.24) 28%, rgba(4,23,14,0.58) 60%, rgba(3,18,11,0.85) 82%, rgba(2,14,8,0.95) 100%)';
+  var CB_SHADE_LIGHT = 'linear-gradient(180deg, rgba(255,255,255,0.18) 0%, rgba(250,250,245,0.38) 30%, rgba(245,246,239,0.76) 62%, rgba(245,246,239,0.92) 84%, rgba(245,246,239,0.97) 100%)';
 
   function cbStore() {
     try { return JSON.parse(localStorage.getItem(CB_STORE_KEY)) || {}; } catch (e) { return {}; }
@@ -710,44 +739,75 @@
     var l = el && el.querySelector(':scope > .n4k-cb');
     if (!l) return null;
     var m = (l.style.backgroundImage || '').match(/url\("?(.*?)"?\)/);
+    if (!m) {
+      var img = l.querySelector('.n4k-cb-img');
+      m = img && (img.style.backgroundImage || '').match(/url\("?(.*?)"?\)/);
+    }
     return m ? { src: m[1], op: parseFloat(l.style.getPropertyValue('--n4k-cbo')) || 1 } : null;
   }
   function cbApply(el, o) {
     var l = el.querySelector(':scope > .n4k-cb');
-    if (!o || !o.src) {
+    if (!o || !o.src || o.removed) {
       if (l) l.remove();
-      el.classList.remove('n4k-cb-on', 'n4k-cb-has');
+      el.classList.remove('n4k-cb-on', 'n4k-cb-has', 'n4k-cb-dark', 'n4k-cb-light');
       el.style.removeProperty('--n4k-cbsh');
       return;
     }
     l = cbLayer(el);
     l.style.backgroundImage = 'url("' + o.src + '")';
     l.style.setProperty('--n4k-cbo', (o.op == null ? 1 : o.op));
-    el.style.setProperty('--n4k-cbsh', cbIsDark(el) ? CB_SHADE_DARK : CB_SHADE_LIGHT);
+    var dark = cbIsDark(el);
+    el.style.setProperty('--n4k-cbsh', dark ? CB_SHADE_DARK : CB_SHADE_LIGHT);
     el.classList.add('n4k-cb-on', 'n4k-cb-has');
+    el.classList.toggle('n4k-cb-dark', dark);
+    el.classList.toggle('n4k-cb-light', !dark);
+
+    var img = l.querySelector('.n4k-cb-img');
+    if (!img) { img = mk('span', 'n4k-cb-img', l); img.setAttribute('aria-hidden', 'true'); }
+    img.style.backgroundImage = 'url("' + o.src + '")';
+
+    var sh = l.querySelector('.n4k-cb-shade');
+    if (!sh) { sh = mk('span', 'n4k-cb-shade', l); sh.setAttribute('aria-hidden', 'true'); }
+
     requestAnimationFrame(function () { requestAnimationFrame(function () { l.classList.add('n4k-cb-in'); }); });
   }
   function cbSet(el, o) {
     var st = cbStore(), k = cbKey(el);
     if (!st[CB_PAGE]) st[CB_PAGE] = {};
     if (o && o.src) st[CB_PAGE][k] = { src: o.src, op: o.op == null ? 1 : o.op };
-    else delete st[CB_PAGE][k];
+    else st[CB_PAGE][k] = { removed: true };
     cbSave(st);
     cbApply(el, o);
   }
 
-  /* restauration des images enregistrées (localStorage) et des
-     attributs statiques data-card-bg présents dans le HTML */
+  /* restauration des images enregistrées (localStorage), des
+     attributs statiques data-card-bg présents dans le HTML,
+     et des fonds photographiques par défaut (CFG) */
   mod('cardbg-apply', function () {
     var st = cbStore()[CB_PAGE] || {};
+    var bgMap = cfg.cardBg || {};
     each($$(CB_SEL), function (el) {
       if (el.querySelector(':scope > .n4k-cb')) return;
       var o = st[cbKey(el)];
       if (!o) {
         var d = el.getAttribute('data-card-bg');
-        if (d) o = { src: d, op: el.hasAttribute('data-card-bg-op') ? (parseFloat(el.getAttribute('data-card-bg-op')) || 1) : 1 };
+        if (d) {
+          o = { src: d, op: el.hasAttribute('data-card-bg-op') ? (parseFloat(el.getAttribute('data-card-bg-op')) || 1) : 1 };
+        } else {
+          for (var sel in bgMap) {
+            if (el.matches && el.matches(sel)) {
+              var list = bgMap[sel] || [];
+              var sibs = $$(sel);
+              var idx = sibs.indexOf(el);
+              if (idx >= 0 && list[idx] && list[idx] !== 'null') {
+                o = { src: file(list[idx]), op: 1 };
+              }
+              break;
+            }
+          }
+        }
       }
-      if (o) cbApply(el, o);
+      if (o && !o.removed) cbApply(el, o);
     });
   });
 
@@ -757,23 +817,25 @@
 
     each($$(CB_SEL), function (c) { c.classList.add('n4k-cb-target'); });
 
-    var toast = mk('div', '', document.body); toast.id = 'n4k-cb-toast'; toast.setAttribute('role', 'status');
+    var host = document.documentElement;
 
-    var toggle = mk('button', '', document.body); toggle.id = 'n4k-cb-toggle'; toggle.type = 'button';
+    var toast = mk('div', '', host); toast.id = 'n4k-cb-toast'; toast.setAttribute('role', 'status'); toast.setAttribute('aria-hidden', 'true');
+
+    var toggle = mk('button', '', host); toggle.id = 'n4k-cb-toggle'; toggle.type = 'button'; toggle.setAttribute('aria-hidden', 'true');
     toggle.innerHTML = ICON + '<u></u><span>Fond des cartes</span>';
     toggle.title = 'Ajouter une image de fond à n’importe quelle carte (Maj+B)';
 
-    var panel = mk('div', '', document.body); panel.id = 'n4k-cb-panel';
+    var panel = mk('div', '', host); panel.id = 'n4k-cb-panel'; panel.setAttribute('aria-hidden', 'true');
     panel.innerHTML = '<h5>Images de fond des cartes</h5>' +
       '<p>Survolez une carte (liseré vert) puis cliquez dessus ou sur 🖼 pour ajouter, changer ou retirer son image de fond.</p>' +
       '<div class="n4k-cb-acts"><button class="n4k-cb-btn warn" type="button" data-act="clear">Tout retirer</button>' +
       '<button class="n4k-cb-btn" type="button" data-act="export">Exporter le HTML</button></div>';
 
-    var fab = mk('button', '', document.body); fab.id = 'n4k-cb-fab'; fab.type = 'button';
+    var fab = mk('button', '', host); fab.id = 'n4k-cb-fab'; fab.type = 'button'; fab.setAttribute('aria-hidden', 'true');
     fab.innerHTML = ICON;
     fab.setAttribute('aria-label', 'Image de fond de la carte');
 
-    var pop = mk('div', '', document.body); pop.id = 'n4k-cb-pop'; pop.hidden = true;
+    var pop = mk('div', '', host); pop.id = 'n4k-cb-pop'; pop.hidden = true; pop.setAttribute('aria-hidden', 'true');
     pop.innerHTML =
       '<header><h5 class="cb-title">Carte</h5><button class="n4k-cb-close" type="button" data-act="close" aria-label="Fermer">✕</button></header>' +
       '<p class="n4k-cb-sub">Image de fond</p>' +
@@ -909,7 +971,7 @@
     }, { passive: true });
 
     /* export : attributs HTML à coller sur les balises des cartes */
-    var exp = mk('div', '', document.body); exp.id = 'n4k-cb-exp';
+    var exp = mk('div', '', host); exp.id = 'n4k-cb-exp'; exp.setAttribute('aria-hidden', 'true');
     var expFile = CB_PAGE.replace(/^root\//, '') + '.html';
     exp.innerHTML = '<div class="n4k-cb-expbox"><h5>Exporter les images de fond — ' + expFile + '</h5>' +
       '<p>Collez les attributs <b>data-card-bg</b> et <b>data-card-bg-op</b> sur la balise de chaque carte indiquée dans le fichier HTML. ' +
@@ -956,8 +1018,13 @@
       if (!b) return;
       if (b.dataset.act === 'clear') {
         if (!confirm('Retirer toutes les images de fond de cette page ?')) return;
-        var st = cbStore(); delete st[CB_PAGE]; cbSave(st);
-        each($$(CB_SEL), function (el) { if (!el.hasAttribute('data-card-bg')) cbApply(el, null); });
+        var st = cbStore();
+        if (!st[CB_PAGE]) st[CB_PAGE] = {};
+        each($$(CB_SEL), function (el) {
+          st[CB_PAGE][cbKey(el)] = { removed: true };
+          cbApply(el, null);
+        });
+        cbSave(st);
         cbToast('Toutes les images de cette page ont été retirées.');
       } else if (b.dataset.act === 'export') openExp();
     });
