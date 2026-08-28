@@ -1012,8 +1012,8 @@
 
         .moat-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
         }
 
         .moat-card {
@@ -1021,10 +1021,10 @@
             overflow: hidden !important;
             display: flex;
             flex-direction: column;
-            border-radius: 22px !important;
-            background: #ffffff !important;
-            border: 1px solid rgba(6, 27, 19, 0.09) !important;
-            box-shadow: 0 4px 20px -2px rgba(6, 27, 19, 0.05), 0 1px 3px rgba(6, 27, 19, 0.03) !important;
+            border-radius: 18px !important;
+            background: #0b2b1e !important;
+            border: 1px solid rgba(255, 255, 255, 0.08) !important;
+            box-shadow: 0 4px 20px -2px rgba(6, 27, 19, 0.12) !important;
             transition: transform 0.4s cubic-bezier(.16, 1, .3, 1), box-shadow 0.4s cubic-bezier(.16, 1, .3, 1), border-color 0.3s ease !important;
             position: relative;
             cursor: pointer;
@@ -1033,8 +1033,8 @@
         }
 
         .moat-card:hover {
-            transform: translateY(-6px) !important;
-            box-shadow: 0 24px 48px -12px rgba(6, 27, 19, 0.16), 0 2px 8px rgba(6, 27, 19, 0.04) !important;
+            transform: translateY(-5px) !important;
+            box-shadow: 0 24px 48px -12px rgba(6, 27, 19, 0.28) !important;
             border-color: rgba(41, 207, 112, 0.5) !important;
         }
 
@@ -1057,9 +1057,8 @@
         .moat-card-media {
             position: relative;
             width: 100%;
-            aspect-ratio: 16 / 10;
-            background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%);
-            border-bottom: 1px solid rgba(6, 27, 19, 0.07);
+            aspect-ratio: 4 / 3.2;
+            background: linear-gradient(180deg, #f5f0e8 0%, #e8e0d4 100%);
             overflow: hidden;
             display: flex;
             align-items: center;
@@ -1070,43 +1069,29 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            padding: 10px 14px;
+            padding: 16px 18px 60px;
             transition: transform 0.5s cubic-bezier(.16, 1, .3, 1), filter 0.3s ease;
             display: block;
         }
 
         .moat-card:hover .moat-card-img {
-            transform: scale(1.06);
-        }
-
-        .moat-card-media::after {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: radial-gradient(circle at center, rgba(41, 207, 112, 0.04) 0%, rgba(6, 27, 19, 0.1) 100%);
-            opacity: 0;
-            transition: opacity 0.35s ease;
-            pointer-events: none;
-        }
-
-        .moat-card:hover .moat-card-media::after {
-            opacity: 1;
+            transform: scale(1.05);
         }
 
         .moat-card-badge {
             position: absolute;
-            top: 11px;
-            left: 11px;
-            z-index: 3;
-            background: rgba(6, 27, 19, 0.88);
+            top: 10px;
+            left: 10px;
+            z-index: 5;
+            background: rgba(6, 27, 19, 0.85);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             color: #29cf70;
-            font-size: 9.5px;
+            font-size: 8.5px;
             font-weight: 900;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            padding: 4px 9px;
+            padding: 3px 8px;
             border-radius: 99px;
             border: 1px solid rgba(41, 207, 112, 0.35);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
@@ -1115,11 +1100,11 @@
 
         .moat-card-zoom {
             position: absolute;
-            top: 11px;
-            right: 11px;
-            z-index: 3;
-            width: 30px;
-            height: 30px;
+            top: 10px;
+            right: 10px;
+            z-index: 5;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(8px);
@@ -1131,7 +1116,7 @@
             cursor: pointer;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             transition: all 0.25s cubic-bezier(.16, 1, .3, 1);
-            opacity: 0.9;
+            opacity: 0.85;
         }
 
         .moat-card:hover .moat-card-zoom {
@@ -1147,43 +1132,48 @@
             box-shadow: 0 6px 18px rgba(41, 207, 112, 0.45) !important;
         }
 
+        /* Body as overlay at the bottom of the image */
         .moat-card-body {
-            padding: 18px 20px 20px;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 4;
+            padding: 40px 16px 14px;
+            background: linear-gradient(to top, rgba(4, 20, 12, 0.94) 0%, rgba(4, 20, 12, 0.82) 45%, rgba(4, 20, 12, 0.45) 75%, transparent 100%);
             display: flex;
             flex-direction: column;
-            flex: 1;
-            background: #ffffff;
         }
 
         .moat-card-top {
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 7px;
+            gap: 6px;
+            margin-bottom: 4px;
         }
 
         .moat-card-cat {
-            font-size: 9.5px;
+            font-size: 8px;
             font-weight: 900;
             letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: #138b4d;
+            color: #73df94;
         }
 
         .moat-card-status {
             display: inline-flex;
             align-items: center;
-            gap: 5px;
-            font-size: 9.5px;
+            gap: 4px;
+            font-size: 8px;
             font-weight: 800;
-            color: #496355;
+            color: #bcefd0;
             letter-spacing: 0.04em;
         }
 
         .moat-status-dot {
-            width: 6px;
-            height: 6px;
+            width: 5px;
+            height: 5px;
             border-radius: 50%;
             background: #29cf70;
             box-shadow: 0 0 8px #29cf70;
@@ -1196,84 +1186,43 @@
         }
 
         .moat-card-title {
-            font-size: 19px !important;
+            font-size: 15px !important;
             font-weight: 900 !important;
-            color: #061b13 !important;
-            margin: 0 0 7px !important;
-            line-height: 1.25 !important;
+            color: #ffffff !important;
+            margin: 0 0 3px !important;
+            line-height: 1.2 !important;
             letter-spacing: -0.025em !important;
         }
 
         .moat-card-desc {
-            font-size: 13.5px !important;
-            color: #556c60 !important;
-            line-height: 1.5 !important;
-            margin: 0 0 16px !important;
-            flex: 1;
+            font-size: 11.5px !important;
+            color: #b5c8be !important;
+            line-height: 1.4 !important;
+            margin: 0 !important;
         }
 
         .moat-card-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-bottom: 16px;
+            display: none;
         }
 
         .moat-tag {
-            font-size: 9.5px;
-            font-weight: 750;
-            color: #135e38;
-            background: #edf7f1;
-            border: 1px solid rgba(41, 207, 112, 0.28);
-            padding: 3px 8px;
-            border-radius: 6px;
-            letter-spacing: 0.02em;
+            display: none;
         }
 
         .moat-card-footer {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding-top: 13px;
-            border-top: 1px solid #edf2ee;
-            margin-top: auto;
+            display: none;
         }
 
         .moat-card-cta {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            font-weight: 850;
-            color: #0d4a2d;
-            transition: color 0.2s ease;
+            display: none;
         }
 
         .moat-arrow {
-            font-style: normal;
-            font-weight: 900;
-            color: #29cf70;
-            transition: transform 0.25s cubic-bezier(.16, 1, .3, 1);
-            display: inline-block;
-        }
-
-        .moat-card:hover .moat-card-cta {
-            color: #096839;
-        }
-
-        .moat-card:hover .moat-arrow {
-            transform: translateX(4px);
+            display: none;
         }
 
         .moat-card-rating {
-            font-size: 10px;
-            font-weight: 850;
-            color: #9a6f17;
-            background: #fcf7e9;
-            border: 1px solid rgba(229, 184, 90, 0.4);
-            padding: 2px 8px;
-            border-radius: 99px;
-            letter-spacing: 0.02em;
+            display: none;
         }
 
         /* Lightbox modal for visual assets */
@@ -1436,6 +1385,12 @@
             .moat-card-media {
                 aspect-ratio: 16 / 10;
             }
+            .moat-card-img {
+                padding: 16px 18px 70px;
+            }
+            .moat-card-body {
+                padding: 50px 16px 16px;
+            }
             .moat-modal {
                 padding: 12px;
             }
@@ -1500,7 +1455,7 @@
             <div class="moat-col">
                 <div class="kicker">Strategic assets</div>
                 <h2 style="font-size:48px;line-height:1;letter-spacing:-.06em;margin:10px 0 14px">Six assets build the moat.</h2>
-                <div class="grid moat-grid" style="grid-template-columns:1fr 1fr">
+                <div class="grid moat-grid">
                     <!-- Asset 01: Food Ontology -->
                     <div class="card moat-card v4-reveal" role="button" tabindex="0" aria-label="Inspect Food Ontology asset" data-title="Food Ontology" data-badge="Asset 01" data-cat="Ontology &amp; Taxonomy" data-desc="Structured African food vocabulary." data-img="assets/img/Phase1/Phase1/Eight_assets_build_the_moat/Food%20Ontology.png">
                         <div class="moat-card-media">
