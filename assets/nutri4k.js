@@ -636,6 +636,334 @@
   });
 
   /* =========================================================
+     7 · card background images — une image de fond par carte
+     Galerie du site, URL, import de fichier, intensité,
+     retiré. Persistance localStorage page par page. Attributs
+     statiques équivalents : data-card-bg / data-card-bg-op.
+     ========================================================= */
+  var CB_SEL = '.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-chain-card,.p2f-icon,.p2x-card,.p2x-chain-card,.node,.p2f-node,.p2x-node,.sat,.v5-float,.ctaBox,.v4-demo,.v5-demo';
+  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof'];
+  var CB_STORE_KEY = 'n4k-cardbg:v1';
+  var CB_PAGE = (function () {
+    var p = location.pathname.replace(/^\//, '').replace(/\.html?$/, '').split('/').filter(Boolean);
+    if (p.length === 1) p.unshift('root');
+    return p.join('/');
+  })();
+  var CB_SHADE_DARK = 'linear-gradient(180deg,#04170cdc 0%,#04170c99 55%,#04170ca6 100%)';
+  var CB_SHADE_LIGHT = 'linear-gradient(180deg,#f5f6efdf 0%,#f5f6efad 55%,#f5f6efbc 100%)';
+
+  function cbStore() {
+    try { return JSON.parse(localStorage.getItem(CB_STORE_KEY)) || {}; } catch (e) { return {}; }
+  }
+  function cbToast(msg) {
+    var t = document.getElementById('n4k-cb-toast'); if (!t) return;
+    t.textContent = msg; t.classList.add('on');
+    clearTimeout(cbToast._t); cbToast._t = setTimeout(function () { t.classList.remove('on'); }, 3800);
+  }
+  function cbSave(st) {
+    try { localStorage.setItem(CB_STORE_KEY, JSON.stringify(st)); return true; }
+    catch (e) { cbToast('Stockage local plein : l’image restera pour cette session seulement.'); return false; }
+  }
+  function cbLum(el) {
+    var cs = getComputedStyle(el).backgroundColor,
+      m = cs.match(/rgba?\(\s*(\d+)[,\s]+(\d+)[,\s]+(\d+)(?:[,\s/]+([\d.]+))?\s*\)/);
+    if (!m) return null;
+    var a = m[4] === undefined ? 1 : parseFloat(m[4]);
+    if (a < .06) return null;
+    return (.2126 * +m[1] + .7152 * +m[2] + .0722 * +m[3]) / 255;
+  }
+  function cbIsDark(el) {
+    var l = cbLum(el);
+    if (l != null) return l < .5;
+    if (el.closest('.dark,.p2f-dark,.v5-dark,.p2x-dark,section.dark,section.hero,section.p2f-hero,section.v5-hero')) return true;
+    var p = el.parentElement;
+    while (p && p !== document.body) {
+      l = cbLum(p);
+      if (l != null) return l < .5;
+      if (typeof p.className === 'string' && /(^|\s)(dark|hero)(\s|$)/.test(p.className)) return true;
+      p = p.parentElement;
+    }
+    return false;
+  }
+  function cbLabel(el) {
+    var h = el.querySelector('h3,h2,h4,.v5-bio h3,strong,b');
+    var t = ((h || el).textContent || '').replace(/\s+/g, ' ').trim();
+    if (t) return t.slice(0, 60);
+    t = (el.getAttribute('class') || '').replace(/n4k-[a-z0-9-]+/g, '').replace(/\s+/g, ' ').trim();
+    return t || 'carte';
+  }
+  function cbKey(el) {
+    var sec = el.closest('section');
+    var si = sec ? $$('section').indexOf(sec) : 0;
+    var scls = sec ? (sec.getAttribute('class') || '').replace(/n4k-[a-z0-9-]+/g, '').trim().replace(/\s+/g, '.') : 'body';
+    var list = $$(CB_SEL, sec || document);
+    var ci = list.indexOf(el); if (ci < 0) ci = 0;
+    var own = (el.getAttribute('class') || '').replace(/n4k-[a-z0-9-]+|v4-reveal|reveal/g, '').trim().replace(/\s+/g, '.');
+    return si + '|' + scls + '|' + ci + '|' + own + '|' + cbLabel(el).slice(0, 24);
+  }
+  function cbLayer(el) {
+    var l = el.querySelector(':scope > .n4k-cb');
+    if (!l) { l = mk('span', 'n4k-cb', el); l.setAttribute('aria-hidden', 'true'); }
+    return l;
+  }
+  function cbCur(el) {
+    var l = el && el.querySelector(':scope > .n4k-cb');
+    if (!l) return null;
+    var m = (l.style.backgroundImage || '').match(/url\("?(.*?)"?\)/);
+    return m ? { src: m[1], op: parseFloat(l.style.getPropertyValue('--n4k-cbo')) || 1 } : null;
+  }
+  function cbApply(el, o) {
+    var l = el.querySelector(':scope > .n4k-cb');
+    if (!o || !o.src) {
+      if (l) l.remove();
+      el.classList.remove('n4k-cb-on', 'n4k-cb-has');
+      el.style.removeProperty('--n4k-cbsh');
+      return;
+    }
+    l = cbLayer(el);
+    l.style.backgroundImage = 'url("' + o.src + '")';
+    l.style.setProperty('--n4k-cbo', (o.op == null ? 1 : o.op));
+    el.style.setProperty('--n4k-cbsh', cbIsDark(el) ? CB_SHADE_DARK : CB_SHADE_LIGHT);
+    el.classList.add('n4k-cb-on', 'n4k-cb-has');
+    requestAnimationFrame(function () { requestAnimationFrame(function () { l.classList.add('n4k-cb-in'); }); });
+  }
+  function cbSet(el, o) {
+    var st = cbStore(), k = cbKey(el);
+    if (!st[CB_PAGE]) st[CB_PAGE] = {};
+    if (o && o.src) st[CB_PAGE][k] = { src: o.src, op: o.op == null ? 1 : o.op };
+    else delete st[CB_PAGE][k];
+    cbSave(st);
+    cbApply(el, o);
+  }
+
+  /* restauration des images enregistrées (localStorage) et des
+     attributs statiques data-card-bg présents dans le HTML */
+  mod('cardbg-apply', function () {
+    var st = cbStore()[CB_PAGE] || {};
+    each($$(CB_SEL), function (el) {
+      if (el.querySelector(':scope > .n4k-cb')) return;
+      var o = st[cbKey(el)];
+      if (!o) {
+        var d = el.getAttribute('data-card-bg');
+        if (d) o = { src: d, op: el.hasAttribute('data-card-bg-op') ? (parseFloat(el.getAttribute('data-card-bg-op')) || 1) : 1 };
+      }
+      if (o) cbApply(el, o);
+    });
+  });
+
+  /* l'éditeur : bascule, panneau, fab, pop-over, export */
+  mod('cardbg-editor', function () {
+    var ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.8" cy="8.8" r="1.8"/><path d="M21 15l-4.2-4.2L6 21.6"/></svg>';
+
+    each($$(CB_SEL), function (c) { c.classList.add('n4k-cb-target'); });
+
+    var toast = mk('div', '', document.body); toast.id = 'n4k-cb-toast'; toast.setAttribute('role', 'status');
+
+    var toggle = mk('button', '', document.body); toggle.id = 'n4k-cb-toggle'; toggle.type = 'button';
+    toggle.innerHTML = ICON + '<u></u><span>Fond des cartes</span>';
+    toggle.title = 'Ajouter une image de fond à n’importe quelle carte (Maj+B)';
+
+    var panel = mk('div', '', document.body); panel.id = 'n4k-cb-panel';
+    panel.innerHTML = '<h5>Images de fond des cartes</h5>' +
+      '<p>Survolez une carte (liseré vert) puis cliquez dessus ou sur 🖼 pour ajouter, changer ou retirer son image de fond.</p>' +
+      '<div class="n4k-cb-acts"><button class="n4k-cb-btn warn" type="button" data-act="clear">Tout retirer</button>' +
+      '<button class="n4k-cb-btn" type="button" data-act="export">Exporter le HTML</button></div>';
+
+    var fab = mk('button', '', document.body); fab.id = 'n4k-cb-fab'; fab.type = 'button';
+    fab.innerHTML = ICON;
+    fab.setAttribute('aria-label', 'Image de fond de la carte');
+
+    var pop = mk('div', '', document.body); pop.id = 'n4k-cb-pop'; pop.hidden = true;
+    pop.innerHTML =
+      '<header><h5 class="cb-title">Carte</h5><button class="n4k-cb-close" type="button" data-act="close" aria-label="Fermer">✕</button></header>' +
+      '<p class="n4k-cb-sub">Image de fond</p>' +
+      '<div class="n4k-cb-cap">Galerie du site</div><div class="n4k-cb-grid" aria-label="Galerie d’images"></div>' +
+      '<div class="n4k-cb-cap">Autre image</div>' +
+      '<div class="n4k-cb-urlrow"><input type="text" placeholder="Coller une URL d’image…" aria-label="URL de l’image"><button class="n4k-cb-btn" type="button" data-act="url">Appliquer</button></div>' +
+      '<div class="n4k-cb-uprow"><button class="n4k-cb-btn" type="button" data-act="file">📁 Importer une image</button><input type="file" accept="image/*" hidden></div>' +
+      '<div class="n4k-cb-op"><label>Intensité de l’image <b class="cb-opval">100 %</b></label><input type="range" min="15" max="100" value="100" aria-label="Intensité de l’image"></div>' +
+      '<div class="n4k-cb-foot"><button class="n4k-cb-btn warn" type="button" data-act="remove">Retirer l’image</button></div>';
+
+    var grid = $('.n4k-cb-grid', pop);
+    each(CB_GALLERY, function (name) {
+      var b = mk('button', '', grid); b.type = 'button'; b.dataset.img = BASE + 'img/' + name + '.jpg'; b.title = name;
+      var im = mk('img', '', b); im.src = b.dataset.img; im.alt = ''; im.loading = 'lazy';
+      b.addEventListener('click', function () { if (popCard) { cbSet(popCard, { src: b.dataset.img, op: popOp() }); markSel(b.dataset.img); } });
+    });
+
+    var mode = false, popCard = null, fabCard = null;
+    function popOp() { var r = $('input[type=range]', pop); return r ? parseInt(r.value, 10) / 100 : 1; }
+    function markSel(src) { each($$('button', grid), function (b) { b.classList.toggle('n4k-cb-sel', b.dataset.img === src); }); }
+
+    function openPop(card) {
+      popCard = card;
+      $('.cb-title', pop).textContent = cbLabel(card);
+      var cur = cbCur(card);
+      markSel(cur ? cur.src : null);
+      var r = $('input[type=range]', pop), u = $('input[type=text]', pop);
+      r.value = cur ? Math.round(cur.op * 100) : 100;
+      u.value = cur && cur.src && cur.src.indexOf('data:') !== 0 ? cur.src : '';
+      $('.cb-opval', pop).textContent = r.value + ' %';
+      pop.hidden = false;
+      var cr = card.getBoundingClientRect(), pw = pop.offsetWidth, ph = pop.offsetHeight;
+      var x = cr.right - pw + 24;
+      if (x < 12) x = 12;
+      if (x + pw > innerWidth - 12) x = Math.max(12, innerWidth - pw - 12);
+      var y = cr.top + 14;
+      if (y + ph > innerHeight - 12) y = Math.max(12, innerHeight - ph - 12);
+      if (y < 70) y = 70;
+      pop.style.left = x + 'px'; pop.style.top = y + 'px';
+    }
+    function closePop() { pop.hidden = true; popCard = null; }
+
+    pop.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-act]') : null;
+      if (!b || !popCard) return;
+      var act = b.dataset.act;
+      if (act === 'close') { closePop(); return; }
+      if (act === 'url') {
+        var v = $('input[type=text]', pop).value.trim();
+        if (!v) { cbToast('Collez d’abord une URL d’image.'); return; }
+        if (!/^(https?:)?\/\//i.test(v) && !/^[./]/.test(v) && v.indexOf('data:image') !== 0) v = 'https://' + v;
+        cbSet(popCard, { src: v, op: popOp() });
+        cbToast('Image appliquée.');
+        return;
+      }
+      if (act === 'file') { $('input[type=file]', pop).click(); return; }
+      if (act === 'remove') { cbSet(popCard, null); cbToast('Image retirée de cette carte.'); }
+    });
+    $('input[type=range]', pop).addEventListener('input', function (e) {
+      $('.cb-opval', pop).textContent = e.target.value + ' %';
+      if (popCard && cbCur(popCard)) { var c = cbCur(popCard); cbSet(popCard, { src: c.src, op: parseInt(e.target.value, 10) / 100 }); }
+    });
+    $('input[type=file]', pop).addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0]; e.target.value = '';
+      if (!f || !popCard) return;
+      if (f.size > 8 * 1024 * 1024) { cbToast('Image trop lourde (8 Mo max).'); return; }
+      var rd = new FileReader();
+      rd.onload = function () {
+        var img = new Image();
+        img.onload = function () {
+          var MAX = 1400, s = Math.min(1, MAX / Math.max(img.width, img.height));
+          var cw = Math.max(1, Math.round(img.width * s)), ch = Math.max(1, Math.round(img.height * s));
+          var cv = mk('canvas', ''), url = rd.result;
+          cv.width = cw; cv.height = ch;
+          try { cv.getContext('2d').drawImage(img, 0, 0, cw, ch); url = cv.toDataURL('image/jpeg', .84); } catch (er) { }
+          cbSet(popCard, { src: url, op: popOp() });
+          if (url.length > 2300000) cbToast('Image compressée > 2,3 Mo : le stockage local peut refuser. Préférez une URL pour publier.');
+          else cbToast('Image importée et enregistrée sur cette carte.');
+        };
+        img.onerror = function () { cbToast('Impossible de lire cette image.'); };
+        img.src = rd.result;
+      };
+      rd.onerror = function () { cbToast('Lecture du fichier impossible.'); };
+      rd.readAsDataURL(f);
+    });
+
+    function setMode(on) {
+      mode = on;
+      html.classList.toggle('n4k-cbmode', on);
+      var sp = toggle.querySelector('span');
+      if (sp) sp.textContent = on ? 'Mode cartes : ON' : 'Fond des cartes';
+      if (!on) { closePop(); fab.classList.remove('on'); fabCard = null; }
+    }
+    toggle.addEventListener('click', function () { setMode(!mode); });
+    document.addEventListener('keydown', function (e) {
+      if (!e.shiftKey || e.ctrlKey || e.metaKey || e.altKey) return;
+      if (e.key !== 'b' && e.key !== 'B') return;
+      var t = e.target;
+      if (t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+      e.preventDefault(); setMode(!mode);
+    });
+
+    document.addEventListener('pointermove', function (e) {
+      if (!mode) return;
+      var t = e.target;
+      var c = (t && t.closest) ? t.closest(CB_SEL) : null;
+      if (c && c.offsetWidth > 8 && c.offsetHeight > 8) {
+        fabCard = c;
+        var r = c.getBoundingClientRect();
+        var x = r.right - 32, y = r.top - 34;
+        if (y < 86) y = r.top + 10;
+        fab.style.left = Math.max(10, Math.min(innerWidth - 48, x)) + 'px';
+        fab.style.top = Math.max(86, y) + 'px';
+        fab.classList.add('on');
+      } else { fab.classList.remove('on'); fabCard = null; }
+    }, { passive: true });
+    fab.addEventListener('click', function () { if (fabCard) openPop(fabCard); });
+
+    document.addEventListener('click', function (e) {
+      if (!mode) return;
+      var t = e.target;
+      if (!t || !t.closest) return;
+      if (t.closest('#n4k-cb-pop,#n4k-cb-panel,#n4k-cb-toggle,#n4k-cb-fab,#n4k-cb-exp,#n4k-cb-toast')) return;
+      if (t.closest('a[href]')) return;
+      var c = t.closest(CB_SEL);
+      if (c) { e.preventDefault(); openPop(c); }
+      else if (!pop.hidden) closePop();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !pop.hidden) closePop(); });
+    addEventListener('resize', function () {
+      fab.classList.remove('on'); fabCard = null;
+      if (!pop.hidden && popCard) openPop(popCard);
+    }, { passive: true });
+
+    /* export : attributs HTML à coller sur les balises des cartes */
+    var exp = mk('div', '', document.body); exp.id = 'n4k-cb-exp';
+    var expFile = CB_PAGE.replace(/^root\//, '') + '.html';
+    exp.innerHTML = '<div class="n4k-cb-expbox"><h5>Exporter les images de fond — ' + expFile + '</h5>' +
+      '<p>Collez les attributs <b>data-card-bg</b> et <b>data-card-bg-op</b> sur la balise de chaque carte indiquée dans le fichier HTML. ' +
+      'Les images importées (data:…) doivent être hébergées : remplacez la valeur par le chemin du fichier (ex. assets/img/ma-photo.jpg).</p>' +
+      '<textarea readonly spellcheck="false" aria-label="Code HTML à copier"></textarea>' +
+      '<div class="n4k-cb-foot"><button class="n4k-cb-btn" type="button" data-act="copy">Copier</button>' +
+      '<button class="n4k-cb-btn warn" type="button" data-act="closeexp">Fermer</button></div></div>';
+    function openExp() {
+      var lines = [], n = 0;
+      each($$(CB_SEL), function (el) {
+        var cur = cbCur(el); if (!cur) return; n++;
+        var op = Math.round(cur.op * 100) / 100;
+        var srcOut = cur.src, note = '';
+        if (cur.src.indexOf('data:image') === 0) {
+          note = '  <!-- image importée : remplacez par le chemin du fichier hébergé, ex. assets/img/ma-photo.jpg -->';
+          srcOut = 'assets/img/ma-photo.jpg';
+        }
+        var own = (el.getAttribute('class') || '').replace(/n4k-[a-z0-9-]+/g, '').trim();
+        lines.push('<!-- ' + cbLabel(el).slice(0, 48) + '  ·  <' + el.tagName.toLowerCase() + ' class="' + own + '">  → ajouter :');
+        lines.push('data-card-bg="' + srcOut + '" data-card-bg-op="' + op + '"' + note);
+      });
+      $('textarea', exp).value = n ? lines.join('\n') : 'Aucune image de fond sur cette page pour le moment. Ajoutez-en en cliquant sur les cartes.';
+      exp.classList.add('on');
+    }
+    exp.addEventListener('click', function (e) {
+      if (e.target === exp) { exp.classList.remove('on'); return; }
+      var b = e.target.closest ? e.target.closest('[data-act]') : null;
+      if (!b) return;
+      if (b.dataset.act === 'closeexp') { exp.classList.remove('on'); return; }
+      if (b.dataset.act === 'copy') {
+        var ta = $('textarea', exp);
+        ta.focus(); ta.select();
+        var ok = false;
+        try { ok = document.execCommand('copy'); } catch (e2) { }
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(ta.value).then(function () { ok = true; }, function () { });
+        }
+        cbToast(ok ? 'Code copié dans le presse-papiers.' : 'Sélectionnez le texte et copiez-le (Ctrl+C).');
+      }
+    });
+
+    panel.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-act]') : null;
+      if (!b) return;
+      if (b.dataset.act === 'clear') {
+        if (!confirm('Retirer toutes les images de fond de cette page ?')) return;
+        var st = cbStore(); delete st[CB_PAGE]; cbSave(st);
+        each($$(CB_SEL), function (el) { if (!el.hasAttribute('data-card-bg')) cbApply(el, null); });
+        cbToast('Toutes les images de cette page ont été retirées.');
+      } else if (b.dataset.act === 'export') openExp();
+    });
+  });
+
+  /* =========================================================
      boot
      ========================================================= */
   function init() {
