@@ -1,0 +1,1 @@
+Phase 2 top navigation restored. Vision, Ecosystem, Team and the other existing navigation items remain accessible. Design/content otherwise unchanged.

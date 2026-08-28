@@ -1,0 +1,14 @@
+NUTRI.N°1 V5 — Phase 2 expanded and finalized
+===============================================
+The Phase 2 / Agribusiness page now explains in detail:
+• Production: organic/biological, smart, climate-resilient and controlled irrigation.
+• Producer network: real-time supply, harvest windows, quality, location and demand connection.
+• Food security & post-harvest loss: rapid aggregation and redirection of perishable fruits/vegetables to cold storage, processing or buyers.
+• Transformation: nutrition-led products, food safety by design, traceability, resource efficiency.
+• Renewable energy: long-term 100% renewable-electricity ambition, with solar as a core source where appropriate.
+• Cold rooms: controlled temperature, sensors/alerts/logs and solar-powered cold storage ambition.
+• Distribution: country hubs, controlled cold chain and multi-channel distribution.
+• Commercialization: Healthy Food Marketplace, demand forecasting and feedback into production.
+• Connected food-system loop: nutrition needs → demand → production → collection → storage → transformation → cold chain → marketplace → consumption → new data.
+
+All other site pages and the Team V4 design are retained.

@@ -1,0 +1,8 @@
+NUTRI.N°1 V5 — Full bilingual content fix
+============================================
+All existing French pages were updated so their visible interface/content is French,
+not only the language selector. Common navigation, CTAs and page-specific terminology
+were translated while preserving the existing layout, styles, animations, navigation,
+Phase 2 content and Team V4 design.
+
+English pages were not modified except for the language selector routing.

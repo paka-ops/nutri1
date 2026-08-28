@@ -1,0 +1,11 @@
+NUTRI.N°1 V5 — Révision linguistique française finale
+========================================================
+Correction ciblée des pages françaises Phase 1 et Phase 2 :
+- titres et sous-titres ;
+- boutons et appels à l'action ;
+- navigation ;
+- terminologie nutrition / IA / plateforme ;
+- contenu complet de la Phase 2 ;
+- grammaire, accords, typographie et formulations professionnelles.
+
+Le design, les animations, la structure, les images et les pages anglaises sont conservés.

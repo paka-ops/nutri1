@@ -1,0 +1,9 @@
+NUTRI.N°1 V5 — French language quality pass
+==============================================
+Only the French-language pages were polished:
+- All visible buttons/CTAs and common navigation labels translated.
+- Main titles and subtitles translated.
+- Phase 2 French copy professionally rewritten for grammar and terminology.
+- French typography and common wording errors corrected.
+- EN/FR routing preserved.
+No CSS, layout, animations, images, English content or site structure were intentionally changed.

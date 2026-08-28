@@ -1,0 +1,9 @@
+NUTRI.N°1 V5 — Bilingual navigation fix
+========================================
+Fixed only the language routing:
+- EN pages now link to their corresponding FR pages.
+- FR pages now link back to their corresponding EN pages.
+- Restored missing FR pages for Vision, Platform, Intelligence, Ecosystem and Team.
+- Kept the expanded Phase 2 content and its navigation.
+- Corrected relative logo paths in FR pages.
+No other site content/design was intentionally changed.
