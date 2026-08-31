@@ -120,8 +120,10 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
   transition:opacity .95s var(--n4k-e),transform 1.05s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms);will-change:opacity,transform}
 .n4k-rv.n4k-in{opacity:1;transform:translate3d(0,0,0) scale(1)}
 .n4k-rv.n4k-in.n4k-tilt{transform:perspective(1150px) rotateX(var(--n4k-rx,0deg)) rotateY(var(--n4k-ry,0deg)) translate3d(0,var(--n4k-ty,0px),0) scale(var(--n4k-sc,1))}
-/* word mask reveal (characters are preserved 1:1) */
-.n4k-w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.14em;margin-bottom:-.14em}
+/* word mask reveal (characters are preserved 1:1)
+   overflow is kept visible so tracked negative letter-spacing never clips the
+   last glyph (e.g. the final "e." in "de l'Afrique.") and descenders stay whole */
+.n4k-w{display:inline-block;overflow:visible;vertical-align:baseline;padding-bottom:0;margin-bottom:0;white-space:nowrap}
 .n4k-w>i{display:inline-block;font-style:inherit;transform:translate3d(0,108%,0) rotate(3deg);opacity:0;filter:blur(6px);
   transition:transform 1.05s var(--n4k-e),opacity .8s ease,filter .8s ease;transition-delay:calc(var(--w,0) * 46ms)}
 .n4k-in .n4k-w>i{transform:none;opacity:1;filter:blur(0)}
@@ -643,3 +645,43 @@ html.n4k-cbmode .n4k-cb-target.n4k-cb-has{outline:1.5px solid #e5b85a99;outline-
   .n4k-cb-grid{grid-template-columns:repeat(4,1fr)}
 }
 @media print{#n4k-cb-toggle,#n4k-cb-panel,#n4k-cb-fab,#n4k-cb-pop,#n4k-cb-exp,#n4k-cb-toast{display:none!important}}
+
+/* ============================================================
+   14 · multilingual text safety
+   Layout-only: no copy is changed. Long translated words wrap
+   inside their container instead of overflowing or being clipped.
+   ============================================================ */
+body{overflow-wrap:break-word;word-break:normal;hyphens:none}
+.heroGrid>*, .arch>*, .grid>*, .teamGrid>*, .cloud>*, .loop>*,
+.v5-team>*, .v5-compare>*, .v5-app>*, .v5-flow>*,
+.p2f-cards>*, .p2f-chain>*, .p2f-loop>*, .p2f-feature>*, .p2f-icons>*,
+.p2x-cards>*, .p2x-steps>*, .p2x-chain>*, .p2x-loop>*,
+.v4-app>*, .v4-loop>*, .foot>*, .flow>*{min-width:0}
+.eyebrow,.chip{max-width:100%}
+.sat,.v5-float{max-width:min(230px,44vw)}
+.p2f-node,.p2x-node{max-width:min(210px,40vw)}
+/* compact the wider French navigation without changing its wording */
+html[lang="fr"] .navin{gap:12px}
+html[lang="fr"] .links{gap:10px;font-size:11px}
+html[lang="fr"] .links a{padding:7px 6px;margin:-7px -6px;white-space:nowrap}
+html[lang="fr"] .nav .btn{padding:10px 13px;font-size:12px}
+/* French typography: slightly larger line rhythm and a modest size step so
+   longer translated headlines keep their containers balanced */
+html[lang="fr"] .hero h1{font-size:clamp(42px,5.4vw,70px)}
+html[lang="fr"] .head h2{font-size:clamp(32px,4.1vw,52px)}
+html[lang="fr"] .ctaBox h2{font-size:clamp(34px,4.5vw,56px)}
+html[lang="fr"] .v5-head h2{font-size:clamp(36px,4.5vw,58px)}
+html[lang="fr"] .p2f-head h2,
+html[lang="fr"] .p2x-head h2{font-size:clamp(35px,4.4vw,57px)}
+html[lang="fr"] .v5-title{font-size:clamp(48px,6vw,84px)}
+html[lang="fr"] .p2f-title,
+html[lang="fr"] .p2x-title{font-size:clamp(46px,5.7vw,78px)}
+html[lang="fr"] .hero h1,
+html[lang="fr"] .head h2,
+html[lang="fr"] .v5-head h2,
+html[lang="fr"] .p2f-head h2,
+html[lang="fr"] .p2x-head h2,
+html[lang="fr"] .ctaBox h2{line-height:1.02}
+html[lang="fr"] .v5-title,
+html[lang="fr"] .p2f-title,
+html[lang="fr"] .p2x-title{line-height:.96}
