@@ -21,7 +21,7 @@
   /* ---------- per-page art direction ---------- */
   var CFG = {
     index: {
-      hero: { img: 'field-sunrise', pos: '62% 42%' },
+      hero: { img: 'hero-index', pos: '55% 55%' },
       dark: ['field-aerial'], wash: true, cta: 'plate-fufu',
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
@@ -33,7 +33,7 @@
       }
     },
     platform: {
-      hero: { img: 'field-aerial', pos: '50% 52%' },
+      hero: { img: 'hero-platform', pos: '58% 50%' },
       dark: ['market-stall'], wash: true,
       thumbs: { '.card': ['null', 'null', 'null', 'plate-kenkey', 'plate-vegetable', 'null'] },
       cardBg: {
@@ -41,7 +41,7 @@
       }
     },
     intelligence: {
-      hero: { img: 'market-stall', pos: '50% 45%' },
+      hero: { img: 'hero-intelligence', pos: '55% 50%' },
       dark: ['field-aerial'], wash: true,
       thumbs: { '.card': ['plate-vegetable', 'market-stall', 'plate-kenkey', 'field-harvest-hands', 'plate-fufu', 'plate-grilled-fish'] },
       cardBg: {
@@ -49,7 +49,7 @@
       }
     },
     ecosystem: {
-      hero: { img: 'field-sunrise', pos: '45% 50%' },
+      hero: { img: 'hero-ecosystem', pos: '55% 50%' },
       dark: ['field-aerial', 'processing-line'], wash: true,
       thumbs: { '.card': ['field-harvest-hands', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'solar-roof'] },
       cardBg: {
@@ -57,7 +57,7 @@
       }
     },
     agribusiness: {
-      hero: { img: 'field-aerial', pos: '50% 40%' },
+      hero: { img: 'hero-agribusiness', pos: '55% 55%' },
       dark: ['field-harvest-hands', 'processing-line', 'market-stall'], wash: true,
       thumbs: {
         '.p2f-card': ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-vegetable', 'solar-roof',
@@ -78,7 +78,7 @@
       }
     },
     team: {
-      hero: { img: 'field-sunrise', pos: '50% 40%' },
+      hero: { img: 'hero-team', pos: '60% 45%' },
       dark: ['processing-line'], wash: true,
       cardBg: {
         '.grid .card': ['field-harvest-hands', 'processing-line', 'field-aerial', 'field-sunrise', 'plate-vegetable', 'market-stall']
