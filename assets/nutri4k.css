@@ -268,6 +268,8 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .ctaBox .n4k-photo{opacity:0}
 .ctaBox.n4k-photo-on .n4k-photo{opacity:.34}
 .ctaBox .n4k-photo img{height:100%}
+/* visuel « Let's build the future » : fondu doux dans le fond crème (lisible) */
+.ctaBox .n4k-cb.n4k-cb-in{opacity:.5!important}
 .ctaBox:before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
   background:linear-gradient(120deg,#f5f4ede6,#f5f6efb3 45%,#fff5dcc9);mix-blend-mode:multiply}
 .ctaBox:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2;
