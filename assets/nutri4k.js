@@ -21,7 +21,7 @@
   /* ---------- per-page art direction ---------- */
   var CFG = {
     index: {
-      hero: { img: 'hero-index', pos: '58% 55%' },
+      hero: { img: 'hero-index', pos: '62% 55%' },
       dark: ['field-aerial'], wash: true, cta: 'plate-fufu',
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
@@ -33,7 +33,7 @@
       }
     },
     platform: {
-      hero: { img: 'hero-platform', pos: '55% 45%' },
+      hero: { img: 'hero-platform', pos: '58% 50%' },
       dark: ['market-stall'], wash: true,
       thumbs: { '.card': ['null', 'null', 'null', 'plate-kenkey', 'plate-vegetable', 'null'] },
       cardBg: {
@@ -41,7 +41,7 @@
       }
     },
     intelligence: {
-      hero: { img: 'hero-intelligence', pos: '62% 58%' },
+      hero: { img: 'hero-intelligence', pos: '60% 50%' },
       dark: ['field-aerial'], wash: true,
       thumbs: { '.card': ['plate-vegetable', 'market-stall', 'plate-kenkey', 'field-harvest-hands', 'plate-fufu', 'plate-grilled-fish'] },
       cardBg: {
@@ -78,7 +78,7 @@
       }
     },
     team: {
-      hero: { img: 'hero-team', pos: '58% 60%' },
+      hero: { img: 'hero-team', pos: '62% 55%' },
       dark: ['processing-line'], wash: true,
       cardBg: {
         '.grid .card': ['field-harvest-hands', 'processing-line', 'field-aerial', 'field-sunrise', 'plate-vegetable', 'market-stall']
