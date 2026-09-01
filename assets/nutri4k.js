@@ -22,14 +22,14 @@
   var CFG = {
     index: {
       hero: { img: 'hero-index', pos: '62% 55%' },
-      dark: ['field-aerial'], wash: true, cta: 'plate-fufu',
+      dark: ['field-aerial'], wash: true, cta: 'cta-future',
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
       cardBg: {
         '.arch .box': ['field-sunrise', 'processing-line'],
         '.grid .card': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
         '.loop .loopbox': ['field-harvest-hands', 'market-stall'],
-        '.ctaBox': ['plate-fufu']
+        '.ctaBox': ['cta-future']
       }
     },
     platform: {
@@ -680,7 +680,7 @@
      statiques équivalents : data-card-bg / data-card-bg-op.
      ========================================================= */
   var CB_SEL = '.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-chain-card,.p2f-icon,.p2x-card,.p2x-chain-card,.node,.p2f-node,.p2x-node,.sat,.v5-float,.ctaBox,.v4-demo,.v5-demo';
-  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof'];
+  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future'];
   var CB_STORE_KEY = 'n4k-cardbg:v1';
   var CB_PAGE = (function () {
     var p = location.pathname.replace(/^\//, '').replace(/\.html?$/, '').split('/').filter(Boolean);
