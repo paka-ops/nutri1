@@ -830,9 +830,7 @@
 
     var toast = mk('div', '', host); toast.id = 'n4k-cb-toast'; toast.setAttribute('role', 'status'); toast.setAttribute('aria-hidden', 'true');
 
-    var toggle = mk('button', '', host); toggle.id = 'n4k-cb-toggle'; toggle.type = 'button'; toggle.setAttribute('aria-hidden', 'true');
-    toggle.innerHTML = ICON + '<u></u><span>Fond des cartes</span>';
-    toggle.title = 'Ajouter une image de fond à n’importe quelle carte (Maj+B)';
+    
 
     var panel = mk('div', '', host); panel.id = 'n4k-cb-panel'; panel.setAttribute('aria-hidden', 'true');
     panel.innerHTML = '<h5>Images de fond des cartes</h5>' +
