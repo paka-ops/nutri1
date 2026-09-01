@@ -1,17 +1,955 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NUTRI.N°1 — Plateforme numérique de nutrition</title><style>
-:root{--g:#29cf70;--d:#061b13;--d2:#0b2b1e;--gold:#e5b85a;--cream:#f5f4ed;--ink:#0b2117;--mut:#6d7d74;--line:#dfe8e1}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--d);color:#fff;line-height:1.55}a{text-decoration:none;color:inherit}.wrap{width:min(1180px,92%);margin:auto}
-.nav{height:76px;position:sticky;top:0;z-index:20;background:#061b13ee;backdrop-filter:blur(16px);border-bottom:1px solid #ffffff1c}.navin{height:100 %;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;font-weight:950}.brand img{width:48px;height:48px;background:#fff;border-radius:50%;object-fit:contain}.brand span{font-size:18px}.brand i{color:var(--gold);font-style:normal}.links{display:flex;gap:20px;font-size:12px;color:#c1d1c8;font-weight:800}.links a:hover{color:#fff}.btn{display:inline-block;padding:12px 17px;border-radius:13px;font-weight:900;font-size:13px}.green{background:var(--g);color:#042414}.outline{border:1px solid #ffffff26;background:#ffffff08}.hero{padding:100px 0 85px;background:radial-gradient(circle at 75% 20%,#29cf7030,transparent 28%),linear-gradient(180deg,var(--d),#0a291c)}.heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:55px;align-items:center}.eyebrow,.chip{display:inline-block;border:1px solid #29cf7040;background:#29cf7010;color:#bcefd0;border-radius:99px;padding:7px 11px;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em}.hero h1{font-size:clamp(45px,6vw,78px);line-height:.94;letter-spacing:-.07em;margin:20px 0}.hero h1 b{color:var(--g)}.hero h1 em{color:var(--gold);font-style:normal}.hero p{font-size:18px;color:#b5c8be;max-width:680px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:27px 0}.art{height:500px;position:relative;display:grid;place-items:center}.ring{width:390px;height:390px;border-radius:50%;border:1px solid #9be76630;box-shadow:0 0 0 55px #9be76608}.core{position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,#a9ee88,#28c970 35%,#0b5b38 70%);display:grid;place-items:center;box-shadow:0 0 80px #29cf7040}.coreIn{width:155px;height:155px;border-radius:50%;background:#eff8ef;color:#0a4329;display:grid;place-items:center;text-align:center;font-weight:950}.coreIn strong{font-size:32px;display:block}.sat{position:absolute;background:#fff;color:#163326;padding:13px;border-radius:16px;box-shadow:0 20px 55px #0005;font-size:10px}.sat b{display:block;color:#087041;font-size:16px}.s1{top:8%;left:0}.s2{top:7%;right:0}.s3{bottom:12%;left:3%}.s4{bottom:8%;right:1%}
-.light{background:var(--cream);color:var(--ink)}.section{padding:90px 0}.head{max-width:800px;margin-bottom:42px}.kicker{font-size:10px;color:#169652;font-weight:950;text-transform:uppercase;letter-spacing:.14em}.dark .kicker{color:#6bdd8f}.head h2{font-size:clamp(35px,4.5vw,57px);line-height:1;letter-spacing:-.06em;margin:9px 0 14px}.head p{color:var(--mut);font-size:17px}.dark .head p{color:#9eb5aa}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;transition:.25s}.card:hover{transform:translateY(-4px);box-shadow:0 20px 50px #173d2b14}.dark .card{background:#0d3223;border-color:#ffffff18;color:#fff}.ico{width:44px;height:44px;border-radius:13px;background:#e9f5eb;color:#0a6b3d;display:grid;place-items:center;font-weight:950;margin-bottom:15px}.dark .ico{background:#29cf7012;color:#73df94}.card h3{font-size:18px;margin:0 0 7px}.card p{font-size:13px;color:var(--mut);margin:0}.dark .card p{color:#9eb5aa}
-.arch{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{padding:29px;border-radius:25px;background:#fff;border:1px solid var(--line)}.box h3{font-size:25px;margin:10px 0 7px}.box p{font-size:13px;color:var(--mut)}.flow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:17px}.flow span{padding:8px 10px;background:#0b6038;color:#fff;border-radius:11px;font-size:10px;font-weight:900}.flow i{color:#1c9d58;font-style:normal;font-weight:900}
-.cloud{display:grid;grid-template-columns:1fr 1fr;gap:25px}.cloudVisual{min-height:430px;border-radius:30px;background:radial-gradient(circle,#145c3d,#071e15 62%);position:relative;border:1px solid #ffffff18}.cloudCenter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:155px;height:155px;border-radius:50%;background:#eff8ef;color:#0a4329;display:grid;place-items:center;text-align:center;font-weight:950}.node{position:absolute;width:115px;padding:13px;border-radius:15px;background:#ffffff0d;border:1px solid #ffffff18;text-align:center;font-size:10px}.node b{display:block;color:var(--g);font-size:19px}.n1{top:8%;left:7%}.n2{top:8%;right:7%}.n3{bottom:8%;left:7%}.n4{bottom:8%;right:7%}.n5{top:4%;left:50%;transform:translateX(-50%)}.n6{bottom:4%;left:50%;transform:translateX(-50%)}
-.loop{display:grid;grid-template-columns:1fr 1fr;gap:16px}.loopbox{padding:30px;border-radius:26px}.loopbox h3{font-size:29px;line-height:1.05;margin:0 0 9px}.loopbox p{font-size:13px;color:#c3d8ca}.lb1{background:#0a2b1e}.lb2{background:linear-gradient(145deg,#3c2d14,#72571d)}
-.teamGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.person{background:#fff;border:1px solid var(--line);border-radius:23px;overflow:hidden}.photo{height:230px;background:linear-gradient(135deg,#dfeee2,#fff0d0);display:grid;place-items:center;color:#0b633b;font-weight:950;font-size:42px}.bio{padding:22px}.bio h3{margin:7px 0 3px}.bio p{font-size:12px;color:var(--mut)}
-.cta{padding:90px 0;background:var(--cream)}.ctaBox{padding:55px;text-align:center;border-radius:32px;background:linear-gradient(135deg,#eff8ef,#fff5dc);color:var(--ink)}.ctaBox h2{font-size:clamp(37px,5vw,62px);line-height:1;letter-spacing:-.07em;margin:9px 0}.ctaBox p{max-width:720px;margin:12px auto 24px;color:var(--mut)}
-footer{padding:42px 0 22px;background:#04150e;color:#9eb5a9}.foot{display:grid;grid-template-columns:1.5fr .7fr .7fr;gap:30px}.foot h4{color:#fff}.foot a{display:block;font-size:12px;margin:6px 0}.copy{border-top:1px solid #ffffff15;margin-top:25px;padding-top:18px;font-size:11px;display:flex;justify-content:space-between}
-@media(max-width:900px){.links{display:none}.heroGrid,.cloud,.loop{grid-template-columns:1fr}.art{order:-1;height:420px}.grid,.teamGrid{grid-template-columns:1fr 1fr}.arch{grid-template-columns:1fr}.foot{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.grid,.teamGrid{grid-template-columns:1fr}.hero{padding:70px 0}.hero h1{font-size:46px}.hero p{font-size:16px}.ring{width:310px;height:310px}.core{width:210px;height:210px}.coreIn{width:135px;height:135px}.sat{display:none}.section{padding:70px 0}.ctaBox{padding:38px 20px}.foot{grid-template-columns:1fr}.copy{flex-direction:column}}
-</style><style>.langswitch{display:flex;gap:4px;margin-left:8px}.langswitch a{padding:7px 9px;border-radius:999px;border:1px solid #ffffff28;color:#b9cec3;font-size:10px;font-weight:950}.langswitch .active{background:#29cf70;color:#062014;border-color:#29cf70}</style><link rel="stylesheet" href="../assets/nutri4k.css"><link rel="preload" as="image" href="../assets/img/field-aerial.jpg"></head><body><div class="nav"><div class="wrap navin"><a class="brand" href="index.html"><img src="../nutri-logo.png"><span>NUTRI<span style="color:#29cf70">.</span>N°1 <i>IA</i></span></a><div class="links"><a href="index.html">Vision</a><a href="platform.html">Plateforme</a><a href="intelligence.html">Intelligence</a><a href="ecosystem.html">Écosystème</a><a href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a></div><a class="btn green" href="index.html#contact">Rejoindre NUTRI.N°1</a><div class="langswitch"><a href="../platform.html">EN</a><a class="active" href="platform.html">FR</a></div></div></div><section class="hero"><div class="wrap heroGrid"><div><div class="eyebrow">PHASE 01 • INFRASTRUCTURE NUMÉRIQUE DE NUTRITION</div><h1>Une <b>plateforme nutritionnelle à 360°</b> conçue pour l'Afrique.</h1><p>Intelligence citoyenne, analyse IA des aliments et des repas, prévention, professionnels de la nutrition, comptes familiaux, appareils connectés et place de marché — le tout alimenté par une architecture de données commune.</p><div class="actions"><a class="btn green" href="#citizen">Citoyen 360°</a><a class="btn outline" href="intelligence.html">Cœur Données & IA</a></div></div><div class="art"><div class="core"><div class="coreIn"><div><strong>360°</strong>CITOYEN<br>TABLEAU DE BORD</div></div></div></div></div></section>
-<section class="section light" id="citizen"><div class="wrap"><div class="head"><div class="kicker">Tableau de bord Citoyen 360°</div><h2>Profil → intelligence → action.</h2><p>L'architecture réunit le profil, l'anthropométrie, les données métaboliques et cliniques, les habitudes alimentaires et les objectifs dans un tableau de bord personnalisé.</p></div><div class="grid"><div class="card"><div class="ico">01</div><h3>Profil & anthropométrie</h3><p>Sexe, âge, poids, taille, IMC, tour de taille, tour de hanche, historique nutritionnel, objectifs et habitudes.</p></div><div class="card"><div class="ico">02</div><h3>Données métaboliques</h3><p>Glycémie, tension artérielle, fréquence cardiaque et autres biomarqueurs disponibles.</p></div><div class="card"><div class="ico">03</div><h3>Contexte clinique</h3><p>Diabète, hypertension, obésité, maladies cardiovasculaires, maladies rénales, cancer et facteurs de risque.</p></div><div class="card"><div class="ico">04</div><h3>Alimentation et scanner des repas</h3><p>Validation d'image, reconnaissance, interrogation de l'ontologie, estimation des portions et calcul des nutriments.</p></div><div class="card"><div class="ico">05</div><h3>Plans personnalisés</h3><p>Évaluation des risques → besoins nutritionnels → association aux aliments locaux → optimisation des repas → plan de 7 jours.</p></div><div class="card"><div class="ico">06</div><h3>Santé connectée</h3><p>Les intégrations ciblées comprennent les glucomètres, tensiomètres, montres connectées, bracelets d'activité et plateformes de santé.</p></div></div></div></section>
-<section class="section dark"><div class="wrap"><div class="head"><div class="kicker">Expert humain dans la boucle</div><h2>Intelligence IA, expertise humaine.</h2><p>Les nutritionnistes et diététiciens peuvent être recherchés par pays et spécialité, puis contactés par chat, rendez-vous, téléconsultation et suivi autorisé des patients.</p></div><div class="grid"><div class="card"><div class="ico">CL</div><h3>Nutrition clinique</h3><p>Spécialisation professionnelle et suivi des patients.</p></div><div class="card"><div class="ico">MC</div><h3>Nutrition maternelle & infantile</h3><p>Nutrition pendant la grossesse, l'allaitement et l'enfance.</p></div><div class="card"><div class="ico">NCD</div><h3>Nutrition orientée pathologies</h3><p>Spécialités diabète, rénale, cardiovasculaire et nutrition générale.</p></div></div></div></section><footer><div class="wrap foot"><div><b style="font-size:21px;color:#fff">NUTRI.N°1</b><p style="font-size:12px">Infrastructure africaine de l'intelligence alimentaire et nutritionnelle — évoluant vers une Plateforme durable d'agro-transformation et de nutrition en Afrique de l'Ouest.</p></div><div><h4>Plateforme</h4><a href="platform.html">Nutrition numérique</a><a href="intelligence.html">Base de connaissances alimentaire africaine</a><a href="ecosystem.html">Acteurs</a></div><div><h4>Entreprises</h4><a href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a><a href="index.html#contact">Contact</a></div></div><div class="wrap copy"><span>© 2026 NUTRI.N°1</span><span>Conçue en Afrique de l’Ouest • Pensée pour l’Afrique</span></div></footer><script>const o=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&(x.target.style.opacity=1)),{threshold:.1});document.querySelectorAll(".card,.box,.person,.loopbox").forEach(x=>{x.style.opacity=0;x.style.transition="opacity .7s,transform .7s";o.observe(x)})</script><script src="../assets/nutri4k.js" defer></script></body></html>
+<!doctype html>
+<html lang="fr">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NUTRI.N°1 — Plateforme numérique de nutrition</title>
+    <style>
+        :root {
+            --g: #29cf70;
+            --d: #061b13;
+            --d2: #0b2b1e;
+            --gold: #e5b85a;
+            --cream: #f5f4ed;
+            --ink: #0b2117;
+            --mut: #6d7d74;
+            --line: #dfe8e1
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        html {
+            scroll-behavior: smooth
+        }
+
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, sans-serif;
+            background: var(--d);
+            color: #fff;
+            line-height: 1.55
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit
+        }
+
+        .wrap {
+            width: min(1180px, 92%);
+            margin: auto
+        }
+
+        .nav {
+            height: 76px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #061b13ee;
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #ffffff1c
+        }
+
+        .navin {
+            height: 100 %;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 950
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 50%;
+            object-fit: contain
+        }
+
+        .brand span {
+            font-size: 18px
+        }
+
+        .brand i {
+            color: var(--gold);
+            font-style: normal
+        }
+
+        .links {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: #c1d1c8;
+            font-weight: 800
+        }
+
+        .links a:hover {
+            color: #fff
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 17px;
+            border-radius: 13px;
+            font-weight: 900;
+            font-size: 13px
+        }
+
+        .green {
+            background: var(--g);
+            color: #042414
+        }
+
+        .outline {
+            border: 1px solid #ffffff26;
+            background: #ffffff08
+        }
+
+        .hero {
+            padding: 100px 0 85px;
+            background: radial-gradient(circle at 75% 20%, #29cf7030, transparent 28%), linear-gradient(180deg, var(--d), #0a291c)
+        }
+
+        .heroGrid {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 55px;
+            align-items: center
+        }
+
+        .eyebrow,
+        .chip {
+            display: inline-block;
+            border: 1px solid #29cf7040;
+            background: #29cf7010;
+            color: #bcefd0;
+            border-radius: 99px;
+            padding: 7px 11px;
+            font-size: 10px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .1em
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 6vw, 78px);
+            line-height: .94;
+            letter-spacing: -.07em;
+            margin: 20px 0
+        }
+
+        .hero h1 b {
+            color: var(--g)
+        }
+
+        .hero h1 em {
+            color: var(--gold);
+            font-style: normal
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #b5c8be;
+            max-width: 680px
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 27px 0
+        }
+
+        .art {
+            height: 500px;
+            position: relative;
+            display: grid;
+            place-items: center
+        }
+
+        .ring {
+            width: 390px;
+            height: 390px;
+            border-radius: 50%;
+            border: 1px solid #9be76630;
+            box-shadow: 0 0 0 55px #9be76608
+        }
+
+        .core {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #a9ee88, #28c970 35%, #0b5b38 70%);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 0 80px #29cf7040
+        }
+
+        .coreIn {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: #eff8ef;
+            color: #0a4329;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .coreIn strong {
+            font-size: 32px;
+            display: block
+        }
+
+        .sat {
+            position: absolute;
+            background: #fff;
+            color: #163326;
+            padding: 13px;
+            border-radius: 16px;
+            box-shadow: 0 20px 55px #0005;
+            font-size: 10px
+        }
+
+        .sat b {
+            display: block;
+            color: #087041;
+            font-size: 16px
+        }
+
+        .s1 {
+            top: 8%;
+            left: 0
+        }
+
+        .s2 {
+            top: 7%;
+            right: 0
+        }
+
+        .s3 {
+            bottom: 12%;
+            left: 3%
+        }
+
+        .s4 {
+            bottom: 8%;
+            right: 1%
+        }
+
+        .light {
+            background: var(--cream);
+            color: var(--ink)
+        }
+
+        .section {
+            padding: 90px 0
+        }
+
+        .head {
+            max-width: 800px;
+            margin-bottom: 42px
+        }
+
+        .kicker {
+            font-size: 10px;
+            color: #169652;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .14em
+        }
+
+        .dark .kicker {
+            color: #6bdd8f
+        }
+
+        .head h2 {
+            font-size: clamp(35px, 4.5vw, 57px);
+            line-height: 1;
+            letter-spacing: -.06em;
+            margin: 9px 0 14px
+        }
+
+        .head p {
+            color: var(--mut);
+            font-size: 17px
+        }
+
+        .dark .head p {
+            color: #9eb5aa
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 24px;
+            transition: .25s
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px #173d2b14
+        }
+
+        .dark .card {
+            background: #0d3223;
+            border-color: #ffffff18;
+            color: #fff
+        }
+
+        .ico {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: #e9f5eb;
+            color: #0a6b3d;
+            display: grid;
+            place-items: center;
+            font-weight: 950;
+            margin-bottom: 15px
+        }
+
+        .dark .ico {
+            background: #29cf7012;
+            color: #73df94
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin: 0 0 7px
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--mut);
+            margin: 0
+        }
+
+        .dark .card p {
+            color: #9eb5aa
+        }
+
+        .arch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .box {
+            padding: 29px;
+            border-radius: 25px;
+            background: #fff;
+            border: 1px solid var(--line)
+        }
+
+        .box h3 {
+            font-size: 25px;
+            margin: 10px 0 7px
+        }
+
+        .box p {
+            font-size: 13px;
+            color: var(--mut)
+        }
+
+        .flow {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 17px
+        }
+
+        .flow span {
+            padding: 8px 10px;
+            background: #0b6038;
+            color: #fff;
+            border-radius: 11px;
+            font-size: 10px;
+            font-weight: 900
+        }
+
+        .flow i {
+            color: #1c9d58;
+            font-style: normal;
+            font-weight: 900
+        }
+
+        .cloud {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px
+        }
+
+        .cloudVisual {
+            min-height: 430px;
+            border-radius: 30px;
+            background: radial-gradient(circle, #145c3d, #071e15 62%);
+            position: relative;
+            border: 1px solid #ffffff18
+        }
+
+        .cloudCenter {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: #eff8ef;
+            color: #0a4329;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .node {
+            position: absolute;
+            width: 115px;
+            padding: 13px;
+            border-radius: 15px;
+            background: #ffffff0d;
+            border: 1px solid #ffffff18;
+            text-align: center;
+            font-size: 10px
+        }
+
+        .node b {
+            display: block;
+            color: var(--g);
+            font-size: 19px
+        }
+
+        .n1 {
+            top: 8%;
+            left: 7%
+        }
+
+        .n2 {
+            top: 8%;
+            right: 7%
+        }
+
+        .n3 {
+            bottom: 8%;
+            left: 7%
+        }
+
+        .n4 {
+            bottom: 8%;
+            right: 7%
+        }
+
+        .n5 {
+            top: 4%;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+
+        .n6 {
+            bottom: 4%;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+
+        .loop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .loopbox {
+            padding: 30px;
+            border-radius: 26px
+        }
+
+        .loopbox h3 {
+            font-size: 29px;
+            line-height: 1.05;
+            margin: 0 0 9px
+        }
+
+        .loopbox p {
+            font-size: 13px;
+            color: #c3d8ca
+        }
+
+        .lb1 {
+            background: #0a2b1e
+        }
+
+        .lb2 {
+            background: linear-gradient(145deg, #3c2d14, #72571d)
+        }
+
+        .teamGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px
+        }
+
+        .person {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 23px;
+            overflow: hidden
+        }
+
+        .photo {
+            height: 230px;
+            background: linear-gradient(135deg, #dfeee2, #fff0d0);
+            display: grid;
+            place-items: center;
+            color: #0b633b;
+            font-weight: 950;
+            font-size: 42px
+        }
+
+        .bio {
+            padding: 22px
+        }
+
+        .bio h3 {
+            margin: 7px 0 3px
+        }
+
+        .bio p {
+            font-size: 12px;
+            color: var(--mut)
+        }
+
+        .cta {
+            padding: 90px 0;
+            background: var(--cream)
+        }
+
+        .ctaBox {
+            padding: 55px;
+            text-align: center;
+            border-radius: 32px;
+            background: linear-gradient(135deg, #eff8ef, #fff5dc);
+            color: var(--ink)
+        }
+
+        .ctaBox h2 {
+            font-size: clamp(37px, 5vw, 62px);
+            line-height: 1;
+            letter-spacing: -.07em;
+            margin: 9px 0
+        }
+
+        .ctaBox p {
+            max-width: 720px;
+            margin: 12px auto 24px;
+            color: var(--mut)
+        }
+
+        footer {
+            padding: 42px 0 22px;
+            background: #04150e;
+            color: #9eb5a9
+        }
+
+        .foot {
+            display: grid;
+            grid-template-columns: 1.5fr .7fr .7fr;
+            gap: 30px
+        }
+
+        .foot h4 {
+            color: #fff
+        }
+
+        .foot a {
+            display: block;
+            font-size: 12px;
+            margin: 6px 0
+        }
+
+        .copy {
+            border-top: 1px solid #ffffff15;
+            margin-top: 25px;
+            padding-top: 18px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between
+        }
+
+        @media(max-width:900px) {
+            .links {
+                display: none
+            }
+
+            .heroGrid,
+            .cloud,
+            .loop {
+                grid-template-columns: 1fr
+            }
+
+            .art {
+                order: -1;
+                height: 420px
+            }
+
+            .grid,
+            .teamGrid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .arch {
+                grid-template-columns: 1fr
+            }
+
+            .foot {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .grid,
+            .teamGrid {
+                grid-template-columns: 1fr
+            }
+
+            .hero {
+                padding: 70px 0
+            }
+
+            .hero h1 {
+                font-size: 46px
+            }
+
+            .hero p {
+                font-size: 16px
+            }
+
+            .ring {
+                width: 310px;
+                height: 310px
+            }
+
+            .core {
+                width: 210px;
+                height: 210px
+            }
+
+            .coreIn {
+                width: 135px;
+                height: 135px
+            }
+
+            .sat {
+                display: none
+            }
+
+            .section {
+                padding: 70px 0
+            }
+
+            .ctaBox {
+                padding: 38px 20px
+            }
+
+            .foot {
+                grid-template-columns: 1fr
+            }
+
+            .copy {
+                flex-direction: column
+            }
+        }
+        /* 1. Structure de la Grille (3 colonnes uniformes) */
+.cards-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 2. La Carte globale */
+.modern-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.modern-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+/* 3. Conteneur Image : Verrouillage strict du ratio paysage (16:9) */
+.modern-card .card-media {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Force le format paysage sur TOUTES les cartes */
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f8fafc;
+  position: relative;
+  flex-shrink: 0; /* Empêche le texte de réduire l'image */
+}
+
+.modern-card .card-media img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Remplit 100% de la zone sans espace vide */
+  display: block;
+}
+
+/* 4. Corps du texte */
+.modern-card .card-content {
+  padding: 16px 8px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.modern-card .card-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.modern-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.modern-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Adaptabilité aux écrans moyens et mobiles */
+@media (max-width: 992px) {
+  .cards-grid-v2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .cards-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+    </style>
+    <style>
+        .langswitch {
+            display: flex;
+            gap: 4px;
+            margin-left: 8px
+        }
+
+        .langswitch a {
+            padding: 7px 9px;
+            border-radius: 999px;
+            border: 1px solid #ffffff28;
+            color: #b9cec3;
+            font-size: 10px;
+            font-weight: 950
+        }
+
+        .langswitch .active {
+            background: #29cf70;
+            color: #062014;
+            border-color: #29cf70
+        }
+    </style>
+    <link rel="stylesheet" href="../assets/nutri4k.css">
+    <link rel="preload" as="image" href="../assets/img/field-aerial.jpg">
+</head>
+
+<body>
+    <div class="nav">
+        <div class="wrap navin"><a class="brand" href="index.html"><img src="../nutri-logo.png"><span>NUTRI<span
+                        style="color:#29cf70">.</span>N°1 <i>IA</i></span></a>
+            <div class="links"><a href="index.html">Vision</a><a href="platform.html">Plateforme</a><a
+                    href="intelligence.html">Intelligence</a><a href="ecosystem.html">Écosystème</a><a
+                    href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a></div><a class="btn green"
+                href="index.html#contact">Rejoindre NUTRI.N°1</a>
+            <div class="langswitch"><a href="../platform.html">EN</a><a class="active" href="platform.html">FR</a></div>
+        </div>
+    </div>
+    <section class="hero">
+        <div class="wrap heroGrid">
+            <div>
+                <div class="eyebrow">PHASE 01 • INFRASTRUCTURE NUMÉRIQUE DE NUTRITION</div>
+                <h1>Une <b>plateforme nutritionnelle à 360°</b> conçue pour l'Afrique.</h1>
+                <p>Intelligence citoyenne, analyse IA des aliments et des repas, prévention, professionnels de la
+                    nutrition, comptes familiaux, appareils connectés et place de marché — le tout alimenté par une
+                    architecture de données commune.</p>
+                <div class="actions"><a class="btn green" href="#citizen">Citoyen 360°</a><a class="btn outline"
+                        href="intelligence.html">Cœur Données & IA</a></div>
+            </div>
+            <div class="art">
+                <div class="core">
+                    <div class="coreIn">
+                        <div><strong>360°</strong>CITOYEN<br>TABLEAU DE BORD</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="section light" id="citizen">
+        <div class="wrap">
+            <div class="head">
+                <div class="kicker">Tableau de bord Citoyen 360°</div>
+                <h2>Profil → intelligence → action.</h2>
+                <p>L'architecture réunit le profil, l'anthropométrie, les données métaboliques et cliniques, les
+                    habitudes alimentaires et les objectifs dans un tableau de bord personnalisé.</p>
+            </div>
+            <div class="cards-grid-v2">
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase1/Phase1/ProfileIntelligenceAction/01.png" alt="Profil & anthropométrie">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">Phase 01</span>
+                        <h3>Profil & anthropométrie</h3>
+                        <p>Sexe, âge, poids, taille, IMC, tour de taille, tour de hanche, historique nutritionnel, objectifs et habitudes.</p>
+                    </div>
+                </article>
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase1/Phase1/ProfileIntelligenceAction/02.png" alt="Données métaboliques">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">Phase 01</span>
+                        <h3>Données métaboliques</h3>
+                        <p>Glycémie, tension artérielle, fréquence cardiaque et autres biomarqueurs disponibles pour un suivi précis.</p>
+                    </div>
+                </article>
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase1/Phase1/ProfileIntelligenceAction/03.png" alt="Contexte clinique">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">Phase 01</span>
+                        <h3>Contexte clinique</h3>
+                        <p>Diabète, hypertension, obésité, maladies cardiovasculaires, maladies rénales, cancer et facteurs de risque.</p>
+                    </div>
+                </article>
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase1/Phase1/ProfileIntelligenceAction/04.png" alt="Alimentation et scanner des repas">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">Phase 01</span>
+                        <h3>Alimentation et scanner des repas</h3>
+                        <p>Validation d'image, reconnaissance, interrogation de l'ontologie, estimation des portions et calcul des nutriments.</p>
+                    </div>
+                </article>
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase1/Phase1/ProfileIntelligenceAction/05.png" alt="Plans personnalisés">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">Phase 01</span>
+                        <h3>Plans personnalisés</h3>
+                        <p>Évaluation des risques, besoins nutritionnels, aliments locaux, optimisation des repas et plan de 7 jours.</p>
+                    </div>
+                </article>
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase1/Phase1/ProfileIntelligenceAction/06.png" alt="Santé connectée">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">Phase 01</span>
+                        <h3>Santé connectée</h3>
+                        <p>Glucomètres, tensiomètres, montres connectées, bracelets d'activité et plateformes de santé intégrées.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    <section class="section dark">
+        <div class="wrap">
+            <div class="head">
+                <div class="kicker">Expert humain dans la boucle</div>
+                <h2>Intelligence IA, expertise humaine.</h2>
+                <p>Les nutritionnistes et diététiciens peuvent être recherchés par pays et spécialité, puis contactés
+                    par chat, rendez-vous, téléconsultation et suivi autorisé des patients.</p>
+            </div>
+            <div class="grid">
+                <div class="card">
+                    <div class="ico">CL</div>
+                    <h3>Nutrition clinique</h3>
+                    <p>Spécialisation professionnelle et suivi des patients.</p>
+                </div>
+                <div class="card">
+                    <div class="ico">MC</div>
+                    <h3>Nutrition maternelle & infantile</h3>
+                    <p>Nutrition pendant la grossesse, l'allaitement et l'enfance.</p>
+                </div>
+                <div class="card">
+                    <div class="ico">NCD</div>
+                    <h3>Nutrition orientée pathologies</h3>
+                    <p>Spécialités diabète, rénale, cardiovasculaire et nutrition générale.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <div class="wrap foot">
+            <div><b style="font-size:21px;color:#fff">NUTRI.N°1</b>
+                <p style="font-size:12px">Infrastructure africaine de l'intelligence alimentaire et nutritionnelle —
+                    évoluant vers une Plateforme durable d'agro-transformation et de nutrition en Afrique de l'Ouest.
+                </p>
+            </div>
+            <div>
+                <h4>Plateforme</h4><a href="platform.html">Nutrition numérique</a><a href="intelligence.html">Base de
+                    connaissances alimentaire africaine</a><a href="ecosystem.html">Acteurs</a>
+            </div>
+            <div>
+                <h4>Entreprises</h4><a href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a><a
+                    href="index.html#contact">Contact</a>
+            </div>
+        </div>
+        <div class="wrap copy"><span>© 2026 NUTRI.N°1</span><span>Conçue en Afrique de l’Ouest • Pensée pour
+                l’Afrique</span></div>
+    </footer>
+    <script>const o = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && (x.target.style.opacity = 1)), { threshold: .1 }); document.querySelectorAll(".card,.box,.person,.loopbox").forEach(x => { x.style.opacity = 0; x.style.transition = "opacity .7s,transform .7s"; o.observe(x) })</script>
+    <script src="../assets/nutri4k.js" defer></script>
+</body>
+
+</html>

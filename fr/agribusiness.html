@@ -1,137 +1,2436 @@
-<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>NUTRI.N°1 — Agro-industrie durable et nutrition</title><style>
-:root{--g:#29cf70;--d:#061b13;--d2:#0b2b1e;--gold:#e5b85a;--cream:#f5f4ed;--ink:#0b2117;--mut:#6d7d74;--line:#dfe8e1}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,system-ui,sans-serif;background:var(--d);color:#fff;line-height:1.55}a{text-decoration:none;color:inherit}.wrap{width:min(1180px,92%);margin:auto}
-.nav{height:76px;position:sticky;top:0;z-index:20;background:#061b13ee;backdrop-filter:blur(16px);border-bottom:1px solid #ffffff1c}.navin{height:100 %;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:10px;font-weight:950}.brand img{width:48px;height:48px;background:#fff;border-radius:50%;object-fit:contain}.brand span{font-size:18px}.brand i{color:var(--gold);font-style:normal}.links{display:flex;gap:20px;font-size:12px;color:#c1d1c8;font-weight:800}.links a:hover{color:#fff}.btn{display:inline-block;padding:12px 17px;border-radius:13px;font-weight:900;font-size:13px}.green{background:var(--g);color:#042414}.outline{border:1px solid #ffffff26;background:#ffffff08}.hero{padding:100px 0 85px;background:radial-gradient(circle at 75% 20%,#29cf7030,transparent 28%),linear-gradient(180deg,var(--d),#0a291c)}.heroGrid{display:grid;grid-template-columns:1.05fr .95fr;gap:55px;align-items:center}.eyebrow,.chip{display:inline-block;border:1px solid #29cf7040;background:#29cf7010;color:#bcefd0;border-radius:99px;padding:7px 11px;font-size:10px;font-weight:950;text-transform:uppercase;letter-spacing:.1em}.hero h1{font-size:clamp(45px,6vw,78px);line-height:.94;letter-spacing:-.07em;margin:20px 0}.hero h1 b{color:var(--g)}.hero h1 em{color:var(--gold);font-style:normal}.hero p{font-size:18px;color:#b5c8be;max-width:680px}.actions{display:flex;gap:10px;flex-wrap:wrap;margin:27px 0}.art{height:500px;position:relative;display:grid;place-items:center}.ring{width:390px;height:390px;border-radius:50%;border:1px solid #9be76630;box-shadow:0 0 0 55px #9be76608}.core{position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,#a9ee88,#28c970 35%,#0b5b38 70%);display:grid;place-items:center;box-shadow:0 0 80px #29cf7040}.coreIn{width:155px;height:155px;border-radius:50%;background:#eff8ef;color:#0a4329;display:grid;place-items:center;text-align:center;font-weight:950}.coreIn strong{font-size:32px;display:block}.sat{position:absolute;background:#fff;color:#163326;padding:13px;border-radius:16px;box-shadow:0 20px 55px #0005;font-size:10px}.sat b{display:block;color:#087041;font-size:16px}.s1{top:8%;left:0}.s2{top:7%;right:0}.s3{bottom:12%;left:3%}.s4{bottom:8%;right:1%}
-.light{background:var(--cream);color:var(--ink)}.section{padding:90px 0}.head{max-width:800px;margin-bottom:42px}.kicker{font-size:10px;color:#169652;font-weight:950;text-transform:uppercase;letter-spacing:.14em}.dark .kicker{color:#6bdd8f}.head h2{font-size:clamp(35px,4.5vw,57px);line-height:1;letter-spacing:-.06em;margin:9px 0 14px}.head p{color:var(--mut);font-size:17px}.dark .head p{color:#9eb5aa}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:24px;transition:.25s}.card:hover{transform:translateY(-4px);box-shadow:0 20px 50px #173d2b14}.dark .card{background:#0d3223;border-color:#ffffff18;color:#fff}.ico{width:44px;height:44px;border-radius:13px;background:#e9f5eb;color:#0a6b3d;display:grid;place-items:center;font-weight:950;margin-bottom:15px}.dark .ico{background:#29cf7012;color:#73df94}.card h3{font-size:18px;margin:0 0 7px}.card p{font-size:13px;color:var(--mut);margin:0}.dark .card p{color:#9eb5aa}
-.arch{display:grid;grid-template-columns:1fr 1fr;gap:16px}.box{padding:29px;border-radius:25px;background:#fff;border:1px solid var(--line)}.box h3{font-size:25px;margin:10px 0 7px}.box p{font-size:13px;color:var(--mut)}.flow{display:flex;gap:7px;flex-wrap:wrap;align-items:center;margin-top:17px}.flow span{padding:8px 10px;background:#0b6038;color:#fff;border-radius:11px;font-size:10px;font-weight:900}.flow i{color:#1c9d58;font-style:normal;font-weight:900}
-.cloud{display:grid;grid-template-columns:1fr 1fr;gap:25px}.cloudVisual{min-height:430px;border-radius:30px;background:radial-gradient(circle,#145c3d,#071e15 62%);position:relative;border:1px solid #ffffff18}.cloudCenter{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:155px;height:155px;border-radius:50%;background:#eff8ef;color:#0a4329;display:grid;place-items:center;text-align:center;font-weight:950}.node{position:absolute;width:115px;padding:13px;border-radius:15px;background:#ffffff0d;border:1px solid #ffffff18;text-align:center;font-size:10px}.node b{display:block;color:var(--g);font-size:19px}.n1{top:8%;left:7%}.n2{top:8%;right:7%}.n3{bottom:8%;left:7%}.n4{bottom:8%;right:7%}.n5{top:4%;left:50%;transform:translateX(-50%)}.n6{bottom:4%;left:50%;transform:translateX(-50%)}
-.loop{display:grid;grid-template-columns:1fr 1fr;gap:16px}.loopbox{padding:30px;border-radius:26px}.loopbox h3{font-size:29px;line-height:1.05;margin:0 0 9px}.loopbox p{font-size:13px;color:#c3d8ca}.lb1{background:#0a2b1e}.lb2{background:linear-gradient(145deg,#3c2d14,#72571d)}
-.teamGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.person{background:#fff;border:1px solid var(--line);border-radius:23px;overflow:hidden}.photo{height:230px;background:linear-gradient(135deg,#dfeee2,#fff0d0);display:grid;place-items:center;color:#0b633b;font-weight:950;font-size:42px}.bio{padding:22px}.bio h3{margin:7px 0 3px}.bio p{font-size:12px;color:var(--mut)}
-.cta{padding:90px 0;background:var(--cream)}.ctaBox{padding:55px;text-align:center;border-radius:32px;background:linear-gradient(135deg,#eff8ef,#fff5dc);color:var(--ink)}.ctaBox h2{font-size:clamp(37px,5vw,62px);line-height:1;letter-spacing:-.07em;margin:9px 0}.ctaBox p{max-width:720px;margin:12px auto 24px;color:var(--mut)}
-footer{padding:42px 0 22px;background:#04150e;color:#9eb5a9}.foot{display:grid;grid-template-columns:1.5fr .7fr .7fr;gap:30px}.foot h4{color:#fff}.foot a{display:block;font-size:12px;margin:6px 0}.copy{border-top:1px solid #ffffff15;margin-top:25px;padding-top:18px;font-size:11px;display:flex;justify-content:space-between}
-@media(max-width:900px){.links{display:none}.heroGrid,.cloud,.loop{grid-template-columns:1fr}.art{order:-1;height:420px}.grid,.teamGrid{grid-template-columns:1fr 1fr}.arch{grid-template-columns:1fr}.foot{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.grid,.teamGrid{grid-template-columns:1fr}.hero{padding:70px 0}.hero h1{font-size:46px}.hero p{font-size:16px}.ring{width:310px;height:310px}.core{width:210px;height:210px}.coreIn{width:135px;height:135px}.sat{display:none}.section{padding:70px 0}.ctaBox{padding:38px 20px}.foot{grid-template-columns:1fr}.copy{flex-direction:column}}
-</style><style>.langswitch{display:flex;gap:4px;margin-left:8px}.langswitch a{padding:7px 9px;border-radius:999px;border:1px solid #ffffff28;color:#b9cec3;font-size:10px;font-weight:950}.langswitch .active{background:#29cf70;color:#062014;border-color:#29cf70}</style><style>
-.v4-orb{position:relative;min-height:500px;display:grid;place-items:center}
-.v4-orb .planet{width:250px;height:250px;border-radius:50%;display:grid;place-items:center;
-background:radial-gradient(circle at 35% 30%,#c7f7a6,#36dc7b 34%,#075536 72%);
-box-shadow:0 0 90px #36dc7b35;animation:v4pulse 3s ease-in-out infinite}
-.v4-orb .planet>div{width:155px;height:155px;border-radius:50%;background:#f0f8f0;color:#063c26;
-display:grid;place-items:center;text-align:center;font-weight:950}.v4-orb .planet b{font-size:38px;display:block}
-.v4-orbit{position:absolute;border:1px solid #9be76630;border-radius:50%;animation:v4spin 28s linear infinite}
-.v4-orbit.o1{width:370px;height:370px}.v4-orbit.o2{width:470px;height:470px;animation-direction:reverse}
-.v4-dot{position:absolute;width:8px;height:8px;background:#36dc7b;border-radius:50%;box-shadow:0 0 18px #36dc7b}
-.o1 .v4-dot{left:10%;top:16%}.o2 .v4-dot{right:14%;bottom:13%}
-@keyframes v4spin{to{transform:rotate(360deg)}}@keyframes v4pulse{50%{transform:scale(1.035)}}
-.v4-demo{background:#061d14;border:1px solid #ffffff16;border-radius:28px;padding:18px;box-shadow:0 30px 80px #0004}
-.v4-demo-top{display:flex;justify-content:space-between;padding:8px 3px 15px;border-bottom:1px solid #ffffff14;font-size:11px}
-.v4-app{display:grid;grid-template-columns:1fr 1fr;gap:13px;padding-top:14px}
-.v4-phone{background:#0d3423;border:1px solid #ffffff12;border-radius:22px;padding:17px;min-height:350px}
-.v4-score{display:flex;align-items:center;gap:15px;margin:18px 0}.v4-score-circle{width:78px;height:78px;border:8px solid #36dc7b;border-radius:50%;display:grid;place-items:center;font-weight:950;font-size:20px}
-.v4-bar{height:7px;background:#ffffff12;border-radius:99px;margin:8px 0}.v4-bar i{display:block;height:100 %;background:#36dc7b;border-radius:99px}
-.v4-food{height:135px;border-radius:17px;background:linear-gradient(135deg,#1a5d3e,#d9e9cf);display:grid;place-items:center;color:#073c26;font-size:28px;font-weight:950}
-.v4-tag{display:inline-block;background:#e0f3e5;color:#087041;border-radius:99px;padding:5px 7px;font-size:8px;font-weight:900;margin:4px 2px}
-.v4-map{position:relative;min-height:420px;border-radius:30px;background:radial-gradient(circle,#125b3c,#061e15 66%);
-display:grid;place-items:center;overflow:hidden;border:1px solid #ffffff15}.v4-africa{font-size:120px;font-weight:950;color:#123f2c;letter-spacing:-.1em}
-.v4-countries{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;padding:30px}
-.v4-countries span{font-size:9px;color:#d5e8dd;border:1px solid #ffffff16;background:#ffffff08;border-radius:99px;padding:8px 10px}
-.v4-countries .active{background:#36dc7b;color:#062014;border-color:#36dc7b}
-.v4-loop{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;align-items:center}.v4-loop-step{padding:15px 7px;background:#0b3020;border:1px solid #ffffff12;border-radius:15px;text-align:center;font-size:10px;font-weight:900}.v4-arrow{text-align:center;color:#36dc7b;font-weight:950}
-.v4-reveal{opacity:0;transform:translateY(22px);transition:.75s}.v4-reveal.show{opacity:1;transform:none}
-@media(max-width:800px){.v4-app,.v4-loop{grid-template-columns:1fr}.v4-orb{min-height:410px}.v4-orbit.o2{width:380px;height:380px}.v4-orbit.o1{width:300px;height:300px}}
-@media(max-width:520px){.v4-orb .planet{width:205px;height:205px}.v4-orb .planet>div{width:130px;height:130px}.v4-africa{font-size:80px}}
-</style><style>
-:root{--v5green:#38e27e;--v5dark:#03140c;--v5mint:#dff8dc;--v5gold:#e9c568}
-.v5{font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
-.v5-hero{min-height:92vh;display:grid;align-items:center;position:relative;overflow:hidden;background:
-radial-gradient(circle at 72% 30%,#1c71462c,transparent 25%),radial-gradient(circle at 15% 80%,#e9c56812,transparent 20%),#03140c}
-.v5-hero-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:35px;align-items:center;padding:70px 0}
-.v5-kicker{font-size:9px;letter-spacing:.16em;text-transform:uppercase;font-weight:950;color:#8ff0a9}
-.v5-title{font-size:clamp(55px,7vw,96px);line-height:.87;letter-spacing:-.09em;margin:16px 0}
-.v5-title span{color:var(--v5green)}.v5-title em{font-style:normal;color:var(--v5gold)}
-.v5-copy{font-size:18px;line-height:1.6;color:#b5cabe;max-width:670px}
-.v5-actions{display:flex;gap:9px;flex-wrap:wrap;margin:26px 0}
-.v5-orb{height:560px;position:relative;display:grid;place-items:center}
-.v5-ring{position:absolute;border:1px solid #91e97b28;border-radius:50%;animation:v5spin 25s linear infinite}
-.v5-ring.r1{width:420px;height:420px}.v5-ring.r2{width:540px;height:540px;animation-direction:reverse}
-.v5-ring:before{content:"";position:absolute;width:10px;height:10px;border-radius:50%;background:var(--v5green);box-shadow:0 0 25px var(--v5green);left:12%;top:18%}
-.v5-ring.r2:before{left:auto;right:13%;top:auto;bottom:12%}
-.v5-core{width:245px;height:245px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#d4f7ae,#39e07e 35%,#075637 72%);display:grid;place-items:center;z-index:2;box-shadow:0 0 90px #38e27e2b}
-.v5-core-in{width:150px;height:150px;border-radius:50%;background:#f2f9f1;color:#063d27;display:grid;place-items:center;text-align:center;font-weight:950}
-.v5-core-in b{display:block;font-size:38px}
-.v5-float{position:absolute;z-index:4;background:#f7faf5;color:#113524;border-radius:16px;padding:13px 15px;box-shadow:0 22px 65px #0005;font-size:9px;font-weight:850}
-.v5-float strong{display:block;color:#087242;font-size:15px}.vf1{left:0;top:13%}.vf2{right:0;top:9%}.vf3{left:2%;bottom:13%}.vf4{right:0;bottom:9%}
-@keyframes v5spin{to{transform:rotate(360deg)}}
-.v5-section{padding:100px 0}.v5-light{background:#f5f6ef;color:#092217}.v5-dark{background:#04170e;color:#fff}
-.v5-head{max-width:820px;margin-bottom:42px}.v5-head small{font-size:9px;color:#129050;font-weight:950;letter-spacing:.16em;text-transform:uppercase}.v5-dark .v5-head small{color:#72e493}
-.v5-head h2{font-size:clamp(40px,5vw,65px);line-height:.94;letter-spacing:-.075em;margin:10px 0 15px}.v5-head p{font-size:16px;color:#6e7e75}.v5-dark .v5-head p{color:#9bb4a7}
-.v5-demo{background:#061f15;border:1px solid #ffffff14;border-radius:30px;padding:20px;box-shadow:0 35px 100px #0003}
-.v5-app{display:grid;grid-template-columns:1fr 1fr;gap:14px}.v5-phone{background:#0d3423;border:1px solid #ffffff10;border-radius:23px;padding:18px;min-height:390px}
-.v5-score{display:flex;gap:15px;align-items:center;margin:20px 0}.v5-score-circle{width:82px;height:82px;border:8px solid #38e27e;border-radius:50%;display:grid;place-items:center;font-size:21px;font-weight:950}
-.v5-bar{height:7px;background:#ffffff12;border-radius:99px;margin:8px 0}.v5-bar i{display:block;height:100 %;background:#38e27e;border-radius:99px}
-.v5-food{height:150px;border-radius:18px;background:linear-gradient(135deg,#1b5d3e,#dcebd3);display:grid;place-items:center;color:#073e29;font-size:28px;font-weight:950}
-.v5-flow{display:grid;grid-template-columns:repeat(9,1fr);gap:7px;align-items:center}.v5-node{padding:14px 6px;border:1px solid #ffffff12;background:#0b3020;border-radius:15px;text-align:center;font-size:9px;font-weight:900}.v5-arr{color:#39df7d;text-align:center}
-.v5-map{min-height:480px;border-radius:32px;background:radial-gradient(circle,#145f3e,#061f15 66%);border:1px solid #ffffff14;position:relative;display:grid;place-items:center;overflow:hidden}.v5-africa{font-size:155px;font-weight:950;color:#12432f;letter-spacing:-.12em}.v5-countries{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:8px;padding:35px}.v5-countries span{font-size:9px;padding:8px 11px;border-radius:99px;border:1px solid #ffffff14;background:#ffffff09;color:#d6e7dd}.v5-countries .active{background:#38e27e;color:#062114;border-color:#38e27e}
-.v5-team{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}.v5-person{background:#fff;border:1px solid #dfe8e1;border-radius:22px;overflow:hidden}.v5-photo{height:220px;background:linear-gradient(135deg,#dcefe0,#fff0cb);display:grid;place-items:center;color:#0a663d;font-weight:950;font-size:36px}.v5-bio{padding:18px}.v5-bio h3{margin:5px 0 2px;font-size:17px}.v5-bio p{font-size:11px;color:#6c7a73;margin:0}
-.v5-compare{display:grid;grid-template-columns:1fr 1.25fr;gap:16px}.v5-box{border-radius:27px;padding:32px}.v5-old{background:#e9ece8;color:#3d4b44}.v5-new{background:#08291c;color:#fff;border:1px solid #ffffff15}.v5-box h3{font-size:27px;line-height:1;margin:0 0 16px}.v5-line{padding:11px 0;border-bottom:1px solid currentColor;opacity:.7;font-size:13px}
-.v5-cta{padding:95px 0;background:#f5f6ef}.v5-cta-box{border-radius:34px;padding:60px 35px;text-align:center;background:linear-gradient(135deg,#edf8ec,#fff2d4);color:#092217}.v5-cta h2{font-size:clamp(42px,5.3vw,70px);line-height:.92;letter-spacing:-.08em;max-width:900px;margin:10px auto 15px}.v5-cta p{max-width:720px;margin:0 auto 24px;color:#6d7b73}
-@media(max-width:900px){.v5-hero-grid,.v5-compare{grid-template-columns:1fr}.v5-orb{height:430px}.v5-team{grid-template-columns:1fr 1fr}.v5-flow{grid-template-columns:repeat(5,1fr)}}
-@media(max-width:580px){.v5-title{font-size:52px}.v5-orb{height:360px}.v5-ring.r1{width:300px;height:300px}.v5-ring.r2{width:370px;height:370px}.v5-core{width:190px;height:190px}.v5-core-in{width:125px;height:125px}.v5-float{display:none}.v5-app,.v5-team{grid-template-columns:1fr}.v5-flow{grid-template-columns:1fr 1fr}.v5-africa{font-size:90px}}
-</style><style>
-.p2f-hero{background:radial-gradient(circle at 75% 20%,#38e27e22,transparent 28%),linear-gradient(180deg,#03140c,#08291b);padding:95px 0}
-.p2f-grid{display:grid;grid-template-columns:1.02fr .98fr;gap:36px;align-items:center}
-.p2f-badge{display:inline-flex;padding:8px 12px;border:1px solid #38e27e44;background:#38e27e0d;border-radius:99px;font-size:9px;font-weight:950;letter-spacing:.13em;color:#a8efb8}
-.p2f-title{font-size:clamp(51px,6.4vw,86px);line-height:.88;letter-spacing:-.09em;margin:16px 0}.p2f-title span{color:#38e27e}.p2f-title em{font-style:normal;color:#e9c568}
-.p2f-copy{font-size:17px;line-height:1.6;color:#b7cbbf;max-width:710px}
-.p2f-visual{min-height:500px;border:1px solid #ffffff14;border-radius:32px;background:#061f15;position:relative;display:grid;place-items:center;overflow:hidden;box-shadow:0 35px 100px #0005}
-.p2f-core{width:255px;height:255px;border-radius:50%;display:grid;place-items:center;background:radial-gradient(circle at 35% 30%,#d5f6ad,#38e27e 35%,#075638 72%);box-shadow:0 0 90px #38e27e2b;z-index:2}
-.p2f-core-in{width:160px;height:160px;border-radius:50%;background:#f1f8ef;color:#073c27;display:grid;place-items:center;text-align:center;font-weight:950}.p2f-core-in b{font-size:27px;display:block}
-.p2f-ring{position:absolute;border:1px solid #91e97b27;border-radius:50%;animation:p2fspin 28s linear infinite}.p2f-ring.r1{width:400px;height:400px}.p2f-ring.r2{width:520px;height:520px;animation-direction:reverse}.p2f-ring:before{content:"";position:absolute;width:9px;height:9px;border-radius:50%;background:#38e27e;box-shadow:0 0 22px #38e27e;left:11%;top:16%}.p2f-ring.r2:before{left:auto;top:auto;right:12%;bottom:12%}
-@keyframes p2fspin{to{transform:rotate(360deg)}}
-.p2f-node{position:absolute;padding:12px 14px;border-radius:16px;background:#ffffff09;border:1px solid #ffffff15;color:#d6e8dd;font-size:9px;font-weight:850;text-align:center}.p2f-node b{display:block;color:#38e27e;font-size:14px}.p2f-n1{top:7%;left:5%}.p2f-n2{top:6%;right:5%}.p2f-n3{bottom:7%;left:5%}.p2f-n4{bottom:6%;right:5%}
-.p2f-section{padding:95px 0}.p2f-light{background:#f5f6ef;color:#092217}.p2f-dark{background:#04170e;color:#fff}
-.p2f-head{max-width:880px;margin-bottom:42px}.p2f-head small{font-size:9px;color:#138d4f;font-weight:950;letter-spacing:.15em;text-transform:uppercase}.p2f-dark .p2f-head small{color:#73e494}.p2f-head h2{font-size:clamp(39px,4.9vw,64px);line-height:.94;letter-spacing:-.075em;margin:10px 0 15px}.p2f-head p{font-size:15px;color:#6c7b72}.p2f-dark .p2f-head p{color:#9bb3a7}
-.p2f-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.p2f-card{padding:25px;border-radius:23px;background:#fff;border:1px solid #dfe8e1}.p2f-dark .p2f-card{background:#0b3020;border-color:#ffffff12;color:#fff}.p2f-num{width:43px;height:43px;border-radius:13px;background:#e7f5e9;color:#0a6e40;display:grid;place-items:center;font-size:10px;font-weight:950;margin-bottom:15px}.p2f-dark .p2f-num{background:#38e27e12;color:#76e596}.p2f-card h3{margin:0 0 8px;font-size:19px}.p2f-card p{margin:0;color:#6b7b72;font-size:12px}.p2f-dark .p2f-card p{color:#9bb3a7}
-.p2f-feature{display:grid;grid-template-columns:1fr 1fr;gap:17px}.p2f-panel{padding:30px;border-radius:28px}.p2f-panel.dark{background:#0a2b1e;color:#fff;border:1px solid #ffffff12}.p2f-panel.light{background:#fff;border:1px solid #dfe8e1}.p2f-panel h3{font-size:28px;line-height:1;margin:0 0 10px}.p2f-panel p{font-size:12px;color:#6d7b73}.p2f-panel.dark p{color:#9bb3a7}
-.p2f-icons{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}.p2f-icon{padding:15px;border-radius:17px;background:#ffffff08;border:1px solid #ffffff12;font-size:10px}.p2f-icon b{display:block;color:#38e27e;font-size:15px;margin-bottom:4px}
-.p2f-chain{display:grid;grid-template-columns:repeat(5,1fr);gap:9px}.p2f-chain-card{min-height:185px;padding:22px 17px;border-radius:21px;background:#0b3020;border:1px solid #ffffff12;position:relative}.p2f-chain-card:not(:last-child):after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);color:#38e27e;font-size:20px;font-weight:950;z-index:2}.p2f-chain-card b{font-size:10px;color:#a8c5b7}.p2f-chain-card strong{display:block;font-size:23px;margin:12px 0 7px;color:#38e27e}.p2f-chain-card p{font-size:10px;color:#9bb3a7}
-.p2f-loop{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;align-items:center}.p2f-loop .node{padding:14px 6px;background:#0b3020;border:1px solid #ffffff12;border-radius:14px;text-align:center;font-size:9px;font-weight:900}.p2f-loop .arr{color:#38e27e;text-align:center}
-.p2f-note{padding:25px 28px;border-left:3px solid #38e27e;background:#38e27e08;border-radius:0 18px 18px 0;color:#c4d9ce;font-size:13px;line-height:1.6;margin-top:22px}
-@media(max-width:900px){.p2f-grid,.p2f-feature{grid-template-columns:1fr}.p2f-cards{grid-template-columns:1fr 1fr}.p2f-chain{grid-template-columns:1fr 1fr}.p2f-chain-card:not(:last-child):after{display:none}.p2f-loop{grid-template-columns:1fr 1fr}}
-@media(max-width:600px){.p2f-cards,.p2f-chain,.p2f-loop{grid-template-columns:1fr}.p2f-visual{min-height:390px}.p2f-core{width:205px;height:205px}.p2f-core-in{width:130px;height:130px}.p2f-node{display:none}}
-</style><style id="phase2-nav-fix">header,nav{z-index:9999;}</style><link rel="stylesheet" href="../assets/nutri4k.css"><link rel="preload" as="image" href="../assets/img/field-aerial.jpg"></head><body>
-<div class="nav"><div class="wrap navin"><a class="brand" href="index.html"><img src="../nutri-logo.png"><span>NUTRI<span style="color:#29cf70">.</span>N°1 <i>IA</i></span></a><div class="links"><a href="index.html">Vision</a><a href="platform.html">Plateforme</a><a href="intelligence.html">Intelligence</a><a href="ecosystem.html">Écosystème</a><a href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a></div><a class="btn green" href="index.html#contact">Rejoindre NUTRI.N°1</a><div class="langswitch"><a href="../agribusiness.html">EN</a><a class="active" href="agribusiness.html">FR</a></div></div></div>
+<!doctype html>
+<html lang="fr">
 
-<section class="p2f-hero"><div class="wrap p2f-grid"><div>
-<div class="p2f-badge">PHASE 02 • PLATEFORME DURABLE D’AGRO-TRANSFORMATION ET DE NUTRITION</div>
-<h1 class="p2f-title">De <span>l'intelligence nutritionnelle</span> à un système alimentaire résilient.</h1>
-<p class="p2f-copy">NUTRI.N°1 construira progressivement une agro-industrie autour de son infrastructure numérique de nutrition : connecter les producteurs à la demande, réduire les pertes post-récolte, développer une agriculture intelligente et climato-résiliente, transformer les aliments nutritifs grâce à des énergies renouvelables et les distribuer grâce à une chaîne du froid maîtrisée.</p>
-<div class="actions"><a class="btn green" href="#production">Explorer la production →</a><a class="btn outline" href="#commercialization">Explorer la commercialisation</a></div>
-</div><div class="p2f-visual"><div class="p2f-ring r1"></div><div class="p2f-ring r2"></div><div class="p2f-core"><div class="p2f-core-in"><div><b>DE LA FERME À L’ALIMENT</b>PRODUCTION INTELLIGENTE<br>× TRANSFORMATION DURABLE</div></div></div>
-<div class="p2f-node p2f-n1">🌱<b>AGRICULTURE RÉSILIENTE</b>Biologique • Intelligente • Irriguée</div><div class="p2f-node p2f-n2">☀<b>ÉNERGIE RENOUVELABLE</b>Opérations alimentées à l’énergie solaire</div><div class="p2f-node p2f-n3">❄<b>CHAÎNE DU FROID</b>Température contrôlée</div><div class="p2f-node p2f-n4">🛒<b>MARCHÉ CONNECTÉ</b>Demande en temps réel</div></div></div></section>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NUTRI.N°1 — Agro-industrie durable et nutrition</title>
+    <style>
+        :root {
+            --g: #29cf70;
+            --d: #061b13;
+            --d2: #0b2b1e;
+            --gold: #e5b85a;
+            --cream: #f5f4ed;
+            --ink: #0b2117;
+            --mut: #6d7d74;
+            --line: #dfe8e1
+        }
 
-<section class="p2f-section p2f-light" id="production"><div class="wrap"><div class="p2f-head"><small>01 • PRODUCTION</small><h2>Un réseau de production guidé par la nutrition.</h2><p>La production combinera progressivement pratiques biologiques, agriculture intelligente, résilience climatique et irrigation contrôlée. La plateforme numérique fournit des signaux de demande et de nutrition afin d'aligner davantage la production sur les besoins des populations et les capacités du marché.</p></div>
-<div class="p2f-cards"><div class="p2f-card"><div class="p2f-num">01</div><h3>Agriculture biologique et pratiques biologiques</h3><p>Développer progressivement des pratiques biologiques et d'agriculture biologique, avec traçabilité, gestion durable des sols et contrôles de qualité.</p></div><div class="p2f-card"><div class="p2f-num">02</div><h3>Agriculture intelligente & climato-résiliente</h3><p>Utiliser les informations climatiques, les données de terrain et des pratiques adaptées pour améliorer la productivité et la résilience face aux changements climatiques.</p></div><div class="p2f-card"><div class="p2f-num">03</div><h3>Irrigation contrôlée</h3><p>Apporter l’eau selon les besoins des cultures, réduire les pertes et stabiliser la production grâce à des systèmes d'irrigation contrôlée.</p></div><div class="p2f-card"><div class="p2f-num">04</div><h3>Planification des cultures guidée par la nutrition</h3><p>Utiliser la pertinence nutritionnelle, la saisonnalité et les signaux de demande pour prioriser les cultures et variétés riches en nutriments et à potentiel commercial.</p></div><div class="p2f-card"><div class="p2f-num">05</div><h3>Approvisionnement traçable</h3><p>Relier à la plateforme les données de production, les dates de récolte, les caractéristiques de qualité, les informations sur les producteurs et l’origine des produits.</p></div><div class="p2f-card"><div class="p2f-num">06</div><h3>Réseau de producteurs connectés</h3><p>Donner aux producteurs une meilleure visibilité sur la demande, les exigences de qualité, la collecte et l'accès au marché.</p></div></div>
-<div class="p2f-note"><b>Principe stratégique :</b> NUTRI.N°1 ne veut pas remplacer les producteurs. Elle veut connecter et renforcer l'écosystème alimentaire autour d'eux — en créant progressivement un parcours plus prévisible de la ferme au marché.</div></div></section>
+        * {
+            box-sizing: border-box
+        }
 
-<section class="p2f-section p2f-dark"><div class="wrap"><div class="p2f-head"><small>02 • SÉCURITÉ ALIMENTAIRE ET PERTES POST-RÉCOLTE</small><h2>Connecter les producteurs à la demande avant que les aliments nutritifs ne soient perdus.</h2><p>Les fruits et légumes sont particulièrement vulnérables aux pertes post-récolte. NUTRI.N°1 peut créer une couche de coordination reliant en temps réel disponibilité, calendrier de récolte, qualité, capacités de stockage, capacités de transformation et demande des acheteurs.</p></div>
-<div class="p2f-feature"><div class="p2f-panel dark"><h3>Connexion producteur → marché</h3><p>Les producteurs pourront progressivement partager disponibilités, récoltes attendues, volumes, attributs de qualité et localisations. Les unités de transformation, distributeurs, détaillants et acheteurs institutionnels pourront répondre aux signaux d'offre et coordonner la collecte.</p><div class="p2f-icons"><div class="p2f-icon"><b>OFFRE EN TEMPS RÉEL</b>Volumes disponibles</div><div class="p2f-icon"><b>FENÊTRE DE RÉCOLTE</b>Quand les produits doivent circuler</div><div class="p2f-icon"><b>QUALITÉ</b>Spécifications et traçabilité</div><div class="p2f-icon"><b>LOCALISATION</b>Planification de la collecte</div></div></div>
-<div class="p2f-panel dark"><h3>Quand un surplus apparaît</h3><p>Les récoltes à risque peuvent progressivement être orientées vers une chambre froide proche, une unité de transformation, un acheteur, un détaillant ou la demande de la place de marché afin d’éviter qu’elles ne restent sans débouché.</p><div class="p2f-icons"><div class="p2f-icon"><b>01</b>Détecter le risque</div><div class="p2f-icon"><b>02</b>Collecter rapidement</div><div class="p2f-icon"><b>03</b>Refroidir / stocker</div><div class="p2f-icon"><b>04</b>Transformer / distribuer</div></div></div></div></div></section>
+        html {
+            scroll-behavior: smooth
+        }
 
-<section class="p2f-section p2f-light"><div class="wrap"><div class="p2f-head"><small>03 • TRANSFORMATION</small><h2>Transformer des matières premières riches en nutriments en produits sûrs et compétitifs.</h2><p>La transformation est conçue comme une extension maîtrisée de l'intelligence nutritionnelle et du réseau alimentaire — de la réception des matières premières au produit fini.</p></div>
-<div class="p2f-cards"><div class="p2f-card"><div class="p2f-num">01</div><h3>Conception de produits guidée par la nutrition</h3><p>Développer des produits compétitifs à partir d'aliments africains riches en nutriments selon les besoins nutritionnels, les préférences, l'accessibilité et la demande.</p></div><div class="p2f-card"><div class="p2f-num">02</div><h3>Sécurité sanitaire dès la conception</h3><p>Intégrer l’hygiène, le contrôle qualité, la traçabilité, la maîtrise des procédés et des procédures documentées de la réception au produit fini.</p></div><div class="p2f-card"><div class="p2f-num">03</div><h3>Objectif : 100 % d’énergie renouvelable</h3><p>Viser progressivement 100 % d'électricité renouvelable pour les opérations de transformation, avec le solaire comme source centrale lorsque cela est techniquement approprié.</p></div><div class="p2f-card"><div class="p2f-num">04</div><h3>Chambres froides alimentées au solaire</h3><p>Concevoir des espaces de stockage à température contrôlée alimentés par des énergies renouvelables, avec des systèmes adaptés de stockage et de secours pour protéger les aliments périssables.</p></div><div class="p2f-card"><div class="p2f-num">05</div><h3>Emballage et traçabilité numérique</h3><p>Protéger les produits tout en maintenant un lien numérique entre leur origine, leur lot, leur transformation, leur qualité et leur distribution.</p></div><div class="p2f-card"><div class="p2f-num">06</div><h3>Efficacité des ressources</h3><p>Réduire les déchets et explorer la valorisation sûre des coproduits.</p></div></div></div></section>
+        body {
+            margin: 0;
+            font-family: Inter, system-ui, sans-serif;
+            background: var(--d);
+            color: #fff;
+            line-height: 1.55
+        }
 
-<section class="p2f-section p2f-dark"><div class="wrap"><div class="p2f-head"><small>04 • STOCKAGE & CONTRÔLÉ CHAÎNE DU FROID</small><h2>Un réseau distribué de conservation à travers les marchés cibles.</h2><p>De grands magasins et des chambres froides à température contrôlée peuvent devenir l'épine dorsale physique entre récolte et marché — notamment pour les fruits et légumes à forte valeur nutritionnelle.</p></div>
-<div class="p2f-chain"><div class="p2f-chain-card"><b>01</b><strong>RÉCOLTE</strong><p>Qualité et traçabilité à la source.</p></div><div class="p2f-chain-card"><b>02</b><strong>COLLECTE</strong><p>Collecte rapide près des producteurs.</p></div><div class="p2f-chain-card"><b>03</b><strong>REFROIDIR</strong><p>Température contrôlée et suivi.</p></div><div class="p2f-chain-card"><b>04</b><strong>TRANSFORMER</strong><p>Transformer, emballer ou préparer.</p></div><div class="p2f-chain-card"><b>05</b><strong>DISTRIBUER</strong><p>Distribution fiable sous chaîne du froid.</p></div></div>
-<div class="p2f-feature" style="margin-top:18px"><div class="p2f-panel dark"><h3>Intelligence de la température</h3><p>Les chambres froides, installations de stockage et moyens de transport pourront intégrer progressivement capteurs, historiques de température, alertes, procédures et contrôles qualité pour maîtriser la chaîne du froid.</p></div><div class="p2f-panel dark"><h3>Chaîne du froid alimentée par les renouvelables</h3><p>Notre ambition à long terme est d'alimenter les infrastructures de transformation et à température contrôlée grâce à des énergies renouvelables, notamment des chambres froides solaires avec systèmes adaptés de stockage et de secours.</p></div></div></div></section>
+        a {
+            text-decoration: none;
+            color: inherit
+        }
 
-<section class="p2f-section p2f-light" id="commercialization"><div class="wrap"><div class="p2f-head"><small>05 • COMMERCIALISATION & DISTRIBUTION</small><h2>Rendre les aliments nutritifs plus faciles à trouver, acheter et distribuer.</h2><p>La couche commerciale relie le réseau d'approvisionnement aux consommateurs, détaillants, institutions, restaurants, distributeurs et autres acheteurs — tandis que les données de demande améliorent continuellement les décisions d'approvisionnement, de production et de produits.</p></div>
-<div class="p2f-cards"><div class="p2f-card"><div class="p2f-num">A</div><h3>Place de marché pour une alimentation saine</h3><p>Une interface numérique pour découvrir, commander et distribuer des produits nutritifs issus de l'écosystème connecté.</p></div><div class="p2f-card"><div class="p2f-num">B</div><h3>Prévision de la demande</h3><p>Utiliser les signaux de la plateforme pour anticiper la demande et réduire l'écart entre production et besoins réels du marché.</p></div><div class="p2f-card"><div class="p2f-num">C</div><h3>Distribution multicanale</h3><p>Servir ménages, détaillants, institutions, restaurants, partenaires de restauration et autres canaux via un réseau organisé.</p></div><div class="p2f-card"><div class="p2f-num">D</div><h3>Pôles nationaux</h3><p>Déployer progressivement des pôles de stockage et distribution dans les pays cibles afin de raccourcir les trajets et protéger la qualité.</p></div><div class="p2f-card"><div class="p2f-num">E</div><h3>Logistique sous chaîne du froid</h3><p>Acheminer les produits sensibles à la température dans des conditions maîtrisées, du stockage jusqu’au marché final.</p></div><div class="p2f-card"><div class="p2f-num">F</div><h3>Retour vers la production</h3><p>Les données de consommation et de demande réintègrent le système afin d’améliorer les futures décisions d’approvisionnement, de production et de développement des produits.</p></div></div></div></section>
+        .wrap {
+            width: min(1180px, 92%);
+            margin: auto
+        }
 
-<section class="p2f-section p2f-dark"><div class="wrap"><div class="p2f-head"><small>LE SYSTÈME ALIMENTAIRE CONNECTÉ</small><h2>Chaque étape alimente la suivante.</h2><p>NUTRI.N°1 est conçue pour relier progressivement l'intelligence numérique à l'infrastructure physique alimentaire.</p></div>
-<div class="p2f-loop"><div class="node">BESOINS<br>NUTRITIONNELS</div><div class="arr">→</div><div class="node">DEMANDE</div><div class="arr">→</div><div class="node">PRODUCTION</div><div class="arr">→</div><div class="node">COLLECTE</div></div>
-<div class="p2f-loop" style="margin-top:8px"><div class="node">STOCKAGE</div><div class="arr">→</div><div class="node">TRANSFORMATION</div><div class="arr">→</div><div class="node">CHAÎNE DU FROID</div><div class="arr">→</div><div class="node">PLACE DE MARCHÉ</div></div>
-<div class="p2f-loop" style="margin-top:8px"><div class="node">CONSOMMATION</div><div class="arr">→</div><div class="node">RETOUR</div><div class="arr">→</div><div class="node">NOUVELLES DONNÉES</div><div class="arr">→</div><div class="node">MEILLEURES DÉCISIONS</div></div>
-<div class="p2f-note"><b>Vision à long terme :</b> une plateforme durable d'agro-transformation et de nutrition en Afrique de l'Ouest qui relie les besoins nutritionnels des populations à la production, la sécurité sanitaire, la prévention des pertes post-récolte, la transformation alimentée par les renouvelables, le stockage frigorifique contrôlé et une commercialisation compétitive.</div></div></section>
-<footer><div class="wrap foot"><div><b style="font-size:21px;color:#fff">NUTRI.N°1</b><p style="font-size:12px">Infrastructure africaine de l’intelligence alimentaire et nutritionnelle — évoluant vers une Plateforme durable d'agro-transformation et de nutrition en Afrique de l'Ouest.</p></div><div><h4>Plateforme</h4><a href="platform.html">Nutrition numérique</a><a href="intelligence.html">Base de connaissances alimentaire africaine</a><a href="ecosystem.html">Acteurs</a></div><div><h4>Entreprises</h4><a href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a><a href="index.html#contact">Contact</a></div></div><div class="wrap copy"><span>© 2026 NUTRI.N°1</span><span>Conçue en Afrique de l’Ouest • Pensée pour l’Afrique</span></div></footer><script>const o=new IntersectionObserver(e=>e.forEach(x=>x.isIntersecting&&(x.target.style.opacity=1)),{threshold:.1});document.querySelectorAll(".card,.box,.person,.loopbox").forEach(x=>{x.style.opacity=0;x.style.transition="opacity .7s,transform .7s";o.observe(x)})</script><script>const v4io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add("show")} ),{threshold:.08});document.querySelectorAll(".v4-reveal").forEach(x=>v4io.observe(x));</script><script src="../assets/nutri4k.js" defer></script></body></html>
+        .nav {
+            height: 76px;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #061b13ee;
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid #ffffff1c
+        }
+
+        .navin {
+            height: 100 %;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 950
+        }
+
+        .brand img {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 50%;
+            object-fit: contain
+        }
+
+        .brand span {
+            font-size: 18px
+        }
+
+        .brand i {
+            color: var(--gold);
+            font-style: normal
+        }
+
+        .links {
+            display: flex;
+            gap: 20px;
+            font-size: 12px;
+            color: #c1d1c8;
+            font-weight: 800
+        }
+
+        .links a:hover {
+            color: #fff
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 17px;
+            border-radius: 13px;
+            font-weight: 900;
+            font-size: 13px
+        }
+
+        .green {
+            background: var(--g);
+            color: #042414
+        }
+
+        .outline {
+            border: 1px solid #ffffff26;
+            background: #ffffff08
+        }
+
+        .hero {
+            padding: 100px 0 85px;
+            background: radial-gradient(circle at 75% 20%, #29cf7030, transparent 28%), linear-gradient(180deg, var(--d), #0a291c)
+        }
+
+        .heroGrid {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 55px;
+            align-items: center
+        }
+
+        .eyebrow,
+        .chip {
+            display: inline-block;
+            border: 1px solid #29cf7040;
+            background: #29cf7010;
+            color: #bcefd0;
+            border-radius: 99px;
+            padding: 7px 11px;
+            font-size: 10px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .1em
+        }
+
+        .hero h1 {
+            font-size: clamp(45px, 6vw, 78px);
+            line-height: .94;
+            letter-spacing: -.07em;
+            margin: 20px 0
+        }
+
+        .hero h1 b {
+            color: var(--g)
+        }
+
+        .hero h1 em {
+            color: var(--gold);
+            font-style: normal
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #b5c8be;
+            max-width: 680px
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 27px 0
+        }
+
+        .art {
+            height: 500px;
+            position: relative;
+            display: grid;
+            place-items: center
+        }
+
+        .ring {
+            width: 390px;
+            height: 390px;
+            border-radius: 50%;
+            border: 1px solid #9be76630;
+            box-shadow: 0 0 0 55px #9be76608
+        }
+
+        .core {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #a9ee88, #28c970 35%, #0b5b38 70%);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 0 80px #29cf7040
+        }
+
+        .coreIn {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: #eff8ef;
+            color: #0a4329;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .coreIn strong {
+            font-size: 32px;
+            display: block
+        }
+
+        .sat {
+            position: absolute;
+            background: #fff;
+            color: #163326;
+            padding: 13px;
+            border-radius: 16px;
+            box-shadow: 0 20px 55px #0005;
+            font-size: 10px
+        }
+
+        .sat b {
+            display: block;
+            color: #087041;
+            font-size: 16px
+        }
+
+        .s1 {
+            top: 8%;
+            left: 0
+        }
+
+        .s2 {
+            top: 7%;
+            right: 0
+        }
+
+        .s3 {
+            bottom: 12%;
+            left: 3%
+        }
+
+        .s4 {
+            bottom: 8%;
+            right: 1%
+        }
+
+        .light {
+            background: var(--cream);
+            color: var(--ink)
+        }
+
+        .section {
+            padding: 90px 0
+        }
+
+        .head {
+            max-width: 800px;
+            margin-bottom: 42px
+        }
+
+        .kicker {
+            font-size: 10px;
+            color: #169652;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .14em
+        }
+
+        .dark .kicker {
+            color: #6bdd8f
+        }
+
+        .head h2 {
+            font-size: clamp(35px, 4.5vw, 57px);
+            line-height: 1;
+            letter-spacing: -.06em;
+            margin: 9px 0 14px
+        }
+
+        .head p {
+            color: var(--mut);
+            font-size: 17px
+        }
+
+        .dark .head p {
+            color: #9eb5aa
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 24px;
+            transition: .25s
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px #173d2b14
+        }
+
+        .dark .card {
+            background: #0d3223;
+            border-color: #ffffff18;
+            color: #fff
+        }
+
+        .ico {
+            width: 44px;
+            height: 44px;
+            border-radius: 13px;
+            background: #e9f5eb;
+            color: #0a6b3d;
+            display: grid;
+            place-items: center;
+            font-weight: 950;
+            margin-bottom: 15px
+        }
+
+        .dark .ico {
+            background: #29cf7012;
+            color: #73df94
+        }
+
+        .card h3 {
+            font-size: 18px;
+            margin: 0 0 7px
+        }
+
+        .card p {
+            font-size: 13px;
+            color: var(--mut);
+            margin: 0
+        }
+
+        .dark .card p {
+            color: #9eb5aa
+        }
+
+        .arch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .box {
+            padding: 29px;
+            border-radius: 25px;
+            background: #fff;
+            border: 1px solid var(--line)
+        }
+
+        .box h3 {
+            font-size: 25px;
+            margin: 10px 0 7px
+        }
+
+        .box p {
+            font-size: 13px;
+            color: var(--mut)
+        }
+
+        .flow {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            align-items: center;
+            margin-top: 17px
+        }
+
+        .flow span {
+            padding: 8px 10px;
+            background: #0b6038;
+            color: #fff;
+            border-radius: 11px;
+            font-size: 10px;
+            font-weight: 900
+        }
+
+        .flow i {
+            color: #1c9d58;
+            font-style: normal;
+            font-weight: 900
+        }
+
+        .cloud {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px
+        }
+
+        .cloudVisual {
+            min-height: 430px;
+            border-radius: 30px;
+            background: radial-gradient(circle, #145c3d, #071e15 62%);
+            position: relative;
+            border: 1px solid #ffffff18
+        }
+
+        .cloudCenter {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: #eff8ef;
+            color: #0a4329;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .node {
+            position: absolute;
+            width: 115px;
+            padding: 13px;
+            border-radius: 15px;
+            background: #ffffff0d;
+            border: 1px solid #ffffff18;
+            text-align: center;
+            font-size: 10px
+        }
+
+        .node b {
+            display: block;
+            color: var(--g);
+            font-size: 19px
+        }
+
+        .n1 {
+            top: 8%;
+            left: 7%
+        }
+
+        .n2 {
+            top: 8%;
+            right: 7%
+        }
+
+        .n3 {
+            bottom: 8%;
+            left: 7%
+        }
+
+        .n4 {
+            bottom: 8%;
+            right: 7%
+        }
+
+        .n5 {
+            top: 4%;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+
+        .n6 {
+            bottom: 4%;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+
+        .loop {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px
+        }
+
+        .loopbox {
+            padding: 30px;
+            border-radius: 26px
+        }
+
+        .loopbox h3 {
+            font-size: 29px;
+            line-height: 1.05;
+            margin: 0 0 9px
+        }
+
+        .loopbox p {
+            font-size: 13px;
+            color: #c3d8ca
+        }
+
+        .lb1 {
+            background: #0a2b1e
+        }
+
+        .lb2 {
+            background: linear-gradient(145deg, #3c2d14, #72571d)
+        }
+
+        .teamGrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px
+        }
+
+        .person {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 23px;
+            overflow: hidden
+        }
+
+        .photo {
+            height: 230px;
+            background: linear-gradient(135deg, #dfeee2, #fff0d0);
+            display: grid;
+            place-items: center;
+            color: #0b633b;
+            font-weight: 950;
+            font-size: 42px
+        }
+
+        .bio {
+            padding: 22px
+        }
+
+        .bio h3 {
+            margin: 7px 0 3px
+        }
+
+        .bio p {
+            font-size: 12px;
+            color: var(--mut)
+        }
+
+        .cta {
+            padding: 90px 0;
+            background: var(--cream)
+        }
+
+        .ctaBox {
+            padding: 55px;
+            text-align: center;
+            border-radius: 32px;
+            background: linear-gradient(135deg, #eff8ef, #fff5dc);
+            color: var(--ink)
+        }
+
+        .ctaBox h2 {
+            font-size: clamp(37px, 5vw, 62px);
+            line-height: 1;
+            letter-spacing: -.07em;
+            margin: 9px 0
+        }
+
+        .ctaBox p {
+            max-width: 720px;
+            margin: 12px auto 24px;
+            color: var(--mut)
+        }
+
+        footer {
+            padding: 42px 0 22px;
+            background: #04150e;
+            color: #9eb5a9
+        }
+
+        .foot {
+            display: grid;
+            grid-template-columns: 1.5fr .7fr .7fr;
+            gap: 30px
+        }
+
+        .foot h4 {
+            color: #fff
+        }
+
+        .foot a {
+            display: block;
+            font-size: 12px;
+            margin: 6px 0
+        }
+
+        .copy {
+            border-top: 1px solid #ffffff15;
+            margin-top: 25px;
+            padding-top: 18px;
+            font-size: 11px;
+            display: flex;
+            justify-content: space-between
+        }
+
+        @media(max-width:900px) {
+            .links {
+                display: none
+            }
+
+            .heroGrid,
+            .cloud,
+            .loop {
+                grid-template-columns: 1fr
+            }
+
+            .art {
+                order: -1;
+                height: 420px
+            }
+
+            .grid,
+            .teamGrid {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .arch {
+                grid-template-columns: 1fr
+            }
+
+            .foot {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .grid,
+            .teamGrid {
+                grid-template-columns: 1fr
+            }
+
+            .hero {
+                padding: 70px 0
+            }
+
+            .hero h1 {
+                font-size: 46px
+            }
+
+            .hero p {
+                font-size: 16px
+            }
+
+            .ring {
+                width: 310px;
+                height: 310px
+            }
+
+            .core {
+                width: 210px;
+                height: 210px
+            }
+
+            .coreIn {
+                width: 135px;
+                height: 135px
+            }
+
+            .sat {
+                display: none
+            }
+
+            .section {
+                padding: 70px 0
+            }
+
+            .ctaBox {
+                padding: 38px 20px
+            }
+
+            .foot {
+                grid-template-columns: 1fr
+            }
+
+            .copy {
+                flex-direction: column
+            }
+        }
+    </style>
+    <style>
+        .langswitch {
+            display: flex;
+            gap: 4px;
+            margin-left: 8px
+        }
+
+        .langswitch a {
+            padding: 7px 9px;
+            border-radius: 999px;
+            border: 1px solid #ffffff28;
+            color: #b9cec3;
+            font-size: 10px;
+            font-weight: 950
+        }
+
+        .langswitch .active {
+            background: #29cf70;
+            color: #062014;
+            border-color: #29cf70
+        }
+    </style>
+    <style>
+        .v4-orb {
+            position: relative;
+            min-height: 500px;
+            display: grid;
+            place-items: center
+        }
+
+        .v4-orb .planet {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 35% 30%, #c7f7a6, #36dc7b 34%, #075536 72%);
+            box-shadow: 0 0 90px #36dc7b35;
+            animation: v4pulse 3s ease-in-out infinite
+        }
+
+        .v4-orb .planet>div {
+            width: 155px;
+            height: 155px;
+            border-radius: 50%;
+            background: #f0f8f0;
+            color: #063c26;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .v4-orb .planet b {
+            font-size: 38px;
+            display: block
+        }
+
+        .v4-orbit {
+            position: absolute;
+            border: 1px solid #9be76630;
+            border-radius: 50%;
+            animation: v4spin 28s linear infinite
+        }
+
+        .v4-orbit.o1 {
+            width: 370px;
+            height: 370px
+        }
+
+        .v4-orbit.o2 {
+            width: 470px;
+            height: 470px;
+            animation-direction: reverse
+        }
+
+        .v4-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: #36dc7b;
+            border-radius: 50%;
+            box-shadow: 0 0 18px #36dc7b
+        }
+
+        .o1 .v4-dot {
+            left: 10%;
+            top: 16%
+        }
+
+        .o2 .v4-dot {
+            right: 14%;
+            bottom: 13%
+        }
+
+        @keyframes v4spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes v4pulse {
+            50% {
+                transform: scale(1.035)
+            }
+        }
+
+        .v4-demo {
+            background: #061d14;
+            border: 1px solid #ffffff16;
+            border-radius: 28px;
+            padding: 18px;
+            box-shadow: 0 30px 80px #0004
+        }
+
+        .v4-demo-top {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 3px 15px;
+            border-bottom: 1px solid #ffffff14;
+            font-size: 11px
+        }
+
+        .v4-app {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 13px;
+            padding-top: 14px
+        }
+
+        .v4-phone {
+            background: #0d3423;
+            border: 1px solid #ffffff12;
+            border-radius: 22px;
+            padding: 17px;
+            min-height: 350px
+        }
+
+        .v4-score {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin: 18px 0
+        }
+
+        .v4-score-circle {
+            width: 78px;
+            height: 78px;
+            border: 8px solid #36dc7b;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 950;
+            font-size: 20px
+        }
+
+        .v4-bar {
+            height: 7px;
+            background: #ffffff12;
+            border-radius: 99px;
+            margin: 8px 0
+        }
+
+        .v4-bar i {
+            display: block;
+            height: 100 %;
+            background: #36dc7b;
+            border-radius: 99px
+        }
+
+        .v4-food {
+            height: 135px;
+            border-radius: 17px;
+            background: linear-gradient(135deg, #1a5d3e, #d9e9cf);
+            display: grid;
+            place-items: center;
+            color: #073c26;
+            font-size: 28px;
+            font-weight: 950
+        }
+
+        .v4-tag {
+            display: inline-block;
+            background: #e0f3e5;
+            color: #087041;
+            border-radius: 99px;
+            padding: 5px 7px;
+            font-size: 8px;
+            font-weight: 900;
+            margin: 4px 2px
+        }
+
+        .v4-map {
+            position: relative;
+            min-height: 420px;
+            border-radius: 30px;
+            background: radial-gradient(circle, #125b3c, #061e15 66%);
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            border: 1px solid #ffffff15
+        }
+
+        .v4-africa {
+            font-size: 120px;
+            font-weight: 950;
+            color: #123f2c;
+            letter-spacing: -.1em
+        }
+
+        .v4-countries {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 30px
+        }
+
+        .v4-countries span {
+            font-size: 9px;
+            color: #d5e8dd;
+            border: 1px solid #ffffff16;
+            background: #ffffff08;
+            border-radius: 99px;
+            padding: 8px 10px
+        }
+
+        .v4-countries .active {
+            background: #36dc7b;
+            color: #062014;
+            border-color: #36dc7b
+        }
+
+        .v4-loop {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            align-items: center
+        }
+
+        .v4-loop-step {
+            padding: 15px 7px;
+            background: #0b3020;
+            border: 1px solid #ffffff12;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 10px;
+            font-weight: 900
+        }
+
+        .v4-arrow {
+            text-align: center;
+            color: #36dc7b;
+            font-weight: 950
+        }
+
+        .v4-reveal {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: .75s
+        }
+
+        .v4-reveal.show {
+            opacity: 1;
+            transform: none
+        }
+
+        @media(max-width:800px) {
+
+            .v4-app,
+            .v4-loop {
+                grid-template-columns: 1fr
+            }
+
+            .v4-orb {
+                min-height: 410px
+            }
+
+            .v4-orbit.o2 {
+                width: 380px;
+                height: 380px
+            }
+
+            .v4-orbit.o1 {
+                width: 300px;
+                height: 300px
+            }
+        }
+
+        @media(max-width:520px) {
+            .v4-orb .planet {
+                width: 205px;
+                height: 205px
+            }
+
+            .v4-orb .planet>div {
+                width: 130px;
+                height: 130px
+            }
+
+            .v4-africa {
+                font-size: 80px
+            }
+        }
+    </style>
+    <style>
+        :root {
+            --v5green: #38e27e;
+            --v5dark: #03140c;
+            --v5mint: #dff8dc;
+            --v5gold: #e9c568
+        }
+
+        .v5 {
+            font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif
+        }
+
+        .v5-hero {
+            min-height: 92vh;
+            display: grid;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            background:
+                radial-gradient(circle at 72% 30%, #1c71462c, transparent 25%), radial-gradient(circle at 15% 80%, #e9c56812, transparent 20%), #03140c
+        }
+
+        .v5-hero-grid {
+            display: grid;
+            grid-template-columns: 1.02fr .98fr;
+            gap: 35px;
+            align-items: center;
+            padding: 70px 0
+        }
+
+        .v5-kicker {
+            font-size: 9px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-weight: 950;
+            color: #8ff0a9
+        }
+
+        .v5-title {
+            font-size: clamp(55px, 7vw, 96px);
+            line-height: .87;
+            letter-spacing: -.09em;
+            margin: 16px 0
+        }
+
+        .v5-title span {
+            color: var(--v5green)
+        }
+
+        .v5-title em {
+            font-style: normal;
+            color: var(--v5gold)
+        }
+
+        .v5-copy {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #b5cabe;
+            max-width: 670px
+        }
+
+        .v5-actions {
+            display: flex;
+            gap: 9px;
+            flex-wrap: wrap;
+            margin: 26px 0
+        }
+
+        .v5-orb {
+            height: 560px;
+            position: relative;
+            display: grid;
+            place-items: center
+        }
+
+        .v5-ring {
+            position: absolute;
+            border: 1px solid #91e97b28;
+            border-radius: 50%;
+            animation: v5spin 25s linear infinite
+        }
+
+        .v5-ring.r1 {
+            width: 420px;
+            height: 420px
+        }
+
+        .v5-ring.r2 {
+            width: 540px;
+            height: 540px;
+            animation-direction: reverse
+        }
+
+        .v5-ring:before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--v5green);
+            box-shadow: 0 0 25px var(--v5green);
+            left: 12%;
+            top: 18%
+        }
+
+        .v5-ring.r2:before {
+            left: auto;
+            right: 13%;
+            top: auto;
+            bottom: 12%
+        }
+
+        .v5-core {
+            width: 245px;
+            height: 245px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 30%, #d4f7ae, #39e07e 35%, #075637 72%);
+            display: grid;
+            place-items: center;
+            z-index: 2;
+            box-shadow: 0 0 90px #38e27e2b
+        }
+
+        .v5-core-in {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: #f2f9f1;
+            color: #063d27;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .v5-core-in b {
+            display: block;
+            font-size: 38px
+        }
+
+        .v5-float {
+            position: absolute;
+            z-index: 4;
+            background: #f7faf5;
+            color: #113524;
+            border-radius: 16px;
+            padding: 13px 15px;
+            box-shadow: 0 22px 65px #0005;
+            font-size: 9px;
+            font-weight: 850
+        }
+
+        .v5-float strong {
+            display: block;
+            color: #087242;
+            font-size: 15px
+        }
+
+        .vf1 {
+            left: 0;
+            top: 13%
+        }
+
+        .vf2 {
+            right: 0;
+            top: 9%
+        }
+
+        .vf3 {
+            left: 2%;
+            bottom: 13%
+        }
+
+        .vf4 {
+            right: 0;
+            bottom: 9%
+        }
+
+        @keyframes v5spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .v5-section {
+            padding: 100px 0
+        }
+
+        .v5-light {
+            background: #f5f6ef;
+            color: #092217
+        }
+
+        .v5-dark {
+            background: #04170e;
+            color: #fff
+        }
+
+        .v5-head {
+            max-width: 820px;
+            margin-bottom: 42px
+        }
+
+        .v5-head small {
+            font-size: 9px;
+            color: #129050;
+            font-weight: 950;
+            letter-spacing: .16em;
+            text-transform: uppercase
+        }
+
+        .v5-dark .v5-head small {
+            color: #72e493
+        }
+
+        .v5-head h2 {
+            font-size: clamp(40px, 5vw, 65px);
+            line-height: .94;
+            letter-spacing: -.075em;
+            margin: 10px 0 15px
+        }
+
+        .v5-head p {
+            font-size: 16px;
+            color: #6e7e75
+        }
+
+        .v5-dark .v5-head p {
+            color: #9bb4a7
+        }
+
+        .v5-demo {
+            background: #061f15;
+            border: 1px solid #ffffff14;
+            border-radius: 30px;
+            padding: 20px;
+            box-shadow: 0 35px 100px #0003
+        }
+
+        .v5-app {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px
+        }
+
+        .v5-phone {
+            background: #0d3423;
+            border: 1px solid #ffffff10;
+            border-radius: 23px;
+            padding: 18px;
+            min-height: 390px
+        }
+
+        .v5-score {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            margin: 20px 0
+        }
+
+        .v5-score-circle {
+            width: 82px;
+            height: 82px;
+            border: 8px solid #38e27e;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+            font-weight: 950
+        }
+
+        .v5-bar {
+            height: 7px;
+            background: #ffffff12;
+            border-radius: 99px;
+            margin: 8px 0
+        }
+
+        .v5-bar i {
+            display: block;
+            height: 100 %;
+            background: #38e27e;
+            border-radius: 99px
+        }
+
+        .v5-food {
+            height: 150px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #1b5d3e, #dcebd3);
+            display: grid;
+            place-items: center;
+            color: #073e29;
+            font-size: 28px;
+            font-weight: 950
+        }
+
+        .v5-flow {
+            display: grid;
+            grid-template-columns: repeat(9, 1fr);
+            gap: 7px;
+            align-items: center
+        }
+
+        .v5-node {
+            padding: 14px 6px;
+            border: 1px solid #ffffff12;
+            background: #0b3020;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 900
+        }
+
+        .v5-arr {
+            color: #39df7d;
+            text-align: center
+        }
+
+        .v5-map {
+            min-height: 480px;
+            border-radius: 32px;
+            background: radial-gradient(circle, #145f3e, #061f15 66%);
+            border: 1px solid #ffffff14;
+            position: relative;
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .v5-africa {
+            font-size: 155px;
+            font-weight: 950;
+            color: #12432f;
+            letter-spacing: -.12em
+        }
+
+        .v5-countries {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-content: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 35px
+        }
+
+        .v5-countries span {
+            font-size: 9px;
+            padding: 8px 11px;
+            border-radius: 99px;
+            border: 1px solid #ffffff14;
+            background: #ffffff09;
+            color: #d6e7dd
+        }
+
+        .v5-countries .active {
+            background: #38e27e;
+            color: #062114;
+            border-color: #38e27e
+        }
+
+        .v5-team {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px
+        }
+
+        .v5-person {
+            background: #fff;
+            border: 1px solid #dfe8e1;
+            border-radius: 22px;
+            overflow: hidden
+        }
+
+        .v5-photo {
+            height: 220px;
+            background: linear-gradient(135deg, #dcefe0, #fff0cb);
+            display: grid;
+            place-items: center;
+            color: #0a663d;
+            font-weight: 950;
+            font-size: 36px
+        }
+
+        .v5-bio {
+            padding: 18px
+        }
+
+        .v5-bio h3 {
+            margin: 5px 0 2px;
+            font-size: 17px
+        }
+
+        .v5-bio p {
+            font-size: 11px;
+            color: #6c7a73;
+            margin: 0
+        }
+
+        .v5-compare {
+            display: grid;
+            grid-template-columns: 1fr 1.25fr;
+            gap: 16px
+        }
+
+        .v5-box {
+            border-radius: 27px;
+            padding: 32px
+        }
+
+        .v5-old {
+            background: #e9ece8;
+            color: #3d4b44
+        }
+
+        .v5-new {
+            background: #08291c;
+            color: #fff;
+            border: 1px solid #ffffff15
+        }
+
+        .v5-box h3 {
+            font-size: 27px;
+            line-height: 1;
+            margin: 0 0 16px
+        }
+
+        .v5-line {
+            padding: 11px 0;
+            border-bottom: 1px solid currentColor;
+            opacity: .7;
+            font-size: 13px
+        }
+
+        .v5-cta {
+            padding: 95px 0;
+            background: #f5f6ef
+        }
+
+        .v5-cta-box {
+            border-radius: 34px;
+            padding: 60px 35px;
+            text-align: center;
+            background: linear-gradient(135deg, #edf8ec, #fff2d4);
+            color: #092217
+        }
+
+        .v5-cta h2 {
+            font-size: clamp(42px, 5.3vw, 70px);
+            line-height: .92;
+            letter-spacing: -.08em;
+            max-width: 900px;
+            margin: 10px auto 15px
+        }
+
+        .v5-cta p {
+            max-width: 720px;
+            margin: 0 auto 24px;
+            color: #6d7b73
+        }
+
+        @media(max-width:900px) {
+
+            .v5-hero-grid,
+            .v5-compare {
+                grid-template-columns: 1fr
+            }
+
+            .v5-orb {
+                height: 430px
+            }
+
+            .v5-team {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .v5-flow {
+                grid-template-columns: repeat(5, 1fr)
+            }
+        }
+
+        @media(max-width:580px) {
+            .v5-title {
+                font-size: 52px
+            }
+
+            .v5-orb {
+                height: 360px
+            }
+
+            .v5-ring.r1 {
+                width: 300px;
+                height: 300px
+            }
+
+            .v5-ring.r2 {
+                width: 370px;
+                height: 370px
+            }
+
+            .v5-core {
+                width: 190px;
+                height: 190px
+            }
+
+            .v5-core-in {
+                width: 125px;
+                height: 125px
+            }
+
+            .v5-float {
+                display: none
+            }
+
+            .v5-app,
+            .v5-team {
+                grid-template-columns: 1fr
+            }
+
+            .v5-flow {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .v5-africa {
+                font-size: 90px
+            }
+        }
+    </style>
+    <style>
+        .p2f-hero {
+            background: radial-gradient(circle at 75% 20%, #38e27e22, transparent 28%), linear-gradient(180deg, #03140c, #08291b);
+            padding: 95px 0
+        }
+
+        .p2f-grid {
+            display: grid;
+            grid-template-columns: 1.02fr .98fr;
+            gap: 36px;
+            align-items: center
+        }
+
+        .p2f-badge {
+            display: inline-flex;
+            padding: 8px 12px;
+            border: 1px solid #38e27e44;
+            background: #38e27e0d;
+            border-radius: 99px;
+            font-size: 9px;
+            font-weight: 950;
+            letter-spacing: .13em;
+            color: #a8efb8
+        }
+
+        .p2f-title {
+            font-size: clamp(51px, 6.4vw, 86px);
+            line-height: .88;
+            letter-spacing: -.09em;
+            margin: 16px 0
+        }
+
+        .p2f-title span {
+            color: #38e27e
+        }
+
+        .p2f-title em {
+            font-style: normal;
+            color: #e9c568
+        }
+
+        .p2f-copy {
+            font-size: 17px;
+            line-height: 1.6;
+            color: #b7cbbf;
+            max-width: 710px
+        }
+
+        .p2f-visual {
+            min-height: 500px;
+            border: 1px solid #ffffff14;
+            border-radius: 32px;
+            background: #061f15;
+            position: relative;
+            display: grid;
+            place-items: center;
+            overflow: hidden;
+            box-shadow: 0 35px 100px #0005
+        }
+
+        .p2f-core {
+            width: 255px;
+            height: 255px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            background: radial-gradient(circle at 35% 30%, #d5f6ad, #38e27e 35%, #075638 72%);
+            box-shadow: 0 0 90px #38e27e2b;
+            z-index: 2
+        }
+
+        .p2f-core-in {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background: #f1f8ef;
+            color: #073c27;
+            display: grid;
+            place-items: center;
+            text-align: center;
+            font-weight: 950
+        }
+
+        .p2f-core-in b {
+            font-size: 27px;
+            display: block
+        }
+
+        .p2f-ring {
+            position: absolute;
+            border: 1px solid #91e97b27;
+            border-radius: 50%;
+            animation: p2fspin 28s linear infinite
+        }
+
+        .p2f-ring.r1 {
+            width: 400px;
+            height: 400px
+        }
+
+        .p2f-ring.r2 {
+            width: 520px;
+            height: 520px;
+            animation-direction: reverse
+        }
+
+        .p2f-ring:before {
+            content: "";
+            position: absolute;
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: #38e27e;
+            box-shadow: 0 0 22px #38e27e;
+            left: 11%;
+            top: 16%
+        }
+
+        .p2f-ring.r2:before {
+            left: auto;
+            top: auto;
+            right: 12%;
+            bottom: 12%
+        }
+
+        @keyframes p2fspin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        .p2f-node {
+            position: absolute;
+            padding: 12px 14px;
+            border-radius: 16px;
+            background: #ffffff09;
+            border: 1px solid #ffffff15;
+            color: #d6e8dd;
+            font-size: 9px;
+            font-weight: 850;
+            text-align: center
+        }
+
+        .p2f-node b {
+            display: block;
+            color: #38e27e;
+            font-size: 14px
+        }
+
+        .p2f-n1 {
+            top: 7%;
+            left: 5%
+        }
+
+        .p2f-n2 {
+            top: 6%;
+            right: 5%
+        }
+
+        .p2f-n3 {
+            bottom: 7%;
+            left: 5%
+        }
+
+        .p2f-n4 {
+            bottom: 6%;
+            right: 5%
+        }
+
+        .p2f-section {
+            padding: 95px 0
+        }
+
+        .p2f-light {
+            background: #f5f6ef;
+            color: #092217
+        }
+
+        .p2f-dark {
+            background: #04170e;
+            color: #fff
+        }
+
+        .p2f-head {
+            max-width: 880px;
+            margin-bottom: 42px
+        }
+
+        .p2f-head small {
+            font-size: 9px;
+            color: #138d4f;
+            font-weight: 950;
+            letter-spacing: .15em;
+            text-transform: uppercase
+        }
+
+        .p2f-dark .p2f-head small {
+            color: #73e494
+        }
+
+        .p2f-head h2 {
+            font-size: clamp(39px, 4.9vw, 64px);
+            line-height: .94;
+            letter-spacing: -.075em;
+            margin: 10px 0 15px
+        }
+
+        .p2f-head p {
+            font-size: 15px;
+            color: #6c7b72
+        }
+
+        .p2f-dark .p2f-head p {
+            color: #9bb3a7
+        }
+
+        .p2f-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px
+        }
+
+        .p2f-card {
+            padding: 25px;
+            border-radius: 23px;
+            background: #fff;
+            border: 1px solid #dfe8e1
+        }
+
+        .p2f-dark .p2f-card {
+            background: #0b3020;
+            border-color: #ffffff12;
+            color: #fff
+        }
+
+        .p2f-num {
+            width: 43px;
+            height: 43px;
+            border-radius: 13px;
+            background: #e7f5e9;
+            color: #0a6e40;
+            display: grid;
+            place-items: center;
+            font-size: 10px;
+            font-weight: 950;
+            margin-bottom: 15px
+        }
+
+        .p2f-dark .p2f-num {
+            background: #38e27e12;
+            color: #76e596
+        }
+
+        .p2f-card h3 {
+            margin: 0 0 8px;
+            font-size: 19px
+        }
+
+        .p2f-card p {
+            margin: 0;
+            color: #6b7b72;
+            font-size: 12px
+        }
+
+        .p2f-dark .p2f-card p {
+            color: #9bb3a7
+        }
+
+        .p2f-feature {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 17px
+        }
+
+        .p2f-panel {
+            padding: 30px;
+            border-radius: 28px
+        }
+
+        .p2f-panel.dark {
+            background: #0a2b1e;
+            color: #fff;
+            border: 1px solid #ffffff12
+        }
+
+        .p2f-panel.light {
+            background: #fff;
+            border: 1px solid #dfe8e1
+        }
+
+        .p2f-panel h3 {
+            font-size: 28px;
+            line-height: 1;
+            margin: 0 0 10px
+        }
+
+        .p2f-panel p {
+            font-size: 12px;
+            color: #6d7b73
+        }
+
+        .p2f-panel.dark p {
+            color: #9bb3a7
+        }
+
+        .p2f-icons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px
+        }
+
+        .p2f-icon {
+            padding: 15px;
+            border-radius: 17px;
+            background: #ffffff08;
+            border: 1px solid #ffffff12;
+            font-size: 10px
+        }
+
+        .p2f-icon b {
+            display: block;
+            color: #38e27e;
+            font-size: 15px;
+            margin-bottom: 4px
+        }
+
+        .p2f-chain {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 9px
+        }
+
+        .p2f-chain-card {
+            min-height: 185px;
+            padding: 22px 17px;
+            border-radius: 21px;
+            background: #0b3020;
+            border: 1px solid #ffffff12;
+            position: relative
+        }
+
+        .p2f-chain-card:not(:last-child):after {
+            content: "→";
+            position: absolute;
+            right: -13px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #38e27e;
+            font-size: 20px;
+            font-weight: 950;
+            z-index: 2
+        }
+
+        .p2f-chain-card b {
+            font-size: 10px;
+            color: #a8c5b7
+        }
+
+        .p2f-chain-card strong {
+            display: block;
+            font-size: 23px;
+            margin: 12px 0 7px;
+            color: #38e27e
+        }
+
+        .p2f-chain-card p {
+            font-size: 10px;
+            color: #9bb3a7
+        }
+
+        .p2f-loop {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 7px;
+            align-items: center
+        }
+
+        .p2f-loop .node {
+            padding: 14px 6px;
+            background: #0b3020;
+            border: 1px solid #ffffff12;
+            border-radius: 14px;
+            text-align: center;
+            font-size: 9px;
+            font-weight: 900
+        }
+
+        .p2f-loop .arr {
+            color: #38e27e;
+            text-align: center
+        }
+
+        .p2f-note {
+            padding: 25px 28px;
+            border-left: 3px solid #38e27e;
+            background: #38e27e08;
+            border-radius: 0 18px 18px 0;
+            color: #c4d9ce;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-top: 22px
+        }
+
+        @media(max-width:900px) {
+
+            .p2f-grid,
+            .p2f-feature {
+                grid-template-columns: 1fr
+            }
+
+            .p2f-cards {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .p2f-chain {
+                grid-template-columns: 1fr 1fr
+            }
+
+            .p2f-chain-card:not(:last-child):after {
+                display: none
+            }
+
+            .p2f-loop {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .p2f-cards,
+            .p2f-chain,
+            .p2f-loop {
+                grid-template-columns: 1fr
+            }
+
+            .p2f-visual {
+                min-height: 390px
+            }
+
+            .p2f-core {
+                width: 205px;
+                height: 205px
+            }
+
+            .p2f-core-in {
+                width: 130px;
+                height: 130px
+            }
+
+            .p2f-node {
+                display: none
+            }
+        }
+    </style>
+    <style id="phase2-nav-fix">
+        header,
+        nav {
+            z-index: 9999;
+        }
+        /* 1. Structure de la Grille (3 colonnes uniformes) */
+.cards-grid-v2 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* 2. La Carte globale */
+.modern-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.modern-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+/* 3. Conteneur Image : Verrouillage strict du ratio paysage (16:9) */
+.modern-card .card-media {
+  width: 100%;
+  aspect-ratio: 16 / 9; /* Force le format paysage sur TOUTES les cartes */
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #f8fafc;
+  position: relative;
+  flex-shrink: 0; /* Empêche le texte de réduire l'image */
+}
+
+.modern-card .card-media img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Remplit 100% de la zone sans espace vide */
+  display: block;
+}
+
+/* 4. Corps du texte */
+.modern-card .card-content {
+  padding: 16px 8px 8px 8px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.modern-card .card-tag {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.modern-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.modern-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* Adaptabilité aux écrans moyens et mobiles */
+@media (max-width: 992px) {
+  .cards-grid-v2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .cards-grid-v2 {
+    grid-template-columns: 1fr;
+  }
+}
+    </style>
+    <link rel="stylesheet" href="../assets/nutri4k.css">
+    <link rel="preload" as="image" href="../assets/img/field-aerial.jpg">
+</head>
+
+<body>
+    <div class="nav">
+        <div class="wrap navin"><a class="brand" href="index.html"><img src="../nutri-logo.png"><span>NUTRI<span
+                        style="color:#29cf70">.</span>N°1 <i>IA</i></span></a>
+            <div class="links"><a href="index.html">Vision</a><a href="platform.html">Plateforme</a><a
+                    href="intelligence.html">Intelligence</a><a href="ecosystem.html">Écosystème</a><a
+                    href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a></div><a class="btn green"
+                href="index.html#contact">Rejoindre NUTRI.N°1</a>
+            <div class="langswitch"><a href="../agribusiness.html">EN</a><a class="active"
+                    href="agribusiness.html">FR</a></div>
+        </div>
+    </div>
+
+    <section class="p2f-hero">
+        <div class="wrap p2f-grid">
+            <div>
+                <div class="p2f-badge">PHASE 02 • PLATEFORME DURABLE D’AGRO-TRANSFORMATION ET DE NUTRITION</div>
+                <h1 class="p2f-title">De <span>l'intelligence nutritionnelle</span> à un système alimentaire résilient.
+                </h1>
+                <p class="p2f-copy">NUTRI.N°1 construira progressivement une agro-industrie autour de son infrastructure
+                    numérique de nutrition : connecter les producteurs à la demande, réduire les pertes post-récolte,
+                    développer une agriculture intelligente et climato-résiliente, transformer les aliments nutritifs
+                    grâce à des énergies renouvelables et les distribuer grâce à une chaîne du froid maîtrisée.</p>
+                <div class="actions"><a class="btn green" href="#production">Explorer la production →</a><a
+                        class="btn outline" href="#commercialization">Explorer la commercialisation</a></div>
+            </div>
+            <div class="p2f-visual">
+                <div class="p2f-ring r1"></div>
+                <div class="p2f-ring r2"></div>
+                <div class="p2f-core">
+                    <div class="p2f-core-in">
+                        <div><b>DE LA FERME À LA FOURCHETTE</b></div>
+                    </div>
+                </div>
+                <div class="p2f-node p2f-n1">🌱<b>AGRICULTURE RÉSILIENTE</b>Biologique • Intelligente • Irriguée</div>
+                <div class="p2f-node p2f-n2">☀<b>ÉNERGIE RENOUVELABLE</b>Opérations alimentées à l’énergie solaire</div>
+                <div class="p2f-node p2f-n3">❄<b>CHAÎNE DU FROID</b>Température contrôlée</div>
+                <div class="p2f-node p2f-n4">🛒<b>MARCHÉ CONNECTÉ</b>Demande en temps réel</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="p2f-section p2f-light" id="production">
+        <div class="wrap">
+            <div class="p2f-head"><small>01 • PRODUCTION</small>
+                <h2>Un réseau de production guidé par la nutrition.</h2>
+                <p>La production combinera progressivement pratiques biologiques, agriculture intelligente, résilience
+                    climatique et irrigation contrôlée. La plateforme numérique fournit des signaux de demande et de
+                    nutrition afin d'aligner davantage la production sur les besoins des populations et les capacités du
+                    marché.</p>
+            </div>
+            <div class="cards-grid-v2">
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/A-nutrition-driven-production-network/01.png" alt="Agriculture biologique et pratiques biologiques">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">01</span>
+                        <h3>Agriculture biologique et pratiques biologiques</h3>
+                        <p>Développer progressivement des pratiques biologiques et d'agriculture biologique, avec traçabilité, gestion durable des sols et contrôles de qualité.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/A-nutrition-driven-production-network/02.png" alt="Agriculture intelligente & climato-résiliente">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">02</span>
+                        <h3>Agriculture intelligente & climato-résiliente</h3>
+                        <p>Utiliser les informations climatiques, les données de terrain et des pratiques adaptées pour améliorer la productivité et la résilience face aux changements climatiques.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/A-nutrition-driven-production-network/03.png" alt="Irrigation contrôlée">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">03</span>
+                        <h3>Irrigation contrôlée</h3>
+                        <p>Apporter l’eau selon les besoins des cultures, réduire les pertes et stabiliser la production grâce à des systèmes d'irrigation contrôlée.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/A-nutrition-driven-production-network/04.png" alt="Planification des cultures guidée par la nutrition">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">04</span>
+                        <h3>Planification des cultures guidée par la nutrition</h3>
+                        <p>Utiliser la pertinence nutritionnelle, la saisonnalité et les signaux de demande pour prioriser les cultures et variétés riches en nutriments et à potentiel commercial.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/A-nutrition-driven-production-network/05.png" alt="Approvisionnement traçable">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">05</span>
+                        <h3>Approvisionnement traçable</h3>
+                        <p>Relier à la plateforme les données de production, les dates de récolte, les caractéristiques de qualité, les informations sur les producteurs et l’origine des produits.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/A-nutrition-driven-production-network/06.png" alt="Réseau de producteurs connectés">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">06</span>
+                        <h3>Réseau de producteurs connectés</h3>
+                        <p>Donner aux producteurs une meilleure visibilité sur la demande, les exigences de qualité, la collecte et l'accès au marché.</p>
+                    </div>
+                </article>
+            </div>
+            <div class="p2f-note"><b>Principe stratégique :</b> NUTRI.N°1 ne veut pas remplacer les producteurs. Elle
+                veut connecter et renforcer l'écosystème alimentaire autour d'eux — en créant progressivement un
+                parcours plus prévisible de la ferme au marché.</div>
+        </div>
+    </section>
+
+    <section class="p2f-section p2f-dark">
+        <div class="wrap">
+            <div class="p2f-head"><small>02 • SÉCURITÉ ALIMENTAIRE ET PERTES POST-RÉCOLTE</small>
+                <h2>Connecter les producteurs à la demande avant que les aliments nutritifs ne soient perdus.</h2>
+                <p>Les fruits et légumes sont particulièrement vulnérables aux pertes post-récolte. NUTRI.N°1 peut créer
+                    une couche de coordination reliant en temps réel disponibilité, calendrier de récolte, qualité,
+                    capacités de stockage, capacités de transformation et demande des acheteurs.</p>
+            </div>
+            <div class="p2f-feature">
+                <div class="p2f-panel dark">
+                    <h3>Connexion producteur → marché</h3>
+                    <p style="font-size: medium;">Les producteurs pourront progressivement partager disponibilités, récoltes attendues, volumes,
+                        attributs de qualité et localisations. Les unités de transformation, distributeurs, détaillants
+                        et acheteurs institutionnels pourront répondre aux signaux d'offre et coordonner la collecte.
+                    </p>
+                    <div class="p2f-icons">
+                        <div class="p2f-icon" style="font-size: 14px;"><b>OFFRE EN TEMPS RÉEL</b>Volumes disponibles</div>
+                        <div class="p2f-icon" style="font-size: 14px;"><b>FENÊTRE DE RÉCOLTE</b>Quand les produits doivent circuler</div>
+                        <div class="p2f-icon" style="font-size: 14px;"><b>QUALITÉ</b>Spécifications et traçabilité</div>
+                        <div class="p2f-icon" style="font-size: 14px;"><b>LOCALISATION</b>Planification de la collecte</div>
+                    </div>
+                </div>
+                <div class="p2f-panel dark">
+                    <h3>Quand un surplus apparaît</h3>
+                    <p style="font-size: medium;">Les récoltes à risque peuvent progressivement être orientées vers une chambre froide proche, une
+                        unité de transformation, un acheteur, un détaillant ou la demande de la place de marché afin
+                        d’éviter qu’elles ne restent sans débouché.</p>
+                    <div class="p2f-icons">
+                        <div class="p2f-icon" style="font-size: 14px;"><b>01</b>Détecter le risque</div>
+                        <div class="p2f-icon" style="font-size: 14px;"><b>02</b>Collecter rapidement</div>
+                        <div class="p2f-icon" style="font-size: 14px;"><b>03</b>Refroidir / stocker</div>
+                        <div class="p2f-icon" style="font-size: 14px;"><b>04</b>Transformer / distribuer</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="p2f-section p2f-light">
+        <div class="wrap">
+            <div class="p2f-head"><small>03 • TRANSFORMATION</small>
+                <h2>Transformer des matières premières riches en nutriments en produits sûrs et compétitifs.</h2>
+                <p>La transformation est conçue comme une extension maîtrisée de l'intelligence nutritionnelle et du
+                    réseau alimentaire — de la réception des matières premières au produit fini.</p>
+            </div>
+            <div class="p2f-cards cards-grid-v2">
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/Turn-nutrient-rich-raw-materials-into-safe-competitive-products/01.png" alt="Conception de produits guidée par la nutrition">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">01</span>
+                        <h3>Conception de produits guidée par la nutrition</h3>
+                        <p>Développer des produits compétitifs à partir d'aliments africains riches en nutriments selon les besoins nutritionnels, les préférences, l'accessibilité et la demande.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/Turn-nutrient-rich-raw-materials-into-safe-competitive-products/02.png" alt="Sécurité sanitaire dès la conception">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">02</span>
+                        <h3>Sécurité sanitaire dès la conception</h3>
+                        <p>Intégrer l’hygiène, le contrôle qualité, la traçabilité, la maîtrise des procédés et des procédures documentées de la réception au produit fini.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/Turn-nutrient-rich-raw-materials-into-safe-competitive-products/03.png" alt="Objectif : 100 % d’énergie renouvelable">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">03</span>
+                        <h3>Objectif : 100 % d’énergie renouvelable</h3>
+                        <p>Viser progressivement 100 % d'électricité renouvelable pour les opérations de transformation, avec le solaire comme source centrale lorsque cela est techniquement approprié.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/Turn-nutrient-rich-raw-materials-into-safe-competitive-products/04..png" alt="Chambres froides alimentées au solaire">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">04</span>
+                        <h3>Chambres froides alimentées au solaire</h3>
+                        <p>Concevoir des espaces de stockage à température contrôlée alimentés par des énergies renouvelables, avec des systèmes adaptés de stockage et de secours pour protéger les aliments périssables.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/Turn-nutrient-rich-raw-materials-into-safe-competitive-products/05.png" alt="Emballage et traçabilité numérique">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">05</span>
+                        <h3>Emballage et traçabilité numérique</h3>
+                        <p>Protéger les produits tout en maintenant un lien numérique entre leur origine, leur lot, leur transformation, leur qualité et leur distribution.</p>
+                    </div>
+                </article>
+
+                <article class="modern-card">
+                    <div class="card-media">
+                        <img src="../assets/img/Phase2/Turn-nutrient-rich-raw-materials-into-safe-competitive-products/06.png" alt="Efficacité des ressources">
+                    </div>
+                    <div class="card-content">
+                        <span class="card-tag">06</span>
+                        <h3>Efficacité des ressources</h3>
+                        <p>Réduire les déchets et explorer la valorisation sûre des coproduits.</p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="p2f-section p2f-dark">
+        <div class="wrap">
+            <div class="p2f-head"><small>04 • STOCKAGE & CONTRÔLÉ CHAÎNE DU FROID</small>
+                <h2>Un réseau distribué de conservation à travers les marchés cibles.</h2>
+                <p>De grands magasins et des chambres froides à température contrôlée peuvent devenir l'épine dorsale
+                    physique entre récolte et marché — notamment pour les fruits et légumes à forte valeur
+                    nutritionnelle.</p>
+            </div>
+            <div class="p2f-chain">
+                <div class="p2f-chain-card"><b>01</b><strong>RÉCOLTE</strong>
+                    <p>Qualité et traçabilité à la source.</p>
+                </div>
+                <div class="p2f-chain-card"><b>02</b><strong>COLLECTE</strong>
+                    <p>Collecte rapide près des producteurs.</p>
+                </div>
+                <div class="p2f-chain-card"><b>03</b><strong>REFROIDIR</strong>
+                    <p>Température contrôlée et suivi.</p>
+                </div>
+                <div class="p2f-chain-card"><b>04</b><strong>TRANSFORMER</strong>
+                    <p>Transformer, emballer ou préparer.</p>
+                </div>
+                <div class="p2f-chain-card"><b>05</b><strong>DISTRIBUER</strong>
+                    <p>Distribution fiable sous chaîne du froid.</p>
+                </div>
+            </div>
+            <div class="p2f-feature" style="margin-top:18px">
+                <div class="p2f-panel dark">
+                    <h3>Intelligence de la température</h3>
+                    <p>Les chambres froides, installations de stockage et moyens de transport pourront intégrer
+                        progressivement capteurs, historiques de température, alertes, procédures et contrôles qualité
+                        pour maîtriser la chaîne du froid.</p>
+                </div>
+                <div class="p2f-panel dark">
+                    <h3>Chaîne du froid alimentée par les renouvelables</h3>
+                    <p>Notre ambition à long terme est d'alimenter les infrastructures de transformation et à
+                        température contrôlée grâce à des énergies renouvelables, notamment des chambres froides
+                        solaires avec systèmes adaptés de stockage et de secours.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="p2f-section p2f-light" id="commercialization">
+        <div class="wrap">
+            <div class="p2f-head"><small>05 • COMMERCIALISATION & DISTRIBUTION</small>
+                <h2>Rendre les aliments nutritifs plus faciles à trouver, acheter et distribuer.</h2>
+                <p>La couche commerciale relie le réseau d'approvisionnement aux consommateurs, détaillants,
+                    institutions, restaurants, distributeurs et autres acheteurs — tandis que les données de demande
+                    améliorent continuellement les décisions d'approvisionnement, de production et de produits.</p>
+            </div>
+            
+        </div>
+    </section>
+
+    <section class="p2f-section p2f-dark">
+        <div class="wrap">
+            <div class="p2f-head"><small>LE SYSTÈME ALIMENTAIRE CONNECTÉ</small>
+                <h2>Chaque étape alimente la suivante.</h2>
+                <p>NUTRI.N°1 est conçue pour relier progressivement l'intelligence numérique à l'infrastructure physique
+                    alimentaire.</p>
+            </div>
+            <div class="p2f-loop">
+                <div class="node">BESOINS
+NUTRITIONNELS</div>
+                <div class="arr">→</div>
+                <div class="node">DEMANDE</div>
+                <div class="arr">→</div>
+                <div class="node">PRODUCTION</div>
+                <div class="arr">→</div>
+                <div class="node">COLLECTE</div>
+            </div>
+            <div class="p2f-loop" style="margin-top:8px">
+                <div class="node">STOCKAGE</div>
+                <div class="arr">→</div>
+                <div class="node">TRANSFORMATION</div>
+                <div class="arr">→</div>
+                <div class="node">CHAÎNE DU FROID</div>
+                <div class="arr">→</div>
+                <div class="node">PLACE DE MARCHÉ</div>
+            </div>
+            <div class="p2f-loop" style="margin-top:8px">
+                <div class="node">CONSOMMATION</div>
+                <div class="arr">→</div>
+                <div class="node">RETOUR</div>
+                <div class="arr">→</div>
+                <div class="node">NOUVELLES DONNÉES</div>
+                <div class="arr">→</div>
+                <div class="node">MEILLEURES DÉCISIONS</div>
+            </div>
+            <div class="p2f-note"><b>Vision à long terme :</b> une plateforme durable d'agro-transformation et de
+                nutrition en Afrique de l'Ouest qui relie les besoins nutritionnels des populations à la production, la
+                sécurité sanitaire, la prévention des pertes post-récolte, la transformation alimentée par les
+                renouvelables, le stockage frigorifique contrôlé et une commercialisation compétitive.</div>
+        </div>
+    </section>
+    <footer>
+        <div class="wrap foot">
+            <div><b style="font-size:21px;color:#fff">NUTRI.N°1</b>
+                <p style="font-size:12px">Infrastructure africaine de l’intelligence alimentaire et nutritionnelle —
+                    évoluant vers une Plateforme durable d'agro-transformation et de nutrition en Afrique de l'Ouest.
+                </p>
+            </div>
+            <div>
+                <h4>Plateforme</h4><a href="platform.html">Nutrition numérique</a><a href="intelligence.html">Base de
+                    connaissances alimentaire africaine</a><a href="ecosystem.html">Acteurs</a>
+            </div>
+            <div>
+                <h4>Entreprises</h4><a href="agribusiness.html">Agro-industrie</a><a href="team.html">Équipe</a><a
+                    href="index.html#contact">Contact</a>
+            </div>
+        </div>
+        <div class="wrap copy"><span>© 2026 NUTRI.N°1</span><span>Conçue en Afrique de l’Ouest • Pensée pour
+                l’Afrique</span></div>
+    </footer>
+    <script>const o = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && (x.target.style.opacity = 1)), { threshold: .1 }); document.querySelectorAll(".card,.box,.person,.loopbox").forEach(x => { x.style.opacity = 0; x.style.transition = "opacity .7s,transform .7s"; o.observe(x) })</script>
+    <script>const v4io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add("show") }), { threshold: .08 }); document.querySelectorAll(".v4-reveal").forEach(x => v4io.observe(x));</script>
+    <script src="../assets/nutri4k.js" defer></script>
+</body>
+
+</html>
