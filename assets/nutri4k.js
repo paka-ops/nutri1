@@ -21,7 +21,7 @@
   /* ---------- per-page art direction ---------- */
   var CFG = {
     index: {
-      hero: { img: 'hero-index', pos: '62% 60%' },
+      hero: { img: 'hero-index', pos: '55% 48%' },
       dark: ['field-aerial'], wash: true, cta: 'plate-fufu',
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
@@ -33,7 +33,7 @@
       }
     },
     platform: {
-      hero: { img: 'hero-platform', pos: '62% 55%' },
+      hero: { img: 'hero-platform', pos: '58% 50%' },
       dark: ['market-stall'], wash: true,
       thumbs: { '.card': ['null', 'null', 'null', 'plate-kenkey', 'plate-vegetable', 'null'] },
       cardBg: {
@@ -41,7 +41,7 @@
       }
     },
     intelligence: {
-      hero: { img: 'hero-intelligence', pos: '62% 50%' },
+      hero: { img: 'hero-intelligence', pos: '60% 52%' },
       dark: ['field-aerial'], wash: true,
       thumbs: { '.card': ['plate-vegetable', 'market-stall', 'plate-kenkey', 'field-harvest-hands', 'plate-fufu', 'plate-grilled-fish'] },
       cardBg: {
@@ -49,7 +49,7 @@
       }
     },
     ecosystem: {
-      hero: { img: 'hero-ecosystem', pos: '62% 62%' },
+      hero: { img: 'hero-ecosystem', pos: '58% 55%' },
       dark: ['field-aerial', 'processing-line'], wash: true,
       thumbs: { '.card': ['field-harvest-hands', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'solar-roof'] },
       cardBg: {
@@ -57,7 +57,7 @@
       }
     },
     agribusiness: {
-      hero: { img: 'hero-agribusiness', pos: '62% 55%' },
+      hero: { img: 'hero-agribusiness', pos: '55% 55%' },
       dark: ['field-harvest-hands', 'processing-line', 'market-stall'], wash: true,
       thumbs: {
         '.p2f-card': ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-vegetable', 'solar-roof',
