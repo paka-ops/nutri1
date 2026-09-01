@@ -21,7 +21,7 @@
   /* ---------- per-page art direction ---------- */
   var CFG = {
     index: {
-      hero: { img: 'hero-index', pos: '60% 72%' },
+      hero: { img: 'hero-index', pos: '62% 60%' },
       dark: ['field-aerial'], wash: true, cta: 'plate-fufu',
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
@@ -33,7 +33,7 @@
       }
     },
     platform: {
-      hero: { img: 'hero-platform', pos: '62% 68%' },
+      hero: { img: 'hero-platform', pos: '62% 55%' },
       dark: ['market-stall'], wash: true,
       thumbs: { '.card': ['null', 'null', 'null', 'plate-kenkey', 'plate-vegetable', 'null'] },
       cardBg: {
@@ -41,7 +41,7 @@
       }
     },
     intelligence: {
-      hero: { img: 'hero-intelligence', pos: '60% 55%' },
+      hero: { img: 'hero-intelligence', pos: '62% 50%' },
       dark: ['field-aerial'], wash: true,
       thumbs: { '.card': ['plate-vegetable', 'market-stall', 'plate-kenkey', 'field-harvest-hands', 'plate-fufu', 'plate-grilled-fish'] },
       cardBg: {
@@ -49,7 +49,7 @@
       }
     },
     ecosystem: {
-      hero: { img: 'hero-ecosystem', pos: '60% 78%' },
+      hero: { img: 'hero-ecosystem', pos: '62% 62%' },
       dark: ['field-aerial', 'processing-line'], wash: true,
       thumbs: { '.card': ['field-harvest-hands', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'solar-roof'] },
       cardBg: {
@@ -57,7 +57,7 @@
       }
     },
     agribusiness: {
-      hero: { img: 'hero-agribusiness', pos: '55% 72%' },
+      hero: { img: 'hero-agribusiness', pos: '62% 55%' },
       dark: ['field-harvest-hands', 'processing-line', 'market-stall'], wash: true,
       thumbs: {
         '.p2f-card': ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-vegetable', 'solar-roof',
@@ -78,7 +78,7 @@
       }
     },
     team: {
-      hero: { img: 'hero-team', pos: '55% 68%' },
+      hero: { img: 'hero-team', pos: '60% 52%' },
       dark: ['processing-line'], wash: true,
       cardBg: {
         '.grid .card': ['field-harvest-hands', 'processing-line', 'field-aerial', 'field-sunrise', 'plate-vegetable', 'market-stall']
@@ -238,7 +238,7 @@
     if (hero && cfg.hero) {
       var hp = photo(hero, cfg.hero.img, {
         pos: cfg.hero.pos, opacity: .96, dur: '36s', bright: 1,
-        shade: 'linear-gradient(96deg,#061b13f7 0%,#061b13ef 26%,#061b13a6 48%,#061b1359 70%,#03140c4d 100%),linear-gradient(180deg,#061b13cc 0%,#061b1326 40%,#03140c59 100%),radial-gradient(circle at 74% 26%,#29cf7024,transparent 44%)'
+        shade: 'linear-gradient(96deg,#061b13f2 0%,#061b13e6 24%,#061b1399 46%,#061b1333 68%,#03140c14 100%),linear-gradient(180deg,#061b13bf 0%,#061b131a 42%,#03140c40 100%),radial-gradient(circle at 74% 26%,#29cf701f,transparent 44%)'
       });
       parallax(hp, .05);
       parallax($('.art, .p2f-visual, .p2x-visual, .v4-orb, .v5-orb', hero), .12);
