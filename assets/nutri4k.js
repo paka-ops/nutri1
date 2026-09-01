@@ -236,10 +236,19 @@
   mod('photos', function () {
     var hero = $('section.hero,section.p2f-hero,section.v5-hero,section.p2x-hero');
     if (hero && cfg.hero) {
-      var hp = photo(hero, cfg.hero.img, {
-        pos: cfg.hero.pos, opacity: .96, dur: '36s', bright: 1,
-        shade: 'linear-gradient(96deg,#061b13f2 0%,#061b13e6 24%,#061b1399 46%,#061b1333 68%,#03140c14 100%),linear-gradient(180deg,#061b13bf 0%,#061b131a 42%,#03140c40 100%),radial-gradient(circle at 74% 26%,#29cf701f,transparent 44%)'
-      });
+      /* la couche photo du hero est désormais écrite en dur dans le HTML
+         (LQIP + <img fetchpriority="high">) : elle s'affiche dès le premier
+         rendu. On la réutilise telle quelle au lieu d'en créer une seconde. */
+      var hp = $('.n4k-photo--hero', hero);
+      if (hp) {
+        hero.style.isolation = 'isolate';
+        hero.classList.add('n4k-photo-on');
+      } else {
+        hp = photo(hero, cfg.hero.img, {
+          pos: cfg.hero.pos, opacity: .96, dur: '36s', bright: 1,
+          shade: 'linear-gradient(96deg,#061b13f2 0%,#061b13e6 24%,#061b1399 46%,#061b1333 68%,#03140c14 100%),linear-gradient(180deg,#061b13bf 0%,#061b131a 42%,#03140c40 100%),radial-gradient(circle at 74% 26%,#29cf701f,transparent 44%)'
+        });
+      }
       parallax(hp, .05);
       parallax($('.art, .p2f-visual, .p2x-visual, .v4-orb, .v5-orb', hero), .12);
     }

@@ -106,6 +106,13 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .n4k-photo:after{content:"";position:absolute;inset:0;mix-blend-mode:soft-light;
   background:radial-gradient(circle at 74% 22%,#29cf703d,transparent 46%),radial-gradient(circle at 12% 88%,#e5b85a2e,transparent 42%)}
 .n4k-photo.n4k-photo--soft{opacity:0;transition:opacity 2.2s}
+/* hero : la couche est écrite directement dans le HTML avec un LQIP (miniature
+   floutée en base64) — elle est donc peinte dès le tout premier rendu, sans
+   attendre le JS ni le téléchargement de la photo plein format. Aucun fondu :
+   plus de trou noir de 0,5 à 1 s à l'arrivée sur le site. */
+.n4k-photo{background-size:cover;background-position:var(--n4k-pos,50% 45%);background-repeat:no-repeat}
+.n4k-photo--hero{opacity:var(--n4k-po,1);transition:none;background-size:cover}
+.n4k-photo--hero img{opacity:1}
 @keyframes n4k-kb{0%{transform:scale(1.04) translate3d(-1.2%,-.8%,0)}100%{transform:scale(1.16) translate3d(1.4%,1%,0)}}
 /* hero content depth */
 .hero .wrap,.p2f-hero .wrap,.v5-hero .wrap{position:relative;z-index:2;transform:translate3d(calc(var(--n4k-mx,0) * -10px),calc(var(--n4k-my,0) * -7px),0);transition:transform .9s var(--n4k-e)}
