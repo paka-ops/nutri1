@@ -134,6 +134,14 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .n4k-w>i{display:inline-block;font-style:inherit;transform:translate3d(0,108%,0) rotate(3deg);opacity:0;filter:blur(6px);
   transition:transform 1.05s var(--n4k-e),opacity .8s ease,filter .8s ease;transition-delay:calc(var(--w,0) * 46ms)}
 .n4k-in .n4k-w>i{transform:none;opacity:1;filter:blur(0)}
+/* calm block reveal for gradient-clipped text (CTA headline & copy):
+   no per-word split, no blur, no scale — just a short, smooth fade-up */
+.n4k-rv.n4k-soft{opacity:0;transform:translate3d(0,18px,0);
+  transition:opacity .8s var(--n4k-e),transform .9s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms);will-change:opacity,transform}
+.n4k-rv.n4k-soft.n4k-in{opacity:1;transform:none}
+.ctaBox .n4k-soft{backface-visibility:hidden}
+.ctaBox h2.n4k-soft{padding-bottom:.06em}
+@media(prefers-reduced-motion:reduce){.n4k-rv.n4k-soft{opacity:1!important;transform:none!important}}
 /* headings / kickers */
 .head,.v5-head,.p2f-head,.p2x-head{position:relative}
 .head .kicker,.v5-head small,.p2f-head small,.p2x-head small{display:inline-flex;align-items:center;gap:8px}

@@ -294,6 +294,18 @@
     if (delay != null) node.style.setProperty('--n4k-rvd', delay + 'ms');
     if (REDUCE || !io) node.classList.add('n4k-in'); else io.observe(node);
   }
+  /* headings whose colour comes from a gradient clipped to the glyphs must never
+     be split: a filter/transform on a child creates its own stacking context and
+     the clipped gradient stops following the glyphs (flicker / invisible words) */
+  function clipsText(el) {
+    if (!el) return false;
+    try {
+      var cs = getComputedStyle(el);
+      if ((cs.webkitBackgroundClip || cs.backgroundClip) === 'text') return true;
+      var f = cs.webkitTextFillColor || '';
+      return /rgba\(0,\s*0,\s*0,\s*0\)|transparent/.test(f);
+    } catch (e) { return false; }
+  }
   /* wrap each word of a heading in a mask span — text itself is untouched */
   function words(host) {
     if (!host || host._n4kw) return; host._n4kw = 1;
@@ -345,8 +357,18 @@
     each($$('.v4-reveal'), function (n) {
       n.classList.remove('v4-reveal'); n.style.opacity = ''; n.style.transform = ''; n.style.transition = '';
     });
+    /* the CTA block ("Let's build the future of nutrition in Africa.") uses a
+       gradient clipped to the text (background-clip:text). Splitting it into
+       per-word spans that each get their own transform/blur breaks that paint:
+       the glyphs detach from the gradient and the line jitters word by word.
+       Those blocks get one calm, coherent fade-up instead. */
+    each($$('.ctaBox .kicker,.ctaBox h2,.ctaBox p,.ctaBox .btn'), function (n, i) {
+      n.classList.add('n4k-soft');
+      reveal(n, 60 + i * 90);
+    });
     each($$('section.hero h1,section.p2f-hero h1,section.v5-hero h1,.head h2,.v5-head h2,.p2f-head h2,.p2x-head h2,.cloud h2,.ctaBox h2,.head p,.v5-head p,.p2f-head p,.ctaBox p,.loopbox h3,.box h3,.p2f-panel h3,.p2f-chain-card strong'), function (h) {
       if ((h.textContent || '').trim().length > 320) return;
+      if (h.classList.contains('n4k-soft') || clipsText(h)) { reveal(h, 40); return; }
       words(h); reveal(h, 40);
     });
     each($$('.head,.v5-head,.p2f-head,.p2x-head'), function (n) { reveal(n, 0); });
