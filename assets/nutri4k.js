@@ -22,14 +22,13 @@
   var CFG = {
     index: {
       hero: { img: 'hero-index', pos: '62% 55%' },
-      dark: ['field-aerial'], wash: true, cta: 'cta-future',
+      dark: ['field-aerial'], wash: true,
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
       cardBg: {
         '.arch .box': ['field-sunrise', 'processing-line'],
         '.grid .card': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
-        '.loop .loopbox': ['field-harvest-hands', 'market-stall'],
-        '.ctaBox': ['cta-future']
+        '.loop .loopbox': ['field-harvest-hands', 'market-stall']
       }
     },
     platform: {
