@@ -45,6 +45,18 @@ COPY : AUCUN MOT AJOUTÉ / SUPPRIMÉ / MODIFIÉ
   ecosystem.html est l'écart préexistant du badge « AI » de la nav, commun aux
   10 autres pages non modifiées).
 
+MISE À JOUR v2 (retours investisseurs)
+- stake-citizens : ajout du côté « connecté » — hologrammes verts translucides au-dessus
+  de chaque plat (anneaux + pictos aliment), reliés par de fins faisceaux lumineux au
+  téléphone : les aliments sont visiblement connectés à l'application. Famille et scène
+  conservées (édition IA de l'image v1).
+- stake-governments : fini le rendu « hacker » trop vert — salle lumineuse en lumière
+  blanche naturelle (plafonniers + lumière du jour), UN grand écran de tableaux de bord
+  clairs, et présence des organisations internationales : drapeau bleu ONU + drapeaux
+  partenaires sur la table, plaque emblème globe-lauriers au mur (OMS/UNICEF/FAO/PAM).
+- Fichiers écrasés (stake-citizens*.jpg / stake-governments*.jpg), cache invalidé via
+  ?v=2 dans ecosystem.html et fr/ecosystem.html (src + srcset), alt mis à jour (EN+FR).
+
 VÉRIFICATIONS
 - node tools/n4k-copy-check.js : moteur actif, 0 erreur runtime sur les 12 pages.
 - Assertion jsdom : 4 cartes .stake par page, 0 n4k-cb et 0 n4k-thumb injectés sur
