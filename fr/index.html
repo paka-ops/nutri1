@@ -545,24 +545,103 @@
         }
 
         .ctaBox {
-            padding: 55px;
+            position: relative;
+            overflow: hidden;
+            padding: 68px 55px 60px;
             text-align: center;
-            border-radius: 32px;
-            background: linear-gradient(135deg, #eff8ef, #fff5dc);
-            color: var(--ink)
+            border-radius: 36px;
+            color: var(--ink);
+            border: 1px solid #29cf7029;
+            background:
+                radial-gradient(560px 340px at 8% -10%, #29cf7024, transparent 60%),
+                radial-gradient(520px 360px at 100% 6%, #e5b85a2e, transparent 62%),
+                radial-gradient(700px 420px at 50% 118%, #9be7661f, transparent 65%),
+                linear-gradient(160deg, #f8fcf5 0%, #f5f4ed 55%, #fdf7e6 100%);
+            box-shadow:
+                inset 0 1px 0 #ffffffd9,
+                inset 0 -1px 0 #0b21170a,
+                0 30px 70px -30px #0b21172e,
+                0 70px 130px -60px #29cf7040
+        }
+
+        .ctaBox:before {
+            content: "";
+            position: absolute;
+            right: -150px;
+            top: -150px;
+            width: 430px;
+            height: 430px;
+            border-radius: 50%;
+            border: 1px solid #29cf7036;
+            box-shadow: 0 0 0 48px #29cf7009, 0 0 0 98px #29cf7105;
+            pointer-events: none;
+            transition: transform 1.2s cubic-bezier(.16, 1, .3, 1)
+        }
+
+        .ctaBox:after {
+            content: "";
+            position: absolute;
+            left: -100px;
+            bottom: -130px;
+            width: 290px;
+            height: 290px;
+            border-radius: 50%;
+            border: 1px dashed #e5b85a66;
+            pointer-events: none
+        }
+
+        .ctaBox:hover:before {
+            transform: scale(1.05)
+        }
+
+        .ctaBox .kicker {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #29cf7040;
+            background: #ffffffb3;
+            color: #0d7a40;
+            border-radius: 99px;
+            padding: 8px 15px;
+            font-size: 10px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .14em;
+            box-shadow: 0 6px 18px -8px #29cf7059
+        }
+
+        .ctaBox .kicker:before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--g);
+            box-shadow: 0 0 0 4px #29cf7029
         }
 
         .ctaBox h2 {
             font-size: clamp(37px, 5vw, 62px);
             line-height: 1;
             letter-spacing: -.07em;
-            margin: 9px 0
+            margin: 20px 0 9px;
+            color: #0b2117;
+            background: linear-gradient(115deg, #0b2117 25%, #0d5c37 68%, #8a6a1e);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent
         }
 
         .ctaBox p {
             max-width: 720px;
-            margin: 12px auto 24px;
-            color: var(--mut)
+            margin: 12px auto 30px;
+            color: var(--mut);
+            position: relative;
+            z-index: 1
+        }
+
+        .ctaBox .btn {
+            position: relative;
+            z-index: 1
         }
 
         footer {
@@ -669,7 +748,18 @@
             }
 
             .ctaBox {
-                padding: 38px 20px
+                padding: 48px 20px
+            }
+
+            .ctaBox:before {
+                width: 300px;
+                height: 300px;
+                right: -120px;
+                top: -120px
+            }
+
+            .ctaBox:after {
+                display: none
             }
 
             .foot {
