@@ -69,7 +69,9 @@
         '.p2f-card': ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-vegetable', 'solar-roof',
           'plate-kenkey', 'processing-line', 'solar-roof', 'processing-line', 'plate-vegetable', 'market-stall',
           'market-stall', 'plate-fufu', 'plate-grilled-fish', 'field-aerial', 'processing-line', 'plate-vegetable'],
-        '.p2f-chain-card': ['field-harvest-hands', 'market-stall', 'processing-line', 'solar-roof', 'plate-grilled-fish']
+        /* section 04 chain cards — one dedicated photo per step:
+           HARVEST / COLLECT / COOL / PROCESS / DISTRIBUTE */
+        '.p2f-chain-card': ['chain-harvest', 'chain-collect', 'chain-cool', 'chain-process', 'chain-distribute']
       },
       cardBg: {
         '.p2f-cards .p2f-card': [
@@ -78,9 +80,11 @@
           'market-stall', 'field-aerial', 'plate-fufu', 'processing-line', 'plate-grilled-fish', 'plate-vegetable'
         ],
         '.p2f-chain .p2f-chain-card': [
-          'field-harvest-hands', 'market-stall', 'solar-roof', 'processing-line', 'plate-grilled-fish'
+          'chain-harvest', 'chain-collect', 'chain-cool', 'chain-process', 'chain-distribute'
         ],
-        '.p2f-panel': ['field-harvest-hands', 'market-stall', 'solar-roof', 'processing-line']
+        /* panels 1-2: section 02 (producer→market, surplus) —
+           panels 3-4: section 04 (temperature intelligence, renewable-powered cold chain) */
+        '.p2f-panel': ['field-harvest-hands', 'market-stall', 'panel-temp-intel', 'panel-solar-cold']
       }
     },
     team: {
