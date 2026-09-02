@@ -23,14 +23,14 @@
     index: {
       hero: { img: 'hero-index', pos: '62% 55%' },
       dark: ['field-aerial'], wash: true,
-      thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
-      thumbSize: 'lg',
+      /* '.loop .loopbox' intentionally excluded from thumbs and cardBg: the ambition
+         loop cards now carry their own clear 4K <img> band (no gradient, no scrim),
+         so neither a round thumbnail nor a faded background is injected over them */
       cardBg: {
         /* '.arch .box' and '.grid .stackcard' intentionally excluded: the strategic-architecture
            and intelligence-stack cards now carry their own clear <img> band with no gradient
            scrim, so no faded background image is injected behind their copy */
-        '.grid .card:not(.stackcard)': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
-        '.loop .loopbox': ['field-harvest-hands', 'market-stall']
+        '.grid .card:not(.stackcard)': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish']
       }
     },
     platform: {
@@ -703,7 +703,7 @@
      statiques équivalents : data-card-bg / data-card-bg-op.
      ========================================================= */
   var CB_SEL = '.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-chain-card,.p2f-icon,.p2x-card,.p2x-chain-card,.node,.p2f-node,.p2x-node,.sat,.v5-float,.ctaBox,.v4-demo,.v5-demo';
-  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future'];
+  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem'];
   var CB_STORE_KEY = 'n4k-cardbg:v1';
   var CB_PAGE = (function () {
     var p = location.pathname.replace(/^\//, '').replace(/\.html?$/, '').split('/').filter(Boolean);

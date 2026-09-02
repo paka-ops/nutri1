@@ -522,34 +522,252 @@
             transform: translateX(-50%)
         }
 
+        /* ambition loop cards: a clear full-bleed photo band on top — no gradient
+           background, no scrim, no fade over the image — while the copy sits on the
+           solid white card below; the flow reads as chips with a travelling pulse.
+           No word of copy is added or removed (numerals come from CSS content). */
         .loop {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 16px
+            gap: 20px
         }
 
         .loopbox {
-            padding: 30px;
-            border-radius: 26px
+            padding: 0;
+            border-radius: 26px;
+            overflow: hidden;
+            background: #fff;
+            border: 1px solid var(--line);
+            box-shadow: 0 20px 55px #0b211712;
+            display: flex;
+            flex-direction: column;
+            transition: transform .55s cubic-bezier(.16, 1, .3, 1), box-shadow .55s
+        }
+
+        .loopbox:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 34px 80px #0b21171f
+        }
+
+        .lpMedia {
+            position: relative;
+            margin: 0;
+            aspect-ratio: 16/9;
+            background: #0a2b1e;
+            overflow: hidden
+        }
+
+        .lpImg {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: none;
+            transform: scale(1.03);
+            transition: transform 1.8s cubic-bezier(.16, 1, .3, 1)
+        }
+
+        .loopbox:hover .lpImg {
+            transform: scale(1.08)
+        }
+
+        .lpMedia:after {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 3px
+        }
+
+        .lb1 .lpMedia:after {
+            background: linear-gradient(90deg, #29cf70, #9be766)
+        }
+
+        .lb2 .lpMedia:after {
+            background: linear-gradient(90deg, #e5b85a, #f3d795)
+        }
+
+        .lpNum {
+            position: absolute;
+            top: 14px;
+            left: 16px;
+            z-index: 2;
+            padding: 7px 12px 7px 10px;
+            border-radius: 999px;
+            background: #061b13d9;
+            backdrop-filter: blur(9px);
+            -webkit-backdrop-filter: blur(9px);
+            border: 1px solid #29cf7059;
+            color: #8ff0a9;
+            font-size: 10px;
+            font-weight: 950;
+            letter-spacing: .18em;
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .lpNum:before {
+            content: "";
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #29cf70;
+            box-shadow: 0 0 10px #29cf70
+        }
+
+        .lb1 .lpNum:after {
+            content: "01"
+        }
+
+        .lb2 .lpNum {
+            border-color: #e5b85a59;
+            color: #f4d99a
+        }
+
+        .lb2 .lpNum:before {
+            background: #e5b85a;
+            box-shadow: 0 0 10px #e5b85a
+        }
+
+        .lb2 .lpNum:after {
+            content: "02"
+        }
+
+        .lpBody {
+            padding: 24px 26px 28px
         }
 
         .loopbox h3 {
-            font-size: 29px;
+            font-size: 26px;
             line-height: 1.05;
-            margin: 0 0 9px
+            letter-spacing: -.02em;
+            margin: 0 0 14px
         }
 
         .loopbox p {
-            font-size: 13px;
-            color: #c3d8ca
+            margin: 0;
+            font-size: 12px;
+            color: var(--mut);
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 7px 8px
         }
 
-        .lb1 {
-            background: #0a2b1e
+        .lpChain span {
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: #f2f7f3;
+            border: 1px solid var(--line);
+            color: #123a28;
+            font-weight: 650;
+            font-size: 12px;
+            line-height: 1.2;
+            animation: lpflow 4.55s linear infinite;
+            transition: background .4s, color .4s, border-color .4s, box-shadow .4s
         }
 
-        .lb2 {
-            background: linear-gradient(145deg, #3c2d14, #72571d)
+        .lpChain i {
+            font-style: normal;
+            font-weight: 850;
+            color: #169652
+        }
+
+        .lb2 .lpChain span {
+            background: #faf5ea;
+            border-color: #eadfc6;
+            color: #4a3a15;
+            animation-name: lpflowg
+        }
+
+        .lb2 .lpChain i {
+            color: #a97f22
+        }
+
+        /* the current of each loop travels chip by chip */
+        .lpChain span:nth-child(1) {
+            animation-delay: 0s
+        }
+
+        .lpChain span:nth-child(3) {
+            animation-delay: .65s
+        }
+
+        .lpChain span:nth-child(5) {
+            animation-delay: 1.3s
+        }
+
+        .lpChain span:nth-child(7) {
+            animation-delay: 1.95s
+        }
+
+        .lpChain span:nth-child(9) {
+            animation-delay: 2.6s
+        }
+
+        .lpChain span:nth-child(11) {
+            animation-delay: 3.25s
+        }
+
+        .lpChain span:nth-child(13) {
+            animation-delay: 3.9s
+        }
+
+        @keyframes lpflow {
+
+            0%,
+            9% {
+                background: #0a2b1e;
+                border-color: #29cf7080;
+                color: #8ff0a9;
+                box-shadow: 0 8px 22px #29cf7040
+            }
+
+            16%,
+            100% {
+                background: #f2f7f3;
+                border-color: var(--line);
+                color: #123a28;
+                box-shadow: 0 0 0 #29cf7000
+            }
+        }
+
+        @keyframes lpflowg {
+
+            0%,
+            9% {
+                background: #3c2d14;
+                border-color: #e5b85a80;
+                color: #f4d99a;
+                box-shadow: 0 8px 22px #e5b85a40
+            }
+
+            16%,
+            100% {
+                background: #faf5ea;
+                border-color: #eadfc6;
+                color: #4a3a15;
+                box-shadow: 0 0 0 #e5b85a00
+            }
+        }
+
+        /* loop cards carry their own clear photo band: no faded card-bg overlay */
+        .loop .loopbox>.n4k-cb,
+        .loop .loopbox .n4k-cb-shade {
+            display: none !important
+        }
+
+        @media (prefers-reduced-motion:reduce) {
+            .lpChain span {
+                animation: none
+            }
+
+            .lpImg,
+            .loopbox {
+                transition: none
+            }
         }
 
         .teamGrid {
@@ -654,6 +872,14 @@
             .cloud,
             .loop {
                 grid-template-columns: 1fr
+            }
+
+            .loopbox h3 {
+                font-size: 23px
+            }
+
+            .lpBody {
+                padding: 20px 20px 24px
             }
 
             .art {
@@ -918,14 +1144,37 @@
             </div>
             <div class="loop">
                 <div class="loopbox lb1">
-                    <h3>Boucle numérique</h3>
-                    <p>Profil → alimentation → IA → recommandation → prévention → accompagnement professionnel → suivi.
-                    </p>
+                    <figure class="lpMedia">
+                        <img class="lpImg" src="../assets/img/loop-digital.jpg"
+                            srcset="../assets/img/loop-digital.jpg 1600w, ../assets/img/loop-digital-4k.jpg 3840w"
+                            sizes="(max-width:900px) 94vw, 566px"
+                            alt="Vue photoréaliste d'une professionnelle africaine de la nutrition dans une clinique lumineuse tenant une tablette affichant un tableau de bord vert d'IA nutritionnelle, une boucle lumineuse de points de données au-dessus de plats locaux : poisson grillé, fufu, tomates et maïs"
+                            loading="lazy" decoding="async">
+                        <span class="lpNum" aria-hidden="true"></span>
+                    </figure>
+                    <div class="lpBody">
+                        <h3>Boucle numérique</h3>
+                        <p class="lpChain"><span>Profil</span> <i>→</i> <span>alimentation</span> <i>→</i>
+                            <span>IA</span> <i>→</i> <span>recommandation</span> <i>→</i> <span>prévention</span>
+                            <i>→</i> <span>accompagnement professionnel</span> <i>→</i> <span>suivi.</span></p>
+                    </div>
                 </div>
                 <div class="loopbox lb2">
-                    <h3>Boucle du système alimentaire</h3>
-                    <p>Besoins nutritionnels → demande → production → transformation → place de marché → consommation →
-                        nouvelle intelligence.</p>
+                    <figure class="lpMedia">
+                        <img class="lpImg" src="../assets/img/loop-foodsystem.jpg"
+                            srcset="../assets/img/loop-foodsystem.jpg 1600w, ../assets/img/loop-foodsystem-4k.jpg 3840w"
+                            sizes="(max-width:900px) 94vw, 566px"
+                            alt="Vue aérienne photoréaliste à l'heure dorée d'un pôle d'agro-transformation ouest-africain : champs verts irrigués, usine de transformation à toit solaire avec silos, camions chargeant des caisses et marché de plein air animé"
+                            loading="lazy" decoding="async">
+                        <span class="lpNum" aria-hidden="true"></span>
+                    </figure>
+                    <div class="lpBody">
+                        <h3>Boucle du système alimentaire</h3>
+                        <p class="lpChain"><span>Besoins nutritionnels</span> <i>→</i> <span>demande</span> <i>→</i>
+                            <span>production</span> <i>→</i> <span>transformation</span> <i>→</i>
+                            <span>place de marché</span> <i>→</i> <span>consommation</span> <i>→</i>
+                            <span>nouvelle intelligence.</span></p>
+                    </div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,44 @@
+NUTRI.N°1 — Cartes « The ambition / L'ambition » : visuels 4K + UI image-first
+==============================================================================
+Pages concernées : index.html et fr/index.html (section « Become Africa's leading
+nutrition company. / Devenir le leader africain de la nutrition. »).
+
+VISUELS AJOUTÉS (photoréalistes, cohérents avec la charte vert/or)
+- assets/img/loop-digital.jpg      (1600w, web)  + loop-digital-4k.jpg   (3840w, master 4K)
+  → « Digital loop / Boucle numérique » : professionnelle africaine de la nutrition,
+    tablette avec dashboard vert d'IA nutritionnelle, boucle lumineuse de données
+    au-dessus de plats locaux (poisson grillé, fufu, tomates, maïs). Ambition, futur crédible.
+- assets/img/loop-foodsystem.jpg   (1600w, web)  + loop-foodsystem-4k.jpg (3840w, master 4K)
+  → « Food-system loop / Boucle du système alimentaire » : vue aérienne heure dorée d'un
+    pôle d'agro-transformation ouest-africain (champs irrigués, usine à toit solaire,
+    silos, camions, marché de plein air).
+- Les cartes chargent le master 4K via srcset (1600w / 3840w) : netteté sur écrans
+  denses et zoom, poids contenu en 1x.
+
+UI DES CARTES (plus de dégradé de fond, plus de voile sur la photo)
+- Bande photo 16:9 pleine largeur en haut, 100 % nette : aucun scrim, aucun fondu,
+  aucun dégradé par-dessus l'image (même règle que les cartes « stack » et « arch »).
+- Le texte associé passe SOUS la photo, sur le carton blanc uni : titre + chaîne du
+  flux composée en pastilles (chips) séparées par des flèches, avec une impulsion
+  lumineuse qui parcourt la boucle pastille par pastille (vert = boucle numérique,
+  or = boucle système alimentaire) ; désactivée si prefers-reduced-motion.
+- Badge 01 / 02 en haut à gauche de la photo : rendu via CSS content (aucun mot
+  ajouté au DOM), pastille sombre translucide + point lumineux vert/or.
+- Liseré d'accent 3 px entre photo et carton (vert lb1, or lb2) ; hover : légère
+  élévation + zoom lent du photo-band (Ken Burns), cohérent avec le tilt n4k.
+- Anciens fonds .lb1/#0a2b1e et .lb2/linear-gradient(145deg,#3c2d14,#72571d) supprimés.
+
+COPY : AUCUN MOT AJOUTÉ / SUPPRIMÉ / MODIFIÉ
+- Texte visible des deux pages vérifié identique à HEAD (normalisation des espaces) :
+  les chips conservent exactement les mêmes mots et flèches que le paragraphe d'origine.
+- tools/n4k-copy-check.js reste donc valide pour ces pages.
+
+MOTEUR D'IMMERSION (assets/nutri4k.js)
+- Config « index » : suppression des vignettes rondes (thumbs '.loopbox') et du fond
+  photo atténué (cardBg '.loop .loopbox') — les cartes portent désormais leur propre
+  photo nette ; commentaire explicite ajouté, comme pour .arch .box / .grid .stackcard.
+- CSS page : .loop .loopbox > .n4k-cb masqué (même précédent que les stackcards).
+- Galerie de l'éditeur « Fond des cartes » : loop-digital et loop-foodsystem ajoutés.
+
+PALETTE : uniquement les tokens existants (#29cf70, #9be766, #e5b85a, #0a2b1e,
+#3c2d14, crèmes/blancs, var(--line), var(--mut)).
