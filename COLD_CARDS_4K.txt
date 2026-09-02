@@ -1,0 +1,60 @@
+NUTRI.N°1 — Section 04 « Storage & Controlled Cold Chain » : photos 4K réalistes cohérentes
+==========================================================================================
+Pages concernées : agribusiness.html et fr/agribusiness.html (section
+« 04 • STORAGE & CONTROLLED COLD CHAIN / 04 • STOCKAGE & CONTRÔLÉ CHAÎNE DU FROID »),
+site de présentation investisseurs.
+
+PROBLÈME RÉSOLU
+- Les deux cartes de la section 04 (« Temperature intelligence / Intelligence de la
+  température » et « Renewable-powered cold chain / Chaîne du froid alimentée par les
+  renouvelables ») ne montraient AUCUNE image lisible et cohérente : le moteur n4k leur
+  injectait uniquement un fond photographique atténué sous un dégradé sombre
+  (panneaux presque noirs pour un investisseur), perçu comme incohérent avec la
+  thématique des cartes.
+
+VISUELS AJOUTÉS (photoréalistes — rendu photo, PAS dessin — cohérents avec chaque
+thématique, neutres, charte vert/or)
+- assets/img/cold-temp-intel.jpg (1536w, web) + cold-temp-intel-4k.jpg (3840x2560, master 4K)
+  → Temperature intelligence : intérieur d'une chambre froide contrôlée, technicien avec
+  tablette durcie affichant un tableau de bord vert de suivi des températures (jauges +
+  courbe), capteur sans fil de température/humidité fixé au rayonnage, caisses de légumes
+  frais (poivrons, tomates, brocolis), brume de froid, évaporateur au plafond.
+- assets/img/cold-solar.jpg (1536w, web, ?v=2) + cold-solar-4k.jpg (3840x2560, master 4K, ?v=2)
+  → Renewable-powered cold chain (v2, plus technologique, scène à l'aube) : centre de
+  refroidissement high-tech dans un grand champ de légumes — tableau de bord vert
+  numérique affichant 4,2 °C sur la façade, antennes de capteurs, unité de
+  réfrigération à ventilateurs, armoire batterie/secours, technicien en gilet HV —
+  rosée encore visible sur les cultures au premier plan, brume à l'horizon, et un
+  champ de panneaux solaires s'étirant jusqu'à l'horizon à côté du soleil levant.
+- Masters 4K générés par rééchantillonnage Lanczos (+ unsharp léger) depuis les masters
+  photoréalistes ; les cartes chargent le 4K via srcset (1536w / 3840w).
+
+UI DES CARTES (image 100 % nette + texte de la thématique inséré sur la photo)
+- Même traitement que les cartes Acteurs / Government Intelligence (sections 15-16 de
+  nutri4k.css) : bande photo 16:9 pleine largeur en haut, AUCUN scrim, AUCUN dégradé,
+  AUCUN voile par-dessus l'image (filter:none) ; léger zoom Ken Burns au hover seulement.
+- Pastille de thématique (.coldTag) en bas à gauche reprenant exactement le titre de la
+  carte, et badge numéroté 01/02 (.coldNum) en haut à gauche — rendus via CSS content
+  selon data-cold et html[lang] (EN + FR), donc AUCUN mot ajouté au DOM.
+- Liseré d'accent 3 px entre photo et carton : menthe→vert (temp), or→vert (solar).
+- Le texte existant (h3, p) reste inchangé sur le corps de carte uni en dessous (.coldBody).
+
+MOTEUR D'IMMERSION (assets/nutri4k.js + assets/nutri4k.css)
+- Config « agribusiness » : sélecteur cardBg des panneaux passé de '.p2f-panel' à
+  '.p2f-panel:not(.cold)' (les 2 panneaux de la section 02 conservent leur fond photo ;
+  les 2 panneaux .cold portent leur propre photo nette).
+- CSS section 17 : styles des cartes .cold ; garde-fous
+  '.p2f-feature .cold>.n4k-cb,.n4k-cb-shade,.n4k-thumb{display:none!important}' pour
+  qu'aucun voile ne soit réinjecté ; désactivé si prefers-reduced-motion.
+- Galerie de l'éditeur « Fond des cartes » : cold-temp-intel et cold-solar ajoutés.
+
+COPY : AUCUN MOT AJOUTÉ / SUPPRIMÉ / MODIFIÉ
+- Texte visible des deux pages vérifié octet-identique (normalisé) à HEAD après
+  modification (extracteur html.parser : 0 diff sur EN et FR).
+
+VÉRIFICATIONS EXÉCUTÉES
+- node --check assets/nutri4k.js : OK ; accolades CSS équilibrées (464/464).
+- jsdom (runScripts) sur les 2 pages avec le vrai nutri4k.js : 2 cartes .cold par page,
+  2 <img class="coldImg"> avec srcset 1536w+3840w, 0 n4k-cb et 0 n4k-thumb injectés sur
+  les cartes .cold, 2 n4k-cb conservés sur les panneaux de la section 02, h3 préservés.
+- Serveur statique : les 2 pages, les 4 images, nutri4k.css et nutri4k.js répondent 200.
