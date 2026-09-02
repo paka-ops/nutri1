@@ -708,3 +708,52 @@ html[lang="fr"] .ctaBox h2{line-height:1.02}
 html[lang="fr"] .v5-title,
 html[lang="fr"] .p2f-title,
 html[lang="fr"] .p2x-title{line-height:.96}
+
+/* ============================================================
+   15 · stakeholder photo cards (ecosystem / écosystème)
+   Investor-grade image-first cards for the "Stakeholders" section:
+   a 100 % clear 16:9 photo band on top — NO scrim, NO gradient, NO
+   fade over the image — the theme word set over the photo as a crisp
+   chip, and the existing copy untouched on the solid card body below.
+   Theme words / numerals are rendered via CSS content so the DOM copy
+   never changes (tools/n4k-copy-check.js stays valid).
+   ============================================================ */
+.grid .stake{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.grid .stake .stMedia{position:relative;margin:0;aspect-ratio:16/9;overflow:hidden;background:#0a2b1e;flex:none}
+.grid .stake .stImg{display:block;width:100%;height:100%;object-fit:cover;filter:none;
+  image-rendering:-webkit-optimize-contrast;transform:scale(1.015);transition:transform 1.8s var(--n4k-e)}
+.grid .stake:hover .stImg{transform:scale(1.06)}
+/* the photo must stay perfectly clear: never let a faded background,
+   directional scrim or round thumbnail be injected over these cards */
+.grid .stake>.n4k-cb,.grid .stake .n4k-cb-shade,.grid .stake .n4k-thumb{display:none!important}
+.grid .stake.n4k-hasthumb{padding-right:0!important}
+/* 3 px accent seam between the photo and the body */
+.grid .stake .stMedia:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2;
+  background:linear-gradient(90deg,var(--n4k-g),var(--n4k-mint));opacity:.9}
+/* numeral badge, top-left (CSS content — no word added to the DOM) */
+.grid .stake .stNum{position:absolute;top:14px;left:14px;z-index:2;display:inline-flex;align-items:center;gap:7px;
+  padding:7px 12px 7px 10px;border-radius:999px;background:#061b13d9;border:1px solid #29cf7059;color:#8ff0a9;
+  font-size:10px;font-weight:950;letter-spacing:.18em;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.grid .stake .stNum:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--n4k-g);box-shadow:0 0 9px #29cf70}
+.grid .stake[data-stake="citizens"] .stNum:after{content:"01"}
+.grid .stake[data-stake="governments"] .stNum:after{content:"02"}
+.grid .stake[data-stake="science"] .stNum:after{content:"03"}
+.grid .stake[data-stake="professionals"] .stNum:after{content:"04"}
+/* theme word over the photo, bottom-left: crisp chip, no gradient scrim */
+.grid .stake .stTag{position:absolute;left:14px;bottom:16px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+  max-width:calc(100% - 28px);padding:9px 14px;border-radius:999px;background:#061b13d9;border:1px solid #29cf7059;
+  color:#eafff2;font-size:10.5px;font-weight:950;letter-spacing:.17em;text-transform:uppercase;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 26px #03140c66}
+.grid .stake .stTag:before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--n4k-gold);box-shadow:0 0 10px #e5b85a}
+.grid .stake[data-stake="citizens"] .stTag:after{content:"Citizens"}
+.grid .stake[data-stake="governments"] .stTag:after{content:"Governments"}
+.grid .stake[data-stake="science"] .stTag:after{content:"Science"}
+.grid .stake[data-stake="professionals"] .stTag:after{content:"Professionals"}
+html[lang="fr"] .grid .stake[data-stake="citizens"] .stTag:after{content:"Citoyens"}
+html[lang="fr"] .grid .stake[data-stake="governments"] .stTag:after{content:"Gouvernements"}
+html[lang="fr"] .grid .stake[data-stake="science"] .stTag:after{content:"Science"}
+html[lang="fr"] .grid .stake[data-stake="professionals"] .stTag:after{content:"Professionnels"}
+/* copy on the solid card body below the photo */
+.grid .stake .stBody{padding:19px 22px 22px}
+.grid .stake .stBody h3{font-size:19px}
+@media (prefers-reduced-motion:reduce){.grid .stake .stImg{transition:none;transform:none}}

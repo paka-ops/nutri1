@@ -52,9 +52,13 @@
     ecosystem: {
       hero: { img: 'hero-ecosystem', pos: '58% 50%' },
       dark: ['field-aerial', 'processing-line'], wash: true,
-      thumbs: { '.card': ['field-harvest-hands', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'solar-roof'] },
+      /* '.grid .card.stake' intentionally excluded from thumbs and cardBg: the four
+         stakeholder cards now carry their own clear 4K photo band (no gradient, no
+         scrim) with the theme word set over the photo, so neither a round thumbnail
+         nor a faded background is injected over them */
+      thumbs: { '.grid .card:not(.stake)': ['market-stall', 'solar-roof'] },
       cardBg: {
-        '.grid .card': ['field-harvest-hands', 'solar-roof', 'field-aerial', 'plate-vegetable', 'processing-line', 'market-stall', 'field-sunrise']
+        '.grid .card:not(.stake)': ['processing-line', 'market-stall', 'field-sunrise']
       }
     },
     agribusiness: {
