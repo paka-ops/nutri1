@@ -83,8 +83,9 @@
           'chain-harvest', 'chain-collect', 'chain-cool', 'chain-process', 'chain-distribute'
         ],
         /* panels 1-2: section 02 (producer→market, surplus) —
-           panels 3-4: section 04 (temperature intelligence, renewable-powered cold chain) */
-        '.p2f-panel': ['field-harvest-hands', 'market-stall', 'panel-temp-intel', 'panel-solar-cold']
+           the two section 04 panels (.cold) carry their own clear 4K photo band
+           (no gradient, no scrim), so no faded background is injected over them */
+        '.p2f-panel:not(.cold)': ['field-harvest-hands', 'market-stall']
       }
     },
     team: {
@@ -712,7 +713,7 @@
      statiques équivalents : data-card-bg / data-card-bg-op.
      ========================================================= */
   var CB_SEL = '.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-chain-card,.p2f-icon,.p2x-card,.p2x-chain-card,.node,.p2f-node,.p2x-node,.sat,.v5-float,.ctaBox,.v4-demo,.v5-demo';
-  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem', 'gov-health', 'gov-food', 'gov-spatial'];
+  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem', 'gov-health', 'gov-food', 'gov-spatial', 'cold-temp-intel', 'cold-solar'];
   var CB_STORE_KEY = 'n4k-cardbg:v1';
   var CB_PAGE = (function () {
     var p = location.pathname.replace(/^\//, '').replace(/\.html?$/, '').split('/').filter(Boolean);
