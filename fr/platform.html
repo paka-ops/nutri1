@@ -316,6 +316,50 @@
             color: #fff
         }
 
+        .expert-card {
+            padding: 0;
+            overflow: hidden
+        }
+
+        .expert-media {
+            position: relative;
+            height: 200px;
+            overflow: hidden
+        }
+
+        .expert-media img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transform: scale(1.02);
+            transition: transform .6s ease
+        }
+
+        .expert-card:hover .expert-media img {
+            transform: scale(1.08)
+        }
+
+        .expert-media::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, transparent 40%, #0d3223 100%)
+        }
+
+        .expert-body {
+            padding: 18px 24px 24px
+        }
+
+        .expert-body .ico {
+            margin-top: -40px;
+            position: relative;
+            z-index: 2;
+            background: #0d3223;
+            border: 1px solid #29cf7040;
+            box-shadow: 0 0 24px #29cf7030
+        }
+
         .ico {
             width: 44px;
             height: 44px;
@@ -911,20 +955,35 @@
                     par chat, rendez-vous, téléconsultation et suivi autorisé des patients.</p>
             </div>
             <div class="grid">
-                <div class="card">
-                    <div class="ico">CL</div>
-                    <h3>Nutrition clinique</h3>
-                    <p>Spécialisation professionnelle et suivi des patients.</p>
+                <div class="card expert-card">
+                    <div class="expert-media"><img src="../assets/img/experts/clinical-nutrition.jpg"
+                            alt="Nutrition clinique futuriste — nutritionniste analysant un tableau de bord holographique du patient"
+                            loading="lazy"></div>
+                    <div class="expert-body">
+                        <div class="ico">CL</div>
+                        <h3>Nutrition clinique</h3>
+                        <p>Spécialisation professionnelle et suivi des patients.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">MC</div>
-                    <h3>Nutrition maternelle & infantile</h3>
-                    <p>Nutrition pendant la grossesse, l'allaitement et l'enfance.</p>
+                <div class="card expert-card">
+                    <div class="expert-media"><img src="../assets/img/experts/maternal-child.jpg"
+                            alt="Consultation futuriste en nutrition maternelle et infantile avec suivi holographique de croissance"
+                            loading="lazy"></div>
+                    <div class="expert-body">
+                        <div class="ico">MC</div>
+                        <h3>Nutrition maternelle & infantile</h3>
+                        <p>Nutrition pendant la grossesse, l'allaitement et l'enfance.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">NCD</div>
-                    <h3>Nutrition orientée pathologies</h3>
-                    <p>Spécialités diabète, rénale, cardiovasculaire et nutrition générale.</p>
+                <div class="card expert-card">
+                    <div class="expert-media"><img src="../assets/img/experts/condition-focused.jpg"
+                            alt="Nutrition orientée pathologies futuriste — hologrammes de cœur, reins et glucose"
+                            loading="lazy"></div>
+                    <div class="expert-body">
+                        <div class="ico">NCD</div>
+                        <h3>Nutrition orientée pathologies</h3>
+                        <p>Spécialités diabète, rénale, cardiovasculaire et nutrition générale.</p>
+                    </div>
                 </div>
             </div>
         </div>
