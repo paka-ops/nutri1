@@ -1,0 +1,52 @@
+NUTRI.N°1 — Cartes « Stakeholders / Acteurs » : photos 4K cohérentes, image nette
+===============================================================================
+Pages concernées : ecosystem.html et fr/ecosystem.html (section « Stakeholders —
+Different needs. One data layer. / Acteurs — Des besoins différents. Une seule
+couche de données. »), présentation investisseurs.
+
+PROBLÈME RÉSOLU
+- Les 4 cartes Acteurs recevaient des fonds photo atténués (voile dégradé) et des
+  vignettes rondes piochés dans une galerie générique (moissons, solaire, marché…)
+  sans rapport avec leur thématique → rendu incohérent et image « dégradée ».
+
+VISUELS AJOUTÉS (photoréalistes, cohérents avec chaque thématique, charte vert/or)
+- assets/img/stake-citizens.jpg      (1376w, web) + stake-citizens-4k.jpg      (3840w, master 4K)
+  → famille ouest-africaine partageant un repas équilibré, appli nutrition verte sur téléphone.
+- assets/img/stake-governments.jpg   + stake-governments-4k.jpg
+  → centre de commandement santé national, mur d'écrans de tableaux de bord verts.
+- assets/img/stake-science.jpg       + stake-science-4k.jpg
+  → chercheurs en laboratoire devant un graphe de preuves lumineux aliments→santé.
+- assets/img/stake-professionals.jpg + stake-professionals-4k.jpg
+  → nutritionniste en clinique, tableau de bord patient vert sur tablette.
+- Les cartes chargent le master 4K via srcset (1376w / 3840w), comme les cartes
+  « ambition » (loop-digital / loop-foodsystem).
+
+UI DES CARTES (image 100 % nette + texte de la thématique inséré)
+- Bande photo 16:9 pleine largeur en haut, AUCUN scrim, AUCUN dégradé, AUCUN voile
+  par-dessus l'image (filter:none) ; léger zoom Ken Burns au hover uniquement.
+- Texte de la thématique inséré SUR la photo, en bas à gauche : pastille nette
+  (.stTag) avec le mot de la thématique (CITIZENS / GOUVERNEMENTS / …) — rendu via
+  CSS content selon data-stake et html[lang], donc AUCUN mot ajouté au DOM.
+- Badge numéroté 01–04 en haut à gauche (.stNum), également en CSS content.
+- Liseré d'accent 3 px vert entre photo et carton ; le texte existant (icône, h3, p)
+  reste inchangé sur le corps de carte uni en dessous.
+
+MOTEUR D'IMMERSION (assets/nutri4k.js + assets/nutri4k.css)
+- Config « ecosystem » : sélecteurs thumbs et cardBg passés à
+  '.grid .card:not(.stake)' — les cartes Acteurs portent leur propre photo nette ;
+  les 3 cartes « Government Intelligence » conservent leurs fonds/vignettes actuels.
+- CSS section 15 : styles des cartes .stake ; garde-fous
+  '.grid .stake>.n4k-cb,.n4k-cb-shade,.n4k-thumb{display:none}' pour qu'aucun voile
+  ne soit jamais réinjecté ; désactivé si prefers-reduced-motion.
+
+COPY : AUCUN MOT AJOUTÉ / SUPPRIMÉ / MODIFIÉ
+- Texte visible des deux pages vérifié identique au HEAD :
+  node tools/n4k-copy-check.js (fr/ecosystem.html sans aucun diff ; le seul diff
+  ecosystem.html est l'écart préexistant du badge « AI » de la nav, commun aux
+  10 autres pages non modifiées).
+
+VÉRIFICATIONS
+- node tools/n4k-copy-check.js : moteur actif, 0 erreur runtime sur les 12 pages.
+- Assertion jsdom : 4 cartes .stake par page, 0 n4k-cb et 0 n4k-thumb injectés sur
+  elles, 4 <img class="stImg"> ; cartes gouvernements inchangées (3 n4k-cb, 2 thumbs).
+- Serveur statique : les 10 URLs (2 pages + 8 images) répondent 200.
