@@ -1,0 +1,65 @@
+NUTRI.N°1 — Cartes « Government Intelligence » : photos 4K cohérentes + thème sur l'image
+==========================================================================================
+Pages concernées : ecosystem.html et fr/ecosystem.html (section « Government
+Intelligence — See the food system at population scale. / Intelligence
+gouvernementale — Voir le système alimentaire à l'échelle de la population. »),
+présentation investisseurs.
+
+PROBLÈME RÉSOLU
+- Les 3 cartes ne portaient AUCUNE image cohérente avec leur thématique : le
+  moteur n4k leur injectait un fond photo atténué (voile dégradé) + une vignette
+  ronde génériques (moissons, solaire, marché…), sans rapport avec Santé /
+  Agriculture / SIG → rendu incohérent et image « dégradée ».
+
+VISUELS AJOUTÉS (photoréalistes — rendu photo, pas dessin — cohérents avec chaque
+thématique, charte vert/or, neutres géographiquement : aucun pays mentionné)
+- assets/img/gov-health.jpg  (1760w, web) + gov-health-4k.jpg  (3840x2160, master 4K)
+  → Health Command Center : salle de commandement d'un ministère de la Santé, grands
+  écrans avec le dashboard vert « NATIONAL HEALTH SURVEILLANCE DASHBOARD » portant
+  les libellés MALNUTRITION, ANEMIA, DIABETES, HYPERTENSION, OBESITY, CARDIOVASCULAR,
+  RENAL + carte de prévalence, ECG, tension, alertes.
+- assets/img/gov-food.jpg + gov-food-4k.jpg
+  → Food Intelligence Center : centre d'analyse gouvernemental, dashboard vert avec
+  les panneaux PRODUCTION, CONSUMPTION, NUTRITION NEEDS, GAPS, REGIONS ; cagettes de
+  maïs, manioc et tomates au premier plan.
+- assets/img/gov-spatial.jpg + gov-spatial-4k.jpg
+  → Spatial Intelligence : salle d'opérations géospatiales, deux analystes devant une
+  immense carte satellite tactile avec le fil d'Ariane COUNTRY → REGION → DISTRICT →
+  COMMUNITY → FACILITY, points communautés, pastilles établissement de santé et silo
+  de production.
+- Les cartes chargent le master 4K via srcset (1760w / 3840w), comme les cartes
+  « Stakeholders » et « ambition ».
+- Chaque visuel est découpé en 16:9 avec un décalage vertical calé pour garder les
+  titres des tableaux de bord dans le cadre (aucun recadrage aléatoire par le navigateur).
+
+UI DES CARTES (image 100 % nette + texte de la thématique inséré sur la photo)
+- Même traitement que les cartes Acteurs (section 15) : bande photo 16:9 pleine
+  largeur en haut, AUCUN scrim, AUCUN dégradé, AUCUN voile par-dessus l'image
+  (filter:none) ; léger zoom Ken Burns au hover uniquement.
+- Texte de la thématique inséré SUR la photo, en bas à gauche : pastille nette
+  (.govTag) reprenant exactement le titre de la carte (Health Command Center /
+  Food Intelligence Center / Spatial Intelligence — et leurs versions FR) — rendu
+  via CSS content selon data-gov et html[lang], donc AUCUN mot ajouté au DOM.
+- Badge numéroté 01–03 en haut à gauche (.govNum), également en CSS content.
+- Liseré d'accent 3 px entre photo et carton : vert (santé), or (alimentation),
+  menthe→vert (spatial). L'ancien contenu (icône MOH/AGR/GIS ou MINISTÈRE…,
+  h3, p) reste inchangé sur le corps de carte uni en dessous (.govBody).
+
+MOTEUR D'IMMERSION (assets/nutri4k.js + assets/nutri4k.css)
+- Config « ecosystem » : sélecteurs thumbs et cardBg passés de
+  '.grid .card:not(.stake)' à '.grid .card:not(.stake):not(.gov)' — les cartes
+  Government Intelligence portent leur propre photo nette, plus jamais de fond
+  dégradé ni de vignette ronde injectés dessus.
+- CSS section 16 : styles des cartes .gov ; garde-fous
+  '.grid .gov>.n4k-cb,.n4k-cb-shade,.n4k-thumb{display:none}' pour qu'aucun voile
+  ne soit réinjecté ; désactivé si prefers-reduced-motion.
+- Galerie de l'éditeur « Fond des cartes » : gov-health, gov-food, gov-spatial ajoutés.
+
+COPY : AUCUN MOT AJOUTÉ / SUPPRIMÉ / MODIFIÉ
+- Texte visible des deux pages vérifié identique à HEAD (jsdom, cf.
+  tools/n4k-copy-check.js ; la référence 329e909 n'existe pas dans ce clone,
+  la comparaison a été faite vs HEAD avant modifications : 0 diff sur EN et FR).
+- Assertions jsdom : 3 cartes .gov par page, 3 <img class="govImg">, 0 n4k-cb et
+  0 n4k-thumb injectés dessus, 0 n4k-hasthumb, srcset 4K présent, 6 fichiers images
+  présents sur disque ; node --check nutri4k.js OK ; accolades CSS équilibrées ;
+  les 7 URLs (2 pages, 4 images, css, js) répondent 200 sur le serveur statique.
