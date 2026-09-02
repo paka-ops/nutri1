@@ -26,7 +26,8 @@
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
       cardBg: {
-        '.arch .box': ['field-sunrise', 'processing-line'],
+        /* '.arch .box' intentionally excluded: the strategic-architecture cards
+           now carry their own clear <img> band with no gradient scrim */
         '.grid .card': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
         '.loop .loopbox': ['field-harvest-hands', 'market-stall']
       }

@@ -358,7 +358,26 @@
             padding: 29px;
             border-radius: 25px;
             background: #fff;
-            border: 1px solid var(--line)
+            border: 1px solid var(--line);
+            overflow: hidden
+        }
+
+        .box .boxImg {
+            display: block;
+            width: calc(100% + 58px);
+            max-width: none;
+            height: 215px;
+            object-fit: cover;
+            margin: -29px -29px 20px;
+            border-radius: 24px 24px 0 0;
+            filter: none
+        }
+
+        /* cartes de l'architecture stratégique : aucun dégradé/voile sur l'image — elle reste
+           parfaitement claire, le texte repose sur le fond blanc de la carte pour la lisibilité */
+        .arch .box>.n4k-cb,
+        .arch .box .n4k-cb-shade {
+            display: none !important
         }
 
         .box h3 {
@@ -704,7 +723,8 @@
         }
     </style>
     <link rel="stylesheet" href="../assets/nutri4k.css">
-    <link rel="preload" as="image" href="../assets/img/field-sunrise.jpg">
+    <link rel="preload" as="image" href="../assets/img/arch-phase1-intelligence.jpg">
+    <link rel="preload" as="image" href="../assets/img/arch-phase2-agribusiness.jpg?v=2">
 </head>
 
 <body>
@@ -753,7 +773,11 @@
                     alimentation et données — et non comme une simple application mobile.</p>
             </div>
             <div class="arch">
-                <div class="box"><span class="chip">PHASE 01 • NUMÉRIQUE</span>
+                <div class="box">
+                    <img class="boxImg" src="../assets/img/arch-phase1-intelligence.jpg"
+                        alt="Une citoyenne scanne un repas africain traditionnel avec son smartphone pendant que l'intelligence nutritionnelle relie les données alimentaires à la santé"
+                        loading="lazy" decoding="async">
+                    <span class="chip">PHASE 01 • NUMÉRIQUE</span>
                     <h3>Construire la couche d'intelligence.</h3>
                     <p>Citoyen 360°, Alimentation et scanner des repas, Base de connaissances alimentaire africaine,
                         Graphe des preuves, IA nutritionnelle africaine, Moteur de prévention, réseau de nutritionnistes
@@ -762,7 +786,11 @@
                         <span>Alimentation</span><i>→</i><span>Données</span><i>→</i><span>IA</span><i>→</i><span>Nutrition</span><i>→</i><span>Prévention</span>
                     </div>
                 </div>
-                <div class="box"><span class="chip" style="background:#fff1d3;color:#8a661e">PHASE 02 •
+                <div class="box">
+                    <img class="boxImg" src="../assets/img/arch-phase2-agribusiness.jpg?v=2"
+                        alt="Une chaîne de valeur alimentaire saine africaine — marché de produits frais, champs agricoles, unité de transformation solaire et camionnette de livraison"
+                        loading="lazy" decoding="async">
+                    <span class="chip" style="background:#fff1d3;color:#8a661e">PHASE 02 •
                         AGRO-INDUSTRIE</span>
                     <h3>Transformer l'intelligence en une alimentation de meilleure qualité.</h3>
                     <p>Connecter les recommandations et la demande à une place de marché d'aliments sains et maîtriser
