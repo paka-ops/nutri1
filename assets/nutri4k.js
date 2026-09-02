@@ -52,13 +52,14 @@
     ecosystem: {
       hero: { img: 'hero-ecosystem', pos: '58% 50%' },
       dark: ['field-aerial', 'processing-line'], wash: true,
-      /* '.grid .card.stake' intentionally excluded from thumbs and cardBg: the four
-         stakeholder cards now carry their own clear 4K photo band (no gradient, no
-         scrim) with the theme word set over the photo, so neither a round thumbnail
-         nor a faded background is injected over them */
-      thumbs: { '.grid .card:not(.stake)': ['market-stall', 'solar-roof'] },
+      /* '.grid .card.stake' and '.grid .card.gov' intentionally excluded from
+         thumbs and cardBg: the four stakeholder cards and the three Government
+         Intelligence cards carry their own clear 4K photo band (no gradient, no
+         scrim) with the theme text set over the photo, so neither a round
+         thumbnail nor a faded background is injected over them */
+      thumbs: { '.grid .card:not(.stake):not(.gov)': ['market-stall', 'solar-roof'] },
       cardBg: {
-        '.grid .card:not(.stake)': ['processing-line', 'market-stall', 'field-sunrise']
+        '.grid .card:not(.stake):not(.gov)': ['processing-line', 'market-stall', 'field-sunrise']
       }
     },
     agribusiness: {
@@ -707,7 +708,7 @@
      statiques équivalents : data-card-bg / data-card-bg-op.
      ========================================================= */
   var CB_SEL = '.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-chain-card,.p2f-icon,.p2x-card,.p2x-chain-card,.node,.p2f-node,.p2x-node,.sat,.v5-float,.ctaBox,.v4-demo,.v5-demo';
-  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem'];
+  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem', 'gov-health', 'gov-food', 'gov-spatial'];
   var CB_STORE_KEY = 'n4k-cardbg:v1';
   var CB_PAGE = (function () {
     var p = location.pathname.replace(/^\//, '').replace(/\.html?$/, '').split('/').filter(Boolean);

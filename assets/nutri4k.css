@@ -757,3 +757,54 @@ html[lang="fr"] .grid .stake[data-stake="professionals"] .stTag:after{content:"P
 .grid .stake .stBody{padding:19px 22px 22px}
 .grid .stake .stBody h3{font-size:19px}
 @media (prefers-reduced-motion:reduce){.grid .stake .stImg{transition:none;transform:none}}
+
+/* ============================================================
+   16 · Government Intelligence photo cards (ecosystem / écosystème)
+   Same investor-grade image-first treatment as the stakeholder
+   cards (section 15), applied to the three "Government
+   Intelligence" cards: a 100 % clear 16:9 photo band on top —
+   NO scrim, NO gradient, NO fade over the image — the card's own
+   theme text set over the photo as a crisp chip, and the existing
+   copy untouched on the solid card body below.
+   Theme words / numerals are rendered via CSS content so the DOM
+   copy never changes (tools/n4k-copy-check.js stays valid).
+   ============================================================ */
+.grid .gov{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.grid .gov .govMedia{position:relative;margin:0;aspect-ratio:16/9;overflow:hidden;background:#0a2b1e;flex:none}
+.grid .gov .govImg{display:block;width:100%;height:100%;object-fit:cover;filter:none;
+  image-rendering:-webkit-optimize-contrast;transform:scale(1.015);transition:transform 1.8s var(--n4k-e)}
+.grid .gov:hover .govImg{transform:scale(1.06)}
+/* the photo must stay perfectly clear: never let a faded background,
+   directional scrim or round thumbnail be injected over these cards */
+.grid .gov>.n4k-cb,.grid .gov .n4k-cb-shade,.grid .gov .n4k-thumb{display:none!important}
+.grid .gov.n4k-hasthumb{padding-right:0!important}
+/* 3 px accent seam between the photo and the body — green / gold / mint */
+.grid .gov .govMedia:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2;opacity:.9}
+.grid .gov[data-gov="health"] .govMedia:after{background:linear-gradient(90deg,var(--n4k-g),var(--n4k-mint))}
+.grid .gov[data-gov="food"] .govMedia:after{background:linear-gradient(90deg,var(--n4k-gold),var(--n4k-gold2))}
+.grid .gov[data-gov="spatial"] .govMedia:after{background:linear-gradient(90deg,var(--n4k-mint),var(--n4k-g))}
+/* numeral badge, top-left (CSS content — no word added to the DOM) */
+.grid .gov .govNum{position:absolute;top:14px;left:14px;z-index:2;display:inline-flex;align-items:center;gap:7px;
+  padding:7px 12px 7px 10px;border-radius:999px;background:#061b13d9;border:1px solid #29cf7059;color:#8ff0a9;
+  font-size:10px;font-weight:950;letter-spacing:.18em;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.grid .gov .govNum:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--n4k-g);box-shadow:0 0 9px #29cf70}
+.grid .gov[data-gov="health"] .govNum:after{content:"01"}
+.grid .gov[data-gov="food"] .govNum:after{content:"02"}
+.grid .gov[data-gov="spatial"] .govNum:after{content:"03"}
+/* theme text over the photo, bottom-left: crisp chip, no gradient scrim */
+.grid .gov .govTag{position:absolute;left:14px;bottom:16px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+  max-width:calc(100% - 28px);padding:9px 13px;border-radius:999px;background:#061b13d9;border:1px solid #29cf7059;
+  color:#eafff2;font-size:9.5px;font-weight:950;letter-spacing:.14em;text-transform:uppercase;white-space:nowrap;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 26px #03140c66}
+.grid .gov .govTag:before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--n4k-gold);box-shadow:0 0 10px #e5b85a}
+.grid .gov[data-gov="health"] .govTag:after{content:"Health Command Center"}
+.grid .gov[data-gov="food"] .govTag:after{content:"Food Intelligence Center"}
+.grid .gov[data-gov="spatial"] .govTag:after{content:"Spatial Intelligence"}
+html[lang="fr"] .grid .gov[data-gov="health"] .govTag:after{content:"Centre de commandement santé"}
+html[lang="fr"] .grid .gov[data-gov="food"] .govTag:after{content:"Centre d'intelligence alimentaire"}
+html[lang="fr"] .grid .gov[data-gov="spatial"] .govTag:after{content:"Intelligence spatiale"}
+/* copy on the solid card body below the photo */
+.grid .gov .govBody{padding:19px 22px 22px}
+.grid .gov .govBody h3{font-size:18px}
+.grid .gov .govBody .ico{margin-bottom:12px}
+@media (prefers-reduced-motion:reduce){.grid .gov .govImg{transition:none;transform:none}}
