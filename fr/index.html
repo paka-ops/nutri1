@@ -348,6 +348,32 @@
             color: #9eb5aa
         }
 
+        /* cartes de la pile d'intelligence : une bande photo nette en haut — aucun voile,
+           aucun fondu, aucun dégradé — le texte repose sur le fond plein de la carte */
+        .grid .stackcard {
+            padding: 0;
+            overflow: hidden
+        }
+
+        .grid .stackcard .stkImg {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 21px 21px 0 0;
+            filter: none
+        }
+
+        .grid .stackcard .stkBody {
+            padding: 19px 22px 22px
+        }
+
+        .grid .stackcard>.n4k-cb,
+        .grid .stackcard .n4k-cb-shade {
+            display: none !important
+        }
+
         .arch {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -810,38 +836,69 @@
                 <h2>Un système connecté. Plusieurs couches d'intelligence.</h2>
             </div>
             <div class="grid">
-                <div class="card">
-                    <div class="ico">01</div>
-                    <h3>Base de connaissances alimentaire africaine</h3>
-                    <p>Ontologie alimentaire, composition nutritionnelle, recettes, consommation et intelligence par
-                        pays.</p>
+                <div class="card stackcard">
+                    <img class="stkImg" src="../assets/img/stack-food-cloud.jpg?v=1"
+                        alt="Un nuage alimentaire africain lumineux : une carte de données lumineuse de l'Afrique entourée d'aliments locaux et reliée par des fils de lumière verts, dans un centre d'innovation baigné de soleil"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">01</div>
+                        <h3>Base de connaissances alimentaire africaine</h3>
+                        <p>Ontologie alimentaire, composition nutritionnelle, recettes, consommation et intelligence par
+                            pays.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">02</div>
-                    <h3>Graphe des preuves</h3>
-                    <p>Aliments → nutriments → alimentation → biomarqueurs → pathologies → preuves → politiques.</p>
+                <div class="card stackcard">
+                    <img class="stkImg" src="../assets/img/stack-evidence-graph.jpg?v=1"
+                        alt="Un graphe de preuves lumineux reliant aliments, nutriments, alimentation, biomarqueurs, pathologies, preuves et politiques, étudié par des chercheurs africains dans un atrium lumineux au lever du soleil"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">02</div>
+                        <h3>Graphe des preuves</h3>
+                        <p>Aliments → nutriments → alimentation → biomarqueurs → pathologies → preuves → politiques.
+                        </p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">03</div>
-                    <h3>IA nutritionnelle africaine</h3>
-                    <p>IA alimentaire, IA santé, IA de recommandation, personnalisation et action.</p>
+                <div class="card stackcard">
+                    <img class="stkImg" src="../assets/img/stack-nutrition-ai.jpg?v=1"
+                        alt="IA nutritionnelle africaine : un cœur neuronal lumineux entre une professionnelle de la nutrition et une famille, avec un score nutritionnel holographique et des recommandations personnalisées"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">03</div>
+                        <h3>IA nutritionnelle africaine</h3>
+                        <p>IA alimentaire, IA santé, IA de recommandation, personnalisation et action.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">04</div>
-                    <h3>Moteur de prévention</h3>
-                    <p>Évaluation des risques, carences nutritionnelles, association aux aliments locaux, optimisation
-                        des repas et suivi.</p>
+                <div class="card stackcard">
+                    <img class="stkImg" src="../assets/img/stack-prevention-engine.jpg?v=1"
+                        alt="Moteur de prévention : un bouclier de lumière verte autour d'une famille partageant un repas sain, avec un tableau de bord flottant de scores de risque, de carences et de repas optimisés"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">04</div>
+                        <h3>Moteur de prévention</h3>
+                        <p>Évaluation des risques, carences nutritionnelles, association aux aliments locaux,
+                            optimisation des repas et suivi.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">05</div>
-                    <h3>Réseau de nutritionnistes</h3>
-                    <p>Recherche par pays et spécialité, rendez-vous, téléconsultation et suivi autorisé.</p>
+                <div class="card stackcard">
+                    <img class="stkImg" src="../assets/img/stack-nutritionist-network.jpg?v=1"
+                        alt="Réseau de nutritionnistes : des nutritionnistes africains reliés par des liaisons de téléconsultation lumineuses sur une carte holographique de l'Afrique"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">05</div>
+                        <h3>Réseau de nutritionnistes</h3>
+                        <p>Recherche par pays et spécialité, rendez-vous, téléconsultation et suivi autorisé.</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="ico">06</div>
-                    <h3>Place de marché d'aliments sains</h3>
-                    <p>Recommandations connectées aux produits, à l'achat, à la consommation et au retour d'expérience.
-                    </p>
+                <div class="card stackcard">
+                    <img class="stkImg" src="../assets/img/stack-marketplace.jpg?v=1"
+                        alt="Place de marché d'aliments sains : un marché africain lumineux où une cliente scanne un produit et où un score nutritionnel holographique relie produits, achat et retour d'expérience"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">06</div>
+                        <h3>Place de marché d'aliments sains</h3>
+                        <p>Recommandations connectées aux produits, à l'achat, à la consommation et au retour
+                            d'expérience.</p>
+                    </div>
                 </div>
             </div>
         </div>

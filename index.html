@@ -349,6 +349,32 @@
             color: #9eb5aa
         }
 
+        /* intelligence-stack cards: a clear, full-resolution photo band on top — no scrim,
+           no fade, no gradient — while every word sits on the solid card below */
+        .grid .stackcard {
+            padding: 0;
+            overflow: hidden
+        }
+
+        .grid .stackcard .stkImg {
+            display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            object-fit: cover;
+            border-radius: 21px 21px 0 0;
+            filter: none
+        }
+
+        .grid .stackcard .stkBody {
+            padding: 19px 22px 22px
+        }
+
+        .grid .stackcard>.n4k-cb,
+        .grid .stackcard .n4k-cb-shade {
+            display: none !important
+        }
+
         .arch {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -1626,35 +1652,65 @@
                 <h2>One connected system. Multiple intelligence layers.</h2>
             </div>
             <div class="grid">
-                <div class="card v4-reveal">
-                    <div class="ico">01</div>
-                    <h3>African Food Cloud</h3>
-                    <p>Food ontology, composition, recipes, consumption and country intelligence.</p>
+                <div class="card stackcard v4-reveal">
+                    <img class="stkImg" src="assets/img/stack-food-cloud.jpg?v=1"
+                        alt="A luminous African Food Cloud: a glowing data map of Africa surrounded by local foods and connected by green light threads, in a bright innovation hub at sunrise"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">01</div>
+                        <h3>African Food Cloud</h3>
+                        <p>Food ontology, composition, recipes, consumption and country intelligence.</p>
+                    </div>
                 </div>
-                <div class="card v4-reveal">
-                    <div class="ico">02</div>
-                    <h3>Evidence Graph</h3>
-                    <p>Food → nutrients → diet → biomarkers → conditions → evidence → policy.</p>
+                <div class="card stackcard v4-reveal">
+                    <img class="stkImg" src="assets/img/stack-evidence-graph.jpg?v=1"
+                        alt="A glowing evidence graph linking food, nutrients, diet, biomarkers, conditions, evidence and policy, studied by African researchers in a bright atrium at sunrise"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">02</div>
+                        <h3>Evidence Graph</h3>
+                        <p>Food → nutrients → diet → biomarkers → conditions → evidence → policy.</p>
+                    </div>
                 </div>
-                <div class="card v4-reveal">
-                    <div class="ico">03</div>
-                    <h3>African Nutrition AI</h3>
-                    <p>Food AI, Health AI, Recommendation AI, personalization and action.</p>
+                <div class="card stackcard v4-reveal">
+                    <img class="stkImg" src="assets/img/stack-nutrition-ai.jpg?v=1"
+                        alt="African Nutrition AI: a glowing neural core between a nutrition professional and a family, with holographic meal scoring and personalised recommendations"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">03</div>
+                        <h3>African Nutrition AI</h3>
+                        <p>Food AI, Health AI, Recommendation AI, personalization and action.</p>
+                    </div>
                 </div>
-                <div class="card v4-reveal">
-                    <div class="ico">04</div>
-                    <h3>Prevention Engine</h3>
-                    <p>Risk assessment, nutrition gaps, local food matching, meal optimization and follow-up.</p>
+                <div class="card stackcard v4-reveal">
+                    <img class="stkImg" src="assets/img/stack-prevention-engine.jpg?v=1"
+                        alt="Prevention Engine: a glowing green shield of light around a family sharing a healthy meal, with a floating dashboard of risk scores, nutrient gaps and optimized meal plans"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">04</div>
+                        <h3>Prevention Engine</h3>
+                        <p>Risk assessment, nutrition gaps, local food matching, meal optimization and follow-up.</p>
+                    </div>
                 </div>
-                <div class="card v4-reveal">
-                    <div class="ico">05</div>
-                    <h3>Nutritionist Network</h3>
-                    <p>Country and specialty discovery, appointments, teleconsultation and authorized follow-up.</p>
+                <div class="card stackcard v4-reveal">
+                    <img class="stkImg" src="assets/img/stack-nutritionist-network.jpg?v=1"
+                        alt="Nutritionist Network: African nutritionists connected by glowing video-consultation links across a luminous holographic map of Africa"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">05</div>
+                        <h3>Nutritionist Network</h3>
+                        <p>Country and specialty discovery, appointments, teleconsultation and authorized follow-up.</p>
+                    </div>
                 </div>
-                <div class="card v4-reveal">
-                    <div class="ico">06</div>
-                    <h3>Healthy Food Marketplace</h3>
-                    <p>Recommendations connected to products, purchase, consumption and feedback.</p>
+                <div class="card stackcard v4-reveal">
+                    <img class="stkImg" src="assets/img/stack-marketplace.jpg?v=1"
+                        alt="Healthy Food Marketplace: a bright African market where a shopper scans a product and a holographic nutrition score links products, purchase and feedback"
+                        loading="lazy" decoding="async">
+                    <div class="stkBody">
+                        <div class="ico">06</div>
+                        <h3>Healthy Food Marketplace</h3>
+                        <p>Recommendations connected to products, purchase, consumption and feedback.</p>
+                    </div>
                 </div>
             </div>
         </div>

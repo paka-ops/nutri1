@@ -26,9 +26,10 @@
       thumbs: { '.loopbox': ['field-harvest-hands', 'market-stall'] },
       thumbSize: 'lg',
       cardBg: {
-        /* '.arch .box' intentionally excluded: the strategic-architecture cards
-           now carry their own clear <img> band with no gradient scrim */
-        '.grid .card': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
+        /* '.arch .box' and '.grid .stackcard' intentionally excluded: the strategic-architecture
+           and intelligence-stack cards now carry their own clear <img> band with no gradient
+           scrim, so no faded background image is injected behind their copy */
+        '.grid .card:not(.stackcard)': ['field-aerial', 'field-harvest-hands', 'plate-fufu', 'plate-vegetable', 'market-stall', 'plate-grilled-fish'],
         '.loop .loopbox': ['field-harvest-hands', 'market-stall']
       }
     },
