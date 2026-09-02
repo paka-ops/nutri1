@@ -42,3 +42,11 @@ MOTEUR D'IMMERSION (assets/nutri4k.js)
 
 PALETTE : uniquement les tokens existants (#29cf70, #9be766, #e5b85a, #0a2b1e,
 #3c2d14, crèmes/blancs, var(--line), var(--mut)).
+
+MISE À JOUR v2 (loop-foodsystem)
+- Le marché collé à la clôture de l'usine cassait la lecture : recomposition du visuel
+  (2 passes d'édition IA) — usine, silos, camions, cour, clôture et champs STRICTEMENT
+  conservés, marché déplacé en petit cluster coloré sur l'horizon lointain, dans une
+  zone villageoise séparée par de grands champs et une piste : deux zones distinctes.
+- Fichiers écrasés (loop-foodsystem.jpg / -4k.jpg), cache invalidé via ?v=2 (EN + FR),
+  alt mis à jour pour décrire la séparation des zones.
