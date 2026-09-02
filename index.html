@@ -359,7 +359,26 @@
             padding: 29px;
             border-radius: 25px;
             background: #fff;
-            border: 1px solid var(--line)
+            border: 1px solid var(--line);
+            overflow: hidden
+        }
+
+        .box .boxImg {
+            display: block;
+            width: calc(100% + 58px);
+            max-width: none;
+            height: 215px;
+            object-fit: cover;
+            margin: -29px -29px 20px;
+            border-radius: 24px 24px 0 0;
+            filter: none
+        }
+
+        /* strategic-architecture cards: no gradient/scrim overlay — the image stays fully clear,
+           while the copy sits on the solid white card below for guaranteed readability */
+        .arch .box>.n4k-cb,
+        .arch .box .n4k-cb-shade {
+            display: none !important
         }
 
         .box h3 {
@@ -1571,7 +1590,11 @@
                     health, food and data — not simply a mobile application.</p>
             </div>
             <div class="arch">
-                <div class="box"><span class="chip">PHASE 01 • DIGITAL</span>
+                <div class="box">
+                    <img class="boxImg" src="assets/img/arch-phase1-intelligence.jpg"
+                        alt="A citizen scanning a traditional African meal with a smartphone while nutrition intelligence connects food data to health insights"
+                        loading="lazy" decoding="async">
+                    <span class="chip">PHASE 01 • DIGITAL</span>
                     <h3>Build the intelligence layer.</h3>
                     <p>Citizen 360°, Food & Meal Scanner, African Food Cloud, Evidence Graph, African Nutrition AI,
                         Prevention Engine, Nutritionist Network and country-specific intelligence.</p>
@@ -1579,7 +1602,11 @@
                         <span>Food</span><i>→</i><span>Data</span><i>→</i><span>AI</span><i>→</i><span>Nutrition</span><i>→</i><span>Prevention</span>
                     </div>
                 </div>
-                <div class="box"><span class="chip" style="background:#fff1d3;color:#8a661e">PHASE 02 •
+                <div class="box">
+                    <img class="boxImg" src="assets/img/arch-phase2-agribusiness.jpg?v=2"
+                        alt="An African healthy food value chain — fresh produce marketplace, farm fields, solar-powered processing facility and delivery van"
+                        loading="lazy" decoding="async">
+                    <span class="chip" style="background:#fff1d3;color:#8a661e">PHASE 02 •
                         AGRI-BUSINESS</span>
                     <h3>Turn intelligence into better food.</h3>
                     <p>Connect recommendations and demand to a Healthy Food Marketplace and progressively master
