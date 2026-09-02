@@ -54,8 +54,15 @@ MISE À JOUR v2 (retours investisseurs)
   blanche naturelle (plafonniers + lumière du jour), UN grand écran de tableaux de bord
   clairs, et présence des organisations internationales : drapeau bleu ONU + drapeaux
   partenaires sur la table, plaque emblème globe-lauriers au mur (OMS/UNICEF/FAO/PAM).
-- Fichiers écrasés (stake-citizens*.jpg / stake-governments*.jpg), cache invalidé via
-  ?v=2 dans ecosystem.html et fr/ecosystem.html (src + srcset), alt mis à jour (EN+FR).
+MISE À JOUR v3 (retours investisseurs)
+- stake-citizens : l'image v2 « faisait dessin » → régénération en rendu photographique
+  documentaire (grain, textures de peau réelles, cuisine vécue, lumière naturelle), en
+  conservant les hologrammes AR verts au-dessus des plats reliés au téléphone.
+- stake-governments : suppression de TOUS les drapeaux (aucun pays mentionné) par
+  édition IA de la scène approuvée — remplacés par verres d'eau, carnets et chevalets
+  de table vierges ; salle lumineuse, grand écran et plaque emblème conservés à
+  l'identique. Alt EN/FR mis à jour (plus aucune mention de drapeaux).
+- Fichiers écrasés, cache invalidé via ?v=3 (EN+FR), srcset citizens passé à 1408w.
 
 VÉRIFICATIONS
 - node tools/n4k-copy-check.js : moteur actif, 0 erreur runtime sur les 12 pages.
