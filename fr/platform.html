@@ -734,33 +734,22 @@
   padding: 20px;
 }
 
-/* 2. La Carte globale - style amélioré */
+/* 2. La Carte globale */
 .modern-card {
   background: #ffffff;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-.modern-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--g);
-  border-radius: 22px 0 0 22px;
-}
+
 .modern-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  border-color: var(--g);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
 }
 
 /* 3. Conteneur Image : Verrouillage strict du ratio paysage (16:9) */
@@ -870,7 +859,7 @@
             <div>
                 <div class="eyebrow">PHASE 01 • INFRASTRUCTURE NUMÉRIQUE DE NUTRITION</div>
                 <h1>Une <b>plateforme nutritionnelle à 360°</b> conçue pour l'Afrique.</h1>
-                <p>Intelligence citoyenne, analyse IA des aliments et des repas, prévention, professionnels de la
+                <p style="color: white;">Intelligence citoyenne, analyse IA des aliments et des repas, prévention, professionnels de la
                     nutrition, comptes familiaux, appareils connectés et place de marché — le tout alimenté par une
                     architecture de données commune.</p>
                 <div class="actions"><a class="btn green" href="#citizen">Citoyen 360°</a><a class="btn outline"
@@ -890,7 +879,7 @@
             <div class="head">
                 <div class="kicker">Tableau de bord Citoyen 360°</div>
                 <h2>Profil → intelligence → action.</h2>
-                <p>L'architecture réunit le profil, l'anthropométrie, les données métaboliques et cliniques, les
+                <p >L'architecture réunit le profil, l'anthropométrie, les données métaboliques et cliniques, les
                     habitudes alimentaires et les objectifs dans un tableau de bord personnalisé.</p>
             </div>
             <div class="cards-grid-v2">
