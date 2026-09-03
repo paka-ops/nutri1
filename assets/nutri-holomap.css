@@ -21,36 +21,67 @@
 .hm-ghost{animation:hmGhost 5s ease-in-out infinite}
 @keyframes hmGhost{0%,100%{transform:translate(0,0);opacity:.35}50%{transform:translate(1.5px,-1.5px);opacity:.15}}
 
-/* Flows: drawn once when visible, then travelling packets + dash flow */
-.hm-track{fill:none;stroke:#4dffa6;stroke-opacity:.18;stroke-width:5;stroke-linecap:round;filter:url(#hmBlur)}
-.hm-line{fill:none;stroke:#b8ffd9;stroke-width:1.6;stroke-linecap:round;stroke-dasharray:900;stroke-dashoffset:900;filter:url(#hmSoft)}
-.is-live .hm-line{animation:hmDraw 1.6s cubic-bezier(.4,0,.2,1) forwards var(--d),hmDash 1.4s linear infinite calc(var(--d) + 1.6s)}
-@keyframes hmDraw{to{stroke-dashoffset:0}}
-@keyframes hmDash{from{stroke-dasharray:6 10;stroke-dashoffset:0}to{stroke-dasharray:6 10;stroke-dashoffset:-32}}
-.hm-packet{fill:#fff;filter:url(#hmNeon);opacity:0}
-.is-live .hm-packet{opacity:1;transition:opacity .4s calc(var(--d) + 1.4s)}
-.hm-packet2{fill:#7dffbd}
+/* ------------------------------------------------------------------------------------------
+   Flows. The JS sequencer emits one arrow every 2 s and drives these states on each .hm-flow:
+     (idle)        → nothing visible (line fully hidden behind its dash offset)
+     .is-drawing   → the solid line grows from the hub to the destination (stroke-dashoffset → 0)
+     .is-on        → arrowhead + impact ring appear at the destination
+     .is-fading    → whole flow fades out (opacity), then classes are cleared
+   --len (path length, px) and --dur (draw duration) are set per flow by the JS.
+   No SVG filters on anything that animates continuously → smooth on 4K displays.
+   ------------------------------------------------------------------------------------------ */
 
-/* Destination nodes */
-.hm-node{opacity:0}
-.is-live .hm-node{animation:hmPop .6s ease-out forwards calc(var(--d) + 1.5s)}
-@keyframes hmPop{from{opacity:0}to{opacity:1}}
-.hm-ring{fill:none;stroke:#7dffbd;stroke-width:1.2;transform-box:fill-box;transform-origin:center}
-.is-live .hm-ring{animation:hmRing 2.4s ease-out infinite calc(var(--d) + 1.6s)}
-.is-live .hm-ring2{animation-delay:calc(var(--d) + 2.8s)}
-@keyframes hmRing{0%{transform:scale(1);opacity:.9}100%{transform:scale(4.2);opacity:0}}
+/* Faint permanent track (brightens while its flow is active) */
+.hm-track{fill:none;stroke:#4dffa6;stroke-opacity:.07;stroke-width:4;stroke-linecap:round;transition:stroke-opacity 1.4s ease}
+.hm-track.is-active{stroke-opacity:.2;transition:stroke-opacity .8s cubic-bezier(.4,0,.2,1)}
+
+/* Flow group: opacity handles the soft fade-out; idle state has no transition so the reset is invisible */
+.hm-flow{opacity:1;transition:none;will-change:opacity}
+.hm-flow.is-fading{opacity:0;transition:opacity 1.4s cubic-bezier(.4,0,.2,1)}
+
+/* Solid line + neon halo, revealed with stroke-dashoffset */
+.hm-line,.hm-halo{fill:none;stroke-linecap:round;stroke-linejoin:round;
+  stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:none}
+.hm-line{stroke:#c9ffe4;stroke-width:1.7}
+.hm-halo{stroke:#4dffa6;stroke-width:6;stroke-opacity:.26}
+.hm-flow.is-drawing .hm-line,.hm-flow.is-drawing .hm-halo{stroke-dashoffset:0;transition:stroke-dashoffset var(--dur,2s) cubic-bezier(.4,0,.2,1)}
+
+/* Arrowhead (appears at arrival, grows from its tip) */
+.hm-head,.hm-headHalo{opacity:0;transform:scale(.4);transform-box:fill-box;transform-origin:100% 50%;transition:none}
+.hm-head{fill:#eafff4}
+.hm-headHalo{fill:#4dffa6;fill-opacity:.42}
+.hm-flow.is-on .hm-head,.hm-flow.is-on .hm-headHalo{opacity:1;transform:scale(1);transition:opacity .32s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.2,.9,.3,1.2)}
+
+/* Impact ring at arrival */
+.hm-impact{stroke:#b8ffd9;stroke-width:1.4;opacity:0;transform-box:fill-box;transform-origin:center}
+.hm-flow.is-on .hm-impact{animation:hmImpact 1.1s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes hmImpact{0%{opacity:.95;transform:scale(.6)}100%{opacity:0;transform:scale(4.6)}}
+
+/* Destination nodes: always present (dim), lit up while their flow is on */
+.hm-nodeGlow{opacity:0;transition:opacity 1.2s ease}
+.hm-node.is-active .hm-nodeGlow{opacity:.34;transition:opacity .4s cubic-bezier(.4,0,.2,1)}
+.hm-dot{opacity:.55;transition:opacity 1.2s ease}
+.hm-node.is-active .hm-dot{opacity:1;transition:opacity .3s ease}
+.hm-ring{fill:none;stroke:#7dffbd;stroke-width:1.1;opacity:0;transform-box:fill-box;transform-origin:center}
+.hm-node.is-active .hm-ring{animation:hmRing 1.9s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes hmRing{0%{transform:scale(1);opacity:.85}100%{transform:scale(3.4);opacity:0}}
 
 /* Hub (Togo) */
-.hm-pulse{fill:none;stroke:#b8ffd9;stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:hmPulse 3s ease-out infinite}
-.hm-pulse2{animation-delay:1s}.hm-pulse3{animation-delay:2s}
-@keyframes hmPulse{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+.hm-hubGlow{transform-box:fill-box;transform-origin:center;transform:scale(1);transition:transform .9s cubic-bezier(.4,0,.2,1)}
+.hm-hub.is-beat .hm-hubGlow{transform:scale(1.32);transition:transform .32s cubic-bezier(.2,.8,.3,1)}
+.hm-pulse{fill:none;stroke:#b8ffd9;stroke-width:1.2;opacity:.7;transform-box:fill-box;transform-origin:center;animation:hmPulse 4s cubic-bezier(.2,.6,.3,1) infinite}
+@keyframes hmPulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(5);opacity:0}}
+/* Burst ring: fired by the sequencer in sync with each departing arrow */
+.hm-burst{fill:none;stroke:#ffffff;stroke-width:1.6;opacity:0;transform-box:fill-box;transform-origin:center}
+.hm-burst.is-on{animation:hmBurst 1.5s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes hmBurst{0%{transform:scale(.7);opacity:1}100%{transform:scale(5.2);opacity:0}}
 .hm-reticle{transform-box:fill-box;transform-origin:center;animation:hmSpin 14s linear infinite}
 @keyframes hmSpin{to{transform:rotate(360deg)}}
 
 /* Typography inside SVG */
 .hm-label,.hm-hubLabel,.hm-status{font-family:inherit;font-weight:900;letter-spacing:.14em;fill:#d9ffe9;paint-order:stroke;stroke:#03140b;stroke-width:3px;stroke-linejoin:round}
-.hm-label{font-size:9.5px;opacity:0}
-.is-live .hm-label{animation:hmPop .5s ease-out forwards 2.2s}
+.hm-label{font-size:8.6px;opacity:.5;transition:opacity 1.2s ease,fill 1.2s ease}
+.hm-label.is-active{opacity:1;fill:#ffffff;transition:opacity .35s ease,fill .35s ease}
 .hm-hubLabel{font-size:10.5px;fill:#fff}
 .hm-status{font-size:9px;fill:#7dffbd;letter-spacing:.2em;animation:hmBlink 2.2s steps(2) infinite}
 @keyframes hmBlink{50%{opacity:.55}}
@@ -61,15 +92,24 @@
   letter-spacing:.08em;text-transform:uppercase;color:#9eb5aa}
 .hm-legend span{display:inline-flex;align-items:center;gap:8px}
 .hm-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.5px solid #7dffbd;box-shadow:0 0 10px rgba(125,255,189,.7)}
-.hm-legend i.hm-lg-line{width:26px;height:0;border-radius:0;border:0;border-top:2px dashed #b8ffd9}
+.hm-legend i.hm-lg-line{width:26px;height:2px;border-radius:2px;border:0;background:#c9ffe4;box-shadow:0 0 8px rgba(77,255,166,.9);position:relative}
+.hm-legend i.hm-lg-line:after{content:"";position:absolute;right:-2px;top:-3px;border:4px solid transparent;border-left:6px solid #c9ffe4;border-right:0}
 
 /* Responsive */
 @media(max-width:1000px){.trustGrid{grid-template-columns:1fr;gap:34px}.hm-stage{max-width:560px}}
 @media(max-width:600px){.hm-svg{transform:none;animation:none}.hm-base{display:none}}
 
-/* Accessibility */
+/* Accessibility: static, fully drawn map (JS adds .is-static; the media query covers no-JS / old browsers) */
+.holoMap.is-static .hm-line,.holoMap.is-static .hm-halo{stroke-dashoffset:0;transition:none}
+.holoMap.is-static .hm-flow{opacity:.6}
+.holoMap.is-static .hm-head,.holoMap.is-static .hm-headHalo{opacity:1;transform:none;transition:none}
+.holoMap.is-static .hm-dot,.holoMap.is-static .hm-label{opacity:1}
+.holoMap.is-static .hm-track{stroke-opacity:.12}
 @media(prefers-reduced-motion:reduce){
-  .hm-svg,.hm-sweep,.hm-ghost,.hm-pulse,.hm-reticle,.hm-status,.is-live .hm-ring{animation:none!important}
-  .hm-line{stroke-dashoffset:0;animation:none!important}
-  .hm-node,.hm-label,.hm-packet{opacity:1!important;animation:none!important}
+  .hm-svg,.hm-sweep,.hm-ghost,.hm-pulse,.hm-burst,.hm-reticle,.hm-status,.hm-ring,.hm-impact{animation:none!important}
+  .hm-line,.hm-halo{stroke-dashoffset:0!important;transition:none!important}
+  .hm-flow{opacity:.6!important;transition:none!important}
+  .hm-head,.hm-headHalo{opacity:1!important;transform:none!important;transition:none!important}
+  .hm-dot,.hm-label{opacity:1!important}
+  .hm-hubGlow{transform:none!important;transition:none!important}
 }

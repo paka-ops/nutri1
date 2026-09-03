@@ -1,6 +1,8 @@
-/* NUTRI.N°1 — Holographic Africa map with animated flows from Togo to West Africa.
+/* NUTRI.N°1 — Holographic Africa map with sequenced data flows from Togo to the whole continent.
    Pure SVG (resolution independent → crisp at 4K). Injected into any element with class "holoMap".
-   Set data-lang="fr" for French labels. */
+   Set data-lang="fr" for French labels.
+   Flows are emitted one at a time (every 2 s) by a small JS sequencer that only runs while the
+   section is on screen (class "is-live" set by the IntersectionObserver) and the tab is visible. */
 (function () {
     'use strict';
 
@@ -25,17 +27,41 @@
         [43.3, -22], [44.3, -19], [44, -16.5], [46, -15.5], [47.7, -13.5]
     ];
     var TOGO = { name: 'Togo', city: 'Lomé', lon: 1.22, lat: 6.13 };
+
+    /* Destinations. Array order = emission order (near / far interleaved so the map never looks
+       one-sided). `bend` = curvature of the quadratic arc (× S px, positive = bows to the right of
+       the direction of travel). `lp` = label placement: r, l, ur, ul, dr, dl, a (above), b (below) or a custom [dx, dy, anchor]. */
     var TARGETS = [
-        { name: 'Ghana', lon: -0.19, lat: 5.6, bend: -1.6 },
-        { name: "Côte d'Ivoire", lon: -4.0, lat: 5.35, bend: -3 },
-        { name: 'Burkina Faso', lon: -1.52, lat: 12.37, bend: 2 },
-        { name: 'Niger', lon: 2.12, lat: 13.51, bend: 3 },
-        { name: 'Bénin', lon: 2.43, lat: 6.37, bend: -1.2 },
-        { name: 'Mali', lon: -8.0, lat: 12.65, bend: 4 },
-        { name: 'Sénégal', lon: -17.45, lat: 14.7, bend: 6 },
-        { name: 'Nigeria', lon: 7.5, lat: 9.06, bend: 2.5 },
-        { name: 'Guinée', lon: -13.7, lat: 9.5, bend: -3.5 }
+        { en: 'Ghana', fr: 'Ghana', lon: -0.19, lat: 5.6, bend: -1.6, lp: [-12, 13, 'end'] },
+        { en: 'Kenya', fr: 'Kenya', lon: 36.82, lat: -1.29, bend: -3.5, lp: 'r' },
+        { en: 'Mali', fr: 'Mali', lon: -8.0, lat: 12.65, bend: 4, lp: 'l' },
+        { en: 'Egypt', fr: 'Égypte', lon: 31.24, lat: 30.05, bend: -5, lp: 'r' },
+        { en: 'Nigeria', fr: 'Nigeria', lon: 7.5, lat: 9.06, bend: 2.5, lp: 'ur' },
+        { en: 'South Africa', fr: 'Afrique du Sud', lon: 18.42, lat: -33.93, bend: 4, lp: 'ur' },
+        { en: 'Senegal', fr: 'Sénégal', lon: -17.45, lat: 14.7, bend: 6, lp: 'b' },
+        { en: 'Ethiopia', fr: 'Éthiopie', lon: 38.75, lat: 9.02, bend: -6, lp: 'r' },
+        { en: 'Benin', fr: 'Bénin', lon: 2.43, lat: 6.37, bend: -1.2, lp: [14, 14, 'start'] },
+        { en: 'Morocco', fr: 'Maroc', lon: -6.85, lat: 34.0, bend: -3, lp: 'ul' },
+        { en: 'DR Congo', fr: 'RD Congo', lon: 15.3, lat: -4.32, bend: -2, lp: 'r' },
+        { en: 'Niger', fr: 'Niger', lon: 2.12, lat: 13.51, bend: 3, lp: 'a' },
+        { en: 'Madagascar', fr: 'Madagascar', lon: 47.5, lat: -18.9, bend: 3, lp: 'b' },
+        { en: "Côte d'Ivoire", fr: "Côte d'Ivoire", lon: -4.0, lat: 5.35, bend: -3, lp: [-8, 25, 'end'] },
+        { en: 'Algeria', fr: 'Algérie', lon: 3.06, lat: 36.75, bend: -3, lp: 'l' },
+        { en: 'Cameroon', fr: 'Cameroun', lon: 11.52, lat: 3.87, bend: 1.5, lp: 'r' },
+        { en: 'Zambia', fr: 'Zambie', lon: 28.28, lat: -15.41, bend: -3, lp: 'l' },
+        { en: 'Burkina Faso', fr: 'Burkina Faso', lon: -1.52, lat: 12.37, bend: 2, lp: 'a' },
+        { en: 'Tanzania', fr: 'Tanzanie', lon: 35.74, lat: -6.17, bend: -1.5, lp: 'r' },
+        { en: 'Guinea', fr: 'Guinée', lon: -13.7, lat: 9.5, bend: -3.5, lp: 'dl' },
+        { en: 'Mozambique', fr: 'Mozambique', lon: 32.58, lat: -25.97, bend: 5, lp: 'r' },
+        { en: 'Tunisia', fr: 'Tunisie', lon: 10.18, lat: 36.8, bend: 2, lp: 'r' },
+        { en: 'Angola', fr: 'Angola', lon: 13.23, lat: -8.84, bend: 2.5, lp: 'dr' }
     ];
+
+    // --- Sequencer timing (ms) --------------------------------------------------
+    var EMIT_EVERY = 2000;   // a new arrow leaves Togo every 2 s
+    var DRAW_MIN = 1800, DRAW_MAX = 2400; // draw duration scales with arc length
+    var HOLD = 3200;         // arrow stays lit after arrival
+    var FADE = 1400;         // opacity fade-out (must match CSS)
 
     // --- Projection: (lon,lat) → SVG px. Frame focused on West Africa + whole continent visible.
     var LON0 = -23, LAT0 = 39, S = 10;
@@ -44,12 +70,31 @@
     var W = 780, H = 760;
 
     function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+    function r1(n) { return Math.round(n * 10) / 10; }
+
+    // Length of a quadratic Bézier by sampling (no DOM measurement needed).
+    function quadLength(x0, y0, cx, cy, x1, y1) {
+        var n = 32, len = 0, px = x0, py = y0;
+        for (var i = 1; i <= n; i++) {
+            var t = i / n, u = 1 - t;
+            var x = u * u * x0 + 2 * u * t * cx + t * t * x1, y = u * u * y0 + 2 * u * t * cy + t * t * y1;
+            len += Math.sqrt((x - px) * (x - px) + (y - py) * (y - py)); px = x; py = y;
+        }
+        return len;
+    }
+
+    var LABEL_POS = {
+        r: [9, 3.5, 'start'], l: [-9, 3.5, 'end'],
+        ur: [9, -8, 'start'], ul: [-9, -8, 'end'],
+        dr: [9, 15, 'start'], dl: [-9, 15, 'end'],
+        a: [0, -10, 'middle'], b: [0, 17, 'middle']
+    };
 
     function build(lang) {
         var fr = lang === 'fr';
         var t = {
-            title: fr ? 'Carte holographique de l’Afrique — flux de données depuis le Togo vers l’Afrique de l’Ouest' : 'Holographic map of Africa — data flows from Togo to West Africa',
-            hub: fr ? 'HUB • TOGO' : 'HUB • TOGO',
+            title: fr ? 'Carte holographique de l’Afrique — flux de données depuis le Togo vers l’ensemble du continent' : 'Holographic map of Africa — data flows from Togo across the whole continent',
+            hub: 'HUB • TOGO',
             status: fr ? 'CONTRÔLE PAR PAYS • ACTIF' : 'COUNTRY-LEVEL CONTROL • LIVE',
             legendA: fr ? 'Nœud national isolé (tenant)' : 'Isolated national node (tenant)',
             legendB: fr ? 'Flux chiffré • RBAC' : 'Encrypted flow • RBAC'
@@ -68,7 +113,6 @@
             '<filter id="hmSoft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="1.6" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
             '<filter id="hmNeon" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="3" result="b"/><feColorMatrix in="b" type="matrix" values="0 0 0 0 .3  0 0 0 0 1  0 0 0 0 .6  0 0 0 1.2 0" result="c"/><feMerge><feMergeNode in="c"/><feMergeNode in="SourceGraphic"/></feMerge></filter>' +
             '<clipPath id="hmClip"><path d="' + poly(AFRICA) + '"/><path d="' + poly(MADAGASCAR) + '"/></clipPath>' +
-            '<marker id="hmArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#b8ffd9"/></marker>' +
             '</defs>';
 
         var africaPath = poly(AFRICA), madaPath = poly(MADAGASCAR);
@@ -84,37 +128,50 @@
             '<path class="hm-ghost" d="' + africaPath + '" fill="none" stroke="#4dffa6" stroke-width=".8" opacity=".35"/>' +
             '</g>';
 
-        // Flows
-        var flows = '', nodes = '', labels = '';
+        // Flows: track (static soft glow) + halo + solid line drawn via stroke-dashoffset + arrowhead + impact ring.
+        var tracks = '', flows = '', nodes = '', labels = '';
         TARGETS.forEach(function (c, i) {
             var p = P(c.lon, c.lat), tx = +p[0], ty = +p[1];
             var mx = (ox + tx) / 2, my = (oy + ty) / 2;
             var dx = tx - ox, dy = ty - oy, len = Math.sqrt(dx * dx + dy * dy) || 1;
             var nx = -dy / len, ny = dx / len; // normal
             var k = c.bend * S;
-            var cx = (mx + nx * k).toFixed(1), cy = (my + ny * k).toFixed(1);
+            var cx = r1(mx + nx * k), cy = r1(my + ny * k);
             var d = 'M' + ox + ' ' + oy + 'Q' + cx + ' ' + cy + ' ' + tx + ' ' + ty;
-            var delay = (i * 0.55).toFixed(2) + 's';
+            var L = Math.ceil(quadLength(ox, oy, cx, cy, tx, ty)) + 2;
+            // Tangent at the end of the arc → arrowhead orientation.
+            var ex = tx - cx, ey = ty - cy, el = Math.sqrt(ex * ex + ey * ey) || 1;
+            var ux = ex / el, uy = ey / el;
+            var ang = r1(Math.atan2(uy, ux) * 180 / Math.PI);
+            var hs = Math.max(0.62, Math.min(1, L / 90)); // smaller arrowhead on very short arcs (Ghana, Benin)
+            var hx = r1(tx - ux * 3.5 * hs), hy = r1(ty - uy * 3.5 * hs);
+            var name = fr ? c.fr : c.en;
+
+            tracks += '<path class="hm-track" data-flow="' + i + '" fill="none" d="' + d + '"/>';
             flows +=
-                '<g class="hm-flow" style="--d:' + delay + '">' +
-                '<path class="hm-track" fill="none" d="' + d + '"/>' +
-                '<path class="hm-line" fill="none" d="' + d + '" marker-end="url(#hmArrow)"/>' +
-                '<circle class="hm-packet" r="3.2"><animateMotion dur="2.6s" begin="' + delay + '" repeatCount="indefinite" path="' + d + '" keyPoints="0;1" keyTimes="0;1" calcMode="linear"/></circle>' +
-                '<circle class="hm-packet hm-packet2" r="2"><animateMotion dur="2.6s" begin="' + (i * 0.55 + 0.35).toFixed(2) + 's" repeatCount="indefinite" path="' + d + '" keyPoints="0;1" keyTimes="0;1" calcMode="linear"/></circle>' +
+                '<g class="hm-flow" data-flow="' + i + '" style="--len:' + L + 'px">' +
+                '<path class="hm-halo" fill="none" d="' + d + '"/>' +
+                '<path class="hm-line" fill="none" d="' + d + '"/>' +
+                '<g transform="translate(' + hx + ' ' + hy + ') rotate(' + ang + ') scale(' + r1(hs) + ')">' +
+                '<path class="hm-headHalo" d="M1.5 0L-12 -6L-9 0L-12 6Z"/>' +
+                '<path class="hm-head" d="M0 0L-10 -4.4L-7.6 0L-10 4.4Z"/>' +
+                '</g>' +
+                '<circle class="hm-impact" cx="' + tx + '" cy="' + ty + '" r="5" fill="none"/>' +
                 '</g>';
             nodes +=
-                '<g class="hm-node" style="--d:' + delay + '" transform="translate(' + tx + ' ' + ty + ')">' +
-                '<circle class="hm-ring" fill="none" r="4"/><circle class="hm-ring hm-ring2" fill="none" r="4"/>' +
-                '<circle r="3" fill="#d9ffe9"/></g>';
-            var anchor = tx < ox ? 'end' : 'start', off = tx < ox ? -9 : 9;
-            var lift = (c.name === 'Ghana' || c.name === 'Bénin' || c.name === "Côte d'Ivoire" || c.name === 'Guinée') ? 16 : -9;
-            labels += '<text class="hm-label" x="' + (tx + off) + '" y="' + (ty + lift) + '" text-anchor="' + anchor + '">' + esc(c.name.toUpperCase()) + '</text>';
+                '<g class="hm-node" data-flow="' + i + '" transform="translate(' + tx + ' ' + ty + ')">' +
+                '<circle class="hm-nodeGlow" r="9" fill="#4dffa6"/>' +
+                '<circle class="hm-ring" fill="none" r="5.5"/>' +
+                '<circle class="hm-dot" r="2.8" fill="#d9ffe9"/></g>';
+            var lp = (typeof c.lp === 'string' ? LABEL_POS[c.lp] : c.lp) || LABEL_POS.r;
+            labels += '<text class="hm-label" data-flow="' + i + '" x="' + r1(tx + lp[0]) + '" y="' + r1(ty + lp[1]) + '" text-anchor="' + lp[2] + '">' + esc(name.toUpperCase()) + '</text>';
         });
 
         var hub =
             '<g class="hm-hub" transform="translate(' + ox + ' ' + oy + ')">' +
-            '<circle r="34" fill="url(#hmGlow)"/>' +
-            '<circle class="hm-pulse" fill="none" r="8"/><circle class="hm-pulse hm-pulse2" fill="none" r="8"/><circle class="hm-pulse hm-pulse3" fill="none" r="8"/>' +
+            '<circle class="hm-hubGlow" r="34" fill="url(#hmGlow)"/>' +
+            '<circle class="hm-burst" fill="none" r="8"/><circle class="hm-burst" fill="none" r="8"/>' +
+            '<circle class="hm-pulse" fill="none" r="8"/>' +
             '<circle r="5.5" fill="#ffffff" filter="url(#hmNeon)"/>' +
             '<g class="hm-reticle"><circle r="16" fill="none" stroke="#b8ffd9" stroke-width=".9" stroke-dasharray="6 5"/><circle r="24" fill="none" stroke="#7dffbd" stroke-width=".6" stroke-dasharray="2 6" opacity=".7"/></g>' +
             '<text class="hm-hubLabel" x="0" y="46" text-anchor="middle">' + esc(t.hub) + '</text>' +
@@ -132,26 +189,144 @@
 
         return '<div class="hm-stage">' +
             '<svg class="hm-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(t.title) + '" xmlns="http://www.w3.org/2000/svg">' +
-            defs + '<rect width="' + W + '" height="' + H + '" fill="url(#hmGrid)" opacity=".5"/>' + land + flows + nodes + labels + hub + hudFrame +
+            defs + '<rect width="' + W + '" height="' + H + '" fill="url(#hmGrid)" opacity=".5"/>' + land +
+            '<g class="hm-tracks">' + tracks + '</g><g class="hm-flows">' + flows + '</g><g class="hm-nodes">' + nodes + '</g><g class="hm-labels">' + labels + '</g>' +
+            hub + hudFrame +
             '</svg><div class="hm-base"></div></div>' + legend;
     }
 
+    // --- Sequencer: one arrow every EMIT_EVERY ms, looping over all destinations --------------
+    function Sequencer(root) {
+        var self = this;
+        this.root = root;
+        this.hub = root.querySelector('.hm-hub');
+        this.bursts = root.querySelectorAll('.hm-burst');
+        this.burstIdx = 0;
+        this.idx = 0;
+        this.timer = null;
+        this.beatTimer = null;
+        this.running = false;
+        this.flows = [];
+        var groups = root.querySelectorAll('.hm-flow');
+        var maxLen = 1;
+        for (var i = 0; i < groups.length; i++) maxLen = Math.max(maxLen, parseFloat(groups[i].style.getPropertyValue('--len')) || 1);
+        for (var j = 0; j < groups.length; j++) {
+            var g = groups[j], id = g.getAttribute('data-flow');
+            var L = parseFloat(g.style.getPropertyValue('--len')) || maxLen;
+            var dur = Math.round(DRAW_MIN + (DRAW_MAX - DRAW_MIN) * (L / maxLen));
+            g.style.setProperty('--dur', dur + 'ms');
+            this.flows.push({
+                g: g, dur: dur, timers: [],
+                track: root.querySelector('.hm-track[data-flow="' + id + '"]'),
+                node: root.querySelector('.hm-node[data-flow="' + id + '"]'),
+                label: root.querySelector('.hm-label[data-flow="' + id + '"]')
+            });
+        }
+        this.emit = function () { self._emit(); };
+    }
+    Sequencer.prototype._clearFlow = function (f) {
+        while (f.timers.length) clearTimeout(f.timers.pop());
+        f.g.classList.remove('is-drawing', 'is-on', 'is-fading');
+        if (f.track) f.track.classList.remove('is-active');
+        if (f.node) f.node.classList.remove('is-active');
+        if (f.label) f.label.classList.remove('is-active');
+    };
+    Sequencer.prototype._beat = function () {
+        var self = this;
+        if (this.bursts.length) {
+            var b = this.bursts[this.burstIdx % this.bursts.length];
+            this.burstIdx++;
+            // The other burst ring is reset so its animation can restart on the next beat.
+            for (var i = 0; i < this.bursts.length; i++) if (this.bursts[i] !== b) this.bursts[i].classList.remove('is-on');
+            b.classList.add('is-on');
+        }
+        if (this.hub) {
+            clearTimeout(this.beatTimer);
+            this.hub.classList.add('is-beat');
+            this.beatTimer = setTimeout(function () { self.hub.classList.remove('is-beat'); }, 360);
+        }
+    };
+    Sequencer.prototype._emit = function () {
+        if (!this.flows.length) return;
+        var f = this.flows[this.idx];
+        this.idx = (this.idx + 1) % this.flows.length;
+        this._clearFlow(f);
+        this._beat();
+        // Flush the idle style once (a single style recalc every 2 s — no per-frame layout work) so the
+        // dashoffset transition always restarts from the hub, even if this flow was reset just now.
+        if (window.getComputedStyle) void window.getComputedStyle(f.g).opacity;
+        f.g.classList.add('is-drawing');
+        if (f.track) f.track.classList.add('is-active');
+        f.timers.push(setTimeout(function () {
+            f.g.classList.add('is-on');
+            if (f.node) f.node.classList.add('is-active');
+            if (f.label) f.label.classList.add('is-active');
+        }, f.dur));
+        f.timers.push(setTimeout(function () {
+            f.g.classList.add('is-fading');
+            if (f.track) f.track.classList.remove('is-active');
+            if (f.node) f.node.classList.remove('is-active');
+            if (f.label) f.label.classList.remove('is-active');
+        }, f.dur + HOLD));
+        f.timers.push(setTimeout(function () {
+            f.g.classList.remove('is-drawing', 'is-on', 'is-fading');
+        }, f.dur + HOLD + FADE));
+    };
+    Sequencer.prototype.start = function () {
+        if (this.running) return;
+        this.running = true;
+        this._emit();
+        this.timer = setInterval(this.emit, EMIT_EVERY);
+    };
+    Sequencer.prototype.stop = function () {
+        if (!this.running) return;
+        this.running = false;
+        clearInterval(this.timer); this.timer = null;
+        clearTimeout(this.beatTimer);
+        if (this.hub) this.hub.classList.remove('is-beat');
+        for (var i = 0; i < this.bursts.length; i++) this.bursts[i].classList.remove('is-on');
+        for (var j = 0; j < this.flows.length; j++) this._clearFlow(this.flows[j]);
+    };
+
     function init() {
         var els = document.querySelectorAll('.holoMap');
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+        var reduced = !!(reduce && reduce.matches);
+        var items = [];
+
         for (var i = 0; i < els.length; i++) {
             if (els[i].getAttribute('data-ready')) continue;
             var lang = els[i].getAttribute('data-lang') || document.documentElement.lang || 'en';
             els[i].innerHTML = build(lang.slice(0, 2).toLowerCase());
             els[i].setAttribute('data-ready', '1');
+            items.push({ el: els[i], seq: new Sequencer(els[i]), visible: false });
         }
+
+        function sync(item) {
+            if (reduced) { item.el.classList.add('is-static'); item.seq.stop(); return; }
+            item.el.classList.remove('is-static');
+            if (item.visible && !document.hidden) item.seq.start(); else item.seq.stop();
+        }
+
         // Start animations only when visible (saves battery, restarts the intro nicely)
         if ('IntersectionObserver' in window) {
             var io = new IntersectionObserver(function (entries) {
-                entries.forEach(function (e) { e.target.classList.toggle('is-live', e.isIntersecting); });
+                entries.forEach(function (e) {
+                    e.target.classList.toggle('is-live', e.isIntersecting);
+                    for (var k = 0; k < items.length; k++) if (items[k].el === e.target) { items[k].visible = e.isIntersecting; sync(items[k]); }
+                });
             }, { threshold: 0.2 });
-            for (var j = 0; j < els.length; j++) io.observe(els[j]);
+            for (var j = 0; j < items.length; j++) io.observe(items[j].el);
         } else {
-            for (var k = 0; k < els.length; k++) els[k].classList.add('is-live');
+            for (var k = 0; k < items.length; k++) { items[k].el.classList.add('is-live'); items[k].visible = true; sync(items[k]); }
+        }
+
+        // Pause in background tabs (timers get throttled → avoids a burst of arrows when coming back).
+        document.addEventListener('visibilitychange', function () { for (var k = 0; k < items.length; k++) sync(items[k]); });
+
+        if (reduce) {
+            var onChange = function (e) { reduced = e.matches; for (var k = 0; k < items.length; k++) sync(items[k]); };
+            if (reduce.addEventListener) reduce.addEventListener('change', onChange); else if (reduce.addListener) reduce.addListener(onChange);
         }
     }
 
