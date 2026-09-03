@@ -1171,142 +1171,6 @@
             vertical-align: middle;
         }
 
-        /* Lightbox modal for visual assets */
-        .moat-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: rgba(3, 18, 11, 0.88);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            display: none;
-            place-items: center;
-            padding: 24px;
-            opacity: 0;
-            transition: opacity 0.3s cubic-bezier(.16, 1, .3, 1);
-        }
-
-        .moat-modal.active {
-            display: grid;
-            opacity: 1;
-        }
-
-        .moat-modal-card {
-            background: #ffffff;
-            border-radius: 24px;
-            max-width: 1040px;
-            width: 100%;
-            max-height: 92vh;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12);
-            transform: scale(0.95);
-            transition: transform 0.35s cubic-bezier(.16, 1, .3, 1);
-        }
-
-        .moat-modal.active .moat-modal-card {
-            transform: scale(1);
-        }
-
-        .moat-modal-bar {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 14px 22px;
-            border-bottom: 1px solid #edf2ee;
-            background: #fafbf9;
-        }
-
-        .moat-modal-bar-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .moat-modal-badge {
-            background: #061b13;
-            color: #29cf70;
-            font-size: 10px;
-            font-weight: 900;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 99px;
-            border: 1px solid rgba(41, 207, 112, 0.3);
-        }
-
-        .moat-modal-title {
-            font-size: 17px;
-            font-weight: 900;
-            color: #061b13;
-        }
-
-        .moat-modal-close {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 1px solid #dfe8e1;
-            background: #ffffff;
-            color: #496355;
-            cursor: pointer;
-            display: grid;
-            place-items: center;
-            font-size: 19px;
-            line-height: 1;
-            transition: all 0.2s ease;
-        }
-
-        .moat-modal-close:hover {
-            background: #061b13;
-            color: #ffffff;
-            border-color: #061b13;
-            transform: scale(1.06);
-        }
-
-        .moat-modal-imgwrap {
-            flex: 1;
-            overflow: auto;
-            background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-
-        .moat-modal-img {
-            max-width: 100%;
-            max-height: 68vh;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
-            background: #fff;
-        }
-
-        .moat-modal-footer {
-            padding: 14px 22px;
-            background: #ffffff;
-            border-top: 1px solid #edf2ee;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-        }
-
-        .moat-modal-desc {
-            font-size: 13.5px;
-            color: #496355;
-            margin: 0;
-            font-weight: 550;
-        }
-
-        .moat-modal-hint {
-            font-size: 11px;
-            color: #8c9e94;
-            letter-spacing: 0.02em;
-            white-space: nowrap;
-        }
-
         @media(max-width: 960px) {
             .cloud {
                 grid-template-columns: 1fr;
@@ -1334,23 +1198,9 @@
             .moat-grid {
                 gap: 20px 14px;
             }
-            .moat-modal {
-                padding: 12px;
-            }
-            .moat-modal-card {
-                max-height: 96vh;
-            }
-            .moat-modal-imgwrap {
-                padding: 12px;
-            }
-            .moat-modal-footer {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 6px;
-            }
         }
     </style>
-    <link rel="stylesheet" href="assets/nutri4k.css">
+    <link rel="stylesheet" href="assets/nutri4k.css"><link rel="stylesheet" href="assets/nutri-zoom.css">
     
 <link rel="preload" as="image" href="assets/img/hero-intelligence.jpg" fetchpriority="high"></head>
 
@@ -1532,88 +1382,9 @@
         <div class="wrap copy"><span>© 2026 NUTRI.N°1</span><span>Built in West Africa • Designed for Africa</span>
         </div>
     </footer>
-    <!-- Lightbox Modal for Full-Resolution Visual Inspection -->
-    <div id="moat-modal" class="moat-modal" role="dialog" aria-modal="true" aria-hidden="true">
-        <div class="moat-modal-card">
-            <div class="moat-modal-bar">
-                <div class="moat-modal-bar-left">
-                    <span class="moat-modal-badge">Asset</span>
-                    <span class="moat-modal-title">Asset Title</span>
-                </div>
-                <button type="button" class="moat-modal-close" aria-label="Close inspection">×</button>
-            </div>
-            <div class="moat-modal-imgwrap">
-                <img src="" alt="" class="moat-modal-img">
-            </div>
-            <div class="moat-modal-footer">
-                <p class="moat-modal-desc"></p>
-                <span class="moat-modal-hint">ESC or click backdrop to close</span>
-            </div>
-        </div>
-    </div>
-
-    <script>
-    (function() {
-        var modal = document.getElementById('moat-modal');
-        if (!modal) return;
-        var modalImg = modal.querySelector('.moat-modal-img');
-        var modalTitle = modal.querySelector('.moat-modal-title');
-        var modalBadge = modal.querySelector('.moat-modal-badge');
-        var modalDesc = modal.querySelector('.moat-modal-desc');
-        var closeBtn = modal.querySelector('.moat-modal-close');
-
-        function openModal(item) {
-            var img = item.querySelector('.moat-item-img');
-            var title = item.getAttribute('data-title') || (item.querySelector('.moat-item-title') ? item.querySelector('.moat-item-title').textContent : '');
-            var badge = item.getAttribute('data-badge') || (item.querySelector('.moat-item-badge') ? item.querySelector('.moat-item-badge').textContent : '');
-            var desc = item.getAttribute('data-desc') || (item.querySelector('.moat-item-desc') ? item.querySelector('.moat-item-desc').textContent : '');
-            if (!img) return;
-            modalImg.src = img.src;
-            modalImg.alt = img.alt || '';
-            modalTitle.textContent = title;
-            modalBadge.textContent = badge;
-            modalDesc.textContent = desc;
-            modal.classList.add('active');
-            modal.setAttribute('aria-hidden', 'false');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeModal() {
-            modal.classList.remove('active');
-            modal.setAttribute('aria-hidden', 'true');
-            document.body.style.overflow = '';
-        }
-
-        document.querySelectorAll('.moat-item').forEach(function(item) {
-            item.addEventListener('click', function(e) {
-                openModal(item);
-            });
-            item.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    openModal(item);
-                }
-            });
-        });
-
-        if (closeBtn) closeBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            closeModal();
-        });
-
-        modal.addEventListener('click', function(e) {
-            if (e.target === modal) closeModal();
-        });
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && modal.classList.contains('active')) {
-                closeModal();
-            }
-        });
-    })();
-    </script>
     <script>const o = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && (x.target.style.opacity = 1)), { threshold: .1 }); document.querySelectorAll(".card,.box,.person,.loopbox,.moat-item").forEach(x => { x.style.opacity = 0; x.style.transition = "opacity .7s,transform .7s"; o.observe(x) })</script>
     <script src="assets/nutri4k.js" defer></script>
+<script src="assets/nutri-zoom.js" defer></script>
 </body>
 
 </html>
