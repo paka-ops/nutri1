@@ -852,3 +852,23 @@ html[lang="fr"] .p2f-feature .cold[data-cold="solar"] .coldTag:after{content:"Ch
 .p2f-feature .cold .coldBody{padding:26px 30px 30px}
 .p2f-feature .cold .coldBody h3{font-size:24px}
 @media (prefers-reduced-motion:reduce){.p2f-feature .cold .coldImg{transition:none;transform:none}}
+
+/* ============================================================
+   15b · stakeholder grid — 5 cards on 2 rows (3 + 2 centered)
+   The "International Organisations" card joins the section; the
+   4-up row becomes a 3-up grid whose second row is centered.
+   ============================================================ */
+.grid .stake[data-stake="organizations"] .stNum:after{content:"05"}
+.grid .stake[data-stake="organizations"] .stTag:after{content:"International Organisations"}
+html[lang="fr"] .grid .stake[data-stake="organizations"] .stTag:after{content:"Organisations internationales"}
+#users .grid.grid4{grid-template-columns:repeat(6,1fr);align-items:stretch}
+#users .grid.grid4>*{grid-column:span 2}
+#users .grid.grid4>*:nth-child(4){grid-column:2/span 2}
+@media(max-width:900px){
+  #users .grid.grid4{grid-template-columns:repeat(4,1fr)}
+  #users .grid.grid4>*,#users .grid.grid4>*:nth-child(4){grid-column:span 2}
+}
+@media(max-width:600px){
+  #users .grid.grid4{grid-template-columns:1fr}
+  #users .grid.grid4>*,#users .grid.grid4>*:nth-child(4){grid-column:auto}
+}
