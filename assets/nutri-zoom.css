@@ -73,6 +73,23 @@ html.n4k-cbmode .nzoom-btn {
 
 /* ---------- Lightbox ---------- */
 .nzoom-modal {
+    /* Carte de zoom TRANSPARENTE : la lightbox n'a plus de fond blanc,
+       elle laisse voir le voile sombre de la page. Tout ce qui doit rester
+       lisible (titres, description, boutons) passe donc en clair / en verre.
+       Les variables ci-dessous centralisent ce thème « verre ». */
+    /* Fond de la carte de zoom : transparent par défaut.
+       Pour un effet « verre fumé » il suffit de mettre par ex.
+       --nz-card-bg: rgba(6, 27, 19, .45);  (ou rgba(255,255,255,.06)) */
+    --nz-card-bg: transparent;
+    --nz-glass: rgba(255, 255, 255, .10);
+    --nz-glass-hover: #29cf70;
+    --nz-line: rgba(255, 255, 255, .16);
+    --nz-edge: rgba(255, 255, 255, .10);
+    --nz-ink: #f2f7f4;
+    --nz-ink-soft: #c3d3ca;
+    --nz-ink-dim: rgba(233, 242, 237, .55);
+    --nz-green: #29cf70;
+
     position: fixed;
     inset: 0;
     z-index: 99999;
@@ -92,7 +109,11 @@ html.n4k-cbmode .nzoom-btn {
 }
 
 .nzoom-card {
-    background: #ffffff;
+    /* Fond transparent (var(--nz-card-bg), voir .nzoom-modal) : la carte
+       blanche disparaît, l'image flotte sur le voile sombre de la page.
+       Seule une fine bordure lumineuse (box-shadow 1px) délimite la zone,
+       et l'ombre noire massive d'origine est supprimée. */
+    background: var(--nz-card-bg);
     border-radius: 24px;
     max-width: 1040px;
     width: 100%;
@@ -100,7 +121,7 @@ html.n4k-cbmode .nzoom-btn {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12);
+    box-shadow: 0 0 0 1px var(--nz-edge);
     transform: scale(0.95);
     transition: transform .35s cubic-bezier(.16, 1, .3, 1);
 }
@@ -115,8 +136,8 @@ html.n4k-cbmode .nzoom-btn {
     justify-content: space-between;
     gap: 12px;
     padding: 14px 22px;
-    border-bottom: 1px solid #edf2ee;
-    background: #fafbf9;
+    border-bottom: 1px solid var(--nz-line);
+    background: transparent;
 }
 
 .nzoom-bar-left {
@@ -127,15 +148,15 @@ html.n4k-cbmode .nzoom-btn {
 }
 
 .nzoom-badge {
-    background: #061b13;
-    color: #29cf70;
+    background: rgba(41, 207, 112, .14);
+    color: var(--nz-green);
     font-size: 10px;
     font-weight: 900;
     letter-spacing: .1em;
     text-transform: uppercase;
     padding: 4px 10px;
     border-radius: 99px;
-    border: 1px solid rgba(41, 207, 112, 0.3);
+    border: 1px solid rgba(41, 207, 112, 0.35);
     white-space: nowrap;
 }
 
@@ -146,7 +167,8 @@ html.n4k-cbmode .nzoom-btn {
 .nzoom-title {
     font-size: 17px;
     font-weight: 900;
-    color: #061b13;
+    color: var(--nz-ink);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .45);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -165,19 +187,21 @@ html.n4k-cbmode .nzoom-btn {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    border: 1px solid #dfe8e1;
-    background: #fff;
-    color: #496355;
+    border: 1px solid var(--nz-line);
+    background: var(--nz-glass);
+    color: var(--nz-ink-soft);
     text-decoration: none;
     font-size: 15px;
     line-height: 1;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     transition: all .2s ease;
 }
 
 .nzoom-open:hover {
-    background: #061b13;
-    color: #fff;
-    border-color: #061b13;
+    background: var(--nz-glass-hover);
+    color: #042414;
+    border-color: var(--nz-glass-hover);
     transform: scale(1.06);
 }
 
@@ -185,22 +209,24 @@ html.n4k-cbmode .nzoom-btn {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    border: 1px solid #dfe8e1;
-    background: #ffffff;
-    color: #496355;
+    border: 1px solid var(--nz-line);
+    background: var(--nz-glass);
+    color: var(--nz-ink-soft);
     cursor: pointer;
     display: grid;
     place-items: center;
     font-size: 19px;
     line-height: 1;
     padding: 0;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     transition: all .2s ease;
 }
 
 .nzoom-close:hover {
-    background: #061b13;
-    color: #ffffff;
-    border-color: #061b13;
+    background: var(--nz-glass-hover);
+    color: #042414;
+    border-color: var(--nz-glass-hover);
     transform: scale(1.06);
 }
 
@@ -208,7 +234,7 @@ html.n4k-cbmode .nzoom-btn {
     flex: 1;
     min-height: 0;
     overflow: auto;
-    background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%);
+    background: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,8 +261,10 @@ html.n4k-cbmode .nzoom-btn {
     height: auto;
     object-fit: contain;
     border-radius: 12px;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
-    background: #fff;
+    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, .65);
+    /* fond transparent : une image avec des zones transparentes (logo PNG…)
+       laisse désormais voir le voile de la lightbox au lieu d'un blanc. */
+    background: transparent;
     transition: width .18s ease, height .18s ease;
     -webkit-user-drag: none;
     user-select: none;
@@ -255,8 +283,8 @@ html.n4k-cbmode .nzoom-btn {
 
 .nzoom-footer {
     padding: 14px 22px;
-    background: #ffffff;
-    border-top: 1px solid #edf2ee;
+    background: transparent;
+    border-top: 1px solid var(--nz-line);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -266,10 +294,11 @@ html.n4k-cbmode .nzoom-btn {
 
 .nzoom-desc {
     font-size: 13.5px;
-    color: #496355;
+    color: var(--nz-ink-soft);
     margin: 0;
     font-weight: 550;
     min-width: 0;
+    text-shadow: 0 1px 6px rgba(0, 0, 0, .4);
 }
 
 .nzoom-tools {
@@ -284,28 +313,30 @@ html.n4k-cbmode .nzoom-btn {
     height: 28px;
     padding: 0 8px;
     border-radius: 9px;
-    border: 1px solid #dfe8e1;
-    background: #fff;
-    color: #496355;
+    border: 1px solid var(--nz-line);
+    background: var(--nz-glass);
+    color: var(--nz-ink-soft);
     font-size: 14px;
     font-weight: 900;
     line-height: 1;
     cursor: pointer;
     display: grid;
     place-items: center;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
     transition: all .2s ease;
 }
 
 .nzoom-tool:hover {
-    background: #061b13;
-    color: #29cf70;
-    border-color: #061b13;
+    background: var(--nz-glass-hover);
+    color: #042414;
+    border-color: var(--nz-glass-hover);
 }
 
 .nzoom-level {
     font-size: 11px;
     font-weight: 900;
-    color: #496355;
+    color: var(--nz-ink-soft);
     min-width: 46px;
     text-align: center;
     letter-spacing: .02em;
@@ -313,7 +344,7 @@ html.n4k-cbmode .nzoom-btn {
 
 .nzoom-hint {
     font-size: 11px;
-    color: #8c9e94;
+    color: var(--nz-ink-dim);
     letter-spacing: .02em;
     white-space: nowrap;
 }
@@ -323,7 +354,7 @@ html.n4k-cbmode .nzoom-btn {
     font-weight: 900;
     letter-spacing: .1em;
     text-transform: uppercase;
-    color: #0f7a42;
+    color: var(--nz-green);
 }
 
 .nzoom-cat:empty {

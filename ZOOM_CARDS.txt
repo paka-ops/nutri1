@@ -91,3 +91,53 @@ fr/index.html 10 · fr/agribusiness.html 21 · fr/ecosystem.html 7 ·
 fr/platform.html 9 · fr/team.html 6 · fr/intelligence.html 9
 (les cartes « Équipe » sans photo ne reçoivent rien : il n'y a rien à agrandir ;
 elles deviennent zoomables dès qu'une photo est posée via « Fond des cartes »).
+
+CARTE DE ZOOM TRANSPARENTE (assets/nutri-zoom.css)
+--------------------------------------------------
+Demande : la carte de la lightbox (« carte de zoom out ») doit avoir un fond
+transparent, et non plus le fond blanc d'origine.
+
+Ce qui a changé (tout est dans assets/nutri-zoom.css, donc appliqué aux
+12 pages d'un coup — aucune page HTML n'a été touchée) :
+
+1. .nzoom-card            background: #ffffff  →  var(--nz-card-bg) = transparent.
+                          L'ombre noire massive est remplacée par un simple
+                          liseré lumineux de 1px (rgba(255,255,255,.10)) qui
+                          délimite la carte sans la remplir.
+2. .nzoom-bar             #fafbf9 → transparent ; filet de séparation clair
+   .nzoom-footer          #ffffff → transparent (rgba(255,255,255,.16)).
+3. .nzoom-imgwrap         le dégradé crème (#faf7f2 → #f3ede4) est supprimé :
+                          l'image flotte directement sur le voile de la lightbox.
+4. .nzoom-img             background: #fff → transparent (une image avec des
+                          zones transparentes, ex. logo PNG, laisse maintenant
+                          voir le fond au lieu d'un blanc) ; ombre renforcée
+                          pour détacher le visuel du fond sombre.
+5. Lisibilité : le fond de la carte étant transparent, tout ce qui était écrit
+   en sombre sur blanc est passé en clair sur le voile rgba(3,18,11,.88) :
+      .nzoom-title   #061b13 → #f2f7f4 (+ léger text-shadow)
+      .nzoom-desc    #496355 → #c3d3ca
+      .nzoom-level   #496355 → #c3d3ca
+      .nzoom-hint    #8c9e94 → rgba(233,242,237,.55)
+      .nzoom-cat     #0f7a42 → #29cf70
+      .nzoom-badge   pastille verte translucide rgba(41,207,112,.14)
+6. Boutons (×, ↗, −, +, ⟳) : fond blanc → « verre » rgba(255,255,255,.10)
+   avec backdrop-filter: blur(6px) ; au survol, vert NUTRI #29cf70 sur
+   encre sombre #042414 (même code couleur que le bouton loupe des cartes).
+
+RÉGLAGE : la transparence est pilotée par UNE seule variable, posée sur
+.nzoom-modal (elle cascade sur toute la lightbox) :
+
+    --nz-card-bg: transparent;                    ← état actuel, 100 % transparent
+    --nz-card-bg: rgba(6, 27, 19, .45);           ← verre fumé sombre
+    --nz-card-bg: rgba(255, 255, 255, .06);       ← voile blanc très léger
+    --nz-card-bg: #ffffff;                        ← retour à l'ancien rendu
+
+Les autres variables du même bloc (--nz-glass, --nz-line, --nz-edge, --nz-ink,
+--nz-ink-soft, --nz-ink-dim, --nz-green) centralisent le thème « verre ».
+
+Le bouton loupe ⨁ affiché SUR les cartes (.nzoom-btn) reste volontairement
+blanc opaque : il doit rester visible sur n'importe quelle photo de carte.
+
+VÉRIFICATION : node tools/nutri-zoom-test.js → 12/12 pages PASS
+(détection des cartes, injection de la loupe, ouverture/fermeture de la
+lightbox, rétablissement du scroll).
