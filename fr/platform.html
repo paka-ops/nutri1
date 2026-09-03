@@ -725,6 +725,7 @@
             }
         }
         /* 1. Structure de la Grille (3 colonnes uniformes) */
+/* 1. Structure de la Grille (3 colonnes uniformes) */
 .cards-grid-v2 {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -734,33 +735,22 @@
   padding: 20px;
 }
 
-/* 2. La Carte globale - style amélioré */
+/* 2. La Carte globale */
 .modern-card {
   background: #ffffff;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  padding: 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  position: relative;
-  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
-.modern-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 4px;
-  height: 100%;
-  background: var(--g);
-  border-radius: 22px 0 0 22px;
-}
+
 .modern-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
-  border-color: var(--g);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
 }
 
 /* 3. Conteneur Image : Verrouillage strict du ratio paysage (16:9) */
@@ -814,6 +804,7 @@
   color: #64748b;
   line-height: 1.5;
 }
+
 
 /* Adaptabilité aux écrans moyens et mobiles */
 @media (max-width: 992px) {
@@ -971,7 +962,6 @@
                             alt="Nutrition clinique futuriste — nutritionniste analysant un tableau de bord holographique du patient"
                             loading="lazy"></div>
                     <div class="expert-body">
-                        <div class="ico">CL</div>
                         <h3>Nutrition clinique</h3>
                         <p>Spécialisation professionnelle et suivi des patients.</p>
                     </div>
@@ -981,7 +971,6 @@
                             alt="Consultation futuriste en nutrition maternelle et infantile avec suivi holographique de croissance"
                             loading="lazy"></div>
                     <div class="expert-body">
-                        <div class="ico">MC</div>
                         <h3>Nutrition maternelle & infantile</h3>
                         <p>Nutrition pendant la grossesse, l'allaitement et l'enfance.</p>
                     </div>
@@ -991,7 +980,6 @@
                             alt="Nutrition orientée pathologies futuriste — hologrammes de cœur, reins et glucose"
                             loading="lazy"></div>
                     <div class="expert-body">
-                        <div class="ico">NCD</div>
                         <h3>Nutrition orientée pathologies</h3>
                         <p>Spécialités diabète, rénale, cardiovasculaire et nutrition générale.</p>
                     </div>
