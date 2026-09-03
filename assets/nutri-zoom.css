@@ -1,0 +1,356 @@
+/* =============================================================
+   nutri-zoom.css
+   Zoom / lightbox universel pour TOUTES les cartes du site.
+   (même rendu que la lightbox "Six assets build the moat" de
+    intelligence.html, mais partagé par les 12 pages HTML)
+
+   Le bouton loupe est injecté par assets/nutri-zoom.js.
+   ============================================================= */
+
+/* Hôte du bouton loupe (posé par le JS uniquement quand l'élément
+   est en position:static et qu'aucun enfant absolu n'en dépend). */
+[data-nzoom-host] {
+    position: relative !important;
+}
+
+/* ---------- Bouton loupe sur la carte ---------- */
+.nzoom-btn {
+    /* !important obligatoire : nutri4k.css pose
+       `.n4k-cb-on > *:not(.n4k-cb):not(.n4k-thumb){position:relative}` —
+       plus spécifique que notre règle — sur toutes les cartes qui ont
+       une image de fond. Sans ça la loupe retomberait dans le flux. */
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
+    z-index: 5;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 1px solid #d9d2c4;
+    color: #061b13;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(11, 33, 23, 0.18);
+    opacity: .9;
+    transition: transform .25s cubic-bezier(.16, 1, .3, 1), background .25s ease, color .25s ease, border-color .25s ease, opacity .25s ease;
+}
+
+[data-nzoom-card]:hover>.nzoom-btn,
+[data-nzoom-card]:hover .nzoom-btn,
+.nzoom-btn:hover,
+.nzoom-btn:focus-visible {
+    opacity: 1;
+}
+
+.nzoom-btn:hover,
+.nzoom-btn:focus-visible {
+    background: #29cf70;
+    color: #042414;
+    border-color: #29cf70;
+    transform: scale(1.12);
+    outline: none;
+}
+
+.nzoom-btn svg {
+    width: 15px;
+    height: 15px;
+    display: block;
+    pointer-events: none;
+}
+
+/* Ne jamais gêner l'éditeur « Fond des cartes » (nutri4k) */
+html.n4k-cbmode .nzoom-btn,
+html.n4k-cbmode [data-nzoom-host] {
+    pointer-events: none !important;
+}
+
+html.n4k-cbmode .nzoom-btn {
+    display: none !important;
+}
+
+/* ---------- Lightbox ---------- */
+.nzoom-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(3, 18, 11, 0.88);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    display: none;
+    place-items: center;
+    padding: 24px;
+    opacity: 0;
+    transition: opacity .3s cubic-bezier(.16, 1, .3, 1);
+}
+
+.nzoom-modal.active {
+    display: grid;
+    opacity: 1;
+}
+
+.nzoom-card {
+    background: #ffffff;
+    border-radius: 24px;
+    max-width: 1040px;
+    width: 100%;
+    max-height: 92vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.12);
+    transform: scale(0.95);
+    transition: transform .35s cubic-bezier(.16, 1, .3, 1);
+}
+
+.nzoom-modal.active .nzoom-card {
+    transform: scale(1);
+}
+
+.nzoom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 14px 22px;
+    border-bottom: 1px solid #edf2ee;
+    background: #fafbf9;
+}
+
+.nzoom-bar-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+}
+
+.nzoom-badge {
+    background: #061b13;
+    color: #29cf70;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 99px;
+    border: 1px solid rgba(41, 207, 112, 0.3);
+    white-space: nowrap;
+}
+
+.nzoom-badge:empty {
+    display: none;
+}
+
+.nzoom-title {
+    font-size: 17px;
+    font-weight: 900;
+    color: #061b13;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.nzoom-bar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 0 0 auto;
+}
+
+.nzoom-open {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #dfe8e1;
+    background: #fff;
+    color: #496355;
+    text-decoration: none;
+    font-size: 15px;
+    line-height: 1;
+    transition: all .2s ease;
+}
+
+.nzoom-open:hover {
+    background: #061b13;
+    color: #fff;
+    border-color: #061b13;
+    transform: scale(1.06);
+}
+
+.nzoom-close {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1px solid #dfe8e1;
+    background: #ffffff;
+    color: #496355;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    font-size: 19px;
+    line-height: 1;
+    padding: 0;
+    transition: all .2s ease;
+}
+
+.nzoom-close:hover {
+    background: #061b13;
+    color: #ffffff;
+    border-color: #061b13;
+    transform: scale(1.06);
+}
+
+.nzoom-imgwrap {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    background: linear-gradient(180deg, #faf7f2 0%, #f3ede4 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    overscroll-behavior: contain;
+}
+
+.nzoom-imgwrap.zoomed {
+    cursor: grab;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: 0;
+}
+
+.nzoom-imgwrap.dragging {
+    cursor: grabbing;
+}
+
+.nzoom-img {
+    margin: auto;
+    max-width: 100%;
+    max-height: 68vh;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.09);
+    background: #fff;
+    transition: width .18s ease, height .18s ease;
+    -webkit-user-drag: none;
+    user-select: none;
+}
+
+.nzoom-imgwrap.zoomed .nzoom-img {
+    border-radius: 0;
+    box-shadow: none;
+    cursor: zoom-out;
+    transition: none;
+}
+
+.nzoom-imgwrap:not(.zoomed) .nzoom-img {
+    cursor: zoom-in;
+}
+
+.nzoom-footer {
+    padding: 14px 22px;
+    background: #ffffff;
+    border-top: 1px solid #edf2ee;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.nzoom-desc {
+    font-size: 13.5px;
+    color: #496355;
+    margin: 0;
+    font-weight: 550;
+    min-width: 0;
+}
+
+.nzoom-tools {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+}
+
+.nzoom-tool {
+    min-width: 28px;
+    height: 28px;
+    padding: 0 8px;
+    border-radius: 9px;
+    border: 1px solid #dfe8e1;
+    background: #fff;
+    color: #496355;
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: all .2s ease;
+}
+
+.nzoom-tool:hover {
+    background: #061b13;
+    color: #29cf70;
+    border-color: #061b13;
+}
+
+.nzoom-level {
+    font-size: 11px;
+    font-weight: 900;
+    color: #496355;
+    min-width: 46px;
+    text-align: center;
+    letter-spacing: .02em;
+}
+
+.nzoom-hint {
+    font-size: 11px;
+    color: #8c9e94;
+    letter-spacing: .02em;
+    white-space: nowrap;
+}
+
+.nzoom-cat {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: #0f7a42;
+}
+
+.nzoom-cat:empty {
+    display: none;
+}
+
+@media(max-width: 640px) {
+    .nzoom-modal {
+        padding: 12px;
+    }
+
+    .nzoom-card {
+        max-height: 96vh;
+    }
+
+    .nzoom-imgwrap {
+        padding: 12px;
+    }
+
+    .nzoom-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .nzoom-title {
+        white-space: normal;
+        font-size: 15px;
+    }
+}
