@@ -1,0 +1,77 @@
+NUTRI.N°1 — Zoom / lightbox sur TOUTES les cartes du site
+=========================================================
+Objet : généraliser à toutes les cartes de toutes les pages la fonction
+d'agrandissement (« zoom ») qui n'existait que sur les cartes de la section
+« Six assets build the moat / Six actifs construisent la barrière à l'entrée »
+de intelligence.html et fr/intelligence.html.
+
+Pages concernées (12)
+---------------------
+index.html  agribusiness.html  ecosystem.html  platform.html  team.html  intelligence.html
+fr/index.html  fr/agribusiness.html  fr/ecosystem.html  fr/platform.html  fr/team.html  fr/intelligence.html
+
+NOUVEAUX FICHIERS PARTAGÉS
+--------------------------
+- assets/nutri-zoom.css  → habillage du bouton loupe + de la lightbox
+                           (même rendu que l'ancienne lightbox « moat » :
+                           barre badge + titre, visuel centré, pied avec la
+                           description, fermeture ×).
+- assets/nutri-zoom.js   → moteur : détection des cartes, injection du bouton,
+                           ouverture/fermeture de la lightbox, zoom.
+- tools/nutri-zoom-test.js → test jsdom (12/12 pages) : vérifie qu'une carte est
+                           bien détectée, que le bouton est injecté dans le bon
+                           conteneur, que la lightbox s'ouvre/se ferme et que le
+                           scroll du body est bien rendu.
+
+Chaque page charge désormais, juste après les fichiers nutri4k :
+    <link rel="stylesheet" href="assets/nutri-zoom.css">
+    <script src="assets/nutri-zoom.js" defer></script>
+
+FONCTIONNEMENT
+--------------
+1. Au chargement, le script repère toutes les cartes du site :
+   .moat-item  .modern-card  .expert-card  .card  .box  .loopbox
+   .person  .v5-person  .p2f-card  .p2f-panel  .p2f-chain-card
+   .p2x-card  .p2x-chain-card  .v5-float  .ctaBox
+2. Une carte est « zoomable » dès qu'elle affiche une image :
+   - une balise <img> (ontologie, cartes Phase 1/Phase 2, experts, stakeholders,
+     gouvernement, boucle digitale, architecture, stack, chaîne du froid…),
+   - ou un fond de carte posé par l'éditeur « Fond des cartes » (nutri4k,
+     Maj+B) / par data-card-bg — y compris les photos ajoutées après coup
+     (un MutationObserver réanalyse la page).
+3. Un bouton loupe ⨁ est injecté en haut à droite du visuel de la carte
+   (dans .moat-item-media, .card-media, .expert-media, .stMedia, .govMedia,
+   .coldMedia, .lpMedia, .photo, .v5-photo… ou sur la carte elle-même).
+   Le conteneur reçoit position:relative uniquement s'il n'a aucun enfant
+   positionné en absolu — la mise en page d'origine n'est jamais modifiée.
+4. Toute la carte devient cliquable (role=button, tabindex=0, Entrée/Espace).
+   Les clics sur un lien ou un bouton restent inchangés ; une carte qui est un
+   lien (<a href>) garde sa navigation, seul le bouton loupe ouvre la lightbox.
+5. La lightbox affiche la MEILLEURE résolution disponible : le dernier candidat
+   du srcset, donc les masters « -4k » (stake-*-4k, gov-*-4k, loop-*-4k,
+   cold-*-4k…) quand ils existent, avec repli automatique sur la source
+   affichée si le fichier est absent.
+6. Zoom dans la lightbox : boutons − / + / ⟳, molette, double-clic sur l'image,
+   touches + / − / 0, et déplacement au glisser quand on est zoomé.
+7. Fermeture : bouton ×, clic sur le fond, touche ÉCHAP. Le scroll de la page
+   est bloqué à l'ouverture puis rétabli, le focus retourne à la carte.
+8. Compatibilité nutri4k : en mode « Fond des cartes » (Maj+B) le bouton loupe
+   est masqué et aucun clic n'est intercepté, pour ne pas gêner l'édition.
+
+NETTOYAGE DES PAGES INTELLIGENCE
+--------------------------------
+intelligence.html et fr/intelligence.html avaient leur lightbox en dur
+(marque #moat-modal, ~200 lignes de CSS .moat-modal-* et un script inline
+réservé aux .moat-item). Tout a été supprimé : ces deux pages utilisent
+maintenant le moteur partagé, comme les 10 autres. Le rendu est identique,
+et intelligence.html (EN) récupère au passage les boutons loupe que seule la
+version FR possédait dans son balisage.
+
+RECENSEMENT (vérifié par le test jsdom)
+---------------------------------------
+index.html 10 · agribusiness.html 27 · ecosystem.html 7 · platform.html 9 ·
+team.html 6 · intelligence.html 9
+fr/index.html 10 · fr/agribusiness.html 21 · fr/ecosystem.html 7 ·
+fr/platform.html 9 · fr/team.html 6 · fr/intelligence.html 9
+(les cartes « Équipe » sans photo ne reçoivent rien : il n'y a rien à agrandir ;
+elles deviennent zoomables dès qu'une photo est posée via « Fond des cartes »).
