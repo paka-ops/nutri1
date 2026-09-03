@@ -713,6 +713,7 @@
     </style>
     <link rel="stylesheet" href="../assets/nutri4k.css">
     <link rel="stylesheet" href="../assets/nutri-zoom.css">
+    <link rel="stylesheet" href="../assets/nutri-holomap.css">
     <link rel="preload" as="image" href="../assets/img/hero-ecosystem.jpg" fetchpriority="high">
 </head>
 
@@ -864,8 +865,8 @@
             </div>
         </div>
     </section>
-    <section class="section dark">
-        <div class="wrap">
+    <section class="section dark" id="trust">
+        <div class="wrap trustGrid">
             <div class="head">
                 <div class="kicker">La confiance dès la conception</div>
                 <h2>Accès basé sur les rôles et contrôle au niveau national.</h2>
@@ -873,6 +874,7 @@
                     minimisation des données, le chiffrement, les journaux d'audit, la pseudonymisation et l'isolation
                     des environnements.</p>
             </div>
+            <div class="holoMap" data-lang="fr" aria-hidden="false"></div>
         </div>
     </section>
     <footer>
@@ -897,6 +899,7 @@
     <script>const o = new IntersectionObserver(e => e.forEach(x => x.isIntersecting && (x.target.style.opacity = 1)), { threshold: .1 }); document.querySelectorAll(".card,.box,.person,.loopbox").forEach(x => { x.style.opacity = 0; x.style.transition = "opacity .7s,transform .7s"; o.observe(x) })</script>
     <script src="../assets/nutri4k.js" defer></script>
     <script src="../assets/nutri-zoom.js" defer></script>
+    <script src="../assets/nutri-holomap.js" defer></script>
 </body>
 
 </html>

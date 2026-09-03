@@ -1,0 +1,75 @@
+/* NUTRI.N°1 — Holographic Africa map (vector, 4K-crisp) ------------------------------------ */
+.trustGrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:56px;align-items:center}
+.trustGrid .head{margin-bottom:0;max-width:640px}
+.holoMap{position:relative;min-width:0}
+.hm-stage{position:relative;aspect-ratio:750/760;width:100%;max-width:720px;margin:0 auto;perspective:1400px}
+.hm-svg{position:relative;z-index:2;width:100%;height:100%;display:block;overflow:visible;
+  transform:rotateX(9deg);transform-origin:50% 100%;
+  filter:drop-shadow(0 0 14px rgba(77,255,166,.35)) drop-shadow(0 0 40px rgba(20,200,110,.18));
+  animation:hmFloat 9s ease-in-out infinite}
+.hm-base{position:absolute;left:8%;right:8%;bottom:-2%;height:20%;z-index:1;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 100%,rgba(77,255,166,.32),rgba(77,255,166,.08) 45%,transparent 72%);
+  filter:blur(6px)}
+.hm-base:after{content:"";position:absolute;inset:auto 0 22% 0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(160,255,205,.75),transparent);
+  box-shadow:0 0 18px rgba(77,255,166,.6)}
+@keyframes hmFloat{0%,100%{transform:rotateX(9deg) translateY(0)}50%{transform:rotateX(9deg) translateY(-8px)}}
+
+/* Scanline sweep over the continent */
+.hm-sweep{animation:hmSweep 6s linear infinite}
+@keyframes hmSweep{0%{transform:translateY(0)}100%{transform:translateY(920px)}}
+.hm-ghost{animation:hmGhost 5s ease-in-out infinite}
+@keyframes hmGhost{0%,100%{transform:translate(0,0);opacity:.35}50%{transform:translate(1.5px,-1.5px);opacity:.15}}
+
+/* Flows: drawn once when visible, then travelling packets + dash flow */
+.hm-track{fill:none;stroke:#4dffa6;stroke-opacity:.18;stroke-width:5;stroke-linecap:round;filter:url(#hmBlur)}
+.hm-line{fill:none;stroke:#b8ffd9;stroke-width:1.6;stroke-linecap:round;stroke-dasharray:900;stroke-dashoffset:900;filter:url(#hmSoft)}
+.is-live .hm-line{animation:hmDraw 1.6s cubic-bezier(.4,0,.2,1) forwards var(--d),hmDash 1.4s linear infinite calc(var(--d) + 1.6s)}
+@keyframes hmDraw{to{stroke-dashoffset:0}}
+@keyframes hmDash{from{stroke-dasharray:6 10;stroke-dashoffset:0}to{stroke-dasharray:6 10;stroke-dashoffset:-32}}
+.hm-packet{fill:#fff;filter:url(#hmNeon);opacity:0}
+.is-live .hm-packet{opacity:1;transition:opacity .4s calc(var(--d) + 1.4s)}
+.hm-packet2{fill:#7dffbd}
+
+/* Destination nodes */
+.hm-node{opacity:0}
+.is-live .hm-node{animation:hmPop .6s ease-out forwards calc(var(--d) + 1.5s)}
+@keyframes hmPop{from{opacity:0}to{opacity:1}}
+.hm-ring{fill:none;stroke:#7dffbd;stroke-width:1.2;transform-box:fill-box;transform-origin:center}
+.is-live .hm-ring{animation:hmRing 2.4s ease-out infinite calc(var(--d) + 1.6s)}
+.is-live .hm-ring2{animation-delay:calc(var(--d) + 2.8s)}
+@keyframes hmRing{0%{transform:scale(1);opacity:.9}100%{transform:scale(4.2);opacity:0}}
+
+/* Hub (Togo) */
+.hm-pulse{fill:none;stroke:#b8ffd9;stroke-width:1.4;transform-box:fill-box;transform-origin:center;animation:hmPulse 3s ease-out infinite}
+.hm-pulse2{animation-delay:1s}.hm-pulse3{animation-delay:2s}
+@keyframes hmPulse{0%{transform:scale(1);opacity:1}100%{transform:scale(5);opacity:0}}
+.hm-reticle{transform-box:fill-box;transform-origin:center;animation:hmSpin 14s linear infinite}
+@keyframes hmSpin{to{transform:rotate(360deg)}}
+
+/* Typography inside SVG */
+.hm-label,.hm-hubLabel,.hm-status{font-family:inherit;font-weight:900;letter-spacing:.14em;fill:#d9ffe9;paint-order:stroke;stroke:#03140b;stroke-width:3px;stroke-linejoin:round}
+.hm-label{font-size:9.5px;opacity:0}
+.is-live .hm-label{animation:hmPop .5s ease-out forwards 2.2s}
+.hm-hubLabel{font-size:10.5px;fill:#fff}
+.hm-status{font-size:9px;fill:#7dffbd;letter-spacing:.2em;animation:hmBlink 2.2s steps(2) infinite}
+@keyframes hmBlink{50%{opacity:.55}}
+.hm-hud{opacity:.8}
+
+/* Legend under the map */
+.hm-legend{display:flex;flex-wrap:wrap;gap:10px 22px;justify-content:center;margin-top:14px;font-size:11px;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;color:#9eb5aa}
+.hm-legend span{display:inline-flex;align-items:center;gap:8px}
+.hm-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;border:1.5px solid #7dffbd;box-shadow:0 0 10px rgba(125,255,189,.7)}
+.hm-legend i.hm-lg-line{width:26px;height:0;border-radius:0;border:0;border-top:2px dashed #b8ffd9}
+
+/* Responsive */
+@media(max-width:1000px){.trustGrid{grid-template-columns:1fr;gap:34px}.hm-stage{max-width:560px}}
+@media(max-width:600px){.hm-svg{transform:none;animation:none}.hm-base{display:none}}
+
+/* Accessibility */
+@media(prefers-reduced-motion:reduce){
+  .hm-svg,.hm-sweep,.hm-ghost,.hm-pulse,.hm-reticle,.hm-status,.is-live .hm-ring{animation:none!important}
+  .hm-line{stroke-dashoffset:0;animation:none!important}
+  .hm-node,.hm-label,.hm-packet{opacity:1!important;animation:none!important}
+}
