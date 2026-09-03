@@ -159,7 +159,7 @@
       var scan = mk('div', 'n4k-scan', body); scan.setAttribute('aria-hidden', 'true'); mk('i', '', scan);
       var wipe = mk('div', '', body); wipe.id = 'n4k-wipe'; wipe.setAttribute('aria-hidden', 'true'); mk('i', '', wipe);
       html.classList.add('n4k-boot');
-      setTimeout(function () { html.classList.remove('n4k-boot'); }, 1750);
+      setTimeout(function () { html.classList.remove('n4k-boot'); }, 700);
     }
   });
 
@@ -289,7 +289,7 @@
         if (node.matches('.p2f-chain-card,.p2x-chain-card')) { node.classList.add('n4k-band'); t.classList.add('n4k-thumb--band'); }
         t.setAttribute('aria-hidden', 'true');
         var im = mk('img', '', t); im.src = file(f); im.alt = ''; im.loading = 'lazy'; im.decoding = 'async';
-        t.style.setProperty('--n4k-rvd', (160 + i * 40) + 'ms');
+        t.style.setProperty('--n4k-rvd', (Math.min(i, 9) * 10) + 'ms');
       });
     });
   });
@@ -376,21 +376,24 @@
        Those blocks get one calm, coherent fade-up instead. */
     each($$('.ctaBox .kicker,.ctaBox h2,.ctaBox p,.ctaBox .btn'), function (n, i) {
       n.classList.add('n4k-soft');
-      reveal(n, 60 + i * 90);
+      reveal(n, 16 + i * 34);
     });
     each($$('section.hero h1,section.p2f-hero h1,section.v5-hero h1,.head h2,.v5-head h2,.p2f-head h2,.p2x-head h2,.cloud h2,.ctaBox h2,.head p,.v5-head p,.p2f-head p,.ctaBox p,.loopbox h3,.box h3,.p2f-panel h3,.p2f-chain-card strong'), function (h) {
       if ((h.textContent || '').trim().length > 320) return;
-      if (h.classList.contains('n4k-soft') || clipsText(h)) { reveal(h, 40); return; }
-      words(h); reveal(h, 40);
+      if (h.classList.contains('n4k-soft') || clipsText(h)) { reveal(h, 16); return; }
+      words(h); reveal(h, 16);
     });
     each($$('.head,.v5-head,.p2f-head,.p2x-head'), function (n) { reveal(n, 0); });
-    /* stagger the children of every group */
+    /* stagger the children of every group, strictly following the DOM order of
+       the section (a picture comes before the copy it illustrates in the HTML,
+       so revealing rows top-to-bottom keeps that same image → background-image →
+       text sequence readable). Delays are short so a full row settles quickly. */
     each($$('.grid,.p2f-cards,.teamGrid,.v5-team,.arch,.loop,.p2f-chain,.p2f-loop,.p2f-feature,.p2f-icons,.p2x-cards,.cloud,.flow,.p2x-loop,.v5-flow'), function (g) {
       each($$('.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-icon,.p2f-chain-card,.p2x-card,.node', g), function (t, i) {
-        reveal(t, Math.min(i, 9) * 76);
+        reveal(t, Math.min(i, 9) * 26);
       });
     });
-    each($$('.p2f-note,.ctaBox,.cloudVisual,.p2f-visual,.art,.v5-demo,.v4-demo,.v4-map'), function (n, i) { reveal(n, Math.min(i, 5) * 55); });
+    each($$('.p2f-note,.ctaBox,.cloudVisual,.p2f-visual,.art,.v5-demo,.v4-demo,.v4-map'), function (n, i) { reveal(n, Math.min(i, 5) * 22); });
     if ('IntersectionObserver' in window) {
       var sio = new IntersectionObserver(function (es) {
         each(es, function (en) { en.target.classList.toggle('n4k-in-sec', en.isIntersecting); });
@@ -625,7 +628,7 @@
       }
       if (best !== cur) { cur = best; each(dots, function (d, i) { d.classList.toggle('on', i === cur); }); }
     });
-    setTimeout(function () { html.classList.add('n4k-lit'); }, 950);
+    setTimeout(function () { html.classList.add('n4k-lit'); }, 380);
   });
 
   mod('nav', function () {
@@ -1083,8 +1086,8 @@
         if (r.top < innerHeight * .96 && r.bottom > -20) { n.classList.add('n4k-in'); if (io) io.unobserve(n); }
       });
       SC.dirty = true;
-    }, 30);
-    setTimeout(function () { SC.dirty = true; each(WIRE, function (w) { w.layout(); }); }, 650);
+    }, 12);
+    setTimeout(function () { SC.dirty = true; each(WIRE, function (w) { w.layout(); }); }, 260);
     addEventListener('pageshow', function () { SC.dirty = true; html.classList.remove('n4k-leave'); });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
