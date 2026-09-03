@@ -1,0 +1,33 @@
+Correction des animations NUTRI.N°1 (4K Immersion)
+Fichiers modifiés : assets/nutri4k.js + assets/nutri4k.css
+(Fichiers FR et EN partagent ces deux assets — la correction s'applique partout.)
+
+1) Cohérence d'ordre des révélations (image → image de fond → texte)
+   - Le moteur de révélation au défilement (IntersectionObserver) déroule les
+     éléments par GROUPE dans l'ORDRE du DOM de la section : la photo d'une carte
+     (qui apparaît avant son texte dans le HTML) est révélée avant la copie,
+     cartes et rangées de haut en bas, sans télescopage ni fin qui traîne.
+   - Les mini-images décoratives (.n4k-thumb) apparaissent désormais en même
+     temps que leur carte au lieu de « surgir » 160–840 ms après le texte.
+   - Les calques d'images de fond (.n4k-cb) fondent rapidement (0,3 s) : l'image
+     est en place derrière la carte AVANT que le texte ne devienne lisible.
+   - Coupure de démarrage (scan "power-on"), barre de progression, filigranes et
+     schémas animés sont armés beaucoup plus tôt pour un rendu immédiat.
+
+2) Temps d'exécution réduits d'environ 60 % (×0,4)
+   Exemples (avant → après) :
+   - Apparition des blocs (.n4k-rv) :  0,95 s/1,05 s → 0,38 s/0,42 s
+   - Révélation mot à mot des titres : 0,82 s → 0,34 s ; décalage 28 ms → 11 ms
+     (plafond 420 ms → 170 ms)
+   - Décalage entre cartes d'une grille : 76 ms → 26 ms (toute une rangée
+     se stabilise ~2,5× plus vite)
+   - Images de fond des cartes : 0,9 s → 0,3 s ; images plein cadre : 1,8 s → 0,55 s
+   - Barre/relais & scan d'accueil : 950 ms → 380 ms ; 1750 ms → 700 ms
+   - Lignes/paquets des schémas (wires) : 2,2 s → 0,9 s
+   - Badges/icons (flip, shine, souligné) : 0,95–1,5 s → 0,4–0,6 s
+
+Conseil si le site reste « lent à AFFICHER les images » une fois hébergé :
+le moteur d'animation n'est alors plus en cause — ce sont les photos 4K.
+Optimiser leur poids (JPEG/WebP ~≤250–400 Ko), éviter la surcharge en 4K inutile
+sur mobile et précharger l'image du hero (fetchpriority="high", déjà en place)
+aura plus d'impact que tout réglage d'animation.
