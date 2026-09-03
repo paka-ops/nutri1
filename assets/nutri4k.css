@@ -39,7 +39,7 @@ html.n4k-boot .n4k-scan{opacity:1}
 .n4k-scan i{position:absolute;left:0;right:0;height:26vh;top:-30vh;
   background:linear-gradient(180deg,#29cf7000,#29cf7018 40%,#e5b85a12 62%,#29cf7000);
   filter:blur(6px)}
-html.n4k-boot .n4k-scan i{animation:n4k-scan 1.5s var(--n4k-e2) forwards}
+html.n4k-boot .n4k-scan i{animation:n4k-scan .6s var(--n4k-e2) forwards}
 @keyframes n4k-scan{0%{top:-30vh;opacity:1}70%{opacity:1}100%{top:110vh;opacity:0}}
 
 /* ---------- 2. scroll progress + section rail ---------- */
@@ -96,7 +96,7 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 
 /* ---------- 5. hero: photo plate, Ken Burns, depth ---------- */
 .hero,.p2f-hero,.p2x-hero,.v5-hero{isolation:isolate}
-.n4k-photo{position:absolute;inset:0;z-index:-1;overflow:hidden;opacity:0;transition:opacity 1.8s var(--n4k-e);
+.n4k-photo{position:absolute;inset:0;z-index:-1;overflow:hidden;opacity:0;transition:opacity .55s var(--n4k-e);
   transform:translate3d(0,calc(var(--n4k-syp,0) * 1px),0);will-change:transform}
 .n4k-photo-on .n4k-photo{opacity:var(--n4k-po,1)}
 .n4k-photo img{width:100%;height:115%;object-fit:cover;object-position:var(--n4k-pos,50% 45%);display:block;will-change:transform;backface-visibility:hidden;
@@ -105,7 +105,7 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .n4k-photo:before{content:"";position:absolute;inset:0;background:var(--n4k-sh,linear-gradient(180deg,#061b13e0,#061b13b8 42%,#03140ce8))}
 .n4k-photo:after{content:"";position:absolute;inset:0;mix-blend-mode:soft-light;
   background:radial-gradient(circle at 74% 22%,#29cf703d,transparent 46%),radial-gradient(circle at 12% 88%,#e5b85a2e,transparent 42%)}
-.n4k-photo.n4k-photo--soft{opacity:0;transition:opacity 2.2s}
+.n4k-photo.n4k-photo--soft{opacity:0;transition:opacity .8s}
 /* hero : la couche est écrite directement dans le HTML avec un LQIP (miniature
    floutée en base64) — elle est donc peinte dès le tout premier rendu, sans
    attendre le JS ni le téléchargement de la photo plein format. Aucun fondu :
@@ -123,8 +123,8 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 @keyframes n4k-sweep{0%,70%{transform:translateX(-120%)}92%,100%{transform:translateX(120%)}}
 
 /* ---------- 6. reveal engine ---------- */
-.n4k-rv{opacity:0;transform:translate3d(0,var(--n4k-rvy,30px),0) scale(.985);
-  transition:opacity .95s var(--n4k-e),transform 1.05s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms);will-change:opacity,transform}
+.n4k-rv{opacity:0;transform:translate3d(0,var(--n4k-rvy,22px),0) scale(.99);
+  transition:opacity .38s var(--n4k-e),transform .42s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms);will-change:opacity,transform}
 .n4k-rv.n4k-in{opacity:1;transform:translate3d(0,0,0) scale(1)}
 .n4k-rv.n4k-in.n4k-tilt{transform:perspective(1150px) rotateX(var(--n4k-rx,0deg)) rotateY(var(--n4k-ry,0deg)) translate3d(0,var(--n4k-ty,0px),0) scale(var(--n4k-sc,1))}
 /* word mask reveal (characters are preserved 1:1)
@@ -136,14 +136,14 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
    looks like every letter is piled on a single point before spreading apart.
    A short, straight rise keeps each letter legible from the first frame.
    The stagger is capped so a long line never trails for seconds. */
-.n4k-w>i{display:inline-block;font-style:inherit;transform:translate3d(0,74%,0);opacity:0;
-  transition:transform .82s var(--n4k-e),opacity .5s ease;
-  transition-delay:calc(var(--w,0) * 28ms);transition-delay:min(calc(var(--w,0) * 28ms),420ms)}
+.n4k-w>i{display:inline-block;font-style:inherit;transform:translate3d(0,62%,0);opacity:0;
+  transition:transform .34s var(--n4k-e),opacity .22s ease;
+  transition-delay:calc(var(--w,0) * 11ms);transition-delay:min(calc(var(--w,0) * 11ms),170ms)}
 .n4k-in .n4k-w>i{transform:none;opacity:1}
 /* calm block reveal for gradient-clipped text (CTA headline & copy):
    no per-word split, no blur, no scale — just a short, smooth fade-up */
-.n4k-rv.n4k-soft{opacity:0;transform:translate3d(0,18px,0);
-  transition:opacity .8s var(--n4k-e),transform .9s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms);will-change:opacity,transform}
+.n4k-rv.n4k-soft{opacity:0;transform:translate3d(0,12px,0);
+  transition:opacity .32s var(--n4k-e),transform .36s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms);will-change:opacity,transform}
 .n4k-rv.n4k-soft.n4k-in{opacity:1;transform:none}
 .ctaBox .n4k-soft{backface-visibility:hidden}
 .ctaBox h2.n4k-soft{padding-bottom:.06em}
@@ -155,11 +155,11 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
   border-radius:50%;background:var(--n4k-g);box-shadow:0 0 0 0 #29cf7066;animation:n4k-beat 2.6s var(--n4k-e2) infinite}
 @keyframes n4k-beat{0%{box-shadow:0 0 0 0 #29cf7066}60%{box-shadow:0 0 0 9px #29cf7000}100%{box-shadow:0 0 0 0 #29cf7000}}
 .head h2:after,.v5-head h2:after,.p2f-head h2:after{content:"";display:block;height:2px;width:0;margin-top:.34em;border-radius:2px;
-  background:linear-gradient(90deg,#29cf70,#e5b85a);box-shadow:0 0 14px #29cf7080;transition:width 1.5s var(--n4k-e) .35s}
+  background:linear-gradient(90deg,#29cf70,#e5b85a);box-shadow:0 0 14px #29cf7080;transition:width .6s var(--n4k-e) .14s}
 .n4k-in h2:after{width:clamp(90px,16%,220px)}
 
 /* ---------- 7. cards: spotlight, glow border, lift ---------- */
-.n4k-card{position:relative;isolation:isolate;transition:opacity .95s var(--n4k-e),transform 1.05s var(--n4k-e),box-shadow .5s var(--n4k-e),border-color .5s}
+.n4k-card{position:relative;isolation:isolate;transition:opacity .38s var(--n4k-e),transform .42s var(--n4k-e),box-shadow .3s var(--n4k-e),border-color .3s}
 .n4k-card:before{content:"";position:absolute;inset:0;border-radius:inherit;z-index:0;pointer-events:none;opacity:0;
   background:radial-gradient(340px circle at var(--n4k-mx2,50%) var(--n4k-my2,50%),#29cf702b,transparent 62%);
   transition:opacity .5s}
@@ -172,7 +172,7 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .n4k-card:hover{box-shadow:0 30px 70px #03140c33}
 .dark .n4k-card:hover,.p2f-dark .n4k-card:hover,.v5-dark .n4k-card:hover{box-shadow:0 34px 80px #03140c73}
 .n4k-card > *{position:relative;z-index:1}
-.n4k-lite{position:relative;transition:transform .6s var(--n4k-e),box-shadow .55s var(--n4k-e),border-color .5s,background-color .5s,color .5s}
+.n4k-lite{position:relative;transition:transform .4s var(--n4k-e),box-shadow .4s var(--n4k-e),border-color .4s,background-color .4s,color .4s}
 .n4k-lite:hover{box-shadow:0 24px 56px #03140c4d}
 .node.n4k-lite:hover,.sat.n4k-lite:hover,.p2f-node.n4k-lite:hover{border-color:#29cf7055;background:#29cf7014}
 .n4k-lite.n4k-tilt{transform:perspective(1100px) rotateX(var(--n4k-rx,0deg)) rotateY(var(--n4k-ry,0deg)) translate3d(0,-5px,0) scale(1.015)}
@@ -180,7 +180,7 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .ico,.p2f-num,.p2x-num{position:relative;overflow:hidden;transition:transform .6s var(--n4k-e),box-shadow .6s,color .4s}
 .ico:after,.p2f-num:after,.p2x-num:after{content:"";position:absolute;inset:-40%;
   background:linear-gradient(115deg,transparent 42%,#ffffff70 50%,transparent 58%);transform:translateX(-140%)}
-.n4k-in .ico:after,.n4k-in .p2f-num:after,.n4k-card:hover .ico:after{animation:n4k-shine 1.5s var(--n4k-e2) .3s}
+.n4k-in .ico:after,.n4k-in .p2f-num:after,.n4k-card:hover .ico:after{animation:n4k-shine .6s var(--n4k-e2) .12s}
 @keyframes n4k-shine{0%{transform:translateX(-140%)}100%{transform:translateX(140%)}}
 .n4k-card:hover .ico,.n4k-card:hover .p2f-num{transform:translateY(-2px) rotate(-6deg) scale(1.06);box-shadow:0 12px 26px #29cf702e}
 /* chip sweep */
@@ -197,7 +197,7 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 /* ---------- 8. decorative thumbnails (fields + Togolese plates) ---------- */
 .n4k-thumb{position:absolute;top:14px;right:14px;width:62px;height:62px;border-radius:50%;overflow:hidden;z-index:2;
   pointer-events:none;box-shadow:0 12px 30px #03140c4d,0 0 0 1px #29cf7047,0 0 0 6px #29cf700f;
-  opacity:0;transform:scale(.6) rotate(-14deg);transition:opacity .8s var(--n4k-e),transform .9s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms)}
+  opacity:0;transform:scale(.72) rotate(-10deg);transition:opacity .32s var(--n4k-e),transform .36s var(--n4k-e);transition-delay:var(--n4k-rvd,0ms)}
 .n4k-in .n4k-thumb{opacity:1;transform:none}
 .p2f-chain-card.n4k-band .n4k-thumb,.n4k-in .n4k-band .n4k-thumb{opacity:1;transform:none;transition:filter .6s}
 .p2f-chain-card.n4k-band:hover .n4k-thumb{filter:brightness(1.16) saturate(1.1)}
@@ -220,11 +220,11 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .n4k-wired{position:relative;isolation:isolate}
 .n4k-wired .n4k-rv{transform:none!important;opacity:1}
 .n4k-wire{position:absolute;inset:0;width:100%;height:100%;z-index:-1;overflow:visible;pointer-events:none;
-  opacity:0;transition:opacity 1.2s var(--n4k-e)}
+  opacity:0;transition:opacity .5s var(--n4k-e)}
 .n4k-wired.n4k-wired-on .n4k-wire{opacity:1}
 .n4k-wire .n4k-line{fill:none;stroke:#29cf7045;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round;
   stroke-dasharray:var(--n4k-len,2000);stroke-dashoffset:var(--n4k-len,2000);
-  transition:stroke-dashoffset 2.2s var(--n4k-e)}
+  transition:stroke-dashoffset .9s var(--n4k-e)}
 .n4k-wired-on .n4k-line{stroke-dashoffset:0}
 .n4k-wire .n4k-line--glow{stroke:#29cf7022;stroke-width:5;filter:blur(3px)}
 .n4k-wire .n4k-pkt{fill:#9be766;filter:drop-shadow(0 0 7px #29cf70)}
@@ -267,7 +267,7 @@ html.n4k-curs-hot #n4k-cursor .r{transform:scale(1.75);border-color:#e5b85acc;ba
 .n4k-halo.h2{width:410px;height:410px;margin:-205px 0 0 -205px;animation-duration:26s;animation-direction:reverse;opacity:.4}
 .n4k-halo.h3{width:215px;height:215px;margin:-107px 0 0 -107px;animation-duration:9s;filter:blur(14px);opacity:.5}
 /* section ambient wash for light sections */
-.n4k-wash{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:0;transition:opacity 1.4s}
+.n4k-wash{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;opacity:0;transition:opacity .6s}
 .n4k-in-sec .n4k-wash{opacity:1}
 .n4k-wash b{position:absolute;border-radius:50%;filter:blur(70px);display:block}
 .n4k-wash b.b1{width:44vw;height:44vw;left:-8vw;top:-14vw;background:#29cf700f;animation:n4k-drift1 34s ease-in-out infinite alternate}
@@ -344,12 +344,12 @@ html.n4k-leave body{opacity:.15;transition:opacity .3s}
 @keyframes n4k-cue{0%{transform:translateY(0);opacity:0}22%{opacity:1}78%{transform:translateY(15px);opacity:0}100%{transform:translateY(0);opacity:0}}
 .n4k-hint.n4k-hide{opacity:0;transform:translateX(-50%) translateY(14px);pointer-events:none;transition:.5s}
 .ico,.p2f-num,.p2x-num{backface-visibility:hidden}
-.n4k-in .ico,.n4k-in .p2f-num,.n4k-in .p2x-num{animation:n4k-flip .95s var(--n4k-e)}
+.n4k-in .ico,.n4k-in .p2f-num,.n4k-in .p2x-num{animation:n4k-flip .4s var(--n4k-e)}
 @keyframes n4k-flip{0%{transform:perspective(600px) rotateX(-72deg) translateY(7px);opacity:.15}
   60%{transform:perspective(600px) rotateX(9deg);opacity:1}100%{transform:none;opacity:1}}
 .p2f-icon{overflow:hidden}
 .p2f-icon:after{content:"";position:absolute;left:10px;right:10px;bottom:8px;height:1px;transform:scaleX(0);transform-origin:left;
-  background:linear-gradient(90deg,#38e27e,#e5b85a00);transition:transform .8s var(--n4k-e) .1s}
+  background:linear-gradient(90deg,#38e27e,#e5b85a00);transition:transform .32s var(--n4k-e)}
 .n4k-in.p2f-icon:after,.n4k-in .p2f-icon:after{transform:scaleX(1)}
 .cloudVisual:hover .n4k-radar,.v4-map:hover .n4k-radar{animation-duration:3.4s}
 
@@ -395,7 +395,7 @@ html.n4k-leave body{opacity:.15;transition:opacity .3s}
   background-position:center;
   background-repeat:no-repeat;
   opacity:0;
-  transition:opacity .9s var(--n4k-e);
+  transition:opacity .3s var(--n4k-e);
   will-change:opacity;
 }
 .n4k-card > .n4k-cb{position:absolute;inset:0;z-index:0}
