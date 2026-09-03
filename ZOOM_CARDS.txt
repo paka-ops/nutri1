@@ -67,6 +67,22 @@ maintenant le moteur partagé, comme les 10 autres. Le rendu est identique,
 et intelligence.html (EN) récupère au passage les boutons loupe que seule la
 version FR possédait dans son balisage.
 
+CORRECTIFS APPORTÉS APRÈS PREMIER TEST NAVIGATEUR
+-------------------------------------------------
+1. Loupe morte sur fr/intelligence.html : les 6 boutons .moat-item-zoom
+   étaient déjà dans le balisage FR, mais le gestionnaire de clic de la carte
+   ignore les clics sur un <button> (pour ne pas casser les liens/boutons
+   internes) — la loupe ne faisait donc plus rien. Le moteur branche
+   maintenant tout bouton loupe déjà présent ; les 6 boutons codés en dur ont
+   été retirés du HTML FR (ainsi que leur CSS mort) pour que EN et FR soient
+   identiques et générés par le même moteur.
+2. Loupe qui retombait dans le flux : nutri4k.css contient
+   `.n4k-cb-on > *:not(.n4k-cb):not(.n4k-thumb){position:relative}`, plus
+   spécifique que `.nzoom-btn`. Sur toutes les cartes ayant une image de fond
+   (team, intelligence, p2f-panel, p2f-chain-card…) le bouton perdait son
+   positionnement absolu. La loupe est désormais en
+   `position:absolute; top:10px; right:10px` avec `!important`.
+
 RECENSEMENT (vérifié par le test jsdom)
 ---------------------------------------
 index.html 10 · agribusiness.html 27 · ecosystem.html 7 · platform.html 9 ·

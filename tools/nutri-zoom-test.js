@@ -91,6 +91,19 @@ function inline(file) {
 
     const badHost = [...btns].filter(b => !b.parentElement || b.parentElement.tagName === 'IMG').length;
 
+    if (process.argv.indexOf('--detail') !== -1) {
+      [...cards].forEach((c, i) => {
+        const b = c.querySelector('.nzoom-btn');
+        const h = b ? b.parentElement : null;
+        const t = (c.getAttribute('data-title') || (c.querySelector('h3') || {}).textContent || '').replace(/\s+/g, ' ').trim();
+        const im = c.querySelector('img[src]');
+        console.log('     ' + String(i + 1).padStart(2) + '. ' + t.slice(0, 46).padEnd(48) +
+          '| carte ' + ((c.className || '').split(' ')[0] || '?').padEnd(14) +
+          '| loupe dans ' + (h ? ((h.className || h.tagName) + '').split(' ')[0] : '-').padEnd(16) +
+          '| image ' + (im ? (im.getAttribute('srcset') || im.getAttribute('src')).split(' ')[0].split('/').pop() : '(fond nutri4k)'));
+      });
+    }
+
     var modal = d.getElementById('nzoom-modal');
     const ok = cards.length > 0 && btns.length > 0 && !!modal && !oldModal &&
       opened && opened.active && opened.closed && badHost === 0 && errs.length === 0;

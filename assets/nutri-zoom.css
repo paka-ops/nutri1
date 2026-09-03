@@ -15,9 +15,13 @@
 
 /* ---------- Bouton loupe sur la carte ---------- */
 .nzoom-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
+    /* !important obligatoire : nutri4k.css pose
+       `.n4k-cb-on > *:not(.n4k-cb):not(.n4k-thumb){position:relative}` —
+       plus spécifique que notre règle — sur toutes les cartes qui ont
+       une image de fond. Sans ça la loupe retomberait dans le flux. */
+    position: absolute !important;
+    top: 10px !important;
+    right: 10px !important;
     z-index: 5;
     width: 30px;
     height: 30px;

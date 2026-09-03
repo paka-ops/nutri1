@@ -409,21 +409,31 @@
         /* le bouton est en position:absolute -> il faut un repère */
         if (!isPositioned(host)) host.setAttribute('data-nzoom-host', '');
 
-        /* la carte possède déjà un bouton loupe (ex. fr/intelligence.html) */
-        if (!card.querySelector('.nzoom-btn, .moat-item-zoom')) {
+        /* la carte possède déjà un bouton loupe (ex. fr/intelligence.html) :
+           on le branche, sinon il resterait inerte (un clic sur un <button>
+           est ignoré par le gestionnaire de la carte). */
+        var preset = card.querySelectorAll('.nzoom-btn, .moat-item-zoom');
+        for (var k = 0; k < preset.length; k++) bindBtn(preset[k]);
+        if (!preset.length) {
             var btn = document.createElement('button');
             btn.type = 'button';
             btn.className = 'nzoom-btn';
             btn.title = T.zoom;
             btn.setAttribute('aria-label', (T.zoom + (meta(card).title ? ' — ' + meta(card).title : '')));
             btn.innerHTML = ICON_ZOOM;
-            btn.addEventListener('click', function (e) {
+            bindBtn(btn);
+            host.appendChild(btn);
+        }
+
+        function bindBtn(b) {
+            if (b.hasAttribute('data-nzoom-on')) return;
+            b.setAttribute('data-nzoom-on', '');
+            b.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 if (editMode()) return;
                 open(card);
             });
-            host.appendChild(btn);
         }
 
         var isLink = card.tagName === 'A' && card.getAttribute('href');
