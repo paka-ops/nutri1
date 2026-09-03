@@ -178,17 +178,17 @@
         }
 
         .ring {
-            width: 390px;
-            height: 390px;
+            width: 400px;
+            height: 400px;
             border-radius: 50%;
-            border: 1px solid #9be76630;
-            box-shadow: 0 0 0 55px #9be76608
+            border: 1px solid #9be76638;
+            box-shadow: 0 0 0 60px #9be76608, 0 0 90px #29cf701f
         }
 
         .core {
             position: absolute;
-            width: 250px;
-            height: 250px;
+            width: 236px;
+            height: 236px;
             border-radius: 50%;
             background: radial-gradient(circle, #a9ee88, #28c970 35%, #0b5b38 70%);
             display: grid;
@@ -197,8 +197,8 @@
         }
 
         .coreIn {
-            width: 155px;
-            height: 155px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             background: #eff8ef;
             color: #0a4329;
@@ -211,6 +211,47 @@
         .coreIn strong {
             font-size: 32px;
             display: block
+        }
+
+        /* ============ orbital hero art ============
+           the satellites revolve around the core on a fixed
+           orbit ring; each one counter-rotates so it stays upright */
+        .orbit {
+            position: absolute;
+            inset: 0;
+            animation: orbitSpin var(--orb-t, 64s) linear infinite
+        }
+
+        .orbit::before {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: calc(var(--orb-r, 200px) * 2 + 62px);
+            height: calc(var(--orb-r, 200px) * 2 + 62px);
+            margin: calc((var(--orb-r, 200px) + 31px) * -1) 0 0 calc((var(--orb-r, 200px) + 31px) * -1);
+            border-radius: 50%;
+            border: 1px dashed #9be76630
+        }
+
+        .orbit::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            margin: -4px 0 0 -4px;
+            border-radius: 50%;
+            background: #9be766;
+            box-shadow: 0 0 14px 4px #29cf7099;
+            transform: translateX(calc(var(--orb-r, 200px) + 31px))
+        }
+
+        @keyframes orbitSpin {
+            to {
+                transform: rotate(360deg)
+            }
         }
 
         .sat {
@@ -229,24 +270,42 @@
             font-size: 16px
         }
 
-        .s1 {
-            top: 8%;
-            left: 0
+        .hero .art .orbit .sat {
+            left: 50%;
+            top: 50%;
+            max-width: 158px;
+            padding: 11px;
+            font-size: 9px;
+            line-height: 1.3;
+            transform: translate(-50%, -50%) rotate(var(--a, 0deg)) translateX(var(--orb-r, 200px)) rotate(calc(var(--a, 0deg) * -1));
+            animation: orbitStay var(--orb-t, 64s) linear infinite
         }
 
-        .s2 {
-            top: 7%;
-            right: 0
+        .hero .art .orbit .sat b {
+            font-size: 13px;
+            line-height: 1.2
         }
 
-        .s3 {
-            bottom: 12%;
-            left: 3%
+        @keyframes orbitStay {
+            from {
+                transform: translate(-50%, -50%) rotate(var(--a, 0deg)) translateX(var(--orb-r, 200px)) rotate(calc(var(--a, 0deg) * -1))
+            }
+            to {
+                transform: translate(-50%, -50%) rotate(var(--a, 0deg)) translateX(var(--orb-r, 200px)) rotate(calc(var(--a, 0deg) * -1 - 360deg))
+            }
         }
 
-        .s4 {
-            bottom: 8%;
-            right: 1%
+        /* the JS-drawn wire spokes are static, so hide them inside the hero —
+           the CSS orbit (dashed ring + tracer dot) replaces them coherently */
+        .hero .art > .n4k-wire {
+            display: none
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .orbit,
+            .hero .art .orbit .sat {
+                animation: none
+            }
         }
 
         .light {
@@ -858,7 +917,33 @@
 
             .art {
                 order: -1;
-                height: 420px
+                height: 420px;
+                --orb-r: 170px
+            }
+
+            .ring {
+                width: 340px;
+                height: 340px
+            }
+
+            .core {
+                width: 200px;
+                height: 200px
+            }
+
+            .coreIn {
+                width: 128px;
+                height: 128px
+            }
+
+            .hero .art .orbit .sat {
+                max-width: 132px;
+                padding: 9px;
+                font-size: 8px
+            }
+
+            .hero .art .orbit .sat b {
+                font-size: 11px
             }
 
             .grid,
@@ -909,7 +994,8 @@
                 height: 135px
             }
 
-            .sat {
+            .sat,
+            .orbit {
                 display: none
             }
 
@@ -991,13 +1077,15 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous connectons e
                         <div><strong>N°1</strong>NUTRITION<br>INTELLIGENCE</div>
                     </div>
                 </div>
-                <div class="sat s1">DONNÉES<b>Base de connaissances alimentaire africaine</b></div>
-                <div class="sat s2">IA<b>Alimentation → Santé</b></div>
-                <div class="sat s3">PERSONNES<b>Citoyens + Professionnels</b></div>
-                <div class="sat s4">ACTION<b>Prévention + place de marché</b></div>
-                <div class="sat s5">Sciences<b>Scientifiques + chercheurs + specialistes</b></div>
-                <div class="sat s6">Gouvernements<b>Ministère de la santé + Ministère de l'agriculture</b></div>
-                <div class="sat s7">Institutions internationales<b>Organizations + programmes internationnaux</b></div>
+                <div class="orbit">
+                    <div class="sat s1" style="--a:0deg">DONNÉES<b>Base de connaissances alimentaire africaine</b></div>
+                    <div class="sat s2" style="--a:51.4deg">IA<b>Alimentation → Santé</b></div>
+                    <div class="sat s3" style="--a:102.9deg">PERSONNES<b>Citoyens + Professionnels</b></div>
+                    <div class="sat s4" style="--a:154.3deg">ACTION<b>Prévention + place de marché</b></div>
+                    <div class="sat s5" style="--a:205.7deg">Sciences<b>Scientifiques + chercheurs + specialistes</b></div>
+                    <div class="sat s6" style="--a:257.1deg">Gouvernements<b>Ministère de la santé + Ministère de l'agriculture</b></div>
+                    <div class="sat s7" style="--a:308.6deg">Institutions internationales<b>Organizations + programmes internationnaux</b></div>
+                </div>
             </div>
         </div>
     </section>
@@ -1030,6 +1118,7 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous connectons e
                 <div class="sat s4">ACTION<b>Prévention + place de marché</b></div>
             </div>
         </div>
+    </section>
     </section>
     <section class="section light">
         <div class="wrap">
