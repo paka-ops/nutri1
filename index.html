@@ -172,10 +172,20 @@
         }
 
         .art {
-            height: 500px;
+            height: 520px;
             position: relative;
             display: grid;
             place-items: center
+        }
+
+        .art::before {
+            content: "";
+            position: absolute;
+            width: 460px;
+            height: 460px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #29cf7026, transparent 62%);
+            pointer-events: none
         }
 
         .ring {
@@ -183,7 +193,19 @@
             height: 390px;
             border-radius: 50%;
             border: 1px solid #9be76630;
-            box-shadow: 0 0 0 55px #9be76608
+            box-shadow: 0 0 0 55px #9be76608;
+            position: relative
+        }
+
+        .ring::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0deg, #9be7663d 40deg, transparent 100deg, transparent 180deg, #b7e26e30 230deg, transparent 300deg);
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 2px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 calc(100% - 2px));
+            animation: ringSpin 24s linear infinite
         }
 
         .core {
@@ -191,22 +213,27 @@
             width: 250px;
             height: 250px;
             border-radius: 50%;
-            background: radial-gradient(circle, #a9ee88, #28c970 35%, #0b5b38 70%);
+            background: radial-gradient(circle, #b9f29a 0%, #33d973 38%, #0c5f3a 72%, #083b26 100%);
             display: grid;
             place-items: center;
-            box-shadow: 0 0 80px #29cf7040
+            box-shadow: 0 0 90px #29cf7055, inset 0 0 60px #ffffff33;
+            z-index: 2;
+            animation: corePulse 3.8s ease-in-out infinite
         }
 
         .coreIn {
-            width: 155px;
-            height: 155px;
+            width: 158px;
+            height: 158px;
             border-radius: 50%;
-            background: #eff8ef;
+            background: linear-gradient(160deg, #ffffff, #e7f5e7);
             color: #0a4329;
             display: grid;
             place-items: center;
             text-align: center;
-            font-weight: 950
+            font-weight: 950;
+            box-shadow: inset 0 0 22px #29cf7022;
+            position: relative;
+            z-index: 2
         }
 
         .coreIn strong {
@@ -215,13 +242,37 @@
         }
 
         .sat {
+            --r: 200px;
+            --off: 0deg;
+            --dur: 26s;
             position: absolute;
-            background: #fff;
+            top: 50%;
+            left: 50%;
+            z-index: 3;
+            background: linear-gradient(160deg, #ffffff, #f0f7ef);
             color: #163326;
-            padding: 13px;
+            padding: 13px 15px;
             border-radius: 16px;
-            box-shadow: 0 20px 55px #0005;
-            font-size: 10px
+            border: 1px solid #29cf7026;
+            box-shadow: 0 22px 55px #0006, 0 0 0 1px #00000008;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .02em;
+            transform: translate(-50%, -50%) rotate(calc(var(--a) + var(--off))) translateX(var(--r)) rotate(calc(-1 * (var(--a) + var(--off))));
+            animation: orbit var(--dur) linear infinite;
+            will-change: transform
+        }
+
+        .sat::after {
+            content: "";
+            position: absolute;
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #9be766, #29cf70);
+            box-shadow: 0 0 12px #29cf70;
+            top: -3px;
+            left: -3px
         }
 
         .sat b {
@@ -231,23 +282,53 @@
         }
 
         .s1 {
-            top: 8%;
-            left: 0
+            --off: 0deg;
+            --r: 158px
         }
 
         .s2 {
-            top: 7%;
-            right: 0
+            --off: 90deg;
+            --r: 205px;
+            --dur: 32s
         }
 
         .s3 {
-            bottom: 12%;
-            left: 3%
+            --off: 180deg;
+            --r: 158px;
+            --dur: 26s
         }
 
         .s4 {
-            bottom: 8%;
-            right: 1%
+            --off: 270deg;
+            --r: 205px;
+            --dur: 32s
+        }
+
+        @property --a {
+            syntax: "<angle>";
+            initial-value: 0deg;
+            inherits: false
+        }
+
+        @keyframes orbit {
+            from {
+                --a: 0deg
+            }
+            to {
+                --a: 360deg
+            }
+        }
+
+        @keyframes ringSpin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes corePulse {
+            50% {
+                box-shadow: 0 0 120px #29cf7066, inset 0 0 70px #ffffff2e
+            }
         }
 
         .light {
@@ -741,6 +822,12 @@
             .loopbox {
                 transition: none
             }
+
+            .sat,
+            .ring::before,
+            .core {
+                animation: none
+            }
         }
 
         .teamGrid {
@@ -857,7 +944,21 @@
 
             .art {
                 order: -1;
-                height: 420px
+                height: 430px
+            }
+
+            .art::before {
+                width: 360px;
+                height: 360px
+            }
+
+            .sat {
+                --r: 150px
+            }
+
+            .s2,
+            .s4 {
+                --r: 178px
             }
 
             .grid,
