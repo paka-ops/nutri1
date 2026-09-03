@@ -854,21 +854,33 @@ html[lang="fr"] .p2f-feature .cold[data-cold="solar"] .coldTag:after{content:"Ch
 @media (prefers-reduced-motion:reduce){.p2f-feature .cold .coldImg{transition:none;transform:none}}
 
 /* ============================================================
-   15b · stakeholder grid — 5 cards on 2 rows (3 + 2 centered)
+   15b · stakeholder grid — all 5 cards on ONE single row
    The "International Organisations" card joins the section; the
-   4-up row becomes a 3-up grid whose second row is centered.
+   five stakeholders now sit side by side in a 5-column row.
+   Responsive: 3 columns on small desktops, 2 on tablet, 1 on
+   mobile. Chips and body type are compacted so the theme labels
+   fit the narrower cards.
    ============================================================ */
 .grid .stake[data-stake="organizations"] .stNum:after{content:"05"}
 .grid .stake[data-stake="organizations"] .stTag:after{content:"International Organisations"}
 html[lang="fr"] .grid .stake[data-stake="organizations"] .stTag:after{content:"Organisations internationales"}
-#users .grid.grid4{grid-template-columns:repeat(6,1fr);align-items:stretch}
-#users .grid.grid4>*{grid-column:span 2}
-#users .grid.grid4>*:nth-child(4){grid-column:2/span 2}
+#users .grid.grid4{grid-template-columns:repeat(5,1fr);align-items:stretch;gap:14px}
+/* narrower cards → compact numeral / theme chips and body type */
+#users .grid.grid4 .stake .stNum{top:10px;left:10px;font-size:9px;letter-spacing:.14em;padding:5px 10px 5px 8px}
+#users .grid.grid4 .stake .stTag{left:10px;bottom:10px;max-width:calc(100% - 20px);
+  font-size:8px;letter-spacing:.03em;padding:6px 9px;border-radius:11px;line-height:1.3;
+  text-transform:none;font-weight:850;white-space:normal}
+#users .grid.grid4 .stake .stBody{padding:16px 16px 18px}
+#users .grid.grid4 .stake .stBody h3{font-size:16px}
+#users .grid.grid4 .stake .stBody .ico{width:38px;height:38px;margin-bottom:11px}
+#users .grid.grid4 .stake .stBody p{font-size:12px}
+@media(max-width:1100px){
+  #users .grid.grid4{grid-template-columns:repeat(3,1fr);gap:16px}
+}
 @media(max-width:900px){
-  #users .grid.grid4{grid-template-columns:repeat(4,1fr)}
-  #users .grid.grid4>*,#users .grid.grid4>*:nth-child(4){grid-column:span 2}
+  #users .grid.grid4{grid-template-columns:repeat(2,1fr);gap:16px}
+  #users .grid.grid4 .stake .stTag{font-size:10px;letter-spacing:.14em;padding:9px 14px;border-radius:999px}
 }
 @media(max-width:600px){
   #users .grid.grid4{grid-template-columns:1fr}
-  #users .grid.grid4>*,#users .grid.grid4>*:nth-child(4){grid-column:auto}
 }
