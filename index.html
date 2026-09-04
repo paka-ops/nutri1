@@ -1855,6 +1855,25 @@
     <link rel="stylesheet" href="assets/nutri4k.css"><link rel="stylesheet" href="assets/nutri-zoom.css">
     <link rel="stylesheet" href="assets/ceo-join.css">
     <link rel="preload" as="image" href="assets/img/hero-index.jpg" fetchpriority="high">
+
+    <style>/* FIX .ico supprimé — garde l'espace sans faire remonter le texte */
+    .ico{visibility:hidden!important;pointer-events:none!important}
+    .stkBody:not(:has(.ico))::before,
+    .tarcBody:not(:has(.ico))::before,
+    .stBody:not(:has(.ico))::before,
+    .govBody:not(:has(.ico))::before{
+      content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+    .grid .gov .govBody:not(:has(.ico))::before{margin-bottom:12px}
+    .grid .tarch .tarcBody:not(:has(.ico))::before{margin-bottom:12px}
+    #users .grid.grid4 .stake .stBody:not(:has(.ico))::before{width:38px;height:38px;margin-bottom:11px}
+    @supports not selector(:has(*)){
+      .stkBody::before,.tarcBody::before,.stBody::before,.govBody::before{
+        content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+      .grid .gov .govBody::before{margin-bottom:12px}
+      .grid .tarch .tarcBody::before{margin-bottom:12px}
+      #users .grid.grid4 .stake .stBody::before{width:38px;height:38px;margin-bottom:11px}
+    }
+    </style>
 </head>
 
 <body>
@@ -1951,7 +1970,6 @@ We start with digital nutrition intelligence. We then connect intelligence, dema
                         alt="Photorealistic view of an African food-intelligence operations centre: two African data engineers in front of a giant screen wall showing a luminous green data map of Africa, with real West African foods analysed on a laboratory bench"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">01</div>
                         <h3>African Food Cloud</h3>
                         <p>Food ontology, composition, recipes, consumption and country intelligence.</p>
                     </div>
@@ -1961,7 +1979,6 @@ We start with digital nutrition intelligence. We then connect intelligence, dema
                         alt="Photorealistic view of African nutrition scientists in a bright research institute exploring a large transparent display showing a glowing evidence graph linking foods, nutrients, biomarkers and health outcomes"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">02</div>
                         <h3>Evidence Graph</h3>
                         <p>Food → nutrients → diet → biomarkers → conditions → evidence → policy.</p>
                     </div>
@@ -1971,7 +1988,6 @@ We start with digital nutrition intelligence. We then connect intelligence, dema
                         alt="Photorealistic view of an African AI engineering team training a nutrition model: a plate of West African food recognised by computer vision on screen while a colleague photographs the real dish on a scanning rig"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">03</div>
                         <h3>African Nutrition AI</h3>
                         <p>Food AI, Health AI, Recommendation AI, personalization and action.</p>
                     </div>
@@ -1981,7 +1997,6 @@ We start with digital nutrition intelligence. We then connect intelligence, dema
                         alt="Photorealistic view of a modern African preventive-health suite: a nutritionist presenting a risk-score and nutrient-gap dashboard to a smiling couple, with fresh local ingredients on the table"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">04</div>
                         <h3>Prevention Engine</h3>
                         <p>Risk assessment, nutrition gaps, local food matching, meal optimization and follow-up.</p>
                     </div>
@@ -1991,7 +2006,6 @@ We start with digital nutrition intelligence. We then connect intelligence, dema
                         alt="Photorealistic view of an African nutritionist running a teleconsultation from a bright clinic, with a video-call grid of patients and colleagues and a glowing green map of connected practitioners across Africa"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">05</div>
                         <h3>Nutritionist Network</h3>
                         <p>Country and specialty discovery, appointments, teleconsultation and authorized follow-up.</p>
                     </div>
@@ -2001,7 +2015,6 @@ We start with digital nutrition intelligence. We then connect intelligence, dema
                         alt="Photorealistic view of a modern healthy-food marketplace in West Africa: a shopper scanning a local food product with her phone showing a green nutrition score, fresh produce shelves and an electric delivery bike outside"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">06</div>
                         <h3>Healthy Food Marketplace</h3>
                         <p>Recommendations connected to products, purchase, consumption and feedback.</p>
                     </div>

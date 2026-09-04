@@ -1108,6 +1108,25 @@
     <link rel="stylesheet" href="assets/nutri-zoom.css">
     <link rel="preload" as="image" href="assets/img/field-sunrise.jpg">
     <link rel="icon" type="image/png" href="./nutri-logo.png">
+
+    <style>/* FIX .ico supprimé — garde l'espace sans faire remonter le texte */
+    .ico{visibility:hidden!important;pointer-events:none!important}
+    .stkBody:not(:has(.ico))::before,
+    .tarcBody:not(:has(.ico))::before,
+    .stBody:not(:has(.ico))::before,
+    .govBody:not(:has(.ico))::before{
+      content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+    .grid .gov .govBody:not(:has(.ico))::before{margin-bottom:12px}
+    .grid .tarch .tarcBody:not(:has(.ico))::before{margin-bottom:12px}
+    #users .grid.grid4 .stake .stBody:not(:has(.ico))::before{width:38px;height:38px;margin-bottom:11px}
+    @supports not selector(:has(*)){
+      .stkBody::before,.tarcBody::before,.stBody::before,.govBody::before{
+        content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+      .grid .gov .govBody::before{margin-bottom:12px}
+      .grid .tarch .tarcBody::before{margin-bottom:12px}
+      #users .grid.grid4 .stake .stBody::before{width:38px;height:38px;margin-bottom:11px}
+    }
+    </style>
 </head>
 
 <body>
@@ -1254,7 +1273,6 @@
                             loading="lazy" decoding="async"><span class="tarcNum" aria-hidden="true"></span><span
                             class="tarcTag" aria-hidden="true"></span></figure>
                     <div class="tarcBody">
-                        <div class="ico">SCI</div>
                         <h3>Scientific</h3>
                         <p>Nutritionists, dietitians, food scientists, epidemiologists and researchers.</p>
                     </div>
@@ -1267,7 +1285,6 @@
                             loading="lazy" decoding="async"><span class="tarcNum" aria-hidden="true"></span><span
                             class="tarcTag" aria-hidden="true"></span></figure>
                     <div class="tarcBody">
-                        <div class="ico">ENG</div>
                         <h3>Engineering</h3>
                         <p>Backend, mobile, frontend, DevOps and QA.</p>
                     </div>
@@ -1280,7 +1297,6 @@
                             loading="lazy" decoding="async"><span class="tarcNum" aria-hidden="true"></span><span
                             class="tarcTag" aria-hidden="true"></span></figure>
                     <div class="tarcBody">
-                        <div class="ico">AI</div>
                         <h3>AI & Data</h3>
                         <p>ML engineers, data engineers, AI engineers and data scientists.</p>
                     </div>
@@ -1293,7 +1309,6 @@
                             loading="lazy" decoding="async"><span class="tarcNum" aria-hidden="true"></span><span
                             class="tarcTag" aria-hidden="true"></span></figure>
                     <div class="tarcBody">
-                        <div class="ico">PROD</div>
                         <h3>Product</h3>
                         <p>Product management, UX/UI and business analysis.</p>
                     </div>
@@ -1306,7 +1321,6 @@
                             loading="lazy" decoding="async"><span class="tarcNum" aria-hidden="true"></span><span
                             class="tarcTag" aria-hidden="true"></span></figure>
                     <div class="tarcBody">
-                        <div class="ico">GROW</div>
                         <h3>Business</h3>
                         <p>Partnerships, commercialization, marketing and regional growth.</p>
                     </div>

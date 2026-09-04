@@ -1042,6 +1042,25 @@
     <link rel="stylesheet" href="../assets/ceo-join.css">
     <link rel="preload" as="image" href="../assets/img/arch-phase1-intelligence.jpg?v=2">
     <link rel="preload" as="image" href="../assets/img/arch-phase2-agribusiness.jpg?v=4">
+
+    <style>/* FIX .ico supprimé — garde l'espace sans faire remonter le texte */
+    .ico{visibility:hidden!important;pointer-events:none!important}
+    .stkBody:not(:has(.ico))::before,
+    .tarcBody:not(:has(.ico))::before,
+    .stBody:not(:has(.ico))::before,
+    .govBody:not(:has(.ico))::before{
+      content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+    .grid .gov .govBody:not(:has(.ico))::before{margin-bottom:12px}
+    .grid .tarch .tarcBody:not(:has(.ico))::before{margin-bottom:12px}
+    #users .grid.grid4 .stake .stBody:not(:has(.ico))::before{width:38px;height:38px;margin-bottom:11px}
+    @supports not selector(:has(*)){
+      .stkBody::before,.tarcBody::before,.stBody::before,.govBody::before{
+        content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+      .grid .gov .govBody::before{margin-bottom:12px}
+      .grid .tarch .tarcBody::before{margin-bottom:12px}
+      #users .grid.grid4 .stake .stBody::before{width:38px;height:38px;margin-bottom:11px}
+    }
+    </style>
 </head>
 
 <body>
@@ -1142,7 +1161,6 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                         alt="Vue photoréaliste d'un centre d'intelligence alimentaire africain : deux ingénieurs de données africains devant un mur d'écrans affichant une carte de données verte lumineuse de l'Afrique, avec de vrais aliments ouest-africains analysés sur une paillasse"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">01</div>
                         <h3>Base de connaissances alimentaire africaine</h3>
                         <p>Ontologie alimentaire, composition nutritionnelle, recettes, consommation et intelligence par
                             pays.</p>
@@ -1153,7 +1171,6 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                         alt="Vue photoréaliste de chercheurs africains en nutrition, dans un institut de recherche lumineux, explorant un grand écran transparent où s'affiche un graphe de preuves reliant aliments, nutriments, biomarqueurs et santé"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">02</div>
                         <h3>Graphe des preuves</h3>
                         <p>Aliments → nutriments → alimentation → biomarqueurs → pathologies → preuves → politiques.
                         </p>
@@ -1164,7 +1181,6 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                         alt="Vue photoréaliste d'une équipe africaine d'ingénierie IA entraînant un modèle nutritionnel : une assiette ouest-africaine reconnue par vision par ordinateur à l'écran pendant qu'un collègue photographie le vrai plat sur un banc de numérisation"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">03</div>
                         <h3>IA nutritionnelle africaine</h3>
                         <p>IA alimentaire, IA santé, IA de recommandation, personnalisation et action.</p>
                     </div>
@@ -1174,7 +1190,6 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                         alt="Vue photoréaliste d'un espace africain moderne de santé préventive : une nutritionniste présente un tableau de bord de scores de risque et de carences à un couple souriant, avec des ingrédients locaux frais sur la table"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">04</div>
                         <h3>Moteur de prévention</h3>
                         <p>Évaluation des risques, carences nutritionnelles, association aux aliments locaux,
                             optimisation des repas et suivi.</p>
@@ -1185,7 +1200,6 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                         alt="Vue photoréaliste d'une nutritionniste africaine en téléconsultation depuis une clinique lumineuse, avec une grille d'appels vidéo de patients et de confrères et une carte verte lumineuse des praticiens connectés à travers l'Afrique"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">05</div>
                         <h3>Réseau de nutritionnistes</h3>
                         <p>Recherche par pays et spécialité, rendez-vous, téléconsultation et suivi autorisé.</p>
                     </div>
@@ -1195,7 +1209,6 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                         alt="Vue photoréaliste d'une place de marché d'aliments sains moderne en Afrique de l'Ouest : une cliente scanne un produit local avec son téléphone affichant un score nutritionnel vert, étals de produits frais et vélo de livraison électrique à l'extérieur"
                         loading="lazy" decoding="async">
                     <div class="stkBody">
-                        <div class="ico">06</div>
                         <h3>Place de marché d'aliments sains</h3>
                         <p>Recommandations connectées aux produits, à l'achat, à la consommation et au retour
                             d'expérience.</p>

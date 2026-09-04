@@ -943,3 +943,61 @@ html[lang="fr"] .grid .tarch[data-tarc="business"] .tarcTag:after{content:"Déve
 .grid .tarch .tarcBody h3{font-size:19px}
 .grid .tarch .tarcBody .ico{margin-bottom:12px}
 @media (prefers-reduced-motion:reduce){.grid .tarch .tarcImg{transition:none;transform:none}}
+
+/* ============================================================
+   19 · FIX .ico supprimé — garde l'espace sans faire remonter le texte
+   Tu supprimes la div <div class="ico">…</div> mais la card ne bouge pas :
+   - si un .ico existe encore → il reste dans le flux mais invisible
+   - si le .ico a été retiré du HTML → un ::before invisible de même
+     taille prend exactement sa place. Double-espace évité via :has().
+   À retirer simplement : supprime ce bloc et le texte remontera de 59 px.
+   ============================================================ */
+.ico{
+  visibility:hidden!important;
+  pointer-events:none!important;
+  /* garde width/height/margin existants → le texte ne remonte pas */
+}
+/* .ico retiré du HTML → on recrée un espace fantôme de 44×44 + margin */
+.stkBody:not(:has(.ico))::before,
+.tarcBody:not(:has(.ico))::before,
+.stBody:not(:has(.ico))::before,
+.govBody:not(:has(.ico))::before{
+  content:"";
+  display:block;
+  width:44px;
+  height:44px;
+  border-radius:13px;
+  margin-bottom:15px;
+  visibility:hidden;
+  pointer-events:none;
+}
+/* tailles spécifiques déjà définies pour gov / tarch / stake-compact */
+.grid .gov .govBody:not(:has(.ico))::before{margin-bottom:12px}
+.grid .tarch .tarcBody:not(:has(.ico))::before{margin-bottom:12px}
+#users .grid.grid4 .stake .stBody:not(:has(.ico))::before{width:38px;height:38px;margin-bottom:11px}
+/* cas général : toute card qui contenait un .ico (stack, tarch, gov, stake)
+   — fallback pour navigateurs sans :has() : le ::before agit même si :has
+   n'est pas compris, donc l'espace est toujours préservé après suppression */
+@supports not selector(:has(*)){
+  .stkBody::before,
+  .tarcBody::before,
+  .stBody::before,
+  .govBody::before{
+    content:"";
+    display:block;
+    width:44px;
+    height:44px;
+    border-radius:13px;
+    margin-bottom:15px;
+    visibility:hidden;
+    pointer-events:none;
+  }
+  .grid .gov .govBody::before{margin-bottom:12px}
+  .grid .tarch .tarcBody::before{margin-bottom:12px}
+  #users .grid.grid4 .stake .stBody::before{width:38px;height:38px;margin-bottom:11px}
+  /* si un .ico existe encore dans un navigateur sans :has, on cache le double */
+  .stkBody:has(.ico)::before,
+  .tarcBody:has(.ico)::before,
+  .stBody:has(.ico)::before,
+  .govBody:has(.ico)::before{display:none}
+}

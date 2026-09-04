@@ -1148,7 +1148,26 @@
     </style>
     <link rel="stylesheet" href="../assets/nutri4k.css"><link rel="stylesheet" href="../assets/nutri-zoom.css">
     
-<link rel="preload" as="image" href="../assets/img/hero-intelligence.jpg" fetchpriority="high"></head>
+<link rel="preload" as="image" href="../assets/img/hero-intelligence.jpg" fetchpriority="high">
+    <style>/* FIX .ico supprimé — garde l'espace sans faire remonter le texte */
+    .ico{visibility:hidden!important;pointer-events:none!important}
+    .stkBody:not(:has(.ico))::before,
+    .tarcBody:not(:has(.ico))::before,
+    .stBody:not(:has(.ico))::before,
+    .govBody:not(:has(.ico))::before{
+      content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+    .grid .gov .govBody:not(:has(.ico))::before{margin-bottom:12px}
+    .grid .tarch .tarcBody:not(:has(.ico))::before{margin-bottom:12px}
+    #users .grid.grid4 .stake .stBody:not(:has(.ico))::before{width:38px;height:38px;margin-bottom:11px}
+    @supports not selector(:has(*)){
+      .stkBody::before,.tarcBody::before,.stBody::before,.govBody::before{
+        content:"";display:block;width:44px;height:44px;border-radius:13px;margin-bottom:15px;visibility:hidden;pointer-events:none}
+      .grid .gov .govBody::before{margin-bottom:12px}
+      .grid .tarch .tarcBody::before{margin-bottom:12px}
+      #users .grid.grid4 .stake .stBody::before{width:38px;height:38px;margin-bottom:11px}
+    }
+    </style>
+</head>
 
 <body>
     <div class="nav">
@@ -1294,19 +1313,16 @@
             </div>
             <div class="grid">
                 <div class="card v4-reveal" data-card-bg="../assets/img/Phase1/Phase1/Fromafood/SpatialIntelligence.png">
-                    <div class="ico">RAG</div>
-                    <h3>Recherche de preuves scientifiques</h3>
+<h3>Recherche de preuves scientifiques</h3>
                     <p>La recherche de preuves scientifiques fait partie de l’architecture cible.</p>
                 </div>
                 <div class="card v4-reveal" data-card-bg="../assets/img/Phase1/Phase1/Fromafood/SpatialIntelligence.png">
-                    <div class="ico">GIS</div>
-                    <h3>Intelligence spatiale</h3>
+<h3>Intelligence spatiale</h3>
                     <p>La malnutrition, les maladies non transmissibles, la production alimentaire, la consommation et
                         la vulnérabilité peuvent être analysées selon leur répartition géographique.</p>
                 </div>
                 <div class="card v4-reveal" data-card-bg="../assets/img/Phase1/Phase1/Fromafood/CountryIntelligence.png">
-                    <div class="ico">🌍</div>
-                    <h3>Intelligence par pays</h3>
+<h3>Intelligence par pays</h3>
                     <p>Les aliments, les recettes, les langues, les monnaies, les moyens de paiement et les indicateurs
                         sont contextualisés pour chaque pays.</p>
                 </div>
