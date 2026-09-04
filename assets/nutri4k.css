@@ -943,3 +943,39 @@ html[lang="fr"] .grid .tarch[data-tarc="business"] .tarcTag:after{content:"Déve
 .grid .tarch .tarcBody h3{font-size:19px}
 .grid .tarch .tarcBody .ico{margin-bottom:12px}
 @media (prefers-reduced-motion:reduce){.grid .tarch .tarcImg{transition:none;transform:none}}
+
+/* ============================================================
+   19 · Invisible logo slot
+   Cards used to carry a 44×44 .ico badge (the green logo square)
+   above the title. Those divs are gone from the markup so they
+   no longer paint a badge. A CSS spacer keeps the exact same
+   vertical room (height + margin-bottom of the old .ico) so the
+   title and body copy stay where they were instead of sliding up.
+   Bodies use ::before (safe: .n4k-card:before lives on the card).
+   Intelligence evidence cards have no body wrapper, so the title
+   itself gets the reserved top margin — never ::before on .card,
+   which would collide with the hover spotlight.
+   ============================================================ */
+.stkBody::before,
+.tarcBody::before,
+.stBody::before,
+.govBody::before{
+  content:"";
+  display:block;
+  width:44px;
+  height:44px;
+  margin-bottom:15px;
+  pointer-events:none;
+  visibility:hidden;
+}
+.grid .tarch .tarcBody::before,
+.grid .gov .govBody::before{margin-bottom:12px}
+#users .grid.grid4 .stake .stBody::before{
+  width:38px;
+  height:38px;
+  margin-bottom:11px;
+}
+/* Evidence-graph cards on intelligence.html / fr/intelligence.html */
+.grid > .card.v4-reveal:not(.stackcard):not(.tarch):not(.stake):not(.gov):not(.expert-card) > h3:first-child{
+  margin-top:59px; /* 44px .ico height + 15px margin-bottom */
+}
