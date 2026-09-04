@@ -1,19 +1,19 @@
-/* NUTRI.N°1 — Join / Rejoindre : popup contact CTO */
+/* NUTRI.N°1 — Join / Rejoindre : popup contact CEO */
 (function () {
   'use strict';
 
-  var CTO = {
-    name: 'Essosolim Joël PAKA',
-    email: 'pakawess@gmail.com',
-    linkedin: 'https://www.linkedin.com/in/essosolim-joel-paka',
-    whatsapp: 'https://wa.me/228?text=' + encodeURIComponent('Bonjour Joel, je souhaite rejoindre NUTRI.N1.')
+  var CEO = {
+    name: 'Dr Essodolom PAKA',
+    email: 'essodolom.paka@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/essodolom-paka-1b95771b3',
+    whatsapp: 'https://wa.me/22890147862?text=' + encodeURIComponent('Bonjour Dr PAKA, je souhaite rejoindre NUTRI.N1.')
   };
 
   var FR = ((document.documentElement.lang || '') + '').toLowerCase().indexOf('fr') === 0;
   var copy = FR ? {
     kicker: 'Rejoindre l\'écosystème',
-    title: 'Parlons avec le CTO',
-    lead: '<b>' + CTO.name + '</b> — <span>CTO du projet</span>',
+    title: 'Parlons avec le CEO',
+    lead: '<b>' + CEO.name + '</b> — <span>CEO du projet</span>',
     mail: 'E-mail',
     linkedin: 'LinkedIn',
     whatsapp: 'WhatsApp',
@@ -21,8 +21,8 @@
     close: 'Fermer'
   } : {
     kicker: 'Join the ecosystem',
-    title: 'Talk with the CTO',
-    lead: '<b>' + CTO.name + '</b> — <span>Project CTO</span>',
+    title: 'Talk with the CEO',
+    lead: '<b>' + CEO.name + '</b> — <span>Project CEO</span>',
     mail: 'Email',
     linkedin: 'LinkedIn',
     whatsapp: 'WhatsApp',
@@ -41,24 +41,24 @@
   }
 
   var overlay = document.createElement('div');
-  overlay.className = 'cto-overlay';
-  overlay.id = 'cto-join';
+  overlay.className = 'ceo-overlay';
+  overlay.id = 'ceo-join';
   overlay.setAttribute('hidden', '');
   overlay.innerHTML =
-    '<div class="cto-modal" role="dialog" aria-modal="true" aria-labelledby="cto-join-title">' +
-      '<button class="cto-close" type="button" aria-label="' + copy.close + '">×</button>' +
-      '<div class="cto-kicker">' + copy.kicker + '</div>' +
-      '<h2 id="cto-join-title">' + copy.title + '</h2>' +
-      '<p class="cto-lead">' + copy.lead + '</p>' +
-      '<div class="cto-list">' +
-        '<a class="cto-item" href="mailto:' + CTO.email + '?subject=' + encodeURIComponent('NUTRI.N°1') + '">' +
-          '<span class="cto-ico">' + svgMail() + '</span>' +
-          '<span><small>' + copy.mail + '</small><strong>' + CTO.email + '</strong></span></a>' +
-        '<a class="cto-item in" href="' + CTO.linkedin + '" target="_blank" rel="noopener noreferrer">' +
-          '<span class="cto-ico">' + svgIn() + '</span>' +
+    '<div class="ceo-modal" role="dialog" aria-modal="true" aria-labelledby="ceo-join-title">' +
+      '<button class="ceo-close" type="button" aria-label="' + copy.close + '">×</button>' +
+      '<div class="ceo-kicker">' + copy.kicker + '</div>' +
+      '<h2 id="ceo-join-title">' + copy.title + '</h2>' +
+      '<p class="ceo-lead">' + copy.lead + '</p>' +
+      '<div class="ceo-list">' +
+        '<a class="ceo-item" href="mailto:' + CEO.email + '?subject=' + encodeURIComponent('NUTRI.N°1') + '">' +
+          '<span class="ceo-ico">' + svgMail() + '</span>' +
+          '<span><small>' + copy.mail + '</small><strong>' + CEO.email + '</strong></span></a>' +
+        '<a class="ceo-item in" href="' + CEO.linkedin + '" target="_blank" rel="noopener noreferrer">' +
+          '<span class="ceo-ico">' + svgIn() + '</span>' +
           '<span><small>' + copy.linkedin + '</small><strong>linkedin.com/in/essosolim-joel-paka</strong></span></a>' +
-        '<a class="cto-item wa" href="' + CTO.whatsapp + '" target="_blank" rel="noopener noreferrer">' +
-          '<span class="cto-ico">' + svgWa() + '</span>' +
+        '<a class="ceo-item wa" href="' + CEO.whatsapp + '" target="_blank" rel="noopener noreferrer">' +
+          '<span class="ceo-ico">' + svgWa() + '</span>' +
           '<span><small>' + copy.whatsapp + '</small><strong>' + copy.waValue + '</strong></span></a>' +
       '</div>' +
     '</div>';
@@ -77,14 +77,14 @@
     lastFocus = document.activeElement;
     overlay.removeAttribute('hidden');
     overlay.classList.add('is-open');
-    document.body.classList.add('cto-lock');
-    var closeBtn = overlay.querySelector('.cto-close');
+    document.body.classList.add('ceo-lock');
+    var closeBtn = overlay.querySeleceor('.ceo-close');
     if (closeBtn) closeBtn.focus();
   }
 
   function closeJoin() {
     overlay.classList.remove('is-open');
-    document.body.classList.remove('cto-lock');
+    document.body.classList.remove('ceo-lock');
     setTimeout(function () {
       if (!overlay.classList.contains('is-open')) overlay.setAttribute('hidden', '');
     }, 380);
@@ -94,7 +94,7 @@
   }
 
   document.addEventListener('click', function (e) {
-    var t = e.target && e.target.closest ? e.target.closest('.js-cto-join, a.btn.green[href*="#contact"]') : null;
+    var t = e.target && e.target.closest ? e.target.closest('.js-ceo-join, a.btn.green[href*="#contact"]') : null;
     if (!t) return;
     openJoin(e);
   }, true);
@@ -103,7 +103,7 @@
     if (e.target === overlay) closeJoin();
   });
   overlay.addEventListener('click', function (e) {
-    var b = e.target.closest ? e.target.closest('.cto-close') : null;
+    var b = e.target.closest ? e.target.closest('.ceo-close') : null;
     if (b) closeJoin();
   });
   document.addEventListener('keydown', function (e) {
