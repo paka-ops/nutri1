@@ -539,6 +539,63 @@
             color: var(--mut)
         }
 
+        .teambanner {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: linear-gradient(135deg, #fff7e3, #eef7ef);
+            border: 1px solid #e5b85a66;
+            border-left: 6px solid var(--gold);
+            border-radius: 18px;
+            padding: 17px 20px;
+            margin: 0 0 30px
+        }
+
+        .teambanner p {
+            margin: 0;
+            font-size: 14px;
+            color: #5a4413
+        }
+
+        .teambanner b {
+            color: #7a5a0d
+        }
+
+        .teamlabel {
+            white-space: nowrap;
+            background: var(--gold);
+            color: #3d2c05;
+            border-radius: 99px;
+            padding: 8px 12px;
+            font-size: 10px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .tools {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 11px
+        }
+
+        .tools span {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: .04em;
+            padding: 5px 9px;
+            border-radius: 99px;
+            background: #0b6038;
+            color: #fff
+        }
+
+        @media(max-width:600px) {
+            .teambanner {
+                align-items: flex-start
+            }
+        }
+
         .cta {
             padding: 90px 0;
             background: var(--cream)
@@ -725,17 +782,17 @@
             <img src="../assets/img/hero-team.jpg" alt="" fetchpriority="high" decoding="async"></div>
         <div class="wrap heroGrid">
             <div>
-                <div class="eyebrow">ÉQUIPE • ScientifiqueENCE • TECHNOLOGIE • AFRIQUE</div>
+                <div class="eyebrow">ÉQUIPE • SCIENCE • TECHNOLOGIE • AFRIQUE</div>
                 <h1>Les personnes qui construisent <b>NUTRI.N°1.</b></h1>
-                <p>Cette page est prête à accueillir la photo professionnelle, la biographie, l'expérience, les
-                    diplômes, les réalisations et la fonction de chaque membre de l'équipe.</p>
+                <p>Une équipe pluridisciplinaire qui allie expertise scientifique en nutrition, technologies, IA &amp;
+                    données, finance, relations internationales et connaissance du marché africain.</p>
                 <div class="actions"><a class="btn green" href="#team">Découvrir l'équipe</a><a class="btn outline"
                         href="index.html#contact">Travailler avec nous</a></div>
             </div>
             <div class="art">
                 <div class="core">
                     <div class="coreIn">
-                        <div><strong>ÉQUIPE</strong>ScientifiqueENCE<br>× TECHNOLOGIE</div>
+                        <div><strong>ÉQUIPE</strong>SCIENCE<br>× TECHNOLOGIE</div>
                     </div>
                 </div>
             </div>
@@ -744,69 +801,85 @@
     <section class="section light" id="team">
         <div class="wrap">
             <div class="head">
-                <div class="kicker">Annuaire de l'équipe</div>
-                <h2>Une page équipe professionnelle, prête pour vos contenus.</h2>
-                <p>Les photos et expériences peuvent être ajoutées sans modifier le design.</p>
+                <div class="kicker">Équipe NUTRI.N°1</div>
+                <h2>Expertise scientifique + Connaissance du marché africain + Exécution.</h2>
+                <p>Une équipe fondatrice et technique, au service d'une infrastructure alimentaire et nutritionnelle
+                    panafricaine.</p>
+            </div>
+            <div class="teambanner">
+                <span class="teamlabel">À noter</span>
+                <p>Cette équipe sera <b>renforcée par l'assistance d'experts de différents domaines</b>, ainsi que par
+                    <b>l'acquisition des compétences adéquates</b> pour la réalisation du projet.</p>
             </div>
             <div class="teamGrid">
                 <div class="person">
-                    <div class="photo">PHOTO</div>
+                    <div class="photo">EP</div>
                     <div class="bio">
                         <div class="kicker">Direction</div>
-                        <h3>Membre de l'équipe 01</h3>
-                        <p><b>Directeur général / Fondateur</b><br>Biographie professionnelle, parcours scientifique,
-                            expérience de direction et vision.</p><span class="chip"
-                            style="color:#0a6b3d;background:#edf6ef;border:0">Ajouter photo + expérience</span>
+                        <h3>Dr. Essodolom PAKA</h3>
+                        <p><b>Fondateur & CEO</b><br>Chargé de recherche, expert en nutrition, sciences alimentaires
+                            et agro-innovation. 12+ années d'expérience professionnelle.</p>
                     </div>
                 </div>
                 <div class="person">
-                    <div class="photo">PHOTO</div>
+                    <div class="photo">TP</div>
+                    <div class="bio">
+                        <div class="kicker">Finance</div>
+                        <h3>M. Toï PAKA</h3>
+                        <p><b>Co-fondateur & Directeur Comptabilité et Finances</b><br>16+ années d'expérience
+                            professionnelle en stratégie financière, planification et supervision des
+                            investissements.</p>
+                    </div>
+                </div>
+                <div class="person">
+                    <div class="photo">LC</div>
+                    <div class="bio">
+                        <div class="kicker">International</div>
+                        <h3>M. Laurent CAMARA</h3>
+                        <p><b>Directeur des Relations Internationales & Marketing</b><br>20+ années d'expérience
+                            professionnelle en relations internationales, partenariats et marketing.</p>
+                    </div>
+                </div>
+                <div class="person">
+                    <div class="photo">JP</div>
                     <div class="bio">
                         <div class="kicker">Technologie</div>
-                        <h3>Membre de l'équipe 02</h3>
-                        <p><b>Directeur technique / Responsable de la technologie</b><br>Architecture logicielle,
-                            infrastructure de données, cybersécurité et ingénierie de plateforme.</p><span class="chip"
-                            style="color:#0a6b3d;background:#edf6ef;border:0">Ajouter photo + expérience</span>
+                        <h3>M. PAKA Essosolim Joel</h3>
+                        <p><b>CTO du projet & Développeur Backend</b><br>Développeur backend Java / Spring Boot avec 3
+                            ans d'expérience. Environnements : Git, Linux, Docker.</p>
+                        <div class="tools"><span>Java</span><span>Spring Boot</span><span>Git</span><span>Linux</span><span>Docker</span></div>
                     </div>
                 </div>
                 <div class="person">
-                    <div class="photo">PHOTO</div>
+                    <div class="photo">KM</div>
+                    <div class="bio">
+                        <div class="kicker">Technologie</div>
+                        <h3>M. Koffi Jeremie MASSEDE</h3>
+                        <p><b>Développeur Full-Stack</b><br>Formation en génie informatique, 2 ans d'expérience en
+                            développement web. Spécialisé en PHP, Laravel, Vue.js, JavaScript, HTML, CSS, MySQL et
+                            WordPress.</p>
+                        <div class="tools"><span>PHP</span><span>Laravel</span><span>Vue.js</span><span>MySQL</span><span>WordPress</span></div>
+                    </div>
+                </div>
+                <div class="person">
+                    <div class="photo">CA</div>
+                    <div class="bio">
+                        <div class="kicker">Technologie</div>
+                        <h3>Mme Charlotte Essowe AWILON</h3>
+                        <p><b>Développeuse Full-Stack</b><br>Formation en génie informatique, 2 ans d'expérience en
+                            développement web. Spécialisée en PHP, Laravel, Vue.js, JavaScript, HTML, CSS, MySQL et
+                            WordPress.</p>
+                        <div class="tools"><span>PHP</span><span>Laravel</span><span>Vue.js</span><span>MySQL</span><span>WordPress</span></div>
+                    </div>
+                </div>
+                <div class="person">
+                    <div class="photo">KK</div>
                     <div class="bio">
                         <div class="kicker">IA & Données</div>
-                        <h3>Membre de l'équipe 03</h3>
-                        <p><b>Responsable IA et données</b><br>Apprentissage automatique, vision par ordinateur,
-                            ingénierie des données et produits IA.</p><span class="chip"
-                            style="color:#0a6b3d;background:#edf6ef;border:0">Ajouter photo + expérience</span>
-                    </div>
-                </div>
-                <div class="person">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Scientifique</div>
-                        <h3>Membre de l'équipe 04</h3>
-                        <p><b>Responsable nutrition et recherche scientifique</b><br>Science de la nutrition,
-                            composition des aliments, preuves et validation scientifique.</p><span class="chip"
-                            style="color:#0a6b3d;background:#edf6ef;border:0">Ajouter photo + expérience</span>
-                    </div>
-                </div>
-                <div class="person">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Produit</div>
-                        <h3>Membre de l'équipe 05</h3>
-                        <p><b>Responsable produit et expérience utilisateur</b><br>Stratégie produit, UX/UI, recherche
-                            et expérience en santé numérique.</p><span class="chip"
-                            style="color:#0a6b3d;background:#edf6ef;border:0">Ajouter photo + expérience</span>
-                    </div>
-                </div>
-                <div class="person">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Croissance</div>
-                        <h3>Membre de l'équipe 06</h3>
-                        <p><b>Responsable développement commercial et partenariats</b><br>Développement de marché,
-                            relations institutionnelles et expansion régionale.</p><span class="chip"
-                            style="color:#0a6b3d;background:#edf6ef;border:0">Ajouter photo + expérience</span>
+                        <h3>M. Kodjo KPAGNATE</h3>
+                        <p><b>Développeur IA & Big Data</b><br>2 ans d'expérience en Python, SQL, Java, IA &amp; Machine
+                            Learning (TensorFlow, PyTorch), analyse de données, NLP et CNN.</p>
+                        <div class="tools"><span>Python</span><span>TensorFlow</span><span>PyTorch</span><span>SQL</span><span>NLP</span></div>
                     </div>
                 </div>
             </div>

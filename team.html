@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -1027,6 +1027,63 @@
             color: #6b7c73
         }
 
+        .teambanner {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            background: linear-gradient(135deg, #fff7e3, #eef7ef);
+            border: 1px solid #e5b85a66;
+            border-left: 6px solid #e5b85a;
+            border-radius: 18px;
+            padding: 17px 20px;
+            margin: 0 0 30px
+        }
+
+        .teambanner p {
+            margin: 0;
+            font-size: 14px;
+            color: #5a4413
+        }
+
+        .teambanner b {
+            color: #7a5a0d
+        }
+
+        .teamlabel {
+            white-space: nowrap;
+            background: #e5b85a;
+            color: #3d2c05;
+            border-radius: 99px;
+            padding: 8px 12px;
+            font-size: 10px;
+            font-weight: 950;
+            text-transform: uppercase;
+            letter-spacing: .08em
+        }
+
+        .tools {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            margin-top: 11px
+        }
+
+        .tools span {
+            font-size: 9px;
+            font-weight: 900;
+            letter-spacing: .04em;
+            padding: 5px 9px;
+            border-radius: 99px;
+            background: #0b6038;
+            color: #fff
+        }
+
+        @media(max-width:600px) {
+            .teambanner {
+                align-items: flex-start
+            }
+        }
+
         @media(max-width:980px) {
             .teamGrid {
                 grid-template-columns: 1fr 1fr
@@ -1062,17 +1119,17 @@
             <img src="../assets/img/hero-team.jpg" alt="" fetchpriority="high" decoding="async"></div>
         <div class="wrap heroGrid">
             <div>
-                <div class="eyebrow">ÉQUIPE • ScientifiqueENCE • TECHNOLOGIE • AFRIQUE</div>
+                <div class="eyebrow">TEAM • SCIENCE • TECHNOLOGY • AFRICA</div>
                 <h1>Building Africa's nutrition infrastructure. <em> <br>The build team</em></h1>
-                <p>A multidisciplinary team combining nutrition and food science, technology, AI/data, product,
-                    operations, business and market expertise.</p>
-                <div class="actions"><a class="btn green" href="#team">Découvrir l'équipe</a><a class="btn outline"
-                        href="index.html#contact">Travailler avec nous</a></div>
+                <p>A multidisciplinary team combining scientific expertise in nutrition, technology, AI &amp; data,
+                    finance, international relations and African market knowledge.</p>
+                <div class="actions"><a class="btn green" href="#team">Meet the team</a><a class="btn outline"
+                        href="index.html#contact">Work with us</a></div>
             </div>
             <div class="art">
                 <div class="core">
                     <div class="coreIn">
-                        <div><strong>ÉQUIPE</strong>ScientifiqueENCE<br>× TECHNOLOGIE</div>
+                        <div><strong>TEAM</strong>SCIENCE<br>× TECHNOLOGY</div>
                     </div>
                 </div>
             </div>
@@ -1082,77 +1139,83 @@
     <section class="section light" id="team">
         <div class="wrap">
             <div class="head reveal">
-                <div class="kicker">Team directory</div>
+                <div class="kicker">NUTRI.N°1 Team</div>
+                <h2>Scientific Expertise + African Market Knowledge + Execution.</h2>
+                <p>A founding and technical team building Africa's food &amp; nutrition intelligence infrastructure.</p>
+            </div>
+            <div class="teambanner">
+                <span class="teamlabel">Please note</span>
+                <p>This team will be <b>reinforced by the assistance of experts from different fields</b>, and by
+                    <b>the acquisition of the skills required</b> to deliver the project.</p>
             </div>
             <div class="teamGrid">
                 <div class="person reveal">
-                    <div class="photo">PHOTO</div>
+                    <div class="photo">EP</div>
                     <div class="bio">
                         <div class="kicker">Leadership</div>
-                        <h3>Team Member 01</h3>
-                        <p><b>CEO / Founder</b><br>Professional biography, scientific background, leadership experience
-                            and vision.</p>
+                        <h3>Dr. Essodolom PAKA</h3>
+                        <p><b>Founder & CEO</b><br>Research Officer with expertise in nutrition, food science and
+                            agro-innovation. 12+ years of professional experience.</p>
                     </div>
                 </div>
                 <div class="person reveal">
-                    <div class="photo">PHOTO</div>
+                    <div class="photo">TP</div>
+                    <div class="bio">
+                        <div class="kicker">Finance</div>
+                        <h3>Mr. Toï PAKA</h3>
+                        <p><b>Co-founder & Accounting / Finance Manager</b><br>16+ years of professional experience in
+                            financial strategy, planning and investment oversight.</p>
+                    </div>
+                </div>
+                <div class="person reveal">
+                    <div class="photo">LC</div>
+                    <div class="bio">
+                        <div class="kicker">International</div>
+                        <h3>Mr. Laurent CAMARA</h3>
+                        <p><b>Head of International Relations & Marketing</b><br>20+ years of professional experience in
+                            international relations, partnerships and marketing.</p>
+                    </div>
+                </div>
+                <div class="person reveal">
+                    <div class="photo">JP</div>
                     <div class="bio">
                         <div class="kicker">Technology</div>
-                        <h3>Team Member 02</h3>
-                        <p><b>CTO / Technology Lead</b><br>Software architecture, cloud, cybersecurity and platform
-                            engineering.</p>
+                        <h3>Mr. PAKA Essosolim Joel</h3>
+                        <p><b>Project CTO & Backend Developer</b><br>Backend developer specialized in Java / Spring
+                            Boot, with 3 years of experience. Environments: Git, Linux, Docker.</p>
+                        <div class="tools"><span>Java</span><span>Spring Boot</span><span>Git</span><span>Linux</span><span>Docker</span></div>
                     </div>
                 </div>
                 <div class="person reveal">
-                    <div class="photo">PHOTO</div>
+                    <div class="photo">KM</div>
+                    <div class="bio">
+                        <div class="kicker">Technology</div>
+                        <h3>Mr. Koffi Jeremie MASSEDE</h3>
+                        <p><b>Full-Stack Developer</b><br>Background in Computer Engineering, 2 years of experience in
+                            web development. Specialized in PHP, Laravel, Vue.js, JavaScript, HTML, CSS, MySQL and
+                            WordPress.</p>
+                        <div class="tools"><span>PHP</span><span>Laravel</span><span>Vue.js</span><span>MySQL</span><span>WordPress</span></div>
+                    </div>
+                </div>
+                <div class="person reveal">
+                    <div class="photo">CA</div>
+                    <div class="bio">
+                        <div class="kicker">Technology</div>
+                        <h3>Ms. Charlotte Essowe AWILON</h3>
+                        <p><b>Full-Stack Developer</b><br>Background in Computer Engineering, 2 years of experience in
+                            web development. Specialized in PHP, Laravel, Vue.js, JavaScript, HTML, CSS, MySQL and
+                            WordPress.</p>
+                        <div class="tools"><span>PHP</span><span>Laravel</span><span>Vue.js</span><span>MySQL</span><span>WordPress</span></div>
+                    </div>
+                </div>
+                <div class="person reveal">
+                    <div class="photo">KK</div>
                     <div class="bio">
                         <div class="kicker">AI & Data</div>
-                        <h3>Team Member 03</h3>
-                        <p><b>AI / Data Lead</b><br>Machine learning, computer vision, data engineering and AI products.
-                        </p>
-                    </div>
-                </div>
-                <div class="person reveal">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Scientific</div>
-                        <h3>Team Member 04</h3>
-                        <p><b>Nutrition / Scientific Lead</b><br>Nutrition science, food composition, evidence and
-                            scientific validation.</p>
-                    </div>
-                </div>
-                <div class="person reveal">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Product</div>
-                        <h3>Team Member 05</h3>
-                        <p><b>Product / UX Lead</b><br>Product strategy, UX/UI, research and digital health.</p>
-                    </div>
-                </div>
-                <div class="person reveal">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Business</div>
-                        <h3>Team Member 06</h3>
-                        <p><b>Business / Partnerships Lead</b><br>Market development, partnerships and regional
-                            expansion.</p>
-                    </div>
-                </div>
-                <div class="person reveal">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Operations</div>
-                        <h3>Team Member 07</h3>
-                        <p><b>Operations / Quality Lead</b><br>Operations, quality, food systems and execution.</p>
-                    </div>
-                </div>
-                <div class="person reveal">
-                    <div class="photo">PHOTO</div>
-                    <div class="bio">
-                        <div class="kicker">Growth</div>
-                        <h3>Team Member 08</h3>
-                        <p><b>Growth / Market Lead</b><br>Commercialization, marketing, customer growth and market
-                            intelligence.</p>
+                        <h3>Mr. Kodjo KPAGNATE</h3>
+                        <p><b>Artificial Intelligence & Big Data Developer</b><br>2 years of experience in Python, SQL,
+                            Java, AI & Machine Learning (TensorFlow, PyTorch), data analysis, NLP and CNNs.</p>
+                        <div class="tools"><span>Python</span><span>TensorFlow</span><span>PyTorch</span><span>SQL</span><span>NLP</span></div>
                     </div>
                 </div>
             </div>
