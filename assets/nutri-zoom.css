@@ -14,28 +14,9 @@
 }
 
 /* ---------- Bouton loupe sur la carte ---------- */
+
 .nzoom-btn {
-    /* !important obligatoire : nutri4k.css pose
-       `.n4k-cb-on > *:not(.n4k-cb):not(.n4k-thumb){position:relative}` —
-       plus spécifique que notre règle — sur toutes les cartes qui ont
-       une image de fond. Sans ça la loupe retomberait dans le flux. */
-    position: absolute !important;
-    top: 10px !important;
-    right: 10px !important;
-    z-index: 5;
-    width: 30px;
-    height: 30px;
-    padding: 0;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid #d9d2c4;
-    color: #061b13;
-    display: grid;
-    place-items: center;
-    cursor: pointer;
-    box-shadow: 0 4px 12px rgba(11, 33, 23, 0.18);
-    opacity: .9;
-    transition: transform .25s cubic-bezier(.16, 1, .3, 1), background .25s ease, color .25s ease, border-color .25s ease, opacity .25s ease;
+    display: none !important;
 }
 
 [data-nzoom-card]:hover>.nzoom-btn,
@@ -384,4 +365,11 @@ html.n4k-cbmode .nzoom-btn {
         white-space: normal;
         font-size: 15px;
     }
+}
+
+/* Masquer le bouton « ouvrir dans un nouvel onglet », le compteur et les contrôles +/-. */
+.nzoom-open,
+.nzoom-tool,
+.nzoom-level {
+    display: none !important;
 }
