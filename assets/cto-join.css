@@ -1,0 +1,187 @@
+/* NUTRI.N°1 — Join / Rejoindre : popup contact CTO */
+.cto-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 240;
+    display: grid;
+    place-items: center;
+    padding: 22px 16px;
+    background: rgba(6, 27, 19, 0.28);
+    backdrop-filter: blur(14px) saturate(1.15);
+    -webkit-backdrop-filter: blur(14px) saturate(1.15);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .38s ease, visibility .38s;
+}
+
+.cto-overlay.is-open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.cto-modal {
+    position: relative;
+    width: min(460px, 100%);
+    padding: 32px 28px 26px;
+    border-radius: 28px;
+    color: #f5f4ed;
+    background:
+        linear-gradient(165deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04) 42%, rgba(9, 42, 28, 0.22)),
+        rgba(11, 43, 30, 0.42);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(41, 207, 112, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.22);
+    backdrop-filter: blur(28px) saturate(1.35);
+    -webkit-backdrop-filter: blur(28px) saturate(1.35);
+    transform: translateY(18px) scale(.96);
+    opacity: 0;
+    transition: transform .42s cubic-bezier(.16, 1, .3, 1), opacity .42s;
+}
+
+.cto-overlay.is-open .cto-modal {
+    transform: none;
+    opacity: 1;
+}
+
+.cto-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    width: 38px;
+    height: 38px;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.08);
+    color: #e8f6ec;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+    transition: .2s;
+}
+
+.cto-close:hover,
+.cto-close:focus-visible {
+    background: #29cf70;
+    color: #042414;
+    border-color: #29cf70;
+    outline: none;
+}
+
+.cto-kicker {
+    font-size: 10px;
+    font-weight: 950;
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: #8ff0a9;
+    margin-bottom: 8px;
+}
+
+.cto-modal h2 {
+    margin: 0 0 6px;
+    font-size: clamp(26px, 4vw, 34px);
+    letter-spacing: -.05em;
+    line-height: 1.05;
+}
+
+.cto-lead {
+    margin: 0 0 22px;
+    font-size: 14px;
+    color: #c5d8cc;
+}
+
+.cto-lead b {
+    color: #fff;
+}
+
+.cto-lead span {
+    color: #e5b85a;
+}
+
+.cto-list {
+    display: grid;
+    gap: 10px;
+}
+
+.cto-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 13px 15px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: inherit;
+    transition: transform .22s, background .22s, border-color .22s, box-shadow .22s;
+}
+
+.cto-item:hover,
+.cto-item:focus-visible {
+    transform: translateY(-2px);
+    background: rgba(41, 207, 112, 0.16);
+    border-color: rgba(41, 207, 112, 0.45);
+    box-shadow: 0 12px 28px rgba(41, 207, 112, 0.12);
+    outline: none;
+}
+
+.cto-ico {
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: rgba(41, 207, 112, 0.16);
+    color: #29cf70;
+}
+
+.cto-ico svg {
+    width: 20px;
+    height: 20px;
+    display: block;
+}
+
+.cto-item.wa .cto-ico {
+    background: rgba(37, 211, 102, 0.18);
+    color: #25d366;
+}
+
+.cto-item.in .cto-ico {
+    background: rgba(10, 102, 194, 0.22);
+    color: #7db7ea;
+}
+
+.cto-item small {
+    display: block;
+    font-size: 10px;
+    font-weight: 950;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #9eb5aa;
+    margin-bottom: 2px;
+}
+
+.cto-item strong {
+    display: block;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    word-break: break-word;
+}
+
+body.cto-lock {
+    overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cto-overlay,
+    .cto-modal,
+    .cto-item {
+        transition: none;
+    }
+}
