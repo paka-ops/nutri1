@@ -91,8 +91,12 @@
     team: {
       hero: { img: 'hero-team', pos: '62% 55%' },
       dark: ['processing-line'], wash: true,
+      /* '.grid .card.tarch' intentionally excluded from cardBg: the five
+         target-capability cards carry their own clear 4K photo band (no
+         gradient, no scrim) with the theme text set over the photo, so no
+         faded background is injected over them */
       cardBg: {
-        '.grid .card': ['field-harvest-hands', 'processing-line', 'field-aerial', 'field-sunrise', 'plate-vegetable', 'market-stall']
+        '.grid .card:not(.tarch)': ['field-harvest-hands', 'processing-line', 'field-aerial', 'field-sunrise', 'plate-vegetable', 'market-stall']
       }
     }
   };
@@ -716,7 +720,7 @@
      statiques équivalents : data-card-bg / data-card-bg-op.
      ========================================================= */
   var CB_SEL = '.card,.box,.loopbox,.person,.v5-person,.p2f-card,.p2f-panel,.p2f-chain-card,.p2f-icon,.p2x-card,.p2x-chain-card,.node,.p2f-node,.p2x-node,.sat,.v5-float,.ctaBox,.v4-demo,.v5-demo';
-  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem', 'gov-health', 'gov-food', 'gov-spatial', 'cold-temp-intel', 'cold-solar'];
+  var CB_GALLERY = ['field-sunrise', 'field-aerial', 'field-harvest-hands', 'market-stall', 'plate-fufu', 'plate-grilled-fish', 'plate-kenkey', 'plate-vegetable', 'processing-line', 'solar-roof', 'cta-future', 'loop-digital', 'loop-foodsystem', 'gov-health', 'gov-food', 'gov-spatial', 'cold-temp-intel', 'cold-solar', 'tarch-scientific', 'tarch-engineering', 'tarch-ai', 'tarch-product', 'tarch-business'];
   var CB_STORE_KEY = 'n4k-cardbg:v1';
   var CB_PAGE = (function () {
     var p = location.pathname.replace(/^\//, '').replace(/\.html?$/, '').split('/').filter(Boolean);

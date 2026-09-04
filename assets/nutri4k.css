@@ -884,3 +884,62 @@ html[lang="fr"] .grid .stake[data-stake="organizations"] .stTag:after{content:"O
 @media(max-width:600px){
   #users .grid.grid4{grid-template-columns:1fr}
 }
+
+/* ============================================================
+   18 · Team architecture photo cards (team / équipe)
+   Investor-grade image-first treatment for the five "Target
+   capabilities" cards of the "Team architecture mirrors product
+   architecture" section: a 100 % clear 16:9 photo band on top —
+   NO scrim, NO gradient, NO fade over the image — the theme text
+   set over the photo as a crisp chip, and the existing copy
+   untouched on the solid card body below.
+   Theme words / numerals are rendered via CSS content so the DOM
+   copy never changes (tools/n4k-copy-check.js stays valid).
+   ============================================================ */
+.grid .tarch{padding:0;overflow:hidden;display:flex;flex-direction:column}
+.grid .tarch .tarcMedia{position:relative;margin:0;aspect-ratio:16/9;overflow:hidden;background:#0a2b1e;flex:none}
+.grid .tarch .tarcImg{display:block;width:100%;height:100%;object-fit:cover;filter:none;
+  image-rendering:-webkit-optimize-contrast;transform:scale(1.015);transition:transform 1.8s var(--n4k-e)}
+.grid .tarch:hover .tarcImg{transform:scale(1.06)}
+/* the photo must stay perfectly clear: never let a faded background,
+   directional scrim or round thumbnail be injected over these cards */
+.grid .tarch>.n4k-cb,.grid .tarch .n4k-cb-shade,.grid .tarch .n4k-thumb{display:none!important}
+.grid .tarch.n4k-hasthumb{padding-right:0!important}
+/* 3 px accent seam between the photo and the body — one per discipline */
+.grid .tarch .tarcMedia:after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;z-index:2;opacity:.9}
+.grid .tarch[data-tarc="scientific"] .tarcMedia:after{background:linear-gradient(90deg,var(--n4k-mint),var(--n4k-g))}
+.grid .tarch[data-tarc="engineering"] .tarcMedia:after{background:linear-gradient(90deg,var(--n4k-g),var(--n4k-gold))}
+.grid .tarch[data-tarc="ai"] .tarcMedia:after{background:linear-gradient(90deg,var(--n4k-g),var(--n4k-mint))}
+.grid .tarch[data-tarc="product"] .tarcMedia:after{background:linear-gradient(90deg,var(--n4k-gold),var(--n4k-g))}
+.grid .tarch[data-tarc="business"] .tarcMedia:after{background:linear-gradient(90deg,var(--n4k-gold),var(--n4k-gold2))}
+/* numeral badge, top-left (CSS content — no word added to the DOM) */
+.grid .tarch .tarcNum{position:absolute;top:14px;left:14px;z-index:2;display:inline-flex;align-items:center;gap:7px;
+  padding:7px 12px 7px 10px;border-radius:999px;background:#061b13d9;border:1px solid #29cf7059;color:#8ff0a9;
+  font-size:10px;font-weight:950;letter-spacing:.18em;backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px)}
+.grid .tarch .tarcNum:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--n4k-g);box-shadow:0 0 9px #29cf70}
+.grid .tarch[data-tarc="scientific"] .tarcNum:after{content:"01"}
+.grid .tarch[data-tarc="engineering"] .tarcNum:after{content:"02"}
+.grid .tarch[data-tarc="ai"] .tarcNum:after{content:"03"}
+.grid .tarch[data-tarc="product"] .tarcNum:after{content:"04"}
+.grid .tarch[data-tarc="business"] .tarcNum:after{content:"05"}
+/* theme text over the photo, bottom-left: crisp chip, no gradient scrim */
+.grid .tarch .tarcTag{position:absolute;left:14px;bottom:16px;z-index:2;display:inline-flex;align-items:center;gap:8px;
+  max-width:calc(100% - 28px);padding:9px 14px;border-radius:999px;background:#061b13d9;border:1px solid #29cf7059;
+  color:#eafff2;font-size:10.5px;font-weight:950;letter-spacing:.17em;text-transform:uppercase;
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 10px 26px #03140c66}
+.grid .tarch .tarcTag:before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--n4k-gold);box-shadow:0 0 10px #e5b85a}
+.grid .tarch[data-tarc="scientific"] .tarcTag:after{content:"Scientific"}
+.grid .tarch[data-tarc="engineering"] .tarcTag:after{content:"Engineering"}
+.grid .tarch[data-tarc="ai"] .tarcTag:after{content:"AI & Data"}
+.grid .tarch[data-tarc="product"] .tarcTag:after{content:"Product"}
+.grid .tarch[data-tarc="business"] .tarcTag:after{content:"Business"}
+html[lang="fr"] .grid .tarch[data-tarc="scientific"] .tarcTag:after{content:"Scientifique"}
+html[lang="fr"] .grid .tarch[data-tarc="engineering"] .tarcTag:after{content:"Ingénierie"}
+html[lang="fr"] .grid .tarch[data-tarc="ai"] .tarcTag:after{content:"IA & Données"}
+html[lang="fr"] .grid .tarch[data-tarc="product"] .tarcTag:after{content:"Produit"}
+html[lang="fr"] .grid .tarch[data-tarc="business"] .tarcTag:after{content:"Développement commercial"}
+/* copy on the solid card body below the photo */
+.grid .tarch .tarcBody{padding:19px 22px 22px}
+.grid .tarch .tarcBody h3{font-size:19px}
+.grid .tarch .tarcBody .ico{margin-bottom:12px}
+@media (prefers-reduced-motion:reduce){.grid .tarch .tarcImg{transition:none;transform:none}}
