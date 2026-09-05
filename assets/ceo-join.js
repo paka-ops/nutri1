@@ -88,7 +88,7 @@
         '</div>' +
         '<a class="ceo-item in" href="' + CEO.linkedin + '" target="_blank" rel="noopener noreferrer">' +
           '<span class="ceo-ico">' + svgIn() + '</span>' +
-          '<span class="ceo-txt"><small>' + copy.linkedin + '</small><strong>linkedin.com/in/essosolim-joel-paka</strong></span></a>' +
+          '<span class="ceo-txt"><small>' + copy.linkedin + '</small><strong>linkedin.com/in/essodolom-paka</strong></span></a>' +
         '<a class="ceo-item wa" href="' + CEO.whatsapp + '" target="_blank" rel="noopener noreferrer">' +
           '<span class="ceo-ico">' + svgWa() + '</span>' +
           '<span class="ceo-txt"><small>' + copy.whatsapp + '</small><strong>' + copy.waValue + '</strong></span></a>' +
