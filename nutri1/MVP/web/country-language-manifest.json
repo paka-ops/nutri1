@@ -1,0 +1,257 @@
+{
+  "version": "34.1",
+  "scope": "12 current ECOWAS member states + 3 AES member states",
+  "defaultCountry": "TG",
+  "countryCount": 15,
+  "countries": [
+    {
+      "code": "BJ",
+      "name": "Benin",
+      "group": "ECOWAS",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "fon",
+        "yor"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "CV",
+      "name": "Cabo Verde",
+      "group": "ECOWAS",
+      "official": [
+        "pt"
+      ],
+      "local": [
+        "kriolu"
+      ],
+      "default": "pt"
+    },
+    {
+      "code": "CI",
+      "name": "Côte d'Ivoire",
+      "group": "ECOWAS",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "dyula",
+        "baoule",
+        "senoufo"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "GM",
+      "name": "The Gambia",
+      "group": "ECOWAS",
+      "official": [
+        "en"
+      ],
+      "local": [
+        "mandinka",
+        "wolof",
+        "fula"
+      ],
+      "default": "en"
+    },
+    {
+      "code": "GH",
+      "name": "Ghana",
+      "group": "ECOWAS",
+      "official": [
+        "en"
+      ],
+      "local": [
+        "ewe",
+        "twi",
+        "ga"
+      ],
+      "default": "en"
+    },
+    {
+      "code": "GN",
+      "name": "Guinea",
+      "group": "ECOWAS",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "pular",
+        "maninka",
+        "susu"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "GW",
+      "name": "Guinea-Bissau",
+      "group": "ECOWAS",
+      "official": [
+        "pt"
+      ],
+      "local": [
+        "kriol",
+        "balanta",
+        "fula"
+      ],
+      "default": "pt"
+    },
+    {
+      "code": "LR",
+      "name": "Liberia",
+      "group": "ECOWAS",
+      "official": [
+        "en"
+      ],
+      "local": [
+        "kpelle",
+        "bassa",
+        "vai"
+      ],
+      "default": "en"
+    },
+    {
+      "code": "NG",
+      "name": "Nigeria",
+      "group": "ECOWAS",
+      "official": [
+        "en"
+      ],
+      "local": [
+        "hausa",
+        "yoruba",
+        "igbo"
+      ],
+      "default": "en"
+    },
+    {
+      "code": "SN",
+      "name": "Senegal",
+      "group": "ECOWAS",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "wolof",
+        "pulaar",
+        "serer",
+        "jola"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "SL",
+      "name": "Sierra Leone",
+      "group": "ECOWAS",
+      "official": [
+        "en"
+      ],
+      "local": [
+        "krio",
+        "temne",
+        "mende"
+      ],
+      "default": "en"
+    },
+    {
+      "code": "TG",
+      "name": "Togo",
+      "group": "ECOWAS",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "ewe",
+        "kab"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "BF",
+      "name": "Burkina Faso",
+      "group": "AES",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "moor",
+        "dyula"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "ML",
+      "name": "Mali",
+      "group": "AES",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "bambara",
+        "fula",
+        "songhay",
+        "tamasheq"
+      ],
+      "default": "fr"
+    },
+    {
+      "code": "NE",
+      "name": "Niger",
+      "group": "AES",
+      "official": [
+        "fr"
+      ],
+      "local": [
+        "hausa",
+        "zarma",
+        "fula"
+      ],
+      "default": "fr"
+    }
+  ],
+  "languageLabels": {
+    "en": "English",
+    "fr": "Français",
+    "es": "Español",
+    "pt": "Português",
+    "ar": "العربية",
+    "ewe": "Eʋegbe / Ewe",
+    "kab": "Kabyè",
+    "twi": "Twi",
+    "ga": "Ga",
+    "fon": "Fon",
+    "yoruba": "Yorùbá",
+    "yor": "Yorùbá",
+    "moor": "Mooré",
+    "dyula": "Dioula",
+    "kriolu": "Kriolu",
+    "pular": "Pular",
+    "pulaar": "Pulaar",
+    "maninka": "Maninka",
+    "susu": "Susu",
+    "kriol": "Kriol",
+    "bambara": "Bamanankan",
+    "hausa": "Hausa",
+    "zarma": "Zarma",
+    "wolof": "Wolof",
+    "krio": "Krio",
+    "temne": "Temne",
+    "mende": "Mende",
+    "balanta": "Balanta",
+    "fula": "Fula",
+    "songhay": "Songhay",
+    "tamasheq": "Tamasheq",
+    "baoule": "Baoulé",
+    "senoufo": "Sénoufo",
+    "mandinka": "Mandinka",
+    "kpelle": "Kpelle",
+    "bassa": "Bassa",
+    "vai": "Vai",
+    "igbo": "Igbo",
+    "serer": "Sérère",
+    "jola": "Jola"
+  }
+}

@@ -1,0 +1,1 @@
+V24 — Base V23. Only change: two compact buttons were added immediately beside the existing Agriculture Intelligence button in the green Executive Home. UNICEF opens the existing UNICEF page; WHO opens the existing WHO page. No additional cards or sections were added.

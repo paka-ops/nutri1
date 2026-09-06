@@ -1,0 +1,186 @@
+[
+  {
+    "iso2": "BJ",
+    "name": "Bénin",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Fon",
+      "Yoruba",
+      "Bariba",
+      "Dendi"
+    ]
+  },
+  {
+    "iso2": "BF",
+    "name": "Burkina Faso",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Mooré",
+      "Dioula",
+      "Fulfuldé"
+    ]
+  },
+  {
+    "iso2": "CV",
+    "name": "Cabo Verde",
+    "official": [
+      "pt"
+    ],
+    "local": [
+      "Kriolu"
+    ]
+  },
+  {
+    "iso2": "CI",
+    "name": "Côte d’Ivoire",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Dioula",
+      "Baoulé",
+      "Sénoufo",
+      "Bété"
+    ]
+  },
+  {
+    "iso2": "GH",
+    "name": "Ghana",
+    "official": [
+      "en"
+    ],
+    "local": [
+      "Twi",
+      "Ewe",
+      "Ga",
+      "Dagbani"
+    ]
+  },
+  {
+    "iso2": "GN",
+    "name": "Guinée",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Pular",
+      "Malinké",
+      "Susu"
+    ]
+  },
+  {
+    "iso2": "GW",
+    "name": "Guinée-Bissau",
+    "official": [
+      "pt"
+    ],
+    "local": [
+      "Crioulo"
+    ]
+  },
+  {
+    "iso2": "LR",
+    "name": "Libéria",
+    "official": [
+      "en"
+    ],
+    "local": [
+      "Kpelle",
+      "Bassa",
+      "Grebo"
+    ]
+  },
+  {
+    "iso2": "ML",
+    "name": "Mali",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Bambara",
+      "Fulfuldé",
+      "Songhaï",
+      "Dogon"
+    ]
+  },
+  {
+    "iso2": "NE",
+    "name": "Niger",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Hausa",
+      "Zarma",
+      "Fulfuldé",
+      "Tamasheq"
+    ]
+  },
+  {
+    "iso2": "NG",
+    "name": "Nigéria",
+    "official": [
+      "en"
+    ],
+    "local": [
+      "Hausa",
+      "Yoruba",
+      "Igbo"
+    ]
+  },
+  {
+    "iso2": "SN",
+    "name": "Sénégal",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Wolof",
+      "Pulaar",
+      "Sérère",
+      "Diola"
+    ]
+  },
+  {
+    "iso2": "SL",
+    "name": "Sierra Leone",
+    "official": [
+      "en"
+    ],
+    "local": [
+      "Krio",
+      "Mende",
+      "Temne"
+    ]
+  },
+  {
+    "iso2": "GM",
+    "name": "Gambie",
+    "official": [
+      "en"
+    ],
+    "local": [
+      "Mandinka",
+      "Wolof",
+      "Fula"
+    ]
+  },
+  {
+    "iso2": "TG",
+    "name": "Togo",
+    "official": [
+      "fr"
+    ],
+    "local": [
+      "Ewe",
+      "Kabyè",
+      "Tem",
+      "Mina",
+      "Kotokoli"
+    ]
+  }
+]

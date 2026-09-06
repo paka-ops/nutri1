@@ -1,0 +1,124 @@
+{
+  "scope": "ECOWAS + AES",
+  "countries": [
+    {
+      "iso2": "BJ",
+      "name": "Benin",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "BF",
+      "name": "Burkina Faso",
+      "region": "West Africa",
+      "group": "ECOWAS;AES",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "CV",
+      "name": "Cabo Verde",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "CVE"
+    },
+    {
+      "iso2": "CI",
+      "name": "Côte d'Ivoire",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "GM",
+      "name": "The Gambia",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "GMD"
+    },
+    {
+      "iso2": "GH",
+      "name": "Ghana",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "GHS"
+    },
+    {
+      "iso2": "GN",
+      "name": "Guinea",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "GNF"
+    },
+    {
+      "iso2": "GW",
+      "name": "Guinea-Bissau",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "LR",
+      "name": "Liberia",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "LRD"
+    },
+    {
+      "iso2": "ML",
+      "name": "Mali",
+      "region": "West Africa",
+      "group": "ECOWAS;AES",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "MR",
+      "name": "Mauritania",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "MRU"
+    },
+    {
+      "iso2": "NE",
+      "name": "Niger",
+      "region": "West Africa",
+      "group": "ECOWAS;AES",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "NG",
+      "name": "Nigeria",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "NGN"
+    },
+    {
+      "iso2": "SN",
+      "name": "Senegal",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "SL",
+      "name": "Sierra Leone",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "SLE"
+    },
+    {
+      "iso2": "TG",
+      "name": "Togo",
+      "region": "West Africa",
+      "group": "ECOWAS",
+      "currency": "XOF"
+    },
+    {
+      "iso2": "TD",
+      "name": "Chad",
+      "region": "Central/West Africa",
+      "group": "AES",
+      "currency": "XAF"
+    }
+  ]
+}

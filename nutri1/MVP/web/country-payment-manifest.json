@@ -1,0 +1,390 @@
+{
+  "version": "36.0",
+  "defaultCountry": "TG",
+  "countries": {
+    "TG": {
+      "country": "Togo",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "mixx",
+          "type": "mobile_money",
+          "name": "Mixx by Yas",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "flooz",
+          "type": "mobile_money",
+          "name": "Flooz",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "GH": {
+      "country": "Ghana",
+      "currency": "GHS",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "mtn_momo",
+          "type": "mobile_money",
+          "name": "MTN MoMo",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "telecel_cash",
+          "type": "mobile_money",
+          "name": "Telecel Cash",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "airteltigo",
+          "type": "mobile_money",
+          "name": "AirtelTigo Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "CI": {
+      "country": "Côte d'Ivoire",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "mtn_momo",
+          "type": "mobile_money",
+          "name": "MTN MoMo",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "moov_money",
+          "type": "mobile_money",
+          "name": "Moov Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "wave",
+          "type": "mobile_money",
+          "name": "Wave",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "SN": {
+      "country": "Senegal",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "wave",
+          "type": "mobile_money",
+          "name": "Wave",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "free_money",
+          "type": "mobile_money",
+          "name": "Free Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "NG": {
+      "country": "Nigeria",
+      "currency": "NGN",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "opay",
+          "type": "wallet",
+          "name": "OPay",
+          "description": "Digital wallet"
+        },
+        {
+          "id": "palmpay",
+          "type": "wallet",
+          "name": "PalmPay",
+          "description": "Digital wallet"
+        },
+        {
+          "id": "bank_transfer_ussd",
+          "type": "bank_transfer",
+          "name": "Bank Transfer / USSD",
+          "description": "Bank payment"
+        }
+      ]
+    },
+    "BJ": {
+      "country": "Benin",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "mtn_momo",
+          "type": "mobile_money",
+          "name": "MTN MoMo",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "moov_money",
+          "type": "mobile_money",
+          "name": "Moov Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "BF": {
+      "country": "Burkina Faso",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "moov_money",
+          "type": "mobile_money",
+          "name": "Moov Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "ML": {
+      "country": "Mali",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "moov_money",
+          "type": "mobile_money",
+          "name": "Moov Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "NE": {
+      "country": "Niger",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "airtel_money",
+          "type": "mobile_money",
+          "name": "Airtel Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "moov_money",
+          "type": "mobile_money",
+          "name": "Moov Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "GN": {
+      "country": "Guinea",
+      "currency": "GNF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "mtn_momo",
+          "type": "mobile_money",
+          "name": "MTN MoMo",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "GW": {
+      "country": "Guinea-Bissau",
+      "currency": "XOF",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "mtn_momo",
+          "type": "mobile_money",
+          "name": "MTN MoMo",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "LR": {
+      "country": "Liberia",
+      "currency": "LRD",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "lonestar_mtn",
+          "type": "mobile_money",
+          "name": "Lonestar Cell MTN Mobile Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "SL": {
+      "country": "Sierra Leone",
+      "currency": "SLE",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "orange_money",
+          "type": "mobile_money",
+          "name": "Orange Money",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "afrimoney",
+          "type": "mobile_money",
+          "name": "Afrimoney",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "GM": {
+      "country": "The Gambia",
+      "currency": "GMD",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "qmoney",
+          "type": "mobile_money",
+          "name": "QMoney",
+          "description": "Mobile Money"
+        },
+        {
+          "id": "afrimoney",
+          "type": "mobile_money",
+          "name": "Afrimoney",
+          "description": "Mobile Money"
+        }
+      ]
+    },
+    "CV": {
+      "country": "Cabo Verde",
+      "currency": "CVE",
+      "methods": [
+        {
+          "id": "card",
+          "type": "bank_card",
+          "name": "Bank card",
+          "description": "Visa / Mastercard"
+        },
+        {
+          "id": "bank_transfer",
+          "type": "bank_transfer",
+          "name": "Bank Transfer",
+          "description": "Bank payment"
+        }
+      ]
+    }
+  }
+}

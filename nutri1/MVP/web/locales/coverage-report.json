@@ -1,0 +1,21 @@
+{
+  "version": "33.0",
+  "canonicalLocale": "en",
+  "supportedLocales": [
+    "en",
+    "fr",
+    "es",
+    "ewe",
+    "kab"
+  ],
+  "keyCount": 685,
+  "keyPrefix": "ui.",
+  "policy": "Every static visible UI string must use an explicit data-i18n key. Dynamic modules must call i18n.t(key, params).",
+  "coverage": {
+    "en": 685,
+    "fr": 356,
+    "es": 356,
+    "ewe": 61,
+    "kab": 58
+  }
+}

@@ -1,0 +1,1 @@
+V20 is the source of truth. Only two additions were made: a separate Healthy Food Store for everyone with country/category/search/price filters, and a compact Patient Dashboard 360° bridge. Existing V20 therapeutic pathways, country/language, payments and other modules remain unchanged.
