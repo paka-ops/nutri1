@@ -2343,6 +2343,42 @@
       max-width: 200px;
     }
     .v51-live.v51-dragging { box-shadow: 0 22px 70px rgba(0,0,0,.4); }
+    .v51-chrome {
+      display: flex !important;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin: -8px -8px 12px !important;
+      padding: 10px 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      cursor: grab !important;
+      background: rgba(255,255,255,.04);
+      border-radius: 14px 14px 0 0;
+    }
+    .v51-chrome-main { display: flex; gap: 10px; align-items: flex-start; min-width: 0; flex: 1; }
+    .v51-chrome-main h3 { margin: 0 0 4px; pointer-events: none; }
+    .v51-chrome-main .v51-sub { margin: 0 !important; pointer-events: none; }
+    .v51-chrome-actions { display: flex; gap: 6px; flex: none; }
+    .v51-grip { font-size: 18px; opacity: .7; padding-top: 2px; }
+    .nutri-float-min { cursor: pointer; }
+    .v52-modal.nutri-floating, .v53-modal.nutri-floating, .v54-modal.nutri-floating,
+    .v56-workspace.nutri-floating, .v57-window.nutri-floating {
+      position: fixed !important;
+      margin: 0 !important;
+      max-height: 86vh;
+    }
+    .nutri-sim-collapsed { width: min(340px, calc(100vw - 24px)) !important; max-height: none !important; }
+    .nutri-sim-collapsed .v52-grid,
+    .nutri-sim-collapsed .v52-card,
+    .nutri-sim-collapsed .v53-toolbar,
+    .nutri-sim-collapsed .v53-grid,
+    .nutri-sim-collapsed .v53-tab,
+    .nutri-sim-collapsed .v54-tabs,
+    .nutri-sim-collapsed .v54-body,
+    .nutri-sim-collapsed .v56-body,
+    .nutri-sim-collapsed #v57ExactContent,
+    .nutri-sim-collapsed .v51-body { display: none !important; }
+
   </style>
 
   <style id="v52-investor-sim-css">
@@ -5133,13 +5169,19 @@
 </main>
 <div id="toast" class="toast"></div>
 <div id="v51Live" class="v51-live" role="status" aria-live="polite">
-  <div class="v51-chrome" id="v51Chrome">
-    <span class="v51-grip" aria-hidden="true">⋮⋮</span>
-    <button type="button" class="v51-min" id="v51MinBtn" title="Reduce / expand" aria-label="Reduce panel">–</button>
-    <button type="button" class="v51-close" onclick="closeV51Sim()" aria-label="Close">×</button>
+  <div class="v51-chrome" id="v51Chrome" title="Drag to move">
+    <div class="v51-chrome-main">
+      <span class="v51-grip" aria-hidden="true">⠿</span>
+      <div>
+        <h3 id="v51LiveTitle">NUTRI.N°1 Intelligence</h3>
+        <div id="v51LiveSub" class="v51-sub">Live application simulation</div>
+      </div>
+    </div>
+    <div class="v51-chrome-actions">
+      <button type="button" class="v51-min" id="v51MinBtn" title="Reduce / expand">–</button>
+      <button type="button" class="v51-close" onclick="closeV51Sim()" aria-label="Close">×</button>
+    </div>
   </div>
-  <h3 id="v51LiveTitle">NUTRI.N°1 Intelligence</h3>
-  <div id="v51LiveSub" class="v51-sub">Live application simulation</div>
   <div class="v51-body">
     <div class="v51-progress"><i></i></div>
     <div id="v51LiveSteps" class="v51-steps"></div>
@@ -6915,56 +6957,96 @@
 
 <script id="v51-drag-min">
   (function () {
-    function ready() {
-      const box = document.getElementById('v51Live');
-      const chrome = document.getElementById('v51Chrome');
-      const minBtn = document.getElementById('v51MinBtn');
-      if (!box || !chrome || box.dataset.dragReady) return;
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+    function makeDraggable(box, handle) {
+      if (!box || !handle || box.dataset.dragReady) return;
       box.dataset.dragReady = '1';
       let drag = false, ox = 0, oy = 0;
       function start(e) {
-        if (e.target.closest('button')) return;
+        if (e.target.closest('button,a,input,select,textarea')) return;
         const pt = e.touches ? e.touches[0] : e;
         const r = box.getBoundingClientRect();
         drag = true;
         ox = pt.clientX - r.left;
         oy = pt.clientY - r.top;
-        box.classList.add('v51-dragging');
+        box.classList.add('v51-dragging', 'nutri-floating');
+        box.style.position = 'fixed';
         box.style.left = r.left + 'px';
         box.style.top = r.top + 'px';
         box.style.right = 'auto';
         box.style.bottom = 'auto';
+        box.style.margin = '0';
         e.preventDefault();
       }
       function move(e) {
         if (!drag) return;
         const pt = e.touches ? e.touches[0] : e;
         const w = box.offsetWidth, h = box.offsetHeight;
-        let x = pt.clientX - ox, y = pt.clientY - oy;
-        x = Math.max(8, Math.min(window.innerWidth - w - 8, x));
-        y = Math.max(8, Math.min(window.innerHeight - h - 8, y));
+        const x = clamp(pt.clientX - ox, 8, window.innerWidth - w - 8);
+        const y = clamp(pt.clientY - oy, 8, window.innerHeight - h - 8);
         box.style.left = x + 'px';
         box.style.top = y + 'px';
       }
-      function end() {
-        drag = false;
-        box.classList.remove('v51-dragging');
-      }
-      chrome.addEventListener('mousedown', start);
-      chrome.addEventListener('touchstart', start, { passive: false });
+      function end() { drag = false; box.classList.remove('v51-dragging'); }
+      handle.addEventListener('mousedown', start);
+      handle.addEventListener('touchstart', start, { passive: false });
       window.addEventListener('mousemove', move);
       window.addEventListener('touchmove', move, { passive: false });
       window.addEventListener('mouseup', end);
       window.addEventListener('touchend', end);
-      minBtn.addEventListener('click', function (e) {
-        e.stopPropagation();
+    }
+    function ensureMin(handle, box) {
+      if (!handle || handle.querySelector('.nutri-float-min')) return;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'nutri-float-min v51-min';
+      b.textContent = '–';
+      b.title = 'Reduce / expand';
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        box.classList.toggle('nutri-sim-collapsed');
         box.classList.toggle('v51-collapsed');
-        minBtn.textContent = box.classList.contains('v51-collapsed') ? '+' : '–';
-        minBtn.setAttribute('aria-label', box.classList.contains('v51-collapsed') ? 'Expand panel' : 'Reduce panel');
+        b.textContent = box.classList.contains('nutri-sim-collapsed') ? '+' : '–';
+      });
+      handle.appendChild(b);
+    }
+    function wire() {
+      const live = document.getElementById('v51Live');
+      if (live) makeDraggable(live, document.getElementById('v51Chrome') || live);
+      const minBtn = document.getElementById('v51MinBtn');
+      if (minBtn && !minBtn.dataset.bound) {
+        minBtn.dataset.bound = '1';
+        minBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          live.classList.toggle('v51-collapsed');
+          live.classList.toggle('nutri-sim-collapsed');
+          minBtn.textContent = live.classList.contains('v51-collapsed') ? '+' : '–';
+        });
+      }
+      const pairs = [
+        ['#v52Overlay .v52-modal', '.v52-head'],
+        ['#v53Shell .v53-modal', '.v53-head'],
+        ['#v54Overlay .v54-modal', '.v54-head'],
+        '#v56overlay .v56-workspace|#v56overlay .v56-top',
+        ['#v57ExactShell .v57-window', '.v57-head']
+      ];
+      [
+        ['#v52Overlay .v52-modal', '.v52-head'],
+        ['#v53Shell .v53-modal', '.v53-head'],
+        ['#v54Overlay .v54-modal', '.v54-head'],
+        ['#v56overlay .v56-workspace', '.v56-top'],
+        ['#v57ExactShell .v57-window', '.v57-head']
+      ].forEach(function (pair) {
+        document.querySelectorAll(pair[0]).forEach(function (box) {
+          const handle = box.querySelector(pair[1]) || box;
+          makeDraggable(box, handle);
+          ensureMin(handle, box);
+        });
       });
     }
-    document.addEventListener('DOMContentLoaded', ready);
-    if (document.readyState !== 'loading') ready();
+    document.addEventListener('DOMContentLoaded', wire);
+    if (document.readyState !== 'loading') wire();
+    new MutationObserver(function () { wire(); }).observe(document.documentElement, { childList: true, subtree: true });
   })();
 </script>
 
