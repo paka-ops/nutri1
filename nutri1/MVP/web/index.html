@@ -3163,6 +3163,203 @@
       }
     }
   </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style id="nutri-ui-investor-refresh">
+    :root {
+      --g: #08733f;
+      --d: #032d1a;
+      --lime: #c9ee59;
+      --bg: #eef5f0;
+      --card: #ffffff;
+      --line: #d4e5d9;
+      --text: #14251a;
+      --muted: #5f7266;
+      --blue: #2469aa;
+      --orange: #b96c1b;
+      --red: #a62f35;
+      --mist: #f7fbf8;
+      --shadow: 0 10px 32px rgba(3, 45, 26, 0.08);
+      --shadow-hover: 0 16px 40px rgba(8, 115, 63, 0.14);
+      --radius: 18px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 500px at -10% -10%, rgba(201,238,89,.18), transparent 50%),
+        radial-gradient(900px 420px at 110% 0%, rgba(8,115,63,.10), transparent 45%),
+        var(--bg);
+      letter-spacing: -.01em;
+    }
+    .side {
+      width: 292px;
+      padding: 20px 16px 28px;
+      background:
+        linear-gradient(165deg, #02180e 0%, var(--d) 42%, #075f35 100%);
+      box-shadow: 8px 0 32px rgba(3,45,26,.18);
+      scrollbar-width: thin;
+    }
+    .side::-webkit-scrollbar { width: 6px; }
+    .side::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 99px; }
+    .brand { font-size: 22px; letter-spacing: -.03em; gap: 8px; }
+    .sidebar-logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.2);
+    }
+    .sub { opacity: .78; margin-top: 6px; }
+    .nav { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; }
+    .nav button, .sidebar-institution {
+      border-radius: 12px !important;
+      padding: 11px 12px !important;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e8f6ec !important;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+    .nav button:hover, .sidebar-institution:hover {
+      background: rgba(201,238,89,.14) !important;
+      transform: translateX(3px);
+    }
+    .nav button.on {
+      background: linear-gradient(90deg, rgba(201,238,89,.28), rgba(255,255,255,.08)) !important;
+      box-shadow: inset 3px 0 0 var(--lime);
+      color: #fff !important;
+    }
+    .main { margin-left: 292px; padding: 22px 26px 48px; }
+    .top {
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .controls select, .top select {
+      min-height: 40px;
+      font-weight: 600;
+    }
+    select, input, textarea {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      font-family: inherit;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--g);
+      box-shadow: 0 0 0 4px rgba(8,115,63,.12);
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 36px 34px;
+      border-radius: 24px;
+      background:
+        radial-gradient(600px 220px at 90% 10%, rgba(201,238,89,.28), transparent 50%),
+        linear-gradient(135deg, #02180e, var(--d) 40%, var(--g));
+      box-shadow: 0 18px 50px rgba(3,45,26,.22);
+    }
+    .hero::after {
+      content: "";
+      position: absolute; right: -40px; bottom: -60px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(201,238,89,.15);
+      pointer-events: none;
+    }
+    .hero h1 { font-size: 34px; letter-spacing: -.04em; line-height: 1.15; }
+    .grid, .grid3, .grid2 { gap: 16px; margin-top: 16px; }
+    .card,
+    .product-card,
+    .v38-kpi,
+    .v45-citizen-metric,
+    .v46-kpi,
+    .core-card,
+    .module-grid > div,
+    .age-card,
+    .ncd-card,
+    .executive-center-card,
+    .role-card,
+    .condition-card,
+    .patient-stat,
+    .v47-plan {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+    .card { padding: 18px; }
+    .card + .card, .view > .card { margin-top: 0; }
+    .view.on { animation: nutriFade .35s ease; }
+    @keyframes nutriFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card:hover,
+    .product-card:hover,
+    .executive-center-card:hover,
+    .ncd-card:hover,
+    .condition-card:hover,
+    .core-card:hover,
+    .module-grid > div:hover,
+    .age-card:hover,
+    .v38-kpi:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: #b7d7c2;
+    }
+    .metric, .v38-kpi-value, .inst-kpi b { color: var(--d); letter-spacing: -.04em; }
+    .pill, .tag, .access-badge, .v47-badge {
+      background: #edf6ef;
+      color: var(--g);
+      font-weight: 700;
+    }
+    .btn {
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 11px 16px;
+      transition: transform .15s, box-shadow .15s, filter .15s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .primary {
+      background: linear-gradient(180deg, #0b8a4c, var(--g));
+      box-shadow: 0 8px 18px rgba(8,115,63,.28);
+    }
+    .primary:hover { filter: brightness(1.05); }
+    .secondary { border: 1px solid #c9e2d1; }
+    table { background: #fff; border-radius: 14px; overflow: hidden; }
+    th { background: var(--mist); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+    tr:hover td { background: #f6fbf7; }
+    .reference { border-radius: 12px; }
+    .progress { height: 8px; background: #e4eee7; }
+    .progress i { background: linear-gradient(90deg, var(--g), var(--lime)); }
+    .top b { font-size: 15px; }
+    .institution-kpis, .v38-kpis, .v46-kpis, .v45-citizen-metric-grid { gap: 14px; }
+    .inst-kpi, .v46-kpi, .v38-kpi, .v45-citizen-metric {
+      background: linear-gradient(180deg, #fff, var(--mist));
+    }
+    .map, .gis-demo, .big-chart {
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .hero-center-btn { border-radius: 12px; }
+    .store-tab.active { background: var(--g) !important; color: #fff !important; }
+    .chat, .v41-chat { border: 1px solid var(--line); }
+    .toast { border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+    @media (max-width: 980px) {
+      .side { display: none; }
+      .main { margin-left: 0; padding: 14px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+    }
+  </style>
+
   <link rel="icon" type="image/png" href="../../../nutri-logo.png">
 </head>
 <script
