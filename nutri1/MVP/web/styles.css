@@ -1,0 +1,2122 @@
+/* =====================================================
+   NUTRI.N°1 - Ultra Modern Investor-Grade UI Framework
+   =====================================================
+   
+   COLOR SYSTEM (Respecting Brand Heritage):
+   - Primary Green: #08733f (Main Brand Color - MUST BE PRESERVED)
+   - Deep Green: #032d1a (Dark Mode Background)
+   - Lime Accent: #c9ee59 (Highlights & CTAs)
+   - Success: #08733f (Actions, confirmations)
+   - Warning: #b96c1b (Alerts, warnings)
+   - Danger: #a62f35 (Errors, critical)
+   - Info: #2469aa (Information)
+   
+   NEUTRAL SYSTEM:
+   - Background: #f3f7f4 (Light base)
+   - Card Background: #ffffff (Clean white)
+   - Text Primary: #14251a (Dark text)
+   - Text Secondary: #2a4232 (Medium dark)
+   - Text Muted: #68776d (Light text)
+   - Border/Line: #dbe8df (Subtle borders)
+   
+   DESIGN PHILOSOPHY:
+   - Professional, clean, modern
+   - Investor-focused: trust, clarity, sophistication
+   - Dynamic: smooth animations, interactive feedback
+   - Consistent: unified color scheme, spacing, typography
+   
+   NOTE: This CSS loads AFTER inline styles in index.html.
+   Therefore, these rules override the inline styles due to cascade order.
+   We use !important on critical properties to ensure they take precedence.
+   =====================================================
+*/
+
+/* =====================================================
+
+/* =====================================================
+   CSS RESET & BASE VARIABLES
+   =====================================================
+*/
+:root {
+  /* Primary Brand Colors */
+  --primary: #08733f !important;
+  --primary-dark: #054a28 !important;
+  --primary-light: #0bb669 !important;
+  --primary-lime: #c9ee59 !important;
+  --primary-bg: #032d1a !important;
+  
+  /* Neutral Colors */
+  --bg: #f3f7f4 !important;
+  --bg-dark: #e8f0e8 !important;
+  --card: #ffffff !important;
+  --card-hover: #fcfdfc !important;
+  --line: #dbe8df !important;
+  --line-dark: #c8d5c8 !important;
+  --text: #14251a !important;
+  --text-light: #2a4232 !important;
+  --muted: #68776d !important;
+  --muted-light: #8fa396 !important;
+  
+  /* Semantic Colors */
+  --success: #08733f !important;
+  --success-light: #dff2e5 !important;
+  --success-bg: #edf6ef !important;
+  --warning: #b96c1b !important;
+  --warning-light: #fef3e8 !important;
+  --warning-bg: #f9f0e8 !important;
+  --danger: #a62f35 !important;
+  --danger-light: #ffe1e1 !important;
+  --danger-bg: #fff0f0 !important;
+  --info: #2469aa !important;
+  --info-light: #e8f0fa !important;
+  --info-bg: #f0f5fa !important;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, #08733f, #054a28) !important;
+  --gradient-sidebar: linear-gradient(155deg, #032d1a, #08733f) !important;
+  --gradient-hero: linear-gradient(135deg, #032d1a, #08733f) !important;
+  --gradient-card: linear-gradient(180deg, #ffffff, #f7faf8) !important;
+  --gradient-lime: linear-gradient(135deg, #c9ee59, #a3d977) !important;
+  
+  /* Shadows - More sophisticated */
+  --shadow-sm: 0 2px 8px rgba(8, 115, 63, 0.08) !important;
+  --shadow: 0 4px 16px rgba(8, 115, 63, 0.12) !important;
+  --shadow-lg: 0 8px 32px rgba(8, 115, 63, 0.16) !important;
+  --shadow-xl: 0 16px 48px rgba(8, 115, 63, 0.20) !important;
+  --shadow-card: 0 7px 25px rgba(23, 53, 31, 0.08) !important;
+  --shadow-depth: 0 10px 40px rgba(8, 115, 63, 0.15) !important;
+  
+  /* Typography */
+  --font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif !important;
+  --font-mono: 'Fira Code', 'Monaco', 'Consolas', monospace !important;
+  
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+  
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius: 9px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-full: 9999px;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition: 0.25s ease;
+  --transition-slow: 0.45s ease;
+  
+  /* Z-Index */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 1000;
+  --z-toast: 2000;
+  --z-max: 9999;
+}
+
+/* =====================================================
+   CSS RESET
+   =====================================================
+*/
+*, *::before, *::after {
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+html {
+  font-size: 16px !important;
+  scroll-behavior: smooth !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* =====================================================
+   BODY & BASE STYLES
+   =====================================================
+*/
+body {
+  margin: 0 !important;
+  padding: 0 !important;
+  background: var(--bg) !important;
+  color: var(--text) !important;
+  font-family: var(--font-family) !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  min-height: 100vh !important;
+}
+
+/* =====================================================
+   TYPOGRAPHY
+   =====================================================
+*/
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 800 !important;
+  line-height: 1.25 !important;
+  color: var(--text) !important;
+  margin-bottom: var(--space-md) !important;
+  font-family: inherit !important;
+}
+
+h1 { font-size: 2.5rem !important; }
+h2 { font-size: 2rem !important; }
+h3 { font-size: 1.5rem !important; }
+h4 { font-size: 1.25rem !important; }
+
+p {
+  margin-bottom: var(--space-md) !important;
+  color: var(--text-light) !important;
+  font-family: inherit !important;
+}
+
+small {
+  font-size: 0.875rem !important;
+  color: var(--muted) !important;
+}
+
+b, strong {
+  font-weight: 700 !important;
+  color: var(--text) !important;
+}
+
+.muted {
+  color: var(--muted) !important;
+}
+
+/* =====================================================
+   LAYOUT - SIDEBAR
+   =====================================================
+*/
+.side {
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 280px !important;
+  padding: var(--space-lg) !important;
+  background: var(--gradient-sidebar) !important;
+  color: #fff !important;
+  overflow: auto !important;
+  z-index: var(--z-sticky) !important;
+  box-shadow: var(--shadow-xl) !important;
+}
+
+.brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-sm) !important;
+  margin-bottom: var(--space-xl) !important;
+  font-size: 1.75rem !important;
+  font-weight: 900 !important;
+  letter-spacing: -0.02em !important;
+  text-transform: uppercase !important;
+}
+
+.brand-logo {
+  width: 46px !important;
+  height: 32px !important;
+  object-fit: contain !important;
+  background: #fff !important;
+  border-radius: var(--radius-sm) !important;
+  vertical-align: middle !important;
+}
+
+.brand b {
+  color: var(--primary-lime) !important;
+}
+
+.sub {
+  font-size: 0.75rem !important;
+  opacity: 0.72 !important;
+  line-height: 1.5 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+}
+
+/* Sidebar Navigation */
+.nav {
+  margin-top: var(--space-lg) !important;
+}
+
+.nav button {
+  display: block !important;
+  width: 100% !important;
+  padding: var(--space-md) var(--space-lg) !important;
+  margin: 2px 0 !important;
+  border: 0 !important;
+  border-radius: var(--radius) !important;
+  background: transparent !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  font-size: 0.9375rem !important;
+  font-weight: 600 !important;
+  transition: all var(--transition-fast) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.nav button::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 3px !important;
+  background: var(--primary-lime) !important;
+  transform: scaleY(0) !important;
+  transition: transform var(--transition) !important;
+}
+
+.nav button:hover,
+.nav button.on {
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  transform: translateX(4px) !important;
+}
+
+.nav button.on::before {
+  transform: scaleY(1) !important;
+}
+
+.nav button:hover::before {
+  transform: scaleY(0.5) !important;
+}
+
+/* =====================================================
+   MAIN CONTENT AREA
+   =====================================================
+*/
+.main {
+  margin-left: 280px !important;
+  padding: var(--space-xl) !important;
+  max-width: 1850px !important;
+  min-height: 100vh !important;
+}
+
+/* Top Bar */
+.top {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  gap: var(--space-md) !important;
+  margin-bottom: var(--space-lg) !important;
+  position: sticky !important;
+  top: 0 !important;
+  background: var(--bg) !important;
+  z-index: var(--z-sticky) !important;
+  padding: var(--space-md) 0 !important;
+}
+
+.controls {
+  display: flex !important;
+  gap: var(--space-sm) !important;
+  align-items: center !important;
+}
+
+/* =====================================================
+   FORMS & INPUTS
+   =====================================================
+*/
+input,
+select,
+textarea {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-sm) var(--space-md) !important;
+  background: #fff !important;
+  font-family: inherit !important;
+  font-size: 0.9375rem !important;
+  transition: all var(--transition-fast) !important;
+  color: var(--text) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none !important;
+  border-color: var(--primary) !important;
+  box-shadow: 0 0 0 3px var(--success-bg) !important;
+}
+
+input::placeholder {
+  color: var(--muted-light) !important;
+}
+
+textarea {
+  resize: vertical !important;
+  min-height: 80px !important;
+}
+
+.form {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-lg) !important;
+}
+
+.form label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-xs) !important;
+  font-weight: 650 !important;
+  color: var(--text) !important;
+  font-size: 0.875rem !important;
+}
+
+/* =====================================================
+   CARDS & CONTAINERS
+   =====================================================
+*/
+.card {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-xl) !important;
+  padding: var(--space-lg) !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: all var(--transition) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.card::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  height: 3px !important;
+  background: var(--gradient-primary) !important;
+  transform: scaleX(0) !important;
+  transition: transform var(--transition) !important;
+}
+
+.card:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-color: var(--primary-light) !important;
+}
+
+.card:hover::before {
+  transform: scaleX(1) !important;
+}
+
+.card.primary {
+  border-left: 4px solid var(--primary) !important;
+}
+
+.card.success {
+  border-left: 4px solid var(--success) !important;
+}
+
+.card.warning {
+  border-left: 4px solid var(--warning) !important;
+}
+
+.card.danger {
+  border-left: 4px solid var(--danger) !important;
+}
+
+.card.info {
+  border-left: 4px solid var(--info) !important;
+}
+
+/* Hero Cards */
+.hero {
+  padding: var(--space-2xl) !important;
+  border-radius: var(--radius-2xl) !important;
+  color: #fff !important;
+  background: var(--gradient-hero) !important;
+  margin-bottom: var(--space-xl) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.hero::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -50% !important;
+  right: -50% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: radial-gradient(circle, rgba(201, 238, 89, 0.15) 0%, transparent 70%) !important;
+  pointer-events: none !important;
+}
+
+.hero h1 {
+  font-size: 2.25rem !important;
+  margin-bottom: var(--space-sm) !important;
+  line-height: 1.2 !important;
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 1.125rem !important;
+}
+
+/* =====================================================
+   GRID SYSTEMS
+   =====================================================
+*/
+.grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--space-lg) !important;
+  margin-top: var(--space-lg) !important;
+}
+
+.grid3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-lg) !important;
+  margin-top: var(--space-lg) !important;
+}
+
+.grid2 {
+  display: grid !important;
+  grid-template-columns: repeat(2, 1fr) !important;
+  gap: var(--space-lg) !important;
+  margin-top: var(--space-lg) !important;
+}
+
+/* =====================================================
+   METRICS & KPIs
+   =====================================================
+*/
+.metric {
+  font-size: 2rem !important;
+  font-weight: 900 !important;
+  margin: var(--space-xs) 0 !important;
+  color: var(--primary) !important;
+  letter-spacing: -0.02em !important;
+}
+
+.kpi {
+  color: var(--muted) !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+/* =====================================================
+   BUTTONS - Major Improvement
+   =====================================================
+*/
+.btn {
+  border: 0 !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-sm) var(--space-lg) !important;
+  cursor: pointer !important;
+  font-size: 0.9375rem !important;
+  font-weight: 700 !important;
+  transition: all var(--transition-fast) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: var(--space-xs) !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+}
+
+.btn:disabled {
+  opacity: 0.6 !important;
+  cursor: not-allowed !important;
+}
+
+.btn:not(:disabled):hover {
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0) !important;
+}
+
+.btn-primary {
+  background: var(--gradient-primary) !important;
+  color: #fff !important;
+  border: 0 !important;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 8px 24px rgba(8, 115, 63, 0.35) !important;
+}
+
+.btn-secondary {
+  background: var(--success-bg) !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--line-dark) !important;
+}
+
+.btn-secondary:hover {
+  background: var(--success-light) !important;
+  border-color: var(--primary) !important;
+}
+
+.btn-danger {
+  background: var(--danger-bg) !important;
+  color: var(--danger) !important;
+  border: 1px solid rgba(166, 47, 53, 0.2) !important;
+}
+
+.btn-danger:hover {
+  background: var(--danger-light) !important;
+  border-color: var(--danger) !important;
+}
+
+.btn-outline {
+  background: transparent !important;
+  color: var(--primary) !important;
+  border: 1px solid var(--primary) !important;
+}
+
+.btn-outline:hover {
+  background: var(--primary) !important;
+  color: #fff !important;
+}
+
+.btn-ghost {
+  background: transparent !important;
+  color: var(--primary) !important;
+  border: 0 !important;
+}
+
+.btn-ghost:hover {
+  background: rgba(8, 115, 63, 0.08) !important;
+}
+
+.btn-icon {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0 !important;
+  border-radius: var(--radius-full) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* =====================================================
+   BADGES & PILLS
+   =====================================================
+*/
+.pill {
+  display: inline-block !important;
+  padding: var(--space-xs) var(--space-md) !important;
+  border-radius: var(--radius-full) !important;
+  background: var(--success-bg) !important;
+  color: var(--primary) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+.badge {
+  display: inline-block !important;
+  padding: var(--space-xs) var(--space-sm) !important;
+  border-radius: var(--radius-sm) !important;
+  font-size: 0.6875rem !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+.badge-success {
+  background: var(--success-bg) !important;
+  color: var(--primary) !important;
+}
+
+.badge-warning {
+  background: var(--warning-bg) !important;
+  color: var(--warning) !important;
+}
+
+.badge-danger {
+  background: var(--danger-bg) !important;
+  color: var(--danger) !important;
+}
+
+.badge-info {
+  background: var(--info-bg) !important;
+  color: var(--info) !important;
+}
+
+.badge-lime {
+  background: rgba(201, 238, 89, 0.15) !important;
+  color: var(--primary-lime) !important;
+}
+
+.tag {
+  font-size: 0.75rem !important;
+  padding: var(--space-xs) var(--space-sm) !important;
+  border-radius: var(--radius-full) !important;
+  background: var(--bg-dark) !important;
+  margin-right: var(--space-xs) !important;
+  display: inline-block !important;
+  color: var(--text-light) !important;
+}
+
+/* =====================================================
+   PROGRESS & STATUS
+   =====================================================
+*/
+.progress {
+  height: 10px !important;
+  background: var(--bg-dark) !important;
+  border-radius: var(--radius-full) !important;
+  overflow: hidden !important;
+}
+
+.progress i {
+  display: block !important;
+  height: 100% !important;
+  width: 0 !important;
+  background: var(--gradient-primary) !important;
+  transition: width var(--transition-slow) !important;
+  border-radius: var(--radius-full) !important;
+}
+
+.progress.success i {
+  background: var(--gradient-lime) !important;
+}
+
+.progress.warning i {
+  background: linear-gradient(90deg, #f0b65a, #b96c1b) !important;
+}
+
+.progress.danger i {
+  background: linear-gradient(90deg, #ef6b73, #a62f35) !important;
+}
+
+/* =====================================================
+   TABLES
+   =====================================================
+*/
+table {
+  width: 100% !important;
+  border-collapse: separate !important;
+  border-spacing: 0 !important;
+}
+
+th,
+td {
+  padding: var(--space-md) !important;
+  border-bottom: 1px solid var(--line) !important;
+  text-align: left !important;
+}
+
+th {
+  background: var(--bg-dark) !important;
+  font-weight: 700 !important;
+  color: var(--text-light) !important;
+  font-size: 0.75rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.04em !important;
+}
+
+tr:hover {
+  background: var(--card-hover) !important;
+}
+
+tr:last-child td {
+  border-bottom: 0 !important;
+}
+
+/* =====================================================
+   ACCORDION
+   =====================================================
+*/
+.accordion {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  margin: var(--space-md) 0 !important;
+  background: var(--card) !important;
+  overflow: hidden !important;
+}
+
+.accordion summary {
+  padding: var(--space-lg) !important;
+  font-weight: 700 !important;
+  cursor: pointer !important;
+  list-style: none !important;
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  transition: background var(--transition) !important;
+}
+
+.accordion summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.accordion summary:after {
+  content: '+' !important;
+  width: 28px !important;
+  height: 28px !important;
+  border-radius: var(--radius-full) !important;
+  background: var(--bg-dark) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.25rem !important;
+  font-weight: 300 !important;
+  color: var(--primary) !important;
+  transition: all var(--transition) !important;
+}
+
+.accordion[open] summary:after {
+  content: '−' !important;
+  transform: rotate(180deg) !important;
+}
+
+.accordion .inner {
+  padding: var(--space-lg) !important;
+  border-top: 1px solid var(--line) !important;
+}
+
+/* =====================================================
+   CHARTS & VISUALIZATIONS
+   =====================================================
+*/
+.chart {
+  height: 280px !important;
+  position: relative !important;
+}
+
+.chart canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.mini-chart {
+  height: 155px !important;
+  position: relative !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-md) !important;
+  background: var(--gradient-card) !important;
+}
+
+.big-chart {
+  height: 210px !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  position: relative !important;
+  background: var(--gradient-card) !important;
+  overflow: hidden !important;
+}
+
+/* =====================================================
+   MAPS
+   =====================================================
+*/
+.map {
+  height: 300px !important;
+  border-radius: var(--radius-xl) !important;
+  background: linear-gradient(135deg, #e9f3eb, #c8dfce) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.pin {
+  position: absolute !important;
+  padding: var(--space-sm) var(--space-md) !important;
+  background: var(--primary) !important;
+  color: #fff !important;
+  border-radius: var(--radius-full) !important;
+  font-size: 0.75rem !important;
+  font-weight: 700 !important;
+  box-shadow: var(--shadow) !important;
+  transition: all var(--transition) !important;
+  cursor: pointer !important;
+}
+
+.pin:hover {
+  transform: scale(1.1) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+/* =====================================================
+   CHAT & MESSAGING
+   =====================================================
+*/
+.chat {
+  height: 270px !important;
+  overflow: auto !important;
+  background: var(--bg-dark) !important;
+  padding: var(--space-lg) !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.msg {
+  padding: var(--space-md) !important;
+  margin: var(--space-md) 0 !important;
+  background: var(--success-bg) !important;
+  border-radius: var(--radius-lg) !important;
+  max-width: 80% !important;
+  animation: fadeIn var(--transition) ease-out !important;
+}
+
+.msg.me {
+  margin-left: auto !important;
+  background: var(--info-bg) !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =====================================================
+   CALENDAR
+   =====================================================
+*/
+.calendar {
+  display: grid !important;
+  grid-template-columns: repeat(7, 1fr) !important;
+  gap: var(--space-xs) !important;
+}
+
+.day {
+  padding: var(--space-sm) !important;
+  background: var(--bg-dark) !important;
+  border-radius: var(--radius) !important;
+  min-height: 65px !important;
+  transition: all var(--transition) !important;
+}
+
+.day:hover {
+  background: var(--card-hover) !important;
+}
+
+.slot {
+  background: var(--success-bg) !important;
+  padding: var(--space-xs) var(--space-sm) !important;
+  border-radius: var(--radius-sm) !important;
+  margin-top: var(--space-xs) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}
+
+/* =====================================================
+   TOAST NOTIFICATIONS
+   =====================================================
+*/
+.toast {
+  display: none !important;
+  position: fixed !important;
+  right: var(--space-xl) !important;
+  bottom: var(--space-xl) !important;
+  background: var(--primary-bg) !important;
+  color: #fff !important;
+  padding: var(--space-lg) var(--space-xl) !important;
+  border-radius: var(--radius-lg) !important;
+  z-index: var(--z-toast) !important;
+  animation: slideIn var(--transition) ease-out !important;
+  box-shadow: var(--shadow-xl) !important;
+}
+
+.toast.show {
+  display: block !important;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100%) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* =====================================================
+   WIZARD & STEPS
+   =====================================================
+*/
+.wizard {
+  display: flex !important;
+  gap: var(--space-sm) !important;
+  flex-wrap: wrap !important;
+}
+
+.step {
+  padding: var(--space-sm) var(--space-lg) !important;
+  border-radius: var(--radius-full) !important;
+  background: var(--success-bg) !important;
+  color: var(--primary) !important;
+  font-size: 0.8125rem !important;
+  font-weight: 700 !important;
+  transition: all var(--transition) !important;
+  cursor: pointer !important;
+}
+
+.step:hover {
+  background: var(--success-light) !important;
+  transform: translateY(-2px) !important;
+}
+
+.step.active {
+  background: var(--gradient-primary) !important;
+  color: #fff !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.step.completed {
+  background: var(--gradient-lime) !important;
+  color: var(--primary-bg) !important;
+}
+
+/* =====================================================
+   PRODUCT CARDS
+   =====================================================
+*/
+.product-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-lg) !important;
+  margin-top: var(--space-lg) !important;
+}
+
+.product-card {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--card) !important;
+  overflow: hidden !important;
+  box-shadow: var(--shadow-card) !important;
+  transition: all var(--transition) !important;
+}
+
+.product-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-color: var(--primary-light) !important;
+}
+
+.product-photo {
+  height: 100px !important;
+  background: linear-gradient(135deg, #eaf5ed, #d5eadb) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 2.875rem !important;
+}
+
+.product-body {
+  padding: var(--space-lg) !important;
+}
+
+.product-body h3 {
+  margin: 0 0 var(--space-sm) !important;
+  font-size: 1.125rem !important;
+}
+
+.product-meta {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: var(--space-xs) !important;
+  margin: var(--space-md) 0 !important;
+}
+
+.product-price {
+  font-size: 1.25rem !important;
+  font-weight: 900 !important;
+  color: var(--primary) !important;
+}
+
+/* =====================================================
+   CONDITION CARDS
+   =====================================================
+*/
+.condition-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--space-md) !important;
+  margin-top: var(--space-lg) !important;
+}
+
+.condition-card {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  border-radius: var(--radius-xl) !important;
+  padding: var(--space-lg) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-sm) !important;
+  font-size: 1.5rem !important;
+  transition: all var(--transition) !important;
+}
+
+.condition-card:hover,
+.condition-card.active {
+  border-color: var(--primary-light) !important;
+  background: var(--success-bg) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-lg) !important;
+}
+
+.condition-card b {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--text-light) !important;
+}
+
+.condition-card small {
+  font-size: 0.75rem !important;
+  color: var(--muted) !important;
+}
+
+/* =====================================================
+   REFERENCE CARDS
+   =====================================================
+*/
+.reference {
+  background: var(--bg-dark) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-md) !important;
+  font-size: 0.875rem !important;
+  transition: all var(--transition) !important;
+}
+
+.reference:hover {
+  border-color: var(--primary-light) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.reference.good {
+  border-left: 4px solid var(--primary) !important;
+}
+
+.reference.warn {
+  border-left: 4px solid var(--warning) !important;
+}
+
+.reference.info {
+  border-left: 4px solid var(--info) !important;
+}
+
+/* =====================================================
+   EXECUTIVE CENTER CARDS
+   =====================================================
+*/
+.executive-center-grid {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: var(--space-md) !important;
+}
+
+.executive-center-card {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  border-radius: var(--radius-xl) !important;
+  padding: var(--space-lg) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-sm) !important;
+  min-height: 145px !important;
+  transition: all var(--transition) !important;
+}
+
+.executive-center-card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: var(--shadow-lg) !important;
+  border-color: var(--primary-light) !important;
+}
+
+.executive-center-card .center-icon {
+  font-size: 1.875rem !important;
+}
+
+.executive-center-card b {
+  font-size: 0.875rem !important;
+}
+
+.executive-center-card small {
+  font-size: 0.75rem !important;
+  color: var(--muted) !important;
+  line-height: 1.4 !important;
+}
+
+.executive-center-card.unicef {
+  border-top: 4px solid #2f7fca !important;
+}
+
+.executive-center-card.who {
+  border-top: 4px solid #3f8f62 !important;
+}
+
+.executive-center-card.citizen {
+  border-top: 4px solid #6b7cc4 !important;
+}
+
+.executive-center-card.health {
+  border-top: 4px solid #d47a57 !important;
+}
+
+.executive-center-card.agriculture {
+  border-top: 4px solid #7d9e52 !important;
+}
+
+/* =====================================================
+   HEAT MAPS
+   =====================================================
+*/
+.heat {
+  display: grid !important;
+  grid-template-columns: repeat(6, 1fr) !important;
+  gap: var(--space-xs) !important;
+}
+
+.heat div {
+  height: 30px !important;
+  border-radius: var(--radius-sm) !important;
+  background: var(--bg-dark) !important;
+  transition: all var(--transition) !important;
+}
+
+.heat div:hover {
+  transform: scale(1.05) !important;
+}
+
+.heat div:nth-child(3n) {
+  background: #a7d2b3 !important;
+}
+
+.heat div:nth-child(4n) {
+  background: #67aa7f !important;
+}
+
+.heat div:nth-child(5n) {
+  background: var(--primary) !important;
+}
+
+/* =====================================================
+   RANKING & STATS
+   =====================================================
+*/
+.rank {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: var(--space-md) !important;
+  border-bottom: 1px solid var(--line) !important;
+  transition: all var(--transition) !important;
+}
+
+.rank:hover {
+  background: var(--card-hover) !important;
+}
+
+.patient-stat {
+  padding: var(--space-lg) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--card) !important;
+}
+
+.patient-stat b {
+  display: block !important;
+  font-size: 1.25rem !important;
+  margin-top: var(--space-xs) !important;
+  color: var(--primary) !important;
+}
+
+/* =====================================================
+   FOOD PATHWAY & FLOW
+   =====================================================
+*/
+.food-pathway,
+.trace-flow,
+.food-bridge {
+  display: flex !important;
+  gap: var(--space-sm) !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  background: var(--bg-dark) !important;
+  padding: var(--space-lg) !important;
+  border-radius: var(--radius-lg) !important;
+  margin: var(--space-md) 0 !important;
+}
+
+.food-pathway span,
+.trace-flow span,
+.food-bridge span {
+  padding: var(--space-sm) var(--space-md) !important;
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+  transition: all var(--transition) !important;
+}
+
+.food-pathway span:hover,
+.trace-flow span:hover,
+.food-bridge span:hover {
+  background: var(--success-bg) !important;
+  border-color: var(--primary) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* =====================================================
+   MATCH METER
+   =====================================================
+*/
+.match-meter {
+  height: 12px !important;
+  background: var(--bg-dark) !important;
+  border-radius: var(--radius-full) !important;
+  overflow: hidden !important;
+  margin: var(--space-md) 0 !important;
+}
+
+.match-bar {
+  height: 100% !important;
+  width: 0 !important;
+  background: var(--gradient-primary) !important;
+  transition: width var(--transition-slow) !important;
+  border-radius: var(--radius-full) !important;
+}
+
+/* =====================================================
+   INSTITUTION KPIs
+   =====================================================
+*/
+.institution-kpis {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: var(--space-md) !important;
+  margin: var(--space-lg) 0 !important;
+}
+
+.inst-kpi {
+  padding: var(--space-lg) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  background: var(--card) !important;
+}
+
+.inst-kpi b {
+  display: block !important;
+  font-size: 1.5625rem !important;
+  margin-top: var(--space-xs) !important;
+  color: var(--primary) !important;
+}
+
+/* =====================================================
+   AGE CARDS
+   =====================================================
+*/
+.age-cards {
+  display: grid !important;
+  grid-template-columns: repeat(5, 1fr) !important;
+  gap: var(--space-sm) !important;
+}
+
+.age-card {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-md) !important;
+  background: var(--card) !important;
+}
+
+.age-card b {
+  display: block !important;
+  font-size: 1.25rem !important;
+  color: var(--primary) !important;
+}
+
+.bar-wrap {
+  height: 9px !important;
+  background: var(--bg-dark) !important;
+  border-radius: var(--radius-full) !important;
+  margin: var(--space-sm) 0 !important;
+  overflow: hidden !important;
+}
+
+.bar-fill {
+  height: 100% !important;
+  background: var(--gradient-primary) !important;
+  border-radius: var(--radius-full) !important;
+  transition: width var(--transition-slow) !important;
+}
+
+/* =====================================================
+   FEEDING & MATERNAL ROWS
+   =====================================================
+*/
+.feeding-row,
+.maternal-row,
+.risk-row,
+.alert-row,
+.cart-row {
+  display: flex !important;
+  justify-content: space-between !important;
+  padding: var(--space-md) !important;
+  border-bottom: 1px solid var(--line) !important;
+  transition: all var(--transition) !important;
+}
+
+.feeding-row:hover,
+.maternal-row:hover,
+.risk-row:hover,
+.alert-row:hover,
+.cart-row:hover {
+  background: var(--card-hover) !important;
+}
+
+.cart-total {
+  font-size: 1.25rem !important;
+  font-weight: 900 !important;
+  text-align: right !important;
+  margin: var(--space-lg) 0 !important;
+  color: var(--primary) !important;
+}
+
+/* =====================================================
+   TREND BARS
+   =====================================================
+*/
+.trend-bars {
+  position: absolute !important;
+  left: 8% !important;
+  right: 8% !important;
+  bottom: 12% !important;
+  height: 72% !important;
+  display: flex !important;
+  align-items: flex-end !important;
+  gap: var(--space-sm) !important;
+}
+
+.trend-bars i {
+  flex: 1 !important;
+  background: var(--primary) !important;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0 !important;
+  opacity: 0.78 !important;
+  transition: all var(--transition) !important;
+}
+
+.trend-bars i:hover {
+  opacity: 1 !important;
+  transform: scaleY(1.05) !important;
+}
+
+/* =====================================================
+   NCD CARDS
+   =====================================================
+*/
+.condition-dashboard-grid,
+.module-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--space-sm) !important;
+  margin: var(--space-lg) 0 !important;
+}
+
+.ncd-card,
+.module-grid > div {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-lg) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  font-size: 1.375rem !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-xs) !important;
+  transition: all var(--transition) !important;
+}
+
+.ncd-card:hover,
+.module-grid > div:hover {
+  background: var(--success-bg) !important;
+  border-color: var(--primary-light) !important;
+  transform: translateY(-2px) !important;
+}
+
+.ncd-card b,
+.module-grid b {
+  font-size: 0.8125rem !important;
+  font-weight: 600 !important;
+  color: var(--text-light) !important;
+}
+
+.ncd-card small,
+.module-grid small {
+  font-size: 0.75rem !important;
+  color: var(--muted) !important;
+}
+
+/* =====================================================
+   GIS DEMO
+   =====================================================
+*/
+.gis-demo {
+  height: 240px !important;
+  border-radius: var(--radius-xl) !important;
+  border: 1px solid var(--line) !important;
+  background: linear-gradient(135deg, #f6faf7, #e7f1e9) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.gis-demo:after {
+  content: "National → Region → District → Community" !important;
+  position: absolute !important;
+  bottom: var(--space-md) !important;
+  left: var(--space-lg) !important;
+  padding: var(--space-sm) var(--space-md) !important;
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  font-size: 0.75rem !important;
+  font-weight: 600 !important;
+}
+
+/* =====================================================
+   EVIDENCE FLOW
+   =====================================================
+*/
+.evidence-flow {
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  gap: var(--space-md) !important;
+  flex-wrap: wrap !important;
+  padding: var(--space-xl) !important;
+  background: var(--bg-dark) !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.evidence-flow span {
+  background: var(--card) !important;
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-md) var(--space-lg) !important;
+  font-weight: 700 !important;
+  font-size: 0.875rem !important;
+  transition: all var(--transition) !important;
+}
+
+.evidence-flow span:hover {
+  background: var(--success-bg) !important;
+  border-color: var(--primary) !important;
+  transform: translateY(-2px) !important;
+}
+
+/* =====================================================
+   MARKET FILTERS
+   =====================================================
+*/
+.market-filters {
+  display: flex !important;
+  gap: var(--space-sm) !important;
+  flex-wrap: wrap !important;
+}
+
+/* =====================================================
+   STORE TABS
+   =====================================================
+*/
+.healthy-store-tabs,
+.store-search-row {
+  display: flex !important;
+  gap: var(--space-sm) !important;
+  flex-wrap: wrap !important;
+  margin: var(--space-lg) 0 !important;
+}
+
+.store-tab {
+  border: 1px solid var(--line) !important;
+  background: var(--card) !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-sm) var(--space-lg) !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+  font-size: 0.75rem !important;
+  transition: all var(--transition) !important;
+}
+
+.store-tab:hover {
+  border-color: var(--primary-light) !important;
+  background: var(--success-bg) !important;
+}
+
+.store-tab.active {
+  background: var(--gradient-primary) !important;
+  color: #fff !important;
+  border-color: var(--primary) !important;
+}
+
+.store-search-row input {
+  flex: 1 !important;
+}
+
+/* =====================================================
+   HERO CENTER BUTTON
+   =====================================================
+*/
+.hero-center-btn {
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+  color: #fff !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-sm) var(--space-lg) !important;
+  font-weight: 800 !important;
+  cursor: pointer !important;
+  transition: all var(--transition) !important;
+  backdrop-filter: blur(5px) !important;
+}
+
+.hero-center-btn:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* =====================================================
+   SIDEBAR INSTITUTION
+   =====================================================
+*/
+.sidebar-institution {
+  width: 100% !important;
+  text-align: left !important;
+  border: 0 !important;
+  background: transparent !important;
+  padding: var(--space-sm) var(--space-md) !important;
+  cursor: pointer !important;
+  font-weight: 700 !important;
+  color: rgba(255, 255, 255, 0.85) !important;
+  transition: all var(--transition-fast) !important;
+  border-radius: var(--radius) !important;
+}
+
+.sidebar-institution:hover {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #fff !important;
+}
+
+/* =====================================================
+   PROFILE SECTION
+   =====================================================
+*/
+.profile-access {
+  padding: 0 !important;
+  overflow: hidden !important;
+}
+
+.profile-summary {
+  cursor: pointer !important;
+  list-style: none !important;
+  padding: var(--space-md) var(--space-lg) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: var(--space-md) !important;
+  transition: all var(--transition) !important;
+}
+
+.profile-summary::-webkit-details-marker {
+  display: none !important;
+}
+
+.profile-summary:hover {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.profile-summary-right {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--space-sm) !important;
+}
+
+.profile-access-body {
+  padding: 0 var(--space-lg) var(--space-lg) !important;
+  border-top: 1px solid var(--line) !important;
+}
+
+.profile-role-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-sm) !important;
+  margin: var(--space-lg) 0 !important;
+}
+
+.role-card {
+  border: 1px solid var(--line) !important;
+  background: #fff !important;
+  border-radius: var(--radius) !important;
+  padding: var(--space-md) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-xs) !important;
+  transition: all var(--transition) !important;
+}
+
+.role-card:hover,
+.role-card.active {
+  border-color: var(--primary-light) !important;
+  background: var(--success-bg) !important;
+  transform: translateY(-2px) !important;
+}
+
+.role-card b {
+  font-size: 0.8125rem !important;
+}
+
+.role-card small {
+  color: var(--muted) !important;
+  font-size: 0.75rem !important;
+}
+
+.profile-form {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--space-sm) !important;
+  margin-bottom: var(--space-lg) !important;
+}
+
+.profile-form label,
+.profile-specialty label {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-xs) !important;
+  font-size: 0.75rem !important;
+  font-weight: 650 !important;
+}
+
+.profile-specialty {
+  max-width: 360px !important;
+  margin-bottom: var(--space-lg) !important;
+}
+
+/* =====================================================
+   SECTION HEAD
+   =====================================================
+*/
+.section-head {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: flex-start !important;
+  gap: var(--space-lg) !important;
+  margin-bottom: var(--space-lg) !important;
+}
+
+.access-badge {
+  padding: var(--space-xs) var(--space-md) !important;
+  border-radius: var(--radius-full) !important;
+  background: var(--success-bg) !important;
+  color: var(--primary) !important;
+  font-size: 0.75rem !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+/* =====================================================
+   PATIENT DASHBOARD
+   =====================================================
+*/
+.patient-selector-grid {
+  grid-template-columns: 1.5fr 1fr 1fr !important;
+}
+
+.patient-dashboard {
+  margin-top: var(--space-lg) !important;
+}
+
+.patient-top {
+  display: grid !important;
+  grid-template-columns: 1.3fr repeat(3, 1fr) !important;
+  gap: var(--space-md) !important;
+}
+
+.patient-grid {
+  display: grid !important;
+  grid-template-columns: 1.3fr 1fr !important;
+  gap: var(--space-lg) !important;
+  margin-top: var(--space-lg) !important;
+}
+
+.family-layout {
+  display: grid !important;
+  grid-template-columns: 280px 1fr !important;
+  gap: var(--space-lg) !important;
+}
+
+.guardian-controls {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-sm) !important;
+  margin-top: var(--space-md) !important;
+}
+
+.family-child-dashboard {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-lg) !important;
+  background: var(--card) !important;
+}
+
+.child-stats {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: var(--space-sm) !important;
+}
+
+.child-stat {
+  padding: var(--space-md) !important;
+  border-radius: var(--radius) !important;
+  background: var(--bg-dark) !important;
+}
+
+/* =====================================================
+   CORE GRID
+   =====================================================
+*/
+.core-grid,
+.institution-map-grid {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: var(--space-md) !important;
+}
+
+.core-card,
+.institution-map-grid button {
+  border: 1px solid var(--line) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: var(--space-lg) !important;
+  background: var(--card) !important;
+  text-align: left !important;
+  cursor: pointer !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: var(--space-xs) !important;
+  transition: all var(--transition) !important;
+}
+
+.core-card:hover,
+.institution-map-grid button:hover {
+  background: var(--success-bg) !important;
+  border-color: var(--primary-light) !important;
+  transform: translateY(-2px) !important;
+  box-shadow: var(--shadow) !important;
+}
+
+.core-card b,
+.institution-map-grid button b {
+  font-size: 0.8125rem !important;
+  font-weight: 650 !important;
+}
+
+.core-card span,
+.institution-map-grid button span {
+  font-size: 0.75rem !important;
+  color: var(--muted) !important;
+  line-height: 1.45 !important;
+}
+
+/* =====================================================
+   RESPONSIVE DESIGN
+   =====================================================
+*/
+@media (max-width: 1200px) {
+  .executive-center-grid {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .institution-kpis {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .age-cards {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+  
+  .condition-dashboard-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media (max-width: 980px) {
+  .side {
+    display: none !important;
+  }
+
+  .main {
+    margin: 0 !important;
+  }
+
+  .grid,
+  .grid3,
+  .grid2,
+  .form {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .patient-top,
+  .patient-grid,
+  .family-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .child-stats {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .patient-selector-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .executive-center-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  
+  .core-grid,
+  .module-grid,
+  .institution-map-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .condition-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .food-bridge {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .institution-kpis {
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+  
+  .age-cards {
+    grid-template-columns: 1fr 1fr 1fr !important;
+  }
+  
+  .condition-dashboard-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .product-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .market-filters {
+    width: 100% !important;
+    flex-direction: column !important;
+  }
+  
+  .profile-role-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+
+  .profile-form {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 700px) {
+  .executive-center-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .v46-gov-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+  
+  .v46-kpis {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .grid,
+  .grid3,
+  .grid2,
+  .form,
+  .product-grid,
+  .condition-grid,
+  .food-bridge,
+  .institution-kpis,
+  .age-cards,
+  .condition-dashboard-grid,
+  .core-grid,
+  .module-grid,
+  .institution-map-grid,
+  .profile-role-grid,
+  .profile-form,
+  .child-stats {
+    grid-template-columns: 1fr !important;
+  }
+
+  .store-search-row {
+    flex-direction: column !important;
+  }
+
+  .section-head {
+    flex-direction: column !important;
+  }
+  
+  .v45-citizen-metric-grid,
+  .v45-chart-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .v46-gov-grid,
+  .v46-kpis {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .v47-research-grid,
+  .v47-plan-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .executive-center-grid {
+    grid-template-columns: 1fr !important;
+  }
+  
+  .v52-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* =====================================================
+   ANIMATIONS
+   =====================================================
+*/
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Apply animations to elements */
+.card,
+.hero,
+.condition-card,
+.ncd-card,
+.executive-center-card,
+.product-card,
+.core-card,
+.module-grid > div {
+  animation: slideUp 0.35s ease-out backwards !important;
+}
+
+/* Stagger animations */
+.card:nth-child(1) { animation-delay: 0.05s !important; }
+.card:nth-child(2) { animation-delay: 0.1s !important; }
+.card:nth-child(3) { animation-delay: 0.15s !important; }
+.card:nth-child(4) { animation-delay: 0.2s !important; }
+.card:nth-child(5) { animation-delay: 0.25s !important; }
+.card:nth-child(6) { animation-delay: 0.3s !important; }
+.card:nth-child(7) { animation-delay: 0.35s !important; }
+.card:nth-child(8) { animation-delay: 0.4s !important; }
+
+/* =====================================================
+   SCROLLBAR STYLING
+   =====================================================
+*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* =====================================================
+   SELECTION STYLES
+   =====================================================
+*/
+::selection {
+  background: var(--primary);
+  color: #fff;
+}
+
+/* =====================================================
+   FOCUS STYLES
+   =====================================================
+*/
+:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* =====================================================
+   PRINT STYLES
+   =====================================================
+*/
+@media print {
+  .side,
+  .top,
+  .controls,
+  .btn,
+  .toast {
+    display: none !important;
+  }
+  
+  .main {
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}
