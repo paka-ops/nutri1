@@ -2292,6 +2292,57 @@
         transform: translateX(330%)
       }
     }
+
+    .v51-live {
+      cursor: default;
+      user-select: none;
+      touch-action: none;
+    }
+    .v51-chrome {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: -4px -4px 10px;
+      cursor: grab;
+    }
+    .v51-chrome:active { cursor: grabbing; }
+    .v51-grip {
+      margin-right: auto;
+      letter-spacing: -2px;
+      opacity: .55;
+      font-size: 14px;
+      padding: 4px 6px;
+    }
+    .v51-min, .v51-close {
+      float: none;
+      border: 0;
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .v51-min:hover, .v51-close:hover { background: rgba(255,255,255,.2); }
+    .v51-live.v51-collapsed {
+      width: min(280px, calc(100vw - 24px));
+      padding: 12px;
+    }
+    .v51-live.v51-collapsed .v51-body,
+    .v51-live.v51-collapsed .v51-sub {
+      display: none;
+    }
+    .v51-live.v51-collapsed h3 {
+      margin: 0;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    .v51-live.v51-dragging { box-shadow: 0 22px 70px rgba(0,0,0,.4); }
   </style>
 
   <style id="v52-investor-sim-css">
@@ -3355,8 +3406,153 @@
       .side { display: none; }
       .main { margin-left: 0; padding: 14px; }
     }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { animation: none !important; transition: none !important; }
+
+    /* Spacing: forms, fields, buttons must never collide */
+    .form,
+    .profile-form,
+    .profile-role-grid,
+    .store-search-row,
+    .market-filters,
+    .institution-filters,
+    .v41-chat-input,
+    .v41-health-filter,
+    .v46-gov-toolbar,
+    .v47-research-filter,
+    .v38-controls,
+    .healthy-store-tabs,
+    .wizard,
+    .controls,
+    .section-head,
+    .v53-action-row,
+    .v52-actions,
+    .v56-actions {
+      gap: 12px !important;
+      flex-wrap: wrap;
+    }
+    .form { gap: 16px !important; }
+    .profile-form { gap: 14px !important; }
+    .form label,
+    .profile-form label,
+    .profile-specialty label,
+    .card label {
+      display: flex;
+      flex-direction: column;
+      gap: 8px !important;
+      margin: 0;
+    }
+    .form label > input,
+    .form label > select,
+    .form label > textarea,
+    .profile-form label > input,
+    .profile-form label > select,
+    .card label > input,
+    .card label > select,
+    .card label > textarea {
+      width: 100%;
+      min-height: 42px;
+      margin: 0;
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    .btn,
+    .hero-center-btn,
+    .store-tab,
+    button.primary,
+    button.secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 6px 8px 6px 0;
+      white-space: normal;
+      line-height: 1.25;
+      min-height: 42px;
+    }
+    .nav button,
+    .sidebar-institution {
+      margin: 0 !important;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .hero h1, .hero p { margin: 0; max-width: 920px; }
+    .hero .btn,
+    .hero .hero-center-btn {
+      margin: 0 10px 8px 0;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px !important;
+      flex-wrap: wrap;
+    }
+    .top {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .top .controls select,
+    .top select,
+    .top input {
+      margin: 0;
+    }
+    .card .btn + .btn,
+    .card button + button,
+    p + .btn,
+    .btn + .btn {
+      /* extra breathing room when stacked inline */
+    }
+    .card > .btn,
+    .card > button.btn {
+      margin-top: 8px;
+    }
+    .profile-access-body {
+      padding: 14px 16px 16px;
+    }
+    .profile-access-body .btn {
+      margin-top: 12px;
+    }
+    .store-search-row input,
+    .v41-chat-input input {
+      flex: 1;
+      min-width: 160px;
+      margin: 0;
+    }
+    .store-search-row .btn,
+    .v41-chat-input .btn {
+      margin: 0;
+      flex: none;
+    }
+    .institution-filters select,
+    .market-filters select,
+    .v46-gov-toolbar select {
+      margin: 0;
+      min-height: 40px;
+    }
+    .accordion { margin: 10px 0; }
+    .rank, .feeding-row, .maternal-row, .risk-row, .alert-row, .cart-row {
+      gap: 12px;
+      align-items: center;
+    }
+    .product-body .btn { width: 100%; margin: 8px 0 0; }
+    .v47-plan .btn { margin-top: 12px; }
+    input + button, select + button, button + input, button + select {
+      margin-left: 0;
+    }
+    .main .view .card + .card,
+    .main .view .grid + .card,
+    .main .view .hero + .card,
+    .main .view .card + .grid,
+    .main .view .grid + .grid {
+      margin-top: 16px;
+    }
+    .view.on > * + * { margin-top: 16px; }
+    .view.on > .grid,
+    .view.on > .grid2,
+    .view.on > .grid3 { margin-top: 16px; }
+    @media (max-width: 700px) {
+      .btn, .hero-center-btn { width: 100%; margin: 6px 0; }
+      .store-search-row, .v41-chat-input, .controls { flex-direction: column; align-items: stretch; }
     }
   </style>
 
@@ -4936,13 +5132,19 @@
   </section>
 </main>
 <div id="toast" class="toast"></div>
-<div id="v51Live" class="v51-live" role="status" aria-live="polite"><button class="v51-close"
-    onclick="closeV51Sim()">×</button>
+<div id="v51Live" class="v51-live" role="status" aria-live="polite">
+  <div class="v51-chrome" id="v51Chrome">
+    <span class="v51-grip" aria-hidden="true">⋮⋮</span>
+    <button type="button" class="v51-min" id="v51MinBtn" title="Reduce / expand" aria-label="Reduce panel">–</button>
+    <button type="button" class="v51-close" onclick="closeV51Sim()" aria-label="Close">×</button>
+  </div>
   <h3 id="v51LiveTitle">NUTRI.N°1 Intelligence</h3>
   <div id="v51LiveSub" class="v51-sub">Live application simulation</div>
-  <div class="v51-progress"><i></i></div>
-  <div id="v51LiveSteps" class="v51-steps"></div>
-  <div id="v51LiveResult" class="v51-result"></div>
+  <div class="v51-body">
+    <div class="v51-progress"><i></i></div>
+    <div id="v51LiveSteps" class="v51-steps"></div>
+    <div id="v51LiveResult" class="v51-result"></div>
+  </div>
 </div>
 
 <script>
@@ -6707,6 +6909,62 @@
     document.addEventListener('DOMContentLoaded', () => setTimeout(ensure, 700));
     new MutationObserver(() => { clearTimeout(window.__v49); window.__v49 = setTimeout(ensure, 350) })
       .observe(document.body, { childList: true, subtree: true });
+  })();
+</script>
+
+
+<script id="v51-drag-min">
+  (function () {
+    function ready() {
+      const box = document.getElementById('v51Live');
+      const chrome = document.getElementById('v51Chrome');
+      const minBtn = document.getElementById('v51MinBtn');
+      if (!box || !chrome || box.dataset.dragReady) return;
+      box.dataset.dragReady = '1';
+      let drag = false, ox = 0, oy = 0;
+      function start(e) {
+        if (e.target.closest('button')) return;
+        const pt = e.touches ? e.touches[0] : e;
+        const r = box.getBoundingClientRect();
+        drag = true;
+        ox = pt.clientX - r.left;
+        oy = pt.clientY - r.top;
+        box.classList.add('v51-dragging');
+        box.style.left = r.left + 'px';
+        box.style.top = r.top + 'px';
+        box.style.right = 'auto';
+        box.style.bottom = 'auto';
+        e.preventDefault();
+      }
+      function move(e) {
+        if (!drag) return;
+        const pt = e.touches ? e.touches[0] : e;
+        const w = box.offsetWidth, h = box.offsetHeight;
+        let x = pt.clientX - ox, y = pt.clientY - oy;
+        x = Math.max(8, Math.min(window.innerWidth - w - 8, x));
+        y = Math.max(8, Math.min(window.innerHeight - h - 8, y));
+        box.style.left = x + 'px';
+        box.style.top = y + 'px';
+      }
+      function end() {
+        drag = false;
+        box.classList.remove('v51-dragging');
+      }
+      chrome.addEventListener('mousedown', start);
+      chrome.addEventListener('touchstart', start, { passive: false });
+      window.addEventListener('mousemove', move);
+      window.addEventListener('touchmove', move, { passive: false });
+      window.addEventListener('mouseup', end);
+      window.addEventListener('touchend', end);
+      minBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        box.classList.toggle('v51-collapsed');
+        minBtn.textContent = box.classList.contains('v51-collapsed') ? '+' : '–';
+        minBtn.setAttribute('aria-label', box.classList.contains('v51-collapsed') ? 'Expand panel' : 'Reduce panel');
+      });
+    }
+    document.addEventListener('DOMContentLoaded', ready);
+    if (document.readyState !== 'loading') ready();
   })();
 </script>
 
