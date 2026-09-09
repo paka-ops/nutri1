@@ -3517,6 +3517,20 @@
     .hero .hero-center-btn {
       margin: 0 10px 8px 0;
     }
+    .hero .hero-actions,
+    .hero .hero-agencies {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+    .hero .hero-actions .btn,
+    .hero .hero-agencies .hero-center-btn {
+      margin: 0;
+    }
+    .hero-agencies {
+      padding-top: 2px;
+    }
     .controls {
       display: flex;
       align-items: center;
@@ -3711,16 +3725,20 @@
       <p data-t="heroText" data-i18n="ui.one_dynamic_platform_connecting_citizens_food_intelligence_ai_nutritio">One
         dynamic platform connecting citizens, food intelligence, AI, nutrition professionals, governments and scientific
         partners.</p>
-      <button class="btn primary" onclick="go('citizen')" data-t="openCitizen"
-        data-i18n="ui.open_citizen_dashboard">Open Citizen Dashboard</button>
-      <button class="btn secondary" onclick="go('health')" data-t="openHealth"
-        data-i18n="ui.health_command_center">Health Command Center</button>
-      <button class="btn secondary" onclick="go('agri')" data-t="openAgri"
-        data-i18n="ui.agriculture_intelligence">Agriculture Intelligence</button>
-      <button onclick="go('unicef',this)" class="hero-center-btn" data-i18n="ui.unicef">🧒 UNICEF</button>
-      <button onclick="go('who',this)" class="hero-center-btn" data-i18n="ui.who">🌍 WHO</button><button
-        onclick="go('wfp',this)" class="hero-center-btn">🍚 WFP</button><button onclick="go('fao',this)"
-        class="hero-center-btn">🌾 FAO</button>
+      <div class="hero-actions">
+        <button class="btn primary" onclick="go('citizen')" data-t="openCitizen"
+          data-i18n="ui.open_citizen_dashboard">Open Citizen Dashboard</button>
+        <button class="btn secondary" onclick="go('health')" data-t="openHealth"
+          data-i18n="ui.health_command_center">Health Command Center</button>
+        <button class="btn secondary" onclick="go('agri')" data-t="openAgri"
+          data-i18n="ui.agriculture_intelligence">Agriculture Intelligence</button>
+      </div>
+      <div class="hero-agencies">
+        <button onclick="go('unicef',this)" class="hero-center-btn" data-i18n="ui.unicef">🧒 UNICEF</button>
+        <button onclick="go('who',this)" class="hero-center-btn" data-i18n="ui.who">🌍 WHO</button>
+        <button onclick="go('wfp',this)" class="hero-center-btn">🍚 WFP</button>
+        <button onclick="go('fao',this)" class="hero-center-btn">🌾 FAO</button>
+      </div>
     </div>
     <div class="card institutional-core">
       <div class="section-head">
