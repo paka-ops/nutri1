@@ -723,15 +723,37 @@
             font-weight: 650;
             font-size: 12px;
             line-height: 1.2;
-            animation: lpflow 4.55s linear infinite;
-            transition: background .4s, color .4s, border-color .4s, box-shadow .4s
+            animation: lpflow var(--lpT, 4.55s) linear infinite;
+            animation-delay: calc(var(--lpS, .65s) * var(--i, 0));
+            transition: background .4s, color .4s, border-color .4s, box-shadow .4s;
+            will-change: transform, box-shadow
         }
+
+        /* the current of each loop travels chip by chip, then closes back on itself */
+        .lpChain span:nth-of-type(1) { --i: 0 }
+        .lpChain span:nth-of-type(2) { --i: 1 }
+        .lpChain span:nth-of-type(3) { --i: 2 }
+        .lpChain span:nth-of-type(4) { --i: 3 }
+        .lpChain span:nth-of-type(5) { --i: 4 }
+        .lpChain span:nth-of-type(6) { --i: 5 }
+        .lpChain span:nth-of-type(7) { --i: 6 }
 
         .lpChain i {
             font-style: normal;
             font-weight: 850;
-            color: #169652
+            color: #169652;
+            display: inline-block;
+            opacity: .55;
+            animation: lparrow var(--lpT, 4.55s) cubic-bezier(.16, 1, .3, 1) infinite;
+            animation-delay: calc(var(--lpS, .65s) * var(--i, 0) + .32s)
         }
+
+        .lpChain i:nth-of-type(1) { --i: 0 }
+        .lpChain i:nth-of-type(2) { --i: 1 }
+        .lpChain i:nth-of-type(3) { --i: 2 }
+        .lpChain i:nth-of-type(4) { --i: 3 }
+        .lpChain i:nth-of-type(5) { --i: 4 }
+        .lpChain i:nth-of-type(6) { --i: 5 }
 
         .lb2 .lpChain span {
             background: #faf5ea;
@@ -741,11 +763,9 @@
         }
 
         .lb2 .lpChain i {
-            color: #a97f22
+            color: #a97f22;
+            animation-name: lparrowg
         }
-
-        /* the current of each loop travels chip by chip */
-       
 
         @keyframes lpflow {
 
@@ -754,15 +774,17 @@
                 background: #0a2b1e;
                 border-color: #29cf7080;
                 color: #8ff0a9;
-                box-shadow: 0 8px 22px #29cf7040
+                box-shadow: 0 8px 22px #29cf7040, 0 0 0 4px #29cf7014;
+                transform: translateY(-2px)
             }
 
-            16%,
+            18%,
             100% {
                 background: #f2f7f3;
                 border-color: var(--line);
                 color: #123a28;
-                box-shadow: 0 0 0 #29cf7000
+                box-shadow: 0 0 0 #29cf7000, 0 0 0 0 #29cf7000;
+                transform: translateY(0)
             }
         }
 
@@ -773,16 +795,220 @@
                 background: #3c2d14;
                 border-color: #e5b85a80;
                 color: #f4d99a;
-                box-shadow: 0 8px 22px #e5b85a40
+                box-shadow: 0 8px 22px #e5b85a40, 0 0 0 4px #e5b85a14;
+                transform: translateY(-2px)
             }
 
-            16%,
+            18%,
             100% {
                 background: #faf5ea;
                 border-color: #eadfc6;
                 color: #4a3a15;
-                box-shadow: 0 0 0 #e5b85a00
+                box-shadow: 0 0 0 #e5b85a00, 0 0 0 0 #e5b85a00;
+                transform: translateY(0)
             }
+        }
+
+        @keyframes lparrow {
+
+            0% {
+                opacity: .55;
+                transform: translateX(0);
+                color: #169652
+            }
+
+            4% {
+                opacity: 1;
+                transform: translateX(4px);
+                color: #29cf70;
+                text-shadow: 0 0 10px #29cf7080
+            }
+
+            14%,
+            100% {
+                opacity: .55;
+                transform: translateX(0);
+                color: #169652;
+                text-shadow: none
+            }
+        }
+
+        @keyframes lparrowg {
+
+            0% {
+                opacity: .55;
+                transform: translateX(0);
+                color: #a97f22
+            }
+
+            4% {
+                opacity: 1;
+                transform: translateX(4px);
+                color: #e5b85a;
+                text-shadow: 0 0 10px #e5b85a80
+            }
+
+            14%,
+            100% {
+                opacity: .55;
+                transform: translateX(0);
+                color: #a97f22;
+                text-shadow: none
+            }
+        }
+
+        /* title row: heading + orbital badge that mirrors the chain, step by step */
+        .lpHead {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin: 0 0 14px
+        }
+
+        .lpHead h3 {
+            margin: 0 !important
+        }
+
+        .lpOrbit {
+            --c: #29cf70;
+            --cd: #0a2b1e;
+            position: relative;
+            flex: 0 0 auto;
+            width: 54px;
+            height: 54px;
+            border-radius: 50%;
+            display: block
+        }
+
+        .lb2 .lpOrbit {
+            --c: #e5b85a;
+            --cd: #3c2d14
+        }
+
+        .lpOrbit:before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+            border: 1px dashed color-mix(in srgb, var(--c) 55%, transparent);
+            animation: lpspin 28s linear infinite
+        }
+
+        .lpOrbit:after {
+            content: "";
+            position: absolute;
+            inset: 4px;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, transparent 0 62%, color-mix(in srgb, var(--c) 0%, transparent) 62%, color-mix(in srgb, var(--c) 55%, transparent) 100%);
+            -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+            mask: radial-gradient(farthest-side, transparent calc(100% - 7px), #000 calc(100% - 6px));
+            animation: lpspin var(--lpT, 4.55s) linear infinite
+        }
+
+        .lpOrbit b {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            margin: -2.5px 0 0 -2.5px;
+            border-radius: 50%;
+            background: color-mix(in srgb, var(--c) 35%, #fff);
+            transform: rotate(var(--a)) translateY(-20px);
+            animation: lpdot var(--lpT, 4.55s) linear infinite;
+            animation-delay: calc(var(--lpS, .65s) * var(--i, 0))
+        }
+
+        .lpOrbit em {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 12px;
+            height: 12px;
+            margin: -6px 0 0 -6px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 35% 35%, #fff 0, var(--c) 45%, var(--cd) 100%);
+            box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 14%, transparent), 0 0 14px color-mix(in srgb, var(--c) 60%, transparent);
+            animation: lpcore 2.275s ease-in-out infinite
+        }
+
+        @keyframes lpspin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes lpdot {
+
+            0%,
+            9% {
+                background: var(--c);
+                box-shadow: 0 0 10px var(--c), 0 0 0 3px color-mix(in srgb, var(--c) 22%, transparent);
+                transform: rotate(var(--a)) translateY(-20px) scale(1.5)
+            }
+
+            22%,
+            100% {
+                background: color-mix(in srgb, var(--c) 35%, #fff);
+                box-shadow: 0 0 0 transparent, 0 0 0 0 transparent;
+                transform: rotate(var(--a)) translateY(-20px) scale(1)
+            }
+        }
+
+        @keyframes lpcore {
+
+            0%,
+            100% {
+                transform: scale(1)
+            }
+
+            50% {
+                transform: scale(1.18)
+            }
+        }
+
+        /* accent line under the photo becomes a slow luminous current */
+        .lpMedia:after {
+            background-size: 200% 100% !important;
+            animation: lpline var(--lpT, 4.55s) linear infinite
+        }
+
+        .lb1 .lpMedia:after {
+            background: linear-gradient(90deg, #1d8f4e 0%, #29cf70 35%, #c6ff8a 50%, #29cf70 65%, #1d8f4e 100%)
+        }
+
+        .lb2 .lpMedia:after {
+            background: linear-gradient(90deg, #b8893a 0%, #e5b85a 35%, #fff0c4 50%, #e5b85a 65%, #b8893a 100%)
+        }
+
+        @keyframes lpline {
+            from {
+                background-position: 100% 0
+            }
+
+            to {
+                background-position: -100% 0
+            }
+        }
+
+        /* gentle drift on the photo band, in the same tempo family */
+        .lpImg {
+            animation: lpken 18s ease-in-out infinite alternate
+        }
+
+        @keyframes lpken {
+            from {
+                transform: scale(1.03) translate3d(0, 0, 0)
+            }
+
+            to {
+                transform: scale(1.09) translate3d(-1.2%, -.8%, 0)
+            }
+        }
+
+        .loopbox:hover .lpImg {
+            animation-play-state: paused
         }
 
         /* loop cards carry their own clear photo band: no faded card-bg overlay */
@@ -792,7 +1018,14 @@
         }
 
         @media (prefers-reduced-motion:reduce) {
-            .lpChain span {
+            .lpChain span,
+            .lpChain i,
+            .lpOrbit:before,
+            .lpOrbit:after,
+            .lpOrbit b,
+            .lpOrbit em,
+            .lpMedia:after,
+            .lpImg {
                 animation: none
             }
 
@@ -1237,7 +1470,10 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                             loading="lazy" decoding="async">
                     </figure>
                     <div class="lpBody">
-                        <h3>Boucle numérique</h3>
+                        <div class="lpHead">
+                            <h3>Boucle numérique</h3>
+                            <span class="lpOrbit" aria-hidden="true"><b style="--a:0deg;--i:0"></b><b style="--a:51.4deg;--i:1"></b><b style="--a:102.9deg;--i:2"></b><b style="--a:154.3deg;--i:3"></b><b style="--a:205.7deg;--i:4"></b><b style="--a:257.1deg;--i:5"></b><b style="--a:308.6deg;--i:6"></b><em></em></span>
+                        </div>
                         <p class="lpChain"><span>Profil</span> <i>→</i> <span>alimentation</span> <i>→</i>
                             <span>IA</span> <i>→</i> <span>recommandation</span> <i>→</i> <span>prévention</span>
                             <i>→</i> <span>accompagnement professionnel</span> <i>→</i> <span>suivi.</span></p>
@@ -1252,7 +1488,10 @@ Nous commençons par l'intelligence nutritionnelle numérique. Nous conneceons e
                             loading="lazy" decoding="async">
                     </figure>
                     <div class="lpBody">
-                        <h3>Boucle du système alimentaire</h3>
+                        <div class="lpHead">
+                            <h3>Boucle du système alimentaire</h3>
+                            <span class="lpOrbit" aria-hidden="true"><b style="--a:0deg;--i:0"></b><b style="--a:51.4deg;--i:1"></b><b style="--a:102.9deg;--i:2"></b><b style="--a:154.3deg;--i:3"></b><b style="--a:205.7deg;--i:4"></b><b style="--a:257.1deg;--i:5"></b><b style="--a:308.6deg;--i:6"></b><em></em></span>
+                        </div>
                         <p class="lpChain"><span>Besoins nutritionnels</span> <i>→</i> <span>demande</span> <i>→</i>
                             <span>production</span> <i>→</i> <span>transformation</span> <i>→</i>
                             <span>place de marché</span> <i>→</i> <span>consommation</span> <i>→</i>
