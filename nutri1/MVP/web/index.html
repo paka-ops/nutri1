@@ -2292,6 +2292,93 @@
         transform: translateX(330%)
       }
     }
+
+    .v51-live {
+      cursor: default;
+      user-select: none;
+      touch-action: none;
+    }
+    .v51-chrome {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: -4px -4px 10px;
+      cursor: grab;
+    }
+    .v51-chrome:active { cursor: grabbing; }
+    .v51-grip {
+      margin-right: auto;
+      letter-spacing: -2px;
+      opacity: .55;
+      font-size: 14px;
+      padding: 4px 6px;
+    }
+    .v51-min, .v51-close {
+      float: none;
+      border: 0;
+      background: rgba(255,255,255,.1);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 18px;
+      line-height: 1;
+    }
+    .v51-min:hover, .v51-close:hover { background: rgba(255,255,255,.2); }
+    .v51-live.v51-collapsed {
+      width: min(280px, calc(100vw - 24px));
+      padding: 12px;
+    }
+    .v51-live.v51-collapsed .v51-body,
+    .v51-live.v51-collapsed .v51-sub {
+      display: none;
+    }
+    .v51-live.v51-collapsed h3 {
+      margin: 0;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 200px;
+    }
+    .v51-live.v51-dragging { box-shadow: 0 22px 70px rgba(0,0,0,.4); }
+    .v51-chrome {
+      display: flex !important;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin: -8px -8px 12px !important;
+      padding: 10px 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.12);
+      cursor: grab !important;
+      background: rgba(255,255,255,.04);
+      border-radius: 14px 14px 0 0;
+    }
+    .v51-chrome-main { display: flex; gap: 10px; align-items: flex-start; min-width: 0; flex: 1; }
+    .v51-chrome-main h3 { margin: 0 0 4px; pointer-events: none; }
+    .v51-chrome-main .v51-sub { margin: 0 !important; pointer-events: none; }
+    .v51-chrome-actions { display: flex; gap: 6px; flex: none; }
+    .v51-grip { font-size: 18px; opacity: .7; padding-top: 2px; }
+    .nutri-float-min { cursor: pointer; }
+    .v52-modal.nutri-floating, .v53-modal.nutri-floating, .v54-modal.nutri-floating,
+    .v56-workspace.nutri-floating, .v57-window.nutri-floating {
+      position: fixed !important;
+      margin: 0 !important;
+      max-height: 86vh;
+    }
+    .nutri-sim-collapsed { width: min(340px, calc(100vw - 24px)) !important; max-height: none !important; }
+    .nutri-sim-collapsed .v52-grid,
+    .nutri-sim-collapsed .v52-card,
+    .nutri-sim-collapsed .v53-toolbar,
+    .nutri-sim-collapsed .v53-grid,
+    .nutri-sim-collapsed .v53-tab,
+    .nutri-sim-collapsed .v54-tabs,
+    .nutri-sim-collapsed .v54-body,
+    .nutri-sim-collapsed .v56-body,
+    .nutri-sim-collapsed #v57ExactContent,
+    .nutri-sim-collapsed .v51-body { display: none !important; }
+
   </style>
 
   <style id="v52-investor-sim-css">
@@ -3163,6 +3250,348 @@
       }
     }
   </style>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style id="nutri-ui-investor-refresh">
+    :root {
+      --g: #08733f;
+      --d: #032d1a;
+      --lime: #c9ee59;
+      --bg: #eef5f0;
+      --card: #ffffff;
+      --line: #d4e5d9;
+      --text: #14251a;
+      --muted: #5f7266;
+      --blue: #2469aa;
+      --orange: #b96c1b;
+      --red: #a62f35;
+      --mist: #f7fbf8;
+      --shadow: 0 10px 32px rgba(3, 45, 26, 0.08);
+      --shadow-hover: 0 16px 40px rgba(8, 115, 63, 0.14);
+      --radius: 18px;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 500px at -10% -10%, rgba(201,238,89,.18), transparent 50%),
+        radial-gradient(900px 420px at 110% 0%, rgba(8,115,63,.10), transparent 45%),
+        var(--bg);
+      letter-spacing: -.01em;
+    }
+    .side {
+      width: 292px;
+      padding: 20px 16px 28px;
+      background:
+        linear-gradient(165deg, #02180e 0%, var(--d) 42%, #075f35 100%);
+      box-shadow: 8px 0 32px rgba(3,45,26,.18);
+      scrollbar-width: thin;
+    }
+    .side::-webkit-scrollbar { width: 6px; }
+    .side::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 99px; }
+    .brand { font-size: 22px; letter-spacing: -.03em; gap: 8px; }
+    .sidebar-logo {
+      width: 44px; height: 44px; border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,.2);
+    }
+    .sub { opacity: .78; margin-top: 6px; }
+    .nav { margin-top: 18px; display: flex; flex-direction: column; gap: 4px; }
+    .nav button, .sidebar-institution {
+      border-radius: 12px !important;
+      padding: 11px 12px !important;
+      font-size: 13px;
+      font-weight: 600;
+      color: #e8f6ec !important;
+      transition: background .2s, transform .2s, box-shadow .2s;
+    }
+    .nav button:hover, .sidebar-institution:hover {
+      background: rgba(201,238,89,.14) !important;
+      transform: translateX(3px);
+    }
+    .nav button.on {
+      background: linear-gradient(90deg, rgba(201,238,89,.28), rgba(255,255,255,.08)) !important;
+      box-shadow: inset 3px 0 0 var(--lime);
+      color: #fff !important;
+    }
+    .main { margin-left: 292px; padding: 22px 26px 48px; }
+    .top {
+      background: rgba(255,255,255,.72);
+      backdrop-filter: blur(14px);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow);
+    }
+    .controls select, .top select {
+      min-height: 40px;
+      font-weight: 600;
+    }
+    select, input, textarea {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      font-family: inherit;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    select:focus, input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--g);
+      box-shadow: 0 0 0 4px rgba(8,115,63,.12);
+    }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      padding: 36px 34px;
+      border-radius: 24px;
+      background:
+        radial-gradient(600px 220px at 90% 10%, rgba(201,238,89,.28), transparent 50%),
+        linear-gradient(135deg, #02180e, var(--d) 40%, var(--g));
+      box-shadow: 0 18px 50px rgba(3,45,26,.22);
+    }
+    .hero::after {
+      content: "";
+      position: absolute; right: -40px; bottom: -60px;
+      width: 220px; height: 220px; border-radius: 50%;
+      background: rgba(201,238,89,.15);
+      pointer-events: none;
+    }
+    .hero h1 { font-size: 34px; letter-spacing: -.04em; line-height: 1.15; }
+    .grid, .grid3, .grid2 { gap: 16px; margin-top: 16px; }
+    .card,
+    .product-card,
+    .v38-kpi,
+    .v45-citizen-metric,
+    .v46-kpi,
+    .core-card,
+    .module-grid > div,
+    .age-card,
+    .ncd-card,
+    .executive-center-card,
+    .role-card,
+    .condition-card,
+    .patient-stat,
+    .v47-plan {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      isolation: isolate;
+    }
+    .card { padding: 18px; }
+    .card + .card, .view > .card { margin-top: 0; }
+    .view.on { animation: nutriFade .35s ease; }
+    @keyframes nutriFade {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: none; }
+    }
+    .card:hover,
+    .product-card:hover,
+    .executive-center-card:hover,
+    .ncd-card:hover,
+    .condition-card:hover,
+    .core-card:hover,
+    .module-grid > div:hover,
+    .age-card:hover,
+    .v38-kpi:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-hover);
+      border-color: #b7d7c2;
+    }
+    .metric, .v38-kpi-value, .inst-kpi b { color: var(--d); letter-spacing: -.04em; }
+    .pill, .tag, .access-badge, .v47-badge {
+      background: #edf6ef;
+      color: var(--g);
+      font-weight: 700;
+    }
+    .btn {
+      font-weight: 700;
+      border-radius: 12px;
+      padding: 11px 16px;
+      transition: transform .15s, box-shadow .15s, filter .15s;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .primary {
+      background: linear-gradient(180deg, #0b8a4c, var(--g));
+      box-shadow: 0 8px 18px rgba(8,115,63,.28);
+    }
+    .primary:hover { filter: brightness(1.05); }
+    .secondary { border: 1px solid #c9e2d1; }
+    table { background: #fff; border-radius: 14px; overflow: hidden; }
+    th { background: var(--mist); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+    tr:hover td { background: #f6fbf7; }
+    .reference { border-radius: 12px; }
+    .progress { height: 8px; background: #e4eee7; }
+    .progress i { background: linear-gradient(90deg, var(--g), var(--lime)); }
+    .top b { font-size: 15px; }
+    .institution-kpis, .v38-kpis, .v46-kpis, .v45-citizen-metric-grid { gap: 14px; }
+    .inst-kpi, .v46-kpi, .v38-kpi, .v45-citizen-metric {
+      background: linear-gradient(180deg, #fff, var(--mist));
+    }
+    .map, .gis-demo, .big-chart {
+      box-shadow: inset 0 0 0 1px var(--line);
+    }
+    .hero-center-btn { border-radius: 12px; }
+    .store-tab.active { background: var(--g) !important; color: #fff !important; }
+    .chat, .v41-chat { border: 1px solid var(--line); }
+    .toast { border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.25); }
+    @media (max-width: 980px) {
+      .side { display: none; }
+      .main { margin-left: 0; padding: 14px; }
+    }
+
+    /* Spacing: forms, fields, buttons must never collide */
+    .form,
+    .profile-form,
+    .profile-role-grid,
+    .store-search-row,
+    .market-filters,
+    .institution-filters,
+    .v41-chat-input,
+    .v41-health-filter,
+    .v46-gov-toolbar,
+    .v47-research-filter,
+    .v38-controls,
+    .healthy-store-tabs,
+    .wizard,
+    .controls,
+    .section-head,
+    .v53-action-row,
+    .v52-actions,
+    .v56-actions {
+      gap: 12px !important;
+      flex-wrap: wrap;
+    }
+    .form { gap: 16px !important; }
+    .profile-form { gap: 14px !important; }
+    .form label,
+    .profile-form label,
+    .profile-specialty label,
+    .card label {
+      display: flex;
+      flex-direction: column;
+      gap: 8px !important;
+      margin: 0;
+    }
+    .form label > input,
+    .form label > select,
+    .form label > textarea,
+    .profile-form label > input,
+    .profile-form label > select,
+    .card label > input,
+    .card label > select,
+    .card label > textarea {
+      width: 100%;
+      min-height: 42px;
+      margin: 0;
+    }
+    textarea { min-height: 88px; resize: vertical; }
+    .btn,
+    .hero-center-btn,
+    .store-tab,
+    button.primary,
+    button.secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin: 6px 8px 6px 0;
+      white-space: normal;
+      line-height: 1.25;
+      min-height: 42px;
+    }
+    .nav button,
+    .sidebar-institution {
+      margin: 0 !important;
+    }
+    .hero {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .hero h1, .hero p { margin: 0; max-width: 920px; }
+    .hero .btn,
+    .hero .hero-center-btn {
+      margin: 0 10px 8px 0;
+    }
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 10px !important;
+      flex-wrap: wrap;
+    }
+    .top {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .top .controls select,
+    .top select,
+    .top input {
+      margin: 0;
+    }
+    .card .btn + .btn,
+    .card button + button,
+    p + .btn,
+    .btn + .btn {
+      /* extra breathing room when stacked inline */
+    }
+    .card > .btn,
+    .card > button.btn {
+      margin-top: 8px;
+    }
+    .profile-access-body {
+      padding: 14px 16px 16px;
+    }
+    .profile-access-body .btn {
+      margin-top: 12px;
+    }
+    .store-search-row input,
+    .v41-chat-input input {
+      flex: 1;
+      min-width: 160px;
+      margin: 0;
+    }
+    .store-search-row .btn,
+    .v41-chat-input .btn {
+      margin: 0;
+      flex: none;
+    }
+    .institution-filters select,
+    .market-filters select,
+    .v46-gov-toolbar select {
+      margin: 0;
+      min-height: 40px;
+    }
+    .accordion { margin: 10px 0; }
+    .rank, .feeding-row, .maternal-row, .risk-row, .alert-row, .cart-row {
+      gap: 12px;
+      align-items: center;
+    }
+    .product-body .btn { width: 100%; margin: 8px 0 0; }
+    .v47-plan .btn { margin-top: 12px; }
+    input + button, select + button, button + input, button + select {
+      margin-left: 0;
+    }
+    .main .view .card + .card,
+    .main .view .grid + .card,
+    .main .view .hero + .card,
+    .main .view .card + .grid,
+    .main .view .grid + .grid {
+      margin-top: 16px;
+    }
+    .view.on > * + * { margin-top: 16px; }
+    .view.on > .grid,
+    .view.on > .grid2,
+    .view.on > .grid3 { margin-top: 16px; }
+    @media (max-width: 700px) {
+      .btn, .hero-center-btn { width: 100%; margin: 6px 0; }
+      .store-search-row, .v41-chat-input, .controls { flex-direction: column; align-items: stretch; }
+    }
+  </style>
+
   <link rel="icon" type="image/png" href="../../../nutri-logo.png">
 </head>
 <script
@@ -4739,13 +5168,25 @@
   </section>
 </main>
 <div id="toast" class="toast"></div>
-<div id="v51Live" class="v51-live" role="status" aria-live="polite"><button class="v51-close"
-    onclick="closeV51Sim()">×</button>
-  <h3 id="v51LiveTitle">NUTRI.N°1 Intelligence</h3>
-  <div id="v51LiveSub" class="v51-sub">Live application simulation</div>
-  <div class="v51-progress"><i></i></div>
-  <div id="v51LiveSteps" class="v51-steps"></div>
-  <div id="v51LiveResult" class="v51-result"></div>
+<div id="v51Live" class="v51-live" role="status" aria-live="polite">
+  <div class="v51-chrome" id="v51Chrome" title="Drag to move">
+    <div class="v51-chrome-main">
+      <span class="v51-grip" aria-hidden="true">⠿</span>
+      <div>
+        <h3 id="v51LiveTitle">NUTRI.N°1 Intelligence</h3>
+        <div id="v51LiveSub" class="v51-sub">Live application simulation</div>
+      </div>
+    </div>
+    <div class="v51-chrome-actions">
+      <button type="button" class="v51-min" id="v51MinBtn" title="Reduce / expand">–</button>
+      <button type="button" class="v51-close" onclick="closeV51Sim()" aria-label="Close">×</button>
+    </div>
+  </div>
+  <div class="v51-body">
+    <div class="v51-progress"><i></i></div>
+    <div id="v51LiveSteps" class="v51-steps"></div>
+    <div id="v51LiveResult" class="v51-result"></div>
+  </div>
 </div>
 
 <script>
@@ -6510,6 +6951,102 @@
     document.addEventListener('DOMContentLoaded', () => setTimeout(ensure, 700));
     new MutationObserver(() => { clearTimeout(window.__v49); window.__v49 = setTimeout(ensure, 350) })
       .observe(document.body, { childList: true, subtree: true });
+  })();
+</script>
+
+
+<script id="v51-drag-min">
+  (function () {
+    function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+    function makeDraggable(box, handle) {
+      if (!box || !handle || box.dataset.dragReady) return;
+      box.dataset.dragReady = '1';
+      let drag = false, ox = 0, oy = 0;
+      function start(e) {
+        if (e.target.closest('button,a,input,select,textarea')) return;
+        const pt = e.touches ? e.touches[0] : e;
+        const r = box.getBoundingClientRect();
+        drag = true;
+        ox = pt.clientX - r.left;
+        oy = pt.clientY - r.top;
+        box.classList.add('v51-dragging', 'nutri-floating');
+        box.style.position = 'fixed';
+        box.style.left = r.left + 'px';
+        box.style.top = r.top + 'px';
+        box.style.right = 'auto';
+        box.style.bottom = 'auto';
+        box.style.margin = '0';
+        e.preventDefault();
+      }
+      function move(e) {
+        if (!drag) return;
+        const pt = e.touches ? e.touches[0] : e;
+        const w = box.offsetWidth, h = box.offsetHeight;
+        const x = clamp(pt.clientX - ox, 8, window.innerWidth - w - 8);
+        const y = clamp(pt.clientY - oy, 8, window.innerHeight - h - 8);
+        box.style.left = x + 'px';
+        box.style.top = y + 'px';
+      }
+      function end() { drag = false; box.classList.remove('v51-dragging'); }
+      handle.addEventListener('mousedown', start);
+      handle.addEventListener('touchstart', start, { passive: false });
+      window.addEventListener('mousemove', move);
+      window.addEventListener('touchmove', move, { passive: false });
+      window.addEventListener('mouseup', end);
+      window.addEventListener('touchend', end);
+    }
+    function ensureMin(handle, box) {
+      if (!handle || handle.querySelector('.nutri-float-min')) return;
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'nutri-float-min v51-min';
+      b.textContent = '–';
+      b.title = 'Reduce / expand';
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        box.classList.toggle('nutri-sim-collapsed');
+        box.classList.toggle('v51-collapsed');
+        b.textContent = box.classList.contains('nutri-sim-collapsed') ? '+' : '–';
+      });
+      handle.appendChild(b);
+    }
+    function wire() {
+      const live = document.getElementById('v51Live');
+      if (live) makeDraggable(live, document.getElementById('v51Chrome') || live);
+      const minBtn = document.getElementById('v51MinBtn');
+      if (minBtn && !minBtn.dataset.bound) {
+        minBtn.dataset.bound = '1';
+        minBtn.addEventListener('click', function (e) {
+          e.stopPropagation();
+          live.classList.toggle('v51-collapsed');
+          live.classList.toggle('nutri-sim-collapsed');
+          minBtn.textContent = live.classList.contains('v51-collapsed') ? '+' : '–';
+        });
+      }
+      const pairs = [
+        ['#v52Overlay .v52-modal', '.v52-head'],
+        ['#v53Shell .v53-modal', '.v53-head'],
+        ['#v54Overlay .v54-modal', '.v54-head'],
+        '#v56overlay .v56-workspace|#v56overlay .v56-top',
+        ['#v57ExactShell .v57-window', '.v57-head']
+      ];
+      [
+        ['#v52Overlay .v52-modal', '.v52-head'],
+        ['#v53Shell .v53-modal', '.v53-head'],
+        ['#v54Overlay .v54-modal', '.v54-head'],
+        ['#v56overlay .v56-workspace', '.v56-top'],
+        ['#v57ExactShell .v57-window', '.v57-head']
+      ].forEach(function (pair) {
+        document.querySelectorAll(pair[0]).forEach(function (box) {
+          const handle = box.querySelector(pair[1]) || box;
+          makeDraggable(box, handle);
+          ensureMin(handle, box);
+        });
+      });
+    }
+    document.addEventListener('DOMContentLoaded', wire);
+    if (document.readyState !== 'loading') wire();
+    new MutationObserver(function () { wire(); }).observe(document.documentElement, { childList: true, subtree: true });
   })();
 </script>
 
