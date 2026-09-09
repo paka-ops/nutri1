@@ -5788,19 +5788,27 @@
       document.dispatchEvent(new CustomEvent('nutri:i18nChanged', { detail: { locale } }));
     },
     render(root = document) {
+      // Guard: never write an unresolved `${...}` template placeholder (some dictionary
+      // values such as "ui.x_0": "${x[0]}" are raw templates). Overwriting already
+      // rendered content with them would display bizarre "${{...}}-like" symbols in
+      // the UI. Missing keys are kept as-is too, instead of leaking the key name.
+      const apply = (el, key, setter) => {
+        const s = this.t(key);
+        if (s === key || s.indexOf('${') !== -1) return;
+        setter(s);
+      };
       root.querySelectorAll?.('[data-i18n]').forEach(el => {
-        const key = el.dataset.i18n;
         if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') return;
-        el.textContent = this.t(key);
+        apply(el, el.dataset.i18n, s => { el.textContent = s });
       });
       root.querySelectorAll?.('[data-i18n-placeholder]').forEach(el => {
-        el.placeholder = this.t(el.dataset.i18nPlaceholder);
+        apply(el, el.dataset.i18nPlaceholder, s => { el.placeholder = s });
       });
       root.querySelectorAll?.('[data-i18n-title]').forEach(el => {
-        el.title = this.t(el.dataset.i18nTitle);
+        apply(el, el.dataset.i18nTitle, s => { el.title = s });
       });
       root.querySelectorAll?.('[data-i18n-aria]').forEach(el => {
-        el.setAttribute('aria-label', this.t(el.dataset.i18nAria));
+        apply(el, el.dataset.i18nAria, s => { el.setAttribute('aria-label', s) });
       });
     },
     // Use this after a module renders HTML dynamically.
@@ -7026,7 +7034,12 @@
         box.classList.toggle('v51-collapsed');
         b.textContent = box.classList.contains('nutri-sim-collapsed') ? '+' : '–';
       });
-      handle.appendChild(b);
+      // Insert the reduce (–) button BEFORE the panel's close (×) button so the
+      // close button stays anchored in the top-right corner (space-between flex
+      // would otherwise centre it when a third child is appended).
+      const close = handle.querySelector('.v52-close,.v53-close,.v54-close,.v56-close,[onclick*="Close"],[onclick*="close"]');
+      if (close && close.parentNode === handle) handle.insertBefore(b, close);
+      else handle.appendChild(b);
     }
     function wire() {
       const live = document.getElementById('v51Live');
