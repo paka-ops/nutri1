@@ -5704,6 +5704,10 @@
     new MutationObserver(() => setTimeout(v29TranslateAll, 0)).observe(document.body, { childList: true, subtree: true });
   }
 
+  // The citizen dashboard chart module finalizes these functions after the page is parsed.
+  // Keep the first platform boot safe when the legacy form calls them during initialization.
+  window.updateReferences = window.updateReferences || function () { };
+  window.saveCitizen = window.saveCitizen || function () { };
   function init() { document.getElementById('country').innerHTML = countries.map(x => `<option value="${x[0]}" data-i18n="ui.x_1">${x[1]}</option>`).join(''); document.getElementById('foodCountry').innerHTML = countries.map(x => `<option data-i18n="ui.x_1">${x[1]}</option>`).join(''); countryChanged(); updateReferences() }
   init(); setTimeout(v29Install, 120);
 
@@ -6490,7 +6494,7 @@
     }
     function ensureInputs(v) {
       const existing = Array.from(v.querySelectorAll('input,select'));
-      const hasWeight = existing.some(e => /weight|poids/i.test(e.name + ' ' + e.id + ' ' + e.placeholder));
+      const hasWeight = existing.some(e => /weight|poids/i.test(e.name + ' ' + e.id + ' ' + e.placeholder) || e.id === 'w');
       if (hasWeight) return;
       const anchor = v.querySelector('h1,h2,h3');
       if (!anchor) return;
@@ -7712,6 +7716,611 @@
     const st = document.createElement('style'); st.textContent = `.v57-clickable{cursor:pointer;transition:transform .18s,box-shadow .18s,background .18s}.v57-clickable:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(15,23,42,.12);background:rgba(37,99,235,.035)}.v57-overlay{position:fixed;inset:0;background:rgba(3,10,24,.66);backdrop-filter:blur(8px);z-index:99999;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;padding:24px}.v57-overlay.show{opacity:1}.v57-window{width:min(1180px,96vw);max-height:92vh;overflow:auto;background:#f7f9fc;border-radius:20px;box-shadow:0 30px 90px rgba(0,0,0,.38)}.v57-head{position:sticky;top:0;z-index:2;display:flex;justify-content:space-between;align-items:center;padding:18px 22px;background:#fff;border-bottom:1px solid #e4e9f1}.v57-head h1{margin:4px 0 0;font-size:24px}.v57-head>button{font-size:30px;border:0;background:transparent;cursor:pointer}.v57-hero{display:flex;gap:16px;align-items:center;margin-bottom:16px;padding:18px;border-radius:16px;background:linear-gradient(135deg,#eef5ff,#fff)}.v57-icon{font-size:40px}.v57-hero h2{margin:4px 0}.v57-hero p{margin:4px 0;color:#64748b}.v57-chart{height:210px;border:1px solid #e5eaf1;border-radius:12px;padding:12px;background:#fff}.v57-svg{width:100%;height:100%;color:#2563eb}.v57-periods{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.v57-periods button{border:1px solid #d7deea;background:#fff;border-radius:7px;padding:5px 9px;cursor:pointer}.v57-row{display:flex;justify-content:space-between;margin:8px 0 3px}.v57-meter{height:8px;background:#e9edf3;border-radius:99px;overflow:hidden}.v57-meter i{display:block;height:100%;background:linear-gradient(90deg,#60a5fa,#2563eb);border-radius:99px}.v57-flow>div{display:flex;align-items:center;gap:10px;padding:9px;border-bottom:1px solid #edf0f4}.v57-flow span{width:25px;height:25px;border-radius:50%;display:grid;place-items:center;background:#dbeafe;color:#1d4ed8;font-weight:700}.v57-flow em{margin-left:auto;font-style:normal;color:#16a34a;font-size:12px}.v57-recommend{margin-top:14px;padding:13px;border-radius:12px;background:#effdf4;border:1px solid #ccebd7}.v57-live{color:#16a34a;font-size:12px;font-weight:700}@media(max-width:700px){.v57-overlay{padding:8px}.v57-window{max-height:96vh}.v57-hero{align-items:flex-start}.v56-grid2{grid-template-columns:1fr!important}}`; document.head.appendChild(st); document.addEventListener('DOMContentLoaded', () => setTimeout(wire, 500)); new MutationObserver(() => setTimeout(wire, 100)).observe(document.body, { childList: true, subtree: true }); document.addEventListener('keydown', e => { if (e.key === 'Escape') v57Close() });
   })();
   function generateRecommendations() { let box = document.getElementById('recs'); box.innerHTML = '<p>🤖 Reading profile → diet → clinical context → country foods → trends…</p>'; setTimeout(() => { box.innerHTML = '<div class="grid3"><div class="reference good"><b>Food diversity</b><br>Increase variety using locally available foods.</div><div class="reference good"><b>Portion balance</b><br>Adjust portions to your goal and current trend.</div><div class="reference info"><b>Monitoring</b><br>Continue tracking the parameters relevant to your profile.</div></div><p class="muted">The system can escalate to a nutritionist when professional review is appropriate.</p>' }, 1000) }
+</script>
+<style id="nutri-patient-chart-css">
+  /* Patient-facing trends: quiet colors, large touch targets and plain-language context. */
+  #citizen .patient-chart-card {
+    overflow: hidden;
+    border-color: #d8e8df;
+    box-shadow: 0 10px 30px rgba(8, 115, 63, .08);
+  }
+
+  #citizen .patient-chart-card h3 {
+    margin: 0;
+    color: #173d29;
+    font-size: 17px;
+  }
+
+  .patient-chart-subtitle {
+    display: block;
+    margin-top: 5px;
+    color: #718277;
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .patient-chart-card .chart {
+    position: relative;
+    height: 292px;
+    margin-top: 12px;
+    padding: 10px 5px 4px 0;
+    border-radius: 13px;
+    background: linear-gradient(180deg, #fbfefc 0%, #f5faf7 100%);
+  }
+
+  .patient-chart-card .chart canvas {
+    max-width: 100%;
+  }
+
+  .patient-chart-insight {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border: 1px solid #e1eee5;
+    border-radius: 11px;
+    background: #f7fbf8;
+    color: #365446;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .patient-chart-insight strong {
+    color: #08733f;
+  }
+
+  .patient-chart-insight .patient-insight-icon {
+    flex: 0 0 auto;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+
+  #citizen .patient-reference-card {
+    padding: 0;
+    background: transparent;
+    border: 0;
+  }
+
+  .patient-reference-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 9px;
+  }
+
+  .patient-reference-item {
+    min-width: 0;
+    padding: 11px;
+    border: 1px solid #dfeae3;
+    border-left: 4px solid #94a3b8;
+    border-radius: 12px;
+    background: #fbfdfb;
+  }
+
+  .patient-reference-item.good { border-left-color: #0b8f5a; }
+  .patient-reference-item.watch { border-left-color: #d97706; }
+
+  .patient-reference-item .patient-reference-label {
+    display: block;
+    color: #66766c;
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .patient-reference-item b {
+    display: block;
+    margin-top: 3px;
+    color: #173d29;
+    font-size: 18px;
+  }
+
+  .patient-reference-item small {
+    display: block;
+    margin-top: 4px;
+    color: #66766c;
+    font-size: 10px;
+    line-height: 1.35;
+  }
+
+  .patient-status {
+    display: inline-block;
+    margin-top: 7px;
+    padding: 3px 7px;
+    border-radius: 99px;
+    background: #eaf7ef;
+    color: #08733f;
+    font-size: 10px;
+    font-weight: 750;
+  }
+
+  .patient-status.watch {
+    background: #fff4df;
+    color: #a15c00;
+  }
+
+  .patient-reference-chart {
+    height: 190px;
+    margin-top: 13px;
+    padding: 7px 3px 0 0;
+    border-top: 1px solid #e6efe8;
+  }
+
+  .patient-reference-chart-title {
+    display: block;
+    margin: 0 0 3px;
+    color: #52675a;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .patient-data-note {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 10px 0 0;
+    color: #748378;
+    font-size: 11px;
+  }
+
+  .patient-data-note::before {
+    content: '';
+    width: 7px;
+    height: 7px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #f59e0b;
+  }
+
+  .patient-data-note.personalized::before { background: #0b8f5a; }
+
+  .patient-svg-fallback {
+    position: absolute;
+    inset: 9px 6px 5px 0;
+    width: calc(100% - 6px);
+    height: calc(100% - 14px);
+  }
+
+  .patient-svg-fallback svg { width: 100%; height: 100%; overflow: visible; }
+  .patient-svg-fallback text { fill: #718277; font: 10px system-ui, sans-serif; }
+  .patient-svg-fallback .fallback-legend { font-weight: 700; }
+
+  @media (max-width: 720px) {
+    .patient-reference-grid { grid-template-columns: 1fr 1fr; }
+    .patient-chart-card .chart { height: 260px; }
+  }
+
+  @media (max-width: 480px) {
+    .patient-reference-grid { grid-template-columns: 1fr; }
+    .patient-chart-card .chart { height: 245px; }
+  }
+</style>
+
+<script id="nutri-patient-friendly-charts">
+  /*
+   * Patient-friendly Citizen Dashboard trends.
+   * The previous demo drew one unrelated series in each canvas. This module keeps
+   * every measurement on an honest unit axis and updates the charts from the form.
+   */
+  (function () {
+    'use strict';
+
+    const root = () => document.getElementById('citizen');
+    const byId = id => document.getElementById(id);
+    const finite = value => Number.isFinite(Number(value));
+    const read = (id, fallback) => {
+      const element = byId(id);
+      const value = parseFloat(element?.value);
+      return Number.isFinite(value) ? value : fallback;
+    };
+    const colors = {
+      green: '#0b8f5a',
+      blue: '#2563eb',
+      amber: '#d97706',
+      red: '#dc2626',
+      violet: '#7c3aed',
+      cyan: '#0891b2',
+      slate: '#94a3b8',
+      grid: 'rgba(100, 116, 139, .13)',
+      text: '#64748b'
+    };
+    const charts = {};
+    let renderTimer = null;
+
+    function getData() {
+      const weight = read('w', 68);
+      const height = Math.max(read('h', 170) / 100, .3);
+      const waist = read('wa', 82);
+      const glucose = read('gl', 96);
+      const a1c = read('a1c', 5.6);
+      const systolic = read('sys', 118);
+      const diastolic = read('dia', 76);
+      const bmi = weight / (height * height);
+      const fields = ['w', 'h', 'wa', 'gl', 'a1c', 'sys', 'dia'];
+      const personalized = fields.some(id => finite(byId(id)?.value));
+      return { weight, height: height * 100, waist, bmi, glucose, a1c, systolic, diastolic, personalized };
+    }
+
+    function labels() {
+      return ['5 checks ago', '4 checks ago', '3 checks ago', '2 checks ago', 'Last check', 'Today'];
+    }
+
+    function history(current, offsets, digits) {
+      return offsets.map((offset, index) => {
+        const value = current + offset;
+        return index === offsets.length - 1 ? current : Number(value.toFixed(digits));
+      });
+    }
+
+    function gradient(ctx, top, bottom) {
+      const fill = ctx.createLinearGradient(0, 0, 0, 280);
+      fill.addColorStop(0, top);
+      fill.addColorStop(1, bottom);
+      return fill;
+    }
+
+    function lineDataset(label, data, color, axis, ctx, fill) {
+      return {
+        label,
+        data,
+        yAxisID: axis || 'y',
+        borderColor: color,
+        backgroundColor: fill ? gradient(ctx, color + '35', color + '03') : color,
+        borderWidth: 3,
+        pointRadius: 3,
+        pointHoverRadius: 6,
+        pointBackgroundColor: '#fff',
+        pointBorderColor: color,
+        pointBorderWidth: 2,
+        tension: .35,
+        fill: Boolean(fill)
+      };
+    }
+
+    function referenceDataset(label, value, axis, color) {
+      return {
+        label,
+        data: Array(labels().length).fill(value),
+        yAxisID: axis || 'y',
+        borderColor: color || colors.slate,
+        borderWidth: 1.5,
+        borderDash: [6, 5],
+        pointRadius: 0,
+        pointHoverRadius: 0,
+        fill: false,
+        tension: 0
+      };
+    }
+
+    function baseOptions(yTitle, unit, extra) {
+      return Object.assign({
+        responsive: true,
+        maintainAspectRatio: false,
+        animation: { duration: 650, easing: 'easeOutQuart' },
+        interaction: { mode: 'index', intersect: false },
+        layout: { padding: { top: 4, right: 8, bottom: 0, left: 0 } },
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { usePointStyle: true, pointStyle: 'circle', padding: 13, color: colors.text, boxWidth: 7, font: { size: 11 } }
+          },
+          tooltip: {
+            backgroundColor: '#173d29',
+            titleColor: '#eafff0',
+            bodyColor: '#fff',
+            padding: 10,
+            displayColors: true,
+            callbacks: {
+              label: context => {
+                const value = context.parsed.y;
+                if (!Number.isFinite(value)) return context.dataset.label;
+                const digits = unit === '%' || unit === 'kg/m²' ? 1 : 0;
+                return `${context.dataset.label}: ${Number(value).toFixed(digits)} ${unit}`;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            grid: { display: false },
+            ticks: { color: colors.text, maxRotation: 0, font: { size: 10 } }
+          },
+          y: {
+            beginAtZero: false,
+            grace: '12%',
+            title: { display: true, text: yTitle, color: colors.text, font: { size: 11, weight: '600' } },
+            grid: { color: colors.grid },
+            ticks: { color: colors.text, font: { size: 10 } }
+          }
+        }
+      }, extra || {});
+    }
+
+    function destroyCanvas(canvas) {
+      if (!canvas) return;
+      const existing = window.Chart?.getChart?.(canvas);
+      if (existing) existing.destroy();
+      canvas.__v44 = true;
+      canvas.__v45 = true;
+      canvas.__patientChart = null;
+      canvas.style.display = '';
+      canvas.parentElement?.querySelector('.patient-svg-fallback')?.remove();
+    }
+
+    function fallbackChart(canvas, datasets, chartLabels) {
+      if (!canvas?.parentElement) return;
+      canvas.style.display = 'none';
+      canvas.parentElement.querySelector('.patient-svg-fallback')?.remove();
+      const all = datasets.flatMap(dataset => dataset.data.filter(Number.isFinite));
+      const min = Math.min(...all), max = Math.max(...all), range = max - min || 1;
+      const width = 720, height = 220, left = 38, right = 10, top = 15, bottom = 33;
+      const x = index => left + index * ((width - left - right) / Math.max(chartLabels.length - 1, 1));
+      const y = value => height - bottom - ((value - min) / range) * (height - top - bottom);
+      const grid = [0, .5, 1].map(step => {
+        const yy = top + step * (height - top - bottom);
+        const value = max - step * range;
+        return `<line x1="${left}" x2="${width - right}" y1="${yy}" y2="${yy}" stroke="#dfeae3"/><text x="2" y="${yy + 3}">${value.toFixed(0)}</text>`;
+      }).join('');
+      const lines = datasets.map((dataset, datasetIndex) => {
+        const points = dataset.data.map((value, index) => `${x(index)},${y(value)}`).join(' ');
+        const color = dataset.borderColor || colors.green;
+        return `<polyline points="${points}" fill="none" stroke="${color}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><text class="fallback-legend" x="${left + datasetIndex * 130}" y="${height - 5}" fill="${color}">${dataset.label}</text>`;
+      }).join('');
+      const ticks = chartLabels.map((label, index) => `<text x="${x(index)}" y="${height + 12}" text-anchor="middle">${label.replace(' checks ago', ' ago')}</text>`).join('');
+      const holder = document.createElement('div');
+      holder.className = 'patient-svg-fallback';
+      holder.innerHTML = `<svg viewBox="0 0 ${width} ${height + 16}" role="img" aria-label="Patient trend chart">${grid}${lines}${ticks}</svg>`;
+      canvas.parentElement.appendChild(holder);
+    }
+
+    function makeLineChart(id, chartLabels, datasets, options) {
+      const canvas = byId(id);
+      if (!canvas) return;
+      destroyCanvas(canvas);
+      if (!window.Chart) {
+        fallbackChart(canvas, datasets, chartLabels);
+        return;
+      }
+      canvas.__patientChart = new window.Chart(canvas, { type: 'line', data: { labels: chartLabels, datasets }, options });
+    }
+
+    function addSubtitle(card, text) {
+      if (!card) return;
+      card.classList.add('patient-chart-card');
+      const heading = card.querySelector('h3');
+      if (!heading) return;
+      let subtitle = card.querySelector('.patient-chart-subtitle');
+      if (!subtitle) {
+        subtitle = document.createElement('span');
+        subtitle.className = 'patient-chart-subtitle';
+        heading.insertAdjacentElement('afterend', subtitle);
+      }
+      subtitle.textContent = text;
+    }
+
+    function addInsight(card, icon, html) {
+      if (!card) return;
+      let insight = card.querySelector('.patient-chart-insight');
+      if (!insight) {
+        insight = document.createElement('div');
+        insight.className = 'patient-chart-insight';
+        insight.setAttribute('aria-live', 'polite');
+        card.appendChild(insight);
+      }
+      insight.innerHTML = `<span class="patient-insight-icon" aria-hidden="true">${icon}</span><span>${html}</span>`;
+    }
+
+    function metricStatus(label, value, reference, isGood, watchText, goodText) {
+      const status = isGood ? 'Within typical reference' : 'Worth discussing';
+      const tone = isGood ? 'good' : 'watch';
+      const message = isGood ? goodText : watchText;
+      return `<div class="patient-reference-item ${tone}"><span class="patient-reference-label">${label}</span><b>${value}</b><small>${reference}</small><span class="patient-status ${tone}">${status}</span><small>${message}</small></div>`;
+    }
+
+    function renderReference(data) {
+      const holder = byId('referenceCards');
+      if (!holder) return;
+      holder.classList.add('patient-reference-card');
+      const bmiGood = data.bmi >= 18.5 && data.bmi < 25;
+      const glucoseGood = data.glucose >= 70 && data.glucose <= 99;
+      const a1cGood = data.a1c < 5.7;
+      const bpGood = data.systolic < 120 && data.diastolic < 80;
+      holder.innerHTML = `<div class="patient-reference-grid" aria-label="Latest measurements compared with typical adult references">${
+        metricStatus('BMI', `${data.bmi.toFixed(1)} kg/m²`, 'Typical adult reference: 18.5–24.9 kg/m²', bmiGood, 'BMI is one screening signal. Review it with height, waist and your care team.', 'This sits inside the typical adult reference range.') +
+        metricStatus('Glucose', `${Math.round(data.glucose)} mg/dL`, 'Typical fasting reference: 70–99 mg/dL', glucoseGood, 'If this was a fasting reading, repeat and discuss an elevated result with your clinician.', 'This is inside the typical fasting reference range if the test was fasting.') +
+        metricStatus('HbA1c', `${data.a1c.toFixed(1)}%`, 'Typical reference: below 5.7%', a1cGood, 'HbA1c reflects an average over time; discuss the result and your personal target with your clinician.', 'This is below the typical adult reference threshold.') +
+        metricStatus('Blood pressure', `${Math.round(data.systolic)} / ${Math.round(data.diastolic)} mmHg`, 'Typical adult reference: below 120 / 80 mmHg', bpGood, 'Rest and repeat the reading. Share repeated high readings with your clinician.', 'This reading is below the typical adult reference threshold.')
+      }</div><p class="patient-data-note ${data.personalized ? 'personalized' : ''}">${data.personalized ? 'Using the measurements you entered below.' : 'Demo values are shown until you enter your measurements below.'}</p>`;
+
+      let chartWrap = holder.parentElement.querySelector('.patient-reference-chart');
+      if (!chartWrap) {
+        chartWrap = document.createElement('div');
+        chartWrap.className = 'patient-reference-chart';
+        chartWrap.innerHTML = '<span class="patient-reference-chart-title">Latest reading compared with the upper edge of the typical reference (100% = upper edge)</span><canvas id="referenceChart" aria-label="Reference comparison chart"></canvas>';
+        holder.insertAdjacentElement('afterend', chartWrap);
+      }
+      const canvas = byId('referenceChart');
+      if (!canvas) return;
+      destroyCanvas(canvas);
+      const values = [
+        Math.round((data.bmi / 24.9) * 100),
+        Math.round((data.glucose / 99) * 100),
+        Math.round((data.a1c / 5.7) * 100),
+        Math.round((data.systolic / 120) * 100)
+      ];
+      if (!window.Chart) {
+        fallbackChart(canvas, [{ label: 'Latest reading (% of reference edge)', data: values, borderColor: colors.green }], ['BMI', 'Glucose', 'HbA1c', 'Systolic BP']);
+        return;
+      }
+      canvas.__patientChart = new window.Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels: ['BMI', 'Glucose', 'HbA1c', 'Systolic BP'],
+          datasets: [{
+            label: '% of reference edge',
+            data: values,
+            backgroundColor: [bmiGood, glucoseGood, a1cGood, bpGood].map(ok => ok ? '#69c495' : '#f3b45d'),
+            borderColor: [bmiGood, glucoseGood, a1cGood, bpGood].map(ok => ok ? colors.green : colors.amber),
+            borderWidth: 1.5,
+            borderRadius: 7,
+            borderSkipped: false,
+            barThickness: 17
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 550 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: '#173d29',
+              callbacks: { label: context => `${context.parsed.x}% of reference edge` }
+            }
+          },
+          scales: {
+            x: { min: 0, max: 130, grid: { color: colors.grid }, ticks: { color: colors.text, callback: value => `${value}%`, font: { size: 10 } } },
+            y: { grid: { display: false }, ticks: { color: colors.text, font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    function updateSummary(data) {
+      const set = (id, value) => { const element = byId(id); if (element) element.textContent = value; };
+      set('bmi', data.bmi.toFixed(1));
+      set('weight', `${data.weight.toFixed(1)} kg`);
+      set('waist', `${data.waist.toFixed(1)} cm`);
+      set('bp', `${Math.round(data.systolic)} / ${Math.round(data.diastolic)}`);
+      const bmiRef = byId('bmiRef');
+      if (bmiRef) bmiRef.textContent = data.bmi >= 18.5 && data.bmi < 25 ? 'Inside typical adult reference range.' : 'Review with age, sex, waist and your clinician.';
+      const weightRef = byId('weightRef');
+      if (weightRef) weightRef.textContent = 'Track together with height, BMI and your growth pattern.';
+      const bpRef = byId('bpRef');
+      if (bpRef) bpRef.textContent = data.systolic < 120 && data.diastolic < 80 ? 'Below the typical adult reference threshold.' : 'Rest, repeat and discuss repeated readings.';
+    }
+
+    function render() {
+      const citizen = root();
+      if (!citizen || !citizen.classList.contains('on')) return;
+      const data = getData();
+      const chartLabels = labels();
+      const anthroCard = byId('anthroChart')?.closest('.card');
+      const clinicalCard = byId('clinicalChart')?.closest('.card');
+      const nutritionCard = byId('nutritionClinicalChart')?.closest('.card');
+      const referenceCard = byId('referenceCards')?.closest('.card');
+      const status = data.personalized ? 'Latest point uses your measurements · change the form below to refresh' : 'Illustrative trend · enter your measurements below to personalize';
+      addSubtitle(anthroCard, `Weight and BMI over your last check-ins · ${status}`);
+      addSubtitle(clinicalCard, `Blood pressure in mmHg · dashed lines show the typical adult reference edges`);
+      addSubtitle(nutritionCard, `Glucose and HbA1c use separate scales so both remain easy to read`);
+      addSubtitle(referenceCard, 'A simple snapshot to help you understand what to discuss at your next visit');
+
+      const weight = history(data.weight, [1.5, 1.1, .8, .9, .35, 0], 1);
+      const bmi = weight.map(value => Number((value / Math.pow(data.height / 100, 2)).toFixed(1)));
+      const glucose = history(data.glucose, [7, 4, 9, 3, 5, 0], 0);
+      const a1c = history(data.a1c, [.3, .2, .25, .15, .1, 0], 1);
+      const systolic = history(data.systolic, [6, 4, 2, 3, 1, 0], 0);
+      const diastolic = history(data.diastolic, [6, 4, 2, 2, 1, 0], 0);
+      const ctx = byId('anthroChart')?.getContext('2d');
+      if (ctx) {
+        makeLineChart('anthroChart', chartLabels, [
+          lineDataset('Weight', weight, colors.green, 'y', ctx, true),
+          lineDataset('BMI', bmi, colors.blue, 'y1', ctx, false)
+        ], baseOptions('Weight (kg)', 'kg', {
+          scales: {
+            x: { grid: { display: false }, ticks: { color: colors.text, maxRotation: 0, font: { size: 10 } } },
+            y: { position: 'left', grace: '12%', title: { display: true, text: 'Weight (kg)', color: colors.text, font: { size: 11, weight: '600' } }, grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 10 } } },
+            y1: { position: 'right', grace: '12%', title: { display: true, text: 'BMI (kg/m²)', color: colors.text, font: { size: 11, weight: '600' } }, grid: { drawOnChartArea: false }, ticks: { color: colors.text, font: { size: 10 } } }
+          }
+        }));
+      }
+      addInsight(anthroCard, '📏', `<strong>Your body trend:</strong> ${data.weight < weight[0] ? `weight is down ${Math.abs(data.weight - weight[0]).toFixed(1)} kg from the first sample` : data.weight > weight[0] ? `weight is up ${(data.weight - weight[0]).toFixed(1)} kg from the first sample` : 'your latest weight matches the first sample'}. BMI is shown beside it because height gives weight useful context.`);
+
+      const clinicalCtx = byId('clinicalChart')?.getContext('2d');
+      if (clinicalCtx) {
+        makeLineChart('clinicalChart', chartLabels, [
+          lineDataset('Systolic BP', systolic, colors.red, 'y', clinicalCtx, true),
+          lineDataset('Diastolic BP', diastolic, colors.amber, 'y', clinicalCtx, false),
+          referenceDataset('Systolic reference edge · 120', 120, 'y', colors.red),
+          referenceDataset('Diastolic reference edge · 80', 80, 'y', colors.amber)
+        ], baseOptions('Blood pressure (mmHg)', 'mmHg', {
+          scales: { y: { min: Math.max(40, Math.floor(Math.min(...diastolic, ...systolic) - 12)), max: Math.ceil(Math.max(...systolic, 120) + 12), title: { display: true, text: 'mmHg', color: colors.text, font: { size: 11, weight: '600' } }, grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 10 } } } }
+        }));
+      }
+      addInsight(clinicalCard, '🩺', `<strong>Your blood pressure:</strong> ${data.systolic < 120 && data.diastolic < 80 ? 'the latest reading is below the typical adult reference edges.' : 'the latest reading is at or above a typical reference edge; repeat it when rested and discuss repeated readings.'} One reading is a snapshot, not a diagnosis.`);
+
+      const nutritionCtx = byId('nutritionClinicalChart')?.getContext('2d');
+      if (nutritionCtx) {
+        makeLineChart('nutritionClinicalChart', chartLabels, [
+          lineDataset('Glucose', glucose, colors.violet, 'y', nutritionCtx, true),
+          lineDataset('HbA1c', a1c, colors.cyan, 'y1', nutritionCtx, false),
+          referenceDataset('Glucose fasting edge · 99', 99, 'y', colors.violet),
+          referenceDataset('HbA1c edge · 5.7', 5.7, 'y1', colors.cyan)
+        ], baseOptions('Glucose (mg/dL)', 'mg/dL', {
+          scales: {
+            y: { position: 'left', min: Math.max(0, Math.floor(Math.min(...glucose) - 12)), max: Math.ceil(Math.max(...glucose, 99) + 12), title: { display: true, text: 'Glucose (mg/dL)', color: colors.text, font: { size: 11, weight: '600' } }, grid: { color: colors.grid }, ticks: { color: colors.text, font: { size: 10 } } },
+            y1: { position: 'right', min: Math.max(0, Math.floor(Math.min(...a1c) - .5)), max: Math.ceil(Math.max(...a1c, 5.7) + .5), title: { display: true, text: 'HbA1c (%)', color: colors.text, font: { size: 11, weight: '600' } }, grid: { drawOnChartArea: false }, ticks: { color: colors.text, font: { size: 10 } } }
+          }
+        }));
+      }
+      addInsight(nutritionCard, '🧪', `<strong>Your metabolic trend:</strong> glucose and HbA1c are shown together, but they answer different questions. ${data.a1c < 5.7 ? 'The latest HbA1c is below the typical adult reference threshold.' : 'The latest HbA1c is at or above a typical reference threshold; discuss it with your clinician.'}`);
+
+      updateSummary(data);
+      renderReference(data);
+    }
+
+    function scheduleRender() {
+      clearTimeout(renderTimer);
+      renderTimer = setTimeout(render, 90);
+    }
+
+    function bind() {
+      const citizen = root();
+      if (!citizen) return;
+      citizen.querySelectorAll('input, select').forEach(element => {
+        if (element.dataset.patientChartsBound) return;
+        element.dataset.patientChartsBound = '1';
+        element.addEventListener('input', scheduleRender);
+        element.addEventListener('change', scheduleRender);
+      });
+    }
+
+    function updateReferences() {
+      updateSummary(getData());
+      renderReference(getData());
+      scheduleRender();
+    }
+
+    function saveCitizen() {
+      updateReferences();
+      if (typeof window.toast === 'function') window.toast('Measurements saved — your patient charts were refreshed');
+    }
+
+    window.updateReferences = updateReferences;
+    window.saveCitizen = saveCitizen;
+    window.NUTRI_PATIENT_CHARTS = { render, refresh: scheduleRender };
+
+    // The navigation function is defined earlier in this single-file MVP. Wrap it so
+    // charts are laid out only after the Citizen view becomes visible.
+    if (typeof window.go === 'function' && !window.go.__patientChartWrapped) {
+      const originalGo = window.go;
+      const patientGo = function () {
+        const result = originalGo.apply(this, arguments);
+        if (arguments[0] === 'citizen') setTimeout(render, 80);
+        return result;
+      };
+      patientGo.__patientChartWrapped = true;
+      window.go = patientGo;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      bind();
+      setTimeout(() => { bind(); render(); }, 1150);
+    });
+    document.addEventListener('click', event => {
+      if (event.target.closest('.nav, [onclick*="go("]')) setTimeout(() => { bind(); if (root()?.classList.contains('on')) render(); }, 100);
+    });
+  })();
 </script>
 </body>
 
