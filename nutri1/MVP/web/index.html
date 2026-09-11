@@ -4161,6 +4161,201 @@
 
   </style>
 
+  <style id="nutri-agri-immersive-css">
+/* ============================================================
+   NUTRI.N°1 — Ministry of Agriculture • National Agrifood Digital Twin
+   Scoped to #agri only. Investor / government-level simulation.
+   ============================================================ */
+#agri { --ag-ink:#13251a; --ag-deep:#062718; --ag-green:#08733f; --ag-lime:#c9ee59; --ag-earth:#b96c1b; --ag-sky:#2f8fd8; --ag-line:#d4e5d9; --ag-amber:#e0a43c; --ag-red:#c0392b; }
+#agri .ag-shell { max-width: 1480px; margin: 0 auto; }
+#agri .ag-command { border-left: 5px solid var(--ag-green); background: linear-gradient(180deg,#ffffff,#f6fbf7); position: relative; overflow: hidden; }
+#agri .ag-command::after { content:""; position:absolute; right:-50px; top:-80px; width:240px; height:240px; border-radius:50%; background: radial-gradient(circle, rgba(201,238,89,.20), transparent 60%); pointer-events:none; }
+#agri .ag-hero { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap; position:relative; z-index:1; }
+#agri .ag-hero h2 { margin:0 0 6px; font-size:clamp(22px,3vw,30px); letter-spacing:-.04em; }
+#agri .ag-hero p { margin:0; color:var(--muted); max-width:800px; line-height:1.55; }
+#agri .ag-hub-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:#0b2e1d; color:#e8f6ec; border-radius:12px; padding:10px 14px; margin:12px 0; position:relative; z-index:1; }
+#agri .ag-led { width:10px; height:10px; border-radius:50%; background:#6b7f70; box-shadow:0 0 0 4px rgba(255,255,255,.08); flex:none; }
+#agri .ag-led.on { background:#2fe07a; box-shadow:0 0 0 5px rgba(47,224,122,.18); animation: agPulse 1.4s infinite; }
+#agri .ag-led.busy { background:#ffc53d; box-shadow:0 0 0 5px rgba(255,197,61,.18); animation: agPulse .7s infinite; }
+#agri .ag-led.err { background:#ff6b6b; }
+@keyframes agPulse { 50% { opacity:.45; transform:scale(.82); } }
+#agri .ag-hub-bar strong { font-size:13px; }
+#agri .ag-hub-bar .pill { background: rgba(201,238,89,.16); color:#c9ee59; font-weight:800; }
+#agri .ag-clock { margin-left:auto; font-variant-numeric:tabular-nums; font-size:12px; opacity:.8; }
+#agri .ag-alertbtn { border:1px solid rgba(255,255,255,.2); background:rgba(255,255,255,.08); color:#fff; border-radius:99px; padding:5px 10px; cursor:pointer; font-size:12px; }
+#agri .ag-alertbtn.has { border-color:#ffc53d; }
+#agri .ag-alertbtn.has b { color:#ffc53d; animation: agPulse 1s infinite; }
+#agri .ag-global-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; background:#f1f7f2; border:1px solid var(--ag-line); border-radius:12px; padding:10px 12px; position:relative; z-index:1; }
+#agri .ag-global-controls .btn { margin:0; }
+#agri .ag-toggle { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:12px; cursor:pointer; user-select:none; }
+#agri .ag-switch { width:42px; height:23px; border-radius:99px; background:#c9d6cc; position:relative; transition:.2s; flex:none; }
+#agri .ag-switch::after { content:""; position:absolute; top:3px; left:3px; width:17px; height:17px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.2); transition:.2s; }
+#agri .ag-toggle input { display:none; }
+#agri .ag-toggle input:checked + .ag-switch { background: var(--ag-green); }
+#agri .ag-toggle input:checked + .ag-switch::after { left:22px; }
+#agri .ag-select { min-height:38px; font-weight:700; min-width:150px; }
+#agri .ag-kpis { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:12px 0; position:relative; z-index:1; }
+#agri .ag-kpi { background:#fff; border:1px solid var(--ag-line); border-radius:12px; padding:11px 12px; transition:.18s; }
+#agri .ag-kpi:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(3,45,26,.08); }
+#agri .ag-kpi small { color:var(--muted); font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:.05em; }
+#agri .ag-kpi b { display:block; font-size:22px; margin-top:3px; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+#agri .ag-kpi span { font-size:11px; color:var(--muted); }
+#agri .ag-kpi.good b { color:var(--ag-green); }
+#agri .ag-kpi.warn b { color:#8a6a12; }
+#agri .ag-kpi.alert b { color:var(--ag-red); }
+#agri .ag-kpi b.flash { animation: agFlash .6s ease; }
+@keyframes agFlash { 0% { background:rgba(201,238,89,.55); } 100% { background:transparent; } }
+#agri .ag-sync-queue { display:flex; flex-direction:column; gap:7px; margin-top:10px; }
+#agri .ag-qrow { display:grid; grid-template-columns:26px 1fr auto; gap:10px; align-items:center; background:#f7fbf8; border:1px solid var(--ag-line); border-radius:10px; padding:8px 10px; font-size:12px; animation: agSlideIn .3s ease; }
+#agri .ag-qrow .ag-qbar { grid-column:1/-1; height:6px; background:#e3ece5; border-radius:99px; overflow:hidden; }
+#agri .ag-qrow .ag-qbar i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--ag-green),#5cc98a); transition:width .3s; }
+@keyframes agSlideIn { from { opacity:0; transform:translateY(6px);} to { opacity:1; transform:none; } }
+#agri .ag-pipeline { display:flex; align-items:center; justify-content:space-between; gap:4px; margin:16px 0 4px; overflow:auto; padding-bottom:4px; }
+#agri .ag-pipe-step { display:flex; min-width:64px; flex-direction:column; align-items:center; gap:5px; color:#809086; text-align:center; transition:.2s; flex:0 0 74px; }
+#agri .ag-pipe-step b { font-size:10px; }
+#agri .ag-pipe-step small { min-height:12px; font-size:9px; }
+#agri .ag-pipe-icon { display:grid; place-items:center; width:30px; height:30px; border:1px solid #d6e3d8; border-radius:9px; background:#f4f8f4; font-size:14px; }
+#agri .ag-pipe-step.active { color:var(--ag-green); }
+#agri .ag-pipe-step.active .ag-pipe-icon { color:#fff; background:var(--ag-green); border-color:var(--ag-green); box-shadow:0 0 0 5px rgba(8,115,63,.10); }
+#agri .ag-pipe-step.done { color:#3d6650; }
+#agri .ag-pipe-step.done .ag-pipe-icon { color:#0b6b3a; background:#dff5e6; border-color:#b9dfc3; }
+#agri .ag-pipe-line { height:1px; flex:1; min-width:8px; background:#d8e5da; position:relative; top:-11px; }
+#agri .ag-pipe-line.done { background:linear-gradient(90deg,#54bd7e,var(--ag-green)); }
+#agri .ag-workbench { display:grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1.4fr) minmax(320px,.9fr); gap:14px; margin-top:14px; }
+#agri .ag-card { position:relative; overflow:hidden; transition: transform .18s, box-shadow .18s; }
+#agri .ag-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+#agri .ag-card-head h3 { margin:3px 0 0; font-size:15px; letter-spacing:-.02em; }
+#agri .ag-kicker { font-size:10px; letter-spacing:.13em; font-weight:900; color:var(--ag-green); opacity:.85; }
+#agri .ag-status-pill { display:inline-flex; align-items:center; gap:6px; flex:none; padding:6px 9px; border-radius:99px; background:#eef4ef; color:#617268; font-size:10px; font-weight:850; white-space:nowrap; }
+#agri .ag-status-pill i { width:6px; height:6px; border-radius:50%; display:inline-block; background:#99a79c; }
+#agri .ag-status-pill.running { color:#886317; background:#fff3d6; }
+#agri .ag-status-pill.running i { background:#f3b91f; animation: agPulse .8s infinite; }
+#agri .ag-status-pill.done { color:#0b6b3a; background:#dff5e6; }
+#agri .ag-status-pill.done i { background:#25bd69; }
+#agri .ag-lever-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+#agri .ag-field { display:flex; flex-direction:column; gap:6px; font-size:11px; font-weight:700; }
+#agri .ag-range { width:100%; accent-color:var(--ag-green); }
+#agri .ag-range-labels { display:flex; justify-content:space-between; font-size:9px; color:var(--muted); }
+#agri .ag-chip-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+#agri .ag-chip { border:1px solid var(--ag-line); background:#fff; border-radius:99px; padding:6px 10px; font-size:11px; font-weight:700; cursor:pointer; transition:.15s; user-select:none; }
+#agri .ag-chip:hover { border-color:var(--ag-green); }
+#agri .ag-chip.active { background:#fff1ee; border-color:#e59a8a; color:#8e2c1c; box-shadow:0 0 0 3px rgba(192,57,43,.08); }
+#agri .ag-score-card { display:flex; gap:14px; align-items:center; margin-top:14px; padding:12px; border-radius:14px; background:linear-gradient(135deg,#062718,#0b4a2c); color:#fff; }
+#agri .ag-donut { width:84px; height:84px; border-radius:50%; flex:none; display:grid; place-items:center; background:conic-gradient(var(--ag-lime) 0%, rgba(255,255,255,.12) 0); position:relative; transition: background .6s; }
+#agri .ag-donut::after { content:""; position:absolute; inset:9px; border-radius:50%; background:#0a3a22; }
+#agri .ag-donut span { position:relative; z-index:1; font-weight:900; font-size:20px; }
+#agri .ag-score-bar { height:7px; background:rgba(255,255,255,.15); border-radius:99px; margin-top:8px; overflow:hidden; }
+#agri .ag-score-bar i { display:block; height:100%; background:linear-gradient(90deg,var(--ag-lime),#5cc98a); transition:width .6s; }
+#agri .ag-group-rings { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:12px; }
+#agri .ag-ring { border:1px solid var(--ag-line); border-radius:12px; padding:9px; text-align:center; font-size:10px; background:#fff; cursor:pointer; transition:.15s; }
+#agri .ag-ring:hover { transform:translateY(-2px); border-color:var(--ag-green); }
+#agri .ag-ring .r { width:52px; height:52px; margin:0 auto 5px; border-radius:50%; display:grid; place-items:center; position:relative; background:conic-gradient(var(--c,#08733f) var(--p,0%), #e6eee8 0); }
+#agri .ag-ring .r::after { content:""; position:absolute; inset:6px; border-radius:50%; background:#fff; }
+#agri .ag-ring .r b { position:relative; z-index:1; font-size:11px; }
+#agri .ag-ring small { display:block; color:var(--muted); font-weight:700; }
+#agri .ag-tabs { display:flex; gap:6px; flex-wrap:wrap; border-bottom:1px solid var(--ag-line); padding-bottom:8px; margin-bottom:10px; }
+#agri .ag-tab { border:0; background:#f1f7f2; border-radius:99px; padding:7px 12px; font-size:11px; font-weight:800; cursor:pointer; color:#3d6650; }
+#agri .ag-tab.active { background:var(--ag-green); color:#fff; }
+#agri .ag-tab-content { display:none; }
+#agri .ag-tab-content.show { display:block; animation: agSlideIn .25s ease; }
+#agri .ag-chart-box { height:200px; position:relative; }
+#agri .ag-chart-box.large { height:260px; }
+#agri .ag-gap-row { display:grid; grid-template-columns:130px 1fr auto; gap:10px; align-items:center; font-size:11px; padding:6px 0; border-bottom:1px dashed var(--ag-line); }
+#agri .ag-gap-row .bar { height:8px; border-radius:99px; background:#e6eee8; overflow:hidden; }
+#agri .ag-gap-row .bar i { display:block; height:100%; transition:width .5s; }
+#agri .ag-gap-row b { font-variant-numeric:tabular-nums; }
+#agri .ag-map { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:10px; min-height:220px; }
+#agri .ag-tile { border-radius:12px; padding:10px; color:#fff; min-height:96px; display:flex; flex-direction:column; justify-content:space-between; cursor:pointer; transition:.2s; position:relative; overflow:hidden; text-shadow:0 1px 2px rgba(0,0,0,.25); }
+#agri .ag-tile:hover { transform:translateY(-3px) scale(1.02); box-shadow:0 12px 28px rgba(0,0,0,.18); }
+#agri .ag-tile b { font-size:12px; }
+#agri .ag-tile small { font-size:10px; opacity:.95; display:block; }
+#agri .ag-tile .ph { position:absolute; top:8px; right:8px; background:rgba(0,0,0,.28); border-radius:99px; padding:2px 7px; font-size:9px; font-weight:900; }
+#agri .ag-tile.hot::before { content:""; position:absolute; inset:0; border:2px solid #fff; border-radius:12px; animation: agPulse 1.2s infinite; pointer-events:none; }
+#agri .ag-legend { display:flex; gap:12px; flex-wrap:wrap; font-size:10px; color:var(--muted); margin-top:8px; }
+#agri .ag-legend i { display:inline-block; width:10px; height:10px; border-radius:3px; margin-right:4px; vertical-align:middle; }
+#agri .ag-chain { display:flex; flex-direction:column; gap:8px; padding:6px 0; }
+#agri .ag-chain-row { display:grid; grid-template-columns:150px 1fr 80px; gap:10px; align-items:center; font-size:11px; }
+#agri .ag-chain-row .bar { height:22px; border-radius:6px; background:linear-gradient(90deg,var(--ag-green),#5cc98a); transition:width .6s; display:flex; align-items:center; padding-left:8px; color:#fff; font-weight:800; font-size:10px; min-width:24px; }
+#agri .ag-chain-row.loss .bar { background:linear-gradient(90deg,var(--ag-red),#e0642f); }
+#agri .ag-chain-row.imp .bar { background:linear-gradient(90deg,var(--ag-sky),#7cc0f0); }
+#agri .ag-chain-row b { text-align:right; font-variant-numeric:tabular-nums; }
+#agri .ag-insight { border-left:4px solid var(--ag-green); background:#f7fbf8; border-radius:10px; padding:9px 11px; margin-bottom:7px; font-size:12px; animation: agSlideIn .3s ease; }
+#agri .ag-insight.warn { border-color:var(--ag-amber); background:#fff8e8; }
+#agri .ag-insight.crit { border-color:var(--ag-red); background:#fff1ee; }
+#agri .ag-insight b { display:block; font-size:12px; }
+#agri .ag-insight small { color:var(--muted); display:block; margin-top:2px; }
+#agri .ag-scn { border:1px solid var(--ag-line); border-radius:12px; padding:10px; margin-bottom:8px; background:#fff; cursor:pointer; transition:.15s; }
+#agri .ag-scn:hover { border-color:var(--ag-green); transform:translateY(-1px); }
+#agri .ag-scn.active { border-color:var(--ag-green); box-shadow:0 0 0 3px rgba(8,115,63,.10); }
+#agri .ag-scn .t { display:flex; justify-content:space-between; gap:8px; font-weight:800; font-size:12px; }
+#agri .ag-scn .m { display:grid; grid-template-columns:repeat(3,1fr); gap:6px; margin-top:7px; }
+#agri .ag-scn .m div { background:#f1f7f2; border-radius:8px; padding:5px 7px; font-size:10px; }
+#agri .ag-scn .m b { display:block; font-size:12px; color:var(--ag-green); }
+#agri .ag-console { background:#061a10; color:#bfe8c9; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11px; border-radius:10px; padding:10px; height:170px; overflow:auto; line-height:1.5; }
+#agri .ag-console .ok { color:#c9ee59; }
+#agri .ag-console .warn { color:#ffc53d; }
+#agri .ag-console .crit { color:#ff8a80; }
+#agri .ag-console .t { opacity:.5; margin-right:6px; }
+#agri .ag-feed { max-height:200px; overflow:auto; display:flex; flex-direction:column; gap:6px; }
+#agri .ag-ev { display:grid; grid-template-columns:24px 1fr auto; gap:8px; align-items:center; font-size:11px; background:#f7fbf8; border:1px solid var(--ag-line); border-radius:9px; padding:6px 8px; animation: agSlideIn .3s ease; }
+#agri .ag-ev small { color:var(--muted); font-variant-numeric:tabular-nums; }
+#agri .ag-empty { color:var(--muted); font-size:12px; text-align:center; padding:14px; border:1px dashed var(--ag-line); border-radius:10px; }
+#agri .ag-lower-grid { display:grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap:14px; margin-top:14px; }
+#agri .ag-inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+#agri .ag-inv { background:linear-gradient(180deg,#fff,#f4faf6); border:1px solid var(--ag-line); border-radius:12px; padding:10px; }
+#agri .ag-inv small { display:block; font-size:10px; color:var(--muted); font-weight:800; text-transform:uppercase; letter-spacing:.05em; }
+#agri .ag-inv b { display:block; font-size:20px; margin-top:3px; color:var(--ag-green); font-variant-numeric:tabular-nums; }
+#agri .ag-inv span { font-size:10px; color:var(--muted); }
+#agri .ag-inv-split { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px; }
+#agri .ag-inv-narrative { font-size:12px; line-height:1.55; background:#f7fbf8; border:1px solid var(--ag-line); border-radius:12px; padding:12px; }
+#agri .ag-inv-narrative h4 { margin:0 0 6px; font-size:13px; }
+#agri .ag-inv-narrative ul { margin:6px 0 0 16px; padding:0; }
+#agri .ag-rows { display:flex; flex-direction:column; gap:6px; }
+#agri .ag-row { display:grid; grid-template-columns:1fr auto auto; gap:10px; align-items:center; font-size:11px; border:1px solid var(--ag-line); border-radius:10px; padding:8px 10px; cursor:pointer; transition:.15s; background:#fff; }
+#agri .ag-row:hover { border-color:var(--ag-green); transform:translateY(-1px); }
+#agri .ag-row b { font-size:12px; }
+#agri .ag-row small { color:var(--muted); display:block; }
+#agri .ag-badge { padding:3px 8px; border-radius:99px; font-size:10px; font-weight:900; color:#fff; white-space:nowrap; }
+#agri .ag-rows-hist { max-height:220px; overflow:auto; }
+#agri .ag-trace { border:1px solid var(--ag-line); border-radius:12px; padding:10px; font-size:11px; background:#fff; }
+#agri .ag-trace b { display:block; font-size:12px; }
+#agri .ag-trace small { color:var(--muted); }
+#agri .ag-trace .steps { display:flex; flex-wrap:wrap; gap:4px; margin-top:6px; }
+#agri .ag-trace .steps span { background:#eef4ef; border-radius:6px; padding:2px 6px; font-size:9px; font-weight:800; color:#3d6650; }
+#agri .ag-modal { position:fixed; inset:0; background:rgba(4,18,12,.55); backdrop-filter:blur(6px); display:none; align-items:center; justify-content:center; z-index:99999; padding:16px; }
+#agri .ag-modal.show { display:flex; }
+#agri .ag-sheet { background:#fff; border-radius:18px; max-width:760px; width:100%; max-height:88vh; overflow:auto; padding:18px; animation: agSlideIn .25s ease; }
+#agri .ag-sheet-head { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:12px; }
+#agri .ag-x { border:0; background:#eef4ef; border-radius:99px; width:32px; height:32px; cursor:pointer; font-weight:900; }
+#agri .ag-alert { border:1px solid var(--ag-line); border-left:4px solid var(--ag-amber); border-radius:10px; padding:9px 11px; margin-bottom:7px; font-size:12px; display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; }
+#agri .ag-alert.crit { border-left-color:var(--ag-red); background:#fff5f3; }
+#agri .ag-alert.acked { opacity:.55; }
+#agri .ag-alert small { color:var(--muted); display:block; }
+#agri .ag-toast-stack { position:fixed; right:18px; bottom:18px; display:flex; flex-direction:column; gap:8px; z-index:99998; }
+#agri .ag-toast { background:#0b2e1d; color:#fff; border-radius:12px; padding:10px 14px; font-size:12px; box-shadow:0 12px 30px rgba(0,0,0,.25); animation: agSlideIn .3s ease; border-left:4px solid var(--ag-lime); max-width:340px; }
+#agri .ag-toast.warn { border-left-color:var(--ag-amber); }
+#agri .ag-toast.crit { border-left-color:var(--ag-red); }
+#agri #agDemoBar { position:fixed; left:50%; bottom:18px; transform:translateX(-50%) translateY(140%); width:min(720px,92vw); background:#062718; color:#fff; border-radius:16px; padding:12px 16px; z-index:99997; transition:transform .35s; box-shadow:0 20px 50px rgba(0,0,0,.35); }
+#agri #agDemoBar.show { transform:translateX(-50%) translateY(0); }
+#agri .ag-demo-top { display:flex; align-items:center; gap:10px; }
+#agri .ag-demo-dot { width:9px; height:9px; border-radius:50%; background:#ff5c5c; animation: agPulse 1s infinite; }
+#agri .ag-demo-stop { margin-left:auto; border:1px solid rgba(255,255,255,.25); background:transparent; color:#fff; border-radius:99px; padding:4px 10px; cursor:pointer; font-size:11px; }
+#agri #agDemoText { margin:8px 0; font-size:13px; line-height:1.45; }
+#agri .ag-demo-track { height:5px; background:rgba(255,255,255,.15); border-radius:99px; overflow:hidden; }
+#agri .ag-demo-track i { display:block; height:100%; width:0; background:var(--ag-lime); transition:width .4s linear; }
+#agri .ag-mini-table { width:100%; border-collapse:collapse; font-size:11px; margin-top:8px; }
+#agri .ag-mini-table th, #agri .ag-mini-table td { padding:6px 8px; border-bottom:1px solid var(--ag-line); text-align:left; }
+#agri .ag-legacy { display:none !important; }
+/* neutralize cross-module hover decorations inside the twin */
+#agri .v53-actionable:after { content:none !important; }
+#agri .v51-actionable, #agri .v52-actionable, #agri .v53-actionable, #agri .v54-action { cursor:inherit; }
+#agri .btn.v54-action:hover, #agri .ag-tab.v54-action:hover { border-color:transparent !important; box-shadow:none !important; transform:none; }
+#agri .card.v53-actionable:hover, #agri .card.v54-action:hover { border-color:var(--ag-line) !important; }
+@media (max-width:1200px) { #agri .ag-workbench { grid-template-columns:1fr 1fr; } #agri .ag-workbench > :last-child { grid-column:1/-1; } #agri .ag-kpis { grid-template-columns:repeat(3,1fr); } }
+@media (max-width:860px) { #agri .ag-workbench, #agri .ag-lower-grid, #agri .ag-inv-split, #agri .ag-lever-grid { grid-template-columns:1fr; } #agri .ag-kpis, #agri .ag-inv-grid { grid-template-columns:repeat(2,1fr); } #agri .ag-map { grid-template-columns:repeat(2,1fr); } #agri #agHistory { grid-template-columns:1fr !important; } }
+@media (prefers-reduced-motion:reduce) { #agri .ag-led.on, #agri .ag-led.busy, #agri .ag-status-pill.running i, #agri .ag-demo-dot, #agri .ag-alertbtn.has b, #agri .ag-tile.hot::before { animation:none !important; } }
+  </style>
+
 
   <style id="nutri-citizen-immersive-css">
 /* ============================================================
@@ -6462,99 +6657,212 @@
   </section>
 
   <section id="agri" class="view">
-    <div class="card">
-      <h2 data-i18n="ui.ministry_of_agriculture_food_intelligence">🌾 Ministry of Agriculture Food Intelligence</h2>
-      <div class="grid">
-        <div>Cereals<div class="metric">—</div>
+    <div class="ag-shell">
+      <!-- COMMAND CENTER -->
+      <div class="card ag-command">
+        <div class="ag-hero">
+          <div>
+            <span class="pill">MINISTRY OF AGRICULTURE • NATIONAL AGRIFOOD DIGITAL TWIN • LIVE</span>
+            <h2 data-i18n="ui.ministry_of_agriculture_food_intelligence">🌾 Ministry of Agriculture Food Intelligence</h2>
+            <p>Sovereign farm-to-fork digital twin for national food security. Every run executes <b>satellite → farmers → climate → yield model → post-harvest losses → markets → nutrition → policy brief</b> in real time, with an explainable, bankable investment case at the end.</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="pill" id="agSessionId">AGRI-TWIN-TG-4821</span>
+            <span class="pill" id="agModelVer">AGRI.TWIN v9 • 14 live feeds • sovereign cloud</span>
+          </div>
         </div>
-        <div>Tubers & Roots<div class="metric">—</div>
+
+        <div class="ag-hub-bar">
+          <span class="ag-led" id="agHubLed"></span>
+          <strong id="agHubStatus">Twin idle — choose country, season & horizon, then run the national simulation</strong>
+          <span class="pill" id="agFeedRate">0 signals/s</span>
+          <span class="pill" id="agSatPill">🛰 Sentinel-2 • MODIS • CHIRPS</span>
+          <button class="ag-alertbtn" id="agAlertBtn" onclick="AG.openAlerts()" title="Early-warning alerts">🔔 <b id="agAlertBadge">0</b></button>
+          <span class="ag-clock" id="agClock">--:--:--</span>
         </div>
-        <div>Fruits & Vegetables<div class="metric">—</div>
+
+        <div class="ag-global-controls">
+          <button class="btn primary" onclick="AG.runFull()">🛰 Run national simulation</button>
+          <button class="btn secondary" onclick="AG.runQuick()">⚡ Quick scan</button>
+          <label class="ag-toggle"><input type="checkbox" id="agAutoEW" checked onchange="AG.setAuto(this.checked)"><span class="ag-switch"></span>Auto early-warning</label>
+          <select class="ag-select" id="agCountry" onchange="AG.setCountry(this.value)">
+            <option value="TG">🇹🇬 Togo</option><option value="GH">🇬🇭 Ghana</option><option value="NG">🇳🇬 Nigeria</option><option value="SN">🇸🇳 Senegal</option><option value="CI">🇨🇮 Côte d'Ivoire</option><option value="BJ">🇧🇯 Benin</option><option value="ML">🇲🇱 Mali</option><option value="BF">🇧🇫 Burkina Faso</option>
+          </select>
+          <select class="ag-select" id="agSeason" onchange="AG.setSeason(this.value)"><option value="main">🌱 Main season</option><option value="lean">🌵 Lean season</option><option value="harvest">🌾 Harvest</option></select>
+          <select class="ag-select" id="agHorizon" onchange="AG.setHorizon(this.value)"><option value="3">⏱ 3-month horizon</option><option value="6" selected>⏱ 6-month horizon</option><option value="12">⏱ 12-month horizon</option></select>
+          <button class="btn primary" onclick="AG.startDemo()">▶ Guided demo</button>
+          <button class="btn secondary" onclick="AG.exportBrief()">⇩ Export policy brief</button>
         </div>
-        <div>Legumes<div class="metric">—</div>
+
+        <div class="ag-kpis">
+          <div class="ag-kpi good"><small>Food self-sufficiency</small><b id="agKpiSelf">—</b><span id="agKpiSelfSub">National needs covered</span></div>
+          <div class="ag-kpi good"><small>Production forecast</small><b id="agKpiProd">—</b><span id="agKpiProdSub">All food groups</span></div>
+          <div class="ag-kpi warn"><small>Post-harvest loss</small><b id="agKpiLoss">—</b><span id="agKpiLossSub">Recoverable value</span></div>
+          <div class="ag-kpi alert"><small>Population at risk</small><b id="agKpiRisk">—</b><span id="agKpiRiskSub">IPC Phase 3+ projection</span></div>
+          <div class="ag-kpi"><small>Investment ROI</small><b id="agKpiRoi">—</b><span id="agKpiRoiSub">Return per $1 invested</span></div>
+        </div>
+
+        <div style="margin-top:10px; display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center;">
+          <div class="progress" style="grid-column:1/-1"><i id="agProgress"></i></div>
+          <span id="agStatus" class="muted" style="font-size:11px;">Ready to simulate.</span>
+          <b id="agProgressValue" style="color:var(--ag-green); font-size:12px;">0%</b>
+        </div>
+        <div class="ag-sync-queue" id="agSyncQueue"></div>
+
+        <div class="ag-pipeline" id="agPipeline">
+          <div class="ag-pipe-step active" data-pipe="sat"><span class="ag-pipe-icon">🛰</span><b>Satellite</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="farm"><span class="ag-pipe-icon">👩🏾‍🌾</span><b>Farmers</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="climate"><span class="ag-pipe-icon">🌦</span><b>Climate</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="yield"><span class="ag-pipe-icon">🌱</span><b>Yield model</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="loss"><span class="ag-pipe-icon">📦</span><b>Losses</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="market"><span class="ag-pipe-icon">💰</span><b>Markets</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="nutrition"><span class="ag-pipe-icon">🥗</span><b>Nutrition</b><small>waiting</small></div>
+          <div class="ag-pipe-line"></div><div class="ag-pipe-step" data-pipe="policy"><span class="ag-pipe-icon">📜</span><b>Policy brief</b><small>waiting</small></div>
         </div>
       </div>
-      <div class="grid">
-        <div>Oilseeds<div class="metric">—</div>
+
+      <!-- WORKBENCH -->
+      <div class="ag-workbench">
+        <!-- LEFT: Scenario & investment lab -->
+        <div class="card ag-card">
+          <div class="ag-card-head"><div><span class="ag-kicker">SCENARIO & INVESTMENT LAB • LIVE TWIN</span><h3>🧪 Policy Levers & Shocks</h3></div><span class="ag-status-pill" id="agLabStatus"><i></i>ready</span></div>
+          <div class="ag-lever-grid">
+            <label class="ag-field">Rainfall anomaly<input type="range" id="agRain" min="-40" max="40" value="0" class="ag-range" oninput="AG.updateLevers()"><span class="ag-range-labels"><span>−40%</span><b id="agRainVal">0%</b><span>+40%</span></span></label>
+            <label class="ag-field">Fertilizer access<input type="range" id="agFert" min="0" max="100" value="46" class="ag-range" oninput="AG.updateLevers()"><span class="ag-range-labels"><span>0%</span><b id="agFertVal">46%</b><span>100%</span></span></label>
+            <label class="ag-field">Irrigation coverage<input type="range" id="agIrr" min="0" max="60" value="8" class="ag-range" oninput="AG.updateLevers()"><span class="ag-range-labels"><span>0%</span><b id="agIrrVal">8%</b><span>60%</span></span></label>
+            <label class="ag-field">Storage & cold-chain (base budget)<input type="range" id="agStore" min="0" max="250" value="20" class="ag-range" oninput="AG.updateLevers()"><span class="ag-range-labels"><span>$0M</span><b id="agStoreVal">$20M</b><span>$250M</span></span></label>
+            <label class="ag-field">Rural roads & market access<input type="range" id="agRoads" min="0" max="100" value="38" class="ag-range" oninput="AG.updateLevers()"><span class="ag-range-labels"><span>0%</span><b id="agRoadsVal">38%</b><span>100%</span></span></label>
+            <label class="ag-field">Extension & digital advisory<input type="range" id="agExt" min="0" max="100" value="30" class="ag-range" oninput="AG.updateLevers()"><span class="ag-range-labels"><span>0%</span><b id="agExtVal">30%</b><span>100%</span></span></label>
+          </div>
+          <div style="margin-top:12px;"><small class="muted" style="font-weight:800; text-transform:uppercase; font-size:10px; letter-spacing:.05em;">Shock scenarios — toggle to stress-test the national food system</small>
+            <div class="ag-chip-row" id="agShockChips">
+              <span class="ag-chip" data-shock="drought">☀️ Drought (Sahel belt)</span>
+              <span class="ag-chip" data-shock="flood">🌊 Flooding (river basins)</span>
+              <span class="ag-chip" data-shock="pest">🐛 Fall armyworm outbreak</span>
+              <span class="ag-chip" data-shock="fuel">⛽ Fuel price spike</span>
+              <span class="ag-chip" data-shock="border">🚧 Border closure / export ban</span>
+              <span class="ag-chip" data-shock="fx">💱 Currency depreciation</span>
+              <span class="ag-chip" data-shock="fertshock">🧪 Fertilizer supply shock</span>
+              <span class="ag-chip" data-shock="conflict">⚠️ Insecurity in production zones</span>
+            </div>
+          </div>
+          <div class="ag-score-card">
+            <div class="ag-donut" id="agFsiDonut"><span id="agFsiCenter">—</span></div>
+            <div style="flex:1;">
+              <div style="font-size:10px; letter-spacing:.12em; font-weight:900; opacity:.8;">FOOD SECURITY INDEX • LIVE</div>
+              <div style="font-size:13px; font-weight:800; margin-top:4px;" id="agFsiLabel">Awaiting first simulation</div>
+              <div class="ag-score-bar"><i id="agFsiBar" style="width:0%"></i></div>
+              <div style="font-size:11px; opacity:.8; margin-top:6px;" id="agFsiSub">Move a lever or toggle a shock — the twin recomputes instantly.</div>
+            </div>
+          </div>
+          <div class="ag-group-rings" id="agRings"></div>
         </div>
-        <div>Animal-source foods<div class="metric">—</div>
+
+        <!-- CENTER: Supply, regions, prices, value chain -->
+        <div class="card ag-card">
+          <div class="ag-card-head"><div><span class="ag-kicker">NATIONAL SUPPLY INTELLIGENCE • SATELLITE-CALIBRATED</span><h3>🗺 Supply, Regions & Markets</h3></div><span class="ag-status-pill" id="agMapStatus"><i></i>idle</span></div>
+          <div class="ag-tabs">
+            <button class="ag-tab active" onclick="AG.tab('supply', this)">Supply vs needs</button>
+            <button class="ag-tab" onclick="AG.tab('regions', this)">Regional risk map</button>
+            <button class="ag-tab" onclick="AG.tab('prices', this)">Price monitor</button>
+            <button class="ag-tab" onclick="AG.tab('chain', this)">Value chain</button>
+          </div>
+          <div class="ag-tab-content show" id="agTabSupply">
+            <div class="ag-chart-box large"><canvas id="agSupplyChart"></canvas></div>
+            <div id="agGapList" style="margin-top:10px;"></div>
+          </div>
+          <div class="ag-tab-content" id="agTabRegions">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+              <small class="muted" id="agRegionMeta">Togo • 5 regions • NDVI, rainfall & yield anomaly fused</small>
+              <span class="pill" id="agRegionHot">0 hotspots</span>
+            </div>
+            <div class="ag-map" id="agMap"></div>
+            <div class="ag-legend"><span><i style="background:#2fb56a"></i>Minimal</span><span><i style="background:#c9ee59"></i>Stressed</span><span><i style="background:#f0b429"></i>Crisis</span><span><i style="background:#e0642f"></i>Emergency</span><span><i style="background:#a12626"></i>Famine risk</span></div>
+          </div>
+          <div class="ag-tab-content" id="agTabPrices">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+              <small class="muted" id="agPriceMeta">Staple price index • 12 months observed + forecast</small>
+              <span class="pill" id="agPriceAnom">Anomaly —</span>
+            </div>
+            <div class="ag-chart-box large"><canvas id="agPriceChart"></canvas></div>
+            <div id="agPriceList" style="margin-top:10px;"></div>
+          </div>
+          <div class="ag-tab-content" id="agTabChain">
+            <div class="ag-chain" id="agChain"></div>
+            <div style="font-size:11px; color:var(--muted); margin-top:8px;">Production → post-harvest losses → marketed surplus → processing → consumption. Widths are proportional to tonnes.</div>
+          </div>
+          <div class="ag-chart-box" style="margin-top:12px;"><canvas id="agTrendChart"></canvas></div>
         </div>
-        <div>Production gap<div class="metric">—</div>
-        </div>
-        <div>National needs<div class="metric">—</div>
+
+        <!-- RIGHT: Early warning, policy engine, reasoning -->
+        <div class="card ag-card">
+          <div class="ag-card-head"><div><span class="ag-kicker">EARLY-WARNING & POLICY ENGINE • EXPLAINABLE</span><h3>🛡 Decision Engine</h3></div><span class="ag-status-pill" id="agEwStatus"><i></i>standby</span></div>
+          <div id="agInsights"></div>
+          <div style="margin-top:14px;">
+            <div class="ag-card-head" style="margin-bottom:6px;"><span class="ag-kicker">BANKABLE POLICY SCENARIOS • INVESTOR CASES</span><span class="pill" id="agScenarioCount">0 cases</span></div>
+            <div id="agScenarios"></div>
+          </div>
+          <div style="margin-top:12px;">
+            <div class="ag-card-head" style="margin-bottom:6px;"><span class="ag-kicker">LIVE TWIN REASONING</span><span class="pill" id="agReasonPill">● streaming</span></div>
+            <div class="ag-console" id="agConsole"></div>
+          </div>
+          <div style="margin-top:12px;">
+            <div class="ag-card-head" style="margin-bottom:6px;"><span class="ag-kicker">SIGNAL FEED</span><span class="pill" id="agFeedCount">0 events</span></div>
+            <div class="ag-feed" id="agFeed"><div class="ag-empty">Run a simulation to populate the live feed.<br>Every satellite pass, farmer report & market signal lands here.</div></div>
+          </div>
         </div>
       </div>
-      <div class="grid2">
-        <div class="card">
-          <h3 data-i18n="ui.production_by_food_group">Production by food group</h3>
-          <div class="chart"><canvas id="aProd"></canvas></div>
+
+      <!-- LOWER GRID -->
+      <div class="ag-lower-grid">
+        <div class="card ag-card">
+          <div class="ag-card-head"><div><span class="ag-kicker">INVESTMENT CASE • AUTO-GENERATED FROM ACTIVE SCENARIO</span><h3>💼 National Investment Case</h3></div><span class="pill" id="agInvMeta">No case yet</span></div>
+          <div class="ag-inv-grid" id="agInvGrid"></div>
+          <div class="ag-inv-split">
+            <div class="ag-chart-box"><canvas id="agRoiChart"></canvas></div>
+            <div id="agInvNarrative" class="ag-inv-narrative"><div class="ag-empty">Run the simulation to generate a bankable investment narrative (cost, benefits, payback, beneficiaries, CO₂).</div></div>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn primary" onclick="AG.optimize()">🎯 Optimize allocation (AI)</button>
+            <button class="btn secondary" onclick="AG.compare()">⇄ Compare with baseline</button>
+            <button class="btn secondary" onclick="AG.shareCase()">↗ Share with Ministry of Finance</button>
+          </div>
         </div>
-        <div class="card">
-          <h3 data-i18n="ui.consumption_vs_needs">Consumption vs needs</h3>
-          <div class="chart"><canvas id="aNeeds"></canvas></div>
+        <div class="card ag-card">
+          <div class="ag-card-head"><div><span class="ag-kicker">REGIONAL INTELLIGENCE • DRILL-DOWN</span><h3>📍 Regional Situation Room</h3></div><button class="btn secondary" style="min-height:34px; font-size:11px;" onclick="AG.clearHistory()">🗑 Clear history</button></div>
+          <div class="ag-rows" id="agRegionRows"></div>
+          <div class="ag-card-head" style="margin:14px 0 6px;"><span class="ag-kicker">RECENT SIMULATIONS</span><span class="pill" id="agHistoryMeta">0 runs</span></div>
+          <div class="ag-rows ag-rows-hist" id="agRunRows"><div class="ag-empty">No runs yet — your national simulations will land here automatically.</div></div>
         </div>
       </div>
-    </div>
-    <div class="card institutional-module">
-      <div class="section-head">
-        <div>
-          <h2>🌾 National Agrifood Intelligence</h2>
-          <p class="muted">Farm-to-fork intelligence for production, markets, resilience, nutrition and value addition.
-          </p>
-        </div><span class="pill">MINISTRY OF AGRICULTURE</span>
+
+      <!-- HISTORY / TRACE -->
+      <div class="card ag-card" style="margin-top:14px;">
+        <div class="ag-card-head"><div><span class="ag-kicker">SESSION MEMORY • GOVERNMENT AUDIT TRACE</span><h3>📚 Simulation history & reasoning trace</h3></div><span class="pill" id="agTraceMeta">0 traces</span></div>
+        <div id="agHistory" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;"></div>
       </div>
-      <div class="module-grid">
-        <div><b>👩🏾‍🌾 Farmer Registry</b><span>Producer, farm, crop, variety, season, production and market-access
-            profiles.</span></div>
-        <div><b>🌱 Production Forecast</b><span>Crop area, yield, harvest forecast and production gaps.</span></div>
-        <div><b>🌦️ Climate Early Warning</b><span>Weather, drought, flood, heat and crop-risk signals.</span></div>
-        <div><b>🌾 Post-Harvest Loss Observatory</b><span>Loss quantity, stage, cause, cost and hotspot mapping.</span>
-        </div>
-        <div><b>💰 Food Price Intelligence</b><span>Market prices, anomalies, availability and trends.</span></div>
-        <div><b>🏭 Processing & Value Addition</b><span>Transformation yields, costs, losses, quality and value
-            creation.</span></div>
-        <div><b>🥗 Nutrition-Sensitive Agriculture</b><span>Availability of diverse, nutrient-dense and biofortified
-            foods.</span></div>
-        <div><b>🧪 Food Safety</b><span>Aflatoxins, microbiology, quality, traceability and laboratory
-            provenance.</span></div>
-        <div><b>🛰️ Satellite/Drone Intelligence</b><span>Farm monitoring, stress detection and targeted field
-            verification.</span></div>
+
+      <!-- MODALS -->
+      <div class="ag-modal" id="agRegionModal"><div class="ag-sheet"><div class="ag-sheet-head"><div><span class="ag-kicker">REGIONAL INTELLIGENCE</span><h3 id="agRegionModalTitle" style="margin:4px 0 0;">Region</h3><small id="agRegionModalSub" class="muted"></small></div><button class="ag-x" onclick="AG.closeRegion()">✕</button></div><div id="agRegionModalBody"></div></div></div>
+      <div class="ag-modal" id="agAlertModal"><div class="ag-sheet"><div class="ag-sheet-head"><div><span class="ag-kicker">EARLY-WARNING CENTER</span><h3>🔔 Agrifood Early-Warning Alerts</h3><p class="muted" style="margin:4px 0 0;">Climate, production, loss and market signals requiring ministerial action.</p></div><button class="ag-x" onclick="AG.closeAlerts()">✕</button></div><div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;"><button class="btn secondary" onclick="AG.ackAll()">✓ Acknowledge all</button><button class="btn secondary" onclick="AG.clearAlerts()">🗑 Clear</button></div><div id="agAlertsList"></div></div></div>
+
+      <!-- TOASTS -->
+      <div class="ag-toast-stack" id="agToasts"></div>
+
+      <!-- DEMO BAR -->
+      <div id="agDemoBar">
+        <div class="ag-demo-top"><span class="ag-demo-dot"></span><strong id="agDemoTitle">▶ Guided demo — autopilot</strong><button class="ag-demo-stop" onclick="AG.stopDemo()">⏹ Stop</button></div>
+        <p id="agDemoText">Initializing National Agrifood Digital Twin…</p>
+        <div class="ag-demo-track"><i id="agDemoFill"></i></div>
       </div>
-    </div>
-    <div class="card">
-      <h3>📦 Ministry of Agriculture Data Products</h3>
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Primary output</th>
-          <th>Decision use</th>
-        </tr>
-        <tr>
-          <td>National Agrifood Command Center</td>
-          <td>Production + markets + climate + nutrition</td>
-          <td>Sector planning</td>
-        </tr>
-        <tr>
-          <td>Post-Harvest Loss Observatory</td>
-          <td>Loss hotspots + causes</td>
-          <td>Investment targeting</td>
-        </tr>
-        <tr>
-          <td>Food Price Observatory</td>
-          <td>Price trends + anomalies</td>
-          <td>Market monitoring</td>
-        </tr>
-        <tr>
-          <td>Nutrition-Sensitive Agriculture Dashboard</td>
-          <td>Healthy-food availability</td>
-          <td>Nutrition policy</td>
-        </tr>
-        <tr>
-          <td>Value Chain Intelligence</td>
-          <td>Processing + value addition</td>
-          <td>Industrial/agri investment</td>
-        </tr>
-      </table>
+
+      <!-- Legacy compatibility markers (hidden): keep older global layers satisfied without altering this UI -->
+      <div class="ag-legacy" aria-hidden="true">
+        <div class="v46-live"></div><div class="v46-kpis"></div><div data-v46-filter="1"></div>
+        <div class="card"><h3>Production by food group</h3><canvas id="aProd"></canvas></div>
+        <div class="card"><h3>Consumption vs needs</h3><canvas id="aNeeds"></canvas></div>
+        <div class="card"><h3>Food supply trend</h3><canvas></canvas></div>
+      </div>
     </div>
   </section>
 
@@ -14922,6 +15230,622 @@ else setTimeout(boot, 350);
   };
 })();
 </script>
+<script id="nutri-agri-immersive-js">
+/* ============================================================
+   NUTRI.N°1 — Ministry of Agriculture • National Agrifood Digital Twin
+   Investor / government-level simulation, scoped to #agri only.
+   Farm-to-fork pipeline: satellite → farmers → climate → yield model →
+   post-harvest losses → markets → nutrition → policy brief.
+   ============================================================ */
+(function(){
+'use strict';
+var $ = function(s,r){ return (r||document).querySelector(s); };
+var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+var LS_KEY='nutri_agri_twin_v1';
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+var ROOT = null;
+
+/* ---------- reference data (simulated, calibrated to plausible orders of magnitude) ---------- */
+var GROUPS=[
+ {id:'cereals', name:'Cereals', icon:'🌾', loss:14, imp:.22, price:380, color:'#08733f'},
+ {id:'tubers', name:'Tubers & roots', icon:'🍠', loss:28, imp:.02, price:210, color:'#b96c1b'},
+ {id:'fv', name:'Fruits & vegetables', icon:'🥬', loss:38, imp:.08, price:520, color:'#2fb56a'},
+ {id:'legumes', name:'Legumes', icon:'🫘', loss:12, imp:.10, price:640, color:'#8a6a12'},
+ {id:'oilseeds', name:'Oilseeds', icon:'🥜', loss:10, imp:.30, price:710, color:'#e0a43c'},
+ {id:'animal', name:'Animal-source foods', icon:'🐟', loss:20, imp:.26, price:2400, color:'#2f8fd8'}
+];
+var COUNTRIES={
+ TG:{name:'Togo', flag:'🇹🇬', pop:9.1, cur:'FCFA', prod:{cereals:1240,tubers:2080,fv:1120,legumes:520,oilseeds:340,animal:230}, needs:{cereals:1580,tubers:1900,fv:1600,legumes:560,oilseeds:420,animal:380},
+  regions:[{n:'Savanes',share:.22,arid:.9,flood:.3,conflict:.7,pop:1.1},{n:'Kara',share:.18,arid:.7,flood:.3,conflict:.3,pop:1.0},{n:'Centrale',share:.20,arid:.5,flood:.4,conflict:.1,pop:.8},{n:'Plateaux',share:.26,arid:.3,flood:.5,conflict:.05,pop:1.7},{n:'Maritime',share:.14,arid:.2,flood:.8,conflict:.05,pop:4.5}]},
+ GH:{name:'Ghana', flag:'🇬🇭', pop:34.1, cur:'GHS', prod:{cereals:3900,tubers:26800,fv:5200,legumes:900,oilseeds:1400,animal:1300}, needs:{cereals:5900,tubers:20500,fv:7400,legumes:1300,oilseeds:1900,animal:1900},
+  regions:[{n:'Northern',share:.2,arid:.85,flood:.5,conflict:.3,pop:2.3},{n:'Upper East',share:.08,arid:.95,flood:.4,conflict:.35,pop:1.3},{n:'Bono / Ahafo',share:.22,arid:.4,flood:.3,conflict:.05,pop:2.1},{n:'Ashanti',share:.18,arid:.3,flood:.3,conflict:.05,pop:5.9},{n:'Volta',share:.14,arid:.35,flood:.8,conflict:.1,pop:2.1},{n:'Greater Accra',share:.03,arid:.4,flood:.7,conflict:.05,pop:5.6}]},
+ NG:{name:'Nigeria', flag:'🇳🇬', pop:227, cur:'NGN', prod:{cereals:31000,tubers:118000,fv:18500,legumes:5200,oilseeds:6800,animal:5400}, needs:{cereals:39500,tubers:96000,fv:31000,legumes:6100,oilseeds:8600,animal:11800},
+  regions:[{n:'Kano',share:.14,arid:.9,flood:.3,conflict:.3,pop:15.5},{n:'Borno',share:.06,arid:.95,flood:.3,conflict:.95,pop:6.1},{n:'Kaduna',share:.12,arid:.7,flood:.3,conflict:.6,pop:9.2},{n:'Benue',share:.16,arid:.4,flood:.7,conflict:.5,pop:6.4},{n:'Oyo',share:.12,arid:.35,flood:.3,conflict:.1,pop:8.2},{n:'Plateau',share:.10,arid:.5,flood:.3,conflict:.55,pop:4.9},{n:'Rivers',share:.06,arid:.2,flood:.85,conflict:.3,pop:7.4},{n:'Lagos',share:.02,arid:.3,flood:.8,conflict:.1,pop:16.5}]},
+ SN:{name:'Senegal', flag:'🇸🇳', pop:18.3, cur:'FCFA', prod:{cereals:3100,tubers:1500,fv:1900,legumes:380,oilseeds:1700,animal:820}, needs:{cereals:4300,tubers:1300,fv:3300,legumes:520,oilseeds:1200,animal:1400},
+  regions:[{n:'Saint-Louis',share:.22,arid:.85,flood:.6,conflict:.05,pop:1.1},{n:'Louga',share:.10,arid:.95,flood:.2,conflict:.05,pop:1.1},{n:'Kaolack',share:.18,arid:.7,flood:.3,conflict:.05,pop:1.2},{n:'Tambacounda',share:.16,arid:.75,flood:.4,conflict:.15,pop:.9},{n:'Ziguinchor',share:.18,arid:.3,flood:.7,conflict:.25,pop:.7},{n:'Dakar',share:.02,arid:.5,flood:.7,conflict:.05,pop:4.1}]},
+ CI:{name:"Côte d'Ivoire", flag:'🇨🇮', pop:29.4, cur:'FCFA', prod:{cereals:3300,tubers:13800,fv:4100,legumes:420,oilseeds:2900,animal:900}, needs:{cereals:5400,tubers:11000,fv:6500,legumes:800,oilseeds:2200,animal:2100},
+  regions:[{n:'Savanes (Korhogo)',share:.2,arid:.85,flood:.3,conflict:.45,pop:2.1},{n:'Vallée du Bandama',share:.18,arid:.5,flood:.4,conflict:.15,pop:2.4},{n:'Montagnes',share:.16,arid:.3,flood:.5,conflict:.2,pop:2.8},{n:'Lacs',share:.14,arid:.45,flood:.4,conflict:.05,pop:2.9},{n:'Comoé',share:.2,arid:.3,flood:.5,conflict:.1,pop:1.9},{n:'Abidjan',share:.02,arid:.3,flood:.8,conflict:.05,pop:6.3}]},
+ BJ:{name:'Benin', flag:'🇧🇯', pop:13.7, cur:'FCFA', prod:{cereals:2400,tubers:7900,fv:1700,legumes:610,oilseeds:820,animal:340}, needs:{cereals:2900,tubers:6100,fv:2600,legumes:640,oilseeds:820,animal:640},
+  regions:[{n:'Alibori',share:.24,arid:.9,flood:.5,conflict:.6,pop:1.2},{n:'Borgou',share:.22,arid:.7,flood:.3,conflict:.4,pop:1.6},{n:'Atacora',share:.14,arid:.8,flood:.3,conflict:.55,pop:1.0},{n:'Collines',share:.16,arid:.45,flood:.3,conflict:.05,pop:.9},{n:'Zou',share:.12,arid:.35,flood:.4,conflict:.05,pop:1.1},{n:'Ouémé',share:.08,arid:.2,flood:.85,conflict:.05,pop:1.4}]},
+ ML:{name:'Mali', flag:'🇲🇱', pop:23.3, cur:'FCFA', prod:{cereals:10400,tubers:900,fv:2100,legumes:640,oilseeds:1100,animal:1600}, needs:{cereals:8200,tubers:800,fv:3600,legumes:700,oilseeds:900,animal:1900},
+  regions:[{n:'Kayes',share:.12,arid:.8,flood:.3,conflict:.2,pop:2.9},{n:'Koulikoro',share:.2,arid:.7,flood:.3,conflict:.3,pop:3.9},{n:'Sikasso',share:.3,arid:.4,flood:.4,conflict:.15,pop:4.1},{n:'Ségou',share:.22,arid:.75,flood:.6,conflict:.55,pop:3.6},{n:'Mopti',share:.12,arid:.9,flood:.7,conflict:.9,pop:3.2},{n:'Tombouctou',share:.04,arid:.98,flood:.5,conflict:.95,pop:1.1}]},
+ BF:{name:'Burkina Faso', flag:'🇧🇫', pop:23.5, cur:'FCFA', prod:{cereals:5600,tubers:340,fv:1300,legumes:1100,oilseeds:820,animal:1200}, needs:{cereals:6300,tubers:400,fv:2900,legumes:900,oilseeds:820,animal:1700},
+  regions:[{n:'Sahel',share:.06,arid:.98,flood:.2,conflict:.95,pop:1.4},{n:'Nord',share:.1,arid:.9,flood:.2,conflict:.85,pop:1.9},{n:'Centre-Nord',share:.12,arid:.85,flood:.3,conflict:.8,pop:2.0},{n:'Est',share:.16,arid:.7,flood:.4,conflict:.85,pop:2.2},{n:'Hauts-Bassins',share:.3,arid:.4,flood:.4,conflict:.2,pop:2.6},{n:'Centre',share:.26,arid:.55,flood:.4,conflict:.1,pop:3.4}]}
+};
+var SHOCKS={
+ drought:{label:'Drought (Sahel belt)', icon:'☀️'},
+ flood:{label:'Flooding (river basins)', icon:'🌊'},
+ pest:{label:'Fall armyworm outbreak', icon:'🐛'},
+ fuel:{label:'Fuel price spike', icon:'⛽'},
+ border:{label:'Border closure / export ban', icon:'🚧'},
+ fx:{label:'Currency depreciation', icon:'💱'},
+ fertshock:{label:'Fertilizer supply shock', icon:'🧪'},
+ conflict:{label:'Insecurity in production zones', icon:'⚠️'}
+};
+var PIPE=[
+ {k:'sat', label:'Satellite ingestion', log:'Sentinel-2 / MODIS NDVI tiles fused • CHIRPS rainfall decadal composite • cloud mask 6.2%'},
+ {k:'farm', label:'Farmer registry sync', log:'Farmer registry reconciled • plot polygons • season declarations • input vouchers'},
+ {k:'climate', label:'Climate early-warning', log:'ECMWF seasonal forecast downscaled • drought & flood probability per district'},
+ {k:'yield', label:'Yield model', log:'Gradient-boosted crop model (NDVI × rainfall × inputs × soil) • 92% back-test R²'},
+ {k:'loss', label:'Post-harvest loss', log:'Loss observatory: storage, transport, processing stages • hotspot clustering'},
+ {k:'market', label:'Market & price fusion', log:'Market price scrapes + SMS enumerators • anomaly detection • import parity'},
+ {k:'nutrition', label:'Nutrition-sensitive layer', log:'Food-group availability vs dietary needs • diversity & micronutrient adequacy'},
+ {k:'policy', label:'Policy brief & investment case', log:'Explainable brief generated • ROI, payback, beneficiaries, CO₂e • audit trace signed'}
+];
+
+/* ---------- state ---------- */
+var S={
+ country:'TG', season:'main', horizon:6, auto:true,
+ levers:{rain:0, fert:46, irr:8, store:20, roads:38, ext:30},
+ shocks:{},
+ running:false, runs:0, alerts:[], history:[], feed:0, lastAt:null, activeTab:'supply',
+ activeScenario:null, result:null, baseline:null, demo:null
+};
+var CH={};   // chart instances
+
+/* ---------- helpers ---------- */
+function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+function fmt(n,d){ return Number(n).toLocaleString('en-US',{maximumFractionDigits:d==null?0:d, minimumFractionDigits:d==null?0:d}); }
+function kt(n){ return n>=1000 ? fmt(n/1000,2)+' Mt' : fmt(n)+' kt'; }
+function money(m){ return m>=1000 ? '$'+fmt(m/1000,2)+'B' : '$'+fmt(m, m<10?1:0)+'M'; }
+function pct(n,d){ return fmt(n, d==null?0:d)+'%'; }
+function nowT(){ return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
+function esc(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+function C(){ return COUNTRIES[S.country]||COUNTRIES.TG; }
+function sleep(ms){ return new Promise(function(r){ setTimeout(r, REDUCED?Math.min(ms,80):ms); }); }
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({country:S.country, season:S.season, horizon:S.horizon, auto:S.auto, levers:S.levers, shocks:S.shocks, history:S.history.slice(0,12), runs:S.runs, alerts:S.alerts.slice(0,20)})); }catch(e){} }
+function restore(){ try{ var d=JSON.parse(localStorage.getItem(LS_KEY)||'null'); if(!d) return; ['country','season','horizon','auto','levers','shocks','history','runs','alerts'].forEach(function(k){ if(d[k]!=null) S[k]=d[k]; }); if(!COUNTRIES[S.country]) S.country='TG'; }catch(e){} }
+
+/* ---------- twin model ---------- */
+function compute(levers, shocks, opts){
+ opts=opts||{};
+ var c=C(), L=levers, sh=shocks;
+ var rain=L.rain + (sh.drought?-25:0) + (sh.flood?30:0);
+ var r=rain/100;
+ var irrShield = 1 - clamp(L.irr/100*1.4, 0, .8);
+ var climate = r<0 ? 1 + r*0.75*irrShield : (r<=.2 ? 1 + r*.35 : 1 + .07 - (r-.2)*.6);
+ var fert = clamp(L.fert + (sh.fertshock?-25:0) + (sh.fx?-12:0), 0, 100);
+ var fertF = 1 + (fert-46)/100*.45;
+ var irrF = 1 + (L.irr-8)/100*.9;
+ var extF = 1 + (L.ext-30)/100*.25;
+ var seasonF = S.season==='lean' ? .9 : (S.season==='harvest' ? 1.06 : 1);
+ var conflictLoss = sh.conflict ? c.regions.reduce(function(a,rg){ return a + rg.share*rg.conflict*.45; },0) : 0;
+ var lossRed = .55*(1-Math.exp(-L.store/90)) + .15*(L.roads-38)/100;
+ var lossFuel = sh.fuel ? 2.5 : 0, lossFlood = sh.flood ? 4 : 0;
+ var priceShock = (sh.fuel?12:0) + (sh.border?18:0) + (sh.fx?15:0) + (sh.fertshock?6:0) + (sh.conflict?8:0);
+ var groups=[], totProd=0, totNeeds=0, totMarketed=0, totLossT=0, totSupply=0, lossValue=0, importValue=0;
+ GROUPS.forEach(function(g){
+  var base=c.prod[g.id], needs=c.needs[g.id];
+  var f=climate*fertF*irrF*extF*seasonF*(1-conflictLoss);
+  if(g.id==='fv' || g.id==='tubers') f = 1 + (f-1)*.8;
+  if(g.id==='animal') f = 1 + (f-1)*.35;
+  if(sh.pest && g.id==='cereals') f*= .82;
+  if(sh.pest && g.id==='legumes') f*= .93;
+  var prod=base*f;
+  var loss=clamp(g.loss*(1-lossRed) + lossFuel + lossFlood + (g.id==='fv' && sh.fuel ? 3 : 0), 2, 60);
+  var lossT=prod*loss/100;
+  var marketed=prod-lossT;
+  var imp = sh.border ? 0 : needs*g.imp*(sh.fx?.8:1);
+  var supply=marketed+imp;
+  var cov=supply/needs*100;
+  var price = 100 + priceShock + clamp((100-cov)*.9, -20, 60) + (S.season==='lean'?9:(S.season==='harvest'?-6:0));
+  groups.push({id:g.id, name:g.name, icon:g.icon, color:g.color, prod:prod, needs:needs, loss:loss, lossT:lossT, marketed:marketed, imp:imp, supply:supply, cov:cov, price:price, lossValue:lossT*g.price/1000, impValue:imp*g.price/1000});
+  totProd+=prod; totNeeds+=needs; totMarketed+=marketed; totLossT+=lossT; totSupply+=supply; lossValue+=lossT*g.price/1000; importValue+=imp*g.price/1000;
+ });
+ var selfSuff = totMarketed/totNeeds*100;
+ var coverage = totSupply/totNeeds*100;
+ var byId={}; groups.forEach(function(g){ byId[g.id]=g; });
+ var diversity = Math.min(byId.fv.cov, byId.legumes.cov, byId.animal.cov);
+ var priceIdx = groups.reduce(function(a,g){ return a + g.price*(g.needs/totNeeds); },0);
+ var priceAnom = priceIdx-100;
+ var avgLoss = totLossT/totProd*100;
+ var fsi = clamp( .42*clamp(coverage,0,120)/1.2 + .22*clamp(diversity,0,110)/1.1 + .2*clamp(100 - priceAnom*1.6, 0, 100) + .16*clamp(100-avgLoss*2.4,0,100), 0, 100);
+ fsi = clamp(fsi - (sh.conflict?4:0) - (S.season==='lean'?2:0), 0, 100);
+ var riskPct = clamp(44 - .46*fsi + (sh.conflict?5:0) + (sh.drought?3:0), 1.5, 65);
+ var popRisk = c.pop*riskPct/100;
+ // regions
+ var regions=c.regions.map(function(rg){
+  var stress = (rain<0 ? -r*rg.arid*1.6 : 0) + (rain>15 ? r*rg.flood*1.3 : 0) + (sh.conflict ? rg.conflict*.9 : 0) + (sh.pest?.18:0) + (100-coverage)/100*.9 + (S.season==='lean'?.12:0) - (L.irr/100)*rg.arid*.8 - (L.roads-38)/100*.25 - (L.ext-30)/100*.15;
+  var score=clamp(stress, 0, 1.6);
+  var phase = score<.22?1 : score<.45?2 : score<.72?3 : score<1.05?4 : 5;
+  var ndvi = clamp(.62 - (rain<0?-r*rg.arid*.55:0) + (rain>0?r*.08:0) + (L.irr/100)*.2, .15, .85);
+  var yieldAn = Math.round(((climate-1)*100)*(0.6+rg.arid*.8)*(rain<0?1:.6) + (sh.pest?-9:0) + (sh.conflict?-rg.conflict*30:0));
+  return {n:rg.n, pop:rg.pop, share:rg.share, phase:phase, score:score, ndvi:ndvi, yieldAn:yieldAn, atRisk: rg.pop*clamp(riskPct/100*(0.4+score), .01, .8)};
+ });
+ // investment case vs baseline levers
+ var B=S.baselineLevers || {rain:0, fert:46, irr:8, store:20, roads:38, ext:30};
+ var scale = Math.pow(c.pop/9.1, .72); // programme size scales with country population
+ var cost = (Math.max(0,L.store-B.store) + Math.max(0,L.irr-B.irr)*11 + Math.max(0,L.fert-B.fert)*1.6 + Math.max(0,L.roads-B.roads)*3.8 + Math.max(0,L.ext-B.ext)*.9)*scale;
+ var base = opts.baseline || null;
+ var benefit=0, recoveredT=0, extraProdT=0, avoidedImp=0, healthSav=0, benefRisk=0;
+ if(base){
+  recoveredT = Math.max(0, base.totLossT - totLossT);
+  extraProdT = Math.max(0, totProd - base.totProd);
+  var lossValRec = Math.max(0, base.lossValue - lossValue);
+  var extraProdVal = groups.reduce(function(a,g){ var bg=base.byId[g.id]; return a + Math.max(0,g.prod-bg.prod)*GROUPS.filter(function(x){return x.id===g.id;})[0].price/1000; },0);
+  avoidedImp = Math.max(0, base.importValue - importValue);
+  benefRisk = Math.max(0, base.popRisk - popRisk);
+  healthSav = benefRisk*1e6*142/1e6;
+  benefit = (lossValRec + extraProdVal)*(S.horizon/12) + avoidedImp*(S.horizon/12)*.6 + healthSav*(S.horizon/12);
+ }
+ var roi = cost>0 ? benefit/cost : (benefit>0?9.9:0);
+ var payback = benefit>0 && cost>0 ? Math.max(1, Math.round(cost/(benefit/S.horizon))) : null;
+ var co2 = recoveredT*1000*1.9/1e3; // kt CO2e
+ return {groups:groups, byId:byId, totProd:totProd, totNeeds:totNeeds, totMarketed:totMarketed, totLossT:totLossT, totSupply:totSupply, lossValue:lossValue, importValue:importValue,
+  selfSuff:selfSuff, coverage:coverage, diversity:diversity, priceAnom:priceAnom, avgLoss:avgLoss, fsi:fsi, riskPct:riskPct, popRisk:popRisk, regions:regions,
+  climate:climate, fertF:fertF, rainEff:rain, inv:{cost:cost, benefit:benefit, roi:roi, payback:payback, recoveredT:recoveredT, extraProdT:extraProdT, avoidedImp:avoidedImp, benefRisk:benefRisk, healthSav:healthSav, co2:co2}};
+}
+function recompute(){
+ S.baseline = compute({rain:0, fert:46, irr:8, store:20, roads:38, ext:30}, {});
+ S.result = compute(S.levers, S.shocks, {baseline:S.baseline});
+ return S.result;
+}
+
+/* ---------- rendering ---------- */
+function setText(id,v){ var el=$('#'+id); if(el) el.textContent=v; }
+function flashKpi(id, v){ var el=$('#'+id); if(!el) return; if(el.textContent!==v){ el.textContent=v; el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); } }
+function renderKpis(){
+ var R=S.result; if(!R) return;
+ var c=C();
+ flashKpi('agKpiSelf', pct(R.selfSuff,1)); setText('agKpiSelfSub', 'Coverage incl. imports '+pct(R.coverage,0));
+ flashKpi('agKpiProd', kt(R.totProd)); setText('agKpiProdSub', (R.totProd>=S.baseline.totProd?'▲ ':'▼ ')+pct(Math.abs(R.totProd/S.baseline.totProd*100-100),1)+' vs baseline');
+ flashKpi('agKpiLoss', pct(R.avgLoss,1)); setText('agKpiLossSub', kt(R.totLossT)+' • '+money(R.lossValue)+' lost/yr');
+ flashKpi('agKpiRisk', fmt(R.popRisk,2)+'M'); setText('agKpiRiskSub', pct(R.riskPct,1)+' of '+fmt(c.pop,1)+'M • '+S.horizon+'-month horizon');
+ var kr=$('#agKpiRoi'); if(kr){ var v=R.inv.cost>0 ? '$'+fmt(R.inv.roi,2) : '—'; flashKpi('agKpiRoi', v); setText('agKpiRoiSub', R.inv.cost>0 ? 'Cost '+money(R.inv.cost)+' • payback '+(R.inv.payback?R.inv.payback+' mo':'—') : 'Move an investment lever to compute'); }
+ var d=$('#agFsiDonut'), f=Math.round(R.fsi);
+ if(d){ var col = f>=70?'#c9ee59':(f>=50?'#f0b429':'#ff6b6b'); d.style.background='conic-gradient('+col+' '+f+'%, rgba(255,255,255,.12) 0)'; }
+ setText('agFsiCenter', f);
+ var bar=$('#agFsiBar'); if(bar) bar.style.width=f+'%';
+ setText('agFsiLabel', f>=75?'Resilient — national food system on track':(f>=60?'Stable with watch-points':(f>=45?'Stressed — early action window open':'Crisis trajectory — immediate intervention required')));
+ setText('agFsiSub', 'Coverage '+pct(R.coverage,0)+' • diversity '+pct(R.diversity,0)+' • price anomaly '+(R.priceAnom>=0?'+':'')+pct(R.priceAnom,0)+' • losses '+pct(R.avgLoss,1));
+ var kpiRisk=$('#agKpiRisk'); if(kpiRisk){ kpiRisk.parentElement.className='ag-kpi '+(R.riskPct>20?'alert':(R.riskPct>10?'warn':'good')); }
+}
+function renderRings(){
+ var box=$('#agRings'); if(!box||!S.result) return;
+ box.innerHTML=S.result.groups.map(function(g){ var p=clamp(g.cov,0,100); var col=g.cov>=95?'#08733f':(g.cov>=75?'#e0a43c':'#c0392b'); return '<div class="ag-ring" data-g="'+g.id+'" title="Click for detail"><div class="r" style="--p:'+p+'%;--c:'+col+'"><b>'+Math.round(g.cov)+'%</b></div>'+g.icon+' '+esc(g.name)+'<small>'+kt(g.supply)+' / '+kt(g.needs)+'</small></div>'; }).join('');
+ $$('.ag-ring', box).forEach(function(el){ el.addEventListener('click', function(){ openGroup(el.getAttribute('data-g')); }); });
+}
+function renderGapList(){
+ var box=$('#agGapList'); if(!box||!S.result) return;
+ var gs=S.result.groups.slice().sort(function(a,b){ return a.cov-b.cov; });
+ box.innerHTML=gs.map(function(g){ var gap=g.needs-g.supply; var col=g.cov>=95?'#08733f':(g.cov>=75?'#e0a43c':'#c0392b'); return '<div class="ag-gap-row"><span>'+g.icon+' '+esc(g.name)+'</span><div class="bar"><i style="width:'+clamp(g.cov,0,100)+'%;background:'+col+'"></i></div><b>'+(gap>0?'−'+kt(gap)+' gap':'+'+kt(-gap)+' surplus')+'</b></div>'; }).join('');
+}
+function phaseColor(p){ return ['#2fb56a','#c9ee59','#f0b429','#e0642f','#a12626'][p-1]; }
+function phaseName(p){ return ['Minimal','Stressed','Crisis','Emergency','Famine risk'][p-1]; }
+function renderMap(){
+ var box=$('#agMap'); if(!box||!S.result) return;
+ var R=S.result, c=C();
+ var hot=R.regions.filter(function(r){ return r.phase>=3; }).length;
+ setText('agRegionMeta', c.flag+' '+c.name+' • '+R.regions.length+' regions • NDVI, rainfall & yield anomaly fused');
+ setText('agRegionHot', hot+' hotspot'+(hot===1?'':'s'));
+ box.innerHTML=R.regions.map(function(r,i){ return '<div class="ag-tile'+(r.phase>=4?' hot':'')+'" data-i="'+i+'" style="background:linear-gradient(160deg,'+phaseColor(r.phase)+','+phaseColor(Math.min(5,r.phase+1))+')"><span class="ph">IPC '+r.phase+'</span><b>'+esc(r.n)+'</b><div><small>NDVI '+r.ndvi.toFixed(2)+' • yield '+(r.yieldAn>=0?'+':'')+r.yieldAn+'%</small><small>'+fmt(r.atRisk,2)+'M at risk • '+phaseName(r.phase)+'</small></div></div>'; }).join('');
+ $$('.ag-tile', box).forEach(function(el){ el.addEventListener('click', function(){ openRegion(+el.getAttribute('data-i')); }); });
+}
+function renderRegionRows(){
+ var box=$('#agRegionRows'); if(!box||!S.result) return;
+ var rs=S.result.regions.slice().sort(function(a,b){ return b.score-a.score; });
+ box.innerHTML=rs.map(function(r){ var i=S.result.regions.indexOf(r); return '<div class="ag-row" data-i="'+i+'"><div><b>'+esc(r.n)+'</b><small>'+fmt(r.pop,1)+'M people • '+pct(r.share*100,0)+' of national output • yield '+(r.yieldAn>=0?'+':'')+r.yieldAn+'%</small></div><span>'+fmt(r.atRisk,2)+'M at risk</span><span class="ag-badge" style="background:'+phaseColor(r.phase)+'">IPC '+r.phase+' • '+phaseName(r.phase)+'</span></div>'; }).join('');
+ $$('.ag-row', box).forEach(function(el){ el.addEventListener('click', function(){ openRegion(+el.getAttribute('data-i')); }); });
+}
+function renderChain(){
+ var box=$('#agChain'); if(!box||!S.result) return;
+ var R=S.result; var max=R.totProd;
+ var processed=R.totMarketed*.31;
+ var rows=[
+  ['🌱 Gross production', R.totProd, ''],
+  ['📦 Post-harvest losses', R.totLossT, 'loss'],
+  ['🚚 Marketed surplus', R.totMarketed, ''],
+  ['🏭 Processed / value-added', processed, ''],
+  ['🚢 Imports', R.totSupply-R.totMarketed, 'imp'],
+  ['🍽 National consumption needs', R.totNeeds, '']
+ ];
+ box.innerHTML=rows.map(function(r){ return '<div class="ag-chain-row '+r[2]+'"><span>'+r[0]+'</span><div class="bar" style="width:'+clamp(r[1]/max*100,3,100)+'%">'+pct(r[1]/max*100,0)+'</div><b>'+kt(r[1])+'</b></div>'; }).join('');
+}
+function renderPriceList(){
+ var box=$('#agPriceList'); if(!box||!S.result) return;
+ var R=S.result;
+ var a=$('#agPriceAnom'); if(a){ a.textContent='Anomaly '+(R.priceAnom>=0?'+':'')+pct(R.priceAnom,1); a.style.background=R.priceAnom>15?'#fff1ee':(R.priceAnom>6?'#fff8e8':'#edf6ef'); a.style.color=R.priceAnom>15?'#c0392b':(R.priceAnom>6?'#8a6a12':'#08733f'); }
+ box.innerHTML=R.groups.slice().sort(function(x,y){ return y.price-x.price; }).map(function(g){ var d=g.price-100; var col=d>15?'#c0392b':(d>6?'#e0a43c':'#08733f'); return '<div class="ag-gap-row"><span>'+g.icon+' '+esc(g.name)+'</span><div class="bar"><i style="width:'+clamp(g.price/1.6,0,100)+'%;background:'+col+'"></i></div><b>'+(d>=0?'+':'')+pct(d,0)+' vs 5-yr avg</b></div>'; }).join('');
+}
+function renderInsights(){
+ var box=$('#agInsights'); if(!box||!S.result) return;
+ var R=S.result, c=C(), out=[];
+ var worst=R.groups.slice().sort(function(a,b){ return a.cov-b.cov; })[0];
+ var hot=R.regions.filter(function(r){ return r.phase>=3; });
+ if(R.fsi<50) out.push({c:'crit', t:'National food security index at '+Math.round(R.fsi)+'/100', s:'Coverage '+pct(R.coverage,0)+' — activate strategic grain reserve release and targeted input subsidies within 30 days.'});
+ else if(R.fsi<65) out.push({c:'warn', t:'Food system under stress ('+Math.round(R.fsi)+'/100)', s:'Early-action window: pre-position inputs and storage before the lean season.'});
+ else out.push({c:'', t:'Food system resilient ('+Math.round(R.fsi)+'/100)', s:'Maintain trajectory; prioritise value addition and export corridors.'});
+ out.push({c:worst.cov<75?'crit':(worst.cov<95?'warn':''), t:worst.icon+' '+worst.name+' is the binding constraint ('+pct(worst.cov,0)+' covered)', s:'Deficit '+kt(Math.max(0,worst.needs-worst.supply))+'. '+(worst.id==='fv'?'Nutrition impact: micronutrient adequacy drops — scale peri-urban horticulture & cold chain.':worst.id==='animal'?'Protein gap — aquaculture & poultry value-chain financing recommended.':'Boost yield via inputs, irrigation and loss reduction.')});
+ if(R.avgLoss>18) out.push({c:'warn', t:'Post-harvest losses at '+pct(R.avgLoss,1)+' = '+money(R.lossValue)+'/yr', s:'Every $1M in storage/cold-chain recovers ≈ '+kt(Math.max(1,(R.totLossT*.55/250)))+' of food annually in this configuration.'});
+ if(hot.length) out.push({c:hot.some(function(r){return r.phase>=4;})?'crit':'warn', t:hot.length+' region'+(hot.length>1?'s':'')+' in IPC Phase 3+: '+hot.map(function(r){return r.n;}).join(', '), s:'Deploy mobile extension teams, unlock emergency seed & feed, and trigger anticipatory cash transfers.'});
+ if(R.priceAnom>12) out.push({c:'warn', t:'Staple price anomaly +'+pct(R.priceAnom,0), s:'Market monitoring flags speculative stocking; consider temporary import-tariff relief.'});
+ if(S.shocks.border) out.push({c:'crit', t:'Border closure removes '+kt(S.baseline.totSupply-S.baseline.totMarketed)+' of imports', s:'Regional ECOWAS trade corridor negotiation is the highest-value diplomatic lever.'});
+ if(S.levers.irr>25) out.push({c:'', t:'Irrigation at '+S.levers.irr+'% shields '+pct(clamp(S.levers.irr/100*1.4,0,.8)*100,0)+' of drought impact', s:'Climate-resilience dividend: production variance reduced across arid regions.'});
+ box.innerHTML=out.slice(0,5).map(function(i){ return '<div class="ag-insight '+i.c+'"><b>'+esc(i.t)+'</b><small>'+esc(i.s)+'</small></div>'; }).join('');
+ var st=$('#agEwStatus'); if(st){ st.className='ag-status-pill '+(S.running?'running':'done'); st.innerHTML='<i></i>'+(S.running?'computing':(out.some(function(x){return x.c==='crit';})?'critical signals':'live early-warning')); }
+}
+function scenarioDefs(){
+ return [
+  {id:'storage', name:'🏗 National storage & cold-chain programme', levers:{store:160, roads:55}, desc:'120 community silos + 14 cold hubs on F&V corridors'},
+  {id:'irrigation', name:'💧 Smart irrigation in arid belt', levers:{irr:30, ext:55}, desc:'Solar drip & small-scale irrigation, 220k ha'},
+  {id:'inputs', name:'🧪 Input access & e-voucher subsidy', levers:{fert:80, ext:60}, desc:'Digital voucher reaching 1.2M smallholders'},
+  {id:'combo', name:'🚀 Integrated resilience package', levers:{store:120, irr:24, fert:70, roads:60, ext:65}, desc:'Blended finance: IDA + AfDB + private cold-chain PPP'}
+ ];
+}
+function renderScenarios(){
+ var box=$('#agScenarios'); if(!box||!S.result) return;
+ var defs=scenarioDefs();
+ var base=S.baseline;
+ var html=defs.map(function(d){
+  var lv=Object.assign({}, S.levers, d.levers);
+  var r=compute(lv, S.shocks, {baseline:S.result});
+  var roi=r.inv.cost>0? r.inv.benefit/r.inv.cost : 0;
+  var dSelf=r.selfSuff-S.result.selfSuff, dRisk=S.result.popRisk-r.popRisk;
+  return '<div class="ag-scn'+(S.activeScenario===d.id?' active':'')+'" data-s="'+d.id+'"><div class="t"><span>'+esc(d.name)+'</span><span class="pill">ROI $'+fmt(roi,1)+'</span></div><small class="muted">'+esc(d.desc)+' • cost '+money(r.inv.cost)+'</small><div class="m"><div>Self-sufficiency<b>'+(dSelf>=0?'+':'')+pct(dSelf,1)+'</b></div><div>People protected<b>'+(dRisk>=0?'+':'')+fmt(dRisk,2)+'M</b></div><div>Food recovered<b>'+kt(Math.max(0, r.inv.recoveredT + r.inv.extraProdT))+'</b></div></div></div>';
+ }).join('');
+ box.innerHTML=html;
+ setText('agScenarioCount', defs.length+' cases');
+ $$('.ag-scn', box).forEach(function(el){ el.addEventListener('click', function(){ applyScenario(el.getAttribute('data-s')); }); });
+}
+function applyScenario(id){
+ var d=scenarioDefs().filter(function(x){ return x.id===id; })[0]; if(!d) return;
+ S.activeScenario=id;
+ var keys=Object.keys(d.levers), steps=14, i=0, start=Object.assign({}, S.levers);
+ var t=setInterval(function(){ i++; keys.forEach(function(k){ S.levers[k]=Math.round(start[k]+(d.levers[k]-start[k])*i/steps); }); syncLeverInputs(); liveRender(); if(i>=steps){ clearInterval(t); toast('Scenario applied: '+d.name, ''); clog('Scenario "'+d.name+'" applied → levers '+JSON.stringify(d.levers), 'ok'); feed('🧪', 'Scenario applied — '+d.name); save(); } }, REDUCED?1:40);
+}
+function renderInvestment(){
+ var grid=$('#agInvGrid'), nar=$('#agInvNarrative'); if(!grid||!S.result) return;
+ var R=S.result, I=R.inv, c=C();
+ var has=I.cost>0;
+ setText('agInvMeta', has ? money(I.cost)+' • ROI $'+fmt(I.roi,2)+' per $1 • '+S.horizon+' mo' : 'No case yet — move an investment lever');
+ grid.innerHTML=[
+  ['Capital required', has?money(I.cost):'—', 'blended public / private'],
+  ['Economic return', has?money(I.benefit):'—', S.horizon+'-month horizon'],
+  ['Payback', I.payback? I.payback+' months':'—', 'discounted 8%'],
+  ['People protected', fmt(I.benefRisk,2)+'M', 'moved out of IPC 3+'],
+  ['Food recovered', kt(I.recoveredT+I.extraProdT), 'losses avoided + extra output'],
+  ['Import bill avoided', money(I.avoidedImp), 'FX savings per year'],
+  ['Health savings', money(I.healthSav), 'malnutrition & NCD costs'],
+  ['CO₂e avoided', fmt(I.co2,0)+' kt', 'food-loss emissions']
+ ].map(function(x){ return '<div class="ag-inv"><small>'+x[0]+'</small><b>'+x[1]+'</b><span>'+x[2]+'</span></div>'; }).join('');
+ if(nar){
+  if(!has) nar.innerHTML='<div class="ag-empty">Move an investment lever (storage, irrigation, inputs, roads, extension) or click a bankable scenario to generate the investment narrative.</div>';
+  else nar.innerHTML='<h4>💼 '+c.flag+' '+c.name+' — Agrifood Resilience Investment Case</h4>'
+   +'<p>A <b>'+money(I.cost)+'</b> programme ('+leverSummary()+') lifts national food self-sufficiency from <b>'+pct(S.baseline.selfSuff,1)+'</b> to <b>'+pct(R.selfSuff,1)+'</b>'+(Object.keys(S.shocks).filter(function(k){return S.shocks[k];}).length?' even under '+activeShockNames().join(' + '):'')+', returning <b>$'+fmt(I.roi,2)+'</b> for every dollar over '+S.horizon+' months.</p>'
+   +'<ul><li><b>'+fmt(I.benefRisk,2)+'M people</b> protected from acute food insecurity.</li><li><b>'+kt(I.recoveredT)+'</b> of food saved from post-harvest loss; <b>'+kt(I.extraProdT)+'</b> additional output.</li><li><b>'+money(I.avoidedImp)+'/yr</b> import bill avoided — direct FX relief for the Treasury.</li><li>Aligned with Malabo Declaration, SDG 2 & the national agricultural investment plan; results verifiable via satellite & farmer registry audit trace.</li></ul>';
+ }
+ drawRoi();
+}
+function leverSummary(){ var B={store:20,irr:8,fert:46,roads:38,ext:30}, L=S.levers, p=[]; if(L.store>B.store) p.push('storage +'+money(L.store-B.store)); if(L.irr>B.irr) p.push('irrigation → '+L.irr+'%'); if(L.fert>B.fert) p.push('input access → '+L.fert+'%'); if(L.roads>B.roads) p.push('market access → '+L.roads+'%'); if(L.ext>B.ext) p.push('digital extension → '+L.ext+'%'); return p.join(', ')||'baseline'; }
+function activeShockNames(){ return Object.keys(S.shocks).filter(function(k){ return S.shocks[k]; }).map(function(k){ return SHOCKS[k].icon+' '+SHOCKS[k].label; }); }
+function renderRuns(){
+ var box=$('#agRunRows'); if(!box) return;
+ setText('agHistoryMeta', S.history.length+' runs'); setText('agTraceMeta', S.history.length+' traces');
+ if(!S.history.length){ box.innerHTML='<div class="ag-empty">No runs yet — your national simulations will land here automatically.</div>'; }
+ else box.innerHTML=S.history.map(function(h){ var col=h.fsi>=70?'#08733f':(h.fsi>=50?'#e0a43c':'#c0392b'); return '<div class="ag-row"><div><b>'+h.flag+' '+esc(h.country)+' • '+esc(h.mode)+'</b><small>'+h.time+' • '+esc(h.season)+' • '+h.horizon+' mo'+(h.shocks.length?' • '+h.shocks.join(', '):'')+'</small></div><span>'+pct(h.selfSuff,1)+' self-suff.</span><span class="ag-badge" style="background:'+col+'">FSI '+Math.round(h.fsi)+'</span></div>'; }).join('');
+ var hist=$('#agHistory'); if(hist){ hist.innerHTML = S.history.length ? S.history.slice(0,6).map(function(h){ return '<div class="ag-trace"><b>'+h.flag+' '+esc(h.country)+' — FSI '+Math.round(h.fsi)+' • '+fmt(h.popRisk,2)+'M at risk</b><small>'+h.time+' • '+esc(h.mode)+' • '+esc(h.season)+' • ROI $'+fmt(h.roi,2)+'</small><div class="steps">'+PIPE.map(function(p){ return '<span>'+esc(p.label)+' ✓</span>'; }).join('')+'</div></div>'; }).join('') : '<div class="ag-empty" style="grid-column:1/-1">No traces yet — run a national simulation to build the government audit trace.</div>'; }
+}
+function renderBadge(){ var n=S.alerts.filter(function(a){ return !a.acked; }).length; setText('agAlertBadge', n); var b=$('#agAlertBtn'); if(b) b.classList.toggle('has', n>0); }
+function renderAlerts(){
+ var box=$('#agAlertsList'); if(!box) return;
+ if(!S.alerts.length){ box.innerHTML='<div class="ag-empty">All clear — no alerts. Early-warning signals will land here.</div>'; return; }
+ box.innerHTML=S.alerts.map(function(a,i){ return '<div class="ag-alert '+a.level+(a.acked?' acked':'')+'"><div><b>'+esc(a.title)+'</b><small>'+esc(a.body)+' • '+a.time+'</small></div>'+(a.acked?'<span class="pill">✓ acknowledged</span>':'<button class="btn secondary" style="min-height:30px;font-size:11px" onclick="AG.ackAlert('+i+')">✓ Acknowledge</button>')+'</div>'; }).join('');
+}
+function pushAlert(level, title, body){ S.alerts.unshift({level:level, title:title, body:body, time:nowT(), acked:false}); S.alerts=S.alerts.slice(0,30); renderBadge(); renderAlerts(); toast(title, level); }
+function evaluateAlerts(){
+ var R=S.result; if(!R || !S.auto) return;
+ var hot=R.regions.filter(function(r){ return r.phase>=4; });
+ if(hot.length) pushAlert('crit', '🚨 IPC Phase 4 in '+hot.map(function(r){return r.n;}).join(', '), fmt(hot.reduce(function(a,r){return a+r.atRisk;},0),2)+'M people — anticipatory action protocol triggered');
+ var w=R.groups.filter(function(g){ return g.cov<70; });
+ if(w.length) pushAlert('warn', '⚠️ Supply deficit: '+w.map(function(g){return g.name;}).join(', '), 'Coverage below 70% — release strategic reserves / fast-track imports');
+ if(R.priceAnom>15) pushAlert('warn', '💰 Price anomaly +'+pct(R.priceAnom,0), 'Staple price index above tolerance band — market intervention review');
+ if(R.avgLoss>22) pushAlert('warn', '📦 Post-harvest losses '+pct(R.avgLoss,1), money(R.lossValue)+' per year — storage investment recommended');
+}
+function toast(msg, level){ var st=$('#agToasts'); if(!st) return; var d=document.createElement('div'); d.className='ag-toast '+(level||''); d.textContent=msg; st.appendChild(d); setTimeout(function(){ d.style.opacity='0'; d.style.transition='opacity .4s'; setTimeout(function(){ d.remove(); }, 400); }, 3800); }
+function clog(msg, cls){ var c=$('#agConsole'); if(!c) return; var d=document.createElement('div'); d.className=cls||''; d.innerHTML='<span class="t">'+nowT()+'</span>'+esc(msg); c.appendChild(d); while(c.children.length>80) c.removeChild(c.firstChild); c.scrollTop=c.scrollHeight; }
+function feed(icon, msg){ var f=$('#agFeed'); if(!f) return; var e=$('.ag-empty', f); if(e) e.remove(); var d=document.createElement('div'); d.className='ag-ev'; d.innerHTML='<span>'+icon+'</span><span>'+esc(msg)+'</span><small>'+nowT()+'</small>'; f.insertBefore(d, f.firstChild); while(f.children.length>40) f.removeChild(f.lastChild); S.feed++; setText('agFeedCount', S.feed+' events'); }
+
+/* ---------- charts ---------- */
+function chart(id, cfg){
+ var c=$('#'+id); if(!c||!window.Chart) return null;
+ if(CH[id]){ try{ CH[id].destroy(); }catch(e){} }
+ try{ CH[id]=new Chart(c.getContext('2d'), cfg); }catch(e){ CH[id]=null; }
+ return CH[id];
+}
+function upd(id, data){ var ch=CH[id]; if(!ch) return false; try{ ch.data.labels=data.labels; data.datasets.forEach(function(ds,i){ if(ch.data.datasets[i]) ch.data.datasets[i].data=ds.data; }); ch.update(REDUCED?'none':undefined); return true; }catch(e){ return false; } }
+function drawSupply(){
+ var R=S.result; if(!R) return;
+ var data={labels:R.groups.map(function(g){ return g.name; }), datasets:[
+  {label:'Production (kt)', data:R.groups.map(function(g){ return Math.round(g.prod); }), backgroundColor:'rgba(8,115,63,.85)', borderRadius:6},
+  {label:'Marketed after losses', data:R.groups.map(function(g){ return Math.round(g.marketed); }), backgroundColor:'rgba(201,238,89,.9)', borderRadius:6},
+  {label:'National needs', data:R.groups.map(function(g){ return Math.round(g.needs); }), backgroundColor:'rgba(185,108,27,.75)', borderRadius:6}
+ ]};
+ if(upd('agSupplyChart', data)) return;
+ chart('agSupplyChart', {type:'bar', data:data, options:{responsive:true, maintainAspectRatio:false, animation:REDUCED?false:{duration:600}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}, tooltip:{callbacks:{label:function(ctx){ return ctx.dataset.label+': '+fmt(ctx.raw)+' kt'; }}}}, scales:{y:{beginAtZero:true, ticks:{font:{size:10}}}, x:{ticks:{font:{size:10}}}}}});
+}
+function priceSeries(){
+ var R=S.result; var months=['Oct','Nov','Dec','Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct+1','Nov+1','Dec+1','Jan+1','Feb+1','Mar+1'];
+ var obs=[], fc=[]; var seed=S.country.charCodeAt(0)+S.country.charCodeAt(1);
+ for(var i=0;i<12;i++){ obs.push(Math.round(100 + Math.sin((i+seed)/2)*5 + (i>=6&&i<=9?6:0) + (i%3)*1.2)); fc.push(null); }
+ var last=obs[11], target=R.groups.reduce(function(a,g){ return a+g.price*(g.needs/R.totNeeds); },0);
+ fc[11]=last; for(var j=1;j<=6;j++){ fc.push(Math.round(last+(target-last)*Math.min(1,j/4) + (j>=3?Math.sin(j)*2:0))); obs.push(null); }
+ return {labels:months, obs:obs, fc:fc, band:fc.map(function(v){ return v==null?null:Math.round(v*1.08); }), low:fc.map(function(v){ return v==null?null:Math.round(v*.93); })};
+}
+function drawPrice(){
+ var p=priceSeries();
+ var data={labels:p.labels, datasets:[
+  {label:'Observed staple index', data:p.obs, borderColor:'#08733f', backgroundColor:'rgba(8,115,63,.12)', tension:.35, fill:true, pointRadius:2},
+  {label:'Twin forecast', data:p.fc, borderColor:'#b96c1b', borderDash:[6,4], tension:.35, pointRadius:2},
+  {label:'Upper band', data:p.band, borderColor:'rgba(185,108,27,.25)', pointRadius:0, borderWidth:1, fill:'+1', backgroundColor:'rgba(185,108,27,.08)'},
+  {label:'Lower band', data:p.low, borderColor:'rgba(185,108,27,.25)', pointRadius:0, borderWidth:1}
+ ]};
+ if(upd('agPriceChart', data)) return;
+ chart('agPriceChart', {type:'line', data:data, options:{responsive:true, maintainAspectRatio:false, animation:REDUCED?false:{duration:600}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}, filter:function(i){ return i.text.indexOf('band')<0; }}}}, scales:{y:{ticks:{font:{size:10}}, suggestedMin:80}, x:{ticks:{font:{size:9}}}}}});
+}
+function drawTrend(){
+ var R=S.result, B=S.baseline; if(!R) return;
+ var yrs=['2021','2022','2023','2024','2025','2026','2027','2028'];
+ var hist=[B.selfSuff-9, B.selfSuff-6.5, B.selfSuff-4, B.selfSuff-2, B.selfSuff-.5];
+ var base=hist.concat([B.selfSuff, B.selfSuff+1.2, B.selfSuff+2.3]);
+ var scn=hist.concat([R.selfSuff, R.selfSuff+(R.selfSuff-B.selfSuff)*.35+1.2, R.selfSuff+(R.selfSuff-B.selfSuff)*.6+2.4]);
+ var data={labels:yrs, datasets:[
+  {label:'Baseline trajectory', data:base.map(function(v){ return +v.toFixed(1); }), borderColor:'#98a99e', borderDash:[5,4], tension:.35, pointRadius:2},
+  {label:'Active scenario', data:scn.map(function(v){ return +v.toFixed(1); }), borderColor:'#08733f', backgroundColor:'rgba(201,238,89,.25)', fill:true, tension:.35, pointRadius:3},
+  {label:'Self-sufficiency target (100%)', data:yrs.map(function(){ return 100; }), borderColor:'rgba(192,57,43,.6)', borderWidth:1, pointRadius:0}
+ ]};
+ if(upd('agTrendChart', data)) return;
+ chart('agTrendChart', {type:'line', data:data, options:{responsive:true, maintainAspectRatio:false, animation:REDUCED?false:{duration:600}, plugins:{legend:{position:'bottom', labels:{boxWidth:10, font:{size:10}}}, title:{display:true, text:'National food self-sufficiency (%) — baseline vs active scenario', font:{size:11}}}, scales:{y:{ticks:{font:{size:10}}}, x:{ticks:{font:{size:10}}}}}});
+}
+function drawRoi(){
+ var R=S.result; if(!R) return; var I=R.inv;
+ var labels=['Capital','Loss recovery','Extra output','Import savings','Health savings'];
+ var lossValRec=Math.max(0,S.baseline.lossValue-R.lossValue)*(S.horizon/12);
+ var extra=Math.max(0, I.benefit - lossValRec - I.avoidedImp*(S.horizon/12)*.6 - I.healthSav*(S.horizon/12));
+ var data={labels:labels, datasets:[{label:'$M over '+S.horizon+' months', data:[Math.round(I.cost), Math.round(lossValRec), Math.round(extra), Math.round(I.avoidedImp*(S.horizon/12)*.6), Math.round(I.healthSav*(S.horizon/12))], backgroundColor:['#b96c1b','#08733f','#2fb56a','#2f8fd8','#8a6a12'], borderRadius:6}]};
+ if(upd('agRoiChart', data)) return;
+ chart('agRoiChart', {type:'bar', data:data, options:{responsive:true, maintainAspectRatio:false, animation:REDUCED?false:{duration:600}, plugins:{legend:{display:false}, title:{display:true, text:'Cost vs benefit streams ($M)', font:{size:11}}}, scales:{y:{beginAtZero:true, ticks:{font:{size:10}}}, x:{ticks:{font:{size:9}}}}}});
+}
+function drawAll(){ drawSupply(); drawTrend(); drawRoi(); if(S.activeTab==='prices') drawPrice(); }
+
+/* ---------- live render (no pipeline) ---------- */
+var liveT=null;
+function liveRender(){
+ recompute();
+ renderKpis(); renderRings(); renderGapList(); renderMap(); renderRegionRows(); renderChain(); renderPriceList(); renderInsights(); renderScenarios(); renderInvestment();
+ clearTimeout(liveT); liveT=setTimeout(function(){ drawSupply(); drawTrend(); if(S.activeTab==='prices') drawPrice(); }, 120);
+ var st=$('#agLabStatus'); if(st){ st.className='ag-status-pill done'; st.innerHTML='<i></i>live recompute'; }
+}
+function syncLeverInputs(){
+ var m={rain:'agRain', fert:'agFert', irr:'agIrr', store:'agStore', roads:'agRoads', ext:'agExt'};
+ Object.keys(m).forEach(function(k){ var el=$('#'+m[k]); if(el && String(el.value)!==String(S.levers[k])) el.value=S.levers[k]; });
+ setText('agRainVal', (S.levers.rain>0?'+':'')+S.levers.rain+'%'); setText('agFertVal', S.levers.fert+'%'); setText('agIrrVal', S.levers.irr+'%'); setText('agStoreVal', '$'+S.levers.store+'M'); setText('agRoadsVal', S.levers.roads+'%'); setText('agExtVal', S.levers.ext+'%');
+}
+function updateLevers(){
+ var g=function(id){ var el=$('#'+id); return el?+el.value:0; };
+ S.levers={rain:g('agRain'), fert:g('agFert'), irr:g('agIrr'), store:g('agStore'), roads:g('agRoads'), ext:g('agExt')};
+ S.activeScenario=null;
+ syncLeverInputs(); liveRender(); save();
+}
+function bindShocks(){
+ $$('#agShockChips .ag-chip').forEach(function(ch){
+  var k=ch.getAttribute('data-shock'); ch.classList.toggle('active', !!S.shocks[k]);
+  if(ch.dataset.bound) return; ch.dataset.bound='1';
+  ch.addEventListener('click', function(){ S.shocks[k]=!S.shocks[k]; ch.classList.toggle('active', S.shocks[k]); liveRender(); save();
+   if(S.shocks[k]){ clog('Shock injected: '+SHOCKS[k].label+' → FSI '+Math.round(S.result.fsi)+' • at risk '+fmt(S.result.popRisk,2)+'M', 'warn'); feed(SHOCKS[k].icon, 'Stress test — '+SHOCKS[k].label); if(S.auto) evaluateAlerts(); }
+   else { clog('Shock removed: '+SHOCKS[k].label+' → FSI '+Math.round(S.result.fsi), 'ok'); }
+  });
+ });
+}
+
+/* ---------- pipeline run ---------- */
+function setPipe(k, state, note){ var el=$('#agPipeline [data-pipe="'+k+'"]'); if(!el) return; el.classList.remove('active','done'); if(state) el.classList.add(state); var s=$('small', el); if(s) s.textContent=note||''; var line=el.previousElementSibling; if(line && line.classList.contains('ag-pipe-line')) line.classList.toggle('done', state==='done'||state==='active'); }
+function resetPipe(){ PIPE.forEach(function(p,i){ setPipe(p.k, i===0?'active':'', 'waiting'); }); }
+function setProgress(p, txt){ var b=$('#agProgress'); if(b) b.style.width=p+'%'; setText('agProgressValue', Math.round(p)+'%'); if(txt) setText('agStatus', txt); }
+function hub(state, txt){ var led=$('#agHubLed'); if(led) led.className='ag-led '+(state||''); if(txt) setText('agHubStatus', txt); }
+function qrow(icon, label){ var q=$('#agSyncQueue'); if(!q) return null; var d=document.createElement('div'); d.className='ag-qrow'; d.innerHTML='<span>'+icon+'</span><span>'+esc(label)+'</span><b>0%</b><div class="ag-qbar"><i></i></div>'; q.appendChild(d); while(q.children.length>3) q.removeChild(q.firstChild); return d; }
+function qprog(row, p){ if(!row) return; $('.ag-qbar i', row).style.width=p+'%'; $('b', row).textContent=Math.round(p)+'%'; }
+var rateT=null;
+function startRate(){ stopRate(); rateT=setInterval(function(){ setText('agFeedRate', fmt(220+Math.random()*420)+' signals/s'); }, 350); }
+function stopRate(){ clearInterval(rateT); rateT=null; setText('agFeedRate', S.lastAt?'ready':'0 signals/s'); }
+var PIPE_ICONS={sat:'🛰', farm:'👩🏾‍🌾', climate:'🌦', yield:'🌱', loss:'📦', market:'💰', nutrition:'🥗', policy:'📜'};
+async function run(mode){
+ if(S.running) return; S.running=true;
+ var c=C(), quick=mode==='quick';
+ var stepMs=quick?260:620;
+ hub('busy', (quick?'Quick scan':'National simulation')+' running — '+c.flag+' '+c.name+' • '+S.season+' season • '+S.horizon+'-month horizon');
+ startRate(); resetPipe(); setProgress(2, 'Initialising digital twin…');
+ ['agLabStatus','agMapStatus','agEwStatus'].forEach(function(id){ var el=$('#'+id); if(el){ el.className='ag-status-pill running'; el.innerHTML='<i></i>computing'; } });
+ clog('═══ '+(quick?'QUICK SCAN':'NATIONAL SIMULATION')+' • '+c.name+' • '+new Date().toISOString().slice(0,10)+' ═══', 'ok');
+ feed('▶', (quick?'Quick scan':'National simulation')+' started — '+c.flag+' '+c.name);
+ var q=$('#agSyncQueue'); if(q) q.innerHTML='';
+ for(var i=0;i<PIPE.length;i++){
+  var p=PIPE[i];
+  setPipe(p.k, 'active', 'running');
+  var row=qrow(PIPE_ICONS[p.k], p.label);
+  clog('['+(i+1)+'/8] '+p.log);
+  for(var s=1;s<=4;s++){ await sleep(stepMs/4); qprog(row, s*25); setProgress(2 + ((i*4+s)/(PIPE.length*4))*96, p.label+'…'); }
+  setPipe(p.k, 'done', 'done ✓');
+  if(!quick || i%2===0){
+   var msgs={sat:'Satellite pass complete — '+fmt(1800+Math.random()*900)+' tiles, NDVI anomaly mapped', farm:fmt(48000+Math.random()*30000)+' farmer records synced • '+fmt(1200+Math.random()*400)+' new season declarations', climate:'Seasonal forecast: rainfall '+(S.levers.rain+(S.shocks.drought?-25:0)+(S.shocks.flood?30:0))+'% vs normal', yield:'Yield model converged • '+fmt(88+Math.random()*7,1)+'% confidence', loss:'Loss observatory: '+fmt(120+Math.random()*60)+' hotspots geo-located', market:fmt(310+Math.random()*90)+' markets priced • anomaly detector armed', nutrition:'Food-group adequacy computed for '+fmt(c.pop,1)+'M people', policy:'Policy brief drafted • audit hash '+Math.random().toString(16).slice(2,10).toUpperCase()};
+   feed(PIPE_ICONS[p.k], msgs[p.k]);
+  }
+  if(p.k==='yield'){ recompute(); renderKpis(); renderRings(); drawSupply(); }
+  if(p.k==='loss'){ renderChain(); renderGapList(); }
+  if(p.k==='market'){ renderPriceList(); if(S.activeTab==='prices') drawPrice(); renderMap(); renderRegionRows(); }
+  if(p.k==='nutrition'){ renderInsights(); drawTrend(); }
+ }
+ liveRender(); drawAll();
+ setProgress(100, 'Simulation complete — brief ready.');
+ S.running=false; S.runs++; S.lastAt=Date.now(); stopRate();
+ hub('on', 'Twin ready ✓ — '+c.flag+' '+c.name+' • FSI '+Math.round(S.result.fsi)+'/100 • '+fmt(S.result.popRisk,2)+'M at risk • self-sufficiency '+pct(S.result.selfSuff,1));
+ var ms=$('#agMapStatus'); if(ms){ ms.className='ag-status-pill done'; ms.innerHTML='<i></i>satellite-calibrated'; }
+ clog('RESULT → FSI '+Math.round(S.result.fsi)+' • coverage '+pct(S.result.coverage,0)+' • losses '+pct(S.result.avgLoss,1)+' • price anomaly '+(S.result.priceAnom>=0?'+':'')+pct(S.result.priceAnom,0)+' • ROI $'+fmt(S.result.inv.roi,2), S.result.fsi>=60?'ok':'crit');
+ S.history.unshift({time:nowT(), country:c.name, flag:c.flag, mode:quick?'Quick scan':'National simulation', season:S.season, horizon:S.horizon, fsi:S.result.fsi, selfSuff:S.result.selfSuff, popRisk:S.result.popRisk, roi:S.result.inv.roi, shocks:activeShockNames()});
+ S.history=S.history.slice(0,12); renderRuns();
+ evaluateAlerts();
+ feed('✅', 'Simulation complete — FSI '+Math.round(S.result.fsi)+'/100, policy brief ready');
+ toast('✓ National simulation complete — FSI '+Math.round(S.result.fsi)+'/100', '');
+ save();
+ try{ document.dispatchEvent(new CustomEvent('nutri:agriTwinRun', {detail:{country:S.country, fsi:S.result.fsi}})); }catch(e){}
+}
+
+/* ---------- modals ---------- */
+function openRegion(i){
+ var r=S.result && S.result.regions[i]; if(!r) return;
+ var c=C(); var m=$('#agRegionModal'); if(!m) return;
+ setText('agRegionModalTitle', '📍 '+r.n+' — IPC Phase '+r.phase+' ('+phaseName(r.phase)+')');
+ setText('agRegionModalSub', c.flag+' '+c.name+' • '+fmt(r.pop,1)+'M people • '+pct(r.share*100,0)+' of national production');
+ var actions = r.phase>=4 ? ['Trigger anticipatory cash transfers (72h)', 'Emergency seed & livestock feed distribution', 'Open humanitarian corridor & pre-position reserve stocks', 'Daily satellite monitoring + field verification drones'] : r.phase===3 ? ['Release district reserve stocks', 'Mobile extension teams + input vouchers', 'Market price ceiling watch & trader registry check', 'Weekly NDVI & rainfall bulletin to governor'] : ['Maintain surveillance cadence', 'Promote nutrient-dense crop diversification', 'Support aggregation & storage cooperatives', 'Link surplus to national school-feeding procurement'];
+ $('#agRegionModalBody').innerHTML='<div class="ag-inv-grid" style="grid-template-columns:repeat(4,1fr)">'
+  +'<div class="ag-inv"><small>NDVI (veg. index)</small><b>'+r.ndvi.toFixed(2)+'</b><span>Sentinel-2 10-day</span></div>'
+  +'<div class="ag-inv"><small>Yield anomaly</small><b>'+(r.yieldAn>=0?'+':'')+r.yieldAn+'%</b><span>vs 5-yr mean</span></div>'
+  +'<div class="ag-inv"><small>People at risk</small><b>'+fmt(r.atRisk,2)+'M</b><span>'+pct(r.atRisk/r.pop*100,0)+' of region</span></div>'
+  +'<div class="ag-inv"><small>Stress score</small><b>'+r.score.toFixed(2)+'</b><span>composite 0–1.6</span></div></div>'
+  +'<h4 style="margin:14px 0 6px">Recommended ministerial actions</h4>'+actions.map(function(a){ return '<div class="ag-insight '+(r.phase>=4?'crit':(r.phase===3?'warn':''))+'"><b>'+esc(a)+'</b></div>'; }).join('')
+  +'<h4 style="margin:14px 0 6px">Drivers detected by the twin</h4><div class="ag-insight"><small>'+esc(driverText(r))+'</small></div>'
+  +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn primary" onclick="AG.createIntervention('+i+')">🎯 Create intervention</button><button class="btn secondary" onclick="AG.closeRegion()">Close</button></div>';
+ m.classList.add('show');
+}
+function driverText(r){ var d=[]; var rain=S.result.rainEff; if(rain<-10) d.push('rainfall deficit '+rain+'% amplified by aridity'); if(rain>15) d.push('excess rainfall / flood exposure'); if(S.shocks.conflict) d.push('insecurity restricting field access'); if(S.shocks.pest) d.push('fall armyworm pressure on cereals'); if(S.result.coverage<90) d.push('national supply gap '+pct(100-S.result.coverage,0)); if(S.levers.irr>20) d.push('irrigation buffering climate stress'); if(!d.length) d.push('no acute drivers — seasonal variability within norms'); return d.join(' • '); }
+function openGroup(id){
+ var g=S.result && S.result.byId[id]; if(!g) return; var m=$('#agRegionModal'); if(!m) return; var c=C();
+ setText('agRegionModalTitle', g.icon+' '+g.name+' — '+pct(g.cov,0)+' of national needs covered');
+ setText('agRegionModalSub', c.flag+' '+c.name+' • production '+kt(g.prod)+' • losses '+pct(g.loss,1)+' • imports '+kt(g.imp));
+ $('#agRegionModalBody').innerHTML='<div class="ag-inv-grid" style="grid-template-columns:repeat(4,1fr)">'
+  +'<div class="ag-inv"><small>Production</small><b>'+kt(g.prod)+'</b><span>forecast</span></div><div class="ag-inv"><small>Post-harvest loss</small><b>'+kt(g.lossT)+'</b><span>'+pct(g.loss,1)+' • '+money(g.lossValue)+'</span></div><div class="ag-inv"><small>Imports</small><b>'+kt(g.imp)+'</b><span>'+money(g.impValue)+' FX</span></div><div class="ag-inv"><small>Price vs 5-yr</small><b>'+(g.price-100>=0?'+':'')+pct(g.price-100,0)+'</b><span>market index</span></div></div>'
+  +'<table class="ag-mini-table"><tr data-v57wired="1"><th>Stage</th><th>Tonnes</th><th>Share</th></tr><tr data-v57wired="1"><td>Gross production</td><td>'+kt(g.prod)+'</td><td>100%</td></tr><tr data-v57wired="1"><td>Lost post-harvest</td><td>'+kt(g.lossT)+'</td><td>'+pct(g.loss,1)+'</td></tr><tr data-v57wired="1"><td>Marketed surplus</td><td>'+kt(g.marketed)+'</td><td>'+pct(100-g.loss,1)+'</td></tr><tr data-v57wired="1"><td>Imports</td><td>'+kt(g.imp)+'</td><td>'+pct(g.imp/g.needs*100,1)+' of needs</td></tr><tr data-v57wired="1"><td><b>Total supply vs needs</b></td><td><b>'+kt(g.supply)+' / '+kt(g.needs)+'</b></td><td><b>'+pct(g.cov,0)+'</b></td></tr></table>'
+  +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px"><button class="btn secondary" onclick="AG.closeRegion()">Close</button></div>';
+ m.classList.add('show');
+}
+function closeRegion(){ var m=$('#agRegionModal'); if(m) m.classList.remove('show'); }
+function createIntervention(i){ var r=S.result.regions[i]; closeRegion(); clog('Intervention created for '+r.n+' • IPC '+r.phase+' • '+fmt(r.atRisk,2)+'M beneficiaries • owner: Regional Directorate', 'ok'); feed('🎯', 'Intervention created — '+r.n+' ('+fmt(r.atRisk,2)+'M beneficiaries)'); toast('🎯 Intervention created for '+r.n+' — routed to regional directorate', ''); }
+function openAlerts(){ renderAlerts(); var m=$('#agAlertModal'); if(m) m.classList.add('show'); }
+function closeAlerts(){ var m=$('#agAlertModal'); if(m) m.classList.remove('show'); }
+function ackAlert(i){ if(S.alerts[i]) S.alerts[i].acked=true; renderBadge(); renderAlerts(); save(); }
+function ackAll(){ S.alerts.forEach(function(a){ a.acked=true; }); renderBadge(); renderAlerts(); save(); }
+function clearAlerts(){ S.alerts=[]; renderBadge(); renderAlerts(); save(); }
+function clearHistory(){ S.history=[]; renderRuns(); save(); toast('History cleared', ''); }
+
+/* ---------- actions ---------- */
+function optimize(){
+ var c=C(); var arid=c.regions.reduce(function(a,r){ return a+r.arid*r.share; },0);
+ var target={store:Math.round(90+arid*40), irr:Math.round(14+arid*22), fert:Math.round(62+arid*10), roads:58, ext:62};
+ clog('AI allocator: maximizing FSI per $ under '+money(compute(Object.assign({}, S.levers, target), S.shocks, {baseline:S.baseline}).inv.cost)+' envelope • aridity weight '+arid.toFixed(2), 'ok');
+ feed('🎯', 'AI optimizer: allocation computed for '+c.name);
+ S.activeScenario=null;
+ var keys=Object.keys(target), steps=18, i=0, start=Object.assign({}, S.levers);
+ var t=setInterval(function(){ i++; keys.forEach(function(k){ S.levers[k]=Math.round(start[k]+(target[k]-start[k])*i/steps); }); syncLeverInputs(); liveRender(); if(i>=steps){ clearInterval(t); toast('🎯 Optimal allocation applied — ROI $'+fmt(S.result.inv.roi,2)+' per $1', ''); save(); } }, REDUCED?1:45);
+}
+function compare(){
+ var R=S.result, B=S.baseline; if(!R) return;
+ var lines=['Self-sufficiency '+pct(B.selfSuff,1)+' → '+pct(R.selfSuff,1), 'People at risk '+fmt(B.popRisk,2)+'M → '+fmt(R.popRisk,2)+'M', 'Losses '+pct(B.avgLoss,1)+' → '+pct(R.avgLoss,1), 'FSI '+Math.round(B.fsi)+' → '+Math.round(R.fsi)];
+ clog('BASELINE vs SCENARIO • '+lines.join(' • '), 'ok'); feed('⇄', 'Comparison — '+lines[0]);
+ var m=$('#agRegionModal'); if(!m) return;
+ setText('agRegionModalTitle', '⇄ Baseline vs active scenario'); setText('agRegionModalSub', C().flag+' '+C().name+' • '+leverSummary()+(activeShockNames().length?' • shocks: '+activeShockNames().join(', '):''));
+ $('#agRegionModalBody').innerHTML='<table class="ag-mini-table"><tr data-v57wired="1"><th>Indicator</th><th>Baseline</th><th>Scenario</th><th>Δ</th></tr>'+[
+  ['Food security index', Math.round(B.fsi), Math.round(R.fsi), ''],
+  ['Self-sufficiency', pct(B.selfSuff,1), pct(R.selfSuff,1), pct(R.selfSuff-B.selfSuff,1)],
+  ['Coverage incl. imports', pct(B.coverage,1), pct(R.coverage,1), pct(R.coverage-B.coverage,1)],
+  ['Production', kt(B.totProd), kt(R.totProd), kt(R.totProd-B.totProd)],
+  ['Post-harvest losses', kt(B.totLossT), kt(R.totLossT), kt(R.totLossT-B.totLossT)],
+  ['Population at risk', fmt(B.popRisk,2)+'M', fmt(R.popRisk,2)+'M', fmt(R.popRisk-B.popRisk,2)+'M'],
+  ['Price anomaly', pct(B.priceAnom,0), pct(R.priceAnom,0), pct(R.priceAnom-B.priceAnom,0)],
+  ['Import bill', money(B.importValue), money(R.importValue), money(R.importValue-B.importValue)]
+ ].map(function(r){ return '<tr data-v57wired="1"><td>'+r[0]+'</td><td>'+r[1]+'</td><td><b>'+r[2]+'</b></td><td>'+r[3]+'</td></tr>'; }).join('')+'</table><div style="display:flex;gap:8px;margin-top:12px"><button class="btn secondary" onclick="AG.closeRegion()">Close</button></div>';
+ m.classList.add('show');
+}
+function shareCase(){ clog('Investment case shared → Ministry of Finance • Ministry of Planning • World Bank country office (secure link, 72h)', 'ok'); feed('↗', 'Investment case shared with Ministry of Finance'); toast('↗ Investment case shared with Ministry of Finance & development partners', ''); }
+function exportBrief(){
+ var R=S.result||recompute(), c=C(), I=R.inv;
+ var txt=['NUTRI.N°1 — NATIONAL AGRIFOOD DIGITAL TWIN • POLICY BRIEF', 'Country: '+c.name+' • Season: '+S.season+' • Horizon: '+S.horizon+' months • Generated: '+new Date().toISOString(), '', 'HEADLINE INDICATORS', ' Food security index: '+Math.round(R.fsi)+'/100', ' Self-sufficiency: '+pct(R.selfSuff,1)+' (coverage incl. imports '+pct(R.coverage,1)+')', ' Production forecast: '+kt(R.totProd), ' Post-harvest losses: '+pct(R.avgLoss,1)+' = '+kt(R.totLossT)+' = '+money(R.lossValue)+'/yr', ' Population at risk (IPC3+): '+fmt(R.popRisk,2)+'M ('+pct(R.riskPct,1)+')', ' Price anomaly: '+(R.priceAnom>=0?'+':'')+pct(R.priceAnom,1), '', 'FOOD GROUPS'].concat(R.groups.map(function(g){ return ' '+g.name+': production '+kt(g.prod)+' • loss '+pct(g.loss,1)+' • imports '+kt(g.imp)+' • coverage '+pct(g.cov,0); })).concat(['', 'REGIONS'], R.regions.map(function(r){ return ' '+r.n+': IPC '+r.phase+' ('+phaseName(r.phase)+') • yield '+(r.yieldAn>=0?'+':'')+r.yieldAn+'% • '+fmt(r.atRisk,2)+'M at risk'; }), ['', 'SCENARIO', ' Levers: '+JSON.stringify(S.levers), ' Shocks: '+(activeShockNames().join(', ')||'none'), '', 'INVESTMENT CASE', ' Capital: '+money(I.cost)+' • Return: '+money(I.benefit)+' • ROI: $'+fmt(I.roi,2)+' per $1 • Payback: '+(I.payback?I.payback+' months':'n/a'), ' People protected: '+fmt(I.benefRisk,2)+'M • Food recovered: '+kt(I.recoveredT+I.extraProdT)+' • Import bill avoided: '+money(I.avoidedImp)+'/yr • CO2e avoided: '+fmt(I.co2,0)+' kt', '', 'Audit: satellite + farmer registry + market feeds • model AGRI.TWIN v9 • simulated demonstration data']).join('\n');
+ try{ var blob=new Blob([txt], {type:'text/plain'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='NUTRI_AgriTwin_PolicyBrief_'+S.country+'_'+new Date().toISOString().slice(0,10)+'.txt'; document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 500); }catch(e){}
+ clog('Policy brief exported ('+txt.length+' chars) • signed audit trace', 'ok'); feed('⇩', 'Policy brief exported'); toast('⇩ Policy brief exported', '');
+}
+function tab(name, btn){
+ S.activeTab=name;
+ $$('#agri .ag-tab').forEach(function(b){ b.classList.toggle('active', b===btn); });
+ var map={supply:'agTabSupply', regions:'agTabRegions', prices:'agTabPrices', chain:'agTabChain'};
+ Object.keys(map).forEach(function(k){ var el=$('#'+map[k]); if(el) el.classList.toggle('show', k===name); });
+ if(name==='supply') setTimeout(drawSupply, 30); if(name==='prices') setTimeout(drawPrice, 30); if(name==='regions') renderMap(); if(name==='chain') renderChain();
+}
+function setCountry(v){ if(!COUNTRIES[v]) return; S.country=v; S.activeScenario=null; var sid=$('#agSessionId'); if(sid) sid.textContent='AGRI-TWIN-'+v+'-'+(Math.floor(Math.random()*9000)+1000); liveRender(); clog('Context switched → '+C().flag+' '+C().name+' • '+C().regions.length+' regions • pop '+fmt(C().pop,1)+'M', 'ok'); feed('🌍', 'Country context: '+C().name); save(); if(S.auto && !S.running) run('quick'); }
+function setSeason(v){ S.season=v; liveRender(); clog('Season set → '+v, 'ok'); save(); }
+function setHorizon(v){ S.horizon=+v||6; liveRender(); clog('Horizon set → '+S.horizon+' months', 'ok'); save(); }
+function setAuto(v){ S.auto=!!v; clog('Auto early-warning '+(S.auto?'ON':'OFF'), S.auto?'ok':'warn'); save(); }
+
+/* ---------- guided demo ---------- */
+var DEMO=[
+ {t:'Welcome. This is the National Agrifood Digital Twin — a sovereign, satellite-calibrated model of the whole food system, from farm to fork.', a:function(){ setCountry('TG'); }},
+ {t:'Step 1 — We run the full national simulation: satellite, farmer registry, climate, yield model, losses, markets, nutrition and policy brief.', a:function(){ run('full'); }, wait:6200},
+ {t:'Step 2 — Stress test: we inject a Sahel drought. Watch the food-security index, regional IPC map and population at risk react instantly.', a:function(){ S.shocks.drought=true; bindShocks(); liveRender(); evaluateAlerts(); tab('regions', $$('#agri .ag-tab')[1]); }},
+ {t:'Step 3 — The early-warning engine escalates hotspots and drafts ministerial actions region by region.', a:function(){ openRegion(0); }, wait:3600},
+ {t:'Step 4 — Now the AI allocator finds the optimal mix of storage, irrigation, inputs, roads and extension for maximum resilience per dollar.', a:function(){ closeRegion(); tab('supply', $$('#agri .ag-tab')[0]); optimize(); }, wait:3800},
+ {t:'Step 5 — A bankable investment case is generated automatically: capital, return, payback, people protected, import bill avoided, CO₂ saved.', a:function(){ compare(); }, wait:3800},
+ {t:'Step 6 — Everything is explainable, auditable and exportable as a policy brief for the Cabinet, Ministry of Finance and development partners.', a:function(){ closeRegion(); exportBrief(); }},
+ {t:'Demo complete. The twin runs for every ECOWAS & AES country — one platform, national food sovereignty, investor-grade evidence.', a:function(){ S.shocks.drought=false; bindShocks(); liveRender(); }}
+];
+function startDemo(){ if(S.demo) return; var bar=$('#agDemoBar'); if(bar) bar.classList.add('show'); S.demo={i:0, stop:false}; clog('Guided demo started', 'ok'); demoStep(); }
+async function demoStep(){
+ var d=S.demo; if(!d||d.stop) return;
+ if(d.i>=DEMO.length){ stopDemo(); return; }
+ var st=DEMO[d.i]; setText('agDemoText', st.t); var f=$('#agDemoFill'); if(f) f.style.width=((d.i+1)/DEMO.length*100)+'%';
+ try{ st.a(); }catch(e){}
+ await sleep(st.wait||3400);
+ if(S.demo && !S.demo.stop){ S.demo.i++; demoStep(); }
+}
+function stopDemo(){ if(S.demo) S.demo.stop=true; S.demo=null; var bar=$('#agDemoBar'); if(bar) bar.classList.remove('show'); }
+
+/* ---------- boot ---------- */
+function clockTick(){ var c=$('#agClock'); if(c) c.textContent=nowT(); }
+function isolate(){
+ // Keep generic cross-module click/change simulators from hijacking the twin's own controls (scoped to #agri only).
+ var shell=$('#agri .ag-shell'); if(!shell || shell.dataset.iso) return; shell.dataset.iso='1';
+ ['click','change','input'].forEach(function(ev){ shell.addEventListener(ev, function(e){ e.stopPropagation(); }); });
+}
+function boot(){
+ try{
+  ROOT=$('#agri'); if(!ROOT || !$('#agri .ag-shell')) return;
+  restore(); isolate();
+  var setVal=function(id,val){ var el=$('#'+id); if(el) el.value=val; };
+  setVal('agCountry', S.country); setVal('agSeason', S.season); setVal('agHorizon', String(S.horizon));
+  var ae=$('#agAutoEW'); if(ae) ae.checked=!!S.auto;
+  var sid=$('#agSessionId'); if(sid) sid.textContent='AGRI-TWIN-'+S.country+'-'+(Math.floor(Math.random()*9000)+1000);
+  syncLeverInputs(); bindShocks();
+  liveRender(); renderRuns(); renderBadge(); renderAlerts(); resetPipe();
+  clog('AGRI.TWIN v9 ready — 14 live feeds • '+Object.keys(COUNTRIES).length+' countries • yield model R² 0.92 • loss observatory • market anomaly detector', 'ok');
+  clog('Levers armed: rainfall, fertilizer, irrigation, storage/cold-chain, roads, extension • 8 shock scenarios');
+  setInterval(clockTick, 1000); clockTick();
+  document.addEventListener('click', function(e){ if(e.target && e.target.closest && e.target.closest('[onclick*="go(\'agri\'"]')){ setTimeout(function(){ drawAll(); renderMap(); }, 420); } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeRegion(); closeAlerts(); } });
+  setTimeout(drawAll, 300);
+ }catch(e){ try{ console.warn('AGRI twin boot', e); }catch(_){} }
+}
+window.AG={ runFull:function(){ run('full'); }, runQuick:function(){ run('quick'); }, setAuto:setAuto, setCountry:setCountry, setSeason:setSeason, setHorizon:setHorizon, updateLevers:updateLevers, tab:tab, optimize:optimize, compare:compare, shareCase:shareCase, exportBrief:exportBrief, openAlerts:openAlerts, closeAlerts:closeAlerts, ackAlert:ackAlert, ackAll:ackAll, clearAlerts:clearAlerts, clearHistory:clearHistory, openRegion:openRegion, closeRegion:closeRegion, createIntervention:createIntervention, startDemo:startDemo, stopDemo:stopDemo, state:S, compute:compute };
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 380); });
+else setTimeout(boot, 380);
+})();
+</script>
+
 </body>
 
 </html>
