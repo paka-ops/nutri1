@@ -4384,13 +4384,19 @@
 #marketplace .mk-pipe-step.done { opacity:1; border-color:#9dd3b4; background:#f4fbf6; }
 #marketplace .mk-pipe-step.done small { color:var(--mk-green); }
 #marketplace .mk-pipe-line { width:12px; height:2px; background:var(--mk-line); flex:none; }
-#marketplace .mk-workbench { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:14px; align-items:stretch; }
-#marketplace .mk-workbench > .mk-analysis { grid-column:1/-1; border-top:4px solid var(--mk-green); box-shadow:0 10px 30px rgba(11,138,76,.08); }
-#marketplace .mk-workbench > .mk-catalog, #marketplace .mk-workbench > .mk-basket { display:flex; flex-direction:column; min-height:520px; }
-#marketplace .mk-workbench > .mk-catalog { border-top:4px solid var(--mk-teal); }
-#marketplace .mk-workbench > .mk-basket { border-top:4px solid var(--mk-amber); }
+#marketplace .mk-workbench { display:grid; grid-template-columns:1fr; gap:16px; margin-top:14px; align-items:start; }
 #marketplace .mk-workbench > .mk-card { box-shadow:0 6px 22px rgba(9,42,26,.06); }
 #marketplace .mk-workbench > .mk-card > .mk-card-head { padding-bottom:10px; border-bottom:1px solid #eef3f0; }
+#marketplace .mk-workbench > .mk-analysis { border-top:4px solid var(--mk-green); box-shadow:0 10px 30px rgba(11,138,76,.08); }
+#marketplace .mk-workbench > .mk-basket { border-top:4px solid var(--mk-amber); display:flex; flex-direction:column; }
+#marketplace .mk-analysis-layout { display:grid; grid-template-columns:minmax(340px,400px) minmax(0,1fr); gap:16px; align-items:start; }
+#marketplace .mk-picker { background:#fbfdfc; border:1px solid #eaf2ed; border-radius:14px; padding:12px; display:flex; flex-direction:column; min-height:440px; }
+#marketplace .mk-picker-head { display:flex; justify-content:space-between; gap:8px; align-items:flex-start; margin-bottom:10px; padding-bottom:10px; border-bottom:1px solid #eef3f0; }
+#marketplace .mk-picker-head h4 { margin:3px 0 0; font-size:13.5px; }
+#marketplace .mk-picker .mk-search-row { flex-direction:column; }
+#marketplace .mk-picker .mk-search-row select { width:100%; }
+#marketplace .mk-picker .mk-product-list { flex:1 1 auto; max-height:640px; min-height:280px; }
+#marketplace .mk-result { min-width:0; }
 #marketplace .mk-analysis #mkAnalysisBody { display:grid; grid-template-columns:1fr 1fr; gap:14px; align-items:start; }
 #marketplace .mk-analysis #mkAnalysisBody > .mk-analysis-hero, #marketplace .mk-analysis #mkAnalysisBody > .mk-donut-grid { grid-column:1/-1; }
 #marketplace .mk-analysis #mkAnalysisBody > .mk-empty { grid-column:1/-1; }
@@ -4398,11 +4404,14 @@
 #marketplace .mk-analysis #mkAnalysisBody > div:nth-child(5).mk-section { grid-column:1/-1; }
 #marketplace .mk-analysis #mkAnalysisBody > .mk-chip-row { grid-column:1/-1; margin-top:2px; display:flex; gap:8px; flex-wrap:wrap; }
 #marketplace .mk-analysis #mkAnalysisBody > .mk-chip-row .btn { flex:1 1 220px; justify-content:center; }
-#marketplace .mk-analysis .mk-goal-grid { grid-template-columns:repeat(3,1fr); }
-#marketplace .mk-catalog #mkProductList { flex:1 1 auto; max-height:560px; min-height:320px; }
-#marketplace .mk-basket #mkBasketBody { flex:1 1 auto; min-height:320px; max-height:560px; overflow:auto; }
-#marketplace .mk-basket .mk-chip-row { margin-top:auto !important; padding-top:10px; border-top:1px solid #eef3f0; }
-#marketplace .mk-basket .mk-chip-row .btn { flex:1 1 180px; justify-content:center; }
+#marketplace .mk-analysis .mk-goal-grid { grid-template-columns:repeat(2,1fr); }
+#marketplace .mk-basket #mkBasketBody { display:grid; grid-template-columns:1fr 1fr; gap:0 18px; align-items:start; }
+#marketplace .mk-basket #mkBasketBody > .mk-empty, #marketplace .mk-basket #mkBasketBody > .mk-donut-grid, #marketplace .mk-basket #mkBasketBody > .mk-section, #marketplace .mk-basket #mkBasketBody > .mk-callout, #marketplace .mk-basket #mkBasketBody > .mk-basket-total { grid-column:1/-1; }
+#marketplace .mk-basket #mkBasketBody > .mk-section { margin-top:12px; }
+#marketplace .mk-basket #mkBasketBody > .mk-section .mk-cov-list { display:grid; grid-template-columns:1fr 1fr; gap:6px 18px; }
+#marketplace .mk-basket #mkBasketBody > .mk-callout { margin-top:12px; }
+#marketplace .mk-basket .mk-chip-row { margin-top:12px !important; padding-top:10px; border-top:1px solid #eef3f0; }
+#marketplace .mk-basket .mk-chip-row .btn { flex:1 1 200px; justify-content:center; }
 #marketplace .mk-card { border:1px solid var(--mk-line); border-radius:16px; background:#fff; padding:15px; }
 #marketplace .mk-card-head { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; margin-bottom:10px; }
 #marketplace .mk-kicker { font-size:9.5px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:var(--mk-green); }
@@ -4547,8 +4556,9 @@
 #marketplace .mk-card-nutrition .mk-legend-inline { margin-top:0; }
 #marketplace .mk-card-nutrition .mk-cov { grid-template-columns:96px 1fr 46px; }
 #marketplace .mk-card-nutrition .mk-sheet-btn { margin-top:8px; width:100%; }
-@media (max-width:1250px) { #marketplace .mk-kpis { grid-template-columns:1fr 1fr; } #marketplace .mk-analysis .mk-goal-grid { grid-template-columns:repeat(2,1fr); } }
-@media (max-width:900px) { #marketplace .mk-workbench, #marketplace .mk-lower-grid, #marketplace .mk-lower-grid2 { grid-template-columns:1fr; } #marketplace .mk-donut-grid { grid-template-columns:1fr 1fr; } #marketplace .mk-analysis #mkAnalysisBody { grid-template-columns:1fr; } #marketplace .mk-analysis #mkAnalysisBody > div:nth-child(5).mk-section { grid-column:auto; } #marketplace .mk-analysis .mk-goal-grid { grid-template-columns:repeat(3,1fr); } #marketplace .mk-workbench > .mk-catalog, #marketplace .mk-workbench > .mk-basket { min-height:0; } #marketplace .mk-catalog #mkProductList, #marketplace .mk-basket #mkBasketBody { max-height:420px; min-height:0; } }
+@media (max-width:1250px) { #marketplace .mk-kpis { grid-template-columns:1fr 1fr; } }
+@media (max-width:1150px) { #marketplace .mk-analysis-layout { grid-template-columns:1fr; } #marketplace .mk-picker { min-height:0; } #marketplace .mk-picker .mk-product-list { max-height:360px; min-height:0; } }
+@media (max-width:900px) { #marketplace .mk-workbench, #marketplace .mk-lower-grid, #marketplace .mk-lower-grid2 { grid-template-columns:1fr; } #marketplace .mk-donut-grid { grid-template-columns:1fr 1fr; } #marketplace .mk-analysis #mkAnalysisBody { grid-template-columns:1fr; } #marketplace .mk-analysis #mkAnalysisBody > div:nth-child(5).mk-section { grid-column:auto; } #marketplace .mk-analysis .mk-goal-grid { grid-template-columns:repeat(3,1fr); } #marketplace .mk-basket #mkBasketBody { grid-template-columns:1fr; } #marketplace .mk-basket #mkBasketBody > .mk-section .mk-cov-list { grid-template-columns:1fr; } }
 @media (max-width:600px) { #marketplace .mk-kpis, #marketplace .mk-donut-grid { grid-template-columns:1fr; } #marketplace .mk-analysis .mk-goal-grid { grid-template-columns:1fr 1fr; } #marketplace .mk-pipe-step { min-width:64px; } #marketplace .mk-cov { grid-template-columns:96px 1fr 44px; } }
 @media (prefers-reduced-motion:reduce) { #marketplace .mk-led.on, #marketplace .mk-led.busy, #marketplace .mk-status-pill.running i, #marketplace .mk-demo-dot, #marketplace .mk-alertbtn.has b { animation:none !important; } }
   </style>
@@ -5848,37 +5858,41 @@
 
     <!-- WORKBENCH -->
     <div class="mk-workbench">
-      <!-- TOP: nutrition analysis (feature rectangle) -->
+      <!-- TOP: product picker + nutrition analysis (merged rectangle) -->
       <div class="card mk-card mk-analysis">
         <div class="mk-card-head">
           <div><span class="mk-kicker" data-mk-i18n="analysis_kicker">NUTRITIONAL CONTRIBUTION • PER PRODUCT</span>
             <h3 data-mk-i18n="analysis_title">🧪 Product nutrition analysis</h3></div>
           <span class="mk-status-pill" id="mkAnalysisStatus"><i></i><span data-mk-i18n="idle">idle</span></span>
         </div>
-        <div id="mkAnalysisBody"></div>
+        <div class="mk-analysis-layout">
+          <!-- LEFT: integrated product picker (ex-catalogue card) -->
+          <aside class="mk-picker">
+            <div class="mk-picker-head">
+              <div><span class="mk-kicker" data-mk-i18n="catalog_kicker">AFRICAN COMPOSITION DATABASE • CATALOGUE</span>
+                <h4 data-mk-i18n="catalog_title">🧾 Healthy food catalogue</h4></div>
+              <span class="mk-status-pill" id="mkCatalogStatus"><i></i><span data-mk-i18n="ready">ready</span></span>
+            </div>
+            <div class="mk-search-row">
+              <input id="mkSearch" placeholder="🔎 Search a healthy food…" data-mk-i18n-placeholder="search_ph" oninput="MKT.setSearch(this.value)">
+              <select id="mkPrice" onchange="MKT.setPrice(this.value)">
+                <option value="all" data-mk-i18n="all_prices">All prices</option>
+                <option value="low" data-mk-i18n="under_8">Under $8</option>
+                <option value="mid">$8–$15</option>
+                <option value="high" data-mk-i18n="above_15">Above $15</option>
+              </select>
+            </div>
+            <div class="mk-cat-tabs" id="mkCatTabs"></div>
+            <div class="mk-product-list" id="mkProductList"></div>
+          </aside>
+          <!-- RIGHT: analysis result -->
+          <div class="mk-result">
+            <div id="mkAnalysisBody"></div>
+          </div>
+        </div>
       </div>
 
-      <!-- BOTTOM-LEFT: catalogue -->
-      <div class="card mk-card mk-catalog">
-        <div class="mk-card-head">
-          <div><span class="mk-kicker" data-mk-i18n="catalog_kicker">AFRICAN COMPOSITION DATABASE • CATALOGUE</span>
-            <h3 data-mk-i18n="catalog_title">🧾 Healthy food catalogue</h3></div>
-          <span class="mk-status-pill" id="mkCatalogStatus"><i></i><span data-mk-i18n="ready">ready</span></span>
-        </div>
-        <div class="mk-search-row">
-          <input id="mkSearch" placeholder="🔎 Search a healthy food…" data-mk-i18n-placeholder="search_ph" oninput="MKT.setSearch(this.value)">
-          <select id="mkPrice" onchange="MKT.setPrice(this.value)">
-            <option value="all" data-mk-i18n="all_prices">All prices</option>
-            <option value="low" data-mk-i18n="under_8">Under $8</option>
-            <option value="mid">$8–$15</option>
-            <option value="high" data-mk-i18n="above_15">Above $15</option>
-          </select>
-        </div>
-        <div class="mk-cat-tabs" id="mkCatTabs"></div>
-        <div class="mk-product-list" id="mkProductList"></div>
-      </div>
-
-      <!-- BOTTOM-RIGHT: basket simulation -->
+      <!-- BOTTOM: basket simulation (full-width rectangle) -->
       <div class="card mk-card mk-basket">
         <div class="mk-card-head">
           <div><span class="mk-kicker" data-mk-i18n="basket_kicker">BASKET SIMULATION • HOUSEHOLD</span>
