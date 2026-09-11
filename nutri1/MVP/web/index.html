@@ -3982,6 +3982,185 @@
     @media (max-width:680px) { #scanner .sc-hero-card { align-items:flex-start; flex-direction:column; padding:20px; } #scanner .sc-session-meta { align-items:flex-start; } #scanner .sc-modebar { display:grid; grid-template-columns:1fr 1fr; } #scanner .sc-mode { min-width:0; flex:auto; } #scanner .sc-mode-spacer { display:none; } #scanner .sc-upload-btn { width:100%; } #scanner .sc-camera { height:300px; } #scanner .sc-pipeline { overflow:auto; justify-content:flex-start; padding-bottom:4px; } #scanner .sc-pipe-step { flex:0 0 66px; } #scanner .sc-pipe-line { flex:0 0 20px; } #scanner .sc-history-list { grid-template-columns:1fr; } #scanner .sc-ingredient-row { grid-template-columns:28px 1fr auto; } #scanner .sc-ingredient-row .sc-confidence-mini { display:none; } #scanner .sc-nutrition-footer { flex-direction:column; } }
     @media (prefers-reduced-motion:reduce) { #scanner .sc-camera-noise,#scanner .sc-live-badge i,#scanner .sc-camera-top span:first-child i { animation:none; } #scanner .sc-camera.scanning .sc-scan-beam { animation:none; top:50%; } }
   </style>
+  <style id="nutri-ai-immersive-css">
+/* ============================================================
+   NUTRI.N°1 — AI Nutrition & Prevention Engine immersive (AI)
+   Scoped to #ai only. Investor-level simulation.
+   ============================================================ */
+#ai { --ai-ink:#13251a; --ai-deep:#062718; --ai-green:#08733f; --ai-lime:#c9ee59; --ai-cyan:#4ee0c1; --ai-blue:#4a8bff; --ai-line:#d4e5d9; --ai-amber:#e0a43c; --ai-red:#c0392b; }
+#ai .ai-shell { max-width: 1480px; margin: 0 auto; }
+#ai .ai-command { border-left: 5px solid var(--ai-green); background: linear-gradient(180deg,#ffffff,#f6fbf7); position: relative; overflow: hidden; }
+#ai .ai-command::after { content:""; position:absolute; right:-50px; top:-80px; width:220px; height:220px; border-radius:50%; background: radial-gradient(circle, rgba(201,238,89,.18), transparent 60%); pointer-events:none; }
+#ai .ai-hero { display:flex; justify-content:space-between; align-items:flex-start; gap:18px; flex-wrap:wrap; }
+#ai .ai-hero h2 { margin:0 0 6px; font-size:clamp(22px,3vw,30px); letter-spacing:-.04em; }
+#ai .ai-hero p { margin:0; color:var(--muted); max-width:760px; line-height:1.55; }
+#ai .ai-hub-bar { display:flex; align-items:center; gap:10px; flex-wrap:wrap; background:#0b2e1d; color:#e8f6ec; border-radius:12px; padding:10px 14px; margin:12px 0; position:relative; z-index:1; }
+#ai .ai-led { width:10px; height:10px; border-radius:50%; background:#6b7f70; box-shadow:0 0 0 4px rgba(255,255,255,.08); flex:none; }
+#ai .ai-led.on { background:#2fe07a; box-shadow:0 0 0 5px rgba(47,224,122,.18); animation: aiPulse 1.4s infinite; }
+#ai .ai-led.busy { background:#ffc53d; box-shadow:0 0 0 5px rgba(255,197,61,.18); animation: aiPulse .7s infinite; }
+#ai .ai-led.err { background:#ff6b6b; }
+@keyframes aiPulse { 50% { opacity:.45; transform:scale(.82); } }
+#ai .ai-hub-bar strong { font-size:13px; letter-spacing:.01em; }
+#ai .ai-hub-bar .pill { background: rgba(201,238,89,.16); color:#c9ee59; font-weight:800; }
+#ai .ai-clock { margin-left:auto; font-variant-numeric:tabular-nums; font-size:12px; opacity:.8; }
+#ai .ai-global-controls { display:flex; gap:10px; flex-wrap:wrap; align-items:center; background:#f1f7f2; border:1px solid var(--ai-line); border-radius:12px; padding:10px 12px; position:relative; z-index:1; }
+#ai .ai-global-controls .btn { margin:0; }
+#ai .ai-toggle { display:inline-flex; align-items:center; gap:8px; font-weight:700; font-size:12px; cursor:pointer; user-select:none; }
+#ai .ai-switch { width:42px; height:23px; border-radius:99px; background:#c9d6cc; position:relative; transition:.2s; flex:none; }
+#ai .ai-switch::after { content:""; position:absolute; top:3px; left:3px; width:17px; height:17px; border-radius:50%; background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.2); transition:.2s; }
+#ai .ai-toggle input { display:none; }
+#ai .ai-toggle input:checked + .ai-switch { background: var(--ai-green); }
+#ai .ai-toggle input:checked + .ai-switch::after { left:22px; }
+#ai .ai-select { min-height:38px; font-weight:700; min-width:160px; }
+#ai .ai-kpis { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin:12px 0; position:relative; z-index:1; }
+#ai .ai-kpi { background:#fff; border:1px solid var(--ai-line); border-radius:12px; padding:11px 12px; transition:.18s; }
+#ai .ai-kpi:hover { transform:translateY(-2px); box-shadow:0 8px 22px rgba(3,45,26,.08); }
+#ai .ai-kpi small { color:var(--muted); font-weight:700; text-transform:uppercase; font-size:10px; letter-spacing:.05em; }
+#ai .ai-kpi b { display:block; font-size:22px; margin-top:3px; letter-spacing:-.02em; font-variant-numeric:tabular-nums; }
+#ai .ai-kpi span { font-size:11px; color:var(--muted); }
+#ai .ai-kpi.good b { color:var(--ai-green); }
+#ai .ai-kpi.warn b { color:#8a6a12; }
+#ai .ai-kpi.alert b { color:var(--ai-red); }
+#ai .ai-sync-queue { display:flex; flex-direction:column; gap:7px; margin-top:10px; }
+#ai .ai-qrow { display:grid; grid-template-columns:26px 1fr auto; gap:10px; align-items:center; background:#f7fbf8; border:1px solid var(--ai-line); border-radius:10px; padding:8px 10px; font-size:12px; animation: aiSlideIn .3s ease; }
+#ai .ai-qrow .ai-qbar { grid-column:1/-1; height:6px; background:#e3ece5; border-radius:99px; overflow:hidden; }
+#ai .ai-qrow .ai-qbar i { display:block; height:100%; width:0; background:linear-gradient(90deg,var(--ai-green),#5cc98a); transition:width .3s; }
+#ai .ai-workbench { display:grid; grid-template-columns: minmax(0,1.05fr) minmax(0,1.35fr) minmax(320px,.85fr); gap:14px; margin-top:14px; }
+#ai .ai-card { position:relative; overflow:hidden; transition: transform .18s, box-shadow .18s, border-color .18s; }
+#ai .ai-card:hover { transform:translateY(-2px); }
+#ai .ai-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+#ai .ai-card-head h3 { margin:3px 0 0; font-size:15px; letter-spacing:-.02em; }
+#ai .ai-kicker { font-size:10px; letter-spacing:.13em; font-weight:900; color:var(--ai-green); opacity:.85; }
+#ai .ai-status-pill { display:inline-flex; align-items:center; gap:6px; flex:none; padding:6px 9px; border-radius:99px; background:#eef4ef; color:#617268; font-size:10px; font-weight:850; white-space:nowrap; }
+#ai .ai-status-pill i { width:6px; height:6px; border-radius:50%; display:inline-block; background:#99a79c; }
+#ai .ai-status-pill.running { color:#886317; background:#fff3d6; }
+#ai .ai-status-pill.running i { background:#f3b91f; animation: aiPulse .8s infinite; }
+#ai .ai-status-pill.done { color:#0b6b3a; background:#dff5e6; }
+#ai .ai-status-pill.done i { background:#25bd69; }
+#ai .ai-pipeline { display:flex; align-items:center; justify-content:space-between; gap:4px; margin:16px 0 12px; overflow:auto; padding-bottom:4px; }
+#ai .ai-pipe-step { display:flex; min-width:64px; flex-direction:column; align-items:center; gap:5px; color:#809086; text-align:center; transition:.2s; flex:0 0 72px; }
+#ai .ai-pipe-step b { font-size:10px; }
+#ai .ai-pipe-step small { min-height:12px; font-size:9px; }
+#ai .ai-pipe-icon { display:grid; place-items:center; width:30px; height:30px; border:1px solid #d6e3d8; border-radius:9px; background:#f4f8f4; font-size:14px; }
+#ai .ai-pipe-step.active { color:var(--ai-green); }
+#ai .ai-pipe-step.active .ai-pipe-icon { color:#fff; background:var(--ai-green); border-color:var(--ai-green); box-shadow:0 0 0 5px rgba(8,115,63,.10); }
+#ai .ai-pipe-step.done { color:#3d6650; }
+#ai .ai-pipe-step.done .ai-pipe-icon { color:#0b6b3a; background:#dff5e6; border-color:#b9dfc3; }
+#ai .ai-pipe-line { height:1px; flex:1; min-width:8px; background:#d8e5da; position:relative; top:-11px; }
+#ai .ai-pipe-line.done { background:linear-gradient(90deg,#54bd7e,var(--ai-green)); }
+#ai .ai-progress-wrap { display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center; }
+#ai .ai-progress-wrap .progress { grid-column:1/-1; height:7px; }
+#ai .ai-progress-wrap .progress i { background:linear-gradient(90deg,var(--ai-green),#7bbd58); }
+#ai .ai-progress-wrap span { color:var(--muted); font-size:11px; }
+#ai .ai-progress-wrap > b { color:var(--ai-green); font-size:12px; }
+#ai .ai-profile-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+#ai .ai-field { display:flex; flex-direction:column; gap:6px; font-size:11px; font-weight:700; }
+#ai .ai-field input, #ai .ai-field select { min-height:40px; font-weight:600; }
+#ai .ai-range { width:100%; accent-color:var(--ai-green); }
+#ai .ai-range-labels { display:flex; justify-content:space-between; font-size:9px; color:var(--muted); }
+#ai .ai-chip-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+#ai .ai-chip { font-size:10px; font-weight:800; padding:5px 9px; border-radius:99px; background:#edf6ef; color:var(--ai-green); cursor:pointer; border:1px solid transparent; transition:.15s; }
+#ai .ai-chip:hover, #ai .ai-chip.active { background:var(--ai-green); color:#fff; border-color:var(--ai-green); }
+#ai .ai-nutrient-rings { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:10px; }
+#ai .ai-ring-card { background:#f7fbf8; border:1px solid var(--ai-line); border-radius:12px; padding:10px; text-align:center; }
+#ai .ai-ring { width:56px; height:56px; border-radius:50%; margin:0 auto 6px; display:grid; place-items:center; font-weight:900; font-size:13px; background:conic-gradient(var(--ai-green) var(--pct), #e6eee8 0); position:relative; }
+#ai .ai-ring::after { content:""; position:absolute; inset:5px; background:#fff; border-radius:50%; }
+#ai .ai-ring span { position:relative; z-index:1; }
+#ai .ai-ring-card small { font-size:10px; color:var(--muted); font-weight:700; text-transform:uppercase; letter-spacing:.04em; }
+#ai .ai-ring-card b { display:block; font-size:12px; margin-top:2px; }
+#ai .ai-chart-box { height:220px; border:1px solid var(--ai-line); border-radius:12px; padding:10px; background:#fff; margin-top:10px; }
+#ai .ai-chart-box canvas { width:100% !important; height:100% !important; }
+#ai .ai-chart-box.large { height:280px; }
+#ai .ai-score-card { background:linear-gradient(135deg,#0b8a4c,#032d1a); color:#fff; border-radius:14px; padding:14px; display:flex; gap:14px; align-items:center; margin-top:10px; }
+#ai .ai-score-num { font-size:38px; font-weight:900; letter-spacing:-.03em; line-height:1; }
+#ai .ai-score-bar { height:7px; background:rgba(255,255,255,.2); border-radius:99px; overflow:hidden; margin-top:8px; }
+#ai .ai-score-bar i { display:block; height:100%; background:#c9ee59; border-radius:99px; transition:width .6s; }
+#ai .ai-food-list { display:flex; flex-direction:column; gap:7px; margin-top:10px; max-height:320px; overflow:auto; padding-right:4px; }
+#ai .ai-food-row { display:grid; grid-template-columns:38px 1fr auto; gap:10px; align-items:center; border:1px solid var(--ai-line); border-radius:11px; padding:8px 10px; background:#fbfdfb; animation: aiSlideIn .3s ease; }
+#ai .ai-food-row .ai-ficon { width:38px; height:38px; border-radius:11px; display:grid; place-items:center; font-size:22px; background:#e7f2e9; }
+#ai .ai-food-row b { font-size:12px; display:block; }
+#ai .ai-food-row small { font-size:11px; color:var(--muted); }
+#ai .ai-food-row .ai-match { font-size:11px; font-weight:800; color:var(--ai-green); background:#dff5e6; padding:4px 8px; border-radius:99px; }
+#ai .ai-tabs { display:flex; gap:7px; flex-wrap:wrap; margin:10px 0 6px; }
+#ai .ai-tab { border:1px solid var(--ai-line); background:#fff; border-radius:10px; padding:8px 12px; cursor:pointer; font-weight:800; font-size:12px; margin:0; }
+#ai .ai-tab.active { background:var(--ai-green); color:#fff; border-color:var(--ai-green); }
+#ai .ai-tab-content { display:none; }
+#ai .ai-tab-content.show { display:block; animation: aiSlideIn .25s ease; }
+#ai .ai-meal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:8px; margin-top:10px; }
+#ai .ai-meal-day { border:1px solid var(--ai-line); border-radius:12px; padding:10px; background:#fff; cursor:pointer; transition:.18s; }
+#ai .ai-meal-day:hover { transform:translateY(-2px); box-shadow:0 8px 18px rgba(3,45,26,.08); border-color:#5ba374; }
+#ai .ai-meal-day.active { border-color:var(--ai-green); box-shadow:0 0 0 3px rgba(8,115,63,.12); background:linear-gradient(180deg,#fff,#f6fbf7); }
+#ai .ai-meal-day b { font-size:11px; display:block; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); }
+#ai .ai-meal-day strong { display:block; margin:6px 0; font-size:12px; }
+#ai .ai-meal-day small { font-size:10px; color:var(--muted); line-height:1.4; }
+#ai .ai-macro { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
+#ai .ai-macro span { font-size:10px; font-weight:700; padding:3px 7px; border-radius:99px; background:#edf6ef; color:var(--ai-green); }
+#ai .ai-detail-meal { background:#f7fbf8; border:1px solid var(--ai-line); border-radius:12px; padding:12px; margin-top:12px; }
+#ai .ai-detail-meal h4 { margin:0 0 8px; font-size:14px; }
+#ai .ai-detail-meal .ai-meal-row { display:flex; justify-content:space-between; gap:10px; padding:8px 0; border-bottom:1px solid var(--ai-line); font-size:12px; }
+#ai .ai-detail-meal .ai-meal-row:last-child { border-bottom:0; }
+#ai .ai-feed { max-height:300px; overflow:auto; display:flex; flex-direction:column; gap:8px; padding-right:4px; }
+#ai .ai-event { display:grid; grid-template-columns:34px 1fr; gap:10px; background:#f7fbf8; border:1px solid var(--ai-line); border-radius:11px; padding:9px 10px; animation: aiSlideIn .3s ease; }
+#ai .ai-event .ai-eicon { width:34px; height:34px; border-radius:10px; display:grid; place-items:center; font-size:18px; background:#e7f2e9; }
+#ai .ai-event b { font-size:12px; display:block; }
+#ai .ai-event small { font-size:11px; color:var(--muted); }
+#ai .ai-event time { font-size:10px; color:var(--muted); font-variant-numeric:tabular-nums; }
+#ai .ai-console { background:#07130c; color:#b9f5cd; border-radius:12px; padding:12px; font:11px/1.7 ui-monospace, Menlo, Consolas, monospace; height:190px; overflow:auto; margin-top:8px; border:1px solid #123322; }
+#ai .ai-console .ai-warn { color:#ffd97a; }
+#ai .ai-console .ai-err { color:#ff9d9d; }
+#ai .ai-console .ai-ok { color:#7dffb0; }
+#ai .ai-console .ai-cyan { color:#7be0ff; }
+#ai .ai-table-wrap { max-height:320px; overflow:auto; border:1px solid var(--ai-line); border-radius:12px; }
+#ai .ai-table-wrap table { margin:0; font-size:12px; }
+#ai .ai-table-wrap th { position:sticky; top:0; z-index:1; }
+#ai .ai-insight { border:1px solid var(--ai-line); border-left:4px solid var(--ai-green); border-radius:11px; padding:10px 12px; margin-top:9px; background:#fbfdfb; animation: aiSlideIn .3s ease; }
+#ai .ai-insight.warn { border-left-color:var(--ai-amber); background:#fffdf4; }
+#ai .ai-insight.alert { border-left-color:var(--ai-red); background:#fff7f7; }
+#ai .ai-insight b { font-size:12px; }
+#ai .ai-insight p { font-size:11px; color:var(--muted); margin:4px 0 0; line-height:1.5; }
+#ai .ai-evidence { position:relative; height:210px; border-radius:14px; background: radial-gradient(circle at 30% 40%, #dff5e6 0 2%, transparent 3%), radial-gradient(circle at 70% 50%, #c9ee59 0 1.5%, transparent 2.5%), linear-gradient(135deg,#f6faf7,#e7f1e9); border:1px solid var(--ai-line); overflow:hidden; margin-top:10px; }
+#ai .ai-node { position:absolute; transform:translate(-50%,-50%); padding:7px 10px; border-radius:99px; font-size:11px; font-weight:800; background:#fff; border:1px solid var(--ai-line); box-shadow:0 4px 12px rgba(0,0,0,.06); }
+#ai .ai-node.food { background:#0b8a4c; color:#fff; border-color:#0b8a4c; }
+#ai .ai-node.nutrient { background:#fff3d6; color:#8a6a12; }
+#ai .ai-node.outcome { background:#dff5e6; color:#0b6b3a; }
+#ai .ai-node.study { background:#e8f0ff; color:#2a4a8a; font-size:10px; }
+#ai .ai-line { position:absolute; height:1px; background:linear-gradient(90deg,#0b8a4c,#c9ee59); opacity:.6; transform-origin:0 0; }
+#ai .ai-modal { position:fixed; inset:0; z-index:10050; display:none; align-items:center; justify-content:center; padding:18px; background:rgba(2,12,7,.62); backdrop-filter:blur(7px); }
+#ai .ai-modal.show { display:flex; }
+#ai .ai-sheet { width:min(720px,96vw); max-height:90vh; overflow:auto; background:#fff; border-radius:20px; box-shadow:0 30px 90px rgba(0,0,0,.35); padding:20px; animation: aiSlideIn .25s ease; }
+#ai .ai-sheet.wide { width:min(880px,96vw); }
+#ai .ai-sheet-head { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; margin-bottom:10px; }
+#ai .ai-x { border:0; background:#eef2f0; width:36px; height:36px; border-radius:11px; font-size:18px; cursor:pointer; flex:none; }
+#ai .ai-toast-stack { position:fixed; right:18px; bottom:18px; z-index:10100; display:flex; flex-direction:column; gap:8px; max-width:min(360px,90vw); }
+#ai .ai-toast { background:#0b2e1d; color:#fff; border-radius:13px; padding:11px 14px; font-size:12px; box-shadow:0 14px 34px rgba(0,0,0,.3); animation: aiSlideIn .25s ease; border-left:4px solid #2fe07a; }
+#ai .ai-toast.warn { border-left-color:#ffc53d; }
+#ai .ai-toast.err { border-left-color:#ff6b6b; }
+#ai .ai-empty { text-align:center; padding:22px 12px; color:var(--muted); }
+#ai .ai-lower-grid { display:grid; grid-template-columns:1.4fr .9fr; gap:14px; margin-top:14px; }
+#ai .ai-lower-grid2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+#ai #aiDemoBar { position:fixed; left:50%; transform:translateX(-50%); bottom:18px; z-index:10150; width:min(680px,calc(100vw - 32px)); background:rgba(7,19,12,.96); color:#eafff1; border:1px solid rgba(201,238,89,.4); border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.4); padding:13px 16px; display:none; }
+#ai #aiDemoBar.show { display:block; animation: aiSlideIn .3s ease; }
+#ai #aiDemoBar .ai-demo-top { display:flex; align-items:center; gap:10px; }
+#ai #aiDemoBar .ai-demo-dot { width:10px; height:10px; border-radius:50%; background:#ff6b6b; animation: aiPulse 1s infinite; flex:none; }
+#ai #aiDemoBar strong { font-size:13px; }
+#ai #aiDemoBar p { font-size:12px; opacity:.85; margin:6px 0 8px; line-height:1.5; }
+#ai #aiDemoBar .ai-demo-track { height:6px; background:rgba(255,255,255,.14); border-radius:99px; overflow:hidden; }
+#ai #aiDemoBar .ai-demo-track i { display:block; height:100%; width:0; background:#c9ee59; transition:width .4s; }
+#ai #aiDemoBar .ai-demo-stop { margin-left:auto; flex:none; border:1px solid rgba(255,255,255,.3); background:transparent; color:#fff; border-radius:10px; padding:8px 12px; font-weight:800; cursor:pointer; font-size:12px; }
+#ai .ai-alertbtn { display:inline-flex; align-items:center; gap:7px; background:rgba(201,238,89,.14); color:#e8f6ec; border:1px solid rgba(201,238,89,.35); border-radius:99px; padding:6px 12px; font-weight:800; font-size:12px; cursor:pointer; }
+#ai .ai-alertbtn b { background:#c9ee59; color:#0b2e1d; border-radius:99px; min-width:20px; height:20px; display:inline-grid; place-items:center; font-size:11px; padding:0 5px; }
+#ai .ai-alertbtn.has b { background:#ffc53d; animation: aiPulse 1s infinite; }
+#ai .ai-alertbtn.crit b { background:#ff6b6b; color:#fff; animation: aiPulse .7s infinite; }
+#ai .ai-donut { width:130px; height:130px; border-radius:50%; margin:auto; display:grid; place-items:center; background:conic-gradient(#0b8a4c 0 42%, #5cc98a 42% 69%, #e0aa43 69% 84%, #e66c73 84% 100%); position:relative; }
+#ai .ai-donut::after { content:""; width:78px; height:78px; border-radius:50%; background:#fff; position:absolute; }
+#ai .ai-donut span { z-index:1; font-weight:900; font-size:18px; }
+@keyframes aiSlideIn { from { opacity:0; transform:translateY(7px); } to { opacity:1; transform:none; } }
+@media (max-width:1180px) { #ai .ai-workbench { grid-template-columns:1fr 1fr; } #ai .ai-lower-grid, #ai .ai-lower-grid2 { grid-template-columns:1fr; } #ai .ai-kpis { grid-template-columns:1fr 1fr; } #ai .ai-meal-grid { grid-template-columns:1fr 1fr 1fr; } }
+@media (max-width:700px) { #ai .ai-workbench, #ai .ai-lower-grid, #ai .ai-lower-grid2 { grid-template-columns:1fr; } #ai .ai-profile-grid, #ai .ai-nutrient-rings { grid-template-columns:1fr 1fr; } #ai .ai-meal-grid { grid-template-columns:1fr 1fr; } }
+@media (prefers-reduced-motion:reduce) { #ai .ai-led.on, #ai .ai-led.busy, #ai .ai-status-pill.running i, #ai .ai-demo-dot, #ai .ai-alertbtn.has b { animation:none !important; } }
+
+  </style>
+
 
 </head>
 <script
@@ -4677,24 +4856,199 @@
     </div>
   </section>
 
-  <section id="ai" class="view">
-    <div class="card">
-      <h2 data-i18n="ui.ai_nutrition_prevention_engine">🥗 AI Nutrition & Prevention Engine</h2>
-      <p>Demonstrate exactly how <b data-i18n="ui.generate_personalized_plan">Generate personalized plan</b> works.</p>
-      <div class="wizard" id="aiWizard"><span class="step active" data-i18n="ui.1_profile">1. Profile</span><span
-          class="step" data-i18n="ui.2_diet">2. Diet</span><span class="step" data-i18n="ui.3_clinical">3.
-          Clinical</span><span class="step" data-i18n="ui.4_country_foods">4. Country foods</span><span class="step"
-          data-i18n="ui.5_nutrient_gaps">5. Nutrient gaps</span><span class="step" data-i18n="ui.6_prevention">6.
-          Prevention</span><span class="step" data-i18n="ui.7_meal_plan">7. Meal plan</span><span class="step"
-          data-i18n="ui.8_explain">8. Explain</span></div>
-      <div style="margin:14px 0">
-        <div class="progress"><i id="aiProgress"></i></div>
-        <p id="aiStatus" data-i18n="ui.ready_to_generate">Ready to generate.</p>
-      </div><button class="btn primary" onclick="generatePlan()" data-i18n="ui.generate_personalized_plan">Generate
-        personalized plan</button>
-      <div id="planCards" class="grid3"></div>
+    <section id="ai" class="view">
+    <div class="ai-shell">
+      <!-- COMMAND CENTER -->
+      <div class="card ai-command">
+        <div class="ai-hero">
+          <div>
+            <span class="pill">AI NUTRITION • PREVENTION ENGINE • LIVE</span>
+            <h2 data-i18n="ui.ai_nutrition_prevention_engine">🥗 AI Nutrition & Prevention Engine</h2>
+            <p>Explainable, country-aware, prevention-first nutrition intelligence. Every plan shows <b>profile → diet → clinical → country foods → nutrient gaps → prevention → meal plan → explain</b> in real time.</p>
+          </div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <span class="pill" id="aiSessionId">AI-SESSION-AF-2847</span>
+            <span class="pill" id="aiModelVer">NUTRI.AI v16 • 8B params • local</span>
+          </div>
+        </div>
+
+        <div class="ai-hub-bar">
+          <span class="ai-led" id="aiHubLed"></span>
+          <strong id="aiHubStatus">Engine idle — configure profile & run pipeline</strong>
+          <span class="pill" id="aiTokenRate">0 tok/s</span>
+          <button class="ai-alertbtn" id="aiAlertBtn" onclick="AI.openAlerts()" title="Alerts">🔔 <b id="aiAlertBadge">0</b></button>
+          <span class="ai-clock" id="aiClock">--:--:--</span>
+        </div>
+
+        <div class="ai-global-controls">
+          <button class="btn primary" onclick="AI.runFull()" data-v43="1" data-v41plan="1" data-v44connect="1">🧬 Generate personalized plan</button>
+          <button class="btn secondary" onclick="AI.runQuick()" data-v43="1" data-v41plan="1">⚡ Quick scan</button>
+          <label class="ai-toggle"><input type="checkbox" id="aiAutoPrevention" checked onchange="AI.setAuto(this.checked)"><span class="ai-switch"></span>Auto-prevention</label>
+          <select class="ai-select" id="aiCountry" onchange="AI.setCountry(this.value)"><option value="TG">🇹🇬 Togo</option><option value="GH">🇬🇭 Ghana</option><option value="NG">🇳🇬 Nigeria</option><option value="SN">🇸🇳 Senegal</option><option value="CI">🇨🇮 Côte d'Ivoire</option><option value="BJ">🇧🇯 Benin</option><option value="ML">🇲🇱 Mali</option><option value="BF">🇧🇫 Burkina Faso</option></select>
+          <select class="ai-select" id="aiGoal" onchange="AI.setGoal(this.value)"><option value="balanced">🎯 Balanced</option><option value="diabetes">🩸 Diabetes-aware</option><option value="hypertension">🩺 Hypertension-aware</option><option value="child">🧒 Child nutrition</option><option value="maternal">🤰 Maternal</option><option value="weight">⚖ Weight management</option></select>
+          <button class="btn primary" onclick="AI.startDemo()" data-v43="1" data-v41plan="1">▶ Guided demo</button>
+          <button class="btn secondary" onclick="AI.exportCSV()" data-v43="1" data-v41plan="1">⇩ Export plan</button>
+        </div>
+
+        <div class="ai-kpis">
+          <div class="ai-kpi good"><small>Plans generated</small><b id="aiKpiPlans">0</b><span id="aiKpiPlansSub">This session</span></div>
+          <div class="ai-kpi good"><small>Prevention score</small><b id="aiKpiScore">—</b><span id="aiKpiScoreSub">AI composite 0-100</span></div>
+          <div class="ai-kpi warn"><small>Risk flags</small><b id="aiKpiRisk">0</b><span id="aiKpiRiskSub">Needs review</span></div>
+          <div class="ai-kpi"><small>Adherence forecast</small><b id="aiKpiAdherence">—</b><span id="aiKpiAdherenceSub">Predicted 7d</span></div>
+        </div>
+
+        <!-- keep legacy progress for compatibility -->
+        <div style="margin-top:10px; display:grid; grid-template-columns:1fr auto; gap:8px; align-items:center;">
+          <div class="progress" style="grid-column:1/-1"><i id="aiProgress"></i></div>
+          <span id="aiStatus" class="muted" style="font-size:11px;">Ready to generate.</span>
+          <b id="aiProgressValue" style="color:var(--ai-green); font-size:12px;">0%</b>
+        </div>
+        <div class="ai-sync-queue" id="aiSyncQueue"></div>
+
+        <!-- pipeline (also keeps legacy wizard for compatibility) -->
+        <div class="wizard" id="aiWizard" style="margin-top:12px; opacity:.9"><span class="step active">1. Profile</span><span class="step">2. Diet</span><span class="step">3. Clinical</span><span class="step">4. Country foods</span><span class="step">5. Nutrient gaps</span><span class="step">6. Prevention</span><span class="step">7. Meal plan</span><span class="step">8. Explain</span></div>
+        <div class="ai-pipeline" id="aiPipeline">
+          <div class="ai-pipe-step active" data-pipe="profile"><span class="ai-pipe-icon">👤</span><b>Profile</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="diet"><span class="ai-pipe-icon">🥗</span><b>Diet</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="clinical"><span class="ai-pipe-icon">🩺</span><b>Clinical</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="country"><span class="ai-pipe-icon">🌍</span><b>Country</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="gaps"><span class="ai-pipe-icon">🧬</span><b>Gaps</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="prevention"><span class="ai-pipe-icon">🛡</span><b>Prevention</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="meal"><span class="ai-pipe-icon">🍲</span><b>Meal plan</b><small>waiting</small></div>
+          <div class="ai-pipe-line"></div><div class="ai-pipe-step" data-pipe="explain"><span class="ai-pipe-icon">🔍</span><b>Explain</b><small>waiting</small></div>
+        </div>
+      </div>
+
+      <!-- WORKBENCH -->
+      <div class="ai-workbench">
+        <!-- LEFT: Profile -->
+        <div class="card ai-card">
+          <div class="ai-card-head"><div><span class="ai-kicker">PATIENT CONTEXT • LIVE</span><h3>👤 Profile & Clinical Intake</h3></div><span class="ai-status-pill" id="aiProfileStatus"><i></i>ready</span></div>
+          <div class="ai-profile-grid">
+            <label class="ai-field">Age<input type="range" id="aiAge" min="2" max="75" value="34" class="ai-range" oninput="AI.updateProfile()"><span class="ai-range-labels"><span>2y</span><b id="aiAgeVal">34y</b><span>75y</span></span></label>
+            <label class="ai-field">Sex<select id="aiSex" onchange="AI.updateProfile()"><option value="F">Female</option><option value="M">Male</option></select></label>
+            <label class="ai-field">BMI<input type="range" id="aiBmi" min="14" max="38" step="0.1" value="23.4" class="ai-range" oninput="AI.updateProfile()"><span class="ai-range-labels"><span>14</span><b id="aiBmiVal">23.4</b><span>38</span></span></label>
+            <label class="ai-field">Glucose (mg/dL)<input type="range" id="aiGlucose" min="70" max="220" value="108" class="ai-range" oninput="AI.updateProfile()"><span class="ai-range-labels"><span>70</span><b id="aiGlucoseVal">108</b><span>220</span></span></label>
+            <label class="ai-field">BP systolic<input type="range" id="aiSys" min="90" max="180" value="118" class="ai-range" oninput="AI.updateProfile()"><span class="ai-range-labels"><span>90</span><b id="aiSysVal">118</b><span>180</span></span></label>
+            <label class="ai-field">Condition<select id="aiCondition" onchange="AI.updateProfile()"><option value="none">No condition</option><option value="diabetes">Diabetes</option><option value="hypertension">Hypertension</option><option value="anaemia">Anaemia</option><option value="child_mal">Child malnutrition</option></select></label>
+          </div>
+          <div style="margin-top:12px;"><small class="muted" style="font-weight:800; text-transform:uppercase; font-size:10px; letter-spacing:.05em;">Diet pattern (24h recall simulation) — toggle to simulate risks</small>
+            <div class="ai-chip-row" id="aiDietChips">
+              <span class="ai-chip active" data-diet="millet">🌾 Millet (low GI)</span>
+              <span class="ai-chip active" data-diet="beans">🫘 Beans</span>
+              <span class="ai-chip" data-diet="fish">🐟 Fish</span>
+              <span class="ai-chip active" data-diet="leafy">🥬 Leafy greens</span>
+              <span class="ai-chip" data-diet="sweet">🍠 Orange sweet potato</span>
+              <span class="ai-chip" data-diet="fruit">🍌 Fruit</span>
+              <span class="ai-chip" data-diet="groundnut">🥜 Groundnut</span>
+              <span class="ai-chip" data-diet="oil">🫒 Palm oil (high)</span>
+              <span class="ai-chip" data-diet="sugary">🥤 Sugary drinks (high sugar)</span>
+              <span class="ai-chip" data-diet="salty">🧂 Salty processed snacks (high salt)</span>
+              <span class="ai-chip" data-diet="whiterice">🍚 White rice (high GI)</span>
+              <span class="ai-chip" data-diet="pastry">🍩 Pastries / Fried dough</span>
+            </div>
+          </div>
+          <div class="ai-score-card">
+            <div class="ai-donut" id="aiPreventionDonut"><span id="aiScoreCenter">—</span></div>
+            <div style="flex:1;">
+              <div style="font-size:10px; letter-spacing:.12em; font-weight:900; opacity:.8;">PREVENTION SCORE • LIVE</div>
+              <div style="font-size:13px; font-weight:800; margin-top:4px;" id="aiScoreLabel">Awaiting first inference</div>
+              <div class="ai-score-bar"><i id="aiScoreBar" style="width:0%"></i></div>
+              <div style="font-size:11px; opacity:.8; margin-top:6px;" id="aiScoreSub">Adjust profile to see AI recompute in real time.</div>
+            </div>
+          </div>
+          <div class="ai-nutrient-rings" id="aiRings"></div>
+        </div>
+
+        <!-- CENTER: Gaps + Country foods -->
+        <div class="card ai-card">
+          <div class="ai-card-head"><div><span class="ai-kicker">AFRICAN FOOD INTELLIGENCE • NUTRIENT GAPS</span><h3>🧬 Nutrient Gaps & Country Foods</h3></div><span class="ai-status-pill" id="aiGapsStatus"><i></i>idle</span></div>
+          <div class="ai-tabs">
+            <button class="ai-tab active" onclick="AI.tab('gaps', this)">Gaps radar</button>
+            <button class="ai-tab" onclick="AI.tab('foods', this)">Country foods</button>
+            <button class="ai-tab" onclick="AI.tab('evidence', this)">Evidence graph</button>
+          </div>
+          <div class="ai-tab-content show" id="aiTabGaps">
+            <div class="ai-chart-box large"><canvas id="aiRadarChart"></canvas></div>
+            <div id="aiGapsList" style="margin-top:10px;"></div>
+          </div>
+          <div class="ai-tab-content" id="aiTabFoods">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; flex-wrap:wrap;">
+              <small class="muted" id="aiFoodsMeta">Togo • 8 foods matched • cost & availability live</small>
+              <span class="pill" id="aiFoodsMatch">Match 0%</span>
+            </div>
+            <div class="ai-food-list" id="aiFoodsList"></div>
+          </div>
+          <div class="ai-tab-content" id="aiTabEvidence">
+            <div class="ai-evidence" id="aiEvidenceGraph"></div>
+            <div style="font-size:11px; color:var(--muted); margin-top:8px;">Food → Nutrient → Biomarker → Outcome → Study. Hover a node for evidence.</div>
+          </div>
+          <div class="ai-chart-box" style="margin-top:12px;"><canvas id="aiRiskChart"></canvas></div>
+        </div>
+
+        <!-- RIGHT: Prevention + Live reasoning -->
+        <div class="card ai-card">
+          <div class="ai-card-head"><div><span class="ai-kicker">PREVENTION LAYER • EXPLAINABLE</span><h3>🛡 Prevention Engine</h3></div><span class="ai-status-pill" id="aiPrevStatus"><i></i>standby</span></div>
+          <div id="aiInsights"></div>
+          <div style="margin-top:14px;">
+            <div class="ai-card-head" style="margin-bottom:6px;"><span class="ai-kicker">SITUATIONAL PREVENTION SCENARIOS • INVESTOR DEMO</span><span class="pill" id="aiScenarioCount">0 scenarios</span></div>
+            <div id="aiSituational"></div>
+          </div>
+          <div style="margin-top:12px;">
+            <div class="ai-card-head" style="margin-bottom:6px;"><span class="ai-kicker">LIVE AI REASONING</span><span class="pill" id="aiReasonPill">● streaming</span></div>
+            <div class="ai-console" id="aiConsole"></div>
+          </div>
+          <div style="margin-top:12px;">
+            <div class="ai-card-head" style="margin-bottom:6px;"><span class="ai-kicker">ACTIVITY FEED</span><span class="pill" id="aiFeedCount">0 events</span></div>
+            <div class="ai-feed" id="aiFeed"><div class="ai-empty">Run a plan to populate live feed.<br>Every inference step & prevention signal appears here.</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- LOWER GRID -->
+      <div class="ai-lower-grid">
+        <div class="card ai-card">
+          <div class="ai-card-head"><div><span class="ai-kicker">PERSONALIZED MEAL PLAN • 7 DAYS • ADHERENCE-AWARE</span><h3>🍲 Generated Meal Plan</h3></div><span class="pill" id="aiMealMeta">No plan yet</span></div>
+          <div class="ai-meal-grid" id="aiMealGrid"></div>
+          <div class="ai-detail-meal" id="aiMealDetail"><div class="ai-empty">Select a day or generate a plan to see detailed meals, macros & smart swaps.</div></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn primary" onclick="AI.swapMeal()" data-v43="1">↔ Smart swap day</button>
+            <button class="btn secondary" onclick="AI.addToLog()" data-v43="1">＋ Add to daily log</button>
+            <button class="btn secondary" onclick="AI.share()" data-v43="1">↗ Share with nutritionist</button>
+          </div>
+          <!-- legacy compatibility container -->
+          <div id="planCards" class="grid3" style="margin-top:12px;"></div>
+        </div>
+        <div class="card ai-card">
+          <div class="ai-card-head"><div><span class="ai-kicker">RECENT PLANS & MEASUREMENTS</span><h3>🧾 Recent outputs</h3></div><button class="btn secondary" style="min-height:34px; font-size:11px;" onclick="AI.clearHistory()" data-v43="1">🗑 Clear</button></div>
+          <div class="ai-table-wrap"><table><thead><tr><th>Time</th><th>Profile</th><th>Country</th><th>Score</th><th>Status</th></tr></thead><tbody id="aiTableBody"><tr><td colspan="5" class="muted">No plans yet — your generated plans will land here automatically.</td></tr></tbody></table></div>
+          <div class="ai-chart-box" style="margin-top:10px;"><canvas id="aiMacroChart"></canvas></div>
+          <div style="margin-top:10px; font-size:11px; color:var(--muted);">Macro distribution is recomputed from the active meal plan.</div>
+        </div>
+      </div>
+
+      <!-- HISTORY -->
+      <div class="card ai-card" style="margin-top:14px;">
+        <div class="ai-card-head"><div><span class="ai-kicker">SESSION MEMORY • INVESTOR TRACE</span><h3>📚 Session history & reasoning trace</h3></div><span class="pill" id="aiHistoryMeta">0 traces</span></div>
+        <div id="aiHistory" style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px;"></div>
+      </div>
+
+      <!-- MODALS -->
+      <div class="ai-modal" id="aiFoodModal"><div class="ai-sheet"><div class="ai-sheet-head"><div><span class="ai-kicker">FOOD INTELLIGENCE</span><h3 id="aiFoodModalTitle" style="margin:4px 0 0;">Food detail</h3><small id="aiFoodModalSub" class="muted"></small></div><button class="ai-x" onclick="AI.closeFood()">✕</button></div><div id="aiFoodModalBody"></div></div></div>
+      <div class="ai-modal" id="aiAlertModal"><div class="ai-sheet"><div class="ai-sheet-head"><div><span class="ai-kicker">ALERTS CENTER</span><h3>🔔 Nutrition & Prevention Alerts</h3><p class="muted" style="margin:4px 0 0;">Warnings & critical signals from the prevention engine.</p></div><button class="ai-x" onclick="AI.closeAlerts()">✕</button></div><div style="display:flex; gap:8px; flex-wrap:wrap; margin:10px 0;"><button class="btn secondary" onclick="AI.ackAll()" data-v43="1">✓ Acknowledge all</button><button class="btn secondary" onclick="AI.clearAlerts()" data-v43="1">🗑 Clear</button></div><div id="aiAlertsList"></div></div></div>
+
+      <!-- TOASTS -->
+      <div class="ai-toast-stack" id="aiToasts"></div>
+
+      <!-- DEMO BAR -->
+      <div id="aiDemoBar">
+        <div class="ai-demo-top"><span class="ai-demo-dot"></span><strong id="aiDemoTitle">▶ Guided demo — autopilot</strong><button class="ai-demo-stop" id="aiDemoStop" onclick="AI.stopDemo()">⏹ Stop</button></div>
+        <p id="aiDemoText">Initializing AI Nutrition & Prevention Engine…</p>
+        <div class="ai-demo-track"><i id="aiDemoFill"></i></div>
+      </div>
     </div>
   </section>
+
 
   <section id="network" class="view">
     <div class="card">
@@ -10603,6 +10957,1013 @@ else setTimeout(boot2, 600);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
+<script id="nutri-ai-immersive-js">
+/* ============================================================
+   NUTRI.N°1 — AI Nutrition & Prevention Engine immersive (AI)
+   Investor-level simulation, scoped to #ai only.
+   FULLY ENGLISH + SITUATIONAL PREVENTION SCENARIOS
+   ============================================================ */
+(function(){
+'use strict';
+var $ = function(s,r){ return (r||document).querySelector(s); };
+var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+var LS_KEY='nutri_ai_immersive_v2';
+var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+var I18N={
+ en:{
+  idle:'Engine idle — configure profile & run pipeline',
+  running:'AI inference running…',
+  done:'Plan ready ✓ — explainable & prevention-checked',
+  auto:'Auto-prevention',
+  plans:'Plans generated',
+  plans_sub:'This session',
+  score:'Prevention score',
+  score_sub:'AI composite 0-100',
+  risk:'Risk flags',
+  risk_sub:'Needs review',
+  adherence:'Adherence forecast',
+  adherence_sub:'Predicted 7d',
+  profile_ready:'ready',
+  profile_live:'live recompute',
+  gaps_idle:'idle',
+  gaps_live:'live',
+  prev_standby:'standby',
+  prev_live:'live prevention',
+  meal_none:'No plan yet',
+  feed_empty:'Run a plan to populate live feed.<br>Every inference step & prevention signal appears here.',
+  console_ready:'NUTRI.AI v16 ready — 8B params • African food ontology 8k foods • Evidence graph 12k edges',
+  alert_title:'Nutrition & Prevention Alerts',
+  alert_empty:'All clear — no alerts. New warnings will land here.',
+  history_empty:'No traces yet — generate a plan to build investor trace.',
+  token:'tok/s',
+  demo_title:'▶ Guided demo — autopilot',
+  demo_stop:'⏹ Stop',
+  export_ok:'Plan exported',
+  share_ok:'Shared with nutritionist network',
+  swap_ok:'Smart swap applied',
+  log_ok:'Added to daily log',
+  scenarios:'scenarios',
+  no_scenarios:'No critical scenarios — profile looks balanced. Toggle sugary drinks, salty snacks, palm oil to simulate risks.'
+ }
+};
+// FORCE ENGLISH ONLY
+function lang(){ return 'en'; }
+function T(k){ return I18N.en[k]||k; }
+
+var FOODS={
+ TG:[
+  {id:'millet', icon:'🌾', name:{en:'Millet'}, nutri:{en:'Energy, fiber, iron'}, cost:'$', avail:92, score:88, detail:{en:'Whole grain • low GI'}},
+  {id:'beans', icon:'🫘', name:{en:'Black-eyed peas'}, nutri:{en:'Protein, iron, folate'}, cost:'$', avail:88, score:91, detail:{en:'Legume • high protein'}},
+  {id:'leafy', icon:'🥬', name:{en:'Gboma (African eggplant leaves)'}, nutri:{en:'Vitamin A, iron, calcium'}, cost:'$', avail:85, score:94, detail:{en:'Leafy • micronutrient dense'}},
+  {id:'fish', icon:'🐟', name:{en:'Smoked fish'}, nutri:{en:'Protein, omega-3, iodine'}, cost:'$$', avail:78, score:86, detail:{en:'Animal protein • preserved'}},
+  {id:'sweet', icon:'🍠', name:{en:'Orange-fleshed sweet potato'}, nutri:{en:'Vitamin A, fiber'}, cost:'$', avail:90, score:92, detail:{en:'Vitamin A powerhouse'}},
+  {id:'baobab', icon:'🍈', name:{en:'Baobab pulp'}, nutri:{en:'Vitamin C, calcium'}, cost:'$', avail:72, score:89, detail:{en:'Wild fruit • vit C'}},
+  {id:'moringa', icon:'🌿', name:{en:'Moringa leaves'}, nutri:{en:'Iron, protein, vit A'}, cost:'$', avail:80, score:95, detail:{en:'Super-leaf • iron'}},
+  {id:'groundnut', icon:'🥜', name:{en:'Groundnut'}, nutri:{en:'Protein, healthy fat'}, cost:'$', avail:88, score:82, detail:{en:'Oilseed • energy'}},
+  {id:'fonio', icon:'🌾', name:{en:'Fonio'}, nutri:{en:'Fiber, iron, low GI'}, cost:'$$', avail:68, score:93, detail:{en:'Ancient grain • low GI'}}
+ ],
+ GH:[
+  {id:'plantain', icon:'🍌', name:{en:'Plantain'}, nutri:{en:'Energy, potassium'}, cost:'$', avail:90, score:80, detail:{en:'Staple • ripe'}},
+  {id:'beans', icon:'🫘', name:{en:'Red red beans'}, nutri:{en:'Protein, fiber'}, cost:'$', avail:87, score:88, detail:{en:'Legume stew base'}},
+  {id:'leafy', icon:'🥬', name:{en:'Kontomire'}, nutri:{en:'Iron, folate'}, cost:'$', avail:84, score:90, detail:{en:'Cocoyam leaves'}},
+  {id:'fish', icon:'🐟', name:{en:'Tilapia'}, nutri:{en:'Protein, iodine'}, cost:'$$', avail:76, score:85, detail:{en:'Freshwater fish'}}
+ ],
+ NG:[
+  {id:'millet', icon:'🌾', name:{en:'Sorghum'}, nutri:{en:'Fiber, iron'}, cost:'$', avail:91, score:87, detail:{en:'Grain • Sahel'}},
+  {id:'beans', icon:'🫘', name:{en:'Brown beans'}, nutri:{en:'Protein, iron'}, cost:'$', avail:89, score:89, detail:{en:'Legume'}},
+  {id:'leafy', icon:'🥬', name:{en:'Ugu (fluted pumpkin)'}, nutri:{en:'Iron, vit A'}, cost:'$', avail:82, score:93, detail:{en:'Leafy • iron'}},
+  {id:'fish', icon:'🐟', name:{en:'Mackerel'}, nutri:{en:'Omega-3, protein'}, cost:'$$', avail:80, score:88, detail:{en:'Oily fish'}}
+ ]
+};
+var ALL_FOODS_FALLBACK = FOODS.TG;
+
+var MEAL_TEMPLATES={
+ balanced:[
+  {day:'Mon', title:{en:'Millet + Gboma + Fish'}, kcal:620, p:28, c:72, f:22, fiber:11, cost:'$1.2', adhere:92},
+  {day:'Tue', title:{en:'Beans + OFSP + Fruit'}, kcal:580, p:26, c:68, f:20, fiber:14, cost:'$0.9', adhere:88},
+  {day:'Wed', title:{en:'Jollof fonio + leafy + groundnut'}, kcal:640, p:24, c:78, f:24, fiber:12, cost:'$1.1', adhere:90},
+  {day:'Thu', title:{en:'Sweet potato + Moringa + Egg'}, kcal:600, p:30, c:65, f:21, fiber:10, cost:'$1.3', adhere:87},
+  {day:'Fri', title:{en:'Rice + beans + baobab sauce'}, kcal:610, p:27, c:74, f:19, fiber:13, cost:'$1.0', adhere:91},
+  {day:'Sat', title:{en:'Tubers + fish + Kontomire'}, kcal:630, p:29, c:70, f:23, fiber:11, cost:'$1.4', adhere:86},
+  {day:'Sun', title:{en:'Family balanced • millet couscous'}, kcal:590, p:25, c:69, f:20, fiber:12, cost:'$1.0', adhere:93}
+ ],
+ diabetes:[
+  {day:'Mon', title:{en:'Millet porridge (low GI) + Moringa + boiled egg'}, kcal:480, p:24, c:42, f:18, fiber:13, cost:'$1.0', adhere:84},
+  {day:'Tue', title:{en:'Beans + leafy + small OFSP'}, kcal:500, p:27, c:48, f:19, fiber:15, cost:'$0.9', adhere:86},
+  {day:'Wed', title:{en:'Fonio + fish + Gboma + baobab'}, kcal:520, p:26, c:50, f:20, fiber:14, cost:'$1.2', adhere:82},
+  {day:'Thu', title:{en:'Sweet potato + groundnut + leafy'}, kcal:490, p:22, c:52, f:18, fiber:12, cost:'$0.8', adhere:88},
+  {day:'Fri', title:{en:'Sorghum + beans + Kontomire'}, kcal:510, p:28, c:46, f:19, fiber:16, cost:'$1.1', adhere:85},
+  {day:'Sat', title:{en:'Fish + Ugu + millet'}, kcal:530, p:30, c:44, f:21, fiber:11, cost:'$1.3', adhere:80},
+  {day:'Sun', title:{en:'Balanced family • portion-aware'}, kcal:500, p:25, c:48, f:18, fiber:13, cost:'$1.0', adhere:87}
+ ],
+ hypertension:[
+  {day:'Mon', title:{en:'Millet + Gboma (no salt) + grilled fish'}, kcal:540, p:28, c:62, f:18, fiber:12, cost:'$1.2', adhere:88},
+  {day:'Tue', title:{en:'Beans + Kontomire + OFSP'}, kcal:560, p:26, c:64, f:17, fiber:15, cost:'$1.0', adhere:90},
+  {day:'Wed', title:{en:'Fonio + Ugu + baobab sauce'}, kcal:550, p:25, c:66, f:16, fiber:14, cost:'$1.1', adhere:87},
+  {day:'Thu', title:{en:'Sweet potato + Moringa + boiled egg (no salt)'}, kcal:530, p:24, c:60, f:18, fiber:11, cost:'$1.0', adhere:86},
+  {day:'Fri', title:{en:'Brown rice + beans + leafy + fruit'}, kcal:570, p:27, c:68, f:18, fiber:13, cost:'$1.0', adhere:89},
+  {day:'Sat', title:{en:'Fish + leafy + millet couscous'}, kcal:560, p:29, c:62, f:19, fiber:12, cost:'$1.3', adhere:85},
+  {day:'Sun', title:{en:'Family DASH • low sodium'}, kcal:540, p:26, c:60, f:17, fiber:14, cost:'$1.1', adhere:91}
+ ]
+};
+
+function defaultState(){
+ return {
+  age:34, sex:'F', bmi:23.4, glucose:108, sys:118, condition:'none',
+  diet:{millet:true, beans:true, fish:false, leafy:true, sweet:false, fruit:false, groundnut:false, oil:false, sugary:false, salty:false, whiterice:false, pastry:false},
+  country:'TG', goal:'balanced', auto:true,
+  plans:0, score:0, risk:0, adherence:0,
+  running:false, lastAt:null,
+  rows:[], feedN:0, history:[], alerts:[], alertSeq:0,
+  activeDay:0, mealPlan:[], gaps:{iron:32, vitA:28, protein:18, fiber:36, calcium:22, folate:24},
+  tokenRate:0
+ };
+}
+var S=defaultState();
+function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify({age:S.age, sex:S.sex, bmi:S.bmi, glucose:S.glucose, sys:S.sys, condition:S.condition, diet:S.diet, country:S.country, goal:S.goal, auto:S.auto, plans:S.plans, rows:S.rows.slice(0,12), history:S.history.slice(0,8)})); }catch(e){} }
+function restore(){
+ try{
+  var raw=localStorage.getItem(LS_KEY); if(!raw) return;
+  var d=JSON.parse(raw);
+  ['age','sex','bmi','glucose','sys','condition','country','goal'].forEach(function(k){ if(d[k]!=null) S[k]=d[k]; });
+  if(typeof d.auto==='boolean') S.auto=d.auto;
+  if(d.diet) S.diet=Object.assign({}, defaultState().diet, d.diet);
+  if(typeof d.plans==='number') S.plans=d.plans;
+  if(d.rows) S.rows=d.rows;
+  if(d.history) S.history=d.history;
+ }catch(e){}
+}
+
+function esc(x){ return String(x==null?'':x).replace(/[&<>\"']/g,function(m){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]; }); }
+function rnd(a,b){ return a+Math.random()*(b-a); }
+function rndi(a,b){ return Math.round(rnd(a,b)); }
+function clamp(v,a,b){ return Math.max(a,Math.min(b,v)); }
+function nowT(){ return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit', second:'2-digit'}); }
+function shortT(){ return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); }
+function nameFor(o){ return o && o.en ? o.en : (typeof o==='string'? o : ''); }
+function gtoast(msg){ try{ if(typeof window.toast==='function') window.toast(msg); }catch(e){} }
+function atoast(msg,kind){
+ try{
+  var box=$('#aiToasts'); if(!box) return;
+  var d=document.createElement('div'); d.className='ai-toast'+(kind?' '+kind:''); d.textContent=msg;
+  box.appendChild(d); while(box.children.length>4) box.removeChild(box.firstChild);
+  setTimeout(function(){ if(d.parentNode) d.parentNode.removeChild(d); }, 3400);
+ }catch(e){}
+}
+function notify(msg,kind){ gtoast(msg); atoast(msg,kind); }
+function clog(msg,cls){
+ try{
+  var c=$('#aiConsole'); if(!c) return;
+  var line=document.createElement('div'); if(cls) line.className=cls;
+  line.textContent='['+nowT()+'] '+msg;
+  c.appendChild(line); while(c.children.length>180) c.removeChild(c.firstChild);
+  c.scrollTop=c.scrollHeight;
+ }catch(e){}
+}
+function feed(icon,title,sub){
+ try{
+  var f=$('#aiFeed'); if(!f) return;
+  var empty=f.querySelector('.ai-empty'); if(empty) empty.remove();
+  var d=document.createElement('div'); d.className='ai-event';
+  d.innerHTML='<div class="ai-eicon">'+icon+'</div><div><b>'+esc(title)+'</b><small>'+esc(sub||'')+'</small><br><time>'+nowT()+'</time></div>';
+  f.prepend(d); while(f.children.length>50) f.removeChild(f.lastChild);
+  S.feedN++; var n=$('#aiFeedCount'); if(n) n.textContent=S.feedN+' events';
+ }catch(e){}
+}
+function pushAlert(icon,title,sub,sev){
+ try{
+  S.alerts.unshift({id:++S.alertSeq, icon:icon, title:title, sub:sub||'', time:nowT(), sev:sev||'warning', acked:false});
+  if(S.alerts.length>40) S.alerts.length=40;
+  renderBadge(); renderAlerts();
+ }catch(e){}
+}
+function renderBadge(){
+ try{
+  var n=S.alerts.filter(function(a){ return !a.acked; }).length;
+  var b=$('#aiAlertBadge'), btn=$('#aiAlertBtn');
+  if(b) b.textContent=n;
+  if(btn){ btn.classList.toggle('has', n>0); btn.classList.toggle('crit', S.alerts.some(function(a){ return !a.acked && a.sev==='critical'; })); }
+ }catch(e){}
+}
+function renderAlerts(){
+ try{
+  var box=$('#aiAlertsList'); if(!box) return;
+  if(!S.alerts.length){ box.innerHTML='<div class="ai-empty">'+esc(T('alert_empty'))+'</div>'; return; }
+  box.innerHTML=S.alerts.map(function(a){
+   return '<div class="ai-insight '+(a.sev==='critical'?'alert':a.sev==='warning'?'warn':'')+(a.acked?' style="opacity:.55"':'')+'"><div style="display:grid; grid-template-columns:38px 1fr auto; gap:10px; align-items:start;"><div style="width:38px; height:38px; border-radius:11px; display:grid; place-items:center; font-size:20px; background:#eef3f0;">'+a.icon+'</div><div><b>'+esc(a.title)+'</b><p>'+esc(a.sub)+'</p><time style="font-size:10px; color:var(--muted);">'+esc(a.time)+' • '+esc(a.sev)+'</time></div>'+(a.acked?'<span class="pill">✓</span>':'<button class="btn secondary" style="min-height:32px; font-size:11px;" onclick="AI.ackAlert('+a.id+')">✓ OK</button>')+'</div></div>';
+  }).join('');
+ }catch(e){}
+}
+
+/* ---------------- Situational Prevention Scenarios ---------------- */
+function getSituationalScenarios(){
+ var gaps=S.gaps||computeGaps();
+ var scenarios=[];
+ // 1 - HIGH SUGAR
+ if(S.diet.sugary || S.diet.pastry || S.diet.whiterice || S.glucose>135 || (gaps.fiber>42 && (S.diet.sweet||S.diet.whiterice))){
+  var level = (S.diet.sugary && S.diet.pastry) || S.glucose>170 ? 'critical' : 'warning';
+  scenarios.push({
+   icon:'🍭', level:level,
+   title:'High Sugar Load — Type 2 Diabetes & Obesity Risk',
+   risk:'Type 2 Diabetes, Obesity, Metabolic Syndrome, Dental caries',
+   mechanism:'Frequent sugary drinks + pastries + high GI white rice cause rapid glucose spikes. Low fiber ('+gaps.fiber+'% gap) worsens insulin response. Current glucose '+S.glucose+' mg/dL indicates glycemic stress.',
+   triggers:['Sugary drinks: '+(S.diet.sugary?'YES':'no'), 'Pastries/fried dough: '+(S.diet.pastry?'YES':'no'), 'White rice high GI: '+(S.diet.whiterice?'YES':'no'), 'Glucose: '+S.glucose+' mg/dL', 'Fiber gap: '+gaps.fiber+'%'],
+   recommendations:[
+    'Replace white rice with low GI millet or fonio — reduces post-meal glucose by 25-35%',
+    'Remove sugary drinks → replace with water + baobab pulp (vit C, no added sugar)',
+    'Add beans + leafy greens + baobab to every main meal to increase fiber and slow absorption',
+    '15-min walk within 60 min after meal — improves glucose disposal',
+    'Monitor HbA1c every 3 months, fasting glucose weekly, keep 1 fruit portion per meal max',
+    'Adherence boost: pre-portion millet 80g dry, use smaller plate'
+   ],
+   foodsAdd:['Millet (low GI)','Fonio','Beans','Gboma leafy','Baobab (unsweetened)','Moringa'],
+   foodsRemove:['Sugary drinks','Pastries','White rice (large portion)','Excess palm oil']
+  });
+ }
+ // 2 - HIGH SALT
+ if(S.diet.salty || S.diet.oil || S.sys>=130 || (S.diet.salty && S.diet.oil)){
+  var lvl = (S.diet.salty && S.sys>=140) ? 'critical' : 'warning';
+  scenarios.push({
+   icon:'🧂', level:lvl,
+   title:'High Sodium & Palm Oil — Hypertension & Stroke Risk',
+   risk:'Hypertension, Stroke, Kidney disease, Heart failure',
+   mechanism:'Salty processed snacks ('+(S.diet.salty?'present':'absent')+') + high palm oil ('+(S.diet.oil?'high':'moderate')+') increase vascular resistance and water retention. Current BP '+S.sys+' mmHg systolic is '+(S.sys>=140?'above threshold':'borderline')+'.',
+   triggers:['Salty processed snacks: '+(S.diet.salty?'YES':'no'), 'Palm oil high: '+(S.diet.oil?'YES':'no'), 'BP systolic: '+S.sys+' mmHg', 'BMI: '+S.bmi],
+   recommendations:[
+    'Reduce salty snacks → replace with roasted groundnut 20g unsalted + fruit',
+    'Limit palm oil to 1 tsp per meal, switch to boiling/grilling instead of frying',
+    'Increase potassium-rich foods: Gboma, Kontomire, Ugu, Orange sweet potato — helps lower BP',
+    'DASH-style: 4-5 servings leafy + 2 servings beans + 1 fruit daily, <5g salt/day',
+    'Re-measure BP at rest after 5 min, track morning/evening, hydrate 1.5-2L/day',
+    'If BP ≥140/90 repeatedly → escalate to nutritionist + clinician'
+   ],
+   foodsAdd:['Gboma (potassium)','Kontomire','Ugu','Orange sweet potato','Beans (no salt)','Moringa'],
+   foodsRemove:['Salty processed snacks','Excess palm oil','Bouillon cubes high sodium','Fried pastries']
+  });
+ }
+ // 3 - HIGH SAT FAT
+ if((S.diet.groundnut && S.diet.oil) || S.diet.pastry || (S.bmi>=28 && S.diet.oil)){
+  scenarios.push({
+   icon:'🫀', level: S.bmi>=30 ? 'critical' : 'warning',
+   title:'High Saturated Fat — Cardiovascular & Dyslipidemia Risk',
+   risk:'Cardiovascular disease, High LDL, Fatty liver, Obesity',
+   mechanism:'Groundnut + palm oil + fried pastries increase saturated fat load. BMI '+S.bmi+' amplifies lipid risk. Low leafy reduces antioxidant protection.',
+   triggers:['Groundnut + palm oil together: '+(S.diet.groundnut&&S.diet.oil?'YES':'no'), 'Pastries: '+(S.diet.pastry?'YES':'no'), 'BMI: '+S.bmi, 'Leafy: '+(S.diet.leafy?'yes':'NO')],
+   recommendations:[
+    'Switch to boiled/grilled fish instead of fried, limit groundnut to 20g/day',
+    'Replace palm oil with small amount + add baobab/moringa for antioxidant',
+    'Add 2 servings leafy daily (Gboma, Ugu) + 1 fruit for fiber and polyphenols',
+    '8000 steps/day target, check lipid panel if BMI ≥28',
+    'Use millet/fonio instead of white rice to improve lipid profile'
+   ],
+   foodsAdd:['Grilled fish','Moringa','Baobab','Leafy greens','Fonio'],
+   foodsRemove:['Fried pastries','Excess palm oil','Large groundnut portions']
+  });
+ }
+ // 4 - LOW FIBER
+ if(!S.diet.leafy || !S.diet.beans || !S.diet.millet || gaps.fiber>40){
+  scenarios.push({
+   icon:'🌾', level: gaps.fiber>50 ? 'warning' : 'info',
+   title:'Low Fiber — Glucose Instability & Gut Health Risk',
+   risk:'Glucose spikes, Constipation, Colon discomfort, Low satiety',
+   mechanism:'Diet low in millet, beans, leafy greens → fiber gap '+gaps.fiber+'%. Reduces satiety and worsens glycemic response.',
+   triggers:['Millet: '+(S.diet.millet?'yes':'NO'), 'Beans: '+(S.diet.beans?'yes':'NO'), 'Leafy: '+(S.diet.leafy?'yes':'NO'), 'Fiber gap: '+gaps.fiber+'%'],
+   recommendations:[
+    'Add millet 80g dry or fonio 70g per meal',
+    'Beans ½ cup daily + leafy 1 cup cooked + fruit 1 portion',
+    'Orange sweet potato 100g as fiber + vit A source',
+    'Hydrate well, 25-30g fiber/day target'
+   ],
+   foodsAdd:['Millet','Beans','Leafy greens','Orange sweet potato','Fruit','Fonio'],
+   foodsRemove:['White rice alone','Sugary drinks']
+  });
+ }
+ // 5 - LOW IRON / ANAEMIA
+ if(!S.diet.leafy || !S.diet.beans || gaps.iron>40 || S.condition==='anaemia'){
+  var lvlIron = (gaps.iron>55 || S.condition==='anaemia') ? 'critical' : 'warning';
+  scenarios.push({
+   icon:'🩸', level:lvlIron,
+   title:'Low Iron — Anemia, Fatigue & Maternal Risk',
+   risk:'Anemia, Fatigue, Low birth weight, Impaired cognition, Maternal complications',
+   mechanism:'Iron gap '+gaps.iron+'% + low leafy/beans intake. Vitamin C gap reduces absorption. '+(S.condition==='anaemia'?'Clinical flag: anaemia.':''),
+   triggers:['Iron gap: '+gaps.iron+'%', 'Leafy: '+(S.diet.leafy?'yes':'NO'), 'Beans: '+(S.diet.beans?'yes':'NO'), 'Condition: '+S.condition],
+   recommendations:[
+    'Add Moringa leaves + Gboma + beans daily — iron-rich',
+    'Pair with vitamin C: baobab pulp or fruit (orange, mango) to boost absorption 3x',
+    'Avoid tea/coffee with meals (reduces absorption), cook in iron pot if possible',
+    'If fatigue persists → check hemoglobin, escalate to nutritionist',
+    'Maternal: ensure folate gap '+gaps.folate+'% also addressed with leafy + beans'
+   ],
+   foodsAdd:['Moringa','Gboma','Beans','Baobab (vit C)','Orange sweet potato'],
+   foodsRemove:['Tea with meals','Excess palm oil blocking absorption']
+  });
+ }
+ // 6 - CHILD MALNUTRITION PATTERN
+ if(S.age<12 || S.condition==='child_mal' || S.bmi<16){
+  scenarios.push({
+   icon:'🧒', level:'critical',
+   title:'Child Nutrition — Stunting & Wasting Prevention',
+   risk:'Stunting, Wasting, Micronutrient deficiency, Immune risk',
+   mechanism:'Age '+S.age+'y, BMI '+S.bmi+' — needs energy-dense but micronutrient-rich foods, small frequent meals, safe preparation.',
+   triggers:['Age: '+S.age+'y', 'BMI: '+S.bmi, 'Condition: '+S.condition],
+   recommendations:[
+    'Small frequent meals: millet porridge + groundnut paste + fruit',
+    'Beans + leafy + OFSP daily, egg if available',
+    'Safe water, handwashing, deworming check',
+    'Growth monitoring monthly, MUAC if <5y'
+   ],
+   foodsAdd:['Millet porridge','Beans','Leafy','OFSP','Groundnut paste','Fruit','Egg'],
+   foodsRemove:['Sugary drinks','Salty snacks']
+  });
+ }
+ return scenarios;
+}
+
+function renderSituational(){
+ try{
+  var box=$('#aiSituational'); if(!box) return;
+  var scenarios=getSituationalScenarios();
+  var cnt=$('#aiScenarioCount'); if(cnt) cnt.textContent=scenarios.length+' '+T('scenarios');
+  if(!scenarios.length){
+   box.innerHTML='<div class="ai-empty">'+T('no_scenarios')+'</div>';
+   return;
+  }
+  box.innerHTML=scenarios.map(function(sc){
+   var cls = sc.level==='critical'?'alert':sc.level==='warning'?'warn':'';
+   return '<div class="ai-insight '+cls+'" style="margin-top:10px;">'+
+    '<div style="display:flex; justify-content:space-between; gap:10px; align-items:flex-start;"><div><b>'+sc.icon+' '+esc(sc.title)+'</b><p style="margin-top:4px;"><strong>Risk:</strong> '+esc(sc.risk)+'</p></div><span class="pill" style="background:'+(sc.level==='critical'?'#ffe1e1':sc.level==='warning'?'#fff3d6':'#dff5e6')+'; color:'+(sc.level==='critical'?'#a62f35':sc.level==='warning'?'#8a6a12':'#0b6b3a')+'">'+esc(sc.level.toUpperCase())+'</span></div>'+
+    '<p style="margin-top:8px;"><strong>Why:</strong> '+esc(sc.mechanism)+'</p>'+
+    '<div style="margin-top:8px; display:grid; grid-template-columns:1fr 1fr; gap:8px;">'+
+     '<div><small style="font-weight:800; text-transform:uppercase; font-size:10px; letter-spacing:.05em;">Triggers detected</small><ul style="margin:6px 0 0; padding-left:16px; font-size:11px; line-height:1.5;">'+sc.triggers.map(function(t){ return '<li>'+esc(t)+'</li>'; }).join('')+'</ul></div>'+
+     '<div><small style="font-weight:800; text-transform:uppercase; font-size:10px; letter-spacing:.05em;">Foods to ADD ✅ / REMOVE 🚫</small><div style="font-size:11px; margin-top:4px;"><div><strong>ADD:</strong> '+esc(sc.foodsAdd.join(', '))+'</div><div style="margin-top:4px;"><strong>REMOVE:</strong> '+esc(sc.foodsRemove.join(', '))+'</div></div></div>'+
+    '</div>'+
+    '<div style="margin-top:10px;"><small style="font-weight:800; text-transform:uppercase; font-size:10px; letter-spacing:.05em;">AI Recommendations — actionable</small><ol style="margin:6px 0 0; padding-left:18px; font-size:11px; line-height:1.6;">'+sc.recommendations.map(function(r){ return '<li>'+esc(r)+'</li>'; }).join('')+'</ol></div>'+
+   '</div>';
+  }).join('');
+ }catch(e){}
+}
+
+function computeGaps(){
+ var base={iron:32, vitA:28, protein:18, fiber:36, calcium:22, folate:24};
+ if(!S.diet.leafy){ base.iron+=18; base.vitA+=22; base.folate+=12; }
+ if(!S.diet.beans){ base.protein+=18; base.iron+=12; base.folate+=14; }
+ if(!S.diet.fish){ base.protein+=8; }
+ if(!S.diet.millet){ base.fiber+=10; base.iron+=6; }
+ if(!S.diet.fruit){ base.vitA+=10; base.fiber+=8; }
+ if(S.diet.oil){ base.fiber+=8; base.iron+=4; base.calcium+=4; }
+ if(S.diet.sugary){ base.fiber+=12; base.calcium+=6; }
+ if(S.diet.salty){ base.calcium+=8; }
+ if(S.diet.whiterice){ base.fiber+=14; base.iron+=6; }
+ if(S.diet.pastry){ base.fiber+=10; base.iron+=4; base.protein+=6; }
+ if(S.bmi>=28){ base.fiber+=12; }
+ if(S.bmi<18.5){ base.protein+=16; base.iron+=14; }
+ if(S.glucose>140){ base.fiber+=14; }
+ if(S.sys>=140){ base.fiber+=10; }
+ if(S.condition==='anaemia'){ base.iron+=22; base.folate+=10; }
+ if(S.condition==='diabetes'){ base.fiber+=18; }
+ if(S.condition==='hypertension'){ base.calcium+=8; }
+ Object.keys(base).forEach(function(k){ base[k]=clamp(base[k]+rndi(-3,3), 5, 78); });
+ S.gaps=base;
+ return base;
+}
+function preventionScore(){
+ var gaps=computeGaps();
+ var avg = (gaps.iron+gaps.vitA+gaps.protein+gaps.fiber+gaps.calcium+gaps.folate)/6;
+ var score = 100 - avg*0.9;
+ if(S.bmi>=30) score-=8; if(S.bmi<18) score-=6;
+ if(S.glucose>140) score-=7; if(S.glucose>170) score-=6;
+ if(S.sys>=140) score-=6; if(S.sys>=160) score-=7;
+ if(S.diet.leafy && S.diet.beans) score+=6;
+ if(S.diet.sugary) score-=10; if(S.diet.salty) score-=8; if(S.diet.pastry) score-=7; if(S.diet.whiterice) score-=5;
+ if(!S.diet.millet && !S.diet.beans && !S.diet.leafy) score-=8;
+ score=clamp(Math.round(score), 12, 96);
+ S.score=score;
+ var risk=0;
+ if(gaps.iron>45) risk++; if(gaps.vitA>45) risk++; if(S.bmi>=30||S.bmi<18) risk++; if(S.glucose>140) risk++; if(S.sys>=140) risk++;
+ if(S.diet.sugary) risk++; if(S.diet.salty) risk++; if(S.diet.pastry) risk++;
+ S.risk=risk;
+ S.adherence = clamp(78 + (S.score-60)*0.35 + (S.diet.beans&&S.diet.millet?5:0) - risk*3 + rnd(-3,3), 42, 96);
+ return {score:S.score, risk:S.risk, adherence:S.adherence, gaps:gaps};
+}
+
+var radarChart=null, riskChart=null, macroChart=null;
+function drawRadar(){
+ try{
+  var cv=$('#aiRadarChart'); if(!cv) return;
+  var gaps=S.gaps || computeGaps();
+  var labels=['Iron','Vit A','Protein','Fiber','Calcium','Folate'];
+  var vals=[gaps.iron,gaps.vitA,gaps.protein,gaps.fiber,gaps.calcium,gaps.folate];
+  if(!window.Chart){
+   cv.outerHTML='<div class="ai-chart-box" style="display:flex; align-items:flex-end; gap:6px;">'+vals.map(function(v){ return '<i style="flex:1; height:'+v+'%; background:linear-gradient(180deg,#0b8a4c,#5cc98a); border-radius:6px 6px 2px 2px;"></i>'; }).join('')+'</div>';
+   return;
+  }
+  if(radarChart){ try{ radarChart.destroy(); }catch(e){} radarChart=null; }
+  radarChart=new window.Chart(cv,{
+   type:'radar',
+   data:{labels:labels, datasets:[{label:'Gap %', data:vals, borderColor:'#08733f', backgroundColor:'rgba(8,115,63,.14)', pointBackgroundColor:'#0b8a4c', borderWidth:2}]},
+   options:{responsive:true, maintainAspectRatio:false, animation:{duration:500}, scales:{r:{min:0, max:80, ticks:{display:false}, grid:{color:'#dbe8df'}, angleLines:{color:'#dbe8df'}}}, plugins:{legend:{display:false}}}
+  });
+ }catch(e){}
+}
+function drawRisk(){
+ try{
+  var cv=$('#aiRiskChart'); if(!cv) return;
+  var labels=['D-6','D-5','D-4','D-3','D-2','D-1','today'];
+  var base = S.score||72;
+  var data = [base-8+ rnd(-2,2), base-5+ rnd(-2,2), base-3+ rnd(-2,2), base-2+ rnd(-2,2), base-1+ rnd(-2,2), base+ rnd(-1,1), base];
+  data=data.map(function(v){ return clamp(Math.round(v), 20, 95); });
+  if(!window.Chart){
+   cv.outerHTML='<div class="ai-chart-box" style="display:flex; align-items:flex-end; gap:6px;">'+data.map(function(v){ return '<i style="flex:1; height:'+v+'%; background:linear-gradient(180deg,#4a8bff,#a3c5ff); border-radius:6px 6px 2px 2px;"></i>'; }).join('')+'</div>';
+   return;
+  }
+  if(riskChart){ try{ riskChart.destroy(); }catch(e){} riskChart=null; }
+  riskChart=new window.Chart(cv,{
+   type:'line',
+   data:{labels:labels, datasets:[{label:'Prevention score', data:data, borderColor:'#0b8a4c', backgroundColor:'rgba(11,138,76,.12)', fill:true, tension:.38, pointRadius:2, borderWidth:2}]},
+   options:{responsive:true, maintainAspectRatio:false, animation:{duration:450}, plugins:{legend:{display:false}}, scales:{y:{min:0, max:100, grid:{color:'#e6eee8'}, ticks:{font:{size:9}}}, x:{ticks:{font:{size:9}, maxTicksLimit:7}}}}
+  });
+ }catch(e){}
+}
+function drawMacro(){
+ try{
+  var cv=$('#aiMacroChart'); if(!cv) return;
+  var plan=S.mealPlan && S.mealPlan.length ? S.mealPlan : MEAL_TEMPLATES.balanced;
+  var totP=0, totC=0, totF=0, totFi=0;
+  plan.forEach(function(d){ totP+=d.p; totC+=d.c; totF+=d.f; totFi+=d.fiber; });
+  var avg=[totP/7, totC/7, totF/7, totFi/7];
+  if(!window.Chart){
+   cv.outerHTML='<div class="ai-chart-box" style="display:flex; align-items:flex-end; gap:8px;">'+avg.map(function(v){ return '<i style="flex:1; height:'+clamp(v*1.2,8,100)+'%; background:linear-gradient(180deg,#0b8a4c,#c9ee59); border-radius:6px 6px 2px 2px;"></i>'; }).join('')+'</div>';
+   return;
+  }
+  if(macroChart){ try{ macroChart.destroy(); }catch(e){} macroChart=null; }
+  macroChart=new window.Chart(cv,{
+   type:'bar',
+   data:{labels:['Protein','Carbs','Fat','Fiber'], datasets:[{label:'g/day avg', data:avg, backgroundColor:['#e66c73','#e0aa43','#6fa8de','#62b679'], borderRadius:8, borderSkipped:false, barThickness:18}]},
+   options:{responsive:true, maintainAspectRatio:false, animation:{duration:500}, plugins:{legend:{display:false}}, scales:{y:{beginAtZero:true, grid:{color:'#e6eee8'}}, x:{grid:{display:false}}}}
+  });
+ }catch(e){}
+}
+
+function renderFoods(){
+ try{
+  var box=$('#aiFoodsList'); if(!box) return;
+  var list = FOODS[S.country] || ALL_FOODS_FALLBACK;
+  var dietKeys=Object.keys(S.diet).filter(function(k){ return S.diet[k]; });
+  var scored = list.map(function(f){
+   var m = f.score + (dietKeys.indexOf(f.id)>-1?4:0);
+   return Object.assign({}, f, {match:clamp(m+rndi(-4,4), 42, 98)});
+  }).sort(function(a,b){ return b.match-a.match; });
+  var avgMatch = scored.length ? Math.round(scored.reduce(function(s,x){ return s+x.match; },0)/scored.length) : 0;
+  var mm=$('#aiFoodsMatch'); if(mm) mm.textContent='Match '+avgMatch+'%';
+  var meta=$('#aiFoodsMeta'); if(meta){ meta.textContent='Country: '+S.country+' • '+scored.length+' foods • cost & availability live'; }
+  box.innerHTML=scored.map(function(f){
+   return '<div class="ai-food-row" onclick="AI.openFood(\''+f.id+'\')"><div class="ai-ficon">'+f.icon+'</div><div><b>'+esc(nameFor(f.name))+'</b><small>'+esc(nameFor(f.nutri))+' • '+esc(nameFor(f.detail))+' • '+f.cost+' • '+f.avail+'% avail</small></div><span class="ai-match">'+f.match+'%</span></div>';
+  }).join('');
+ }catch(e){}
+}
+function renderEvidence(){
+ try{
+  var box=$('#aiEvidenceGraph'); if(!box) return;
+  var nodes=[
+   {id:'f1', cls:'food', x:18, y:28, t:'🌾 Millet'},
+   {id:'f2', cls:'food', x:22, y:72, t:'🫘 Beans'},
+   {id:'n1', cls:'nutrient', x:42, y:38, t:'Iron 6.2mg'},
+   {id:'n2', cls:'nutrient', x:48, y:68, t:'Fiber 11g'},
+   {id:'o1', cls:'outcome', x:68, y:32, t:'Fatigue ↓'},
+   {id:'o2', cls:'outcome', x:72, y:70, t:'Glucose stable'},
+   {id:'s1', cls:'study', x:88, y:22, t:'Study 2023 • RCT'},
+   {id:'s2', cls:'study', x:86, y:78, t:'WHO • 2022'}
+  ];
+  var lines=[
+   {x1:18,y1:28,x2:42,y2:38},{x1:22,y1:72,x2:48,y2:68},{x1:42,y1:38,x2:68,y2:32},{x1:48,y1:68,x2:72,y2:70},{x1:68,y1:32,x2:88,y2:22},{x1:72,y1:70,x2:86,y2:78}
+  ];
+  box.innerHTML=lines.map(function(l){ var dx=l.x2-l.x1, dy=l.y2-l.y1, len=Math.sqrt(dx*dx+dy*dy), ang=Math.atan2(dy,dx)*180/Math.PI; return '<div class="ai-line" style="left:'+l.x1+'%; top:'+l.y1+'%; width:'+len+'%; transform:rotate('+ang+'deg)"></div>'; }).join('')+
+   nodes.map(function(n){ return '<div class="ai-node '+n.cls+'" style="left:'+n.x+'%; top:'+n.y+'%;" title="'+esc(n.t)+'">'+esc(n.t)+'</div>'; }).join('');
+ }catch(e){}
+}
+function renderGapsList(){
+ try{
+  var box=$('#aiGapsList'); if(!box) return;
+  var gaps=S.gaps || computeGaps();
+  var items=[
+   {k:'iron', icon:'🩸', label:{en:'Iron gap'}, desc:{en:'Fatigue, anemia risk if persistent'}},
+   {k:'vitA', icon:'👁', label:{en:'Vitamin A gap'}, desc:{en:'Vision & immunity support'}},
+   {k:'protein', icon:'💪', label:{en:'Protein gap'}, desc:{en:'Muscle & recovery'}},
+   {k:'fiber', icon:'🌾', label:{en:'Fiber gap'}, desc:{en:'Glucose stability & satiety'}},
+   {k:'calcium', icon:'🦴', label:{en:'Calcium gap'}, desc:{en:'Bone & maternal'}},
+   {k:'folate', icon:'🧬', label:{en:'Folate gap'}, desc:{en:'Maternal & cell growth'}}
+  ];
+  box.innerHTML=items.map(function(it){
+   var v=gaps[it.k]; var cls=v>45?'alert':v>32?'warn':'';
+   return '<div class="ai-insight '+cls+'"><b>'+it.icon+' '+esc(nameFor(it.label))+' — '+v+'%</b><p>'+esc(nameFor(it.desc))+' • '+(v>45?'high':v>30?'moderate':'low')+' gap</p><div class="progress" style="height:6px; margin-top:6px;"><i style="width:'+v+'%; background:linear-gradient(90deg,'+(cls==='alert'?'#c0392b':cls==='warn'?'#e0a43c':'#0b8a4c')+',#5cc98a)"></i></div></div>';
+  }).join('');
+ }catch(e){}
+}
+function renderRings(){
+ try{
+  var box=$('#aiRings'); if(!box) return;
+  var gaps=S.gaps || computeGaps();
+  var rings=[
+   {label:{en:'Energy'}, pct: clamp(100-gaps.protein*0.6, 20, 95), val: (S.bmi*1.1).toFixed(1)+' BMI'},
+   {label:{en:'Prevention'}, pct: S.score||0, val: (S.score||0)+'/100'},
+   {label:{en:'Diversity'}, pct: Object.keys(S.diet).filter(function(k){ return S.diet[k]; }).length/12*100, val: Object.keys(S.diet).filter(function(k){ return S.diet[k]; }).length+'/12 foods'}
+  ];
+  box.innerHTML=rings.map(function(r){
+   return '<div class="ai-ring-card"><div class="ai-ring" style="--pct:'+r.pct+'%"><span>'+Math.round(r.pct)+'%</span></div><small>'+esc(nameFor(r.label))+'</small><b>'+esc(r.val)+'</b></div>';
+  }).join('');
+ }catch(e){}
+}
+function renderInsights(){
+ try{
+  var box=$('#aiInsights'); if(!box) return;
+  if(!S.lastAt){ box.innerHTML='<div class="ai-empty">No traces yet — generate a plan to build investor trace.<br>Adjust profile & run pipeline.</div>'; return; }
+  var gaps=S.gaps, out=[];
+  if(gaps.iron>40) out.push({cls:'alert', icon:'🩸', t:'Low iron — fatigue/anemia risk '+gaps.iron+'%', d:'Add Gboma, Moringa, beans + vit C fruit (baobab).'});
+  if(gaps.fiber>38) out.push({cls:'warn', icon:'🌾', t:'Low fiber '+gaps.fiber+'% — unstable glucose', d:'Prefer whole millet, sweet potato, leafy, fruit.'});
+  if(S.glucose>140) out.push({cls:'alert', icon:'🍭', t:'Glucose '+S.glucose+' mg/dL — above threshold', d:'Reduce starch portion, add fiber, 15-min post-meal walk.'});
+  if(S.sys>=140) out.push({cls:'alert', icon:'🧂', t:'BP '+S.sys+' mmHg — elevated (high salt link)', d:'Reduce salt, increase leafy/potassium, re-measure at rest.'});
+  if(S.bmi>=30) out.push({cls:'warn', icon:'⚖', t:'BMI '+S.bmi+' — overweight', d:'Moderate 300 kcal deficit + 8000 steps/day.'});
+  if(!out.length) out.push({cls:'', icon:'✅', t:'Balanced profile — prevention score '+S.score, d:'Keep food diversity + activity.'});
+  box.innerHTML=out.map(function(x){ return '<div class="ai-insight '+x.cls+'"><b>'+x.icon+' '+esc(x.t)+'</b><p>'+esc(x.d)+'</p></div>'; }).join('');
+ }catch(e){}
+}
+function renderMealGrid(){
+ try{
+  var box=$('#aiMealGrid'); if(!box) return;
+  var plan=S.mealPlan && S.mealPlan.length ? S.mealPlan : [];
+  if(!plan.length){ box.innerHTML='<div class="ai-empty" style="grid-column:1/-1;">No meal plan yet — run pipeline to generate 7-day plan.</div>'; return; }
+  box.innerHTML=plan.map(function(d,i){
+   return '<div class="ai-meal-day '+(i===S.activeDay?'active':'')+'" onclick="AI.selectDay('+i+')"><b>'+d.day+'</b><strong>'+esc(nameFor(d.title))+'</strong><small>'+d.kcal+' kcal • P'+d.p+' C'+d.c+' F'+d.f+' • Fib '+d.fiber+'g</small><div class="ai-macro"><span>'+d.cost+'</span><span>'+d.adhere+'% adh.</span></div></div>';
+  }).join('');
+ }catch(e){}
+}
+function renderMealDetail(){
+ try{
+  var box=$('#aiMealDetail'); if(!box) return;
+  var plan=S.mealPlan; if(!plan||!plan.length){ box.innerHTML='<div class="ai-empty">Select a day or generate a plan to see detailed meals, macros & smart swaps.</div>'; return; }
+  var d=plan[S.activeDay];
+  var meals=[
+   {k:'Breakfast', v:'Millet porridge + fruit + groundnut'},
+   {k:'Lunch', v: nameFor(d.title)},
+   {k:'Dinner', v:'Light soup + leafy + tuber'}
+  ];
+  box.innerHTML='<h4>📅 '+d.day+' — '+esc(nameFor(d.title))+'</h4>'+
+   meals.map(function(m){ return '<div class="ai-meal-row"><span>'+esc(m.k)+'</span><b>'+esc(m.v)+'</b></div>'; }).join('')+
+   '<div class="ai-meal-row"><span>Calories</span><b>'+d.kcal+' kcal</b></div>'+
+   '<div class="ai-meal-row"><span>Protein / Carbs / Fat / Fiber</span><b>'+d.p+'g / '+d.c+'g / '+d.f+'g / '+d.fiber+'g</b></div>'+
+   '<div class="ai-meal-row"><span>Est. cost</span><b>'+d.cost+' • local availability</b></div>'+
+   '<div class="ai-meal-row"><span>Predicted adherence</span><b>'+d.adhere+'%</b></div>'+
+   '<div style="margin-top:10px; font-size:11px; color:var(--muted);">🧬 AI rationale: country-adapted, profile-aware, prevention-first — fiber ↑, iron ↑, low GI if needed. Evidence-linked.</div>';
+ }catch(e){}
+}
+function renderTable(){
+ try{
+  var tb=$('#aiTableBody'); if(!tb) return;
+  if(!S.rows.length){ tb.innerHTML='<tr><td colspan="5" class="muted">No plans yet — your generated plans will land here automatically.</td></tr>'; return; }
+  tb.innerHTML=S.rows.slice(0,20).map(function(r){
+   return '<tr><td>'+esc(r.t)+'</td><td>'+esc(r.profile)+'</td><td>'+esc(r.country)+'</td><td><b>'+esc(r.score)+'</b></td><td><span class="pill" style="background:'+(r.status==='ok'?'#dff5e6':'#fff3d6')+'; color:'+(r.status==='ok'?'#0b6b3a':'#8a6a12')+'">'+esc(r.status==='ok'?'✓ ok':'↻ '+r.status)+'</span></td></tr>';
+  }).join('');
+ }catch(e){}
+}
+function renderHistory(){
+ try{
+  var box=$('#aiHistory'); if(!box) return;
+  if(!S.history.length){ box.innerHTML='<div class="ai-empty" style="grid-column:1/-1;">No traces yet — generate a plan to build investor trace.</div>'; var hm=$('#aiHistoryMeta'); if(hm) hm.textContent='0 traces'; return; }
+  var hm=$('#aiHistoryMeta'); if(hm) hm.textContent=S.history.length+' traces';
+  box.innerHTML=S.history.slice(0,6).map(function(h){
+   return '<div class="card ai-card" style="padding:12px;"><div style="display:flex; justify-content:space-between; gap:8px;"><small class="muted">'+esc(h.t)+'</small><span class="pill">'+esc(h.score)+'/100</span></div><b style="display:block; margin:8px 0 4px;">'+esc(h.title)+'</b><small class="muted">'+esc(h.country)+' • '+esc(h.goal)+' • '+esc(h.kcal)+' kcal avg</small><div class="ai-macro" style="margin-top:8px;"><span>'+esc(h.risk)+' risks</span><span>'+esc(h.adhere)+'% adh.</span></div></div>';
+  }).join('');
+ }catch(e){}
+}
+function renderHub(){
+ try{
+  var led=$('#aiHubLed'), st=$('#aiHubStatus'), tr=$('#aiTokenRate');
+  if(led) led.className='ai-led'+(S.running?' busy':(S.lastAt?' on':''));
+  if(st) st.textContent=S.running? T('running') : (S.lastAt? T('done') : T('idle'));
+  if(tr) tr.textContent=S.running? (S.tokenRate||0)+' '+T('token') : (S.lastAt? 'ready':'0 '+T('token'));
+  var kp=$('#aiKpiPlans'); if(kp) kp.textContent=S.plans;
+  var ks=$('#aiKpiScore'); if(ks) ks.textContent=S.score? S.score+'/100':'—';
+  var kr=$('#aiKpiRisk'); if(kr) kr.textContent=S.risk;
+  var ka=$('#aiKpiAdherence'); if(ka) ka.textContent=S.adherence? Math.round(S.adherence)+'%':'—';
+  var mm=$('#aiMealMeta'); if(mm) mm.textContent=S.mealPlan && S.mealPlan.length ? S.mealPlan.length+' days • '+S.mealPlan.reduce(function(s,d){ return s+d.kcal; },0)+' kcal week' : T('meal_none');
+  var ps=$('#aiProfileStatus'); if(ps){ ps.className='ai-status-pill '+(S.running?'running':'done'); ps.innerHTML='<i></i>'+(S.running?'live':'ready'); }
+  var gs=$('#aiGapsStatus'); if(gs){ gs.className='ai-status-pill '+(S.running?'running':(S.lastAt?'done':'')); gs.innerHTML='<i></i>'+(S.running?'live':(S.lastAt?'live':'idle')); }
+  var prev=$('#aiPrevStatus'); if(prev){ prev.className='ai-status-pill '+(S.running?'running':(S.lastAt?'done':'')); prev.innerHTML='<i></i>'+(S.running?'live':(S.lastAt?'live':'standby')); }
+  var sc=$('#aiScoreCenter'); if(sc) sc.textContent=S.score||'—';
+  var sb=$('#aiScoreBar'); if(sb) sb.style.width=(S.score||0)+'%';
+  var sl=$('#aiScoreLabel'); if(sl) sl.textContent=S.lastAt? 'Prevention score '+S.score+' • '+S.risk+' risk flags • '+Math.round(S.adherence)+'% adherence' : 'Awaiting first inference';
+  var ss=$('#aiScoreSub'); if(ss) ss.textContent=S.lastAt? 'Live recompute active — toggle diet chips to see prevention update' : 'Adjust profile to see AI recompute in real time.';
+ }catch(e){}
+}
+function setProgress(pct,text){
+ try{
+  var bar=$('#aiProgress'); if(bar) bar.style.width=clamp(pct,0,100)+'%';
+  var tx=$('#aiStatus'); if(tx) tx.textContent=text;
+  var pv=$('#aiProgressValue'); if(pv) pv.textContent=Math.round(pct)+'%';
+  var steps=$$('#aiWizard .step');
+  if(steps.length){
+   var idx=Math.min(steps.length-1, Math.floor(pct/ (100/steps.length)));
+   steps.forEach(function(s,i){ s.classList.toggle('active', i<=idx); });
+  }
+ }catch(e){}
+}
+function renderQueue(items){
+ try{
+  var q=$('#aiSyncQueue'); if(!q) return;
+  if(!items||!items.length){ q.innerHTML=''; return; }
+  q.innerHTML=items.map(function(it){
+   return '<div class="ai-qrow"><span>'+it.icon+'</span><span><b>'+esc(it.title)+'</b> <span class="muted">— '+esc(it.sub)+'</span></span><b>'+Math.round(it.pct)+'%</b><div class="ai-qbar"><i style="width:'+Math.round(it.pct)+'%"></i></div></div>';
+  }).join('');
+ }catch(e){}
+}
+
+/* ---------------- Pipeline engine ---------------- */
+var pipeTimers=[];
+function clearPipe(){ pipeTimers.forEach(function(t){ clearTimeout(t); clearInterval(t); }); pipeTimers=[]; }
+function pipelineSteps(){
+ return [
+  {id:'profile', icon:'👤', title:{en:'Profile ingestion'}, sub:{en:'age, sex, BMI'}},
+  {id:'diet', icon:'🥗', title:{en:'Diet recall'}, sub:{en:'24h foods & diversity'}},
+  {id:'clinical', icon:'🩺', title:{en:'Clinical context'}, sub:{en:'glucose, BP, condition'}},
+  {id:'country', icon:'🌍', title:{en:'Country food match'}, sub:{en:'cost, availability, ontology'}},
+  {id:'gaps', icon:'🧬', title:{en:'Nutrient gaps'}, sub:{en:'iron, vitA, fiber…'}},
+  {id:'prevention', icon:'🛡', title:{en:'Prevention engine'}, sub:{en:'NCD risk & early signals'}},
+  {id:'meal', icon:'🍲', title:{en:'Meal plan synthesis'}, sub:{en:'7-day, adherence-aware'}},
+  {id:'explain', icon:'🔍', title:{en:'Explain & evidence'}, sub:{en:'why + traceability'}}
+ ];
+}
+function updatePipeline(idx, pct){
+ try{
+  var steps=$$('#aiPipeline .ai-pipe-step'), lines=$$('#aiPipeline .ai-pipe-line');
+  steps.forEach(function(el,i){
+   el.classList.toggle('active', i===idx); el.classList.toggle('done', i<idx);
+   var small=el.querySelector('small'); if(small) small.textContent=i<idx?'✓':i===idx?'running':'waiting';
+  });
+  lines.forEach(function(el,i){ el.classList.toggle('done', i<idx); });
+  setProgress(pct, pipelineSteps()[idx] ? nameFor(pipelineSteps()[idx].title)+' — '+Math.round(pct)+'%' : 'Generating… '+Math.round(pct)+'%');
+ }catch(e){}
+}
+function resetPipeline(){
+ try{
+  $$('#aiPipeline .ai-pipe-step').forEach(function(el,i){ el.classList.toggle('active', i===0); el.classList.remove('done'); var s=el.querySelector('small'); if(s) s.textContent='waiting'; });
+  $$('#aiPipeline .ai-pipe-line').forEach(function(el){ el.classList.remove('done'); });
+  setProgress(0, T('idle'));
+ }catch(e){}
+}
+
+function generateMealPlan(){
+ var tmpl = MEAL_TEMPLATES[S.goal] || MEAL_TEMPLATES.balanced;
+ var factor = 1;
+ if(S.bmi>=30) factor=0.85; else if(S.bmi<18.5) factor=1.15;
+ if(S.age<12) factor*=0.75;
+ if(S.condition==='diabetes') factor*=0.9;
+ if(S.condition==='hypertension') factor*=0.92;
+ var plan = tmpl.map(function(d){
+  var nd=Object.assign({}, d);
+  nd.kcal=Math.round(d.kcal*factor);
+  nd.p=Math.round(d.p*factor);
+  nd.c=Math.round(d.c*(factor*0.9));
+  nd.f=Math.round(d.f*factor);
+  nd.fiber=Math.round(d.fiber*(factor*1.05));
+  return nd;
+ });
+ S.mealPlan=plan;
+ S.activeDay=0;
+ return plan;
+}
+
+function runFull(){
+ if(S.running) return;
+ clearPipe(); S.running=true; S.tokenRate=0; renderHub(); resetPipeline();
+ clog('Pipeline start — profile '+S.age+'y '+S.sex+' BMI '+S.bmi+' • '+S.country+' • '+S.goal+' • diet '+Object.keys(S.diet).filter(function(k){return S.diet[k];}).join(','), 'ai-cyan');
+ feed('🧬','AI pipeline started', S.country+' • '+S.goal+' • '+S.age+'y '+S.sex+' BMI '+S.bmi);
+ var steps=pipelineSteps();
+ var queue=steps.map(function(s){ return {icon:s.icon, title:nameFor(s.title), sub:nameFor(s.sub), pct:0}; });
+ renderQueue(queue);
+ var tokenIv=setInterval(function(){ S.tokenRate=clamp(S.tokenRate+rndi(20,80), 0, 520); var tr=$('#aiTokenRate'); if(tr) tr.textContent=Math.round(S.tokenRate)+' tok/s'; }, 260);
+ pipeTimers.push(tokenIv);
+ var gi=0;
+ function nextStep(){
+  if(gi>=steps.length) return finish();
+  var step=steps[gi];
+  updatePipeline(gi, (gi/steps.length)*100);
+  clog('Step '+(gi+1)+'/8 — '+nameFor(step.title)+' • '+nameFor(step.sub));
+  var p=0;
+  var iv=setInterval(function(){
+   p=clamp(p+rndi(9,22),0,100);
+   queue[gi].pct=p;
+   queue[gi].sub = p<30?'reading…': p<70?'inferring…':'validating…';
+   renderQueue(queue);
+   var global = ((gi + p/100)/steps.length)*100;
+   setProgress(global, nameFor(step.title)+' — '+Math.round(p)+'%');
+   if(p>=100){
+    clearInterval(iv);
+    if(step.id==='profile'){ computeGaps(); renderRings(); }
+    if(step.id==='diet'){ computeGaps(); renderRings(); }
+    if(step.id==='clinical'){ preventionScore(); renderHub(); }
+    if(step.id==='country'){ renderFoods(); renderEvidence(); }
+    if(step.id==='gaps'){ drawRadar(); renderGapsList(); drawRisk(); renderSituational(); }
+    if(step.id==='prevention'){ renderInsights(); renderSituational(); 
+     var scenarios=getSituationalScenarios();
+     scenarios.forEach(function(sc){
+      if(sc.level==='critical') pushAlert('🚨', sc.title, sc.risk, 'critical');
+      else if(sc.level==='warning') pushAlert('⚠️', sc.title, sc.risk, 'warning');
+     });
+    }
+    if(step.id==='meal'){ generateMealPlan(); renderMealGrid(); renderMealDetail(); drawMacro(); }
+    feed(step.icon, nameFor(step.title)+' ✓', nameFor(step.sub));
+    clog('✓ '+nameFor(step.title)+' complete', 'ai-ok');
+    gi++; setTimeout(nextStep, 380);
+   }
+  }, REDUCED? 320: 180);
+  pipeTimers.push(iv);
+ }
+ function finish(){
+  clearPipe(); S.running=false; S.tokenRate=0; S.plans++; S.lastAt=shortT();
+  setProgress(100, T('done'));
+  renderQueue([]); renderHub(); renderTable(); renderHistory();
+  S.rows.unshift({t:shortT(), profile:S.age+'y '+S.sex+' BMI '+S.bmi, country:S.country, score:S.score, status:'ok'});
+  if(S.rows.length>40) S.rows.length=40;
+  S.history.unshift({t:shortT(), title: (S.goal+' • '+S.country+' • '+S.age+'y '+S.sex), country:S.country, goal:S.goal, score:S.score, risk:S.risk, adhere:Math.round(S.adherence), kcal: S.mealPlan.length? Math.round(S.mealPlan.reduce(function(s,d){ return s+d.kcal; },0)/7) : 0});
+  if(S.history.length>12) S.history.length=12;
+  save(); renderTable(); renderHistory(); renderMealGrid(); renderMealDetail(); renderSituational();
+  try{
+   var out=$('#planCards');
+   if(out){
+    var days=S.mealPlan;
+    out.innerHTML=days.map(function(d){ return '<div class="card"><strong>'+d.day+'</strong><div style="margin-top:5px;">'+esc(nameFor(d.title))+'</div><div class="muted">'+d.kcal+' kcal • P'+d.p+' C'+d.c+' F'+d.f+' • Fiber '+d.fiber+'g</div><div style="margin-top:6px;"><span class="pill">'+d.cost+'</span><span class="pill">'+d.adhere+'% adh.</span></div></div>'; }).join('');
+   }
+  }catch(e){}
+  feed('✅','Plan ready — explainable', S.score+'/100 • '+S.risk+' risks • '+Math.round(S.adherence)+'% adherence');
+  clog('Pipeline complete — prevention score '+S.score+' • risk '+S.risk+' • adherence '+Math.round(S.adherence)+'% • scenarios '+getSituationalScenarios().length, 'ai-ok');
+  notify('✓ '+T('done'));
+ }
+ nextStep();
+}
+function runQuick(){
+ if(S.running) return;
+ S.running=true; renderHub(); resetPipeline();
+ clog('Quick scan — gaps + prevention + situational scenarios', 'ai-cyan');
+ feed('⚡','Quick scan','Gaps + prevention + meal');
+ var steps=[pipelineSteps()[4], pipelineSteps()[5], pipelineSteps()[6]];
+ var queue=steps.map(function(s){ return {icon:s.icon, title:nameFor(s.title), sub:nameFor(s.sub), pct:0}; });
+ renderQueue(queue);
+ var gi=0;
+ function next(){
+  if(gi>=steps.length){
+   clearPipe(); S.running=false; S.plans++; S.lastAt=shortT();
+   setProgress(100, T('done'));
+   renderQueue([]); renderHub();
+   generateMealPlan(); renderMealGrid(); renderMealDetail(); drawMacro(); renderInsights(); drawRadar(); renderGapsList(); drawRisk(); renderSituational();
+   S.rows.unshift({t:shortT(), profile:S.age+'y '+S.sex+' BMI '+S.bmi, country:S.country, score:S.score, status:'ok'});
+   S.history.unshift({t:shortT(), title:'Quick • '+S.country+' • '+S.goal, country:S.country, goal:S.goal, score:S.score, risk:S.risk, adhere:Math.round(S.adherence), kcal: Math.round(S.mealPlan.reduce(function(s,d){ return s+d.kcal; },0)/7)});
+   save(); renderTable(); renderHistory();
+   notify('⚡ Quick scan complete');
+   return;
+  }
+  var p=0;
+  var iv=setInterval(function(){
+   p=clamp(p+rndi(14,28),0,100); queue[gi].pct=p; renderQueue(queue); setProgress((gi+p/100)/steps.length*100, nameFor(steps[gi].title));
+   if(p>=100){ clearInterval(iv); gi++; setTimeout(next, 300); }
+  }, 160);
+  pipeTimers.push(iv);
+ }
+ next();
+}
+
+/* ---------------- profile ---------------- */
+function updateProfile(){
+ try{
+  S.age=parseInt($('#aiAge').value,10)||34;
+  S.bmi=parseFloat($('#aiBmi').value)||23.4;
+  S.glucose=parseInt($('#aiGlucose').value,10)||108;
+  S.sys=parseInt($('#aiSys').value,10)||118;
+  S.sex=$('#aiSex').value||'F';
+  S.condition=$('#aiCondition').value||'none';
+  var av=$('#aiAgeVal'); if(av) av.textContent=S.age+'y';
+  var bv=$('#aiBmiVal'); if(bv) bv.textContent=S.bmi;
+  var gv=$('#aiGlucoseVal'); if(gv) gv.textContent=S.glucose;
+  var sv=$('#aiSysVal'); if(sv) sv.textContent=S.sys;
+  preventionScore(); renderHub(); renderRings(); renderGapsList(); drawRadar(); drawRisk(); renderInsights(); renderSituational();
+  if(S.auto){ }
+  save();
+ }catch(e){}
+}
+function bindDiet(){
+ try{
+  $$('#aiDietChips .ai-chip').forEach(function(ch){
+   if(ch.dataset.aiBound) return; ch.dataset.aiBound='1';
+   ch.addEventListener('click', function(){
+    var k=ch.getAttribute('data-diet');
+    S.diet[k]=!S.diet[k];
+    ch.classList.toggle('active', !!S.diet[k]);
+    preventionScore(); renderHub(); renderRings(); renderGapsList(); drawRadar(); drawRisk(); renderInsights(); renderFoods(); renderSituational();
+    save();
+    clog('Diet toggle: '+k+' → '+(S.diet[k]?'on':'off')+' — recomputing situational risks');
+   });
+  });
+ }catch(e){}
+}
+
+/* ---------------- foods modal ---------------- */
+function openFood(id){
+ try{
+  var list=FOODS[S.country]||ALL_FOODS_FALLBACK;
+  var f=list.filter(function(x){ return x.id===id; })[0] || list[0];
+  if(!f) return;
+  $('#aiFoodModal').classList.add('show');
+  $('#aiFoodModalTitle').textContent=f.icon+' '+nameFor(f.name);
+  $('#aiFoodModalSub').textContent=nameFor(f.detail)+' • '+nameFor(f.nutri);
+  $('#aiFoodModalBody').innerHTML='<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:10px;">'+
+   '<div style="background:#f6faf7; border:1px solid var(--ai-line); border-radius:11px; padding:10px;"><small class="muted">Cost</small><b style="display:block; margin-top:4px;">'+f.cost+' • affordable</b></div>'+
+   '<div style="background:#f6faf7; border:1px solid var(--ai-line); border-radius:11px; padding:10px;"><small class="muted">Availability</small><b style="display:block; margin-top:4px;">'+f.avail+'% • local market</b></div>'+
+   '<div style="background:#f6faf7; border:1px solid var(--ai-line); border-radius:11px; padding:10px;"><small class="muted">Nutrients</small><b style="display:block; margin-top:4px;">'+esc(nameFor(f.nutri))+'</b></div>'+
+   '<div style="background:#f6faf7; border:1px solid var(--ai-line); border-radius:11px; padding:10px;"><small class="muted">Match</small><b style="display:block; margin-top:4px; color:var(--ai-green);">'+f.score+'% • recommended</b></div></div>'+
+   '<div style="margin-top:12px; font-size:12px;"><b>🧬 Why this choice?</b><p class="muted" style="margin:6px 0 0; line-height:1.5;">This food is selected by NUTRI ontology to close identified gaps ('+Object.keys(S.gaps).join(', ')+') while respecting country '+S.country+' and goal '+S.goal+'. Evidence: Food→Nutrient→Biomarker→Outcome.</p></div>'+
+   '<div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:12px;"><button class="btn primary" onclick="AI.addFoodToPlan(\''+f.id+'\')" data-v43="1">＋ Add to plan</button><button class="btn secondary" onclick="AI.closeFood()" data-v43="1">Close</button></div>';
+ }catch(e){}
+}
+function closeFood(){ try{ $('#aiFoodModal').classList.remove('show'); }catch(e){} }
+
+/* ---------------- meal plan ---------------- */
+function selectDay(i){ try{ S.activeDay=i; renderMealGrid(); renderMealDetail(); }catch(e){} }
+function swapMeal(){
+ try{
+  if(!S.mealPlan||!S.mealPlan.length){ notify('Generate a plan first','warn'); return; }
+  var d=S.mealPlan[S.activeDay];
+  var alt = MEAL_TEMPLATES[S.goal==='balanced'?'diabetes':'balanced'][S.activeDay % 7] || MEAL_TEMPLATES.balanced[S.activeDay%7];
+  S.mealPlan[S.activeDay]=Object.assign({}, alt, {kcal: Math.round(alt.kcal*(S.bmi>=30?0.85:1)), title: alt.title});
+  renderMealGrid(); renderMealDetail(); drawMacro();
+  clog('Smart swap: '+d.day+' → '+nameFor(S.mealPlan[S.activeDay].title), 'ai-ok');
+  feed('↔','Smart swap', S.mealPlan[S.activeDay].day+' • '+nameFor(S.mealPlan[S.activeDay].title));
+  notify('↔ '+T('swap_ok'));
+ }catch(e){}
+}
+function addToLog(){
+ try{
+  if(!S.mealPlan||!S.mealPlan.length){ notify('No plan to add','warn'); return; }
+  var d=S.mealPlan[S.activeDay];
+  feed('＋','Added to log', d.day+' • '+nameFor(d.title)+' • '+d.kcal+' kcal');
+  clog('Added to daily log: '+d.day+' — '+nameFor(d.title), 'ai-ok');
+  notify('＋ '+T('log_ok'));
+ }catch(e){}
+}
+function share(){
+ try{
+  feed('↗','Shared with nutritionist', S.mealPlan && S.mealPlan.length ? nameFor(S.mealPlan[S.activeDay].title) : 'plan');
+  clog('Shared plan with nutritionist network', 'ai-ok');
+  notify('↗ '+T('share_ok'));
+ }catch(e){}
+}
+function addFoodToPlan(id){
+ try{
+  closeFood();
+  if(S.diet[id]!=null) { S.diet[id]=true; var chip=$('#aiDietChips .ai-chip[data-diet="'+id+'"]'); if(chip) chip.classList.add('active'); }
+  preventionScore(); renderHub(); renderRings(); renderGapsList(); drawRadar(); drawRisk(); renderFoods(); renderSituational();
+  clog('Food added to plan context: '+id, 'ai-ok');
+  feed('🌿','Food added to context', id);
+  notify('🌿 '+id+' added');
+ }catch(e){}
+}
+function clearHistory(){
+ try{
+  S.rows=[]; S.history=[]; S.plans=0; save(); renderTable(); renderHistory(); renderHub();
+  notify('History cleared');
+ }catch(e){}
+}
+function exportCSV(){
+ try{
+  if(!S.mealPlan||!S.mealPlan.length){ notify('Nothing to export','warn'); return; }
+  var csv='day,title,kcal,protein,carbs,fat,fiber,cost,adherence\n'+S.mealPlan.map(function(d){ return [d.day,'"'+nameFor(d.title)+'"',d.kcal,d.p,d.c,d.f,d.fiber,d.cost,d.adhere].join(','); }).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='nutri-ai-plan-'+S.country+'-'+S.goal+'.csv'; a.click();
+  setTimeout(function(){ try{ URL.revokeObjectURL(a.href);}catch(e){} },2000);
+  clog('Exported meal plan CSV — '+S.mealPlan.length+' days', 'ai-ok');
+  notify('⇩ '+T('export_ok')+' — '+S.mealPlan.length+' days');
+ }catch(e){}
+}
+function tab(name,btn){
+ try{
+  $$('#ai .ai-tab').forEach(function(b){ b.classList.remove('active'); });
+  if(btn) btn.classList.add('active');
+  $$('#ai .ai-tab-content').forEach(function(c){ c.classList.remove('show'); });
+  var id='#aiTab'+name.charAt(0).toUpperCase()+name.slice(1);
+  var el=$(id); if(el) el.classList.add('show');
+  if(name==='gaps') setTimeout(drawRadar,60);
+  if(name==='foods') setTimeout(renderFoods,60);
+  if(name==='evidence') setTimeout(renderEvidence,60);
+ }catch(e){}
+}
+function setCountry(v){ S.country=v; save(); renderFoods(); renderEvidence(); clog('Country set: '+v); feed('🌍','Country: '+v, 'Food DB switched • match recomputed'); renderSituational(); }
+function setGoal(v){ S.goal=v; save(); clog('Goal set: '+v); feed('🎯','Goal: '+v, 'Prevention rules updated'); if(S.mealPlan&&S.mealPlan.length){ generateMealPlan(); renderMealGrid(); renderMealDetail(); drawMacro(); } renderSituational(); }
+function setAuto(v){ S.auto=!!v; save(); clog('Auto-prevention '+(v?'enabled':'paused')); }
+
+function clockTick(){ try{ var c=$('#aiClock'); if(c) c.textContent=nowT(); var sid=$('#aiSessionId'); if(sid && !sid.dataset.fixed){ sid.textContent='AI-SESSION-AF-'+String(Math.floor(Math.random()*9000)+1000); sid.dataset.fixed='1'; } }catch(e){} }
+
+function openAlerts(){ try{ renderAlerts(); $('#aiAlertModal').classList.add('show'); }catch(e){} }
+function closeAlerts(){ try{ $('#aiAlertModal').classList.remove('show'); }catch(e){} }
+function ackAlert(id){ try{ var a=S.alerts.filter(function(x){ return x.id===id; })[0]; if(a) a.acked=true; renderBadge(); renderAlerts(); }catch(e){} }
+function ackAll(){ try{ S.alerts.forEach(function(a){ a.acked=true; }); renderBadge(); renderAlerts(); }catch(e){} }
+function clearAlerts(){ try{ S.alerts=[]; renderBadge(); renderAlerts(); }catch(e){} }
+
+var demoOn=false;
+function sleep(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function demoSay(step,total,text){ try{ $('#aiDemoText').textContent=text; $('#aiDemoFill').style.width=Math.round(step/total*100)+'%'; }catch(e){} }
+function demoShow(on){ try{ $('#aiDemoBar').classList.toggle('show', !!on); }catch(e){} }
+async function startDemo(){
+ if(demoOn) return;
+ demoOn=true;
+ try{ if(typeof window.go==='function') window.go('ai'); }catch(e){}
+ await sleep(500); demoShow(true);
+ var steps=[
+  {t:'Booting NUTRI.AI v16 — loading African food ontology (8k foods) and evidence graph (12k edges)…', fn: async function(){ clog('NUTRI.AI boot • ontology 8k foods • evidence graph 12k edges • 15 countries', 'ai-cyan'); await sleep(1200); }},
+  {t:'Profile: 34y Female, BMI 23.4, Glucose 108, BP 118 — maternal context. Diet: millet, beans, Gboma leaves.', fn: async function(){ $('#aiAge').value=32; $('#aiBmi').value=22.8; $('#aiGlucose').value=112; $('#aiSys').value=116; $('#aiCondition').value='none'; $('#aiCountry').value='TG'; $('#aiGoal').value='maternal'; S.country='TG'; S.goal='maternal'; S.diet={millet:true, beans:true, fish:false, leafy:true, sweet:true, fruit:true, groundnut:false, oil:false, sugary:false, salty:false, whiterice:false, pastry:false}; $$('#aiDietChips .ai-chip').forEach(function(ch){ var k=ch.getAttribute('data-diet'); ch.classList.toggle('active', !!S.diet[k]); }); updateProfile(); await sleep(900); }},
+  {t:'Simulating HIGH SUGAR risk: adding sugary drinks + pastries + white rice — glucose rises to 168, fiber gap up.', fn: async function(){ S.diet.sugary=true; S.diet.pastry=true; S.diet.whiterice=true; S.glucose=168; $('#aiGlucose').value=168; $('#aiGlucoseVal').textContent=168; var chip1=$('#aiDietChips .ai-chip[data-diet="sugary"]'); if(chip1) chip1.classList.add('active'); var chip2=$('#aiDietChips .ai-chip[data-diet="pastry"]'); if(chip2) chip2.classList.add('active'); var chip3=$('#aiDietChips .ai-chip[data-diet="whiterice"]'); if(chip3) chip3.classList.add('active'); preventionScore(); renderHub(); renderRings(); renderGapsList(); drawRadar(); drawRisk(); renderInsights(); renderSituational(); feed('🍭','High sugar pattern detected','Sugary drinks + pastries + white rice → diabetes risk'); await sleep(1300); }},
+  {t:'Simulating HIGH SALT risk: adding salty processed snacks + palm oil high — BP rises to 148, hypertension scenario.', fn: async function(){ S.diet.salty=true; S.diet.oil=true; S.sys=148; $('#aiSys').value=148; $('#aiSysVal').textContent=148; var c1=$('#aiDietChips .ai-chip[data-diet="salty"]'); if(c1) c1.classList.add('active'); var c2=$('#aiDietChips .ai-chip[data-diet="oil"]'); if(c2) c2.classList.add('active'); preventionScore(); renderHub(); renderRings(); renderGapsList(); drawRadar(); drawRisk(); renderInsights(); renderSituational(); feed('🧂','High salt pattern detected','Salty snacks + palm oil → hypertension risk'); await sleep(1300); }},
+  {t:'Full pipeline: profile → country foods → gaps → prevention → meal plan → explain — generating situational recommendations.', fn: async function(){ runFull(); for(var i=0;i<140 && demoOn && S.running;i++) await sleep(100); await sleep(800); }},
+  {t:'Investor trace: evidence graph farm→family, 7-day adherence-aware plan, export CSV, share with nutritionist network.', fn: async function(){ renderEvidence(); renderMealGrid(); await sleep(1200); }}
+ ];
+ for(var i=0;i<steps.length && demoOn;i++){
+  demoSay(i, steps.length, '〔'+(i+1)+'/'+steps.length+'〕 '+steps[i].t);
+  await steps[i].fn();
+ }
+ if(demoOn){
+  demoSay(steps.length, steps.length, '✓ Demo complete — explore situational prevention scenarios: sugar → diabetes, salt → hypertension, fat → CVD.');
+  feed('🎬','Guided demo finished', 'TG • prevention • score '+S.score+' • '+getSituationalScenarios().length+' scenarios');
+  gtoast('✓ Guided demo complete — '+getSituationalScenarios().length+' prevention scenarios');
+  await sleep(4000);
+ }
+ demoOn=false; demoShow(false);
+}
+function stopDemo(){ demoOn=false; demoShow(false); try{ clearPipe(); S.running=false; renderHub(); }catch(e){} gtoast('⏹ Demo stopped'); }
+
+window.AI={
+ runFull: runFull,
+ runQuick: runQuick,
+ updateProfile: updateProfile,
+ setCountry: setCountry,
+ setGoal: setGoal,
+ setAuto: setAuto,
+ tab: tab,
+ openFood: openFood,
+ closeFood: closeFood,
+ selectDay: selectDay,
+ swapMeal: swapMeal,
+ addToLog: addToLog,
+ share: share,
+ addFoodToPlan: addFoodToPlan,
+ clearHistory: clearHistory,
+ exportCSV: exportCSV,
+ openAlerts: openAlerts,
+ closeAlerts: closeAlerts,
+ ackAlert: ackAlert,
+ ackAll: ackAll,
+ clearAlerts: clearAlerts,
+ startDemo: startDemo,
+ stopDemo: stopDemo
+};
+var prevGen=window.generatePlan;
+window.generatePlan=function(){
+ try{
+  var aiView=$('#ai');
+  if(aiView && aiView.classList.contains('on')){
+   return runFull();
+  }
+  if(typeof prevGen==='function' && prevGen!==window.generatePlan){
+   return prevGen.apply(this, arguments);
+  }
+  return runFull();
+ }catch(e){ try{ return runFull(); }catch(e2){} }
+};
+
+function boot(){
+ try{
+  if(!$('#ai')) return;
+  restore();
+  $$('#ai button').forEach(function(b){ try{ b.dataset.v43='1'; b.dataset.v44connect='1'; b.dataset.v41plan='1'; }catch(e){} });
+  var setVal=function(id,val){ var el=$('#'+id); if(el) el.value=val; };
+  setVal('aiAge', S.age); setVal('aiBmi', S.bmi); setVal('aiGlucose', S.glucose); setVal('aiSys', S.sys);
+  setVal('aiSex', S.sex); setVal('aiCondition', S.condition); setVal('aiCountry', S.country); setVal('aiGoal', S.goal);
+  var ap=$('#aiAutoPrevention'); if(ap) ap.checked=!!S.auto;
+  $$('#aiDietChips .ai-chip').forEach(function(ch){ var k=ch.getAttribute('data-diet'); ch.classList.toggle('active', !!S.diet[k]); });
+  preventionScore(); renderHub(); renderFoods(); renderEvidence(); renderGapsList(); renderRings(); renderInsights(); renderSituational(); renderMealGrid(); renderMealDetail(); renderTable(); renderHistory(); renderBadge(); renderAlerts();
+  drawRadar(); drawRisk(); drawMacro();
+  clog(I18N.en.console_ready, 'ai-ok');
+  clog('Prevention scenarios armed: sugar→diabetes, salt→hypertension, fat→CVD, fiber→gut, iron→anemia, child→stunting');
+  setInterval(clockTick, 1000); clockTick();
+  document.addEventListener('change', function(e){ var id=(e.target&&e.target.id)||''; if(id==='language'||id==='lang') setTimeout(function(){ renderFoods(); renderEvidence(); renderGapsList(); renderRings(); renderInsights(); renderSituational(); renderMealGrid(); renderMealDetail(); renderHub(); },140); });
+  document.addEventListener('click', function(e){ if(e.target && e.target.closest && e.target.closest('[onclick*="go(\'ai\'"]')){ setTimeout(function(){ drawRadar(); drawRisk(); drawMacro(); renderEvidence(); renderSituational(); }, 400); } });
+  document.addEventListener('keydown', function(e){ if(e.key==='Escape'){ closeFood(); closeAlerts(); } });
+  bindDiet();
+  setInterval(function(){ if(!S.running){ var tr=$('#aiTokenRate'); if(tr) tr.textContent=S.lastAt?'ready':'0 tok/s'; } }, 2000);
+ }catch(e){}
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', function(){ setTimeout(boot, 350); });
+else setTimeout(boot, 350);
+})();
+
+</script>
+
 
 </body>
 
