@@ -11835,9 +11835,7 @@ function clearHistory(){
 function exportCSV(){
  try{
   if(!S.mealPlan||!S.mealPlan.length){ notify('Nothing to export','warn'); return; }
-  var csv='day,title,kcal,protein,carbs,fat,fiber,cost,adherence
-'+S.mealPlan.map(function(d){ return [d.day,'"'+nameFor(d.title)+'"',d.kcal,d.p,d.c,d.f,d.fiber,d.cost,d.adhere].join(','); }).join('
-');
+  var csv='day,title,kcal,protein,carbs,fat,fiber,cost,adherence\n'+S.mealPlan.map(function(d){ return [d.day,'"'+nameFor(d.title)+'"',d.kcal,d.p,d.c,d.f,d.fiber,d.cost,d.adhere].join(','); }).join('\n');
   var blob=new Blob([csv],{type:'text/csv'}); var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='nutri-ai-plan-'+S.country+'-'+S.goal+'.csv'; a.click();
   setTimeout(function(){ try{ URL.revokeObjectURL(a.href);}catch(e){} },2000);
   clog('Exported meal plan CSV — '+S.mealPlan.length+' days', 'ai-ok');
