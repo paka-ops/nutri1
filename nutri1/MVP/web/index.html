@@ -6461,103 +6461,386 @@
     </div>
   </section>
 
-  <section id="agri" class="view">
-    <div class="card">
-      <h2 data-i18n="ui.ministry_of_agriculture_food_intelligence">🌾 Ministry of Agriculture Food Intelligence</h2>
-      <div class="grid">
-        <div>Cereals<div class="metric">—</div>
-        </div>
-        <div>Tubers & Roots<div class="metric">—</div>
-        </div>
-        <div>Fruits & Vegetables<div class="metric">—</div>
-        </div>
-        <div>Legumes<div class="metric">—</div>
-        </div>
-      </div>
-      <div class="grid">
-        <div>Oilseeds<div class="metric">—</div>
-        </div>
-        <div>Animal-source foods<div class="metric">—</div>
-        </div>
-        <div>Production gap<div class="metric">—</div>
-        </div>
-        <div>National needs<div class="metric">—</div>
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="card">
-          <h3 data-i18n="ui.production_by_food_group">Production by food group</h3>
-          <div class="chart"><canvas id="aProd"></canvas></div>
-        </div>
-        <div class="card">
-          <h3 data-i18n="ui.consumption_vs_needs">Consumption vs needs</h3>
-          <div class="chart"><canvas id="aNeeds"></canvas></div>
-        </div>
-      </div>
-    </div>
-    <div class="card institutional-module">
-      <div class="section-head">
-        <div>
-          <h2>🌾 National Agrifood Intelligence</h2>
-          <p class="muted">Farm-to-fork intelligence for production, markets, resilience, nutrition and value addition.
-          </p>
-        </div><span class="pill">MINISTRY OF AGRICULTURE</span>
-      </div>
-      <div class="module-grid">
-        <div><b>👩🏾‍🌾 Farmer Registry</b><span>Producer, farm, crop, variety, season, production and market-access
-            profiles.</span></div>
-        <div><b>🌱 Production Forecast</b><span>Crop area, yield, harvest forecast and production gaps.</span></div>
-        <div><b>🌦️ Climate Early Warning</b><span>Weather, drought, flood, heat and crop-risk signals.</span></div>
-        <div><b>🌾 Post-Harvest Loss Observatory</b><span>Loss quantity, stage, cause, cost and hotspot mapping.</span>
-        </div>
-        <div><b>💰 Food Price Intelligence</b><span>Market prices, anomalies, availability and trends.</span></div>
-        <div><b>🏭 Processing & Value Addition</b><span>Transformation yields, costs, losses, quality and value
-            creation.</span></div>
-        <div><b>🥗 Nutrition-Sensitive Agriculture</b><span>Availability of diverse, nutrient-dense and biofortified
-            foods.</span></div>
-        <div><b>🧪 Food Safety</b><span>Aflatoxins, microbiology, quality, traceability and laboratory
-            provenance.</span></div>
-        <div><b>🛰️ Satellite/Drone Intelligence</b><span>Farm monitoring, stress detection and targeted field
-            verification.</span></div>
-      </div>
-    </div>
-    <div class="card">
-      <h3>📦 Ministry of Agriculture Data Products</h3>
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Primary output</th>
-          <th>Decision use</th>
-        </tr>
-        <tr>
-          <td>National Agrifood Command Center</td>
-          <td>Production + markets + climate + nutrition</td>
-          <td>Sector planning</td>
-        </tr>
-        <tr>
-          <td>Post-Harvest Loss Observatory</td>
-          <td>Loss hotspots + causes</td>
-          <td>Investment targeting</td>
-        </tr>
-        <tr>
-          <td>Food Price Observatory</td>
-          <td>Price trends + anomalies</td>
-          <td>Market monitoring</td>
-        </tr>
-        <tr>
-          <td>Nutrition-Sensitive Agriculture Dashboard</td>
-          <td>Healthy-food availability</td>
-          <td>Nutrition policy</td>
-        </tr>
-        <tr>
-          <td>Value Chain Intelligence</td>
-          <td>Processing + value addition</td>
-          <td>Industrial/agri investment</td>
-        </tr>
-      </table>
-    </div>
-  </section>
+  <section id="agri" class="view agri-experience" data-v44bar="1" data-v52control="1">
+    <style>
+      /* Agriculture command center — intentionally scoped to #agri only. */
+      #agri.agri-experience { padding-bottom: 30px; }
+      #agri .agri-shell { --ink:#09291e; --forest:#063c2b; --green:#0c8151; --lime:#d8f56b; --sky:#54c7e9; --sun:#ffcb5b; --coral:#ff8565; --paper:#f6faf6; --line:#d9e8df; color:var(--ink); font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+      #agri .agri-shell *, #agri .agri-shell *:before, #agri .agri-shell *:after { box-sizing:border-box; }
+      #agri .agri-legacy-sentinel,
+      #agri > .v38-controls, #agri > .v38-kpis, #agri > .v46-live, #agri > .v46-kpis,
+      #agri > [data-v46-filter], #agri > .v44-livebar { display:none !important; }
+      #agri .agri-shell .v54-action { transform:none; box-shadow:none; }
+      #agri .agri-hero { position:relative; isolation:isolate; overflow:hidden; padding:30px; border-radius:24px; color:#fff; background:radial-gradient(circle at 90% 15%,rgba(216,245,107,.23),transparent 28%),radial-gradient(circle at 62% 112%,rgba(84,199,233,.22),transparent 34%),linear-gradient(125deg,#031f16 0%,#06442f 52%,#0b7650 100%); box-shadow:0 18px 45px rgba(5,56,37,.23); }
+      #agri .agri-hero:after { content:""; position:absolute; z-index:-1; right:-90px; top:-115px; width:420px; height:420px; opacity:.25; background:repeating-radial-gradient(ellipse at center,transparent 0 27px,rgba(216,245,107,.52) 28px 29px,transparent 30px 54px); transform:rotate(-18deg); }
+      #agri .agri-kicker { display:inline-flex; align-items:center; gap:8px; margin:0 0 11px; color:var(--lime); font-size:11px; font-weight:850; letter-spacing:.115em; text-transform:uppercase; }
+      #agri .agri-live-dot { width:8px; height:8px; border-radius:50%; background:var(--lime); box-shadow:0 0 0 0 rgba(216,245,107,.6); animation:agriPulse 1.75s infinite; }
+      @keyframes agriPulse { 70% { box-shadow:0 0 0 8px rgba(216,245,107,0); } 100% { box-shadow:0 0 0 0 rgba(216,245,107,0); } }
+      #agri .agri-hero-grid { display:grid; grid-template-columns:minmax(0,1.48fr) minmax(310px,.88fr); align-items:end; gap:28px; }
+      #agri .agri-hero h1 { max-width:810px; margin:0; color:#fff; font-size:clamp(29px,4vw,49px); line-height:1.02; letter-spacing:-.047em; }
+      #agri .agri-hero h1 span { color:var(--lime); }
+      #agri .agri-hero-copy { max-width:770px; margin:14px 0 0; color:rgba(255,255,255,.82); font-size:15px; line-height:1.65; }
+      #agri .agri-hero-proof { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+      #agri .agri-proof { min-height:82px; padding:13px; border:1px solid rgba(255,255,255,.16); border-radius:14px; background:rgba(2,26,18,.22); backdrop-filter:blur(8px); }
+      #agri .agri-proof strong { display:block; margin-top:4px; color:#fff; font-size:19px; letter-spacing:-.03em; }
+      #agri .agri-proof small { color:rgba(255,255,255,.67); font-size:10px; line-height:1.35; }
+      #agri .agri-command { display:grid; grid-template-columns:minmax(230px,1fr) minmax(230px,1fr) minmax(285px,1.35fr) auto; align-items:end; gap:13px; margin-top:15px; padding:14px; border:1px solid #cfe4d6; border-radius:17px; background:#fff; box-shadow:0 10px 25px rgba(14,63,39,.07); }
+      #agri .agri-field { min-width:0; }
+      #agri .agri-field label, #agri .agri-range-label { display:flex; justify-content:space-between; gap:10px; margin-bottom:6px; color:#476153; font-size:10px; font-weight:850; letter-spacing:.08em; text-transform:uppercase; }
+      #agri .agri-field select { width:100%; appearance:none; border:1px solid #cfe0d4; border-radius:10px; padding:10px 34px 10px 11px; color:var(--ink); font:700 13px Inter,ui-sans-serif,system-ui,sans-serif; background:#f8fcf9 linear-gradient(45deg,transparent 50%,#0d7f51 50%) calc(100% - 17px) 50%/5px 5px no-repeat,linear-gradient(135deg,#0d7f51 50%,transparent 50%) calc(100% - 12px) 50%/5px 5px no-repeat; cursor:pointer; }
+      #agri .agri-range-wrap { padding:1px 1px 0; }
+      #agri .agri-range-value { color:var(--green); font-size:12px; letter-spacing:0; }
+      #agri input[type=range].agri-range { width:100%; height:7px; margin:11px 0 4px; appearance:none; border:0; border-radius:999px; outline:none; background:linear-gradient(90deg,var(--green) 0 48%,#dbe9de 48% 100%); cursor:pointer; }
+      #agri input[type=range].agri-range::-webkit-slider-thumb { width:19px; height:19px; appearance:none; border:3px solid #fff; border-radius:50%; background:var(--lime); box-shadow:0 2px 7px rgba(3,42,27,.3); }
+      #agri input[type=range].agri-range::-moz-range-thumb { width:15px; height:15px; border:3px solid #fff; border-radius:50%; background:var(--lime); box-shadow:0 2px 7px rgba(3,42,27,.3); }
+      #agri .agri-run { min-height:42px; padding:0 17px; border:0; border-radius:11px; color:#062f20; font:850 12px Inter,ui-sans-serif,system-ui,sans-serif; white-space:nowrap; background:var(--lime); cursor:pointer; box-shadow:0 7px 15px rgba(115,142,16,.18); transition:transform .18s,filter .18s; }
+      #agri .agri-run:hover { transform:translateY(-2px); filter:brightness(1.03); }
+      #agri .agri-run:disabled { cursor:wait; filter:saturate(.4); }
+      #agri .agri-context-line { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 2px 0; color:#6d8074; font-size:11px; }
+      #agri .agri-context-line b { color:#0b7047; }
+      #agri .agri-strategy-row { display:flex; flex-wrap:wrap; gap:7px; margin:16px 0 0; }
+      #agri .agri-strategy { padding:8px 11px; border:1px solid #cfe2d4; border-radius:999px; color:#355b45; font:800 11px Inter,ui-sans-serif,system-ui,sans-serif; background:#fff; cursor:pointer; transition:all .17s; }
+      #agri .agri-strategy:hover, #agri .agri-strategy.active { border-color:var(--green); color:#fff; background:var(--green); box-shadow:0 7px 14px rgba(10,111,70,.16); }
+      #agri .agri-metric-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:11px; margin:15px 0; }
+      #agri .agri-metric { position:relative; overflow:hidden; min-height:130px; padding:15px; border:1px solid #d7e8dc; border-radius:17px; background:#fff; box-shadow:0 8px 20px rgba(13,62,39,.055); }
+      #agri .agri-metric:before { content:""; position:absolute; left:0; top:0; right:0; height:3px; background:linear-gradient(90deg,var(--green),var(--lime)); }
+      #agri .agri-metric:nth-child(2):before { background:linear-gradient(90deg,#1e82ad,var(--sky)); }
+      #agri .agri-metric:nth-child(3):before { background:linear-gradient(90deg,#df7438,var(--sun)); }
+      #agri .agri-metric:nth-child(4):before { background:linear-gradient(90deg,#8464c5,#c99bff); }
+      #agri .agri-metric:nth-child(5):before { background:linear-gradient(90deg,#079868,#8ce3a2); }
+      #agri .agri-metric-label { display:block; min-height:29px; color:#6a7e70; font-size:10px; font-weight:850; letter-spacing:.07em; line-height:1.38; text-transform:uppercase; }
+      #agri .agri-metric strong { display:block; margin-top:7px; color:#0a3927; font-size:clamp(21px,2vw,28px); letter-spacing:-.045em; }
+      #agri .agri-metric small { display:block; margin-top:4px; color:#548067; font-size:10px; line-height:1.35; }
+      #agri .agri-delta { position:absolute; right:13px; bottom:12px; padding:3px 6px; border-radius:99px; color:#087349; font-size:10px; font-weight:850; background:#e6f7e9; }
+      #agri .agri-board { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(320px,.9fr); gap:13px; margin-top:13px; }
+      #agri .agri-stack { display:grid; gap:13px; }
+      #agri .agri-panel { min-width:0; overflow:hidden; padding:18px; border:1px solid #d7e7dc; border-radius:18px; background:#fff; box-shadow:0 9px 25px rgba(13,62,39,.055); }
+      #agri .agri-panel-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+      #agri .agri-panel-head h2, #agri .agri-panel-head h3 { margin:0; color:#113e2b; font-size:15px; letter-spacing:-.02em; }
+      #agri .agri-panel-head p { margin:4px 0 0; color:#728378; font-size:11px; line-height:1.45; }
+      #agri .agri-unit { flex:none; padding:5px 7px; border-radius:8px; color:#2c7254; font-size:10px; font-weight:850; background:#eaf5ed; }
+      #agri .agri-chart { position:relative; height:286px; }
+      #agri .agri-chart.short { height:222px; }
+      #agri .agri-chart canvas { width:100% !important; height:100% !important; }
+      #agri .agri-caption { margin:9px 0 0; color:#74857a; font-size:10px; line-height:1.48; }
+      #agri .agri-digital-twin { position:relative; min-height:380px; overflow:hidden; border:1px solid #184f3a; border-radius:17px; color:#effff6; background:radial-gradient(ellipse at 68% 27%,rgba(88,199,151,.31),transparent 28%),linear-gradient(140deg,#05271d 0%,#0b4632 55%,#062b20 100%); }
+      #agri .agri-digital-twin:before { content:""; position:absolute; inset:0; opacity:.22; background-image:linear-gradient(rgba(216,245,107,.22) 1px,transparent 1px),linear-gradient(90deg,rgba(216,245,107,.22) 1px,transparent 1px); background-size:30px 30px; mask-image:linear-gradient(120deg,#000,transparent); }
+      #agri .agri-map-top { position:relative; z-index:1; display:flex; align-items:flex-start; justify-content:space-between; gap:10px; padding:16px; }
+      #agri .agri-map-title { margin:0; color:#fff; font-size:15px; }
+      #agri .agri-map-sub { margin:4px 0 0; color:rgba(238,255,245,.66); font-size:10px; line-height:1.4; }
+      #agri .agri-map-status { display:inline-flex; align-items:center; gap:5px; padding:5px 7px; border:1px solid rgba(216,245,107,.27); border-radius:99px; color:var(--lime); font-size:9px; font-weight:850; white-space:nowrap; background:rgba(0,0,0,.14); }
+      #agri .agri-map-status i { width:6px; height:6px; border-radius:50%; background:var(--lime); }
+      #agri .agri-contour { position:absolute; left:10%; top:23%; width:70%; height:56%; border:1px solid rgba(216,245,107,.32); border-radius:41% 59% 54% 46% / 50% 41% 59% 50%; transform:rotate(-9deg); box-shadow:inset 0 0 45px rgba(77,211,149,.08); }
+      #agri .agri-contour:after { content:""; position:absolute; inset:15% 13%; border:1px solid rgba(84,199,233,.34); border-radius:49% 51% 42% 58% / 58% 42% 58% 42%; }
+      #agri .agri-route { position:absolute; z-index:1; left:17%; top:62%; width:66%; height:2px; transform:rotate(-20deg); transform-origin:left; background:linear-gradient(90deg,transparent,var(--lime),var(--sky),transparent); box-shadow:0 0 12px rgba(216,245,107,.8); }
+      #agri .agri-zone { position:absolute; z-index:2; display:flex; align-items:center; gap:6px; padding:6px 8px; border:1px solid rgba(255,255,255,.26); border-radius:9px; color:#fff; font:800 10px Inter,ui-sans-serif,system-ui,sans-serif; text-align:left; background:rgba(2,27,18,.75); box-shadow:0 7px 18px rgba(0,0,0,.18); cursor:pointer; transition:transform .18s,background .18s; }
+      #agri .agri-zone:hover { transform:translateY(-3px); background:#0e6547; }
+      #agri .agri-zone i { width:9px; height:9px; border:2px solid #fff; border-radius:50%; background:var(--zone,#ff8565); box-shadow:0 0 0 5px color-mix(in srgb,var(--zone,#ff8565) 25%,transparent); }
+      #agri .agri-zone small { display:block; color:rgba(255,255,255,.68); font-size:8px; font-weight:650; }
+      #agri .agri-zone.north { left:17%; top:31%; } #agri .agri-zone.central { left:47%; top:48%; } #agri .agri-zone.coast { right:9%; bottom:20%; } #agri .agri-zone.market { right:19%; top:27%; }
+      #agri .agri-map-legend { position:absolute; z-index:2; left:16px; right:16px; bottom:14px; display:flex; flex-wrap:wrap; gap:8px; color:rgba(255,255,255,.79); font-size:9px; }
+      #agri .agri-map-legend span { display:inline-flex; align-items:center; gap:4px; } #agri .agri-map-legend i { width:7px; height:7px; border-radius:50%; background:var(--c); }
+      #agri .agri-flow { display:grid; grid-template-columns:repeat(4,1fr); gap:6px; margin-top:13px; }
+      #agri .agri-flow-step { position:relative; min-height:95px; padding:11px 8px; border:1px solid #dbe9df; border-radius:12px; background:#f8fcf9; }
+      #agri .agri-flow-step:not(:last-child):after { content:"→"; position:absolute; z-index:2; right:-10px; top:37px; color:#39a274; font-size:16px; font-weight:900; }
+      #agri .agri-flow-icon { display:block; font-size:17px; } #agri .agri-flow-step b { display:block; margin-top:7px; color:#164834; font-size:10px; } #agri .agri-flow-step small { display:block; margin-top:4px; color:#768a7c; font-size:9px; line-height:1.32; }
+      #agri .agri-signal-list { display:grid; gap:8px; margin-top:10px; }
+      #agri .agri-signal { display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:8px; padding:9px 0; border-bottom:1px solid #e6efe9; }
+      #agri .agri-signal:last-child { border-bottom:0; } #agri .agri-signal i { width:8px; height:8px; border-radius:50%; background:var(--signal); box-shadow:0 0 0 4px color-mix(in srgb,var(--signal) 16%,transparent); } #agri .agri-signal b { color:#234e3a; font-size:11px; } #agri .agri-signal span { color:#738579; font-size:10px; } #agri .agri-signal em { padding:4px 6px; border-radius:6px; color:#4d6858; font-size:9px; font-style:normal; background:#f0f6f1; }
+      #agri .agri-bottom { display:grid; grid-template-columns:minmax(0,1.1fr) minmax(310px,.9fr); gap:13px; margin-top:13px; }
+      #agri .agri-outcome { padding:14px; border-radius:14px; color:#eafff0; background:linear-gradient(125deg,#0a5f42,#0c8054); }
+      #agri .agri-outcome h3 { margin:0; color:#fff; font-size:15px; } #agri .agri-outcome p { margin:7px 0 0; color:rgba(234,255,240,.75); font-size:11px; line-height:1.5; }
+      #agri .agri-outcome-bar { height:9px; overflow:hidden; margin:12px 0 8px; border-radius:99px; background:rgba(255,255,255,.2); } #agri .agri-outcome-bar i { display:block; width:0; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--lime),#7fe9c8); transition:width .8s cubic-bezier(.2,.75,.25,1); }
+      #agri .agri-outcome-foot { display:flex; justify-content:space-between; gap:10px; color:rgba(255,255,255,.78); font-size:10px; }
+      #agri .agri-events { display:grid; gap:9px; max-height:207px; overflow:auto; padding-right:3px; }
+      #agri .agri-event { display:grid; grid-template-columns:10px 1fr auto; align-items:start; gap:8px; padding-bottom:9px; border-bottom:1px solid #e6efe9; } #agri .agri-event:last-child { border-bottom:0; } #agri .agri-event i { width:8px; height:8px; margin-top:4px; border-radius:50%; background:#21a86f; box-shadow:0 0 0 4px #e2f6ea; } #agri .agri-event b { display:block; color:#1c4934; font-size:10px; } #agri .agri-event span { display:block; margin-top:2px; color:#73857a; font-size:9px; line-height:1.4; } #agri .agri-event time { color:#87a092; font-size:9px; white-space:nowrap; }
+      #agri .agri-dock { display:none; position:relative; overflow:hidden; margin-top:13px; border:1px solid #bcdccd; border-radius:18px; background:linear-gradient(125deg,#f3fbf4,#fff); box-shadow:0 15px 35px rgba(10,83,51,.09); } #agri .agri-dock.show { display:block; animation:agriDock .25s ease both; } @keyframes agriDock { from { opacity:0; transform:translateY(-7px); } to { opacity:1; transform:translateY(0); } }
+      #agri .agri-dock:before { content:""; position:absolute; top:0; bottom:0; left:0; width:4px; background:linear-gradient(#d8f56b,#0c8151); }
+      #agri .agri-dock-inner { padding:18px 20px 20px 22px; } #agri .agri-dock-head { display:flex; align-items:flex-start; justify-content:space-between; gap:14px; } #agri .agri-dock h3 { margin:3px 0 0; color:#103d2a; font-size:17px; } #agri .agri-dock-kicker { color:#0a7950; font-size:10px; font-weight:900; letter-spacing:.09em; text-transform:uppercase; } #agri .agri-dock p { max-width:850px; color:#61776a; font-size:12px; line-height:1.55; } #agri .agri-close-dock { border:0; border-radius:8px; padding:6px 8px; color:#4e6b5a; font-size:17px; line-height:1; background:#e8f4ea; cursor:pointer; }
+      #agri .agri-dock-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:9px; margin-top:13px; } #agri .agri-dock-stat { padding:12px; border:1px solid #d9e9dd; border-radius:11px; background:#fff; } #agri .agri-dock-stat span { display:block; color:#718478; font-size:9px; font-weight:850; text-transform:uppercase; } #agri .agri-dock-stat b { display:block; margin-top:5px; color:#0a6543; font-size:17px; }
+      #agri .agri-dock-actions { display:flex; flex-wrap:wrap; gap:7px; margin-top:14px; } #agri .agri-minibtn { padding:8px 10px; border:1px solid #c8ddcd; border-radius:9px; color:#19563c; font:800 10px Inter,ui-sans-serif,system-ui,sans-serif; background:#fff; cursor:pointer; } #agri .agri-minibtn.main { border-color:#0d7c51; color:#fff; background:#0d7c51; }
+      #agri .agri-disclaimer { margin-top:16px; color:#788d7e; font-size:9px; line-height:1.45; }
+      #agri .agri-sr-only { position:absolute; width:1px; height:1px; padding:0; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+      @media (max-width:1180px) { #agri .agri-command { grid-template-columns:1fr 1fr; } #agri .agri-metric-grid { grid-template-columns:repeat(3,1fr); } #agri .agri-board, #agri .agri-bottom { grid-template-columns:1fr; } }
+      @media (max-width:760px) { #agri .agri-hero { padding:22px; } #agri .agri-hero-grid { grid-template-columns:1fr; } #agri .agri-hero-proof { max-width:430px; } #agri .agri-command { grid-template-columns:1fr; } #agri .agri-metric-grid { grid-template-columns:1fr 1fr; } #agri .agri-flow { grid-template-columns:1fr 1fr; } #agri .agri-flow-step:not(:last-child):after { display:none; } #agri .agri-dock-grid { grid-template-columns:1fr; } }
+      @media (max-width:440px) { #agri .agri-metric-grid { grid-template-columns:1fr; } #agri .agri-hero-proof { grid-template-columns:1fr; } #agri .agri-context-line { align-items:flex-start; flex-direction:column; } #agri .agri-zone { transform:scale(.9); transform-origin:left top; } }
+    </style>
 
+    <!-- Invisible compatibility anchors keep legacy generic modules from injecting stacked panels into this focused simulation. -->
+    <div class="agri-legacy-sentinel v38-controls v38-kpis v46-live v46-kpis" data-v46-filter="1" aria-hidden="true"></div>
+    <div class="agri-legacy-sentinel card" aria-hidden="true"><h3>Production by food group</h3><canvas id="agriLegacyProduction"></canvas></div>
+    <div class="agri-legacy-sentinel card" aria-hidden="true"><h3>Consumption vs needs</h3><canvas id="agriLegacyNeeds"></canvas></div>
+    <div class="agri-legacy-sentinel card" aria-hidden="true"><h3>Food supply trend</h3><canvas id="agriLegacyTrend"></canvas></div>
+
+    <div class="agri-shell">
+      <header class="agri-hero">
+        <div class="agri-kicker"><i class="agri-live-dot"></i> NUTRI.N°1 • Jumeau numérique agroalimentaire</div>
+        <div class="agri-hero-grid">
+          <div>
+            <h1>De l’aléa climatique à une <span>décision d’investissement</span> mesurable.</h1>
+            <p class="agri-hero-copy">Un command center qui relie cultures, pertes, marchés et nutrition pour simuler — avant d’investir — les résultats d’un portefeuille agricole national.</p>
+          </div>
+          <div class="agri-hero-proof" aria-label="Démonstration de capacité de la plateforme">
+            <div class="agri-proof"><small>SOURCES FUSIONNÉES</small><strong>06</strong><small>satellite, terrain, marché, nutrition</small></div>
+            <div class="agri-proof"><small>HORIZON DE DÉCISION</small><strong>90 jours</strong><small>de l’alerte à l’action suivie</small></div>
+            <div class="agri-proof"><small>TRAÇABILITÉ</small><strong>100%</strong><small>chaque hypothèse est visible</small></div>
+            <div class="agri-proof"><small>MODÈLE</small><strong>Actionable</strong><small>investir, prioriser, mesurer</small></div>
+          </div>
+        </div>
+      </header>
+
+      <div class="agri-command" aria-label="Paramètres de la simulation d'investissement">
+        <div class="agri-field"><label for="agriCountry">Pays de démonstration</label><select id="agriCountry" onchange="AgriTwin.setCountry(this.value)"><option value="Togo">Togo</option><option value="Ghana">Ghana</option><option value="Sénégal">Sénégal</option><option value="Côte d’Ivoire">Côte d’Ivoire</option></select></div>
+        <div class="agri-field"><label for="agriSeason">Scénario climatique</label><select id="agriSeason" onchange="AgriTwin.setSeason(this.value)"><option value="normal">Campagne normale</option><option value="dry">Sécheresse prolongée</option><option value="wet">Pluviométrie favorable</option><option value="flood">Inondations localisées</option></select></div>
+        <div class="agri-range-wrap"><div class="agri-range-label"><label for="agriCapital">Portefeuille d’investissement</label><span class="agri-range-value" id="agriCapitalLabel">24 M$</span></div><input class="agri-range" id="agriCapital" type="range" min="5" max="60" value="24" oninput="AgriTwin.setCapital(this.value)"></div>
+        <button class="agri-run" id="agriRunButton" type="button" onclick="AgriTwin.run()">✦ Simuler l’impact</button>
+      </div>
+      <div class="agri-context-line"><span><b id="agriStatus">Modèle prêt</b> · Hypothèses traçables · recalcul instantané</span><span id="agriClock">Cycle de données : aujourd’hui</span></div>
+
+      <div class="agri-strategy-row" role="tablist" aria-label="Portefeuille prioritaire">
+        <button class="agri-strategy active" type="button" data-strategy="balanced" onclick="AgriTwin.strategy('balanced',this)">◌ Portefeuille équilibré</button>
+        <button class="agri-strategy" type="button" data-strategy="climate" onclick="AgriTwin.strategy('climate',this)">☀ Résilience climatique</button>
+        <button class="agri-strategy" type="button" data-strategy="nutrition" onclick="AgriTwin.strategy('nutrition',this)">◉ Nutrition d’abord</button>
+        <button class="agri-strategy" type="button" data-strategy="market" onclick="AgriTwin.strategy('market',this)">↗ Marchés & logistique</button>
+      </div>
+
+      <section class="agri-metric-grid" aria-label="Résultats clés de la simulation">
+        <article class="agri-metric"><span class="agri-metric-label">Disponibilité alimentaire projetée</span><strong id="agriAvailability">—</strong><small id="agriAvailabilitySub">vs besoins nutritionnels annuels</small><span class="agri-delta" id="agriAvailabilityDelta">—</span></article>
+        <article class="agri-metric"><span class="agri-metric-label">Pertes post-récolte évitées</span><strong id="agriLoss">—</strong><small id="agriLossSub">grâce aux infrastructures ciblées</small><span class="agri-delta" id="agriLossDelta">—</span></article>
+        <article class="agri-metric"><span class="agri-metric-label">Valeur économique protégée</span><strong id="agriValue">—</strong><small id="agriValueSub">rendement estimé du portefeuille</small><span class="agri-delta" id="agriValueDelta">—</span></article>
+        <article class="agri-metric"><span class="agri-metric-label">Emplois & micro-entreprises soutenus</span><strong id="agriJobs">—</strong><small id="agriJobsSub">production, transformation, marchés</small><span class="agri-delta" id="agriJobsDelta">—</span></article>
+        <article class="agri-metric"><span class="agri-metric-label">Personnes avec régime plus diversifié</span><strong id="agriNutrition">—</strong><small id="agriNutritionSub">accès accru aux aliments denses</small><span class="agri-delta" id="agriNutritionDelta">—</span></article>
+      </section>
+
+      <div class="agri-board">
+        <div class="agri-stack">
+          <article class="agri-panel">
+            <div class="agri-panel-head"><div><h2>Disponibilité vs besoins nutritionnels</h2><p>Lecture claire par groupe alimentaire — la barre colorée est la disponibilité estimée, le contour représente le besoin.</p></div><span class="agri-unit">milliers t / an</span></div>
+            <div class="agri-chart" id="agriBalanceWrap"><canvas id="agriBalanceChart" role="img" aria-label="Disponibilité alimentaire projetée comparée aux besoins nutritionnels"></canvas></div>
+            <p class="agri-caption">Les écarts rendent immédiatement visibles les investissements à prioriser : production, stockage, chaîne du froid ou accès marché.</p>
+          </article>
+          <article class="agri-panel">
+            <div class="agri-panel-head"><div><h2>Trajectoire de transformation à 24 mois</h2><p>La disponibilité progresse pendant que les pertes et les ruptures logistiques diminuent.</p></div><span class="agri-unit">% système</span></div>
+            <div class="agri-chart short"><canvas id="agriTrajectoryChart" role="img" aria-label="Évolution projetée de la disponibilité et des pertes post-récolte"></canvas></div>
+          </article>
+        </div>
+
+        <div class="agri-stack">
+          <article class="agri-digital-twin" aria-label="Carte synthétique de points d'intervention">
+            <div class="agri-map-top"><div><h2 class="agri-map-title">Jumeau numérique territorial</h2><p class="agri-map-sub">Cliquez un signal pour ouvrir une fiche décisionnelle dans la page.</p></div><span class="agri-map-status"><i></i> 24 flux actifs</span></div>
+            <div class="agri-contour"></div><div class="agri-route"></div>
+            <button class="agri-zone north" style="--zone:#ff8b6e" type="button" onclick="AgriTwin.zone('Bassin nord','Stress hydrique')"><i></i><span>Bassin nord<small id="agriNorthLabel">stress hydrique</small></span></button>
+            <button class="agri-zone central" style="--zone:#ffd15d" type="button" onclick="AgriTwin.zone('Plateau central','Pertes post-récolte')"><i></i><span>Plateau central<small id="agriCentralLabel">pertes stockage</small></span></button>
+            <button class="agri-zone coast" style="--zone:#6ee8c3" type="button" onclick="AgriTwin.zone('Corridor côtier','Accès marché')"><i></i><span>Corridor marché<small id="agriCoastLabel">accès logistique</small></span></button>
+            <button class="agri-zone market" style="--zone:#5fd1f1" type="button" onclick="AgriTwin.zone('Hub interrégional','Prix & distribution')"><i></i><span>Hub interrégional<small>prix & distribution</small></span></button>
+            <div class="agri-map-legend"><span><i style="--c:#ff8b6e"></i> aléa climat</span><span><i style="--c:#ffd15d"></i> perte / stockage</span><span><i style="--c:#6ee8c3"></i> opportunité</span><span><i style="--c:#5fd1f1"></i> marché</span></div>
+          </article>
+          <article class="agri-panel">
+            <div class="agri-panel-head"><div><h3>Allocation recommandée du portefeuille</h3><p>Le modèle répartit le capital selon le risque, le déficit et le potentiel nutritionnel.</p></div><span class="agri-unit" id="agriPortfolioTitle">24 M$</span></div>
+            <div class="agri-chart short"><canvas id="agriAllocationChart" role="img" aria-label="Répartition recommandée de l'investissement"></canvas></div>
+          </article>
+        </div>
+      </div>
+
+      <div class="agri-bottom">
+        <article class="agri-panel">
+          <div class="agri-panel-head"><div><h2>De la donnée à l’impact vérifiable</h2><p>Chaque investissement est relié à une source, un indicateur et une décision à suivre.</p></div><span class="agri-unit">chaîne de preuve</span></div>
+          <div class="agri-flow">
+            <div class="agri-flow-step"><span class="agri-flow-icon">🛰</span><b>Détecter</b><small>végétation, pluies, surfaces</small></div>
+            <div class="agri-flow-step"><span class="agri-flow-icon">◫</span><b>Réconcilier</b><small>champs, marchés, stockage</small></div>
+            <div class="agri-flow-step"><span class="agri-flow-icon">✦</span><b>Simuler</b><small>choc, investissement, scénario</small></div>
+            <div class="agri-flow-step"><span class="agri-flow-icon">✓</span><b>Mesurer</b><small>pertes évitées, accès, nutrition</small></div>
+          </div>
+          <div class="agri-outcome">
+            <h3 id="agriOutcomeTitle">Un portefeuille qui convertit les signaux en résultats.</h3>
+            <p id="agriOutcomeCopy">La simulation montre où chaque dollar peut réduire les pertes et améliorer l’accès à une alimentation diversifiée.</p>
+            <div class="agri-outcome-bar"><i id="agriOutcomeBar"></i></div>
+            <div class="agri-outcome-foot"><span id="agriOutcomeLeft">Confiance du modèle : —</span><span id="agriOutcomeRight">ROI social : —</span></div>
+          </div>
+        </article>
+        <div class="agri-stack">
+          <article class="agri-panel">
+            <div class="agri-panel-head"><div><h3>Indice de préparation à l’échelle</h3><p>Un radar lisible pour un comité d’investissement.</p></div><span class="agri-unit" id="agriReadinessScore">— / 100</span></div>
+            <div class="agri-chart short"><canvas id="agriReadinessChart" role="img" aria-label="Radar de préparation à l'échelle du système agroalimentaire"></canvas></div>
+          </article>
+          <article class="agri-panel">
+            <div class="agri-panel-head"><div><h3>Flux de décision en direct</h3><p>Des signaux compréhensibles, pas une boîte noire.</p></div><span class="agri-unit">traçable</span></div>
+            <div class="agri-events" id="agriEvents" aria-live="polite"></div>
+          </article>
+        </div>
+      </div>
+
+      <section class="agri-dock" id="agriDock" aria-live="polite" aria-label="Panneau décisionnel intégré">
+        <div class="agri-dock-inner" id="agriDockInner"></div>
+      </section>
+      <p class="agri-disclaimer">Démonstration de simulation : les résultats illustrent la capacité de modélisation et ne constituent pas des statistiques nationales observées. Les données de production, de marché, de nutrition et de terrain peuvent être connectées aux sources institutionnelles validées avant décision.</p>
+    </div>
+
+    <script id="agri-digital-twin-engine">
+      (function () {
+        const root = document.getElementById('agri');
+        if (!root || window.AgriTwin) return;
+
+        /* Stop the legacy document-level modal handlers at the boundary of this redesigned section.
+           All interactions below use one embedded decision dock, never stacked floating panels. */
+        root.addEventListener('click', function (event) { event.stopImmediatePropagation(); });
+        root.addEventListener('change', function (event) { event.stopImmediatePropagation(); });
+
+        const byId = id => document.getElementById(id);
+        const countries = {
+          'Togo': { production: .78, need: .76, jobs: .76, nutrition: .78, label: 'Togo' },
+          'Ghana': { production: 1.17, need: 1.12, jobs: 1.14, nutrition: 1.13, label: 'Ghana' },
+          'Sénégal': { production: .94, need: .93, jobs: .91, nutrition: .93, label: 'Sénégal' },
+          'Côte d’Ivoire': { production: 1.24, need: 1.2, jobs: 1.2, nutrition: 1.18, label: 'Côte d’Ivoire' }
+        };
+        const seasons = {
+          normal: { label: 'campagne normale', factor: 1, loss: 0, confidence: 93 },
+          dry: { label: 'sécheresse prolongée', factor: .83, loss: 2.1, confidence: 88 },
+          wet: { label: 'pluviométrie favorable', factor: 1.1, loss: -.4, confidence: 94 },
+          flood: { label: 'inondations localisées', factor: .91, loss: 1.25, confidence: 90 }
+        };
+        const strategies = {
+          balanced: { label: 'portefeuille équilibré', group: [1.02,1.01,1.04,1.06,1.03,1.02], allocation: [28,22,18,18,14], boost: .012, loss: .2 },
+          climate: { label: 'résilience climatique', group: [1.07,1.06,.98,1.03,1.02,.97], allocation: [38,18,12,16,16], boost: .019, loss: .45 },
+          nutrition: { label: 'nutrition d’abord', group: [.98,1.01,1.18,1.17,1.06,1.12], allocation: [17,14,31,22,16], boost: .018, loss: .15 },
+          market: { label: 'marchés & logistique', group: [1.02,1.02,1.08,1.06,1.04,1.08], allocation: [21,32,16,18,13], boost: .013, loss: 1.25 }
+        };
+        const state = { country: 'Togo', season: 'normal', capital: 24, strategy: 'balanced', charts: {}, running: false, events: [] };
+        const labels = ['Céréales','Racines & tubercules','Fruits & légumes','Légumineuses','Oléagineux','Aliments animaux'];
+        const needs = [1260,840,710,470,260,390];
+        const baseline = [1080,890,470,355,205,245];
+        const colors = ['#0a8758','#4fb78d','#ffbd51','#f07b5d','#8d72d2','#54bddd'];
+
+        function money(value) { return new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 }).format(Math.round(value)); }
+        function decimal(value, digits) { return new Intl.NumberFormat('fr-FR', { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value); }
+        function now() { return new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit', second:'2-digit' }); }
+        function clamp(value, min, max) { return Math.max(min, Math.min(max, value)); }
+
+        function model() {
+          const country = countries[state.country];
+          const season = seasons[state.season];
+          const strategy = strategies[state.strategy];
+          const capitalEffect = 1 + state.capital * (.0024 + strategy.boost / 100);
+          const loss = clamp(15.8 + season.loss - state.capital * .145 - strategy.loss, 5.1, 18.5);
+          const projected = baseline.map((value, index) => value * country.production * season.factor * capitalEffect * strategy.group[index] * ((100 - loss) / 84.2));
+          const localNeeds = needs.map(value => value * country.need);
+          const availability = projected.reduce((a,b) => a+b,0) / localNeeds.reduce((a,b) => a+b,0) * 100;
+          const baselineAvailability = baseline.reduce((a,b) => a+b,0) * country.production / localNeeds.reduce((a,b) => a+b,0) * 100;
+          const avoidedLoss = Math.max(.4, 15.8 + season.loss - loss);
+          const roi = 2.15 + state.capital * .041 + (state.strategy === 'market' ? .2 : state.strategy === 'nutrition' ? .14 : .08) - (state.season === 'dry' ? .17 : 0);
+          const value = state.capital * roi;
+          const jobs = (1650 + state.capital * 178 + Math.max(0, availability - 66) * 38) * country.jobs;
+          const nutrition = (1.12 + state.capital * .071 + Math.max(0, availability - 66) * .024 + (state.strategy === 'nutrition' ? .48 : 0)) * country.nutrition;
+          const confidence = clamp(season.confidence + (state.capital > 35 ? 1 : 0) + (state.strategy === 'balanced' ? 1 : 0), 82, 96);
+          const readiness = [clamp(54 + state.capital*.48 + (state.strategy==='climate'?8:0), 25, 96), clamp(57 + state.capital*.45 + (state.strategy==='market'?7:0),25,96), clamp(50 + state.capital*.58 + (state.strategy==='nutrition'?9:0),25,96), clamp(59 + state.capital*.43,25,96), clamp(confidence - 3,25,96)];
+          return { country, season, strategy, loss, projected, localNeeds, availability, baselineAvailability, avoidedLoss, roi, value, jobs, nutrition, confidence, readiness };
+        }
+
+        function chartFallback(canvas, type, data) {
+          const rect = canvas.getBoundingClientRect(); const width = Math.max(360, Math.round(rect.width || 660)); const height = Math.max(190, Math.round(rect.height || 260)); const ratio = window.devicePixelRatio || 1;
+          canvas.width = width * ratio; canvas.height = height * ratio; const c = canvas.getContext('2d'); c.setTransform(ratio,0,0,ratio,0,0); c.clearRect(0,0,width,height);
+          c.font = '10px Inter, system-ui'; c.fillStyle = '#6f8175'; c.strokeStyle = '#e1ebe4'; c.lineWidth = 1;
+          if (type === 'balance') {
+            const max = Math.max.apply(null, data.need) * 1.15, left = 122, top = 15, row = (height-32)/data.labels.length, usable = width-left-20;
+            data.labels.forEach((label,i) => { const y = top + i*row; c.fillStyle='#52695b'; c.textAlign='right'; c.fillText(label,left-8,y+row*.57); c.fillStyle='#e9f0eb'; c.fillRect(left,y+5,usable*(data.need[i]/max),Math.max(10,row*.38)); c.fillStyle=colors[i]; c.fillRect(left,y+5,usable*(data.supply[i]/max),Math.max(10,row*.38)); c.textAlign='left'; c.fillStyle='#416250'; c.fillText(Math.round(data.supply[i])+' / '+Math.round(data.need[i]),left+usable*(data.need[i]/max)+6,y+row*.57); });
+          } else if (type === 'donut') {
+            const total=data.values.reduce((a,b)=>a+b,0), cx=width*.36, cy=height*.5, r=Math.min(width,height)*.28; let start=-Math.PI/2; data.values.forEach((v,i)=>{const end=start+Math.PI*2*v/total;c.beginPath();c.strokeStyle=colors[i];c.lineWidth=r*.42;c.arc(cx,cy,r,start,end);c.stroke();start=end;});c.textAlign='center';c.fillStyle='#113e2b';c.font='bold 18px Inter';c.fillText('$'+data.capital+'M',cx,cy+6);c.textAlign='left';c.font='10px Inter';data.labels.forEach((x,i)=>{c.fillStyle=colors[i];c.fillRect(width*.63,25+i*25,9,9);c.fillStyle='#52695b';c.fillText(x+' '+data.values[i]+'%',width*.63+15,34+i*25);});
+          } else if (type === 'radar') {
+            const cx=width*.5,cy=height*.52,r=Math.min(width,height)*.32,n=data.values.length;c.strokeStyle='#cddfd3';for(let k=1;k<5;k++){c.beginPath();for(let i=0;i<n;i++){let a=-Math.PI/2+i*Math.PI*2/n,rr=r*k/4;let x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;i?c.lineTo(x,y):c.moveTo(x,y)}c.closePath();c.stroke()}c.beginPath();data.values.forEach((v,i)=>{let a=-Math.PI/2+i*Math.PI*2/n,rr=r*v/100;let x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr;i?c.lineTo(x,y):c.moveTo(x,y)});c.closePath();c.fillStyle='rgba(12,129,81,.19)';c.fill();c.strokeStyle='#0c8151';c.lineWidth=2;c.stroke();data.labels.forEach((x,i)=>{let a=-Math.PI/2+i*Math.PI*2/n,rr=r+17;c.fillStyle='#52695b';c.textAlign=Math.cos(a)>.25?'left':Math.cos(a)<-.25?'right':'center';c.fillText(x,cx+Math.cos(a)*rr,cy+Math.sin(a)*rr+3)})
+          } else {
+            const pad={l:36,r:15,t:15,b:25}, max=100, usableW=width-pad.l-pad.r, usableH=height-pad.t-pad.b;c.strokeStyle='#e1ebe4';for(let y=0;y<5;y++){let yy=pad.t+y*usableH/4;c.beginPath();c.moveTo(pad.l,yy);c.lineTo(width-pad.r,yy);c.stroke()}data.lines.forEach((line,l)=>{c.beginPath();c.strokeStyle=line.color;c.lineWidth=2.5;line.values.forEach((v,i)=>{let x=pad.l+i*usableW/(line.values.length-1),y=pad.t+usableH-(v/max)*usableH;i?c.lineTo(x,y):c.moveTo(x,y)});c.stroke();});data.labels.forEach((x,i)=>{c.textAlign='center';c.fillStyle='#718277';c.fillText(x,pad.l+i*usableW/(data.labels.length-1),height-7)});
+          }
+        }
+
+        function upsertChart(key, canvasId, kind, data) {
+          const canvas = byId(canvasId); if (!canvas) return;
+          if (!window.Chart) { chartFallback(canvas, kind, data); return; }
+          const Chart = window.Chart;
+          let config;
+          if (kind === 'balance') config = { type:'bar', data:{ labels:data.labels, datasets:[{ label:'Disponibilité projetée', data:data.supply, backgroundColor:colors, borderRadius:5, barPercentage:.7 },{ label:'Besoins nutritionnels', data:data.need, backgroundColor:'rgba(8,60,43,.02)', borderColor:'#1e6b4c', borderWidth:2, borderRadius:5, barPercentage:.7 }] }, options:{ indexAxis:'y', responsive:true, maintainAspectRatio:false, animation:{duration:620}, plugins:{ legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,font:{size:10}}}, tooltip:{callbacks:{label:ctx=>ctx.dataset.label+': '+Math.round(ctx.raw)+' kt/an'}} }, scales:{x:{beginAtZero:true,grid:{color:'#e7efe9'},ticks:{font:{size:10},callback:v=>v+' kt'}},y:{grid:{display:false},ticks:{font:{size:10}}}} } };
+          if (kind === 'line') config = { type:'line', data:{ labels:data.labels, datasets:[{ label:'Disponibilité', data:data.lines[0].values, borderColor:'#0c8151', backgroundColor:'rgba(12,129,81,.12)', tension:.38, fill:true, pointRadius:2.5, yAxisID:'y' },{ label:'Pertes post-récolte', data:data.lines[1].values, borderColor:'#ed795d', backgroundColor:'transparent', tension:.38, borderDash:[5,4], pointRadius:2.5, yAxisID:'y1' }] }, options:{responsive:true,maintainAspectRatio:false,animation:{duration:620},plugins:{legend:{position:'bottom',labels:{usePointStyle:true,boxWidth:8,font:{size:10}}}},scales:{y:{min:45,max:100,grid:{color:'#e7efe9'},ticks:{font:{size:10},callback:v=>v+'%'}},y1:{position:'right',min:0,max:20,grid:{drawOnChartArea:false},ticks:{font:{size:10},callback:v=>v+'%'}},x:{grid:{display:false},ticks:{font:{size:10}}}}} };
+          if (kind === 'donut') config = { type:'doughnut', data:{labels:data.labels,datasets:[{data:data.values,backgroundColor:colors.slice(0,data.values.length),borderWidth:3,borderColor:'#fff',hoverOffset:7}]}, options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'right',labels:{usePointStyle:true,boxWidth:8,padding:10,font:{size:10}}},tooltip:{callbacks:{label:ctx=>ctx.label+': '+ctx.raw+'% · '+decimal(data.capital*ctx.raw/100,1)+' M$'}}}} };
+          if (kind === 'radar') config = { type:'radar',data:{labels:data.labels,datasets:[{label:'Indice de préparation',data:data.values,backgroundColor:'rgba(12,129,81,.17)',borderColor:'#0c8151',borderWidth:2,pointBackgroundColor:'#d8f56b',pointBorderColor:'#0c8151',pointRadius:3}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{r:{min:0,max:100,ticks:{display:false,stepSize:25},angleLines:{color:'#d4e4d8'},grid:{color:'#d4e4d8'},pointLabels:{color:'#547060',font:{size:9,weight:'600'}}}}} };
+          if (!state.charts[key]) { state.charts[key] = new Chart(canvas.getContext('2d'), config); }
+          else { const chart = state.charts[key]; chart.data = config.data; chart.options = config.options; chart.update(); }
+        }
+
+        function renderEvents() {
+          const el = byId('agriEvents'); if (!el) return;
+          el.innerHTML = state.events.slice(0,5).map(event => '<div class="agri-event"><i></i><div><b>'+event.title+'</b><span>'+event.copy+'</span></div><time>'+event.time+'</time></div>').join('');
+        }
+        function event(title, copy) { state.events.unshift({ title:title, copy:copy, time:now() }); state.events = state.events.slice(0,5); renderEvents(); }
+        function setText(id, value) { const el=byId(id); if(el) el.textContent=value; }
+        function chartData(m) {
+          const availabilityLine = [m.baselineAvailability, m.baselineAvailability+4, m.baselineAvailability+8, m.availability-5, m.availability-2, m.availability].map(v=>clamp(v,40,99));
+          const lossLine = [15.8+m.season.loss,15.2+m.season.loss,14.5+m.season.loss,13.5+m.season.loss,m.loss+.7,m.loss].map(v=>clamp(v,3,20));
+          upsertChart('balance','agriBalanceChart','balance',{ labels:labels, supply:m.projected, need:m.localNeeds });
+          upsertChart('trajectory','agriTrajectoryChart','line',{ labels:['M0','M4','M8','M12','M18','M24'], lines:[{values:availabilityLine,color:'#0c8151'},{values:lossLine,color:'#ed795d'}] });
+          upsertChart('allocation','agriAllocationChart','donut',{ labels:['Eau & intrants','Stockage & froid','Cultures nutritives','Accès marché','Données & suivi'],values:m.strategy.allocation,capital:state.capital });
+          upsertChart('readiness','agriReadinessChart','radar',{ labels:['Données','Résilience','Nutrition','Marchés','Exécution'],values:m.readiness });
+        }
+        function render() {
+          const m=model();
+          const gap = Math.max(0, 100-m.availability);
+          setText('agriAvailability', decimal(m.availability,0)+'%'); setText('agriAvailabilitySub', gap ? decimal(gap,0)+' pts à combler pour les besoins annuels' : 'besoins annuels couverts'); setText('agriAvailabilityDelta','+'+decimal(m.availability-m.baselineAvailability,0)+' pts');
+          setText('agriLoss', decimal(m.avoidedLoss,1)+' pts'); setText('agriLossSub','taux projeté : '+decimal(m.loss,1)+'% des volumes'); setText('agriLossDelta','↓ '+decimal(m.avoidedLoss,1)+' pts');
+          setText('agriValue', decimal(m.value,0)+' M$'); setText('agriValueSub','effet de levier estimé : '+decimal(m.roi,1)+'×'); setText('agriValueDelta',decimal(m.roi,1)+'× retour');
+          setText('agriJobs', money(m.jobs)); setText('agriJobsSub','chaînes de valeur locales activées'); setText('agriJobsDelta','+ '+money(m.jobs*.12));
+          setText('agriNutrition', decimal(m.nutrition,1)+' M'); setText('agriNutritionSub','personnes avec accès diversifié'); setText('agriNutritionDelta','+ '+decimal(m.nutrition*.22,1)+' M');
+          setText('agriPortfolioTitle',state.capital+' M$'); setText('agriReadinessScore',decimal(m.readiness.reduce((a,b)=>a+b,0)/m.readiness.length,0)+' / 100');
+          setText('agriOutcomeTitle',''+m.country.label+' : '+m.strategy.label+' pour sécuriser '+decimal(m.availability,0)+'% des besoins.');
+          setText('agriOutcomeCopy','Avec '+state.capital+' M$, la simulation concentre le capital là où il réduit les pertes ('+decimal(m.avoidedLoss,1)+' points) et améliore le plus l’accès aux aliments nutritifs.');
+          setText('agriOutcomeLeft','Confiance du modèle : '+m.confidence+'%'); setText('agriOutcomeRight','ROI social : '+decimal(m.roi,1)+'×');
+          const bar=byId('agriOutcomeBar'); if(bar) requestAnimationFrame(()=>bar.style.width=clamp(m.availability,8,100)+'%');
+          setText('agriNorthLabel',state.season==='dry'?'stress hydrique élevé':state.season==='flood'?'exposition inondation':'suivi hydrique');
+          setText('agriCentralLabel','pertes '+decimal(m.loss,1)+'%'); setText('agriCoastLabel','couverture '+decimal(m.availability,0)+'%');
+          const range=byId('agriCapital'); if(range){const pct=(state.capital-5)/55*100;range.style.background='linear-gradient(90deg,#0c8151 0 '+pct+'%,#dbe9de '+pct+'% 100%)';}
+          setText('agriCapitalLabel',state.capital+' M$');
+          chartData(m);
+          return m;
+        }
+        function dock(title, kicker, html) {
+          const dockEl=byId('agriDock'), inner=byId('agriDockInner'); if(!dockEl||!inner)return;
+          inner.innerHTML='<div class="agri-dock-head"><div><div class="agri-dock-kicker">'+kicker+'</div><h3>'+title+'</h3></div><button class="agri-close-dock" type="button" onclick="AgriTwin.closeDock()" aria-label="Fermer le panneau">×</button></div>'+html;
+          dockEl.classList.add('show');
+        }
+        function zone(name, subject) {
+          const m=render(); event('Fiche territoire ouverte',name+' · '+subject+' contextualisé.');
+          dock('Fiche décisionnelle — '+name,'Signal territorial · aucune fenêtre superposée',
+            '<p><b>'+subject+'</b> est relié au portefeuille <b>'+m.strategy.label+'</b>. La plateforme rend la priorité lisible : source, hypothèse, levier, responsable et résultat attendu restent dans le même espace de travail.</p>'+
+            '<div class="agri-dock-grid"><div class="agri-dock-stat"><span>Priorité</span><b>'+ (subject.includes('hydrique')?'Élevée':'Ciblée') +'</b></div><div class="agri-dock-stat"><span>Action recommandée</span><b>'+ (subject.includes('Pertes')?'Stockage':'Paquet terrain') +'</b></div><div class="agri-dock-stat"><span>Indicateur de suivi</span><b>'+decimal(m.confidence,0)+'% confiance</b></div></div>'+
+            '<div class="agri-dock-actions"><button type="button" class="agri-minibtn main" onclick="AgriTwin.run()">Simuler ce paquet</button><button type="button" class="agri-minibtn" onclick="AgriTwin.brief()">Générer le brief exécutif</button></div>');
+        }
+        function brief() {
+          const m=render(); event('Brief exécutif préparé','Synthèse investissement, risque et résultat générée.');
+          dock('Brief exécutif prêt à partager','Comité gouvernemental & investisseurs',
+            '<p>Pour <b>'+m.country.label+'</b>, un portefeuille de <b>'+state.capital+' M$</b> orienté <b>'+m.strategy.label+'</b> projette une disponibilité de <b>'+decimal(m.availability,0)+'%</b>, '+decimal(m.avoidedLoss,1)+' points de pertes évitées et <b>'+decimal(m.nutrition,1)+' million(s)</b> de personnes mieux servies par une alimentation diversifiée.</p>'+
+            '<div class="agri-dock-grid"><div class="agri-dock-stat"><span>Valeur protégée</span><b>'+decimal(m.value,0)+' M$</b></div><div class="agri-dock-stat"><span>Effet de levier</span><b>'+decimal(m.roi,1)+'×</b></div><div class="agri-dock-stat"><span>Préparation</span><b>'+decimal(m.readiness.reduce((a,b)=>a+b,0)/m.readiness.length,0)+'/100</b></div></div>'+
+            '<div class="agri-dock-actions"><button type="button" class="agri-minibtn main" onclick="AgriTwin.download()">⇩ Télécharger le brief</button><button type="button" class="agri-minibtn" onclick="AgriTwin.closeDock()">Continuer l’exploration</button></div>');
+        }
+        function run() {
+          if(state.running)return; state.running=true; const button=byId('agriRunButton'); let p=0; if(button){button.disabled=true;button.textContent='Calcul du jumeau · 0%';} setText('agriStatus','Fusion des sources et recalcul en cours');
+          const timer=setInterval(()=>{p=Math.min(100,p+10);if(button)button.textContent='Calcul du jumeau · '+p+'%';if(p>=100){clearInterval(timer);state.running=false;if(button){button.disabled=false;button.textContent='✓ Impact simulé';setTimeout(()=>{if(!state.running)button.textContent='✦ Simuler l’impact';},1100);}const m=render();setText('agriStatus','Simulation complétée · modèle prêt à décider');event('Cycle de simulation terminé',m.country.label+' · '+m.strategy.label+' · '+m.confidence+'% confiance.');dock('Impact simulé : décision prête','Résultat du cycle · intégré dans la page', '<p>Le jumeau numérique a réconcilié le climat <b>'+m.season.label+'</b>, le portefeuille de <b>'+state.capital+' M$</b> et les six groupes alimentaires. Aucun panneau flottant : le résultat reste ancré dans le tableau de bord pour comparer, ajuster et décider.</p><div class="agri-dock-grid"><div class="agri-dock-stat"><span>Disponibilité</span><b>'+decimal(m.availability,0)+'%</b></div><div class="agri-dock-stat"><span>Pertes évitées</span><b>'+decimal(m.avoidedLoss,1)+' pts</b></div><div class="agri-dock-stat"><span>Valeur protégée</span><b>'+decimal(m.value,0)+' M$</b></div></div><div class="agri-dock-actions"><button type="button" class="agri-minibtn main" onclick="AgriTwin.brief()">Ouvrir le brief exécutif</button><button type="button" class="agri-minibtn" onclick="AgriTwin.closeDock()">Comparer un autre scénario</button></div>');}},105);
+        }
+        function download() {
+          const m=model(); const lines=['NUTRI.N°1 — Brief exécutif agroalimentaire','Pays : '+m.country.label,'Scénario : '+m.season.label,'Portefeuille : '+state.capital+' M$','Stratégie : '+m.strategy.label,'Disponibilité projetée : '+decimal(m.availability,0)+'%','Pertes évitées : '+decimal(m.avoidedLoss,1)+' points','Valeur économique protégée : '+decimal(m.value,0)+' M$','ROI estimé : '+decimal(m.roi,1)+'×','Confiance du modèle : '+m.confidence+'%','','Démonstration de simulation : hypothèses à valider avec les données institutionnelles.'].join('\n');
+          const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([lines],{type:'text/plain;charset=utf-8'})); a.download='nutri1-brief-agroalimentaire-'+state.country.toLowerCase().replace(/[^a-z]/g,'')+'.txt'; document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(a.href);event('Brief téléchargé','Paquet de décision prêt pour partage.');
+        }
+        function setCountry(value){ state.country=value; const m=render(); setText('agriStatus','Contexte '+m.country.label+' recalculé'); event('Contexte pays mis à jour',m.country.label+' · besoins et capacité ajustés.'); }
+        function setSeason(value){ state.season=value; const m=render(); setText('agriStatus','Scénario '+m.season.label+' recalculé'); event('Hypothèse climatique changée',m.season.label+' · exposition réévaluée.'); }
+        function setCapital(value){ state.capital=Number(value); render(); setText('agriStatus','Portefeuille ajusté · impact recalculé'); }
+        function strategy(value, button){ state.strategy=value; root.querySelectorAll('.agri-strategy').forEach(el=>el.classList.toggle('active',el===button)); const m=render(); setText('agriStatus','Priorité '+m.strategy.label+' activée'); event('Portefeuille repondéré',m.strategy.label+' · allocation adaptée.'); }
+        function closeDock(){ byId('agriDock')?.classList.remove('show'); }
+        function init(){
+          event('Connecteurs prêts','Satellite, registres, marché et nutrition réconciliés.'); event('Baseline chargée','Six groupes alimentaires et besoins annuels modélisés.'); render();
+          const observer=new MutationObserver(()=>{ if(root.classList.contains('on')) setTimeout(()=>{Object.values(state.charts).forEach(chart=>chart.resize&&chart.resize());render();},100); }); observer.observe(root,{attributes:true,attributeFilter:['class']});
+          setInterval(()=>{ if(root.classList.contains('on')) setText('agriClock','Cycle de données : '+now()); },1000);
+        }
+        window.AgriTwin={setCountry,setSeason,setCapital,strategy,run,zone,brief,download,closeDock};
+        if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(init,1050)); else setTimeout(init,1050);
+      })();
+    </script>
+  </section>
 
   <section id="wfp" class="view">
     <div class="hero institution-hero"><span class="pill">WFP • FOOD SECURITY & NUTRITION</span>
