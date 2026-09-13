@@ -7949,14 +7949,15 @@
     },
     available(code) {
       const c = this.manifest.countries.find(x => x.code === code);
-      return c ? [...new Set([...(c.official || []), ...(c.local || [])])] : ['en'];
+      return c ? [...new Set(['en', ...(c.official || []), ...(c.local || [])])] : ['en'];
     },
     rebuildLanguages(code) {
       const s = this.languageSelect(); if (!s) return;
       const langs = this.available(code), saved = localStorage.getItem('nutri_language');
       const c = this.manifest.countries.find(x => x.code === code);
       s.innerHTML = langs.map(x => `<option value="${x}">${this.manifest.languageLabels[x] || x}</option>`).join('');
-      s.value = langs.includes(saved) ? saved : (c?.default || langs[0]);
+      // Default platform language is English; a previously saved user choice is respected.
+      s.value = langs.includes(saved) ? saved : (langs.includes('en') ? 'en' : (c?.default || langs[0]));
       localStorage.setItem('nutri_language', s.value);
       if (window.NUTRI_I18N?.setLocale) window.NUTRI_I18N.setLocale(s.value, false);
     },
@@ -9014,7 +9015,8 @@
         langs.map(l => `<option value="${l}">${l}</option>`).join('');
       if (langs.includes(current)) s.value = current;
       else {
-        const official = countryLanguages[code].official[0]; s.value = official;
+        // Default platform language is English (falls back to the official language if unavailable).
+        s.value = langs.includes('English') ? 'English' : countryLanguages[code].official[0];
       }
       statusNear(s, `<span class="v48-lang-loading"><span class="v48-lang-dot"></span> ${countryLanguages[code].name}: language package loaded ✓</span>`);
     }
