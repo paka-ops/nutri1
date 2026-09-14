@@ -183,9 +183,44 @@ test("CSS selectors are scoped to health (no global selectors)", () => {
   const rules = css.replace(/\/\*[\s\S]*?\*\//g, "").match(/[^{}]+\{/g) || [];
   rules.forEach((r) => {
     const selector = r.slice(0, -1).trim();
-    if (selector.startsWith("@") || /^(0%|100%)$/.test(selector)) return;
+    if (
+      selector.startsWith("@") ||
+      selector.split(",").every((s) => /^(from|to|[0-9.]+%)$/.test(s.trim()))
+    )
+      return;
     selector
+      .replace(/\([^)]*\)/g, "")
       .split(",")
       .forEach((s) => assert.ok(s.trim().startsWith("#health"), s));
   });
+});
+
+// Prevent another visual redesign: the Agriculture design rules must be copied,
+// not approximated. Only the scope, class names and animation names may change.
+test("health reuses the exact Agriculture design rules under isolated names", () => {
+  const html = fs.readFileSync(
+    path.join(__dirname, "../../web/index.html"),
+    "utf8",
+  );
+  const source = html
+    .split('<style id="nutri-agri-v59-css">')[1]
+    .split("</style>")[0];
+  const expected = source
+    .replaceAll("#agri", "#health")
+    .replaceAll("ag-", "hg-")
+    .replaceAll("agc", "hgc")
+    .replace(/\bag(?=[A-Z])/g, "hg")
+    .replaceAll(
+      "AGRI INVESTMENT INTELLIGENCE",
+      "HEALTH INVESTMENT INTELLIGENCE",
+    )
+    .replaceAll("Ministry of Agriculture", "Ministry of Health");
+  const actual = fs
+    .readFileSync(
+      path.join(__dirname, "../../web/assets/health/cockpit.css"),
+      "utf8",
+    )
+    .split("/* BEGIN AGRI PARITY */")[1]
+    .split("/* END AGRI PARITY */")[0];
+  assert.equal(actual.trim(), expected.trim());
 });
