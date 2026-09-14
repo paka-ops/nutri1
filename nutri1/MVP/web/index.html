@@ -4893,8 +4893,8 @@
 #unicef .un-chip.lime { background: rgba(158,232,76,.13); border-color: rgba(158,232,76,.42); color: #d3f59a; }
 #unicef .un-chip.blue { background: rgba(28,171,226,.18); border-color: rgba(28,171,226,.46); color: #aee2ff; }
 #unicef .un-chip.light { background: var(--un-soft); border-color: #d5e6ee; color: #36586c; }
-#unicef .un-hero-actions { display: flex; flex-direction: column; gap: 9px; align-items: flex-end; }
-#unicef .un-filters { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+#unicef .un-hero-actions { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; justify-content: flex-end; }
+#unicef .un-filters { display: flex; gap: 8px; flex-wrap: wrap; width: 100%; justify-content: flex-end; }
 #unicef .un-filters label { display: flex; flex-direction: column; gap: 3px; font-size: 9.5px; letter-spacing: .12em; text-transform: uppercase; font-weight: 800; color: #8fc8de; }
 #unicef select.un-select {
   border: 1px solid rgba(255,255,255,.22); background: rgba(255,255,255,.09); color: #fff; border-radius: 10px;
@@ -17889,7 +17889,7 @@ else setTimeout(boot, 350);
       npv_low: 'Low case', npv_high: 'High case',
       required: 'Required', committed: 'Committed', gap: 'Financing gap',
       supply: 'Supply chain', chw: 'CHW workforce', cold: 'Cold chain', demand: 'Community demand', dataq: 'Data quality', finance_lbl: 'Financing',
-      baseline: 'Baseline', final: 'Final year',
+      baseline: 'Baseline', final: 'Final year', final_s: 'Final',
       ck_title: 'Child Nutrition Investment Cockpit',
       ck_sub: 'One surface, stacked intelligence layers — the national child-survival investment case',
       ck_present: '▶ Presentation', ck_export: '⇩ Export CSV', ck_close: '✕',
@@ -17965,7 +17965,7 @@ else setTimeout(boot, 350);
       npv_low: 'Cas bas', npv_high: 'Cas haut',
       required: 'Requis', committed: 'Engagé', gap: 'Déficit de financement',
       supply: 'Chaîne d’appro.', chw: 'ASC', cold: 'Chaîne du froid', demand: 'Demande communautaire', dataq: 'Qualité des données', finance_lbl: 'Financement',
-      baseline: 'Référence', final: 'Dernière année',
+      baseline: 'Référence', final: 'Dernière année', final_s: 'Fin',
       ck_title: 'Cockpit d’investissement nutrition de l’enfant',
       ck_sub: 'Une surface, des couches d’intelligence empilées — le dossier d’investissement national pour la survie de l’enfant',
       ck_present: '▶ Présentation', ck_export: '⇩ Export CSV', ck_close: '✕',
@@ -18423,15 +18423,24 @@ else setTimeout(boot, 350);
       }
       ctx.restore();
     }
+    function bottomPadFor(labels) {
+      var mx = 0; (labels || []).forEach(function (l) { mx = Math.max(mx, String(l).length); });
+      return mx <= 7 ? 34 : mx <= 11 ? 54 : 64;   // room for rotated tick labels — never clipped
+    }
     function axisLabels(ctx, labels, w, h, pad, every) {
-      ctx.save(); ctx.font = '10px Inter, system-ui, sans-serif'; ctx.fillStyle = '#7b8d99'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      ctx.save(); ctx.font = '10px Inter, system-ui, sans-serif';
       var n = labels.length, bw = (w - pad.l - pad.r) / n;
       every = every || 1;
+      var maxLen = 0; labels.forEach(function (l) { maxLen = Math.max(maxLen, String(l).length); });
+      var rot = maxLen > 7;
+      ctx.fillStyle = '#7b8d99';
       labels.forEach(function (l, i) {
         if (i % every) return;
         ctx.save();
         ctx.translate(pad.l + bw * (i + .5), h - pad.b + 6);
-        if (String(l).length > 9) { ctx.rotate(-Math.PI / 8); ctx.textAlign = 'right'; }
+        ctx.textBaseline = 'top';
+        if (rot) { ctx.rotate(-Math.PI / 4); ctx.textAlign = 'right'; }  // classic 45° tick: no interlacing
+        else { ctx.textAlign = 'center'; }
         ctx.fillText(String(l), 0, 0);
         ctx.restore();
       });
@@ -18472,7 +18481,7 @@ else setTimeout(boot, 350);
       var hits = [];
       anim(cv, function (e) {
         var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
-        var pad = { l: 46, r: 14, t: 16, b: 36 };
+        var pad = { l: 46, r: 14, t: 16, b: bottomPadFor(cfg.labels) };
         var series = cfg.series, n = cfg.labels.length, groups = series.length;
         var max = 0; series.forEach(function (s) { s.data.forEach(function (v) { max = Math.max(max, v); }); });
         max = max * 1.16 || 1;
@@ -18497,7 +18506,7 @@ else setTimeout(boot, 350);
       var hits = [];
       anim(cv, function (e) {
         var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
-        var pad = { l: 46, r: 14, t: 16, b: 36 };
+        var pad = { l: 46, r: 14, t: 16, b: bottomPadFor(cfg.labels) };
         var series = cfg.series, n = cfg.labels.length;
         var totals = cfg.labels.map(function (_, i) { return series.reduce(function (a, s) { return a + Math.max(0, s.data[i]); }, 0); });
         var max = Math.max.apply(null, totals.concat([1])) * 1.15;
@@ -18525,7 +18534,7 @@ else setTimeout(boot, 350);
       var hits = [];
       anim(cv, function (e) {
         var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
-        var pad = { l: 122, r: 52, t: 8, b: 8 };
+        var pad = { l: 136, r: 52, t: 8, b: 8 };
         var n = cfg.labels.length, row = (h - pad.t - pad.b) / n;
         var max = Math.max.apply(null, cfg.values.map(Math.abs).concat([1])) * 1.15;
         hits.length = 0;
@@ -18533,7 +18542,7 @@ else setTimeout(boot, 350);
           var v = cfg.values[i] * e, bw = (w - pad.l - pad.r) * Math.abs(v) / max;
           var y = pad.t + row * i + row * 0.2, bh = Math.max(3, row * 0.6);
           ctx.fillStyle = '#7b8d99'; ctx.font = '10.5px Inter, system-ui, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-          ctx.fillText(String(lab).slice(0, 24), pad.l - 8, y + bh / 2);
+          ctx.fillText(String(lab).slice(0, 23), pad.l - 8, y + bh / 2);
           ctx.fillStyle = cfg.colors ? cfg.colors[i] : '#1cabe2';
           rr(ctx, pad.l, y, Math.max(2, bw), bh, 5); ctx.fill();
           ctx.fillStyle = '#2c4356'; ctx.textAlign = 'left'; ctx.font = '700 10.5px Inter, system-ui, sans-serif';
@@ -18555,6 +18564,7 @@ else setTimeout(boot, 350);
         var min = cfg.zero ? 0 : Math.min.apply(null, vals.concat([0]));
         grid(ctx, w, h, pad, min, max, cfg.fmt, 4);
         var bw = (w - pad.l - pad.r) / Math.max(1, n - 1);
+        var ev = cfg.every || 1; while (ev < n - 1 && bw * ev < 34) ev++;   // auto-skip on narrow cards
         var X = function (i) { return pad.l + bw * i; };
         var Y = function (v) { return h - pad.b - (h - pad.t - pad.b) * ((v - min) / Math.max(1e-6, max - min)); };
         hits.length = 0;
@@ -18584,7 +18594,7 @@ else setTimeout(boot, 350);
             ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = s.color; ctx.lineWidth = 2; ctx.stroke();
           });
         });
-        axisLabels(ctx, cfg.labels, w, h, pad, cfg.every || 1);
+        axisLabels(ctx, cfg.labels, w, h, pad, ev);
         for (var i = 0; i < n; i++) {
           var html = '<b>' + esc(cfg.labels[i]) + '</b>';
           series.forEach(function (s) { html += '<br>' + esc(s.name) + ': ' + (cfg.fmt ? cfg.fmt(s.data[i]) : nf(s.data[i], 1)); });
@@ -18622,20 +18632,22 @@ else setTimeout(boot, 350);
       if (!cv) return;
       anim(cv, function (e) {
         var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
-        var cx = w / 2, cy = h * 0.62, R = Math.min(w / 2, h * 0.62) - 10;
+        var cx = w / 2, cy = h * 0.56, R = Math.min(w / 2, h * 0.56) - 14;
         function arc(a0, a1, color, lw) {
           ctx.beginPath(); ctx.arc(cx, cy, R, a0, a1);
-          ctx.strokeStyle = color; ctx.lineWidth = lw || 14; ctx.lineCap = 'round'; ctx.stroke();
+          ctx.strokeStyle = color; ctx.lineWidth = lw || 13; ctx.lineCap = 'round'; ctx.stroke();
         }
         var a = Math.PI, b = Math.PI * 2;
-        arc(a, b, 'rgba(3,26,38,.10)', 14);
+        arc(a, b, 'rgba(3,26,38,.10)', 13);
         var va = a + (b - a) * clamp(cfg.value, 0, 1) * e;
-        arc(a, va, cfg.color || '#1cabe2', 14);
+        arc(a, va, cfg.color || '#1cabe2', 13);
         ctx.fillStyle = '#04283a'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.font = '800 ' + Math.round(R * 0.42) + 'px Inter, system-ui, sans-serif';
+        ctx.font = '800 ' + Math.round(R * 0.34) + 'px Inter, system-ui, sans-serif';
         ctx.fillText(cfg.labelValue || '', cx, cy - 2);
-        ctx.font = '600 ' + Math.round(R * 0.15) + 'px Inter, system-ui, sans-serif';
-        ctx.fillStyle = '#6c8493'; ctx.fillText(cfg.label || '', cx, cy + Math.round(R * 0.32));
+        // the descriptive phrase sits BELOW the arc, never on the chart
+        ctx.font = '700 10.5px Inter, system-ui, sans-serif';
+        ctx.fillStyle = '#6c8493'; ctx.textBaseline = 'alphabetic';
+        ctx.fillText(cfg.label || '', cx, h - 5);
       }, 700);
     }
     function radar(cv, cfg) {
@@ -18687,7 +18699,7 @@ else setTimeout(boot, 350);
       var hits = [];
       anim(cv, function (e) {
         var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
-        var pad = { l: 46, r: 14, t: 18, b: 36 };
+        var pad = { l: 46, r: 14, t: 18, b: bottomPadFor(cfg.labels) };
         var labels = cfg.labels, values = cfg.values, n = labels.length;
         var run = [], cur = values[0];
         for (var i = 1; i < n; i++) { run.push(cur); cur -= Math.abs(values[i]); }
@@ -18769,7 +18781,7 @@ else setTimeout(boot, 350);
       var hits = [];
       anim(cv, function (e) {
         var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
-        var pad = { l: 150, r: 26, t: 10, b: 14 };
+        var pad = { l: 158, r: 26, t: 10, b: 14 };
         var items = cfg.items, n = items.length, row = (h - pad.t - pad.b) / Math.max(1, n);
         var maxD = 0;
         items.forEach(function (it) { maxD = Math.max(maxD, Math.abs(it.high - it.base), Math.abs(it.base - it.low)); });
@@ -18782,7 +18794,7 @@ else setTimeout(boot, 350);
         items.forEach(function (it, i) {
           var y = pad.t + row * i + row * 0.24, bh = Math.max(4, row * 0.52);
           ctx.fillStyle = '#44586a'; ctx.font = '10px Inter, system-ui, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
-          ctx.fillText(String(it.label).slice(0, 26), pad.l - 8, y + bh / 2);
+          ctx.fillText(String(it.label).slice(0, 25), pad.l - 8, y + bh / 2);
           var wLo = (w - pad.l - pad.r) / 2 * Math.abs(it.base - it.low) / maxD * e;
           var wHi = (w - pad.l - pad.r) / 2 * Math.abs(it.high - it.base) / maxD * e;
           ctx.fillStyle = '#e25563'; rr(ctx, cx - wLo, y, Math.max(2, wLo), bh, 4); ctx.fill();
@@ -18978,8 +18990,6 @@ else setTimeout(boot, 350);
       series: [{ name: t('cumulative'), data: sim.livesCum.map(function (v) { return v * 1e6; }), color: '#0e9d68' }, { name: t('annual'), data: sim.livesPr.map(function (v) { return v * 1e6; }), color: '#9ee84c' }]
     });
 
-    var lg4 = $('#uDecompLegend');
-    if (lg4) lg4.innerHTML = '<span>' + t('cases_averted') + '</span>';
     var stuntLevers = LEVERS.filter(function (l) { return l.stunt > 0; });
     var decompSeries = stuntLevers.map(function (l, i) {
       return {
@@ -18987,8 +18997,10 @@ else setTimeout(boot, 350);
         data: [Math.max(0, (sim.baseline.stunt - sim.last.stunt) * (l.stunt / stuntLevers.reduce(function (a, b) { return a + b.stunt; }, 0))) * sim.baseline.u5 * 10] // thousands
       };
     });
+    var lg4 = $('#uDecompLegend');
+    if (lg4) lg4.innerHTML = decompSeries.map(function (s) { return '<span><i style="background:' + s.color + '"></i>' + esc(s.name) + '</span>'; }).join('');
     CH.stacked($('#uDecomp'), {
-      labels: [t('final')], tipHost: plotHost($('#uDecomp')), fmt: function (v) { return nf(v, 0) + 'k'; },
+      labels: [t('final_s')], tipHost: plotHost($('#uDecomp')), fmt: function (v) { return nf(v, 0) + 'k'; },
       series: decompSeries
     });
 
@@ -19044,7 +19056,7 @@ else setTimeout(boot, 350);
     });
     var remaining = sim.last.stunt;
     CH.waterfall($('#uWater'), {
-      labels: stuntLevers2.map(function (l) { return t('lv_' + l.k).split(' ')[0]; }).concat([t('final')]),
+      labels: stageChartLabels(),
       values: [sim.baseline.stunt].concat(waterVals).concat([remaining]),
       fmt: function (v) { return nf(v, 1) + '%'; }, lastColor: '#0e9d68'
     });
@@ -19069,7 +19081,7 @@ else setTimeout(boot, 350);
     if (lgh) lgh.innerHTML = '<span>' + (lang() === 'fr' ? 'Faible' : 'Low') + '</span><i style="width:60px;height:10px;border-radius:99px;background:linear-gradient(90deg,#e9f7fb,#7fd8ff,#f2c94c,#ef8b2c,#e25563)"></i><span>' + (lang() === 'fr' ? 'Élevé' : 'High') + '</span>';
     CH.heatmap($('#uHeat'), {
       rows: reg.map(function (r) { return r.name; }),
-      cols: [t('stunting'), t('wasting'), t('anaemia'), lang() === 'fr' ? 'Accès' : 'Access', (lang() === 'fr' ? 'Déf. couverture' : 'Coverage gap')],
+      cols: heatCols(),
       values: reg.map(function (r) { return [r.stunt / 50, r.wast / 16, r.anem / 80, 1 - r.access, r.covGap]; })
     });
 
@@ -19177,6 +19189,9 @@ else setTimeout(boot, 350);
       });
     }
   }
+  function chartIndLabels() { return lang() === 'fr' ? ['Retard', 'Émaciation', 'Anémie', 'Poids naiss.'] : ['Stunting', 'Wasting', 'Anaemia', 'Low birth wt.']; }
+  function stageChartLabels() { return lang() === 'fr' ? ['Vit. A', 'ANJE', 'MMN', 'Matern.', 'École', 'EAH', 'Fin'] : ['Vit. A', 'IYCF', 'MNP', 'Maternal', 'School', 'WASH', 'Final']; }
+  function heatCols() { return lang() === 'fr' ? ['Retard', 'Émac.', 'Anémie', 'Accès', 'Couv.'] : ['Stunt.', 'Wast.', 'Anaemia', 'Access', 'Gap']; }
   var UN_PALETTE = ['#1cabe2', '#0e9d68', '#f2c94c', '#8b5cf6', '#ef8b2c', '#e25563', '#39c0ed', '#9ee84c', '#0a7ca4'];
 
 
@@ -19336,13 +19351,13 @@ else setTimeout(boot, 350);
       requestAnimationFrame(function () {
         if (layer === 'overview') {
           CH.lines(cv('ckTraj'), { labels: years, tipHost: host('ckTraj'), zero: true, every: sim.horizon > 10 ? 2 : 1, marker: sim.targetStunt, markerLabel: 'WHO ' + nf(sim.targetStunt, 1) + '%', fmt: function (v) { return nf(v, 1) + '%'; }, series: [{ name: t('sq'), data: sim.stuntSq, color: '#7fd8ff', dashed: true }, { name: t('prog'), data: sim.stuntPr, color: '#9ee84c', fill: true }] });
-          CH.bars(cv('ckPrev'), { labels: [t('stunting'), t('wasting'), t('anaemia'), t('lbw')], tipHost: host('ckPrev'), fmt: function (v) { return nf(v, 1) + '%'; }, series: [{ name: t('out_now'), data: [sim.baseline.stunt, sim.baseline.wast, sim.baseline.anem, sim.baseline.lbw], color: '#e25563' }, { name: t('out_prog'), data: [sim.last.stunt, sim.last.wast, sim.last.anem, sim.last.lbw], color: '#9ee84c' }] });
+          CH.bars(cv('ckPrev'), { labels: chartIndLabels(), tipHost: host('ckPrev'), fmt: function (v) { return nf(v, 1) + '%'; }, series: [{ name: t('out_now'), data: [sim.baseline.stunt, sim.baseline.wast, sim.baseline.anem, sim.baseline.lbw], color: '#e25563' }, { name: t('out_prog'), data: [sim.last.stunt, sim.last.wast, sim.last.anem, sim.last.lbw], color: '#9ee84c' }] });
         } else if (layer === 'outcomes') {
           CH.bars(cv('ckLives'), { labels: years, tipHost: host('ckLives'), fmt: function (v) { return nf(v, 0); }, series: [{ name: t('cumulative'), data: sim.livesCum.map(function (v) { return v * 1e6; }), color: '#9ee84c' }, { name: t('annual'), data: sim.livesPr.map(function (v) { return v * 1e6; }), color: '#7fd8ff' }] });
           var stuntLevers = LEVERS.filter(function (l) { return l.stunt > 0; });
           var sum = stuntLevers.reduce(function (a, b) { return a + b.stunt; }, 0);
           CH.waterfall(cv('ckWater'), {
-            labels: stuntLevers.map(function (l) { return t('lv_' + l.k).split(' ')[0]; }).concat([t('final')]),
+            labels: stageChartLabels(),
             values: [sim.baseline.stunt].concat(stuntLevers.map(function (l) { return (sim.baseline.stunt - sim.last.stunt) * (l.stunt / sum); })).concat([sim.last.stunt]),
             fmt: function (v) { return nf(v, 1) + '%'; }, lastColor: '#9ee84c'
           });
@@ -19372,7 +19387,7 @@ else setTimeout(boot, 350);
           var reg = regions();
           CH.heatmap(cv('ckHeat'), {
             rows: reg.map(function (r) { return r.name; }),
-            cols: [t('stunting'), t('wasting'), t('anaemia'), lang() === 'fr' ? 'Accès' : 'Access', (lang() === 'fr' ? 'Déf. couverture' : 'Coverage gap')],
+            cols: heatCols(),
             values: reg.map(function (r) { return [r.stunt / 50, r.wast / 16, r.anem / 80, 1 - r.access, r.covGap]; })
           });
         } else if (layer === 'equity') {
