@@ -9584,7 +9584,7 @@
 
     /* ---------- MINISTRY OF HEALTH ---------- */
     function healthCharts() {
-      const view = $('#health'); if (!view) return;
+      const view = $('#health'); if (!view || view.dataset.healthCockpit) return;
       const chartData = [
         ['Children — double burden', [34, 29, 24, 20, 18, 16], ['0–6m', '6–24m', '24–59m', '5–12y', '12–18y', 'Adults']],
         ['Pregnant & lactating women', [18, 21, 19, 23, 20, 17], ['Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2']],
@@ -10076,7 +10076,7 @@
     }
 
     function health() {
-      const v = $('#health'); if (!v) return;
+      const v = $('#health'); if (!v || v.dataset.healthCockpit) return;
       ensureLive(v, 'MINISTRY OF HEALTH • LIVE NUTRITION & NCD INTELLIGENCE');
       addKpis(v, [
         ['Children monitored', '24,860', 'active records'],
