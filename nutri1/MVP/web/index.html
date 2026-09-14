@@ -6633,114 +6633,19 @@
     </div>
   </section>
 
-  <section id="health" class="view">
-    <div class="card">
-      <h2 data-i18n="ui.ministry_of_health_command_center">🏥 Ministry of Health Command Center</h2>
-      <div class="grid">
-        <div class="card">Children<div class="metric">—</div><span class="pill" data-i18n="ui.double_burden">double
-            burden</span></div>
-        <div class="card">Pregnant women<div class="metric">—</div>
-        </div>
-        <div class="card">Lactating women<div class="metric">—</div>
-        </div>
-        <div class="card">NCDs<div class="metric">—</div>
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="card">
-          <h3 data-i18n="ui.children_double_burden">Children — double burden</h3>
-          <div class="chart"><canvas id="hChildren"></canvas></div>
-        </div>
-        <div class="card">
-          <h3 data-i18n="ui.pregnant_lactating_women">Pregnant & lactating women</h3>
-          <div class="chart"><canvas id="hWomen"></canvas></div>
-        </div>
-      </div>
-      <div class="grid2">
-        <div class="card">
-          <h3 data-i18n="ui.ncd_trends">NCD trends</h3>
-          <div class="chart"><canvas id="hNcd"></canvas></div>
-        </div>
-        <div class="card">
-          <h3 data-i18n="ui.health_gis">Health GIS</h3>
-          <div class="map"><span class="pin" style="left:15%;top:40%" data-i18n="ui.region_a">Region A</span><span
-              class="pin" style="left:48%;top:23%" data-i18n="ui.region_b">Region B</span><span class="pin"
-              style="left:70%;top:55%" data-i18n="ui.region_c">Region C</span></div>
-        </div>
-      </div>
-      <div class="card">
-        <h3 data-i18n="ui.priority_ncd_modules">Priority NCD modules</h3>
-        <div class="grid3">
-          <div data-i18n="ui.diabetes_2">🩸 Diabetes</div>
-          <div data-i18n="ui.hypertension_2">❤️ Hypertension</div>
-          <div data-i18n="ui.cardiovascular_disease_2">🫀 Cardiovascular disease</div>
-          <div data-i18n="ui.cancers">🎗 Cancers</div>
-          <div data-i18n="ui.kidney_disease_2">🫘 Kidney disease</div>
-          <div data-i18n="ui.other_priority_ncds">➕ Other priority NCDs</div>
-        </div>
-      </div>
+  <section id="health" class="view" data-health-cockpit="1" aria-label="Health & Prevention Investment Lab">
+    <!-- Health-only assets. No shared chart defaults, navigation or other views are changed. -->
+    <link rel="stylesheet" href="assets/health/cockpit.css">
+    <div class="hc-shell" id="hcShell" lang="fr" translate="no">
+      <h2>Centre de décision Santé &amp; Prévention</h2>
+      <p>Chargement du laboratoire de simulation NUTRI.N°1…</p>
+      <noscript>Activez JavaScript pour explorer les projections. Cette démonstration utilise exclusivement des données fictives.</noscript>
     </div>
-    <div class="card institutional-module">
-      <div class="section-head">
-        <div>
-          <h2>🩺 Nutrition → NCD Intelligence</h2>
-          <p class="muted">Population and service intelligence focused on diet-related noncommunicable diseases.</p>
-        </div><span class="pill">MINISTRY OF HEALTH</span>
-      </div>
-      <div class="module-grid">
-        <div><b>🩸 Diabetes Prevention</b><span>Food quality, physical activity, BMI, glucose/HbA1c where available,
-            follow-up and trends.</span></div>
-        <div><b>❤️ Hypertension & CVD</b><span>Blood pressure, sodium exposure, weight, activity and cardiovascular risk
-            factors.</span></div>
-        <div><b>🍬 Sugar Intelligence</b><span>Estimated free-sugar exposure, sweetened beverages and population
-            trends.</span></div>
-        <div><b>🧂 Sodium Intelligence</b><span>Estimated sodium exposure, food sources and reduction-program
-            monitoring.</span></div>
-        <div><b>⚖️ Obesity Observatory</b><span>Overweight, obesity, waist circumference, dietary patterns and
-            activity.</span></div>
-        <div><b>📱 Screening & Follow-up</b><span>Campaign collection, professional review, referral and longitudinal
-            monitoring.</span></div>
-        <div><b>🚨 NCD Early Warning</b><span>Emerging dietary and metabolic risk signals for investigation and
-            public-health action.</span></div>
-        <div><b>📈 Intervention Impact</b><span>Baseline → intervention → follow-up → outcome reporting for prevention
-            programs.</span></div>
-      </div>
-    </div>
-    <div class="card">
-      <h3>📦 Ministry of Health Data Products</h3>
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Primary output</th>
-          <th>Decision use</th>
-        </tr>
-        <tr>
-          <td>National Nutrition & NCD Observatory</td>
-          <td>Risk-factor trends + GIS</td>
-          <td>National planning</td>
-        </tr>
-        <tr>
-          <td>Diabetes & Hypertension Monitor</td>
-          <td>Control/follow-up indicators</td>
-          <td>Care improvement</td>
-        </tr>
-        <tr>
-          <td>Food-NCD Risk Engine</td>
-          <td>Dietary risk profiles</td>
-          <td>Prevention targeting</td>
-        </tr>
-        <tr>
-          <td>Screening Campaign Platform</td>
-          <td>Aggregated screening intelligence</td>
-          <td>Campaign management</td>
-        </tr>
-        <tr>
-          <td>Prevention Impact Engine</td>
-          <td>Before/after outcomes</td>
-          <td>Program evaluation</td>
-        </tr>
-      </table>
-    </div>
+    <!-- Satisfy old health decorators without exposing duplicate toolbars. -->
+    <span class="v46-live" hidden></span><div class="v46-kpis" hidden></div>
+    <div data-v46-filter hidden></div><div data-v43-health-filter hidden></div><div class="v44-filter" hidden></div>
+    <script src="assets/health/model.js" defer></script>
+    <script src="assets/health/cockpit.js" defer></script>
   </section>
 
   <section id="agri" class="view">
@@ -8476,7 +8381,7 @@
 
     /* ---------- MINISTRY OF HEALTH ---------- */
     function healthCharts() {
-      const view = $('#health'); if (!view) return;
+      const view = $('#health'); if (!view || view.dataset.healthCockpit) return;
       const chartData = [
         ['Children — double burden', [34, 29, 24, 20, 18, 16], ['0–6m', '6–24m', '24–59m', '5–12y', '12–18y', 'Adults']],
         ['Pregnant & lactating women', [18, 21, 19, 23, 20, 17], ['Q1', 'Q2', 'Q3', 'Q4', 'Q1', 'Q2']],
@@ -8968,7 +8873,7 @@
     }
 
     function health() {
-      const v = $('#health'); if (!v) return;
+      const v = $('#health'); if (!v || v.dataset.healthCockpit) return;
       ensureLive(v, 'MINISTRY OF HEALTH • LIVE NUTRITION & NCD INTELLIGENCE');
       addKpis(v, [
         ['Children monitored', '24,860', 'active records'],
