@@ -4562,6 +4562,276 @@
 @media (max-width:600px) { #marketplace .mk-kpis, #marketplace .mk-donut-grid { grid-template-columns:1fr; } #marketplace .mk-analysis .mk-goal-grid { grid-template-columns:1fr 1fr; } #marketplace .mk-pipe-step { min-width:64px; } #marketplace .mk-cov { grid-template-columns:96px 1fr 44px; } }
 @media (prefers-reduced-motion:reduce) { #marketplace .mk-led.on, #marketplace .mk-led.busy, #marketplace .mk-status-pill.running i, #marketplace .mk-demo-dot, #marketplace .mk-alertbtn.has b { animation:none !important; } }
   </style>
+<style id="nutri-health-v60-css">/* ============================================================
+   NUTRI.N°1 V60 — HEALTH INVESTMENT INTELLIGENCE
+   Self-contained styles, strictly scoped to #health and #healthCockpit.
+   Nothing outside the Ministry of Health module is restyled.
+   ============================================================ */
+
+/* ---------- legacy de-confliction: one simulation surface, no stacked panels ---------- */
+#health [hidden] { display: none !important; }
+#health .v38-kpis, #health .v38-controls, #health .v38-chart-wrap,
+#health .v46-live, #health .v46-kpis, #health .v46-gov-toolbar, #health .v46-gov-card,
+#health .v44-livebar, #health .v43-live-stage,
+#health .v47-research-live, #health .v47-research-filter, #health .v47-research-grid,
+#health .hl-decoy { display: none !important; }
+#health .v51-actionable:hover, #health .v53-actionable:hover, #health .v54-action:hover { transform: none; box-shadow: none; border-color: var(--line) !important; }
+#health .v53-actionable:after { content: none !important; }
+
+#health, #healthCockpit { --hl-ink: #03121e; --hl-deep: #07293f; --hl-teal: #0a7d94; --hl-aqua: #46e0c8; --hl-blue: #3b82f6; --hl-gold: #f2c94c; --hl-red: #e4576b; --hl-violet: #8b5cf6; --hl-orange: #f0913f; --hl-line: #dcebf1; --hl-soft: #f2f9fc; --hl-radius: 18px; }
+
+#health .hl-shell { display: flex; flex-direction: column; gap: 16px; }
+
+/* ================= HERO ================= */
+#health .hl-hero {
+  position: relative; overflow: hidden; border-radius: 24px; padding: 26px 28px 22px;
+  color: #e6f9ff; border: 1px solid rgba(70, 224, 200, .18);
+  background: radial-gradient(1100px 380px at 8% -30%, rgba(70, 224, 200, .2), transparent 60%),
+              radial-gradient(760px 320px at 96% 0%, rgba(59, 130, 246, .2), transparent 62%),
+              linear-gradient(140deg, #02101c 0%, var(--hl-deep) 46%, #0a7d94 118%);
+  box-shadow: 0 26px 70px rgba(3, 34, 51, .32);
+}
+#health .hl-hero:before {
+  content: ''; position: absolute; inset: 0; opacity: .5; pointer-events: none;
+  background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size: 46px 46px; mask-image: radial-gradient(70% 80% at 20% 0%, #000 20%, transparent 75%);
+}
+#health .hl-hero-top { position: relative; display: flex; flex-wrap: wrap; gap: 18px; align-items: flex-start; justify-content: space-between; }
+#health .hl-kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 800; color: var(--hl-aqua); }
+#health .hl-kicker i { width: 7px; height: 7px; border-radius: 99px; background: var(--hl-aqua); box-shadow: 0 0 0 4px rgba(70,224,200,.16); animation: hlPulse 2.4s infinite; }
+@keyframes hlPulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(.72); opacity: .55 } }
+#health .hl-hero h2 { margin: 10px 0 8px; font-size: clamp(23px, 2.5vw, 33px); line-height: 1.12; letter-spacing: -.035em; color: #fff; }
+#health .hl-hero h2 b { color: var(--hl-aqua); font-weight: 900; }
+#health .hl-hero p { margin: 0; max-width: 830px; color: #bfe6f2; line-height: 1.6; font-size: 13.5px; }
+#health .hl-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
+#health .hl-chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 99px; font-size: 11px; font-weight: 650;
+  background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); color: #dbf6fd; backdrop-filter: blur(4px);
+}
+#health .hl-chip.aqua { background: rgba(70,224,200,.14); border-color: rgba(70,224,200,.4); color: var(--hl-aqua); }
+#health .hl-chip.blue { background: rgba(59,130,246,.16); border-color: rgba(59,130,246,.42); color: #bed8ff; }
+#health .hl-hero-actions { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; justify-content: flex-end; }
+#health .hl-btn {
+  border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: #e6f9ff;
+  border-radius: 12px; padding: 11px 15px; font-size: 12.5px; font-weight: 750; cursor: pointer; transition: transform .16s, box-shadow .16s, background .16s;
+  display: inline-flex; align-items: center; gap: 7px;
+}
+#health .hl-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.15); box-shadow: 0 12px 26px rgba(0,0,0,.24) }
+#health .hl-btn.primary { background: linear-gradient(120deg, var(--hl-aqua), #2ec7e8); color: #032023; border-color: transparent; box-shadow: 0 14px 30px rgba(70,224,200,.22); }
+#health .hl-btn.primary:hover { box-shadow: 0 18px 38px rgba(70,224,200,.34) }
+#health .hl-btn.ghost { background: transparent; }
+#health .hl-hero-stats { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-top: 22px; }
+#health .hl-hero-stat { padding: 14px 15px; border-radius: 15px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.11); }
+#health .hl-hero-stat small { display: block; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #93cfe0; font-weight: 700 }
+#health .hl-hero-stat b { display: block; font-size: clamp(19px, 1.8vw, 25px); margin-top: 6px; color: #fff; letter-spacing: -.03em }
+#health .hl-hero-stat span { font-size: 11px; color: #a8d9e6 }
+#health .hl-hero-stat.good b { color: var(--hl-aqua) }
+
+/* ================= KPI STRIP ================= */
+#health .hl-kpis { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px; }
+#health .hl-kpi {
+  position: relative; background: #fff; border: 1px solid var(--hl-line); border-radius: 16px; padding: 13px 14px 8px;
+  box-shadow: 0 10px 26px rgba(7, 41, 63, .06); overflow: hidden;
+}
+#health .hl-kpi:before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--hl-teal), var(--hl-aqua)); }
+#health .hl-kpi.warn:before { background: linear-gradient(180deg, var(--hl-orange), #ffd88a) }
+#health .hl-kpi.bad:before { background: linear-gradient(180deg, var(--hl-red), #ffa2ad) }
+#health .hl-kpi.info:before { background: linear-gradient(180deg, var(--hl-blue), #9ac4ff) }
+#health .hl-kpi small { display: block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 750; min-height: 24px }
+#health .hl-kpi b { display: block; font-size: 22px; letter-spacing: -.04em; margin: 3px 0 2px; color: var(--text) }
+#health .hl-kpi .hl-kpi-delta { font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 99px; }
+#health .hl-kpi .hl-kpi-delta.up { color: #0b6b62; background: #e4f8f3 }
+#health .hl-kpi .hl-kpi-delta.down { color: #a3272f; background: #fdecec }
+#health .hl-kpi .hl-kpi-delta.flat { color: #4b5a60; background: #edf3f5 }
+#health .hl-kpi canvas { display: block; width: 100%; height: 34px; margin-top: 4px }
+
+/* ================= CONTROLS / LEVERS ================= */
+#health .hl-deck { border-radius: 20px; padding: 20px; color: #e8fbff; background: linear-gradient(150deg, #04202f1f, #07293f 55%, #0a5f78 130%), linear-gradient(#07293f,#07293f); border: 1px solid #0d3b52; box-shadow: 0 18px 44px rgba(7,41,63,.22); }
+#health .hl-deck-head { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 14px }
+#health .hl-deck-head h3 { margin: 0; font-size: 17px; color: #fff; letter-spacing: -.02em }
+#health .hl-deck-head p { margin: 4px 0 0; color: #9ed2e2; font-size: 12px }
+#health .hl-presets { display: flex; flex-wrap: wrap; gap: 7px }
+#health .hl-preset {
+  border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.06); color: #dbf6fd; border-radius: 99px;
+  padding: 7px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: all .15s;
+}
+#health .hl-preset:hover { background: rgba(255,255,255,.14); transform: translateY(-1px) }
+#health .hl-preset.on { background: var(--hl-aqua); color: #032023; border-color: transparent }
+#health .hl-levers { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 13px }
+#health .hl-lever { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); border-radius: 14px; padding: 12px 13px }
+#health .hl-lever-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px }
+#health .hl-lever-top b { font-size: 12.5px; color: #f2fdff; font-weight: 750 }
+#health .hl-lever-top span { font-size: 12px; font-weight: 800; color: var(--hl-aqua); font-variant-numeric: tabular-nums }
+#health .hl-lever small { display: block; color: #8fc3d4; font-size: 10.5px; margin-top: 3px; line-height: 1.45; min-height: 30px }
+#health input[type="range"].hl-range { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; margin: 6px 0 0; cursor: pointer }
+#health input[type="range"].hl-range::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: linear-gradient(90deg, var(--hl-aqua) var(--hl-fill, 0%), rgba(255,255,255,.16) var(--hl-fill, 0%)) }
+#health input[type="range"].hl-range::-webkit-slider-thumb { -webkit-appearance: none; width: 17px; height: 17px; margin-top: -5.5px; border-radius: 99px; background: #fff; border: 3px solid var(--hl-teal); box-shadow: 0 4px 12px rgba(0,0,0,.35) }
+#health input[type="range"].hl-range::-moz-range-track { height: 6px; border-radius: 99px; background: rgba(255,255,255,.16) }
+#health input[type="range"].hl-range::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--hl-aqua) }
+#health input[type="range"].hl-range::-moz-range-thumb { width: 15px; height: 15px; border-radius: 99px; background: #fff; border: 3px solid var(--hl-teal) }
+#health .hl-deck-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 15px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.09) }
+#health .hl-seg { display: inline-flex; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 11px; padding: 3px; gap: 3px }
+#health .hl-seg button { border: 0; background: transparent; color: #cfeef8; border-radius: 8px; padding: 7px 12px; font-size: 11.5px; font-weight: 750; cursor: pointer }
+#health .hl-seg button.on { background: rgba(70,224,200,.9); color: #032023 }
+#health .hl-deck-readout { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; font-size: 12px; color: #c9ecf6 }
+#health .hl-deck-readout b { color: #fff; font-size: 15px; font-variant-numeric: tabular-nums }
+
+/* ================= PIPELINE ================= */
+#health .hl-pipe { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 9px }
+#health .hl-step { position: relative; background: #fff; border: 1px solid var(--hl-line); border-radius: 13px; padding: 11px 12px; overflow: hidden }
+#health .hl-step i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 99px; background: #edf4f8; color: #4c616d; font-style: normal; font-size: 11px; font-weight: 800; }
+#health .hl-step b { display: block; font-size: 11.5px; margin: 7px 0 3px; color: var(--text) }
+#health .hl-step small { color: var(--muted); font-size: 10.5px }
+#health .hl-step.done i { background: #dff7f1; color: #0b6b62 }
+#health .hl-step.run i { background: var(--hl-aqua); color: #032023; animation: hlPulse 1.1s infinite }
+#health .hl-step.done:after { content: ''; position: absolute; inset: auto 0 0 0; height: 3px; background: linear-gradient(90deg, var(--hl-teal), var(--hl-aqua)) }
+
+/* ================= GRIDS / CARDS ================= */
+#health .hl-grid { display: grid; gap: 13px }
+#health .hl-grid.c2 { grid-template-columns: repeat(2, minmax(0,1fr)) }
+#health .hl-grid.c3 { grid-template-columns: repeat(3, minmax(0,1fr)) }
+#health .hl-grid.c4 { grid-template-columns: repeat(4, minmax(0,1fr)) }
+#health .hl-grid.c2-1 { grid-template-columns: 2fr 1fr }
+#health .hl-card { background: #fff; border: 1px solid var(--hl-line); border-radius: var(--hl-radius); padding: 16px; box-shadow: 0 12px 30px rgba(7,41,63,.055); transition: transform .18s, box-shadow .18s }
+#health .hl-card:hover { transform: translateY(-2px); box-shadow: 0 18px 40px rgba(7,41,63,.09) }
+#health .hl-card-head { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; margin-bottom: 10px }
+#health .hl-card-head h3 { margin: 2px 0 3px; font-size: 14px; letter-spacing: -.015em; color: var(--text) }
+#health .hl-card-sub { margin: 0; font-size: 11px; color: var(--muted); line-height: 1.5 }
+#health .hl-card-kicker { font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--hl-teal); font-weight: 800 }
+#health .hl-open { border: 1px solid var(--hl-line); background: var(--hl-soft); color: var(--hl-teal); width: 30px; height: 30px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 800; transition: all .15s; flex: 0 0 auto }
+#health .hl-open:hover { background: var(--hl-aqua); color: #032023; border-color: transparent }
+#health .hl-plot { position: relative; height: 220px }
+#health .hl-plot.h180 { height: 180px } #health .hl-plot.h200 { height: 200px } #health .hl-plot.h240 { height: 240px }
+#health .hl-plot.h260 { height: 260px } #health .hl-plot.h300 { height: 300px }
+#health .hl-plot canvas { display: block; width: 100%; height: 100% }
+#health .hl-tip { position: absolute; pointer-events: none; z-index: 3; transform: translate(-50%, -115%); background: var(--hl-ink); color: #e6f9ff; border-radius: 10px; padding: 8px 10px; font-size: 11px; box-shadow: 0 12px 30px rgba(0,0,0,.35); opacity: 0; transition: opacity .12s; white-space: nowrap; border: 1px solid rgba(70,224,200,.35) }
+#health .hl-legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 9px; font-size: 11px; color: #51656f }
+#health .hl-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 5px; vertical-align: -1px }
+#health .hl-badge { display: inline-block; padding: 4px 10px; border-radius: 99px; font-size: 10.5px; font-weight: 800; background: var(--hl-soft); border: 1px solid var(--hl-line); color: #24505f; white-space: nowrap }
+#health .hl-badge.aqua { background: rgba(70,224,200,.14); border-color: rgba(10,125,148,.3); color: #0a7d94 }
+#health .hl-badge.blue { background: rgba(59,130,246,.12); border-color: rgba(59,130,246,.3); color: #2563eb }
+#health .hl-badge.red { background: rgba(228,87,107,.12); border-color: rgba(228,87,107,.3); color: #c33a51 }
+#health table.hl-table { width: 100%; border-collapse: collapse; font-size: 11.5px }
+#health table.hl-table th { text-align: left; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 8px; border-bottom: 1px solid var(--hl-line); position: sticky; top: 0; background: #fff; z-index: 1 }
+#health table.hl-table td { padding: 8px; border-bottom: 1px solid #ecf4f7; color: #2c4450 }
+#health table.hl-table tr.hl-row-on td { background: #e9faf5; box-shadow: inset 3px 0 0 var(--hl-teal) }
+#health .hl-tag { display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 800; background: #e4f8f3; color: #0b6b62 }
+#health .hl-tag.b { background: #e7f0fd; color: #2563eb } #health .hl-tag.o { background: #fdf0e2; color: #b56a1d }
+#health .hl-tag.r { background: #fdecee; color: #c33a51 } #health .hl-tag.g { background: #e4f8f3; color: #0b6b62 }
+#health .hl-bar { display: inline-block; height: 7px; border-radius: 99px; background: #ecf4f7; overflow: hidden; min-width: 60px }
+#health .hl-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--hl-teal), var(--hl-aqua)) }
+
+/* ================= MODULES ================= */
+#health .hl-modules { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px }
+#health .hl-module { background: var(--hl-soft); border: 1px solid var(--hl-line); border-radius: 14px; padding: 13px; cursor: pointer; transition: transform .16s, box-shadow .16s, border-color .16s }
+#health .hl-module:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(7,41,63,.1); border-color: rgba(10,125,148,.35) }
+#health .hl-module-top { display: flex; justify-content: space-between; align-items: center; gap: 8px }
+#health .hl-module-top b { font-size: 12px; color: var(--text) }
+#health .hl-module p { margin: 6px 0 0; font-size: 10.5px; color: var(--muted); line-height: 1.5; min-height: 30px }
+#health .hl-metric { margin-top: 8px; font-size: 10.5px; color: var(--muted) }
+#health .hl-metric em { font-style: normal; font-weight: 800; color: #0a7d94 }
+#health .hl-spark { height: 34px; margin-top: 6px }
+#health .hl-spark canvas { display: block; width: 100%; height: 100% }
+
+/* ================= FEED / NOTES ================= */
+#health .hl-feed { display: flex; flex-direction: column; gap: 8px; max-height: 320px; overflow: auto }
+#health .hl-feed-item { border-left: 3px solid var(--hl-teal); background: #f6fbfd; border-radius: 0 12px 12px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.5; color: #2c4450 }
+#health .hl-feed-item b { display: block; color: var(--text); font-size: 12px; margin-bottom: 3px }
+#health .hl-feed-item.warn { border-left-color: var(--hl-orange) } #health .hl-feed-item.bad { border-left-color: var(--hl-red) }
+#health .hl-note { font-size: 11px; color: var(--muted); line-height: 1.6 }
+#health .hl-fin { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; margin-top: 10px }
+#health .hl-fin-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; background: var(--hl-soft); border: 1px solid var(--hl-line); border-radius: 10px; padding: 7px 10px }
+#health .hl-fin-row span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+#health .hl-fin-row b { font-size: 13px; color: #0b3d4d; font-variant-numeric: tabular-nums }
+#health .hl-note-ok { display: flex; gap: 10px; align-items: center; margin: 12px 0 2px; padding: 10px 14px; border-radius: 12px;
+  background: linear-gradient(90deg, rgba(10,125,148,.08), rgba(70,224,200,.16)); border: 1px solid rgba(10,125,148,.22); color: #14484f; font-size: 11.5px }
+#health .hl-note-ok b { color: var(--hl-teal); font-size: 13px }
+#health .hl-shell { animation: hlIn .34s cubic-bezier(.2,.7,.3,1) both }
+@keyframes hlIn { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
+@media print {
+  #health .hl-hero-actions, #health .hl-deck, #health .hl-pipe, #health .hl-note-ok { display: none !important }
+  #health .hl-card { break-inside: avoid }
+}
+
+/* ================= UNIFIED COCKPIT (single surface, layered deck) ================= */
+#healthCockpit { position: fixed; inset: 0; z-index: 100300; display: none; align-items: center; justify-content: center; padding: 22px;
+  background: radial-gradient(900px 500px at 15% 0%, rgba(70,224,200,.14), transparent 60%), rgba(1, 10, 16, .72); backdrop-filter: blur(9px); }
+#healthCockpit.show { display: flex; animation: hlcIn .22s ease }
+@keyframes hlcIn { from { opacity: 0 } to { opacity: 1 } }
+#healthCockpit .hlc-window { position: relative; width: min(1320px, 97vw); height: min(880px, 94vh); display: flex; flex-direction: column;
+  background: linear-gradient(180deg, #03243203, #021019), linear-gradient(#07293f, #041b28); color: #e6f9ff; border: 1px solid rgba(70,224,200,.16);
+  border-radius: 24px; box-shadow: 0 40px 120px rgba(0,0,0,.55); overflow: hidden }
+#healthCockpit .hlc-head { display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: flex-start; padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,.08) }
+#healthCockpit .hlc-head h2 { margin: 6px 0 4px; font-size: clamp(18px, 1.8vw, 24px); color: #fff; letter-spacing: -.03em }
+#healthCockpit .hlc-head p { margin: 0; color: #9ed2e2; font-size: 12px }
+#healthCockpit .hlc-actions { display: flex; gap: 8px; flex-wrap: wrap }
+#healthCockpit .hlc-btn { border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.07); color: #e6f9ff; border-radius: 11px; padding: 9px 13px; font-size: 12px; font-weight: 700; cursor: pointer; transition: all .15s }
+#healthCockpit .hlc-btn:hover { background: rgba(255,255,255,.16); transform: translateY(-1px) }
+#healthCockpit .hlc-btn.primary { background: linear-gradient(120deg, var(--hl-aqua), #2ec7e8); color: #032023; border-color: transparent }
+#healthCockpit .hlc-btn.x { width: 38px; height: 38px; padding: 0; font-size: 17px; border-radius: 12px }
+#healthCockpit .hlc-deck { position: relative; display: flex; gap: 6px; padding: 12px 22px 0; overflow-x: auto; scrollbar-width: thin }
+#healthCockpit .hlc-layer-tab {
+  position: relative; border: 1px solid rgba(255,255,255,.1); border-bottom: 0; background: rgba(255,255,255,.05); color: #bfe3ee;
+  border-radius: 12px 12px 0 0; padding: 9px 14px 11px; font-size: 11.5px; font-weight: 750; cursor: pointer; white-space: nowrap; transition: all .18s; transform-origin: bottom center;
+}
+#healthCockpit .hlc-layer-tab:hover { background: rgba(255,255,255,.12); color: #fff }
+#healthCockpit .hlc-layer-tab.on { background: linear-gradient(180deg, rgba(70,224,200,.22), rgba(70,224,200,.06)); color: #fff; border-color: rgba(70,224,200,.5); transform: translateY(0) }
+#healthCockpit .hlc-layer-tab.on:after { content: ''; position: absolute; left: 12px; right: 12px; bottom: -1px; height: 2px; background: var(--hl-aqua) }
+#healthCockpit .hlc-body { flex: 1; overflow: auto; padding: 18px 22px 22px; background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 220px) }
+#healthCockpit .hlc-pane { display: none }
+#healthCockpit .hlc-pane.on { display: block; animation: hlcLayer .28s cubic-bezier(.2,.7,.3,1) }
+@keyframes hlcLayer { from { opacity: 0; transform: translateY(14px) scale(.995) } to { opacity: 1; transform: none } }
+#healthCockpit .hlc-grid { display: grid; gap: 13px }
+#healthCockpit .hlc-grid.c2 { grid-template-columns: repeat(2, minmax(0,1fr)) }
+#healthCockpit .hlc-grid.c3 { grid-template-columns: repeat(3, minmax(0,1fr)) }
+#healthCockpit .hlc-grid.c4 { grid-template-columns: repeat(4, minmax(0,1fr)) }
+#healthCockpit .hlc-card { background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.09); border-radius: 16px; padding: 14px }
+#healthCockpit .hlc-card h3 { margin: 0 0 4px; font-size: 13.5px; color: #fff }
+#healthCockpit .hlc-card .hlc-sub { font-size: 11px; color: #9ed2e2; margin: 0 0 8px }
+#healthCockpit .hlc-kpi { background: linear-gradient(160deg, rgba(70,224,200,.12), rgba(255,255,255,.03)); border: 1px solid rgba(70,224,200,.22); border-radius: 15px; padding: 13px }
+#healthCockpit .hlc-kpi small { display: block; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #9ed2e2; font-weight: 750 }
+#healthCockpit .hlc-kpi b { display: block; font-size: 21px; color: #fff; margin: 5px 0 2px; letter-spacing: -.03em }
+#healthCockpit .hlc-kpi span { font-size: 10.5px; color: #9ed2e2 }
+#healthCockpit .hlc-plot { position: relative; height: 220px }
+#healthCockpit .hlc-plot.tall { height: 300px }
+#healthCockpit .hlc-plot canvas { display: block; width: 100%; height: 100% }
+#healthCockpit .hlc-tip { position: absolute; pointer-events: none; z-index: 3; transform: translate(-50%, -115%); background: #e6f9ff; color: #03121e; border-radius: 10px; padding: 8px 10px; font-size: 11px; box-shadow: 0 12px 30px rgba(0,0,0,.4); opacity: 0; transition: opacity .12s; white-space: nowrap }
+#healthCockpit table.hlc-table { width: 100%; border-collapse: collapse; font-size: 11.5px }
+#healthCockpit table.hlc-table th { text-align: left; font-size: 9.5px; letter-spacing: .1em; text-transform: uppercase; color: #9ed2e2; padding: 7px 8px; border-bottom: 1px solid rgba(255,255,255,.1) }
+#healthCockpit table.hlc-table td { padding: 8px; border-bottom: 1px solid rgba(255,255,255,.06); color: #d9f2fa }
+#healthCockpit .hlc-tag { display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 10px; font-weight: 800; background: rgba(70,224,200,.18); color: var(--hl-aqua) }
+#healthCockpit .hlc-log { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; color: #9ed2e2; line-height: 1.7; max-height: 260px; overflow: auto }
+#healthCockpit .hlc-log b { color: var(--hl-aqua); font-weight: 700 }
+#healthCockpit .hlc-foot { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; padding: 11px 22px; border-top: 1px solid rgba(255,255,255,.08); background: rgba(0,0,0,.18); font-size: 11px; color: #9ed2e2 }
+#healthCockpit .hlc-status { display: inline-flex; align-items: center; gap: 7px; color: #d5f2fa; font-weight: 650 }
+#healthCockpit .hlc-status i { width: 8px; height: 8px; border-radius: 99px; background: var(--hl-aqua); box-shadow: 0 0 0 4px rgba(70,224,200,.14); animation: hlPulse 2s infinite }
+#healthCockpit .hlc-progress { height: 4px; border-radius: 99px; background: rgba(255,255,255,.12); overflow: hidden; flex: 1; min-width: 140px }
+#healthCockpit .hlc-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--hl-aqua), #7fc9ff); transition: width .3s }
+
+@media (max-width: 1500px) {
+  #health .hl-kpis { grid-template-columns: repeat(4, minmax(0,1fr)) }
+  #health .hl-levers { grid-template-columns: repeat(3, minmax(0,1fr)) }
+}
+@media (max-width: 1150px) {
+  #health .hl-kpis { grid-template-columns: repeat(3, minmax(0,1fr)) }
+  #health .hl-grid.c3, #health .hl-grid.c4, #health .hl-modules, #health .hl-pipe { grid-template-columns: repeat(2, minmax(0,1fr)) }
+  #health .hl-grid.c2, #health .hl-grid.c2-1 { grid-template-columns: 1fr }
+  #health .hl-levers { grid-template-columns: repeat(2, minmax(0,1fr)) }
+  #health .hl-hero-stats { grid-template-columns: repeat(2, minmax(0,1fr)) }
+  #healthCockpit .hlc-grid.c3, #healthCockpit .hlc-grid.c4 { grid-template-columns: repeat(2, minmax(0,1fr)) }
+}
+@media (max-width: 760px) {
+  #health .hl-kpis, #health .hl-levers, #health .hl-modules, #health .hl-pipe,
+  #health .hl-grid.c2, #health .hl-grid.c3, #health .hl-grid.c4 { grid-template-columns: 1fr 1fr }
+  #health .hl-hero { padding: 20px }
+  #healthCockpit { padding: 8px } #healthCockpit .hlc-grid.c2, #healthCockpit .hlc-grid.c3, #healthCockpit .hlc-grid.c4 { grid-template-columns: 1fr }
+  #healthCockpit .hlc-window { height: 97vh }
+}
+@media (prefers-reduced-motion: reduce) {
+  #health .hl-kicker i, #health .hl-step.run i, #healthCockpit .hlc-status i { animation: none !important }
+  #health .hl-card:hover, #health .hl-module:hover, #health .hl-btn:hover { transform: none }
+}
+</style>
 <style id="nutri-agri-v59-css">/* ============================================================
    NUTRI.N°1 V59 — AGRI INVESTMENT INTELLIGENCE
    Self-contained styles, strictly scoped to #agri and #agriCockpit.
@@ -6634,113 +6904,350 @@
   </section>
 
   <section id="health" class="view">
-    <div class="card">
-      <h2 data-i18n="ui.ministry_of_health_command_center">🏥 Ministry of Health Command Center</h2>
-      <div class="grid">
-        <div class="card">Children<div class="metric">—</div><span class="pill" data-i18n="ui.double_burden">double
-            burden</span></div>
-        <div class="card">Pregnant women<div class="metric">—</div>
+    <!-- ============================================================
+         V60 — HEALTH & NUTRITION INVESTMENT INTELLIGENCE
+         Additive layer scoped to #health. Legacy V39/V41/V43/V46
+         decorators are neutralised for this view only (see
+         nutri-health-v60-js): one simulation surface, no stacked panels.
+         ============================================================ -->
+
+    <!-- compatibility shims: keep the legacy V39/V43/V46 decorators from injecting
+         visible artefacts into this redesigned view (kept invisible on purpose).
+         The hidden cards below also give the V41 chart filler its own target
+         canvases so it can never hijack the live V60 charts. -->
+    <span class="v46-live" hidden></span>
+    <div class="v46-kpis" hidden></div>
+    <div data-v46-filter hidden></div>
+    <div data-v43-health-filter hidden></div>
+    <div class="hl-decoy card" hidden aria-hidden="true">Children — double burden<div class="chart"><canvas id="hChildren"></canvas></div></div>
+    <div class="hl-decoy card" hidden aria-hidden="true">Pregnant &amp; lactating women<div class="chart"><canvas id="hWomen"></canvas></div></div>
+    <div class="hl-decoy card" hidden aria-hidden="true">NCD trends<div class="chart"><canvas id="hNcd"></canvas></div></div>
+
+    <div class="hl-shell" id="hlShell">
+
+      <!-- ================= HERO ================= -->
+      <div class="hl-hero">
+        <div class="hl-hero-top">
+          <div>
+            <span class="hl-kicker"><i></i><span data-hl="k0">HEALTH &amp; NUTRITION INVESTMENT SIMULATION • LIVE</span></span>
+            <h2><span data-hl="k1">🏥 Ministry of Health Investment Cockpit</span><br><b data-hl="k2">From population evidence to a bankable health &amp; nutrition investment case</b></h2>
+            <p data-hl="k3">One deterministic engine reconciles malnutrition, maternal health, NCD trends, service coverage and system capacity into a single investment case: capital plan, net present value, benefit-cost ratio, lives saved and DALYs averted — country by country, lever by lever.</p>
+            <div class="hl-chips">
+              <span class="hl-chip aqua">● <span data-hl="k4">Live model</span></span>
+              <span class="hl-chip" id="hlChipCountry">🌍 Togo</span>
+              <span class="hl-chip" id="hlChipHorizon">🗓 10-year horizon</span>
+              <span class="hl-chip blue" id="hlChipModel">NUTRI.HEALTH v60 • deterministic engine</span>
+              <span class="hl-chip" id="hlChipSession">HLTH-SESSION-0000</span>
+              <span class="hl-chip aqua" data-hl="k9">✓ One simulation surface — no stacked panels</span>
+            </div>
+          </div>
+          <div class="hl-hero-actions">
+            <button type="button" class="hl-btn primary" data-hl-act="run">⚡ <span data-hl="k5">Run the simulation</span></button>
+            <button type="button" class="hl-btn" data-hl-act="cockpit">🏛 <span data-hl="k6">Open investment cockpit</span></button>
+            <button type="button" class="hl-btn ghost" data-hl-act="export">⇩ <span data-hl="k7">Export model</span></button>
+            <button type="button" class="hl-btn ghost" data-hl-act="reset">↺ <span data-hl="k8">Reset levers</span></button>
+          </div>
         </div>
-        <div class="card">Lactating women<div class="metric">—</div>
-        </div>
-        <div class="card">NCDs<div class="metric">—</div>
+        <div class="hl-hero-stats">
+          <div class="hl-hero-stat good"><small data-hl="h1l">Programme capital</small><b id="hlHeroCapex">$0M</b><span data-hl="h1s">Public + donor envelope</span></div>
+          <div class="hl-hero-stat"><small data-hl="h2l">Net present value</small><b id="hlHeroNpv">$0M</b><span id="hlHeroNpvSub">@ 10% discount rate</span></div>
+          <div class="hl-hero-stat"><small data-hl="h3l">Return profile</small><b id="hlHeroBcrV">0×</b><span id="hlHeroBcr">BCR — • payback n/a</span></div>
+          <div class="hl-hero-stat"><small data-hl="h4l">Lives saved / jobs</small><b id="hlHeroImpact">0</b><span id="hlHeroImpactSub">deaths averted per year at full scale</span></div>
         </div>
       </div>
-      <div class="grid2">
-        <div class="card">
-          <h3 data-i18n="ui.children_double_burden">Children — double burden</h3>
-          <div class="chart"><canvas id="hChildren"></canvas></div>
+
+      <!-- ================= KPI STRIP ================= -->
+      <div class="hl-kpis" id="hlKpis"></div>
+
+      <!-- ================= LEVER DECK ================= -->
+      <div class="hl-deck">
+        <div class="hl-deck-head">
+          <div>
+            <h3><span data-hl="d1">🎛 Investment levers — design the national health &amp; nutrition programme</span></h3>
+            <p data-hl="d2">Every lever is priced, time-phased and translated into stunting, anemia, NCD control, lives saved, productivity and cash-flow. Move a lever: the whole model recomputes instantly.</p>
+          </div>
+          <div class="hl-presets" id="hlPresets"></div>
         </div>
-        <div class="card">
-          <h3 data-i18n="ui.pregnant_lactating_women">Pregnant & lactating women</h3>
-          <div class="chart"><canvas id="hWomen"></canvas></div>
+        <div class="hl-levers" id="hlLevers"></div>
+        <div class="hl-deck-foot">
+          <div class="hl-seg" id="hlHorizon">
+            <button type="button" data-horizon="5">5 <span data-hl="y">yrs</span></button>
+            <button type="button" data-horizon="10" class="on">10 <span data-hl="y">yrs</span></button>
+            <button type="button" data-horizon="15">15 <span data-hl="y">yrs</span></button>
+          </div>
+          <div class="hl-deck-readout">
+            <span><span data-hl="d3">Capital envelope</span> <b id="hlOutCapex">$0M</b></span>
+            <span><span data-hl="d4">Annual net benefit</span> <b id="hlOutBenefit">$0M</b></span>
+            <span><span data-hl="d5">Lives saved / yr</span> <b id="hlOutLives">0</b></span>
+            <span><span data-hl="d6">Jobs created</span> <b id="hlOutJobs">0</b></span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <label style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:#c9ecf6" title="Food-price / epidemic shock applied to the scenario">
+              <span data-hl="d7">Health &amp; food-price shock</span>
+              <input type="range" class="hl-range" id="hlShock" min="0" max="100" value="0" style="width:120px">
+              <b id="hlShockVal" style="color:#fff;font-variant-numeric:tabular-nums">0%</b>
+            </label>
+            <button type="button" class="hl-btn primary" data-hl-act="run">⚡ <span data-hl="k5">Run the simulation</span></button>
+          </div>
         </div>
       </div>
-      <div class="grid2">
-        <div class="card">
-          <h3 data-i18n="ui.ncd_trends">NCD trends</h3>
-          <div class="chart"><canvas id="hNcd"></canvas></div>
+
+      <!-- ================= PIPELINE ================= -->
+      <div class="hl-pipe" id="hlPipe">
+        <div class="hl-step" data-step="0"><i>1</i><b data-hl="p1">Evidence intake</b><small data-hl="p1s">surveys • surveillance • DHS • facility data</small></div>
+        <div class="hl-step" data-step="1"><i>2</i><b data-hl="p2">Burden &amp; risk model</b><small data-hl="p2s">prevalence → cases → DALYs</small></div>
+        <div class="hl-step" data-step="2"><i>3</i><b data-hl="p3">Intervention layer</b><small data-hl="p3s">levers → coverage → effect sizes</small></div>
+        <div class="hl-step" data-step="3"><i>4</i><b data-hl="p4">Health &amp; equity outcomes</b><small data-hl="p4s">stunting, anemia, NCD control, lives</small></div>
+        <div class="hl-step" data-step="4"><i>5</i><b data-hl="p5">Investment case</b><small data-hl="p5s">capex, NPV, BCR, payback</small></div>
+        <div class="hl-step" data-step="5"><i>6</i><b data-hl="p6">Decision package</b><small data-hl="p6s">programmes, owners, M&amp;E</small></div>
+      </div>
+      <div class="hl-note-ok"><b>✓</b><span data-hl="k10">Unified surface: the legacy decoration panels of this view are disabled and their content is merged into this cockpit — one simulation, zero stacked panels.</span></div>
+
+      <!-- ================= FLAGSHIP CHARTS ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card" data-hl-open="burden">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c1k">FLAGSHIP • DOUBLE BURDEN</div>
+              <h3 data-hl="c1t">Malnutrition &amp; NCD burden: today vs simulated programme</h3>
+              <p class="hl-card-sub" data-hl="c1s">Population prevalence (%) by condition — final year of the programme</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="burden" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h300"><canvas id="hBurden"></canvas></div>
+          <div class="hl-legend" id="hlBurdenLegend"></div>
         </div>
-        <div class="card">
-          <h3 data-i18n="ui.health_gis">Health GIS</h3>
-          <div class="map"><span class="pin" style="left:15%;top:40%" data-i18n="ui.region_a">Region A</span><span
-              class="pin" style="left:48%;top:23%" data-i18n="ui.region_b">Region B</span><span class="pin"
-              style="left:70%;top:55%" data-i18n="ui.region_c">Region C</span></div>
+        <div class="hl-card" data-hl-open="system">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c2k">SERVICE COVERAGE</div>
+              <h3 data-hl="c2t">Essential service coverage: today vs programme</h3>
+              <p class="hl-card-sub" data-hl="c2s">UHC-type coverage indicators, % of the population</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="system" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h300"><canvas id="hCoverage"></canvas></div>
+          <div class="hl-legend" id="hlCoverageLegend"></div>
         </div>
       </div>
-      <div class="card">
-        <h3 data-i18n="ui.priority_ncd_modules">Priority NCD modules</h3>
-        <div class="grid3">
-          <div data-i18n="ui.diabetes_2">🩸 Diabetes</div>
-          <div data-i18n="ui.hypertension_2">❤️ Hypertension</div>
-          <div data-i18n="ui.cardiovascular_disease_2">🫀 Cardiovascular disease</div>
-          <div data-i18n="ui.cancers">🎗 Cancers</div>
-          <div data-i18n="ui.kidney_disease_2">🫘 Kidney disease</div>
-          <div data-i18n="ui.other_priority_ncds">➕ Other priority NCDs</div>
+
+      <div class="hl-grid c2">
+        <div class="hl-card" data-hl-open="burden">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c3k">TRAJECTORY</div>
+              <h3 data-hl="c3t">Child stunting trajectory — status quo vs programme</h3>
+              <p class="hl-card-sub" data-hl="c3s">Prevalence in under-5 children, year by year, with uncertainty band</p>
+            </div>
+            <span class="hl-badge aqua" id="hlTrajBadge">—</span>
+          </div>
+          <div class="hl-plot h240"><canvas id="hTraj"></canvas></div>
+          <div class="hl-legend" id="hlTrajLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="burden">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c4k">DOUBLE BURDEN OF DISEASE</div>
+              <h3 data-hl="c4t">Burden composition (final year)</h3>
+              <p class="hl-card-sub" data-hl="c4s">Disability-adjusted life years by cause group — status quo vs programme</p>
+            </div>
+            <span class="hl-badge" id="hlDoubleBadge">—</span>
+          </div>
+          <div class="hl-plot h240"><canvas id="hDouble"></canvas></div>
+          <div class="hl-legend" id="hlDoubleLegend"></div>
         </div>
       </div>
-    </div>
-    <div class="card institutional-module">
-      <div class="section-head">
-        <div>
-          <h2>🩺 Nutrition → NCD Intelligence</h2>
-          <p class="muted">Population and service intelligence focused on diet-related noncommunicable diseases.</p>
-        </div><span class="pill">MINISTRY OF HEALTH</span>
+
+      <div class="hl-grid c3">
+        <div class="hl-card" data-hl-open="prevention">
+          <div class="hl-card-head"><div><div class="hl-card-kicker" data-hl="c5k">WHO TARGETS</div><h3 data-hl="c5t">Attainment of global 2030 targets</h3></div></div>
+          <div class="hl-plot h180"><canvas id="hlGauge"></canvas></div>
+          <div class="hl-legend" id="hlGaugeLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head"><div><div class="hl-card-kicker" data-hl="c6k">CAPITAL</div><h3 data-hl="c6t">Capital allocation by programme</h3></div></div>
+          <div class="hl-plot h180"><canvas id="hlDonut"></canvas></div>
+          <div class="hl-legend" id="hlDonutLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head"><div><div class="hl-card-kicker" data-hl="c7k">BANKABILITY</div><h3 data-hl="c7t">Investment attractiveness score</h3></div></div>
+          <div class="hl-plot h180"><canvas id="hlScore"></canvas></div>
+          <div class="hl-legend" id="hlScoreLegend"></div>
+        </div>
       </div>
-      <div class="module-grid">
-        <div><b>🩸 Diabetes Prevention</b><span>Food quality, physical activity, BMI, glucose/HbA1c where available,
-            follow-up and trends.</span></div>
-        <div><b>❤️ Hypertension & CVD</b><span>Blood pressure, sodium exposure, weight, activity and cardiovascular risk
-            factors.</span></div>
-        <div><b>🍬 Sugar Intelligence</b><span>Estimated free-sugar exposure, sweetened beverages and population
-            trends.</span></div>
-        <div><b>🧂 Sodium Intelligence</b><span>Estimated sodium exposure, food sources and reduction-program
-            monitoring.</span></div>
-        <div><b>⚖️ Obesity Observatory</b><span>Overweight, obesity, waist circumference, dietary patterns and
-            activity.</span></div>
-        <div><b>📱 Screening & Follow-up</b><span>Campaign collection, professional review, referral and longitudinal
-            monitoring.</span></div>
-        <div><b>🚨 NCD Early Warning</b><span>Emerging dietary and metabolic risk signals for investigation and
-            public-health action.</span></div>
-        <div><b>📈 Intervention Impact</b><span>Baseline → intervention → follow-up → outcome reporting for prevention
-            programs.</span></div>
+
+      <div class="hl-grid c2">
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c8k">CASH-FLOW</div>
+              <h3 data-hl="c8t">Cumulative net benefit &amp; payback</h3>
+              <p class="hl-card-sub" data-hl="c8s">Yearly net benefit, cumulative curve and break-even point</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="investment" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h260"><canvas id="hlCash"></canvas></div>
+          <div class="hl-legend" id="hlCashLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c9k">RISK</div>
+              <h3 data-hl="c9t">Sensitivity of NPV to ±20% driver shocks</h3>
+              <p class="hl-card-sub" data-hl="c9s">Which assumption moves the investment case most</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="investment" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h260"><canvas id="hlTornado"></canvas></div>
+          <div class="hl-legend" id="hlTornadoLegend"></div>
+        </div>
       </div>
-    </div>
-    <div class="card">
-      <h3>📦 Ministry of Health Data Products</h3>
-      <table>
-        <tr>
-          <th>Product</th>
-          <th>Primary output</th>
-          <th>Decision use</th>
-        </tr>
-        <tr>
-          <td>National Nutrition & NCD Observatory</td>
-          <td>Risk-factor trends + GIS</td>
-          <td>National planning</td>
-        </tr>
-        <tr>
-          <td>Diabetes & Hypertension Monitor</td>
-          <td>Control/follow-up indicators</td>
-          <td>Care improvement</td>
-        </tr>
-        <tr>
-          <td>Food-NCD Risk Engine</td>
-          <td>Dietary risk profiles</td>
-          <td>Prevention targeting</td>
-        </tr>
-        <tr>
-          <td>Screening Campaign Platform</td>
-          <td>Aggregated screening intelligence</td>
-          <td>Campaign management</td>
-        </tr>
-        <tr>
-          <td>Prevention Impact Engine</td>
-          <td>Before/after outcomes</td>
-          <td>Program evaluation</td>
-        </tr>
-      </table>
-    </div>
+
+      <div class="hl-grid c3">
+        <div class="hl-card" data-hl-open="system">
+          <div class="hl-card-head"><div><div class="hl-card-kicker" data-hl="c10k">HEALTH SYSTEM</div><h3 data-hl="c10t">System readiness profile</h3></div><button type="button" class="hl-open" data-hl-open-btn="system" title="Open in cockpit">⤢</button></div>
+          <div class="hl-plot h240"><canvas id="hlRadar"></canvas></div>
+          <div class="hl-legend" id="hlRadarLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="prevention">
+          <div class="hl-card-head"><div><div class="hl-card-kicker" data-hl="c11k">IMPACT DECOMPOSITION</div><h3 data-hl="c11t">DALYs averted by lever group</h3></div><button type="button" class="hl-open" data-hl-open-btn="prevention" title="Open in cockpit">⤢</button></div>
+          <div class="hl-plot h240"><canvas id="hlWater"></canvas></div>
+          <div class="hl-legend" id="hlWaterLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="burden">
+          <div class="hl-card-head"><div><div class="hl-card-kicker" data-hl="c12k">MORBIDITY</div><h3 data-hl="c12t">Cases averted per year (final year)</h3></div><button type="button" class="hl-open" data-hl-open-btn="burden" title="Open in cockpit">⤢</button></div>
+          <div class="hl-plot h240"><canvas id="hlAvoid"></canvas></div>
+          <div class="hl-legend" id="hlAvoidLegend"></div>
+        </div>
+      </div>
+
+      <div class="hl-grid c2-1">
+        <div class="hl-card" data-hl-open="equity">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c13k">GEOSPATIAL</div>
+              <h3 data-hl="c13t">Regional burden &amp; access heatmap</h3>
+              <p class="hl-card-sub" data-hl="c13s">Illustrative regional weights — stunting, wasting, anemia, NCD risk, service access</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="equity" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h260"><canvas id="hlHeat"></canvas></div>
+          <div class="hl-legend" id="hlHeatLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c14k">HEALTH WORKFORCE</div>
+              <h3 data-hl="c14t">Jobs created by programme</h3>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="investment" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h260"><canvas id="hlJobs"></canvas></div>
+          <div class="hl-legend" id="hlJobsLegend"></div>
+        </div>
+      </div>
+
+      <!-- ================= SCENARIOS + FINANCING ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c16k">SCENARIOS</div>
+              <h3 data-hl="c16t">Scenario comparison — net present value</h3>
+              <p class="hl-card-sub" data-hl="c16s">Six programme designs priced by the same engine</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="investment" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h200"><canvas id="hlScenario"></canvas></div>
+          <div style="max-height:260px;overflow:auto;margin-top:10px"><table class="hl-table" id="hlScenarioTable"></table></div>
+        </div>
+        <div class="hl-card" data-hl-open="investment">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c15k">FINANCING</div>
+              <h3 data-hl="c15t">Blended-finance structure</h3>
+              <p class="hl-card-sub" data-hl="c15s">How the capital envelope can be raised and what each dollar delivers</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="investment" title="Open in cockpit">⤢</button>
+          </div>
+          <div class="hl-plot h200"><canvas id="hlFinance"></canvas></div>
+          <div class="hl-fin" id="hlFinanceMetrics"></div>
+        </div>
+      </div>
+
+      <!-- ================= MODULES WITH LIVE MINI-CHARTS ================= -->
+      <div class="hl-card">
+        <div class="hl-card-head">
+          <div>
+            <div class="hl-card-kicker" data-hl="m0">MINISTRY CAPABILITY LAYERS</div>
+            <h3 data-hl="m1">Nine health &amp; nutrition intelligence modules — each one feeds the investment model</h3>
+            <p class="hl-card-sub" data-hl="m2">Every module carries a live indicator and a trend. Click a module to open its layer in the unified cockpit.</p>
+          </div>
+          <span class="hl-badge aqua" data-hl="m3">CONNECTED TO THE MODEL</span>
+        </div>
+        <div class="hl-modules" id="hlModules"></div>
+      </div>
+
+      <!-- ================= PROGRAMME TABLE + INSIGHT FEED ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="t1k">INVESTMENT PROGRAMME</div>
+              <h3 data-hl="t1t">Bankable programme pipeline</h3>
+              <p class="hl-card-sub" data-hl="t1s">Cost, health return, share of envelope and delivery owner for every programme</p>
+            </div>
+            <span class="hl-badge blue" id="hlProgramBadge">—</span>
+          </div>
+          <div style="max-height:330px;overflow:auto"><table class="hl-table" id="hlProgramTable"></table></div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="t2k">DECISION SUPPORT</div>
+              <h3 data-hl="t2t">What the model recommends</h3>
+            </div>
+            <span class="hl-badge aqua" id="hlFeedBadge">live</span>
+          </div>
+          <div class="hl-feed" id="hlFeed"></div>
+        </div>
+      </div>
+
+      <!-- ================= INDICATOR TABLE + METHOD ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="t3k">NATIONAL NUTRITION &amp; NCD SCORECARD</div>
+              <h3 data-hl="t3t">Indicator intelligence — today, status quo, programme</h3>
+              <p class="hl-card-sub" data-hl="t3s">Every indicator with its final-year value under both futures and the gain achieved</p>
+            </div>
+            <span class="hl-badge" id="hlIndBadge">—</span>
+          </div>
+          <div style="max-height:330px;overflow:auto"><table class="hl-table" id="hlIndTable"></table></div>
+        </div>
+        <div class="hl-card">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="t4k">METHOD &amp; PROVENANCE</div>
+              <h3 data-hl="t4t">How to read these numbers</h3>
+            </div>
+          </div>
+          <p class="hl-note" id="hlMethod"></p>
+          <div class="hl-legend" style="gap:14px;margin-top:10px">
+            <span><i style="background:linear-gradient(90deg,#0a7d94,#46e0c8)"></i><span data-hl="t4l1">Simulated programme</span></span>
+            <span><i style="background:#c4d5de"></i><span data-hl="t4l2">Status quo</span></span>
+            <span><i style="background:#3b82f6"></i><span data-hl="t4l3">WHO / global target</span></span>
+          </div>
+          <div class="hl-chips" style="margin-top:12px">
+            <span class="hl-chip" style="background:#f2f9fc;border-color:#dcebf1;color:#3d5560" data-hl="t4c1">WHO / UNICEF / LiST-compatible outcome logic</span>
+            <span class="hl-chip" style="background:#f2f9fc;border-color:#dcebf1;color:#3d5560" data-hl="t4c2">Deterministic, auditable equations</span>
+            <span class="hl-chip" style="background:#f2f9fc;border-color:#dcebf1;color:#3d5560" data-hl="t4c3">Illustrative calibration — ready for official data</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /hl-shell -->
   </section>
 
   <section id="agri" class="view">
@@ -17201,6 +17708,1838 @@ else setTimeout(boot, 350);
   setTimeout(function () { if (isAgriVisible()) sweep(); }, 4000);
 })();
 </script>
+<script id="nutri-health-v60-js">/* ============================================================
+   NUTRI.N°1 V60 — HEALTH & NUTRITION INVESTMENT INTELLIGENCE ENGINE
+   Scope: #health only (+ its own unified cockpit overlay #healthCockpit).
+   Additive: no other module, style or handler of the platform is modified.
+   The legacy V39/V41/V43/V44/V46/V51/V52/V53/V54/V57 decorators are
+   neutralised for this view through a capture-phase guard, so a single
+   simulation surface is shown instead of stacked panels.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  var ROOT = document.getElementById('health');
+  if (!ROOT) return;
+
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  var SESSION = 'HLTH-' + String(Math.floor(100000 + Math.random() * 899999));
+  function plotHost(cv) { return cv && cv.closest ? cv.closest('.hl-plot, .hlc-plot, .hl-spark, .hl-module') : null; }
+
+  /* ==================== I18N (module-local) ==================== */
+  var STR = {
+    en: {
+      k0: 'HEALTH & NUTRITION INVESTMENT SIMULATION • LIVE',
+      k1: '🏥 Ministry of Health Investment Cockpit',
+      k2: 'From population evidence to a bankable health & nutrition investment case',
+      k3: 'One deterministic engine reconciles malnutrition, maternal health, NCD trends, service coverage and system capacity into a single investment case: capital plan, net present value, benefit-cost ratio, lives saved and DALYs averted — country by country, lever by lever.',
+      k4: 'Live model', k5: 'Run the simulation', k6: 'Open investment cockpit', k7: 'Export model', k8: 'Reset levers',
+      k9: '✓ One simulation surface — no stacked panels', k10: 'Unified surface: the legacy decoration panels of this view are disabled and their content is merged into this cockpit — one simulation, zero stacked panels.',
+      h1l: 'Programme capital', h1s: 'Public + donor envelope', h2l: 'Net present value', h3l: 'Return profile', h4l: 'Lives saved / jobs',
+      d1: '🎛 Investment levers — design the national health & nutrition programme',
+      d2: 'Every lever is priced, time-phased and translated into stunting, anemia, NCD control, lives saved, productivity and cash-flow. Move a lever: the whole model recomputes instantly.',
+      d3: 'Capital envelope', d4: 'Annual net benefit', d5: 'Lives saved / yr', d6: 'Jobs created', d7: 'Health & food-price shock', y: 'yrs',
+      p1: 'Evidence intake', p1s: 'surveys • surveillance • DHS • facility data', p2: 'Burden & risk model', p2s: 'prevalence → cases → DALYs',
+      p3: 'Intervention layer', p3s: 'levers → coverage → effect sizes', p4: 'Health & equity outcomes', p4s: 'stunting, anemia, NCD control, lives',
+      p5: 'Investment case', p5s: 'capex, NPV, BCR, payback', p6: 'Decision package', p6s: 'programmes, owners, M&E',
+      c1k: 'FLAGSHIP • DOUBLE BURDEN', c1t: 'Malnutrition & NCD burden: today vs simulated programme', c1s: 'Population prevalence (%) by condition — final year of the programme',
+      c2k: 'SERVICE COVERAGE', c2t: 'Essential service coverage: today vs programme', c2s: 'UHC-type coverage indicators, % of the population',
+      c3k: 'TRAJECTORY', c3t: 'Child stunting trajectory — status quo vs programme', c3s: 'Prevalence in under-5 children, year by year, with uncertainty band',
+      c4k: 'DOUBLE BURDEN OF DISEASE', c4t: 'Burden composition (final year)', c4s: 'Disability-adjusted life years by cause group — status quo vs programme',
+      c5k: 'WHO TARGETS', c5t: 'Attainment of global 2030 targets', c6k: 'CAPITAL', c6t: 'Capital allocation by programme', c7k: 'BANKABILITY', c7t: 'Investment attractiveness score',
+      c8k: 'CASH-FLOW', c8t: 'Cumulative net benefit & payback', c8s: 'Yearly net benefit, cumulative curve and break-even point',
+      c9k: 'RISK', c9t: 'Sensitivity of NPV to ±20% driver shocks', c9s: 'Which assumption moves the investment case most',
+      c10k: 'HEALTH SYSTEM', c10t: 'System readiness profile', c11k: 'IMPACT DECOMPOSITION', c11t: 'DALYs averted by lever group', c12k: 'MORBIDITY', c12t: 'Cases averted per year (final year)',
+      c13k: 'GEOSPATIAL', c13t: 'Regional burden & access heatmap', c13s: 'Illustrative regional weights — stunting, wasting, anemia, NCD risk, service access',
+      c14k: 'HEALTH WORKFORCE', c14t: 'Jobs created by programme',
+      c15k: 'FINANCING', c15t: 'Blended-finance structure', c15s: 'How the capital envelope can be raised and what each dollar delivers',
+      c16k: 'SCENARIOS', c16t: 'Scenario comparison — net present value', c16s: 'Six programme designs priced by the same engine',
+      fin_pub: 'Public / concessional', fin_priv: 'Impact & private capital', fin_debt: 'Development debt',
+      per_daly: 'Cost per DALY averted', per_life: 'Capital per life saved / yr', opex_y: 'Annual operating cost', fin_leverage: 'External capital mobilised',
+      p10: 'P10 — low case', p90: 'P90 — high case', bcr: 'BCR', coverage_pts: 'Coverage gain', scenario: 'Scenario',
+      m0: 'MINISTRY CAPABILITY LAYERS', m1: 'Nine health & nutrition intelligence modules — each one feeds the investment model',
+      m2: 'Every module carries a live indicator and a trend. Click a module to open its layer in the unified cockpit.', m3: 'CONNECTED TO THE MODEL',
+      t1k: 'INVESTMENT PROGRAMME', t1t: 'Bankable programme pipeline', t1s: 'Cost, health return, share of envelope and delivery owner for every programme',
+      t2k: 'DECISION SUPPORT', t2t: 'What the model recommends',
+      t3k: 'NATIONAL NUTRITION & NCD SCORECARD', t3t: 'Indicator intelligence — today, status quo, programme', t3s: 'Every indicator with its final-year value under both futures and the gain achieved',
+      t4k: 'METHOD & PROVENANCE', t4t: 'How to read these numbers',
+      t4l1: 'Simulated programme', t4l2: 'Status quo', t4l3: 'WHO / global target',
+      t4c1: 'WHO / UNICEF / LiST-compatible outcome logic', t4c2: 'Deterministic, auditable equations', t4c3: 'Illustrative calibration — ready for official data',
+      method: 'Prevalence, service coverage, cases, deaths, DALYs, productivity and cash-flow are computed by a transparent deterministic model: population × baseline prevalence (WHO/UNICEF/World Bank reference ranges) × time-phased intervention effect sizes (LiST-style risk reduction), translated into DALYs averted, healthcare costs avoided, productivity gains and fiscal revenue, discounted at 10% over the selected horizon. Cost benchmarks follow WHO-CHOICE and Disease Control Priorities orders of magnitude, for demonstration. Connect official country data and the same engine returns official results — every equation stays auditable.',
+      kpi_st: 'Child stunting', kpi_wa: 'Child wasting', kpi_an: 'Anemia — women', kpi_ebf: 'Exclusive breastfeeding', kpi_dm: 'Diabetes prevalence', kpi_htn: 'Hypertension control',
+      kpi_lives: 'Lives saved / year', kpi_dalys: 'DALYs averted / yr', kpi_capex: 'Programme capital', kpi_npv: 'Net present value', kpi_bcr: 'Benefit-cost ratio', kpi_pay: 'Payback period',
+      kpi_jobs: 'Jobs created', kpi_score: 'Attractiveness score',
+      sub_final: 'final year', sub_now: 'today', sub_year: 'per year', sub_pv: 'present value @ 10%', sub_total: 'direct + induced', sub_grade: 'grade', sub_none: 'not reached yet',
+      sub_dalys: 'WHO very cost-effective threshold' , sub_ctrl: 'treated & controlled',
+      today: 'Today', statusq: 'Status quo', programme: 'Programme', gain: 'Gain', indicator: 'Indicator', final_yr: 'final yr',
+      sq: 'Status quo', prog: 'Programme', cumulative: 'Cumulative net benefit', yearly: 'Yearly net benefit', payback: 'Payback',
+      npv_low: 'NPV — low case', npv_high: 'NPV — high case', capex: 'Capital', opex: 'Operating cost',
+      cond_st: 'Stunting', cond_wa: 'Wasting', cond_an: 'Anemia', cond_dm: 'Diabetes', cond_ht: 'Hypertension', cond_ob: 'Obesity',
+      srv_uhc: 'Essential services (UHC)', srv_scr: 'NCD screening', srv_ctrl: 'Treatment control', srv_mic: 'Micronutrients', srv_anc: 'ANC 4+ visits', srv_ebf: 'Exclusive breastfeeding',
+      ck_title: 'Health & Nutrition Investment Cockpit', ck_sub: 'One surface, layered intelligence — the national health & nutrition investment case',
+      ck_present: '▶ Presentation', ck_export: '⇩ Export CSV', ck_close: '✕',
+      layer_overview: 'Overview', layer_burden: 'Burden', layer_prevention: 'Prevention', layer_investment: 'Investment', layer_equity: 'Equity & geo', layer_system: 'Health system', layer_audit: 'Audit & method',
+      ck_ready: 'Model up to date', ck_layer: 'Layer', ck_of: 'of', ck_updated: 'Last recalculation',
+      recommendations: 'Recommendations', activated: 'Activated programmes',
+      scorecard: 'Indicator scorecard', trajectory: 'Stunting trajectory', cov_chart: 'Service coverage', portfolio: 'Programme portfolio',
+      chain: 'Prevention impact chain', dalys_dec: 'DALYs averted by lever group', cases_averted: 'Cases averted per year',
+      equations: 'Model equations', provenance: 'Provenance & quality', exports: 'Exports', print: 'Print summary',
+      region: 'Region', risk: 'Burden', opportunity: 'Access',
+      meals: 'school meals / day', cases: 'people covered', chws: 'community health workers',
+      lv_c1000: 'First 1000 days & CHWs', lv_c1000_s: 'Community nutrition, growth monitoring, exclusive breastfeeding, community health workers',
+      lv_school: 'School health & feeding', lv_school_s: 'School meals, micronutrients, health education, deworming, physical activity',
+      lv_fortif: 'Fortification & micronutrients', lv_fortif_s: 'Iron-folate, vitamin A, iodized salt, staple fortification, emergency supplies',
+      lv_maternal: 'Maternal & newborn care', lv_maternal_s: 'ANC visits, skilled birth attendance, maternal anemia, low-birth-weight prevention',
+      lv_screen: 'NCD screening campaigns', lv_screen_s: 'Blood pressure, glucose, BMI screening in communities and workplaces, referral',
+      lv_pen: 'NCD primary-care protocols', lv_pen_s: 'WHO-PEN hypertension & diabetes protocols, essential medicines, follow-up',
+      lv_fiscal: 'Sugar-tax & food policies', lv_fiscal_s: 'Sweetened-beverage excise, reformulation, marketing rules — generates fiscal revenue',
+      lv_digital: 'Digital surveillance & data', lv_digital_s: 'DHIS2 registry, early warning, facility analytics, workforce management',
+      lv_wash: 'WASH & safe food environments', lv_wash_s: 'Water, sanitation in clinics & schools, food safety, enteric-disease reduction',
+      pre_status: 'Status quo', pre_donor: 'Donor minimum', pre_national: 'National plan', pre_investor: 'Investor scale-up', pre_nutrition: 'Nutrition first', pre_full: 'Full transformation',
+      out_now: 'Today', out_prog: 'Programme', requirement: 'Global target', available: 'With programme',
+      shock_note: 'shock applied', jobs_unit: 'k jobs', lives_unit: 'deaths averted / yr',
+      grad_A: 'Bankable now', grad_B: 'Bankable with safeguards', grad_C: 'Design revision needed',
+      owner1: 'Community health directorate', owner2: 'School health & education', owner3: 'Food & nutrition directorate', owner4: 'Maternal health directorate', owner5: 'NCD programme', owner6: 'NCD programme', owner7: 'Fiscal policy unit', owner8: 'Digital health unit', owner9: 'Environmental health',
+      ins_best: 'Best value for money', ins_best_d: 'delivers the highest benefit-cost ratio at the current budget — protect its funding line.',
+      ins_gap: 'Coverage gap', ins_gap_d: 'coverage stays below 40% — the epidemiological impact will lag; consider a scale-up.',
+      ins_shock: 'Shock exposure', ins_shock_d: 'The health & food-price shock erodes programme effect by up to 28% — build a contingency window.',
+      ins_fiscal: 'Fiscal dividend', ins_fiscal_d: 'The sugar-tax lever generates revenue that can co-finance the programme after year 2.',
+      ins_ncd: 'NCD epidemic', ins_ncd_d: 'Diabetes and hypertension keep rising in the status quo — the treatment package halts the curve.',
+      ins_cpd: 'Cost-effectiveness', ins_cpd_d: 'is below the WHO very-cost-effective threshold (GDP per capita) — a strong case for domestic and donor financing.',
+      ins_target: 'WHO 2030 target', ins_target_d: 'reached on stunting inside the horizon. A full roll-out sustains the gain beyond the programme.',
+      ins_digital: 'System multiplier', ins_digital_d: 'Digital surveillance raises the effect of every other lever — keep it above 60%.',
+      ins_pay: 'Financing note', ins_pay_d: 'Break-even happens within the horizon; blended finance can pull it earlier by 1-2 years.',
+      sv_registry: 'children tracked live', sv_maternal: 'ANC women followed', sv_screen: 'adults screened / yr', sv_pen: 'patients on protocol', sv_fiscal: 'tax revenue / yr', sv_supply: 'supply-chain coverage', sv_ewarn: 'alert lead time', sv_workforce: 'health workers managed', sv_gis: 'districts mapped'
+    },
+    fr: {
+      k0: 'SIMULATION D’INVESTISSEMENT SANTÉ & NUTRITION • LIVE',
+      k1: '🏥 Cockpit d’investissement du Ministère de la Santé',
+      k2: 'De la preuve de population à un dossier d’investissement santé & nutrition bancable',
+      k3: 'Un moteur déterministe réconcilie malnutrition, santé maternelle, tendances MNT, couverture de services et capacité du système en un seul dossier d’investissement : plan de capital, valeur actualisée nette, ratio bénéfice-coût, vies sauvées et DALYs évitées — pays par pays, levier par levier.',
+      k4: 'Modèle live', k5: 'Lancer la simulation', k6: 'Ouvrir le cockpit', k7: 'Exporter le modèle', k8: 'Réinitialiser',
+      k9: '✓ Une seule surface de simulation — aucune superposition', k10: 'Surface unifiée : les anciens panneaux décoratifs de cette vue sont désactivés et leur contenu est fusionné dans ce cockpit — une seule simulation, zéro superposition.',
+      h1l: 'Capital du programme', h1s: 'Enveloppe publique + bailleurs', h2l: 'Valeur actualisée nette', h3l: 'Profil de retour', h4l: 'Vies sauvées / emplois',
+      d1: '🎛 Leviers d’investissement — concevez le programme national de santé & nutrition',
+      d2: 'Chaque levier est chiffré, étalé dans le temps et traduit en retards de croissance, anémie, contrôle des MNT, vies sauvées, productivité et trésorerie. Bougez un levier : tout le modèle se recalcule instantanément.',
+      d3: 'Enveloppe de capital', d4: 'Bénéfice net annuel', d5: 'Vies sauvées / an', d6: 'Emplois créés', d7: 'Choc sanitaire & prix alimentaires', y: 'ans',
+      p1: 'Collecte des preuves', p1s: 'enquêtes • surveillance • EDS • données des formations sanitaires', p2: 'Modèle de charge & risque', p2s: 'prévalence → cas → DALYs',
+      p3: 'Couche d’intervention', p3s: 'leviers → couverture → tailles d’effet', p4: 'Résultats santé & équité', p4s: 'retard de croissance, anémie, contrôle MNT, vies',
+      p5: 'Dossier d’investissement', p5s: 'capex, VAN, RBC, délai de retour', p6: 'Pack de décision', p6s: 'programmes, responsables, S&E',
+      c1k: 'PHARE • DOUBLE CHARGE', c1t: 'Charge malnutrition & MNT : aujourd’hui vs programme simulé', c1s: 'Prévalence populationnelle (%) par affection — année finale du programme',
+      c2k: 'COUVERTURE DE SERVICES', c2t: 'Couverture des services essentiels : aujourd’hui vs programme', c2s: 'Indicateurs de type CSA (UHC), % de la population',
+      c3k: 'TRAJECTOIRE', c3t: 'Trajectoire du retard de croissance — statu quo vs programme', c3s: 'Prévalence chez les moins de 5 ans, année par année, avec bande d’incertitude',
+      c4k: 'DOUBLE CHARGE DE MALADIE', c4t: 'Composition de la charge (année finale)', c4s: 'Années de vie corrigées du handicap par groupe de causes — statu quo vs programme',
+      c5k: 'CIBLES OMS', c5t: 'Atteinte des cibles mondiales 2030', c6k: 'CAPITAL', c6t: 'Allocation du capital par programme', c7k: 'BANCABILITÉ', c7t: 'Score d’attractivité pour l’investisseur',
+      c8k: 'TRÉSORERIE', c8t: 'Bénéfice net cumulé & délai de retour', c8s: 'Bénéfice annuel, courbe cumulée et point d’équilibre',
+      c9k: 'RISQUE', c9t: 'Sensibilité de la VAN à ±20% sur les moteurs', c9s: 'Quelle hypothèse déplace le plus la décision',
+      c10k: 'SYSTÈME DE SANTÉ', c10t: 'Profil de préparation du système', c11k: 'DÉCOMPOSITION DE L’IMPACT', c11t: 'DALYs évitées par groupe de leviers', c12k: 'MORBIDITÉ', c12t: 'Cas évités par an (année finale)',
+      c13k: 'GÉOSPATIAL', c13t: 'Carte de chaleur des charges & accès', c13s: 'Pondérations régionales illustratives — retard, émaciation, anémie, risque MNT, accès aux services',
+      c14k: 'PERSONNEL DE SANTÉ', c14t: 'Emplois créés par programme',
+      c15k: 'FINANCEMENT', c15t: 'Structure de financement mixte', c15s: 'Comment mobiliser l’enveloppe et ce que chaque dollar produit',
+      c16k: 'SCÉNARIOS', c16t: 'Comparaison de scénarios — valeur actualisée nette', c16s: 'Six conceptions de programme chiffrées par le même moteur',
+      fin_pub: 'Public / concessionnel', fin_priv: 'Capital à impact & privé', fin_debt: 'Dette de développement',
+      per_daly: 'Coût par DALY évitée', per_life: 'Capital par vie sauvée / an', opex_y: 'Coût d’exploitation annuel', fin_leverage: 'Capital externe mobilisé',
+      p10: 'P10 — cas bas', p90: 'P90 — cas haut', bcr: 'RBC', coverage_pts: 'Gain de couverture', scenario: 'Scénario',
+      m0: 'COUCHES DE COMPÉTENCES DU MINISTÈRE', m1: 'Neuf modules d’intelligence santé & nutrition — chacun alimente le modèle d’investissement',
+      m2: 'Chaque module porte un indicateur live et une tendance. Cliquez sur un module pour ouvrir sa couche dans le cockpit unifié.', m3: 'CONNECTÉ AU MODÈLE',
+      t1k: 'PROGRAMME D’INVESTISSEMENT', t1t: 'Portefeuille de programmes bancables', t1s: 'Coût, retour santé, part de l’enveloppe et responsable de mise en œuvre pour chaque programme',
+      t2k: 'AIDE À LA DÉCISION', t2t: 'Ce que le modèle recommande',
+      t3k: 'TABLEAU DE BORD NUTRITION & MNT', t3t: 'Intelligence par indicateur — aujourd’hui, statu quo, programme', t3s: 'Chaque indicateur avec sa valeur en année finale selon les deux futurs et le gain obtenu',
+      t4k: 'MÉTHODE & PROVENANCE', t4t: 'Comment lire ces chiffres',
+      t4l1: 'Programme simulé', t4l2: 'Statu quo', t4l3: 'Cible OMS / mondiale',
+      t4c1: 'Logique de résultats compatible OMS / UNICEF / LiST', t4c2: 'Équations déterministes et auditables', t4c3: 'Calibration illustrative — prête pour les données officielles',
+      method: 'Prévalences, couverture de services, cas, décès, DALYs, productivité et trésorerie sont calculés par un modèle déterministe transparent : population × prévalence de base (ordres de grandeur OMS/UNICEF/Banque mondiale) × tailles d’effet des interventions étalées dans le temps (logique LiST), traduites en DALYs évitées, coûts de soins évités, gains de productivité et recettes fiscales, actualisées à 10% sur l’horizon choisi. Les coûts unitaires suivent les ordres de grandeur WHO-CHOICE et Disease Control Priorities, à des fins de démonstration. Connectez les données officielles du pays : le même moteur renvoie des résultats officiels — chaque équation reste auditable.',
+      kpi_st: 'Retard de croissance', kpi_wa: 'Émaciation', kpi_an: 'Anémie — femmes', kpi_ebf: 'Allaitement exclusif', kpi_dm: 'Diabète', kpi_htn: 'Contrôle HTA',
+      kpi_lives: 'Vies sauvées / an', kpi_dalys: 'DALYs évitées / an', kpi_capex: 'Capital du programme', kpi_npv: 'Valeur actualisée nette', kpi_bcr: 'Ratio bénéfice-coût', kpi_pay: 'Délai de retour',
+      kpi_jobs: 'Emplois créés', kpi_score: 'Score d’attractivité',
+      sub_final: 'année finale', sub_now: 'aujourd’hui', sub_year: 'par an', sub_pv: 'valeur actuelle @ 10%', sub_total: 'directs + induits', sub_grade: 'note', sub_none: 'pas encore atteint',
+      sub_dalys: 'seuil OMS très coût-efficace', sub_ctrl: 'traités & contrôlés',
+      today: 'Aujourd’hui', statusq: 'Statu quo', programme: 'Programme', gain: 'Gain', indicator: 'Indicateur', final_yr: 'année finale',
+      sq: 'Statu quo', prog: 'Programme', cumulative: 'Bénéfice net cumulé', yearly: 'Bénéfice net annuel', payback: 'Retour',
+      npv_low: 'VAN — cas bas', npv_high: 'VAN — cas haut', capex: 'Capital', opex: 'Coût d’exploitation',
+      cond_st: 'Retard de croissance', cond_wa: 'Émaciation', cond_an: 'Anémie', cond_dm: 'Diabète', cond_ht: 'Hypertension', cond_ob: 'Obésité',
+      srv_uhc: 'Services essentiels (CSA)', srv_scr: 'Dépistage MNT', srv_ctrl: 'Contrôle du traitement', srv_mic: 'Micronutriments', srv_anc: 'CPN 4+ visites', srv_ebf: 'Allaitement exclusif',
+      ck_title: 'Cockpit d’investissement santé & nutrition', ck_sub: 'Une seule surface, des couches d’intelligence empilées — le dossier d’investissement national de santé & nutrition',
+      ck_present: '▶ Présentation', ck_export: '⇩ Export CSV', ck_close: '✕',
+      layer_overview: 'Vue d’ensemble', layer_burden: 'Charge', layer_prevention: 'Prévention', layer_investment: 'Investissement', layer_equity: 'Équité & géo', layer_system: 'Système de santé', layer_audit: 'Audit & méthode',
+      ck_ready: 'Modèle à jour', ck_layer: 'Couche', ck_of: 'sur', ck_updated: 'Dernier recalcul',
+      recommendations: 'Recommandations', activated: 'Programmes activés',
+      scorecard: 'Tableau d’indicateurs', trajectory: 'Trajectoire du retard', cov_chart: 'Couverture de services', portfolio: 'Portefeuille de programmes',
+      chain: 'Chaîne d’impact prévention', dalys_dec: 'DALYs évitées par groupe de leviers', cases_averted: 'Cas évités par an',
+      equations: 'Équations du modèle', provenance: 'Provenance & qualité', exports: 'Exports', print: 'Imprimer la synthèse',
+      region: 'Région', risk: 'Charge', opportunity: 'Accès',
+      meals: 'repas scolaires / jour', cases: 'personnes couvertes', chws: 'agents de santé communautaires',
+      lv_c1000: '1000 premiers jours & ASC', lv_c1000_s: 'Nutrition communautaire, surveillance de la croissance, allaitement exclusif, agents de santé communautaires',
+      lv_school: 'Santé & alimentation scolaire', lv_school_s: 'Cantines, micronutriments, éducation sanitaire, déparasitage, activité physique',
+      lv_fortif: 'Fortification & micronutriments', lv_fortif_s: 'Fer-folate, vitamine A, sel iodé, fortification des aliments de base, approvisionnement d’urgence',
+      lv_maternal: 'Soins maternels & néonatals', lv_maternal_s: 'CPN, accouchement assisté, anémie maternelle, prévention du faible poids de naissance',
+      lv_screen: 'Campagnes de dépistage MNT', lv_screen_s: 'Tension, glycémie, IMC en communautés et milieux de travail, orientation',
+      lv_pen: 'Protocoles MNT en soins primaires', lv_pen_s: 'Protocoles OMS-PEN hypertension & diabète, médicaments essentiels, suivi',
+      lv_fiscal: 'Taxe sucre & politiques alimentaires', lv_fiscal_s: 'Accise sur boissons sucrées, reformulation, règles de marketing — génère des recettes fiscales',
+      lv_digital: 'Surveillance numérique & données', lv_digital_s: 'Registre DHIS2, alerte précoce, analytique des formations sanitaires, gestion du personnel',
+      lv_wash: 'WASH & environnements alimentaires sûrs', lv_wash_s: 'Eau, assainissement dans les écoles & centres de santé, sécurité sanitaire, réduction des maladies entériques',
+      pre_status: 'Statu quo', pre_donor: 'Minimum bailleurs', pre_national: 'Plan national', pre_investor: 'Montée investisseur', pre_nutrition: 'Nutrition d’abord', pre_full: 'Transformation complète',
+      out_now: 'Aujourd’hui', out_prog: 'Programme', requirement: 'Cible mondiale', available: 'Avec programme',
+      shock_note: 'choc appliqué', jobs_unit: 'k emplois', lives_unit: 'décès évités / an',
+      grad_A: 'Bancable maintenant', grad_B: 'Bancable avec garanties', grad_C: 'Révision de conception requise',
+      owner1: 'Direction de la santé communautaire', owner2: 'Santé scolaire & éducation', owner3: 'Direction alimentation & nutrition', owner4: 'Direction santé maternelle', owner5: 'Programme MNT', owner6: 'Programme MNT', owner7: 'Unité politique fiscale', owner8: 'Unité santé numérique', owner9: 'Santé environnementale',
+      ins_best: 'Meilleur rapport valeur/argent', ins_best_d: 'délivre le meilleur ratio bénéfice-coût au budget actuel — protégez sa ligne de financement.',
+      ins_gap: 'Écart de couverture', ins_gap_d: 'reste sous 40% de couverture — l’impact épidémiologique tardera ; envisagez une montée en charge.',
+      ins_shock: 'Exposition aux chocs', ins_shock_d: 'Le choc sanitaire & prix alimentaires érode l’effet du programme jusqu’à 28% — prévoyez une fenêtre de contingence.',
+      ins_fiscal: 'Dividende fiscal', ins_fiscal_d: 'Le levier taxe sucre génère des recettes pouvant co-financer le programme dès l’an 2.',
+      ins_ncd: 'Épidémie de MNT', ins_ncd_d: 'Diabète et hypertension continuent de monter au statu quo — le paquet de soins stoppe la courbe.',
+      ins_cpd: 'Coût-efficacité', ins_cpd_d: 'est sous le seuil OMS de très bonne coût-efficacité (PIB par habitant) — argument solide pour un financement national et extérieur.',
+      ins_target: 'Cible OMS 2030', ins_target_d: 'atteinte sur le retard de croissance dans l’horizon. Un déploiement complet soutient le gain au-delà du programme.',
+      ins_digital: 'Multiplicateur de système', ins_digital_d: 'La surveillance numérique augmente l’effet de tous les autres leviers — gardez-la au-dessus de 60%.',
+      ins_pay: 'Note de financement', ins_pay_d: 'Le point d’équilibre arrive dans l’horizon ; un financement mixte peut l’avancer de 1 à 2 ans.',
+      sv_registry: 'enfants suivis en direct', sv_maternal: 'femmes CPN suivies', sv_screen: 'adultes dépistés / an', sv_pen: 'patients sous protocole', sv_fiscal: 'recettes fiscales / an', sv_supply: 'couverture chaîne d’approvisionnement', sv_ewarn: 'délai d’alerte', sv_workforce: 'agents de santé gérés', sv_gis: 'districts cartographiés'
+    }
+  };
+  function lang() {
+    var l = '';
+    try { l = localStorage.getItem('nutri_language') || document.documentElement.lang || 'en'; } catch (e) { }
+    l = String(l).toLowerCase();
+    return l.indexOf('fr') === 0 ? 'fr' : 'en';
+  }
+  function t(k) { var s = STR[lang()] || STR.en; return s[k] || STR.en[k] || k; }
+  function applyI18n() { $$('#health [data-hl]').forEach(function (el) { el.textContent = t(el.getAttribute('data-hl')); }); }
+
+  /* ==================== FORMATTERS ==================== */
+  function nf(v, d) { d = d == null ? 0 : d; if (!isFinite(v)) v = 0; return Number(v).toLocaleString(lang() === 'fr' ? 'fr-FR' : 'en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+  function money(v) {
+    if (!isFinite(v)) v = 0;
+    var a = Math.abs(v);
+    if (a >= 1000) return (v < 0 ? '-' : '') + '$' + (a / 1000).toFixed(a >= 10000 ? 0 : 1) + 'B';
+    return (v < 0 ? '-' : '') + '$' + nf(a, a < 10 ? 2 : 0) + 'M';
+  }
+  function pct(v, d) { if (!isFinite(v)) v = 0; return nf(v * 100, d == null ? 1 : d) + '%'; }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
+  function legend(items) { return items.map(function (i) { return '<span><i style="background:' + i.c + '"></i>' + esc(i.l) + '</span>'; }).join(''); }
+  function hexA(hex, a) {
+    var m = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return m ? 'rgba(' + parseInt(m[1], 16) + ',' + parseInt(m[2], 16) + ',' + parseInt(m[3], 16) + ',' + a + ')' : hex;
+  }
+  function setText(sel, v) { var el = $(sel); if (el) el.textContent = v; }
+
+  /* ==================== POPULATION & EPIDEMIOLOGY DATA (illustrative calibration) ==================== */
+  /* st: stunting U5 • wa: wasting U5 • an: anemia WRA • ebf: exclusive breastfeeding <6m •
+     dm: diabetes adults • htn: hypertension adults • ob: adult obesity • uhc: service coverage index
+     hxp: health expenditure $/cap • risk: crisis exposure • growth: population growth */
+  var C = {
+    TG: { n: 'Togo', pop: 9.1, st: .275, wa: .054, an: .46, ebf: .54, dm: .062, htn: .23, ob: .09, uhc: 42, hxp: 38, risk: 55, growth: .024 },
+    BJ: { n: 'Benin', pop: 13.7, st: .32, wa: .048, an: .44, ebf: .40, dm: .058, htn: .225, ob: .095, uhc: 44, hxp: 43, risk: 48, growth: .026 },
+    BF: { n: 'Burkina Faso', pop: 23.0, st: .345, wa: .082, an: .48, ebf: .38, dm: .062, htn: .21, ob: .085, uhc: 41, hxp: 37, risk: 70, growth: .026 },
+    CV: { n: 'Cabo Verde', pop: .6, st: .09, wa: .025, an: .30, ebf: .54, dm: .082, htn: .26, ob: .17, uhc: 72, hxp: 210, risk: 35, growth: .008 },
+    CI: { n: 'Côte d’Ivoire', pop: 29.4, st: .225, wa: .061, an: .43, ebf: .32, dm: .066, htn: .24, ob: .105, uhc: 47, hxp: 55, risk: 46, growth: .025 },
+    GM: { n: 'The Gambia', pop: 2.8, st: .24, wa: .062, an: .45, ebf: .35, dm: .06, htn: .23, ob: .095, uhc: 49, hxp: 48, risk: 42, growth: .026 },
+    GH: { n: 'Ghana', pop: 34.1, st: .18, wa: .055, an: .42, ebf: .53, dm: .068, htn: .255, ob: .132, uhc: 57, hxp: 62, risk: 38, growth: .021 },
+    GN: { n: 'Guinea', pop: 14.2, st: .25, wa: .058, an: .47, ebf: .36, dm: .058, htn: .22, ob: .088, uhc: 40, hxp: 32, risk: 50, growth: .024 },
+    GW: { n: 'Guinea-Bissau', pop: 2.2, st: .26, wa: .06, an: .48, ebf: .33, dm: .062, htn: .22, ob: .09, uhc: 42, hxp: 40, risk: 44, growth: .023 },
+    LR: { n: 'Liberia', pop: 5.5, st: .30, wa: .032, an: .44, ebf: .55, dm: .056, htn: .215, ob: .095, uhc: 42, hxp: 44, risk: 40, growth: .025 },
+    ML: { n: 'Mali', pop: 23.5, st: .36, wa: .094, an: .52, ebf: .35, dm: .056, htn: .205, ob: .078, uhc: 38, hxp: 33, risk: 74, growth: .030 },
+    MR: { n: 'Mauritania', pop: 4.9, st: .23, wa: .078, an: .44, ebf: .40, dm: .074, htn: .245, ob: .15, uhc: 46, hxp: 66, risk: 52, growth: .026 },
+    NE: { n: 'Niger', pop: 27.2, st: .41, wa: .124, an: .50, ebf: .23, dm: .048, htn: .19, ob: .068, uhc: 32, hxp: 26, risk: 78, growth: .034 },
+    NG: { n: 'Nigeria', pop: 223.8, st: .32, wa: .07, an: .48, ebf: .29, dm: .06, htn: .24, ob: .122, uhc: 44, hxp: 30, risk: 52, growth: .024 },
+    SN: { n: 'Senegal', pop: 18.3, st: .185, wa: .075, an: .43, ebf: .46, dm: .07, htn: .25, ob: .135, uhc: 55, hxp: 63, risk: 40, growth: .027 },
+    SL: { n: 'Sierra Leone', pop: 8.8, st: .28, wa: .048, an: .46, ebf: .49, dm: .058, htn: .22, ob: .098, uhc: 40, hxp: 33, risk: 42, growth: .023 },
+    TD: { n: 'Chad', pop: 19.3, st: .38, wa: .104, an: .49, ebf: .20, dm: .052, htn: .20, ob: .072, uhc: 28, hxp: 22, risk: 76, growth: .031 }
+  };
+
+  var LEVERS = [
+    { k: 'c1000', unit: 3.2, owner: 'owner1' },
+    { k: 'school', unit: 2.8, owner: 'owner2' },
+    { k: 'fortif', unit: 1.2, owner: 'owner3' },
+    { k: 'maternal', unit: 3.6, owner: 'owner4' },
+    { k: 'screen', unit: 2.2, owner: 'owner5' },
+    { k: 'pen', unit: 3.4, owner: 'owner6' },
+    { k: 'fiscal', unit: 0.8, owner: 'owner7' },
+    { k: 'digital', unit: 1.6, owner: 'owner8' },
+    { k: 'wash', unit: 2.4, owner: 'owner9' }
+  ];
+  var PRESETS = {
+    status: { c1000: 0, school: 0, fortif: 0, maternal: 0, screen: 0, pen: 0, fiscal: 0, digital: 0, wash: 0 },
+    donor: { c1000: .22, school: .12, fortif: .45, maternal: .18, screen: .08, pen: .06, fiscal: 0, digital: .15, wash: .12 },
+    national: { c1000: .34, school: .30, fortif: .38, maternal: .32, screen: .26, pen: .24, fiscal: .22, digital: .32, wash: .26 },
+    investor: { c1000: .48, school: .58, fortif: .60, maternal: .44, screen: .62, pen: .56, fiscal: .40, digital: .60, wash: .42 },
+    nutrition: { c1000: .86, school: .64, fortif: .80, maternal: .72, screen: .15, pen: .12, fiscal: .10, digital: .46, wash: .62 },
+    full: { c1000: .86, school: .76, fortif: .82, maternal: .78, screen: .72, pen: .76, fiscal: .60, digital: .78, wash: .70 }
+  };
+  var REGIONS = [
+    { en: 'Urban coastal', fr: 'Littoral urbain', st: .70, wa: .80, an: .85, ncd: 1.30, acc: 1.30 },
+    { en: 'Southern agrarian', fr: 'Sud agricole', st: .95, wa: .95, an: 1.00, ncd: 1.00, acc: 1.05 },
+    { en: 'Central highlands', fr: 'Plateaux centraux', st: 1.10, wa: 1.05, an: 1.05, ncd: .90, acc: .85 },
+    { en: 'Northern savanna', fr: 'Savane du nord', st: 1.45, wa: 1.40, an: 1.20, ncd: .70, acc: .55 },
+    { en: 'River basin', fr: 'Bassin fluvial', st: 1.20, wa: 1.25, an: 1.10, ncd: .85, acc: .70 },
+    { en: 'Pastoral north', fr: 'Nord pastoral', st: 1.35, wa: 1.30, an: 1.15, ncd: .75, acc: .60 }
+  ];
+  var MODULES = [
+    { id: 'registry', icon: '📈', en: 'Growth monitoring registry', fr: 'Registre de surveillance de la croissance', lev: 'c1000' },
+    { id: 'maternal', icon: '🤰', en: 'Maternal & ANC platform', fr: 'Plateforme maternelle & CPN', lev: 'maternal' },
+    { id: 'screen', icon: '🩺', en: 'NCD screening network', fr: 'Réseau de dépistage MNT', lev: 'screen' },
+    { id: 'pen', icon: '💊', en: 'Protocol & prescription engine', fr: 'Moteur de protocoles & prescription', lev: 'pen' },
+    { id: 'fiscal', icon: '🍬', en: 'Food-environment & tax monitor', fr: 'Surveillance environnement alimentaire & taxes', lev: 'fiscal' },
+    { id: 'supply', icon: '🚚', en: 'Micronutrient supply chain', fr: 'Chaîne des micronutriments', lev: 'fortif' },
+    { id: 'ewarn', icon: '🚨', en: 'Early-warning intelligence', fr: 'Intelligence d’alerte précoce', lev: 'digital' },
+    { id: 'workforce', icon: '👥', en: 'Health workforce & CHWs', fr: 'Personnel de santé & ASC', lev: 'wash' },
+    { id: 'gis', icon: '🗺', en: 'GIS burden hotspots', fr: 'Foyers géographiques de charge', lev: 'digital' }
+  ];
+  var JOBS = [
+    { k: 'c1000', en: 'Community health workers', fr: 'Agents de santé communautaires', f: function (L, pop) { return (L.c1000 || 0) * pop * 1.54; } },
+    { k: 'school', en: 'School cooks & staff', fr: 'Cuisinières & personnel scolaire', f: function (L, pop) { return (L.school || 0) * pop * 0.45; } },
+    { k: 'screen', en: 'Screening teams', fr: 'Équipes de dépistage', f: function (L, pop) { return (L.screen || 0) * pop * 0.30; } },
+    { k: 'pen', en: 'PEN clinicians', fr: 'Cliniciens PEN', f: function (L, pop) { return (L.pen || 0) * pop * 0.26; } },
+    { k: 'maternal', en: 'Midwives & ANC staff', fr: 'Sages-femmes & personnel CPN', f: function (L, pop) { return (L.maternal || 0) * pop * 0.20; } },
+    { k: 'digital', en: 'Data & surveillance officers', fr: 'Agents de données & surveillance', f: function (L, pop) { return (L.digital || 0) * pop * 0.12; } },
+    { k: 'wash', en: 'WASH technicians', fr: 'Techniciens WASH', f: function (L, pop) { return (L.wash || 0) * pop * 0.22; } }
+  ];
+
+  var state = {
+    code: 'TG',
+    horizon: 10,
+    shock: 0,
+    preset: 'national',
+    levers: Object.assign({}, PRESETS.national)
+  };
+
+  /* ==================== DETERMINISTIC SIMULATION ENGINE ==================== */
+  /* tweaks let the sensitivity analysis bend one driver at a time */
+  function simulate(L, horizon, shock, tw) {
+    tw = tw || {};
+    var effK = tw.eff == null ? 1 : tw.eff;
+    var costK = tw.cost == null ? 1 : tw.cost;
+    var valK = tw.val == null ? 1 : tw.val;
+    var rampK = tw.rampK == null ? 1 : tw.rampK;
+    var disc = tw.disc == null ? 0.10 : tw.disc;
+
+    var c = C[state.code] || C.TG;
+    var P0 = c.pop;
+    var shockF = (shock || 0) / 100;
+    var popScale = 0.62 * Math.pow(P0, 0.85);
+
+    /* ---- programme economics ------------------------------------------------ */
+    var capex = 0;
+    LEVERS.forEach(function (lv) { capex += (lv.unit * (L[lv.k] || 0)) * popScale; });
+    capex *= costK;
+    var opex = capex * 0.34;                       // annual running cost of the installed package
+    var taxFull = (L.fiscal || 0) * P0 * 1.1;      // $M / yr at full coverage
+
+    /* ---- composite effect indices (0..1), with system multiplier ------------- */
+    var sysM = 0.72 + 0.38 * (L.digital || 0);
+    var eff = (1 - 0.28 * shockF) * effK;
+    var E_nut = clamp((0.40 * (L.c1000 || 0) + 0.16 * (L.school || 0) + 0.14 * (L.fortif || 0) + 0.16 * (L.maternal || 0) + 0.14 * (L.wash || 0)) * sysM * eff, 0, 1);
+    var E_ncd = clamp((0.30 * (L.screen || 0) + 0.34 * (L.pen || 0) + 0.22 * (L.fiscal || 0) + 0.14 * (L.digital || 0)) * (0.75 + 0.32 * (L.digital || 0)) * eff, 0, 1);
+    var E_ebf = clamp((0.62 * (L.c1000 || 0) + 0.22 * (L.maternal || 0) + 0.16 * (L.school || 0)) * sysM * eff, 0, 1);
+    var E_sys = clamp((0.30 * (L.digital || 0) + 0.25 * (L.pen || 0) + 0.20 * (L.maternal || 0) + 0.15 * (L.c1000 || 0) + 0.10 * (L.screen || 0)) * eff, 0, 1);
+    var gdpPc = clamp(c.hxp / 0.048, 220, 9000);   // health expenditure back-out of GDP pc
+    var VSLY = 1.6 * gdpPc / 1000 * valK;          // $M per thousand DALYs
+
+    var u5 = P0 * 0.155, wra = P0 * 0.25, adults = P0 * 0.52;
+
+    /* ---- yearly trajectories ------------------------------------------------ */
+    var years = [], stSq = [], stPr = [], waSq = [], waPr = [], anSq = [], anPr = [], ebfPr = [], dmSq = [], dmPr = [], obSq = [], obPr = [], htBsq = [], htBpr = [];
+    var dalys = [], deaths = [], benefits = [], costs = [], cumul = [], taxRev = [];
+    var bCost = 0, bHealth = 0, bProd = 0, bTax = 0, cum = 0, payback = 0, last = null;
+    var ctrlFinal = 0, ctrl0 = 0.11;
+    cum = -capex;                                   // full envelope committed at t0
+
+    for (var i = 0; i < horizon; i++) {
+      var tt = i + 1;
+      var ramp = clamp((0.16 + 0.15 * tt) * rampK, 0, 1);
+      var shockDecay = tt === 1 ? 1 : (tt === 2 ? 0.5 : 0.15);
+      years.push(2025 + tt);
+
+      var stS = c.st * Math.exp(-0.024 * tt);
+      var stP = c.st * Math.exp(-(0.024 + 0.048 * E_nut * ramp) * tt);
+      var waS = c.wa * Math.exp(-0.014 * tt) * (1 + 0.45 * shockF * shockDecay);
+      var waP = c.wa * (1 + 0.45 * shockF * shockDecay * (1 - 0.5 * E_nut)) * Math.exp(-(0.014 + 0.042 * E_nut * ramp) * tt);
+      var anS = c.an * Math.exp(-0.010 * tt);
+      var anP = c.an * Math.exp(-(0.010 + 0.040 * E_nut * ramp) * tt);
+      var eP = c.ebf + (0.85 - c.ebf) * (1 - Math.exp(-0.10 * E_ebf * ramp * tt));
+      var dmS = c.dm * Math.exp(0.021 * tt);
+      var dmP = c.dm * Math.exp((0.021 - 0.024 * E_ncd * ramp) * tt);
+      var obS = c.ob * Math.exp(0.018 * tt);
+      var obP = c.ob * Math.exp((0.018 - 0.020 * (L.fiscal || 0) * ramp - 0.005 * (L.school || 0) * ramp) * tt);
+      var htnS = c.htn * Math.exp(0.009 * tt);
+      var htnP = c.htn * Math.exp((0.009 - 0.006 * E_ncd * ramp) * tt);
+      var ctrl = clamp(0.11 + 0.52 * (0.62 * (L.pen || 0) + 0.26 * (L.screen || 0) + 0.12 * (L.digital || 0)) * ramp, 0, 0.72);
+      ctrlFinal = ctrl;
+      var htBS = htnS * (1 - 0.42 * ctrl0);
+      var htBP = htnP * (1 - 0.42 * ctrl);
+
+      stSq.push(stS); stPr.push(stP); waSq.push(waS); waPr.push(waP); anSq.push(anS); anPr.push(anP);
+      ebfPr.push(eP); dmSq.push(dmS); dmPr.push(dmP); obSq.push(obS); obPr.push(obP); htBsq.push(htBS); htBpr.push(htBP);
+
+      /* --- health outcomes: DALYs averted (k) & deaths averted (persons) --- */
+      var dSt = Math.max(0, stS - stP) * u5 * 300;      // k-DALYs
+      var dWa = Math.max(0, waS - waP) * u5 * 1400;
+      var dAn = Math.max(0, anS - anP) * wra * 20;
+      var dDm = Math.max(0, dmS - dmP) * adults * 120;
+      var dHt = Math.max(0, htBS - htBP) * adults * 90;
+      var dOb = Math.max(0, obS - obP) * adults * 60;
+      var daly = dSt + dWa + dAn + dDm + dHt + dOb;
+      var dth = (stS - stP) * u5 * 6.5 + (waS - waP) * u5 * 10 + (dmS - dmP) * adults * 6 + (htBS - htBP) * adults * 5 + (obS - obP) * adults * 3; // thousands? → persons:
+      dth = Math.max(0, dth) * 1000;
+      dalys.push(daly); deaths.push(dth);
+
+      /* --- benefits: economic value of health + direct savings + productivity + tax --- */
+      var bV = daly * VSLY;
+      var bS = (dDm * 95 / 120 + dHt * 70 / 90 + dWa * 160 / 1400 + dSt * 25 / 300) * valK;
+      var bP = Math.max(0, stS - stP) * u5 * 1000 * 0.11 * gdpPc / 1000 * valK / 5;
+      var bT = taxFull * ramp;
+      var ben = bV + bS + bP + bT;
+      var capY = tt <= 3 ? capex * (tt === 1 ? 0.45 : tt === 2 ? 0.35 : 0.20) : capex * 0.05;   // capital deployment
+      var cost = capY + opex * ramp;
+      benefits.push(ben); costs.push(cost); taxRev.push(bT);
+      bCost += cost; bHealth += bV + bS + bP; bTax += bT;
+      cum += ben - (cost - capY);                    // cash view: benefits net of running cost
+      cumul.push(cum);
+      if (payback === 0 && cum >= 0) payback = tt;
+      last = {
+        st: stP, stSq: stS, wa: waP, waSq: waS, an: anP, anSq: anS, ebf: eP, dm: dmP, dmSq: dmS, ob: obP, obSq: obS,
+        htB: htBP, htBSq: htBS, ctrl: ctrl, daly: daly, dSt: dSt, dWa: dWa, dAn: dAn, dDm: dDm, dHt: dHt, dOb: dOb,
+        uhc: clamp(c.uhc + 24 * E_sys, 0, 92), ben: ben, cost: cost
+      };
+    }
+
+    /* --- NPV / IRR / BCR ------------------------------------------------------ */
+    /* investor view: the full envelope is committed up-front (t0), benefits net of
+       running cost flow from year 1 — BCR stays PV(benefits)/PV(all costs). */
+    var npv = 0, pvB = 0, pvC = 0;
+    for (var j = 0; j < horizon; j++) {
+      var df = 1 / Math.pow(1 + disc, j + 1);
+      pvB += benefits[j] * df;
+      pvC += costs[j] * df;
+    }
+    npv = -capex + pvB - (pvC - capex);            // = PV(net flows) with t0 outlay
+    var flowsIRR = [-capex];
+    for (var jf = 0; jf < horizon; jf++) flowsIRR.push(benefits[jf] - (costs[jf] - (jf <= 2 ? capex * (jf === 0 ? .45 : jf === 1 ? .35 : .20) : capex * 0.05)));
+    function npvAt(r) {
+      var s = 0;
+      for (var j = 0; j < flowsIRR.length; j++) s += flowsIRR[j] / Math.pow(1 + r, j);
+      return s;
+    }
+    var irr = null;
+    (function () {
+      var lo = -0.5, hi = 3;
+      if (npvAt(lo) * npvAt(hi) > 0) return;
+      for (var k = 0; k < 60; k++) {
+        var mid = (lo + hi) / 2;
+        if (npvAt(lo) * npvAt(mid) <= 0) hi = mid; else lo = mid;
+      }
+      irr = (lo + hi) / 2;
+    })();
+    var bcr = pvC > 0 ? pvB / pvC : null;
+    var dalysPV = 0, deathsPV = 0;
+    for (var j2 = 0; j2 < horizon; j2++) { var df2 = 1 / Math.pow(1 + disc, j2 + 1); dalysPV += dalys[j2] * df2; deathsPV += deaths[j2] * df2; }
+    var cpd = dalysPV > 0 ? (pvC * 1000) / dalysPV : null;   // $ per DALY averted
+
+    /* --- attractiveness score -------------------------------------------------- */
+    var score = 0;
+    if (bcr != null) score += 32 * clamp(bcr / 7, 0, 1);
+    score += 22 * clamp(Math.max(0, npv) / Math.max(60, capex * 2), 0, 1);
+    score += 16 * (1 - c.risk / 130);
+    score += 16 * clamp(cpd == null || cpd <= 0 ? 1 : 1.4 * gdpPc / cpd, 0, 1);
+    score += 14 * clamp((L.digital || 0) / 0.8, 0, 1);
+    score = clamp(score, 0, 100);
+    var grade = score >= 68 ? 'A' : score >= 45 ? 'B' : 'C';
+
+    /* --- jobs (thousands) ------------------------------------------------------ */
+    var jobsRows = JOBS.map(function (o) { return { k: o.k, label: o[lang()] || o.en, v: o.f(L, P0) }; });
+    var jobsTotal = jobsRows.reduce(function (a, b) { return a + b.v; }, 0);
+
+    return {
+      c: c, L: L, last: last, years: years, capex: capex, opex: opex, taxFull: taxFull,
+      stSq: stSq, stPr: stPr, waSq: waSq, waPr: waPr, anSq: anSq, anPr: anPr, ebfPr: ebfPr,
+      dmSq: dmSq, dmPr: dmPr, obSq: obSq, obPr: obPr, htBsq: htBsq, htBpr: htBpr,
+      dalys: dalys, deaths: deaths, benefits: benefits, costs: costs, cumul: cumul, taxRev: taxRev,
+      npv: npv, irr: irr, bcr: bcr, payback: payback || null, cpd: cpd, score: score, grade: grade,
+      pvB: pvB, pvC: pvC, dalysPV: dalysPV, deathsPV: deathsPV,
+      E_nut: E_nut, E_ncd: E_ncd, E_ebf: E_ebf, E_sys: E_sys, gdpPc: gdpPc,
+      ctrlFinal: ctrlFinal, jobsRows: jobsRows, jobs: jobsTotal,
+      bVal: bHealth, bSav: null, bTax: bTax,
+      reduction: last ? 1 - last.st / c.st : 0
+    };
+  }
+
+  /* ---- programme pipeline rows (cost per lever, marginal ROI share) ---------- */
+  function programmeRows(sim) {
+    var rows = LEVERS.map(function (lv) {
+      var lvl = sim.L[lv.k] || 0;
+      var capex = lv.unit * lvl * 0.62 * Math.pow(sim.c.pop, 0.85);
+      return { k: lv.k, label: t('lv_' + lv.k), cost: capex, lvl: lvl, owner: t(lv.owner), roi: 0, share: 0, benefit: 0 };
+    }).filter(function (r) { return r.lvl > 0.01; });
+    var tot = rows.reduce(function (a, b) { return a + b.cost; }, 0) || 1;
+    var sim2 = simulate(zeroOther(sim.L), state.horizon, state.shock);
+    rows.forEach(function (r) {
+      var L2 = Object.assign({}, PRESETS.status, {}, sim.L); L2[r.k] = 0;
+      var s2 = simulate(L2, state.horizon, state.shock);
+      var d = sim2.npv - s2.npv;
+      r.benefit = Math.max(0.01, d);
+      r.roi = r.cost > 0 ? r.benefit / r.cost : 0;
+      r.share = r.cost / tot;
+    });
+    rows.sort(function (a, b) { return b.roi - a.roi; });
+    return rows;
+  }
+  function zeroOther() { return state.levers; }
+
+  /* ---- scenario table (six designs priced by the same engine) ---------------- */
+  function scenarioRows() {
+    return Object.keys(PRESETS).map(function (k) {
+      var s = simulate(PRESETS[k], state.horizon, state.shock);
+      return { key: k, label: t('pre_' + k), capex: s.capex, npv: s.npv, irr: s.irr, payback: s.payback, jobs: s.jobs, sim: s };
+    });
+  }
+
+  /* ---- sensitivity (tornado) -------------------------------------------------- */
+  function sensitivity(sim) {
+    function npvTweak(tw) { return simulate(sim.L, state.horizon, state.shock, tw).npv; }
+    return [
+      { label: lang() === 'fr' ? 'Tailles d’effet' : 'Effect sizes', base: sim.npv, low: npvTweak({ eff: .8 }), high: npvTweak({ eff: 1.2 }) },
+      { label: lang() === 'fr' ? 'Coûts unitaires' : 'Unit costs', base: sim.npv, low: npvTweak({ cost: 1.2 }), high: npvTweak({ cost: .8 }) },
+      { label: lang() === 'fr' ? 'Valorisation santé' : 'Health valuation', base: sim.npv, low: npvTweak({ val: .8 }), high: npvTweak({ val: 1.2 }) },
+      { label: lang() === 'fr' ? 'Vitesse d’adoption' : 'Adoption pace', base: sim.npv, low: npvTweak({ rampK: .7 }), high: npvTweak({ rampK: 1.25 }) },
+      { label: lang() === 'fr' ? 'Taux d’actualisation' : 'Discount rate', base: sim.npv, low: npvTweak({ disc: .12 }), high: npvTweak({ disc: .08 }) }
+    ];
+  }
+
+  /* ---- financing structure ----------------------------------------------------- */
+  function financing(sim) {
+    var priv = clamp(sim.capex * (0.10 + 0.16 * (sim.L.fiscal || 0)), 0, sim.capex * 0.4);
+    var debt = clamp(sim.capex * 0.30, 0, sim.capex * 0.45);
+    var pub = Math.max(0, sim.capex - priv - debt);
+    return {
+      pub: pub, priv: priv, debt: debt,
+      perDaly: sim.deathsPV > 0 ? (sim.pvC * 1e6) / (sim.deathsPV * 1000) : null,
+      perLife: sim.last && sim.last.daly > 0 ? sim.capex * 1e6 / Math.max(1, sim.deaths[sim.deaths.length - 1]) : null,
+      opex: sim.opex, leverage: priv + debt
+    };
+  }
+
+  /* ---- regional weights --------------------------------------------------------- */
+  function regional() {
+    var c = C[state.code] || C.TG;
+    return REGIONS.map(function (r) {
+      return {
+        name: r[lang()] || r.en,
+        st: clamp(c.st * r.st * 2.2, .05, .95),
+        wa: clamp(c.wa * r.wa * 4.5, .05, .95),
+        an: clamp(c.an * r.an * 1.35, .05, .95),
+        ncd: clamp((c.dm + c.htn) * r.ncd * 1.6, .05, .95),
+        acc: clamp(1.15 - c.uhc / 100, .05, .9) * r.acc,
+        opp: clamp(0.9 - c.uhc / 140 + (1.4 - r.acc) * .25, .08, .95)
+      };
+    });
+  }
+
+  /* ---- decision feed -------------------------------------------------------------- */
+  function insights(sim) {
+    var out = [];
+    var rows = programmeRows(sim);
+    if (rows.length) {
+      var best = rows[0];
+      out.push({ t: t('ins_best'), d: '「' + best.label + '」 ' + t('ins_best_d'), w: '' });
+    }
+    var cov = covRows(sim);
+    var scr = cov[1];
+    if (scr && scr.pr < 40) out.push({ t: t('ins_gap'), d: t('srv_scr') + ' ' + t('ins_gap_d'), w: 'warn' });
+    if (state.shock >= 30) out.push({ t: t('ins_shock'), d: t('ins_shock_d'), w: 'bad' });
+    if ((sim.L.fiscal || 0) > .3) out.push({ t: t('ins_fiscal'), d: money(sim.taxRev[sim.taxRev.length - 1] || 0) + ' / ' + t('y') + ' — ' + t('ins_fiscal_d'), w: '' });
+    out.push({ t: t('ins_ncd'), d: t('ins_ncd_d') + ' (' + pct(sim.dmSq[sim.dmSq.length - 1], 1) + ' → ' + pct(sim.dmPr[sim.dmPr.length - 1], 1) + ')', w: '' });
+    if (sim.cpd != null && sim.gdpPc > 0) out.push({ t: t('ins_cpd'), d: '$' + nf(sim.cpd, 0) + ' / DALY — ' + t('ins_cpd_d'), w: sim.cpd < sim.gdpPc ? '' : 'warn' });
+    if (sim.reduction >= .40) out.push({ t: t('ins_target'), d: '−' + pct(sim.reduction, 0) + ' — ' + t('ins_target_d'), w: '' });
+    if ((sim.L.digital || 0) < .2 && rows.length > 2) out.push({ t: t('ins_digital'), d: t('ins_digital_d'), w: 'warn' });
+    if (sim.payback) out.push({ t: t('ins_pay'), d: t('payback') + ': ' + sim.payback + ' ' + t('y') + ' — ' + t('ins_pay_d'), w: '' });
+    return out;
+  }
+
+  /* ---- coverage rows (today vs programme) ------------------------------------------- */
+  function covRows(sim) {
+    var c = sim.c, L = sim.L, last = sim.last;
+    return [
+      { k: 'uhc', label: t('srv_uhc'), sq: c.uhc, pr: last.uhc },
+      { k: 'scr', label: t('srv_scr'), sq: Math.round(c.uhc * 0.28), pr: clamp(c.uhc * 0.28 + 55 * (L.screen || 0) + 8 * (L.digital || 0), 0, 92) },
+      { k: 'ctrl', label: t('srv_ctrl'), sq: Math.round(11), pr: Math.round(sim.ctrlFinal * 100) },
+      { k: 'mic', label: t('srv_mic'), sq: 45, pr: clamp(45 + 45 * (L.fortif || 0), 0, 96) },
+      { k: 'anc', label: t('srv_anc'), sq: clamp(c.uhc * 1.25, 20, 80), pr: clamp(c.uhc * 1.25 + 30 * (L.maternal || 0), 0, 94) },
+      { k: 'ebf', label: t('srv_ebf'), sq: Math.round(c.ebf * 100), pr: Math.round(last.ebf * 100) }
+    ];
+  }
+
+  /* ==================== CHART ENGINE (custom canvas, animated) ==================== */
+  var CH = (function () {
+    function ctxOf(cv) { if (!cv) return null; try { return cv.getContext('2d'); } catch (e) { return null; } }
+    function fit(cv) {
+      var ctx = ctxOf(cv); if (!ctx) return null;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var w = Math.max(60, cv.clientWidth || (cv.parentElement && cv.parentElement.clientWidth) || 300);
+      var h = Math.max(50, cv.clientHeight || (cv.parentElement && cv.parentElement.clientHeight) || 160);
+      if (cv.width !== Math.round(w * dpr) || cv.height !== Math.round(h * dpr)) { cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr); }
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, w, h);
+      return { ctx: ctx, w: w, h: h };
+    }
+    function anim(cv, draw, dur) {
+      if (!cv) return;
+      cv.__hlDraw = draw;
+      if (cv.__hlRAF) cancelAnimationFrame(cv.__hlRAF);
+      if (REDUCED || !dur) { draw(1); return; }
+      var t0 = performance.now();
+      (function frame(now) {
+        var p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+        try { draw(e); } catch (err) { }
+        cv.__hlRAF = p < 1 ? requestAnimationFrame(frame) : null;
+      })(t0);
+    }
+    function redraw(cv) { if (cv && cv.__hlDraw) { try { cv.__hlDraw(1); } catch (e) { } } }
+    function rr(ctx, x, y, w, h, r) {
+      r = Math.max(0, Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2));
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r); ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h); ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r); ctx.quadraticCurveTo(x, y, x + r, y); ctx.closePath();
+    }
+    function lg(ctx, y, h, color, alpha) {
+      var g = ctx.createLinearGradient(0, y, 0, y + h);
+      g.addColorStop(0, color); g.addColorStop(1, hexA(color, alpha == null ? .12 : alpha));
+      return g;
+    }
+    function grid(ctx, w, h, pad, min, max, fmt, steps) {
+      steps = steps || 4;
+      ctx.save();
+      ctx.font = '10px Inter, system-ui, sans-serif';
+      for (var i = 0; i <= steps; i++) {
+        var v = min + (max - min) * i / steps;
+        var y = h - pad.b - (h - pad.t - pad.b) * (i / steps);
+        ctx.strokeStyle = i === 0 ? 'rgba(20,40,52,.26)' : 'rgba(20,40,52,.09)';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(w - pad.r, y); ctx.stroke();
+        ctx.fillStyle = '#7d8c92'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+        ctx.fillText(fmt ? fmt(v) : nf(v, 0), pad.l - 6, y);
+      }
+      ctx.restore();
+    }
+    function axisLabels(ctx, labels, w, h, pad, every) {
+      ctx.save(); ctx.font = '10px Inter, system-ui, sans-serif'; ctx.fillStyle = '#7d8c92'; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+      var n = labels.length, bw = (w - pad.l - pad.r) / n;
+      every = every || 1;
+      labels.forEach(function (l, i) {
+        if (i % every) return;
+        ctx.save();
+        ctx.translate(pad.l + bw * (i + .5), h - pad.b + 6);
+        if (String(l).length > 9) { ctx.rotate(-Math.PI / 8); ctx.textAlign = 'right'; }
+        ctx.fillText(String(l), 0, 0);
+        ctx.restore();
+      });
+      ctx.restore();
+    }
+    function attachTip(host, cv, getHits, polar) {
+      if (!host || host.__hlTip) return;
+      host.__hlTip = true;
+      var tip = document.createElement('div');
+      tip.className = /hlc-/.test(host.className) ? 'hlc-tip' : 'hl-tip';
+      host.appendChild(tip);
+      host.addEventListener('mousemove', function (ev) {
+        var hits = getHits();
+        if (!hits || !hits.length) { tip.style.opacity = 0; return; }
+        var r = cv.getBoundingClientRect(), rh = host.getBoundingClientRect();
+        var x = ev.clientX - r.left, y = ev.clientY - r.top, best = null, bestD = 1e9;
+        hits.forEach(function (hh) {
+          var d;
+          if (hh.cx != null && polar) {
+            var dx = x - hh.cx, dy = y - hh.cy, dist = Math.sqrt(dx * dx + dy * dy);
+            d = (dist > hh.r && dist < hh.R) ? 0 : Math.abs(dist - (hh.r + hh.R) / 2);
+          } else {
+            var cx2 = hh.x + hh.w / 2;
+            d = (x >= hh.x && x <= hh.x + hh.w) ? 0 : Math.abs(x - cx2);
+          }
+          if (d < bestD) { bestD = d; best = hh; }
+        });
+        if (!best) { tip.style.opacity = 0; return; }
+        tip.innerHTML = best.tip;
+        tip.style.opacity = 1;
+        tip.style.left = (ev.clientX - rh.left) + 'px';
+        tip.style.top = (ev.clientY - rh.top - 6) + 'px';
+      });
+      host.addEventListener('mouseleave', function () { tip.style.opacity = 0; });
+    }
+    function bars(cv, cfg) {
+      if (!cv) return;
+      var hits = [];
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var pad = { l: 46, r: 14, t: 16, b: 36 };
+        var series = cfg.series, n = cfg.labels.length, groups = series.length;
+        var max = 0; series.forEach(function (s) { s.data.forEach(function (v) { max = Math.max(max, v); }); });
+        max = max * 1.16 || 1;
+        grid(ctx, w, h, pad, 0, max, cfg.fmt, 4);
+        var bw = (w - pad.l - pad.r) / n, inner = bw * 0.66, each = inner / groups;
+        hits.length = 0;
+        for (var i = 0; i < n; i++) {
+          for (var s = 0; s < groups; s++) {
+            var val = series[s].data[i] * e, bh = (h - pad.t - pad.b) * (val / max);
+            var x = pad.l + bw * i + (bw - inner) / 2 + each * s, y = h - pad.b - bh;
+            ctx.fillStyle = s === 0 && groups > 1 ? hexA(series[s].color, .32) : series[s].color;
+            rr(ctx, x + 1, y, Math.max(2, each - 2), Math.max(1, bh), 5); ctx.fill();
+            hits.push({ x: x, y: y, w: each, h: Math.max(6, bh), tip: '<b>' + esc(cfg.labels[i]) + '</b><br>' + esc(series[s].name) + ': ' + (cfg.fmt ? cfg.fmt(series[s].data[i]) : nf(series[s].data[i])) });
+          }
+        }
+        axisLabels(ctx, cfg.labels, w, h, pad);
+      }, cfg.dur == null ? 640 : cfg.dur);
+      if (cfg.tipHost) attachTip(cfg.tipHost, cv, function () { return hits; });
+    }
+    function stacked(cv, cfg) {
+      if (!cv) return;
+      var hits = [];
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var pad = { l: 46, r: 14, t: 16, b: 36 };
+        var series = cfg.series, n = cfg.labels.length;
+        var totals = cfg.labels.map(function (_, i) { return series.reduce(function (a, s) { return a + Math.max(0, s.data[i]); }, 0); });
+        var max = Math.max.apply(null, totals.concat([1])) * 1.15;
+        grid(ctx, w, h, pad, 0, max, cfg.fmt, 4);
+        var bw = (w - pad.l - pad.r) / n, inner = bw * 0.56;
+        hits.length = 0;
+        for (var i = 0; i < n; i++) {
+          var y0 = h - pad.b;
+          for (var s = 0; s < series.length; s++) {
+            var v = Math.max(0, series[s].data[i]) * e;
+            var bh = (h - pad.t - pad.b) * (v / max);
+            var x = pad.l + bw * i + (bw - inner) / 2;
+            ctx.fillStyle = series[s].color;
+            ctx.fillRect(x, y0 - bh, inner, Math.max(0, bh));
+            if (bh > 1) hits.push({ x: x, y: y0 - bh, w: inner, h: bh, tip: '<b>' + esc(cfg.labels[i]) + '</b><br>' + esc(series[s].name) + ': ' + (cfg.fmt ? cfg.fmt(series[s].data[i]) : nf(series[s].data[i])) });
+            y0 -= bh;
+          }
+        }
+        axisLabels(ctx, cfg.labels, w, h, pad);
+      }, cfg.dur == null ? 640 : cfg.dur);
+      if (cfg.tipHost) attachTip(cfg.tipHost, cv, function () { return hits; });
+    }
+    function hbars(cv, cfg) {
+      if (!cv) return;
+      var hits = [];
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var pad = { l: 122, r: 52, t: 8, b: 8 };
+        var n = cfg.labels.length, row = (h - pad.t - pad.b) / n;
+        var max = Math.max.apply(null, cfg.values.map(Math.abs).concat([1])) * 1.15;
+        hits.length = 0;
+        cfg.labels.forEach(function (lab, i) {
+          var v = cfg.values[i] * e, bw = (w - pad.l - pad.r) * Math.abs(v) / max;
+          var y = pad.t + row * i + row * 0.2, bh = Math.max(3, row * 0.6);
+          ctx.fillStyle = '#7d8c92'; ctx.font = '10.5px Inter, system-ui, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+          ctx.fillText(String(lab).slice(0, 24), pad.l - 8, y + bh / 2);
+          ctx.fillStyle = cfg.colors ? cfg.colors[i] : '#0a7d94';
+          rr(ctx, pad.l, y, Math.max(2, bw), bh, 5); ctx.fill();
+          ctx.fillStyle = '#31474f'; ctx.textAlign = 'left'; ctx.font = '700 10.5px Inter, system-ui, sans-serif';
+          ctx.fillText(cfg.fmt ? cfg.fmt(cfg.values[i]) : nf(cfg.values[i], 0), pad.l + Math.max(2, bw) + 7, y + bh / 2);
+          hits.push({ x: pad.l, y: y - row * .15, w: Math.max(6, bw), h: row * .9, tip: '<b>' + esc(lab) + '</b><br>' + (cfg.fmt ? cfg.fmt(cfg.values[i]) : nf(cfg.values[i], 0)) });
+        });
+      }, cfg.dur == null ? 620 : cfg.dur);
+      if (cfg.tipHost) attachTip(cfg.tipHost, cv, function () { return hits; });
+    }
+    function lines(cv, cfg) {
+      if (!cv) return;
+      var hits = [];
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var pad = { l: 46, r: 16, t: 16, b: 34 };
+        var series = cfg.series, n = cfg.labels.length;
+        var vals = []; series.forEach(function (s) { s.data.forEach(function (v) { vals.push(v); }); });
+        var max = Math.max.apply(null, vals.concat([1])) * 1.12;
+        var min = cfg.zero ? 0 : Math.min.apply(null, vals.concat([0]));
+        grid(ctx, w, h, pad, min, max, cfg.fmt, 4);
+        if (cfg.mark != null && cfg.mark >= min && cfg.mark <= max) {
+          var my = h - pad.b - (h - pad.t - pad.b) * ((cfg.mark - min) / Math.max(1e-6, max - min));
+          ctx.strokeStyle = hexA(cfg.markColor || '#3b82f6', .8); ctx.setLineDash([5, 4]); ctx.lineWidth = 1.4;
+          ctx.beginPath(); ctx.moveTo(pad.l, my); ctx.lineTo(w - pad.r, my); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle = cfg.markColor || '#3b82f6'; ctx.font = '700 9.5px Inter, system-ui, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'bottom';
+          ctx.fillText(cfg.markLabel || '', w - pad.r - 2, my - 3);
+        }
+        var bw = (w - pad.l - pad.r) / Math.max(1, n - 1);
+        var X = function (i) { return pad.l + bw * i; };
+        var Y = function (v) { return h - pad.b - (h - pad.t - pad.b) * ((v - min) / Math.max(1e-6, max - min)); };
+        hits.length = 0;
+        series.forEach(function (s) {
+          var pts = s.data.map(function (v, i) { return [X(i), Y(v)]; });
+          if (s.fill) {
+            ctx.beginPath();
+            pts.forEach(function (p, i) { i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); });
+            ctx.lineTo(X(n - 1), h - pad.b); ctx.lineTo(X(0), h - pad.b); ctx.closePath();
+            ctx.fillStyle = lg(ctx, pad.t, h - pad.t - pad.b, s.color, .04); ctx.fill();
+          }
+          ctx.beginPath();
+          pts.forEach(function (p, i) { i ? ctx.lineTo(p[0], p[1]) : ctx.moveTo(p[0], p[1]); });
+          ctx.strokeStyle = s.color; ctx.lineWidth = s.width || 2.4;
+          if (s.dashed) ctx.setLineDash([6, 5]);
+          ctx.lineJoin = 'round'; ctx.stroke(); ctx.setLineDash([]);
+          pts.forEach(function (p) {
+            ctx.beginPath(); ctx.arc(p[0], p[1], 3.1, 0, Math.PI * 2);
+            ctx.fillStyle = '#fff'; ctx.fill(); ctx.strokeStyle = s.color; ctx.lineWidth = 2; ctx.stroke();
+          });
+        });
+        axisLabels(ctx, cfg.labels, w, h, pad, cfg.every || 1);
+        for (var i = 0; i < n; i++) {
+          var html = '<b>' + esc(cfg.labels[i]) + '</b>';
+          series.forEach(function (s) { html += '<br>' + esc(s.name) + ': ' + (cfg.fmt ? cfg.fmt(s.data[i]) : nf(s.data[i], 1)); });
+          hits.push({ x: X(i) - bw / 2, y: pad.t, w: bw, h: h - pad.t - pad.b, tip: html });
+        }
+      }, cfg.dur == null ? 780 : cfg.dur);
+      if (cfg.tipHost) attachTip(cfg.tipHost, cv, function () { return hits; });
+    }
+    function donut(cv, cfg) {
+      if (!cv) return;
+      var hits = [];
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var total = cfg.items.reduce(function (a, b) { return a + b.value; }, 0) || 1;
+        var cx = w / 2, cy = h / 2 + 4, R = Math.min(w, h) / 2 - 8, r = R * 0.63;
+        var a0 = -Math.PI / 2;
+        hits.length = 0;
+        cfg.items.forEach(function (it) {
+          var a1 = a0 + (it.value / total) * Math.PI * 2 * e;
+          ctx.beginPath(); ctx.arc(cx, cy, R, a0, a1); ctx.arc(cx, cy, r, a1, a0, true); ctx.closePath();
+          ctx.fillStyle = it.color; ctx.fill();
+          if (it.value / total > .05) hits.push({ cx: cx, cy: cy, R: R, r: r, tip: '<b>' + esc(it.label) + '</b><br>' + (cfg.fmt ? cfg.fmt(it.value) : nf(it.value, 0)) + ' • ' + pct(it.value / total, 0) });
+          a0 = a1;
+        });
+        ctx.fillStyle = '#14252e'; ctx.textAlign = 'center';
+        ctx.font = '800 17px Inter, system-ui, sans-serif'; ctx.fillText(cfg.centerValue || '', cx, cy - 2);
+        ctx.font = '10px Inter, system-ui, sans-serif'; ctx.fillStyle = '#7d8c92'; ctx.fillText(cfg.centerLabel || '', cx, cy + 14);
+      }, 720);
+      if (cfg.tipHost) attachTip(cfg.tipHost, cv, function () { return hits; }, true);
+    }
+    function gauge(cv, cfg) {
+      if (!cv) return;
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var cx = w / 2, cy = h * 0.84, R = Math.min(w / 2 - 12, h * 0.7), lw = Math.max(9, R * 0.18);
+        var a0 = Math.PI, a1 = Math.PI * 2;
+        ctx.lineCap = 'round';
+        ctx.beginPath(); ctx.arc(cx, cy, R, a0, a1); ctx.strokeStyle = '#edf4f8'; ctx.lineWidth = lw; ctx.stroke();
+        [[0, .45, '#e4576b'], [.45, .7, '#f0913f'], [.7, 1, '#0a9478']].forEach(function (z) {
+          ctx.beginPath(); ctx.arc(cx, cy, R, a0 + (a1 - a0) * z[0], a0 + (a1 - a0) * z[1]);
+          ctx.strokeStyle = hexA(z[2], .28); ctx.lineWidth = lw; ctx.stroke();
+        });
+        var v = clamp(cfg.value, 0, 1) * e;
+        var g = ctx.createLinearGradient(cx - R, 0, cx + R, 0);
+        g.addColorStop(0, '#0a7d94'); g.addColorStop(1, '#46e0c8');
+        ctx.beginPath(); ctx.arc(cx, cy, R, a0, a0 + (a1 - a0) * v); ctx.strokeStyle = g; ctx.lineWidth = lw; ctx.stroke();
+        ctx.fillStyle = '#14252e'; ctx.textAlign = 'center';
+        ctx.font = '800 21px Inter, system-ui, sans-serif'; ctx.fillText(cfg.labelValue || pct(cfg.value, 0), cx, cy - R * 0.3);
+        ctx.font = '10px Inter, system-ui, sans-serif'; ctx.fillStyle = '#7d8c92'; ctx.fillText(cfg.label || '', cx, cy - R * 0.3 + 15);
+      }, 820);
+    }
+    function radar(cv, cfg) {
+      if (!cv) return;
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var cx = w / 2, cy = h / 2 + 2, R = Math.min(w, h) / 2 - 26, n = cfg.axes.length;
+        ctx.strokeStyle = 'rgba(20,40,52,.12)';
+        for (var ring = 1; ring <= 4; ring++) {
+          ctx.beginPath();
+          for (var i = 0; i <= n; i++) {
+            var a = -Math.PI / 2 + (i % n) * (Math.PI * 2 / n), rad = R * ring / 4;
+            var x = cx + Math.cos(a) * rad, y = cy + Math.sin(a) * rad;
+            i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          }
+          ctx.stroke();
+        }
+        cfg.axes.forEach(function (ax, i) {
+          var a = -Math.PI / 2 + i * (Math.PI * 2 / n);
+          ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+          ctx.strokeStyle = 'rgba(20,40,52,.1)'; ctx.stroke();
+          ctx.fillStyle = '#6d7d84'; ctx.font = '9.5px Inter, system-ui, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+          ctx.fillText(ax, cx + Math.cos(a) * (R + 15), cy + Math.sin(a) * (R + 13));
+        });
+        cfg.series.forEach(function (s) {
+          ctx.beginPath();
+          s.data.forEach(function (v, i) {
+            var a = -Math.PI / 2 + i * (Math.PI * 2 / n), rad = R * clamp(v, 0, 1) * e;
+            var x = cx + Math.cos(a) * rad, y = cy + Math.sin(a) * rad;
+            i ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+          });
+          ctx.closePath();
+          ctx.fillStyle = hexA(s.color, .18); ctx.fill();
+          ctx.strokeStyle = s.color; ctx.lineWidth = 2; ctx.stroke();
+        });
+      }, 780);
+    }
+    function waterfall(cv, cfg) {
+      if (!cv) return;
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var pad = { l: 48, r: 14, t: 18, b: 40 };
+        var max = Math.max.apply(null, cfg.values.concat([1])) * 1.15;
+        grid(ctx, w, h, pad, 0, max, cfg.fmt, 4);
+        var bw = (w - pad.l - pad.r) / cfg.labels.length, inner = bw * 0.56, run = 0;
+        for (var i = 0; i < cfg.labels.length; i++) {
+          var v = cfg.values[i] * e;
+          var x = pad.l + bw * i + (bw - inner) / 2;
+          var bh = (h - pad.t - pad.b) * (v / max);
+          if (i === 0) {
+            ctx.fillStyle = '#c4d5de'; ctx.fillRect(x, h - pad.b - bh, inner, bh); run = v;
+          } else if (i === cfg.labels.length - 1) {
+            ctx.fillStyle = cfg.lastColor || '#0a9478'; ctx.fillRect(x, h - pad.b - bh, inner, bh);
+          } else {
+            var yTop = h - pad.b - (h - pad.t - pad.b) * (run / max);
+            ctx.fillStyle = hexA(cfg.color || '#0a7d94', .9);
+            ctx.fillRect(x, yTop, inner, bh);
+            run -= v;
+            ctx.strokeStyle = 'rgba(20,40,52,.25)'; ctx.setLineDash([3, 3]);
+            ctx.beginPath(); ctx.moveTo(x - bw * .22, yTop); ctx.lineTo(x, yTop); ctx.stroke(); ctx.setLineDash([]);
+          }
+        }
+        axisLabels(ctx, cfg.labels, w, h, pad, 1);
+      }, 720);
+    }
+    function heatmap(cv, cfg) {
+      if (!cv) return;
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var padL = 104, padT = 26, padR = 10, padB = 10;
+        var rows = cfg.rows.length, cols = cfg.cols.length;
+        var cw = (w - padL - padR) / cols, chh = (h - padT - padB) / rows;
+        cfg.cols.forEach(function (cname, j) {
+          ctx.fillStyle = '#6d7d84'; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.font = '9.5px Inter, system-ui, sans-serif';
+          ctx.save(); ctx.translate(padL + cw * (j + .5), padT - 6); if (String(cname).length > 8) ctx.rotate(-Math.PI / 9); ctx.fillText(cname, 0, 0); ctx.restore();
+        });
+        cfg.rows.forEach(function (rname, i) {
+          ctx.fillStyle = '#31474f'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle'; ctx.font = '700 10px Inter, system-ui, sans-serif';
+          ctx.fillText(String(rname), padL - 8, padT + chh * (i + .5));
+          cfg.cols.forEach(function (_, j) {
+            var v = clamp(cfg.values[i][j] * e, 0, 1);
+            ctx.fillStyle = heatColor(v);
+            rr(ctx, padL + cw * j + 2, padT + chh * i + 2, cw - 4, chh - 4, 6); ctx.fill();
+            if (chh > 26) {
+              ctx.fillStyle = v > .55 ? '#032023' : '#3b4b52'; ctx.font = '700 9.5px Inter, system-ui, sans-serif';
+              ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+              ctx.fillText(String(Math.round(cfg.values[i][j] * 100)), padL + cw * j + cw / 2, padT + chh * i + chh / 2);
+            }
+          });
+        });
+      }, 660);
+      function heatColor(v) {
+        var stops = [[0, '#e9f7f5'], [.35, '#8fe8d8'], [.6, '#f2c94c'], [.8, '#f0913f'], [1, '#e4576b']];
+        for (var i = 1; i < stops.length; i++) {
+          if (v <= stops[i][0]) {
+            var a = (v - stops[i - 1][0]) / (stops[i][0] - stops[i - 1][0]);
+            return mix(stops[i - 1][1], stops[i][1], a);
+          }
+        }
+        return stops[stops.length - 1][1];
+      }
+      function mix(a, b, k) {
+        function p(h) { return [parseInt(h.substr(1, 2), 16), parseInt(h.substr(3, 2), 16), parseInt(h.substr(5, 2), 16)]; }
+        var A = p(a), B = p(b);
+        return 'rgb(' + Math.round(A[0] + (B[0] - A[0]) * k) + ',' + Math.round(A[1] + (B[1] - A[1]) * k) + ',' + Math.round(A[2] + (B[2] - A[2]) * k) + ')';
+      }
+    }
+    function tornado(cv, cfg) {
+      if (!cv) return;
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var padL = 150, padR = 72, padT = 10, padB = 10;
+        var rows = cfg.items.length || 1, row = (h - padT - padB) / rows;
+        var lim = 0; cfg.items.forEach(function (it) { lim = Math.max(lim, Math.abs(it.low - it.base), Math.abs(it.high - it.base)); });
+        lim = lim * 1.35 || 1;
+        var zero = padL + (w - padL - padR) / 2;
+        ctx.strokeStyle = 'rgba(20,40,52,.22)'; ctx.beginPath(); ctx.moveTo(zero, padT); ctx.lineTo(zero, h - padB); ctx.stroke();
+        cfg.items.forEach(function (it, i) {
+          var y = padT + row * i + row * .18, bh = Math.max(6, row * .64);
+          var lo = it.low - it.base, hi = it.high - it.base;
+          var scale = ((w - padL - padR) / 2) / lim;
+          var x1 = zero + lo * scale * e, x2 = zero + hi * scale * e;
+          ctx.fillStyle = hexA('#e4576b', .8); ctx.fillRect(Math.min(x1, zero), y, Math.abs(x1 - zero), Math.max(3, bh / 2 - 1));
+          ctx.fillStyle = hexA('#0a9478', .85); ctx.fillRect(zero, y + bh / 2 + 1, Math.abs(x2 - zero), Math.max(3, bh / 2 - 1));
+          ctx.fillStyle = '#31474f'; ctx.font = '700 10px Inter, system-ui, sans-serif'; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+          ctx.fillText(String(it.label).slice(0, 26), padL - 8, y + bh / 2);
+          ctx.textAlign = 'left'; ctx.fillStyle = '#6d7d84';
+          ctx.fillText(money(Math.min(lo, hi)), Math.max(x1, x2) + 6, y + bh / 2);
+        });
+      }, 720);
+    }
+    function spark(cv, cfg) {
+      if (!cv) return;
+      anim(cv, function (e) {
+        var f = fit(cv); if (!f) return; var ctx = f.ctx, w = f.w, h = f.h;
+        var all = cfg.data.length > 1 ? cfg.data : [0, 1];
+        var max = Math.max.apply(null, all), min = Math.min.apply(null, all), span = (max - min) || 1;
+        var X = function (i) { return 2 + (w - 4) * i / (all.length - 1); };
+        var Y = function (v) { return h - 3 - (h - 8) * ((v - min) / span); };
+        var n = Math.max(2, Math.round(all.length * e));
+        ctx.beginPath();
+        for (var i = 0; i < n; i++) { i ? ctx.lineTo(X(i), Y(all[i])) : ctx.moveTo(X(i), Y(all[i])); }
+        ctx.lineTo(X(n - 1), h); ctx.lineTo(X(0), h); ctx.closePath();
+        ctx.fillStyle = lg(ctx, 0, h, cfg.color || '#0a7d94', .04); ctx.fill();
+        ctx.beginPath();
+        for (var j = 0; j < n; j++) { j ? ctx.lineTo(X(j), Y(all[j])) : ctx.moveTo(X(j), Y(all[j])); }
+        ctx.strokeStyle = cfg.color || '#0a7d94'; ctx.lineWidth = 1.8; ctx.stroke();
+      }, 760);
+    }
+    return { bars: bars, stacked: stacked, hbars: hbars, lines: lines, donut: donut, gauge: gauge, radar: radar, waterfall: waterfall, heatmap: heatmap, tornado: tornado, spark: spark, redraw: redraw };
+  })();
+
+  /* ==================== RENDERING ==================== */
+  function renderLevers() {
+    var host = $('#hlLevers'); if (!host) return;
+    host.innerHTML = LEVERS.map(function (l) {
+      var v = Math.round((state.levers[l.k] || 0) * 100);
+      return '<div class="hl-lever">' +
+        '<div class="hl-lever-top"><b>' + esc(t('lv_' + l.k)) + '</b><span data-lv-val="' + l.k + '">' + v + '%</span></div>' +
+        '<input type="range" class="hl-range" min="0" max="100" step="1" value="' + v + '" data-lv="' + l.k + '" style="--hl-fill:' + v + '%" aria-label="' + esc(t('lv_' + l.k)) + '">' +
+        '<small>' + esc(t('lv_' + l.k + '_s')) + '</small></div>';
+    }).join('');
+  }
+  function renderPresets() {
+    var host = $('#hlPresets'); if (!host) return;
+    var order = ['status', 'donor', 'national', 'investor', 'nutrition', 'full'];
+    host.innerHTML = order.map(function (p) {
+      return '<button type="button" class="hl-preset' + (state.preset === p ? ' on' : '') + '" data-preset="' + p + '">' + esc(t('pre_' + p)) + '</button>';
+    }).join('');
+  }
+  function kpiCard(o) {
+    return '<div class="hl-kpi ' + (o.tone || '') + '">' +
+      '<small>' + esc(o.label) + '</small><b>' + o.value + '</b>' +
+      '<span class="hl-kpi-delta ' + (o.dir || 'flat') + '">' + esc(o.delta || '') + '</span>' +
+      '<div style="font-size:10.5px;color:var(--muted);margin-top:4px">' + esc(o.sub || '') + '</div>' +
+      (o.spark ? '<canvas data-spark="' + o.spark + '"></canvas>' : '') + '</div>';
+  }
+  function renderKpis(sim) {
+    var host = $('#hlKpis'); if (!host) return;
+    var last = sim.last;
+    var dSt = (last.st - sim.stSq[sim.stSq.length - 1]) * 100;
+    var dWa = (last.wa - sim.waSq[sim.waSq.length - 1]) * 100;
+    var dAn = (last.an - sim.anSq[sim.anSq.length - 1]) * 100;
+    var dEbf = (last.ebf - sim.c.ebf) * 100;
+    var dDm = (last.dm - sim.dmSq[sim.dmSq.length - 1]) * 100;
+    var livesF = sim.deaths[sim.deaths.length - 1] || 0;
+    host.innerHTML = [
+      kpiCard({ label: t('kpi_st'), value: pct(last.st, 1), sub: t('final_yr'), dir: dSt <= 0 ? 'up' : 'down', delta: (dSt <= 0 ? '' : '+') + nf(dSt, 1) + ' pts', spark: 'st' }),
+      kpiCard({ label: t('kpi_wa'), value: pct(last.wa, 1), sub: t('final_yr'), tone: last.wa > .07 ? 'warn' : '', dir: dWa <= 0 ? 'up' : 'down', delta: (dWa <= 0 ? '' : '+') + nf(dWa, 1) + ' pts', spark: 'wa' }),
+      kpiCard({ label: t('kpi_an'), value: pct(last.an, 1), sub: t('final_yr'), dir: dAn <= 0 ? 'up' : 'down', delta: (dAn <= 0 ? '' : '+') + nf(dAn, 1) + ' pts', spark: 'an' }),
+      kpiCard({ label: t('kpi_ebf'), value: pct(last.ebf, 0), sub: t('sub_now') + ' ' + pct(sim.c.ebf, 0), dir: dEbf >= 0 ? 'up' : 'down', delta: (dEbf >= 0 ? '+' : '') + nf(dEbf, 1) + ' pts', spark: 'ebf' }),
+      kpiCard({ label: t('kpi_dm'), value: pct(last.dm, 1), sub: t('statusq') + ' ' + pct(sim.dmSq[sim.dmSq.length - 1], 1), tone: 'info', dir: dDm <= 0 ? 'up' : 'down', delta: (dDm <= 0 ? '' : '+') + nf(dDm, 2) + ' pts', spark: 'dm' }),
+      kpiCard({ label: t('kpi_htn'), value: pct(sim.ctrlFinal * 100, 0), sub: t('sub_ctrl'), tone: 'info', dir: sim.ctrlFinal > .11 ? 'up' : 'flat', delta: sim.ctrlFinal > .11 ? '+' + nf((sim.ctrlFinal - .11) * 100, 0) + ' pts' : '—', spark: 'ctrl' }),
+      kpiCard({ label: t('kpi_lives'), value: nf(livesF, 0), sub: t('lives_unit'), dir: 'up', delta: '♥', spark: 'lives' }),
+      kpiCard({ label: t('kpi_dalys'), value: nf(sim.dalys[sim.dalys.length - 1] || 0, 0) + 'k', sub: t('sub_year'), dir: 'up', delta: 'Σ PV ' + nf(sim.dalysPV / 1000, 0) + 'M', spark: 'dalys' }),
+      kpiCard({ label: t('kpi_capex'), value: money(sim.capex), sub: money(sim.opex) + ' ' + t('opex_y').toLowerCase(), dir: 'flat', delta: '', spark: 'capex' }),
+      kpiCard({ label: t('kpi_npv'), value: money(sim.npv), sub: t('sub_pv'), tone: sim.npv > 0 ? '' : 'bad', dir: sim.npv > 0 ? 'up' : 'down', delta: sim.bcr == null ? t('sub_none') : t('bcr') + ' ' + nf(sim.bcr, 2) + ' • ' + (sim.payback ? t('payback') + ' ' + sim.payback + ' ' + t('y') : '—'), spark: 'npv' }),
+      kpiCard({ label: t('kpi_jobs'), value: nf(sim.jobs, 1) + 'k', sub: t('sub_total'), dir: 'up', delta: '', spark: 'jobs' }),
+      kpiCard({ label: t('kpi_score'), value: Math.round(sim.score) + '/100', sub: t('sub_grade') + ' ' + sim.grade, tone: 'info', dir: sim.score >= 60 ? 'up' : 'flat', delta: sim.grade === 'A' ? t('grad_A') : sim.grade === 'B' ? t('grad_B') : t('grad_C'), spark: 'score' })
+    ].join('');
+    setText('#hlHeroCapex', money(sim.capex));
+    setText('#hlHeroNpv', money(sim.npv));
+    setText('#hlHeroNpvSub', t('sub_pv'));
+    setText('#hlHeroBcrV', sim.bcr == null ? '—' : nf(sim.bcr, 1) + '×');
+    setText('#hlHeroBcr', (sim.bcr == null ? t('bcr') + ' —' : t('bcr') + ' ' + nf(sim.bcr, 2)) + ' • ' + (sim.payback ? t('payback') + ' ' + sim.payback + ' ' + t('y') : t('sub_none')));
+    setText('#hlHeroImpact', nf(livesF, 0) + ' / ' + nf(sim.jobs, 0) + 'k');
+    setText('#hlHeroImpactSub', livesF > 0 ? t('lives_unit') + ' • ' + t('kpi_jobs').toLowerCase() : t('sub_none'));
+    setText('#hlChipCountry', '🌍 ' + sim.c.n);
+    setText('#hlChipHorizon', '🗓 ' + state.horizon + ' ' + t('y'));
+    setText('#hlChipModel', 'NUTRI.HEALTH v60 • deterministic • ' + LEVERS.length + ' levers');
+    setText('#hlChipSession', SESSION);
+    setText('#hlOutCapex', money(sim.capex));
+    setText('#hlOutBenefit', money(sim.benefits[sim.benefits.length - 1] - sim.costs[sim.costs.length - 1] || 0));
+    setText('#hlOutLives', nf(livesF, 0));
+    setText('#hlOutJobs', nf(sim.jobs, 1) + 'k');
+    var badge = $('#hlProgramBadge'); if (badge) badge.textContent = money(sim.capex) + ' • ' + sim.grade;
+    var ib = $('#hlIndBadge'); if (ib) ib.textContent = (lang() === 'fr' ? 'année' : 'year') + ' ' + (2025 + state.horizon);
+    var sparkDefs = {
+      st: sim.stPr.map(function (v) { return v * 100; }),
+      wa: sim.waPr.map(function (v) { return v * 100; }),
+      an: sim.anPr.map(function (v) { return v * 100; }),
+      ebf: sim.ebfPr.map(function (v) { return v * 100; }),
+      dm: sim.dmPr.map(function (v) { return v * 100; }),
+      ctrl: sim.years.map(function (_, i) { return 11 + (sim.ctrlFinal - .11) * Math.min(1, (i + 1) / sim.years.length) * 100; }),
+      lives: sim.deaths, dalys: sim.dalys, capex: sim.cumul, npv: sim.cumul, pay: sim.benefits,
+      jobs: sim.jobsRows[0] ? sim.years.map(function (_, i) { return sim.jobs * (0.25 + 0.75 * Math.min(1, (i + 1) / sim.years.length)); }) : sim.cumul,
+      cpd: sim.dalys, score: sim.benefits.map(function (v, i) { return v * (1 + i * 0.04); })
+    };
+    $$('#health canvas[data-spark]').forEach(function (cv) {
+      var key = cv.getAttribute('data-spark');
+      var col = (key === 'npv' || key === 'lives' || key === 'dalys' || key === 'score' || key === 'cpd' || key === 'ebf') ? '#0a9478'
+        : (key === 'st' || key === 'wa' || key === 'an' || key === 'dm') ? '#e4576b' : '#0a7d94';
+      CH.spark(cv, { data: sparkDefs[key] || sim.benefits, color: col });
+    });
+  }
+
+  function renderCharts(sim) {
+    var last = sim.last;
+    var condLabels = [t('cond_st'), t('cond_wa'), t('cond_an'), t('cond_ob'), t('cond_dm'), t('cond_ht')];
+    var nowV = [sim.c.st * 100, sim.c.wa * 100, sim.c.an * 100, sim.c.ob * 100, sim.c.dm * 100, sim.c.htn * 100];
+    var prV = [last.st * 100, last.wa * 100, last.an * 100, last.ob * 100, last.dm * 100, last.htn * (1 - .42 * last.ctrl) * 100];
+    var lg1 = $('#hlBurdenLegend');
+    if (lg1) lg1.innerHTML = legend([{ c: hexA('#0a7d94', .32), l: t('today') }, { c: '#0a9478', l: t('prog') }]);
+    CH.bars($('#hBurden'), {
+      labels: condLabels, tipHost: plotHost($('#hBurden')), fmt: function (v) { return nf(v, 1) + '%'; },
+      series: [{ name: t('today'), data: nowV, color: '#0a7d94' }, { name: t('prog'), data: prV, color: '#0a9478' }]
+    });
+
+    var cov = covRows(sim);
+    var covLabels = cov.map(function (r) { return r.label; });
+    var covSq = cov.map(function (r) { return r.sq; }), covPr = cov.map(function (r) { return r.pr; });
+    var lg2 = $('#hlCoverageLegend');
+    if (lg2) lg2.innerHTML = legend([{ c: hexA('#3b82f6', .32), l: t('today') }, { c: '#8b5cf6', l: t('prog') }]);
+    CH.bars($('#hCoverage'), {
+      labels: covLabels, tipHost: plotHost($('#hCoverage')), fmt: function (v) { return nf(v, 0) + '%'; },
+      series: [{ name: t('today'), data: covSq, color: '#3b82f6' }, { name: t('prog'), data: covPr, color: '#8b5cf6' }]
+    });
+
+    var lg3 = $('#hlTrajLegend');
+    if (lg3) lg3.innerHTML = legend([{ c: '#c4d5de', l: t('sq') }, { c: '#0a9478', l: t('prog') }, { c: '#57d8bd', l: t('p90') }, { c: '#b9813f', l: t('p10') }, { c: '#3b82f6', l: t('requirement') }]);
+    CH.lines($('#hTraj'), {
+      labels: sim.years, tipHost: plotHost($('#hTraj')), zero: true, every: state.horizon > 10 ? 2 : 1,
+      fmt: function (v) { return nf(v, 1) + '%'; }, mark: sim.c.st * 0.6, markLabel: 'WHO −40%',
+      series: [
+        { name: t('sq'), data: sim.stSq.map(function (v) { return v * 100; }), color: '#c4d5de', dashed: true },
+        { name: t('p90'), data: sim.stPr.map(function (v) { return v * 92; }), color: '#57d8bd', dashed: true },
+        { name: t('p10'), data: sim.stPr.map(function (v) { return v * 108; }), color: '#b9813f', dashed: true },
+        { name: t('prog'), data: sim.stPr.map(function (v) { return v * 100; }), color: '#0a9478', fill: true }
+      ]
+    });
+    setText('#hlTrajBadge', '−' + pct(sim.reduction, 0) + ' ' + (lang() === 'fr' ? 'vs aujourd’hui' : 'vs today'));
+
+    var lg4 = $('#hlDoubleLegend');
+    if (lg4) lg4.innerHTML = legend([{ c: '#0a7d94', l: t('cond_st') + ' / ' + t('cond_wa') }, { c: '#3b82f6', l: t('cond_an') }, { c: '#f0913f', l: t('cond_dm') + ' / ' + t('cond_ht') + ' / ' + t('cond_ob') }]);
+    var stSQk = sim.c.st * sim.c.pop * 0.155 * 300 * Math.exp(-0.024 * state.horizon);   // k-DALYs, status quo
+    var waSQk = sim.c.wa * sim.c.pop * 0.155 * 1400 * Math.exp(-0.014 * state.horizon);
+    var anSQk = sim.c.an * sim.c.pop * 0.25 * 20 * Math.exp(-0.010 * state.horizon);
+    var dmSQk = sim.dmSq[sim.dmSq.length - 1] * sim.c.pop * 0.52 * 120;
+    var htSQk = sim.htBsq[sim.htBsq.length - 1] * sim.c.pop * 0.52 * 90;
+    var obSQk = sim.obSq[sim.obSq.length - 1] * sim.c.pop * 0.52 * 60;
+    var stPRk = last.dSt, waPRk = last.dWa, anPRk = last.dAn, dmPRk = last.dDm, htPRk = last.dHt, obPRk = last.dOb;
+    CH.stacked($('#hDouble'), {
+      labels: [t('statusq'), t('prog')], tipHost: plotHost($('#hDouble')), fmt: function (v) { return nf(v, 0) + 'k'; },
+      series: [
+        { name: t('cond_st') + ' / ' + t('cond_wa'), data: [stSQk + waSQk, stPRk + waPRk], color: '#0a7d94' },
+        { name: t('cond_an'), data: [anSQk, anPRk], color: '#3b82f6' },
+        { name: t('cond_dm') + ' + ' + t('cond_ht') + ' + ' + t('cond_ob'), data: [dmSQk + htSQk + obSQk, dmPRk + htPRk + obPRk], color: '#f0913f' }
+      ]
+    });
+    setText('#hlDoubleBadge', 'Δ ' + nf((dmPRk + htPRk + obPRk + stPRk + waPRk + anPRk) - (dmSQk + htSQk + obSQk + stSQk + waSQk + anSQk), 0) + 'k DALYs');
+
+    var attained = 0.25 * clamp(sim.reduction / .4, 0, 1) + 0.25 * clamp((last.wa < 0.03 ? 1 : 0.03 / Math.max(1e-6, last.wa)) * 0.6, 0, 1) + 0.25 * clamp((last.ebf - sim.c.ebf) / .2, 0, 1) + 0.25 * clamp(1 - (sim.dmPr[sim.dmPr.length - 1] - sim.c.dm) / Math.max(1e-6, sim.dmSq[sim.dmSq.length - 1] - sim.c.dm), 0, 1);
+    CH.gauge($('#hlGauge'), { value: clamp(attained, 0, 1), label: t('c5t'), labelValue: pct(clamp(attained, 0, 1), 0) });
+    var gl = $('#hlGaugeLegend');
+    if (gl) gl.innerHTML = '<span>' + t('sq') + ': ' + pct(attained * .45, 0) + '</span><span>' + t('prog') + ': ' + pct(attained, 0) + '</span>';
+
+    var prog = programmeRows(sim);
+    var palette = ['#0a7d94', '#0a9478', '#46e0c8', '#3b82f6', '#8b5cf6', '#f2c94c', '#f0913f', '#e4576b', '#14b8a6'];
+    CH.donut($('#hlDonut'), {
+      items: prog.slice(0, 9).map(function (r, i) { return { label: r.label, value: r.cost, color: palette[i % palette.length] }; }),
+      centerValue: money(sim.capex), centerLabel: t('capex'), fmt: function (v) { return money(v); }, tipHost: plotHost($('#hlDonut'))
+    });
+    var dl = $('#hlDonutLegend');
+    if (dl) dl.innerHTML = prog.slice(0, 9).map(function (r, i) { return '<span><i style="background:' + palette[i % palette.length] + '"></i>' + esc(r.label) + ' • ' + pct(r.share, 0) + '</span>'; }).join('');
+
+    CH.gauge($('#hlScore'), { value: clamp(sim.score / 100, 0, 1), label: t('kpi_score'), labelValue: Math.round(sim.score) + '/100 — ' + sim.grade });
+    var sl = $('#hlScoreLegend');
+    if (sl) sl.innerHTML = '<span>' + t('bcr') + ' ' + (sim.bcr == null ? '—' : nf(sim.bcr, 2)) + '</span><span>IRR ' + (sim.irr == null ? '—' : nf(sim.irr * 100, 0) + '%') + '</span><span>' + t('per_daly') + ' $' + nf(sim.cpd || 0, 0) + '</span>';
+
+    var lgc = $('#hlCashLegend');
+    if (lgc) lgc.innerHTML = legend([{ c: '#3b82f6', l: t('yearly') + ' ($M)' }, { c: '#0a9478', l: t('cumulative') + ' ($M)' }]);
+    CH.bars($('#hlCash'), {
+      labels: sim.years, tipHost: plotHost($('#hlCash')), fmt: function (v) { return money(v); },
+      series: [
+        { name: t('yearly'), data: sim.benefits.map(function (b, i) { return b - sim.costs[i]; }), color: '#3b82f6' },
+        { name: t('cumulative'), data: sim.cumul, color: '#0a9478' }
+      ]
+    });
+
+    var lgt = $('#hlTornadoLegend');
+    if (lgt) lgt.innerHTML = legend([{ c: '#e4576b', l: t('npv_low') }, { c: '#0a9478', l: t('npv_high') }]);
+    CH.tornado($('#hlTornado'), { items: sensitivity(sim) });
+
+    var lgr = $('#hlRadarLegend');
+    if (lgr) lgr.innerHTML = legend([{ c: '#e4576b', l: t('today') }, { c: '#0a9478', l: t('prog') }]);
+    var uh = sim.c.uhc / 100;
+    CH.radar($('#hlRadar'), {
+      axes: [lang() === 'fr' ? 'Surveillance' : 'Surveillance', lang() === 'fr' ? 'Personnel' : 'Workforce', lang() === 'fr' ? 'Chaîne d’appro.' : 'Supply chain', lang() === 'fr' ? 'Financement' : 'Financing', lang() === 'fr' ? 'Soins commun.' : 'Community care', lang() === 'fr' ? 'Qualité données' : 'Data quality'],
+      series: [
+        { name: t('today'), data: [uh * .62, uh * .58, uh * .60, uh * .55, uh * .50, uh * .45].map(function (v) { return clamp(v, .05, 1); }), color: '#e4576b' },
+        {
+          name: t('prog'), data: [
+            uh * .62 + .38 * (sim.L.digital || 0), uh * .58 + .30 * (sim.L.c1000 || 0) + .12 * (sim.L.maternal || 0),
+            uh * .60 + .34 * (sim.L.fortif || 0) + .1 * (sim.L.wash || 0), uh * .55 + .25 * (sim.L.fiscal || 0) + .1 * (sim.L.digital || 0),
+            uh * .50 + .36 * (sim.L.c1000 || 0) + .18 * (sim.L.pen || 0), uh * .45 + .40 * (sim.L.digital || 0)
+          ].map(function (v) { return clamp(v, .05, 1); }), color: '#0a9478'
+        }
+      ]
+    });
+
+    var totDaly = stSQk + waSQk + anSQk + dmSQk + htSQk + obSQk;
+    var avertTot = stPRk + waPRk + anPRk + dmPRk + htPRk + obPRk;
+    var childAvert = stPRk + waPRk + anPRk, ncdAvert = dmPRk + htPRk + obPRk;
+    var sumNut = (0.40 * (sim.L.c1000 || 0) + 0.14 * (sim.L.wash || 0)) || 1e-6;
+    var sumMat = (0.16 * (sim.L.school || 0) + 0.16 * (sim.L.maternal || 0)) || 1e-6;
+    var sumFor = (0.14 * (sim.L.fortif || 0)) || 1e-6;
+    var sumNcd = (0.34 * (sim.L.pen || 0) + 0.30 * (sim.L.screen || 0)) || 1e-6;
+    var sumSys = (0.14 * (sim.L.digital || 0)) || 1e-6;
+    var sumFis = (0.22 * (sim.L.fiscal || 0)) || 1e-6;
+    var norm = sumNut + sumMat + sumFor + sumNcd + sumSys + sumFis || 1;
+    var g1 = childAvert * sumNut / norm, g2 = childAvert * sumMat / norm, g3 = childAvert * sumFor / norm;
+    var g4 = ncdAvert * sumNcd / norm, g5 = (childAvert + ncdAvert) * sumSys / norm, g6 = ncdAvert * sumFis / norm;
+    var lgw = $('#hlWaterLegend');
+    if (lgw) lgw.innerHTML = '<span>' + t('dalys_dec') + ': ' + nf(avertTot, 0) + 'k / ' + nf(totDaly, 0) + 'k</span>';
+    CH.waterfall($('#hlWater'), {
+      labels: [t('statusq'), t('lv_c1000').split(' &')[0], t('lv_maternal').split(' &')[0], t('lv_fortif').split(' &')[0], 'NCD', lang() === 'fr' ? 'Système' : 'System', t('prog')],
+      values: [totDaly, Math.max(0, g1), Math.max(0, g2), Math.max(0, g3), Math.max(0, g4), Math.max(0, g5 + g6), Math.max(0, totDaly - avertTot)],
+      fmt: function (v) { return nf(v, 0); }, color: '#0a7d94', lastColor: '#0a9478'
+    });
+
+    var avoidLabels = [t('cond_st'), t('cond_wa'), t('cond_an'), t('cond_dm'), t('cond_ht'), t('cond_ob')];
+    var avoidVals = [stPRk / 300 * 1000, waPRk / 1400 * 1000, anPRk / 20 * 1000, dmPRk / 120 * 1000, htPRk / 90 * 1000, obPRk / 60 * 1000];
+    var lga = $('#hlAvoidLegend');
+    if (lga) lga.innerHTML = '<span>' + t('cases_averted') + ': ' + nf(avoidVals.reduce(function (a, b) { return a + b; }, 0), 0) + 'k</span>';
+    CH.hbars($('#hlAvoid'), {
+      labels: avoidLabels, values: avoidVals, tipHost: plotHost($('#hlAvoid')),
+      colors: ['#0a7d94', '#0a9478', '#3b82f6', '#f0913f', '#e4576b', '#8b5cf6'],
+      fmt: function (v) { return nf(v, 0) + 'k'; }
+    });
+
+    var reg = regional();
+    var lgh = $('#hlHeatLegend');
+    if (lgh) lgh.innerHTML = '<span>' + (lang() === 'fr' ? 'Faible' : 'Low') + '</span><i style="width:60px;height:10px;border-radius:99px;background:linear-gradient(90deg,#e9f7f5,#8fe8d8,#f2c94c,#f0913f,#e4576b)"></i><span>' + (lang() === 'fr' ? 'Élevé' : 'High') + '</span>';
+    CH.heatmap($('#hlHeat'), {
+      rows: reg.map(function (r) { return r.name; }),
+      cols: [t('cond_st'), t('cond_wa'), t('cond_an'), 'NCD', lang() === 'fr' ? 'Accès' : 'Access'],
+      values: reg.map(function (r) { return [r.st, r.wa, r.an, r.ncd, r.acc]; })
+    });
+
+    var lgj = $('#hlJobsLegend');
+    if (lgj) lgj.innerHTML = legend([{ c: '#0a7d94', l: t('kpi_jobs') + ' (k)' }]);
+    CH.hbars($('#hlJobs'), {
+      labels: sim.jobsRows.map(function (r) { return r.label; }), values: sim.jobsRows.map(function (r) { return r.v; }),
+      tipHost: plotHost($('#hlJobs')), fmt: function (v) { return nf(v, 1) + 'k'; }
+    });
+
+    var sc = scenarioRows();
+    var scColors = ['#c4d5de', '#3b82f6', '#0a9478', '#8b5cf6', '#f0913f', '#46e0c8'];
+    var scCv = $('#hlScenario');
+    if (scCv) CH.hbars(scCv, {
+      labels: sc.map(function (r) { return r.label; }), values: sc.map(function (r) { return Math.max(0, r.npv); }),
+      colors: scColors, fmt: function (v) { return money(v); }, tipHost: plotHost(scCv)
+    });
+    var scT = $('#hlScenarioTable');
+    if (scT) scT.innerHTML = '<tr><th>' + t('scenario') + '</th><th>' + t('capex') + '</th><th>' + t('kpi_npv') + '</th><th>IRR</th><th>' + t('payback') + '</th><th>' + t('kpi_lives') + '</th></tr>' +
+      sc.map(function (r) {
+        return '<tr' + (state.preset === r.key ? ' class="hl-row-on"' : '') + '><td><b>' + esc(r.label) + '</b></td><td>' + money(r.capex) + '</td>' +
+          '<td><b>' + money(r.npv) + '</b></td><td>' + (r.irr == null ? '—' : nf(r.irr * 100, 0) + '%') + '</td>' +
+          '<td>' + (r.payback ? r.payback + ' ' + t('y') : '—') + '</td><td>' + nf(r.sim.deathsPV, 0) + '</td></tr>';
+      }).join('');
+
+    var fin = financing(sim);
+    var finCv = $('#hlFinance');
+    if (finCv) CH.hbars(finCv, {
+      labels: [t('fin_pub'), t('fin_priv'), t('fin_debt')],
+      values: [fin.pub, fin.priv, fin.debt],
+      colors: ['#0a9478', '#8b5cf6', '#3b82f6'], fmt: function (v) { return money(v); }, tipHost: plotHost(finCv)
+    });
+    var finT = $('#hlFinanceMetrics');
+    if (finT) finT.innerHTML =
+      '<div class="hl-fin-row"><span>' + t('per_daly') + '</span><b>' + (sim.cpd != null ? '$' + nf(Math.round(sim.cpd), 0) : '—') + '</b></div>' +
+      '<div class="hl-fin-row"><span>' + t('per_life') + '</span><b>' + (fin.perLife ? '$' + nf(Math.round(fin.perLife), 0) : '—') + '</b></div>' +
+      '<div class="hl-fin-row"><span>' + t('fin_leverage') + '</span><b>' + money(fin.leverage) + '</b></div>' +
+      '<div class="hl-fin-row"><span>' + t('opex_y') + '</span><b>' + money(fin.opex) + '</b></div>';
+  }
+
+  function renderTables(sim) {
+    var prog = programmeRows(sim);
+    var t1 = $('#hlProgramTable');
+    if (t1) t1.innerHTML =
+      '<tr><th>' + t('programme') + '</th><th>' + t('capex') + '</th><th>ROI</th><th>' + (lang() === 'fr' ? 'Part' : 'Share') + '</th><th>' + (lang() === 'fr' ? 'Responsable' : 'Owner') + '</th></tr>' +
+      prog.map(function (r) {
+        return '<tr><td><b>' + esc(r.label) + '</b></td><td>' + money(r.cost) + '</td>' +
+          '<td><span class="hl-tag ' + (r.roi >= 3 ? 'g' : r.roi >= 1.5 ? 'b' : 'o') + '">' + nf(r.roi, 2) + '×</span></td>' +
+          '<td><div style="display:flex;align-items:center;gap:7px"><span class="hl-bar" style="flex:1"><i style="width:' + Math.round(r.share * 100) + '%"></i></span><b style="font-size:10.5px">' + pct(r.share, 0) + '</b></div></td>' +
+          '<td style="color:var(--muted)">' + esc(r.owner) + '</td></tr>';
+      }).join('');
+
+    var last = sim.last;
+    var t2 = $('#hlIndTable');
+    if (t2) {
+      function row(label, today, sqF, prF, fmt) {
+        var g = prF - sqF;
+        return '<tr><td><b>' + esc(label) + '</b></td><td>' + fmt(today) + '</td><td>' + fmt(sqF) + '</td><td><b>' + fmt(prF) + '</b></td>' +
+          '<td><span class="hl-tag ' + (g > 0 ? 'g' : g < 0 ? 'r' : '') + '">' + (g > 0 ? '+' : '') + fmt(g) + '</span></td></tr>';
+      }
+      var f1 = function (v) { return nf(v, 1) + '%'; };
+      t2.innerHTML =
+        '<tr><th>' + t('indicator') + '</th><th>' + t('today') + '</th><th>' + t('statusq') + '</th><th>' + t('programme') + '</th><th>' + t('gain') + '</th></tr>' +
+        row(t('cond_st'), sim.c.st * 100, sim.stSq[sim.stSq.length - 1] * 100, last.st * 100, f1) +
+        row(t('cond_wa'), sim.c.wa * 100, sim.waSq[sim.waSq.length - 1] * 100, last.wa * 100, f1) +
+        row(t('cond_an'), sim.c.an * 100, sim.anSq[sim.anSq.length - 1] * 100, last.an * 100, f1) +
+        row(t('srv_ebf'), sim.c.ebf * 100, sim.c.ebf * 100, last.ebf * 100, f1) +
+        row(t('cond_dm'), sim.c.dm * 100, sim.dmSq[sim.dmSq.length - 1] * 100, last.dm * 100, f1) +
+        row(t('cond_ob'), sim.c.ob * 100, sim.obSq[sim.obSq.length - 1] * 100, last.ob * 100, f1) +
+        row(t('srv_uhc'), sim.c.uhc, sim.c.uhc, last.uhc, function (v) { return nf(v, 0); }) +
+        row(t('srv_ctrl'), 11, 11, sim.ctrlFinal * 100, function (v) { return nf(v, 0) + '%'; }) +
+        '<tr><td><b>' + t('kpi_lives') + '</b></td><td>—</td><td>—</td><td><b>' + nf(sim.deaths[sim.deaths.length - 1] || 0, 0) + '</b></td><td><span class="hl-tag g">' + nf(sim.deathsPV, 0) + ' Σ</span></td></tr>' +
+        '<tr><td><b>' + t('kpi_dalys') + '</b></td><td>—</td><td>—</td><td><b>' + nf(sim.dalys[sim.dalys.length - 1] || 0, 0) + 'k</b></td><td><span class="hl-tag g">' + nf(sim.dalysPV / 1000, 1) + 'M Σ</span></td></tr>';
+    }
+
+    var feed = $('#hlFeed');
+    if (feed) feed.innerHTML = insights(sim).map(function (x) { return '<div class="hl-feed-item ' + (x.w || '') + '"><b>' + esc(x.t) + '</b>' + esc(x.d) + '</div>'; }).join('');
+    setText('#hlFeedBadge', lang() === 'fr' ? 'à jour' : 'live');
+    setText('#hlMethod', t('method'));
+
+    var host = $('#hlModules');
+    if (host) {
+      var c = sim.c, L = sim.L, pop = c.pop;
+      var vals = {
+        registry: nf(pop * 1.35 * Math.max(.15, L.c1000 || .06), 2) + 'M',
+        maternal: nf(pop * 0.42 * Math.max(.15, L.maternal || .06), 2) + 'M',
+        screen: nf(pop * 2.1 * (L.screen || .04), 2) + 'M',
+        pen: nf(pop * 1.6 * (L.pen || .04), 2) + 'M',
+        fiscal: money((L.fiscal || 0) * pop * 1.1),
+        supply: pct(.42 + .5 * (L.fortif || 0), 0),
+        ewarn: (lang() === 'fr' ? '72 h → ' : '72h → ') + Math.round(72 + 110 * (L.digital || 0)) + 'h',
+        workforce: nf(pop * (0.9 + 1.54 * (L.c1000 || 0) * .8 + 0.26 * (L.pen || 0)), 1) + 'k',
+        gis: Math.round(24 + 120 * (L.digital || 0)) + ''
+      };
+      host.innerHTML = MODULES.map(function (m) {
+        var v = L[m.lev] || 0;
+        return '<div class="hl-module" data-hl-module="' + m.id + '">' +
+          '<div class="hl-module-top"><div><span style="font-size:18px">' + m.icon + '</span> <b>' + esc(m[lang()] || m.en) + '</b></div>' +
+          '<span class="hl-tag ' + (v > .5 ? 'g' : v > .25 ? 'b' : 'o') + '">' + pct(v, 0) + '</span></div>' +
+          '<p>' + esc(m[lang()] || m.en) + '</p>' +
+          '<div class="hl-metric">' + esc(t('sv_' + m.id)) + ': <em>' + vals[m.id] + '</em></div>' +
+          '<div class="hl-spark"><canvas data-sparkmod="' + m.id + '"></canvas></div></div>';
+      }).join('');
+      $$('#hlModules canvas[data-sparkmod]').forEach(function (cv, i) {
+        var seed = (i + 1) * 1.7;
+        var d = [0, 1, 2, 3, 4, 5, 6].map(function (k) { return 40 + 22 * Math.sin(seed + k * .9) + 8 * k; });
+        CH.spark(cv, { data: d, color: i % 3 === 0 ? '#0a9478' : i % 3 === 1 ? '#3b82f6' : '#f0913f' });
+      });
+    }
+  }
+
+  /* ==================== COCKPIT ==================== */
+  var LAST_SIM = null, rafId = null;
+  var CK = (function () {
+    var shell = null, body = null, deck = null, currentLayer = 'overview', autoPlay = null;
+    var LAYERS = ['overview', 'burden', 'prevention', 'investment', 'equity', 'system', 'audit'];
+    var card = function (title, sub, inner) { return '<div class="hlc-card"><h3>' + title + '</h3>' + (sub ? '<p class="hlc-sub">' + esc(sub) + '</p>' : '') + inner + '</div>'; };
+    var kpi = function (label, value, sub) { return '<div class="hlc-kpi"><small>' + esc(label) + '</small><b>' + value + '</b><span>' + esc(sub || '') + '</span></div>'; };
+
+    function ensure() {
+      if (shell) return shell;
+      shell = document.createElement('div');
+      shell.id = 'healthCockpit'; shell.className = 'hlc-shell';
+      shell.setAttribute('role', 'dialog'); shell.setAttribute('aria-modal', 'true'); shell.setAttribute('aria-label', 'Health investment cockpit');
+      shell.innerHTML =
+        '<div class="hlc-window">' +
+        '<div class="hlc-head">' +
+        '<div><span class="hl-kicker"><i></i>' + esc(t('k0')) + '</span><h2>' + esc(t('ck_title')) + '</h2><p>' + esc(t('ck_sub')) + '</p></div>' +
+        '<div class="hlc-actions">' +
+        '<button type="button" class="hlc-btn" data-hlc="present">' + esc(t('ck_present')) + '</button>' +
+        '<button type="button" class="hlc-btn" data-hlc="export">' + esc(t('ck_export')) + '</button>' +
+        '<button type="button" class="hlc-btn x" data-hlc="close" aria-label="Close">' + esc(t('ck_close')) + '</button>' +
+        '</div></div>' +
+        '<div class="hlc-deck" id="hlcDeck"></div>' +
+        '<div class="hlc-body" id="hlcBody"></div>' +
+        '<div class="hlc-foot"><span class="hlc-status"><i></i><span id="hlcStatus">' + esc(t('ck_ready')) + '</span></span>' +
+        '<span class="hlc-progress"><i id="hlcProgress"></i></span><span id="hlcMeta"></span></div></div>';
+      document.body.appendChild(shell);
+      deck = $('#hlcDeck', shell); body = $('#hlcBody', shell);
+      deck.innerHTML = LAYERS.map(function (l, i) { return '<button type="button" class="hlc-layer-tab' + (i === 0 ? ' on' : '') + '" data-hlc-tab="' + l + '">' + esc(t('layer_' + l)) + '</button>'; }).join('');
+      body.innerHTML = LAYERS.map(function (l) { return '<div class="hlc-pane' + (l === 'overview' ? ' on' : '') + '" data-hlc-pane="' + l + '"></div>'; }).join('');
+      shell.addEventListener('click', function (e) { if (e.target === shell) close(); });
+      return shell;
+    }
+    function isOpen() { return !!(shell && shell.classList.contains('show')); }
+    function open(layer) { ensure(); shell.classList.add('show'); document.body.style.overflow = 'hidden'; show(layer || currentLayer); }
+    function close() { if (!shell) return; shell.classList.remove('show'); document.body.style.overflow = ''; stopPresent(); }
+    function show(layer) {
+      ensure();
+      currentLayer = layer;
+      $$('.hlc-layer-tab', shell).forEach(function (b) { b.classList.toggle('on', b.getAttribute('data-hlc-tab') === layer); });
+      $$('.hlc-pane', shell).forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-hlc-pane') === layer); });
+      renderPane(layer);
+      setText('#hlcStatus', t('ck_ready') + ' • ' + t('layer_' + layer));
+      setText('#hlcMeta', t('ck_layer') + ' ' + (LAYERS.indexOf(layer) + 1) + ' ' + t('ck_of') + ' ' + LAYERS.length + ' • ' + t('ck_updated') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
+    }
+    function renderPane(layer) {
+      var pane = $('[data-hlc-pane="' + layer + '"]', shell); if (!pane) return;
+      var sim = LAST_SIM || simulate(state.levers, state.horizon, state.shock);
+      var last = sim.last;
+      var html = '';
+      if (layer === 'overview') {
+        html = '<div class="hlc-grid c4" style="margin-bottom:13px">' +
+          kpi(t('kpi_capex'), money(sim.capex), t('h1s')) +
+          kpi(t('kpi_npv'), money(sim.npv), t('sub_pv')) +
+          kpi(t('bcr'), sim.bcr == null ? '—' : nf(sim.bcr, 2) + '×', 'IRR ' + (sim.irr == null ? '—' : nf(sim.irr * 100, 0) + '%') + ' • ' + t('payback') + ' ' + (sim.payback || '—')) +
+          kpi(t('kpi_lives'), nf(sim.deaths[sim.deaths.length - 1] || 0, 0) + '/' + t('y'), nf(sim.jobs, 0) + 'k ' + t('kpi_jobs').toLowerCase()) + '</div>' +
+          '<div class="hlc-grid c2">' +
+          card('📈 ' + t('trajectory'), t('c3s'), '<div class="hlc-plot tall"><canvas data-hlc-cv="ckTraj"></canvas></div>') +
+          card('🫀 ' + t('c1t'), t('c1s'), '<div class="hlc-plot tall"><canvas data-hlc-cv="ckBurden"></canvas></div>') + '</div>' +
+          '<div class="hlc-grid c2" style="margin-top:13px">' +
+          card('🧭 ' + t('recommendations'), '', '<div class="hlc-log">' + insights(sim).slice(0, 5).map(function (x) { return '<b>' + esc(x.t) + '</b> — ' + esc(x.d); }).join('<br><br>') + '</div>') +
+          card('⚙️ ' + t('activated'), '', '<table class="hlc-table">' + programmeRows(sim).slice(0, 9).map(function (r) { return '<tr><td>' + esc(r.label) + '</td><td>' + money(r.cost) + '</td><td><span class="hlc-tag">' + nf(r.roi, 2) + '×</span></td></tr>'; }).join('') + '</table>') + '</div>';
+      } else if (layer === 'burden') {
+        html = '<div class="hlc-grid c2">' +
+          card('📉 ' + t('trajectory'), t('c3s'), '<div class="hlc-plot"><canvas data-hlc-cv="ckTraj2"></canvas></div>') +
+          card('🫀 ' + t('c1t'), t('c1s'), '<div class="hlc-plot"><canvas data-hlc-cv="ckBurden2"></canvas></div>') + '</div>' +
+          '<div class="hlc-grid c2" style="margin-top:13px">' +
+          card('⚖️ ' + t('c4t'), t('c4s'), '<div class="hlc-plot"><canvas data-hlc-cv="ckDouble"></canvas></div>') +
+          card('🗂 ' + t('scorecard'), '', '<div style="max-height:300px;overflow:auto"><table class="hlc-table" id="ckIndTable"></table></div>') + '</div>';
+      } else if (layer === 'prevention') {
+        var cov = covRows(sim);
+        html = '<div class="hlc-grid c4" style="margin-bottom:13px">' +
+          kpi(t('kpi_ebf'), pct(last.ebf, 0), '+' + nf((last.ebf - sim.c.ebf) * 100, 1) + ' pts') +
+          kpi(t('srv_mic'), pct(.42 + .5 * (sim.L.fortif || 0), 0), '') +
+          kpi(t('kpi_dalys'), nf(sim.dalys[sim.dalys.length - 1] || 0, 0) + 'k', t('sub_year')) +
+          kpi(t('per_daly'), sim.cpd == null ? '—' : '$' + nf(sim.cpd, 0), t('sub_dalys')) + '</div>' +
+          '<div class="hlc-grid c2">' +
+          card('🌊 ' + t('dalys_dec'), '', '<div class="hlc-plot"><canvas data-hlc-cv="ckWater"></canvas></div>') +
+          card('🏥 ' + t('cov_chart'), '', '<div class="hlc-plot"><canvas data-hlc-cv="ckCov"></canvas></div>') + '</div>' +
+          '<div class="hlc-grid" style="margin-top:13px">' + card('🔗 ' + t('chain'), '', '<div class="hlc-log">' +
+            '🍼 ' + t('lv_c1000') + ': <b>' + pct(sim.L.c1000 || 0, 0) + '</b> — ' + nf(sim.c.pop * 1.35 * (sim.L.c1000 || 0), 2) + 'M ' + t('cases') + '<br>' +
+            '🏫 ' + t('lv_school') + ': <b>' + pct(sim.L.school || 0, 0) + '</b> — ' + nf(sim.c.pop * 0.42 * (sim.L.school || 0) * 1000, 0) + 'k ' + t('meals') + '<br>' +
+            '💊 ' + t('lv_fortif') + ': <b>' + pct(sim.L.fortif || 0, 0) + '</b><br>' +
+            '🩺 ' + t('lv_screen') + ': <b>' + pct(sim.L.screen || 0, 0) + '</b><br>' +
+            '❤️ ' + t('lv_pen') + ': <b>' + pct(sim.L.pen || 0, 0) + '</b> — ' + t('srv_ctrl') + ' ' + pct(sim.ctrlFinal * 100, 0) + '</div>') + '</div>';
+      } else if (layer === 'investment') {
+        html = '<div class="hlc-grid c4" style="margin-bottom:13px">' +
+          kpi(t('kpi_capex'), money(sim.capex), '') + kpi(t('kpi_npv'), money(sim.npv), '') +
+          kpi(t('bcr'), sim.bcr == null ? '—' : nf(sim.bcr, 2) + '×', '') + kpi(t('kpi_pay'), sim.payback ? sim.payback + ' ' + t('y') : '—', '') + '</div>' +
+          '<div class="hlc-grid c2">' +
+          card('💵 ' + t('c8t'), t('c8s'), '<div class="hlc-plot"><canvas data-hlc-cv="ckCash"></canvas></div>') +
+          card('🌪 ' + t('c9t'), t('c9s'), '<div class="hlc-plot"><canvas data-hlc-cv="ckTornado"></canvas></div>') + '</div>' +
+          '<div class="hlc-grid c2" style="margin-top:13px">' +
+          card('🍩 ' + t('c6t'), '', '<div class="hlc-plot"><canvas data-hlc-cv="ckDonut"></canvas></div>') +
+          card('💼 ' + t('portfolio'), '', '<div style="max-height:300px;overflow:auto"><table class="hlc-table" id="ckProgTable"></table></div>') + '</div>';
+      } else if (layer === 'equity') {
+        var reg = regional();
+        html = '<div class="hlc-grid c2">' +
+          card('🗺 ' + t('c13t'), t('c13s'), '<div class="hlc-plot tall"><canvas data-hlc-cv="ckHeat"></canvas></div>') +
+          card('📍 ' + (lang() === 'fr' ? 'Priorités territoriales' : 'Territorial priorities'), '', '<table class="hlc-table"><tr><th>' + t('region') + '</th><th>' + t('risk') + '</th><th>' + t('opportunity') + '</th></tr>' +
+            reg.map(function (r) { return '<tr><td>' + esc(r.name) + '</td><td><span class="hlc-tag" style="background:rgba(228,87,107,.18)">' + pct((r.st + r.wa + r.ncd) / 3, 0) + '</span></td><td><span class="hlc-tag">' + pct(r.opp, 0) + '</span></td></tr>'; }).join('') + '</table>') + '</div>';
+      } else if (layer === 'system') {
+        html = '<div class="hlc-grid c2">' +
+          card('🛡 ' + t('c10t'), '', '<div class="hlc-plot"><canvas data-hlc-cv="ckRadar"></canvas></div>') +
+          card('🏥 ' + t('cov_chart'), '', '<div class="hlc-plot"><canvas data-hlc-cv="ckCov2"></canvas></div>') + '</div>' +
+          '<div class="hlc-grid" style="margin-top:13px">' + card('🔬 ' + (lang() === 'fr' ? 'Modules connectés' : 'Connected modules'), '', '<table class="hlc-table">' +
+            MODULES.map(function (m) { return '<tr><td>' + m.icon + ' ' + esc(m[lang()] || m.en) + '</td><td><span class="hlc-tag">' + pct(sim.L[m.lev] || 0, 0) + '</span></td></tr>'; }).join('') + '</table>') + '</div>';
+      } else {
+        html = '<div class="hlc-grid c2">' +
+          card('🧮 ' + t('equations'), '', '<div class="hlc-log">' +
+            '<b>stunting[t]</b> = st₀ × exp(−(r₀ + rᵢ × E_nut × ramp)·t)<br>' +
+            '<b>E_nut</b> = Σ wᵢ·leverᵢ × (0.72 + 0.38·digital) × (1 − 0.28·shock)<br>' +
+            '<b>DALYs[t]</b> = Σ (Δprevalence × pop_group × daly_weight)<br>' +
+            '<b>benefit[t]</b> = DALYs×VSLY + costs avoided + productivity + tax − opex<br>' +
+            '<b>NPV</b> = Σ benefit[t]/(1+10%)ᵗ − deployed capital<br>' +
+            '<b>BCR</b> = PV(benefits)/PV(costs) • <b>IRR</b> = rate where NPV = 0<br>' +
+            '<b>cost/DALY</b> = PV(costs) / PV(DALYs averted) — vs WHO threshold (GDP pc)</div>') +
+          card('🗄 ' + t('provenance'), '', '<table class="hlc-table">' +
+            [['Population • ' + sim.c.n, nf(sim.c.pop, 1) + 'M', 'Δ ' + pct(sim.c.growth, 1) + '/' + t('y'), lang() === 'fr' ? 'référence' : 'reference'],
+            [lang() === 'fr' ? 'Retard de croissance (0-5)' : 'Stunting (U5)', pct(sim.c.st, 1), '→ ' + pct(sim.last.st, 1), 'JME/UNICEF'],
+            [lang() === 'fr' ? 'Dépenses de santé' : 'Health expenditure', '$' + nf(sim.c.hxp, 0) + '/cap', '—', 'WHO GHED'],
+            ['UHC index', String(sim.c.uhc) + '/100', '→ ' + nf(sim.last.uhc, 0), 'WHO UHC'],
+            [lang() === 'fr' ? 'Taux d’actualisation' : 'Discount rate', '10%', '—', lang() === 'fr' ? 'hypothèse' : 'assumption'],
+            [lang() === 'fr' ? 'Horizon' : 'Horizon', state.horizon + ' ' + t('y'), '—', lang() === 'fr' ? 'sélection' : 'selection']]
+              .map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td>' + esc(r[1]) + '</td><td>' + esc(r[2]) + '</td><td>' + esc(r[3]) + '</td></tr>'; }).join('') + '</table>') + '</div>' +
+          '<div class="hlc-grid" style="margin-top:13px">' + card('📤 ' + t('exports'), '',
+            '<div style="display:flex;gap:9px;flex-wrap:wrap"><button type="button" class="hlc-btn primary" data-hlc="export">⇩ CSV</button>' +
+            '<button type="button" class="hlc-btn" data-hlc="export-json">⇩ JSON</button>' +
+            '<button type="button" class="hlc-btn" data-hlc="print">🖨 ' + t('print') + '</button></div>') + '</div>';
+      }
+      pane.innerHTML = html;
+      drawPane(layer, sim);
+    }
+    function drawPane(layer, sim) {
+      var cv = function (n) { return $('[data-hlc-cv="' + n + '"]', shell); };
+      var host = function (n) { var c = cv(n); return c ? plotHost(c) : null; };
+      var condLabels = [t('cond_st'), t('cond_wa'), t('cond_an'), t('cond_ob'), t('cond_dm'), t('cond_ht')];
+      var nowV = [sim.c.st * 100, sim.c.wa * 100, sim.c.an * 100, sim.c.ob * 100, sim.c.dm * 100, sim.c.htn * 100];
+      var prV = [sim.last.st * 100, sim.last.wa * 100, sim.last.an * 100, sim.last.ob * 100, sim.last.dm * 100, sim.last.htn * (1 - .42 * sim.last.ctrl) * 100];
+      requestAnimationFrame(function () {
+        if (layer === 'overview') {
+          CH.lines(cv('ckTraj'), { labels: sim.years, tipHost: host('ckTraj'), zero: true, every: state.horizon > 10 ? 2 : 1, fmt: function (v) { return nf(v, 1) + '%'; }, mark: sim.c.st * 60, markLabel: 'WHO −40%', series: [{ name: t('sq'), data: sim.stSq.map(function (v) { return v * 100; }), color: '#5f7d8a', dashed: true }, { name: t('prog'), data: sim.stPr.map(function (v) { return v * 100; }), color: '#46e0c8', fill: true }] });
+          CH.bars(cv('ckBurden'), { labels: condLabels, tipHost: host('ckBurden'), fmt: function (v) { return nf(v, 1) + '%'; }, series: [{ name: t('today'), data: nowV, color: '#0a7d94' }, { name: t('prog'), data: prV, color: '#46e0c8' }] });
+        } else if (layer === 'burden') {
+          CH.lines(cv('ckTraj2'), { labels: sim.years, tipHost: host('ckTraj2'), zero: true, every: state.horizon > 10 ? 2 : 1, fmt: function (v) { return nf(v, 1) + '%'; }, series: [{ name: t('sq'), data: sim.stSq.map(function (v) { return v * 100; }), color: '#5f7d8a', dashed: true }, { name: t('prog'), data: sim.stPr.map(function (v) { return v * 100; }), color: '#46e0c8', fill: true }] });
+          CH.bars(cv('ckBurden2'), { labels: condLabels, tipHost: host('ckBurden2'), fmt: function (v) { return nf(v, 1) + '%'; }, series: [{ name: t('today'), data: nowV, color: '#0a7d94' }, { name: t('prog'), data: prV, color: '#46e0c8' }] });
+          var stSQk = sim.c.st * sim.c.pop * 0.155 * 300 * Math.exp(-0.024 * state.horizon);
+          var waSQk = sim.c.wa * sim.c.pop * 0.155 * 1400 * Math.exp(-0.014 * state.horizon);
+          var anSQk = sim.c.an * sim.c.pop * 0.25 * 20 * Math.exp(-0.010 * state.horizon);
+          var dmSQk = sim.dmSq[sim.dmSq.length - 1] * sim.c.pop * 0.52 * 120;
+          var htSQk = sim.htBsq[sim.htBsq.length - 1] * sim.c.pop * 0.52 * 90;
+          var obSQk = sim.obSq[sim.obSq.length - 1] * sim.c.pop * 0.52 * 60;
+          CH.stacked(cv('ckDouble'), {
+            labels: [t('statusq'), t('prog')], tipHost: host('ckDouble'), fmt: function (v) { return nf(v, 0) + 'k'; },
+            series: [
+              { name: t('cond_st') + ' / ' + t('cond_wa'), data: [stSQk + waSQk, sim.last.dSt + sim.last.dWa], color: '#46e0c8' },
+              { name: t('cond_an'), data: [anSQk, sim.last.dAn], color: '#7fc9ff' },
+              { name: 'NCD', data: [dmSQk + htSQk + obSQk, sim.last.dDm + sim.last.dHt + sim.last.dOb], color: '#f0913f' }
+            ]
+          });
+          var t1 = $('#ckIndTable', shell);
+          if (t1) t1.innerHTML = '<tr><th>' + t('indicator') + '</th><th>' + t('statusq') + '</th><th>' + t('programme') + '</th></tr>' +
+            [[t('cond_st'), sim.stSq[sim.stSq.length - 1] * 100, sim.last.st * 100], [t('cond_wa'), sim.waSq[sim.waSq.length - 1] * 100, sim.last.wa * 100],
+            [t('cond_an'), sim.anSq[sim.anSq.length - 1] * 100, sim.last.an * 100], [t('cond_dm'), sim.dmSq[sim.dmSq.length - 1] * 100, sim.last.dm * 100],
+            [t('cond_ob'), sim.obSq[sim.obSq.length - 1] * 100, sim.last.ob * 100]]
+              .map(function (r) { return '<tr><td>' + esc(r[0]) + '</td><td>' + nf(r[1], 1) + '%</td><td><b>' + nf(r[2], 1) + '%</b></td></tr>'; }).join('');
+        } else if (layer === 'prevention') {
+          var totDaly = sim.dalys[sim.dalys.length - 1] || 0;
+          var avert = sim.last.dSt + sim.last.dWa + sim.last.dAn + sim.last.dDm + sim.last.dHt + sim.last.dOb;
+          var sqTot = (sim.c.st * sim.c.pop * 0.155 * 300 * Math.exp(-0.024 * state.horizon) + sim.c.wa * sim.c.pop * 0.155 * 1400 * Math.exp(-0.014 * state.horizon) + sim.c.an * sim.c.pop * 0.25 * 20 * Math.exp(-0.010 * state.horizon) + sim.dmSq[sim.dmSq.length - 1] * sim.c.pop * 0.52 * 120 + sim.htBsq[sim.htBsq.length - 1] * sim.c.pop * 0.52 * 90 + sim.obSq[sim.obSq.length - 1] * sim.c.pop * 0.52 * 60);
+          CH.waterfall(cv('ckWater'), {
+            labels: [t('statusq'), lang() === 'fr' ? '1000j' : '1000d', lang() === 'fr' ? 'Materno-scolaire' : 'Maternal+school', lang() === 'fr' ? 'Micro-nutr.' : 'Micronut.', 'NCD', lang() === 'fr' ? 'Système+fiscal' : 'System+fiscal', t('prog')],
+            values: [sqTot, Math.max(0, avert * .34), Math.max(0, avert * .22), Math.max(0, avert * .14), Math.max(0, avert * .22), Math.max(0, avert * .08), Math.max(0, sqTot - avert)],
+            fmt: function (v) { return nf(v, 0); }, color: '#0a7d94', lastColor: '#46e0c8'
+          });
+          var cov = covRows(sim);
+          CH.bars(cv('ckCov'), { labels: cov.map(function (r) { return r.label; }), tipHost: host('ckCov'), fmt: function (v) { return nf(v, 0) + '%'; }, series: [{ name: t('today'), data: cov.map(function (r) { return r.sq; }), color: '#3b82f6' }, { name: t('prog'), data: cov.map(function (r) { return r.pr; }), color: '#46e0c8' }] });
+        } else if (layer === 'investment') {
+          CH.bars(cv('ckCash'), { labels: sim.years, tipHost: host('ckCash'), fmt: function (v) { return money(v); }, series: [{ name: t('cumulative'), data: sim.cumul, color: '#46e0c8' }] });
+          CH.tornado(cv('ckTornado'), { items: sensitivity(sim) });
+          CH.donut(cv('ckDonut'), {
+            items: programmeRows(sim).slice(0, 9).map(function (r, i) { return { label: r.label, value: r.cost, color: ['#0a7d94', '#0a9478', '#46e0c8', '#3b82f6', '#8b5cf6', '#f2c94c', '#f0913f', '#e4576b', '#14b8a6'][i % 9] }; }),
+            centerValue: money(sim.capex), centerLabel: t('capex'), fmt: function (v) { return money(v); }, tipHost: host('ckDonut')
+          });
+          var t2 = $('#ckProgTable', shell);
+          if (t2) t2.innerHTML = '<tr><th>' + t('programme') + '</th><th>' + t('capex') + '</th><th>PV</th><th>ROI</th></tr>' + programmeRows(sim).map(function (r) {
+            return '<tr><td>' + esc(r.label) + '</td><td>' + money(r.cost) + '</td><td>' + money(r.benefit) + '</td><td><span class="hlc-tag">' + nf(r.roi, 2) + '×</span></td></tr>';
+          }).join('');
+        } else if (layer === 'equity') {
+          var reg = regional();
+          CH.heatmap(cv('ckHeat'), { rows: reg.map(function (r) { return r.name; }), cols: [t('cond_st'), t('cond_wa'), t('cond_an'), 'NCD', lang() === 'fr' ? 'Accès' : 'Access'], values: reg.map(function (r) { return [r.st, r.wa, r.an, r.ncd, r.acc]; }) });
+        } else if (layer === 'system') {
+          var uh = sim.c.uhc / 100;
+          CH.radar(cv('ckRadar'), {
+            axes: [lang() === 'fr' ? 'Surveillance' : 'Surveillance', lang() === 'fr' ? 'Personnel' : 'Workforce', lang() === 'fr' ? 'Chaîne d’appro.' : 'Supply chain', lang() === 'fr' ? 'Financement' : 'Financing', lang() === 'fr' ? 'Soins commun.' : 'Community care', lang() === 'fr' ? 'Qualité données' : 'Data quality'],
+            series: [
+              { name: t('today'), data: [uh * .62, uh * .58, uh * .60, uh * .55, uh * .50, uh * .45].map(function (v) { return clamp(v, .05, 1); }), color: '#e4576b' },
+              {
+                name: t('prog'), data: [
+                  uh * .62 + .38 * (sim.L.digital || 0), uh * .58 + .30 * (sim.L.c1000 || 0) + .12 * (sim.L.maternal || 0),
+                  uh * .60 + .34 * (sim.L.fortif || 0) + .1 * (sim.L.wash || 0), uh * .55 + .25 * (sim.L.fiscal || 0) + .1 * (sim.L.digital || 0),
+                  uh * .50 + .36 * (sim.L.c1000 || 0) + .18 * (sim.L.pen || 0), uh * .45 + .40 * (sim.L.digital || 0)
+                ].map(function (v) { return clamp(v, .05, 1); }), color: '#46e0c8'
+              }
+            ]
+          });
+          var cov2 = covRows(sim);
+          CH.bars(cv('ckCov2'), { labels: cov2.map(function (r) { return r.label; }), tipHost: host('ckCov2'), fmt: function (v) { return nf(v, 0) + '%'; }, series: [{ name: t('today'), data: cov2.map(function (r) { return r.sq; }), color: '#3b82f6' }, { name: t('prog'), data: cov2.map(function (r) { return r.pr; }), color: '#46e0c8' }] });
+        }
+      });
+    }
+    function startPresent() {
+      stopPresent();
+      if (!isOpen()) open('overview');
+      var i = 0;
+      var prog = $('#hlcProgress', shell);
+      autoPlay = setInterval(function () {
+        i++;
+        if (prog) prog.style.width = Math.round(100 * i / LAYERS.length) + '%';
+        if (i >= LAYERS.length) { stopPresent(); return; }
+        show(LAYERS[i]);
+      }, 5200);
+    }
+    function stopPresent() { if (autoPlay) { clearInterval(autoPlay); autoPlay = null; } var p = shell && $('#hlcProgress', shell); if (p) p.style.width = '0%'; }
+    return { open: open, close: close, show: show, isOpen: isOpen, renderPane: renderPane, current: function () { return currentLayer; }, ensure: ensure, present: startPresent };
+  })();
+
+  /* ==================== PIPELINE ==================== */
+  var runToken = 0;
+  function runPipeline(cb) {
+    var my = ++runToken;
+    var steps = $$('#hlPipe .hl-step');
+    steps.forEach(function (s) {
+      s.classList.remove('done', 'run');
+      var i = s.querySelector('i');
+      if (i) { if (!i.getAttribute('data-n')) i.setAttribute('data-n', i.textContent); i.textContent = i.getAttribute('data-n'); }
+    });
+    var i = 0;
+    (function next() {
+      if (my !== runToken) return;
+      if (i > 0 && steps[i - 1]) {
+        steps[i - 1].classList.remove('run'); steps[i - 1].classList.add('done');
+        var ii = steps[i - 1].querySelector('i'); if (ii) ii.textContent = '✓';
+      }
+      if (i >= steps.length) { if (cb) cb(); return; }
+      steps[i].classList.add('run');
+      i++;
+      setTimeout(next, REDUCED ? 60 : 320);
+    })();
+  }
+
+  /* ==================== MASTER RENDER ==================== */
+  function render() {
+    LAST_SIM = simulate(state.levers, state.horizon, state.shock);
+    applyI18n();
+    renderPresets();
+    renderKpis(LAST_SIM);
+    renderCharts(LAST_SIM);
+    renderTables(LAST_SIM);
+    var sh = $('#hlShock');
+    if (sh) sh.style.setProperty('--hl-fill', sh.value + '%');
+    return LAST_SIM;
+  }
+  function scheduleRender() {
+    if (rafId) cancelAnimationFrame(rafId);
+    rafId = requestAnimationFrame(function () { rafId = null; render(); });
+  }
+
+  /* ==================== LEGACY NEUTRALISATION ==================== */
+  function isHlVisible() { return ROOT.classList.contains('on'); }
+  function sweep() {
+    $$('#health .v52-actionable, #health .v53-actionable, #health .v51-actionable, #health .v54-action, #health .v57-clickable').forEach(function (el) {
+      el.classList.remove('v52-actionable', 'v53-actionable', 'v51-actionable', 'v54-action', 'v57-clickable');
+    });
+    $$('#health .v38-kpis, #health .v38-controls, #health .v38-chart-wrap, #health .v46-live, #health .v46-kpis, #health .v46-gov-toolbar, #health .v46-gov-card, #health .v44-livebar, #health .v44-processing, #health .v43-live-stage[data-v43-health-filter="1"], #health .v47-research-live, #health .v47-research-filter, #health .v47-research-grid').forEach(function (el) {
+      if (el.hasAttribute('hidden')) return;                       // our own invisible shims
+      if (el.closest && el.closest('.hl-decoy')) return;
+      if (el.parentNode) el.parentNode.removeChild(el);
+    });
+    $$('#health .card').forEach(function (el) {
+      if (el.classList.contains('hl-decoy')) return;
+      var txt = el.textContent || '';
+      if (txt.indexOf('Dynamic government indicator') >= 0 || txt.indexOf('Dynamic food-system indicator') >= 0 || txt.indexOf('Live population view') >= 0) {
+        if (el.parentNode) el.parentNode.removeChild(el);
+      }
+    });
+  }
+  function closeLegacyPanels() {
+    try { if (typeof window.closeV51Sim === 'function') window.closeV51Sim(); } catch (e) { }
+    try { if (typeof window.closeV52Simulation === 'function') window.closeV52Simulation(); } catch (e) { }
+    try { if (window.NUTRI53 && window.NUTRI53.close) window.NUTRI53.close(); } catch (e) { }
+    try { if (window.NUTRI54 && window.NUTRI54.close) window.NUTRI54.close(); } catch (e) { }
+    try { if (typeof window.v56Close === 'function') window.v56Close(); } catch (e) { }
+    try { if (typeof window.v57Close === 'function') window.v57Close(); } catch (e) { }
+    ['v56overlay', 'v57ExactShell'].forEach(function (id) { var el = document.getElementById(id); if (el && el.parentNode) el.parentNode.removeChild(el); });
+    ['v51Live', 'v52Overlay', 'v53Shell', 'v54Overlay'].forEach(function (id) { var el = document.getElementById(id); if (el) el.classList.remove('show'); });
+  }
+
+  /* ==================== EVENTS (health-scoped capture delegation + focus guard) ==================== */
+  function onHlEvent(e) {
+    var tgt = e.target;
+    if (!tgt || !tgt.closest) return;
+    var act = tgt.closest('[data-hl-act]');
+    if (act) {
+      var a = act.getAttribute('data-hl-act');
+      if (a === 'run') { runPipeline(function () { render(); }); CK.open('overview'); }
+      else if (a === 'cockpit') { runPipeline(); CK.open('overview'); }
+      else if (a === 'export') exportCSV();
+      else if (a === 'reset') { state.levers = Object.assign({}, PRESETS.national); state.preset = 'national'; state.shock = 0; var sh = $('#hlShock'); if (sh) sh.value = 0; setText('#hlShockVal', '0%'); renderPresets(); renderLevers(); render(); }
+      return;
+    }
+    var op = tgt.closest('[data-hl-open-btn]');
+    if (op) { CK.open(op.getAttribute('data-hl-open-btn')); return; }
+    var head = tgt.closest('.hl-card-head');
+    if (head && head.closest('[data-hl-open]')) { CK.open(head.closest('[data-hl-open]').getAttribute('data-hl-open')); return; }
+    var mod = tgt.closest('[data-hl-module]');
+    if (mod) { var map = { registry: 'prevention', maternal: 'prevention', screen: 'system', pen: 'system', fiscal: 'investment', supply: 'prevention', ewarn: 'system', workforce: 'system', gis: 'equity' }; CK.open(map[mod.getAttribute('data-hl-module')] || 'overview'); return; }
+    var pre = tgt.closest('[data-preset]');
+    if (pre) {
+      var key = pre.getAttribute('data-preset');
+      state.preset = key; state.levers = Object.assign({}, PRESETS[key]);
+      state.shock = 0;
+      var sh2 = $('#hlShock'); if (sh2) sh2.value = 0;
+      setText('#hlShockVal', '0%');
+      renderPresets(); renderLevers(); render(); runPipeline();
+      return;
+    }
+    var hz = tgt.closest('[data-horizon]');
+    if (hz) {
+      state.horizon = parseInt(hz.getAttribute('data-horizon'), 10) || 10;
+      $$('#hlHorizon button').forEach(function (b) { b.classList.toggle('on', b === hz); });
+      render(); return;
+    }
+    var ck = tgt.closest('[data-hlc]');
+    if (ck) {
+      var v = ck.getAttribute('data-hlc');
+      if (v === 'close') CK.close();
+      else if (v === 'present') CK.present();
+      else if (v === 'export') exportCSV();
+      else if (v === 'export-json') exportJSON();
+      else if (v === 'print') window.print();
+      return;
+    }
+    var tab = tgt.closest('[data-hlc-tab]');
+    if (tab) { CK.show(tab.getAttribute('data-hlc-tab')); return; }
+  }
+  function onHlInput(e) {
+    var el = e.target;
+    if (!el || !el.getAttribute) return;
+    if (el.id === 'hlShock') {
+      state.shock = parseInt(el.value, 10) || 0;
+      setText('#hlShockVal', state.shock + '%');
+      el.style.setProperty('--hl-fill', el.value + '%');
+      scheduleRender();
+      return;
+    }
+    var key = el.getAttribute('data-lv');
+    if (!key) return;
+    state.levers[key] = (parseInt(el.value, 10) || 0) / 100;
+    el.style.setProperty('--hl-fill', el.value + '%');
+    var chip = $('[data-lv-val="' + key + '"]'); if (chip) chip.textContent = el.value + '%';
+    state.preset = null;
+    $$('#hlPresets .hl-preset').forEach(function (b) { b.classList.remove('on'); });
+    scheduleRender();
+  }
+  document.addEventListener('click', function (e) {
+    var tgt = e.target;
+    if (!tgt || !tgt.closest) return;
+    if (tgt.closest('#healthCockpit')) { onHlEvent(e); return; }        // our own surface, no interference
+    if (!isHlVisible() || !ROOT.contains(tgt)) return;                  // outside our scope
+    onHlEvent(e);                                                       // handle our controls first
+    e.stopImmediatePropagation();                                       // then: no stacked legacy panel
+  }, true);
+  document.addEventListener('input', function (e) {
+    var tgt = e.target;
+    if (!tgt) return;
+    if (isHlVisible() && ROOT.contains(tgt)) { onHlInput(e); e.stopImmediatePropagation(); }
+  }, true);
+  document.addEventListener('change', function (e) {
+    var tgt = e.target;
+    if (!tgt) return;
+    if (isHlVisible() && ROOT.contains(tgt)) e.stopImmediatePropagation();
+  }, true);
+  document.addEventListener('keydown', function (e) {
+    if (!CK.isOpen()) return;
+    if (e.key === 'Escape') CK.close();
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      var LAYERS = ['overview', 'burden', 'prevention', 'investment', 'equity', 'system', 'audit'];
+      var i = LAYERS.indexOf(CK.current());
+      i = (i + (e.key === 'ArrowRight' ? 1 : -1) + LAYERS.length) % LAYERS.length;
+      CK.show(LAYERS[i]);
+    }
+  });
+
+  /* ==================== EXPORT ==================== */
+  function download(name, text, mime) {
+    try {
+      var blob = new Blob([text], { type: mime + ';charset=utf-8' });
+      var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+      document.body.appendChild(a); a.click();
+      setTimeout(function () { URL.revokeObjectURL(a.href); if (a.parentNode) a.parentNode.removeChild(a); }, 400);
+      if (typeof window.toast === 'function') window.toast('✓ ' + (lang() === 'fr' ? 'Export prêt : ' : 'Export ready: ') + name);
+    } catch (e) { }
+  }
+  function exportCSV() {
+    var sim = LAST_SIM || render();
+    var rows = [['NUTRI.N°1 — Health & nutrition investment model', SESSION], [], ['Country', sim.c.n], ['Horizon (years)', state.horizon],
+    ['Capital ($M)', Math.round(sim.capex)], ['NPV ($M)', Math.round(sim.npv)], ['IRR', sim.irr == null ? 'n/a' : (sim.irr * 100).toFixed(1) + '%'],
+    ['BCR', sim.bcr == null ? 'n/a' : sim.bcr.toFixed(2)], ['Payback (years)', sim.payback || 'n/a'],
+    ['Cost per DALY averted ($)', Math.round(sim.cpd || 0)], ['Attractiveness', Math.round(sim.score) + '/100 (' + sim.grade + ')'], []];
+    rows.push(['Lever', 'Level %']);
+    LEVERS.forEach(function (l) { rows.push([t('lv_' + l.k), Math.round((sim.L[l.k] || 0) * 100)]); });
+    rows.push([]); rows.push(['Indicator', 'Today %', 'Status quo final %', 'Programme final %']);
+    rows.push(['Stunting (U5)', (sim.c.st * 100).toFixed(1), (sim.stSq[sim.stSq.length - 1] * 100).toFixed(1), (sim.last.st * 100).toFixed(1)]);
+    rows.push(['Wasting (U5)', (sim.c.wa * 100).toFixed(1), (sim.waSq[sim.waSq.length - 1] * 100).toFixed(1), (sim.last.wa * 100).toFixed(1)]);
+    rows.push(['Anemia (WRA)', (sim.c.an * 100).toFixed(1), (sim.anSq[sim.anSq.length - 1] * 100).toFixed(1), (sim.last.an * 100).toFixed(1)]);
+    rows.push(['Diabetes (adults)', (sim.c.dm * 100).toFixed(1), (sim.dmSq[sim.dmSq.length - 1] * 100).toFixed(1), (sim.last.dm * 100).toFixed(1)]);
+    rows.push([]); rows.push(['Year', 'DALYs averted (k)', 'Deaths averted', 'Benefit $M', 'Cost $M', 'Cumulative $M']);
+    sim.years.forEach(function (y, i) { rows.push([y, Math.round(sim.dalys[i]), Math.round(sim.deaths[i]), Math.round(sim.benefits[i]), Math.round(sim.costs[i]), Math.round(sim.cumul[i])]); });
+    var csv = rows.map(function (r) { return r.map(function (c) { var s = String(c == null ? '' : c); return s.indexOf(',') >= 0 ? '"' + s + '"' : s; }).join(','); }).join('\n');
+    download('nutri1-health-investment-' + state.code + '.csv', csv, 'text/csv');
+  }
+  function exportJSON() {
+    var sim = LAST_SIM || render();
+    download('nutri1-health-model-' + state.code + '.json', JSON.stringify({
+      session: SESSION, country: sim.c.n, countryCode: state.code, horizon: state.horizon, levers: state.levers, shock: state.shock,
+      capex: sim.capex, opex: sim.opex, npv: sim.npv, irr: sim.irr, bcr: sim.bcr, payback: sim.payback,
+      costPerDalys: sim.cpd, score: sim.score, grade: sim.grade,
+      stuntingProgramme: sim.stPr, stuntingStatusQuo: sim.stSq, dalysAvertedK: sim.dalys, deathsAverted: sim.deaths,
+      yearlyBenefit: sim.benefits, yearlyCost: sim.costs, cumulative: sim.cumul,
+      jobsThousands: sim.jobs, pvBenefits: sim.pvB, pvCosts: sim.pvC, eNut: sim.E_nut, eNcd: sim.E_ncd
+    }, null, 2), 'application/json');
+  }
+
+  /* ==================== ACTIVATION ==================== */
+  function codeFromCountrySelect() {
+    try {
+      var sel = document.getElementById('country');
+      if (sel && sel.selectedOptions && sel.selectedOptions[0]) {
+        var nm = (sel.selectedOptions[0].textContent || '').trim();
+        for (var k in C) { if (C[k].n === nm) return k; }
+        if (/togo/i.test(nm)) return 'TG';
+        if (/benin|bénin/i.test(nm)) return 'BJ';
+        if (/ghana/i.test(nm)) return 'GH';
+        if (/nigeria/i.test(nm)) return 'NG';
+        if (/senegal|sénégal/i.test(nm)) return 'SN';
+        if (/ivoire|ivory/i.test(nm)) return 'CI';
+        if (/niger\b/i.test(nm) && !/nigeria/i.test(nm)) return 'NE';
+      }
+    } catch (e) { }
+    return null;
+  }
+  function actCountry() { var code = codeFromCountrySelect(); if (code && C[code] && code !== state.code) { state.code = code; render(); } }
+  function activate() {
+    if (!isHlVisible()) return;
+    actCountry();
+    closeLegacyPanels();
+    sweep();
+    CK.ensure();
+    render();
+  }
+  (function wrapGo() {
+    var prev = window.go;
+    if (typeof prev !== 'function') return;
+    window.go = function (id) { var r = prev.apply(this, arguments); if (id === 'health') setTimeout(activate, 40); return r; };
+  })();
+
+  document.addEventListener('nutri:countryChanged', function () { if (isHlVisible()) { actCountry(); render(); } });
+  document.addEventListener('nutri:i18nChanged', function () { if (isHlVisible()) { renderLevers(); render(); if (CK.isOpen()) CK.renderPane(CK.current()); } });
+
+  if (window.MutationObserver) {
+    var sweepTimer = null;
+    new MutationObserver(function () {
+      if (!isHlVisible()) return;
+      clearTimeout(sweepTimer); sweepTimer = setTimeout(sweep, 350);
+    }).observe(ROOT, { childList: true, subtree: true, attributes: true, attributeFilter: ['class'] });
+    var bodyTimer = null;
+    new MutationObserver(function () {
+      if (!isHlVisible()) return;
+      clearTimeout(bodyTimer); bodyTimer = setTimeout(closeLegacyPanels, 700);
+    }).observe(document.body, { childList: true });
+  }
+  var resizeT = null;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeT);
+    resizeT = setTimeout(function () { $$('#health canvas, #healthCockpit canvas').forEach(function (cv) { CH.redraw(cv); }); }, 200);
+  });
+
+  /* ==================== BOOT ==================== */
+  renderLevers();
+  renderPresets();
+  CK.ensure();
+  window.NUTRI_HEALTH = {
+    session: SESSION,
+    presets: PRESETS,
+    defaultLevers: function () { return Object.assign({}, PRESETS.national); },
+    open: function (layer) { CK.open(layer); },
+    close: function () { CK.close(); },
+    applyPreset: function (key) {
+      if (!PRESETS[key]) return;
+      state.preset = key; state.levers = Object.assign({}, PRESETS[key]);
+      state.shock = 0;
+      var sh = $('#hlShock'); if (sh) sh.value = 0;
+      setText('#hlShockVal', '0%');
+      renderPresets(); renderLevers(); render();
+    },
+    setLevers: function (obj) { Object.assign(state.levers, obj); renderLevers(); render(); },
+    setCountry: function (code) { if (C[code]) { state.code = code; render(); } },
+    setHorizon: function (h) { state.horizon = h; render(); },
+    setShock: function (v) { state.shock = v; var sh = $('#hlShock'); if (sh) sh.value = v; render(); },
+    simulate: function () { return LAST_SIM; },
+    export: exportCSV
+  };
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { setTimeout(activate, 200); });
+  else setTimeout(activate, 200);
+  setTimeout(function () { if (isHlVisible()) sweep(); }, 1800);
+  setTimeout(function () { if (isHlVisible()) sweep(); }, 4000);
+})();
+</script>
+
 </body>
 
 </html>
