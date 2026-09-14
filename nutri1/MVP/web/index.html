@@ -8106,6 +8106,42 @@
         <div class="hl-fin" id="hlDietKpis"></div>
         <ul class="hl-pane-ins" id="hlDietInsights"></ul>
       </div>
+
+      <!-- ================= EXTENDED NUTRITION-LINKED DISEASE SPECTRUM ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card" data-hl-open="epidemiologie">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c35k">EXTENDED NCD SPECTRUM • DIET-LINKED</div>
+              <h3 data-hl="c35t">Beyond diabetes &amp; hypertension: the wider malnutrition-linked disease burden</h3>
+              <p class="hl-card-sub" data-hl="c35s">Fatty liver disease, dyslipidemia, cardiovascular events, colorectal cancer, osteoporosis and gut-transit disorders — status quo vs simulated programme</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="epidemiologie" title="Open in studio">⤢</button>
+          </div>
+          <div class="hl-plot h280"><canvas id="hlExtBurden"></canvas></div>
+          <div class="hl-legend" id="hlExtBurdenLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="prevention">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c36k">DIET × DISEASE RISK</div>
+              <h3 data-hl="c36t">Ultra-processed food share vs composite disease-risk signal</h3>
+              <p class="hl-card-sub" data-hl="c36s">Countries with a higher share of ultra-processed foods in the diet track with a higher composite risk signal (bubble size = dietary diversity score)</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="prevention" title="Open in studio">⤢</button>
+          </div>
+          <div class="hl-plot h280"><canvas id="hlExtRisk"></canvas></div>
+        </div>
+      </div>
+      <div class="hl-card hl-diet-note">
+        <div class="hl-card-head">
+          <div>
+            <div class="hl-card-kicker" data-hl="ext_title">Nutrition-linked disease spectrum</div>
+            <p class="hl-card-sub" data-hl="ext_sub">Illustrative calibration derived from national NCD base-rates and diet composition — not sourced epidemiological data</p>
+          </div>
+        </div>
+        <ul class="hl-pane-ins" id="hlExtNcdNote"></ul>
+      </div>
       </div><!-- /hl-flags -->
 
       <!-- ================= SCENARIOS + FINANCING ================= -->
@@ -10663,7 +10699,7 @@
     /* Robust aliases used by existing selects. */
     const aliases = {
       'togo': 'TG', 'tg': 'TG', 'benin': 'BJ', 'bénin': 'BJ', 'bj': 'BJ', 'burkina faso': 'BF', 'bf': 'BF',
-      'cabo verde': 'CV', 'cape verde': 'CV', 'cv': 'CV', "côte d'ivoire": 'CI', "cote d'ivoire": 'CI",'ivory coast':'CI','ci':'CI',
+      'cabo verde': 'CV', 'cape verde': 'CV', 'cv': 'CV', "côte d'ivoire": 'CI', "cote d'ivoire": 'CI', 'ivory coast': 'CI', 'ci': 'CI',
   'the gambia': 'GM', 'gambia': 'GM', 'gm': 'GM', 'ghana': 'GH', 'gh': 'GH', 'guinea': 'GN', 'gn': 'GN',
       'guinea-bissau': 'GW', 'guinea bissau': 'GW', 'gw': 'GW', 'liberia': 'LR', 'lr': 'LR', 'mali': 'ML', 'ml': 'ML',
       'mauritania': 'MR', 'mr': 'MR', 'niger': 'NE', 'ne': 'NE', 'nigeria': 'NG', 'ng': 'NG', 'senegal': 'SN', 'sn': 'SN',
@@ -18776,6 +18812,11 @@ else setTimeout(boot, 350);
       diet_link_highimp: 'High cereal import dependency exposes the food supply to price shocks — domestic cereal, legume and biofortified staple production reduces this exposure and its nutrition fallout.',
       diet_link_highultra: 'A rising ultra-processed share of the diet tracks with obesity, diabetes and hypertension — nutrition-sensitive agriculture and fresh food supply chains counterbalance it.',
       grp_cer: 'Cereals', grp_roots: 'Roots & tubers', grp_leg: 'Legumes & pulses', grp_veg: 'Fruit & vegetables', grp_ani: 'Animal-source foods', grp_fat: 'Oils & fats', grp_sug: 'Sugar',
+      c35k: 'EXTENDED NCD SPECTRUM • DIET-LINKED', c35t: 'Beyond diabetes & hypertension: the wider malnutrition-linked disease burden', c35s: 'Fatty liver disease, dyslipidemia, cardiovascular events, colorectal cancer, osteoporosis and gut-transit disorders — status quo vs simulated programme',
+      c36k: 'DIET × DISEASE RISK', c36t: 'Ultra-processed food share vs composite disease-risk signal', c36s: 'Countries with a higher share of ultra-processed foods in the diet track with a higher composite risk signal (bubble size = dietary diversity score)',
+      ext_title: 'Nutrition-linked disease spectrum', ext_sub: 'Illustrative calibration derived from national NCD base-rates and diet composition — not sourced epidemiological data',
+      ext_link: 'What this means for the health & agriculture programme', ext_risk_axis: 'Composite disease-risk signal (%)',
+      extk_nafld: 'Fatty liver (NAFLD)', extk_dysl: 'Dyslipidemia', extk_cvd: 'CVD events (MI/stroke)', extk_crc: 'Colorectal cancer risk', extk_osteo: 'Osteoporosis (women 50+)', extk_gi: 'Chronic constipation / dysbiosis',
       m0: 'MINISTRY CAPABILITY LAYERS', m1: 'Ten health, nutrition & agriculture intelligence modules — each one feeds the investment model',
       m2: 'Every module carries a live indicator and its trend. Click a module to open its layer in the studio.',
       m3: 'CONNECTED TO THE MODEL',
@@ -18931,6 +18972,11 @@ else setTimeout(boot, 350);
       diet_link_highimp: 'Une forte dépendance aux importations de céréales expose l’approvisionnement aux chocs de prix — la production nationale de céréales, légumineuses et aliments de base biofortifiés réduit cette exposition et ses effets nutritionnels.',
       diet_link_highultra: 'Une part croissante d’aliments ultra-transformés dans le régime est associée à l’obésité, au diabète et à l’hypertension — l’agriculture sensible à la nutrition et les filières d’aliments frais la contrebalancent.',
       grp_cer: 'Céréales', grp_roots: 'Racines & tubercules', grp_leg: 'Légumineuses', grp_veg: 'Fruits & légumes', grp_ani: 'Aliments d’origine animale', grp_fat: 'Huiles & matières grasses', grp_sug: 'Sucre',
+      c35k: 'SPECTRE MNT ÉTENDU • LIÉ AU RÉGIME', c35t: 'Au-delà du diabète & de l’hypertension : le fardeau élargi des maladies liées à la malnutrition', c35s: 'Stéatose hépatique, dyslipidémie, événements cardiovasculaires, cancer colorectal, ostéoporose et troubles du transit — statu quo vs programme simulé',
+      c36k: 'RÉGIME × RISQUE DE MALADIE', c36t: 'Part d’aliments ultra-transformés vs signal de risque composite', c36s: 'Les pays avec une part plus élevée d’aliments ultra-transformés dans le régime présentent un signal de risque composite plus élevé (taille de bulle = score de diversité alimentaire)',
+      ext_title: 'Spectre des maladies liées à la nutrition', ext_sub: 'Calibration illustrative dérivée des taux de base nationaux de MNT et de la composition du régime — pas des données épidémiologiques sourcées',
+      ext_link: 'Ce que cela implique pour le programme santé & agriculture', ext_risk_axis: 'Signal de risque composite de maladie (%)',
+      extk_nafld: 'Stéatose hépatique (NASH)', extk_dysl: 'Dyslipidémie', extk_cvd: 'Événements CV (infarctus/AVC)', extk_crc: 'Risque de cancer colorectal', extk_osteo: 'Ostéoporose (femmes 50+)', extk_gi: 'Constipation chronique / dysbiose',
       m0: 'COUCHES DE CAPACITÉ DU MINISTÈRE', m1: 'Dix modules d’intelligence santé, nutrition & agriculture — chacun alimente le modèle d’investissement',
       m2: 'Chaque module porte un indicateur live et sa tendance. Cliquez un module pour ouvrir sa couche dans le studio.',
       m3: 'CONNECTÉ AU MODÈLE',
@@ -19101,6 +19147,34 @@ else setTimeout(boot, 350);
     TD: { foods: [{en:'Sorghum',fr:'Sorgho',pct:26}, {en:'Millet',fr:'Mil',pct:16}, {en:'Groundnut',fr:'Arachide',pct:8}, {en:'Cowpea',fr:'Niébé',pct:8}, {en:'Milk & meat',fr:'Lait & viande',pct:10}], comp: {cer:58,roots:3,leg:13,veg:6,ani:15,fat:3,sug:2}, cerealImport: 18, dds: 3.2, ultra: 4 }
   };
   function diet() { return DIET[state.code] || DIET.TG; }
+
+  /* ==================== EXTENDED NUTRITION-LINKED DISEASE SPECTRUM (illustrative) ====================
+     Beyond the core stunting/wasting/anemia/diabetes/hypertension/obesity block above, a wider set of
+     conditions is strongly associated with diet quality and the double burden of malnutrition:
+     NAFLD (fatty liver), dyslipidemia, CVD events (heart attack/stroke), colorectal-cancer risk signal,
+     iron-deficiency anemia already tracked as "an" — osteoporosis proxy, and GI/gut-transit disorders
+     linked to ultra-processed intake and low fibre (legumes/vegetables). Derived deterministically from
+     the same country base-rates (C) and diet composition (DIET) — illustrative, not epidemiological data. */
+  function extNcd(sim) {
+    var c = (sim && sim.c) || C[state.code] || C.TG, d = diet();
+    var nafld = clamp(c.ob * .58 + c.dm * .22, .01, .60);                       // hepatic steatosis proxy
+    var dysl = clamp(c.htn * .52 + c.ob * .34, .01, .65);                        // hypercholesterolemia/hypertriglyceridemia proxy
+    var cvdEvents = clamp(c.htn * .050 + c.dm * .030 + c.ob * .018, .002, .09);  // annual heart-attack/stroke incidence proxy (share of adults)
+    var crc = clamp(.010 + c.ob * .022 + (d.ultra / 100) * .018 - (d.comp.veg + d.comp.leg) / 100 * .012, .004, .05); // colorectal-cancer risk signal
+    var osteo = clamp(.16 - d.comp.ani * .0022 + (1 - d.dds / 10) * .05, .05, .38); // osteoporosis proxy (women 50+)
+    var gi = clamp(.20 + (d.ultra / 100) * .55 - (d.comp.leg + d.comp.veg) / 100 * .28, .08, .52); // chronic constipation/dysbiosis proxy
+    return { nafld: nafld, dysl: dysl, cvdEvents: cvdEvents, crc: crc, osteo: osteo, gi: gi };
+  }
+  function extNcdProgramme(sim) {
+    var base = extNcd(sim);
+    var L = (sim && sim.L) || state.levers;
+    var relief = clamp(.10 + .34 * sat(num(L.screen)) + .30 * sat(num(L.pen)) + .22 * sat(num(L.fiscal)) + .16 * sat(num(L.agri)), 0, .62);
+    var giRelief = clamp(.08 + .36 * sat(num(L.agri)) + .20 * sat(num(L.school)) + .12 * sat(num(L.wash)), 0, .55);
+    return {
+      nafld: base.nafld * (1 - relief), dysl: base.dysl * (1 - relief), cvdEvents: base.cvdEvents * (1 - relief * .85),
+      crc: base.crc * (1 - relief * .70), osteo: base.osteo * (1 - relief * .55), gi: base.gi * (1 - giRelief)
+    };
+  }
 
   /* cost: $M per year per 13.7M inhabitants at lever = 100% (illustrative unit costs)
      eff:  share of the burden of each condition that full coverage of this lever removes */
@@ -20866,6 +20940,47 @@ else setTimeout(boot, 350);
     setHtml('#hlDietInsights', ins.map(function (b) { return '<li><b>' + esc(b.t) + '</b><span>' + esc(b.d) + '</span></li>'; }).join(''));
   }
 
+  /* ---------------- extended nutrition-linked disease spectrum ---------------- */
+  function drawExtBurden(sim) {
+    var sq = extNcd(sim), pr = extNcdProgramme(sim);
+    var labels = [t('extk_nafld'), t('extk_dysl'), t('extk_cvd'), t('extk_crc'), t('extk_osteo'), t('extk_gi')];
+    var sqData = [sq.nafld, sq.dysl, sq.cvdEvents, sq.crc, sq.osteo, sq.gi].map(function (v) { return v * 100; });
+    var prData = [pr.nafld, pr.dysl, pr.cvdEvents, pr.crc, pr.osteo, pr.gi].map(function (v) { return v * 100; });
+    bars('hlExtBurden', {
+      labels: labels, labelsOn: true, fmt: function (v) { return (v >= 10 ? nf(v, 0) : nf(v, 1)) + '%'; },
+      bw: 26, rot: -34,
+      series: [
+        { name: t('sq'), data: sqData, color: PAL.orange },
+        { name: t('prog'), data: prData, color: PAL.aqua }
+      ]
+    });
+    legend('hlExtBurdenLegend', [
+      { color: PAL.orange, label: t('sq') },
+      { color: PAL.aqua, label: t('prog') }
+    ]);
+  }
+  function drawExtRisk(sim) {
+    var pts = CODES.map(function (k, i) {
+      var dd = DIET[k] || DIET.TG, cc = C[k] || C.TG;
+      var e = extNcd({ c: cc });
+      var composite = (e.nafld + e.dysl + e.cvdEvents * 4 + e.crc * 4 + e.gi) / 5 * 100;
+      return { x: dd.ultra, y: composite, r: 6 + dd.dds * 1.1, label: C[k].n, color: k === state.code ? PAL.red : SER[i % SER.length] };
+    });
+    scatter('hlExtRisk', {
+      points: pts, x0: 0, x1: 26, y0: 5, y1: 25,
+      xFmt: function (v) { return nf(v, 0) + '%'; }, yFmt: function (v) { return nf(v, 0) + '%'; },
+      yLabel: t('ext_risk_axis')
+    });
+  }
+  function renderExtNcdInsight(sim) {
+    var sq = extNcd(sim), pr = extNcdProgramme(sim), d = diet();
+    var reduction = sq.gi > 1e-6 ? (sq.gi - pr.gi) / sq.gi : 0;
+    var msg = lang() === 'fr'
+      ? 'Au-delà de la MNT « cœur » (diabète, HTA, obésité), le régime actuel (' + nf(d.ultra, 0) + '% d’aliments ultra-transformés, ' + nf(d.comp.leg + d.comp.veg, 0) + '% de légumineuses & légumes) est associé à un risque plus élevé de stéatose hépatique, dyslipidémie, événements cardiovasculaires, cancer colorectal, ostéoporose et troubles du transit — le programme simulé réduit ces risques de troubles digestifs de ' + nf(reduction * 100, 0) + '% via le dépistage, les protocoles MNT et la diversification agricole.'
+      : 'Beyond the "core" NCDs (diabetes, hypertension, obesity), the current diet (' + nf(d.ultra, 0) + '% ultra-processed share, ' + nf(d.comp.leg + d.comp.veg, 0) + '% legumes & vegetables) is associated with higher risk of fatty liver disease, dyslipidemia, cardiovascular events, colorectal cancer, osteoporosis and gut-transit disorders — the simulated programme cuts this digestive-disorder risk by ' + nf(reduction * 100, 0) + '% through screening, NCD protocols and agricultural diversification.';
+    setHtml('#hlExtNcdNote', '<li><b>' + esc(t('ext_link')) + '</b><span>' + esc(msg) + '</span></li>');
+  }
+
   function drawScenario(sim) {
     var rows = scenarioRows();
     var labels = rows.map(function (r) { return r.label; });
@@ -20897,7 +21012,8 @@ else setTimeout(boot, 350);
     ['hlCascade', drawCascade], ['hlEquity', drawEquity], ['hlGdp', drawGdp], ['hlBudget', drawBudget],
     ['hlGap', drawGap], ['hlRisk', drawRisk], ['hlTimeline', drawTimeline], ['hlBench', drawBench],
     ['hlLives', drawLives], ['hlRoi', drawRoi], ['hlOop', drawOop], ['hlScenario', drawScenario],
-    ['hlFinance', drawFinance], ['hlDietTop', drawDietTop], ['hlDietComp', drawDietComp], ['hlDietBench', drawDietBench]
+    ['hlFinance', drawFinance], ['hlDietTop', drawDietTop], ['hlDietComp', drawDietComp], ['hlDietBench', drawDietBench],
+    ['hlExtBurden', drawExtBurden], ['hlExtRisk', drawExtRisk]
   ];
   function drawAll(sim) {
     CHARTS.forEach(function (c) { try { c[1](sim); } catch (e) { DRAW_ERRORS.push('draw:' + c[0] + ' ' + e.message); } });
@@ -21282,7 +21398,7 @@ else setTimeout(boot, 350);
     var sim = SIM;
     renderHero(sim); renderRibbon(sim); renderDeal(sim); renderKpis(sim); renderLevers(sim);
     renderReadouts(sim); renderScenarioTable(sim); renderProgramTable(sim); renderIndTable(sim);
-    renderModules(sim); renderMemo(sim); renderMethod(sim); renderDietKpis(sim);
+    renderModules(sim); renderMemo(sim); renderMethod(sim); renderDietKpis(sim); renderExtNcdInsight(sim);
     if (STUDIO.open) renderStudio(sim); else renderTeaser(sim);
     drawAll(sim);
   }
