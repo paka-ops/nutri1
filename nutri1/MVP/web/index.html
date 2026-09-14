@@ -19210,7 +19210,7 @@ else setTimeout(boot, 350);
       shell.innerHTML =
         '<div class="unc-window">' +
         '<div class="unc-head">' +
-        '<div><span class="un-kicker"><i></i>' + esc(t('k0')) + '</span><h2>' + esc(t('ck_title')) + '</h2><p>' + esc(t('ck_sub')) + '</p></div>' +
+        '<div><span class="un-kicker"><i></i><span>' + esc(t('k0')) + '</span></span><h2>' + esc(t('ck_title')) + '</h2><p>' + esc(t('ck_sub')) + '</p></div>' +
         '<div class="unc-actions">' +
         '<button type="button" class="unc-btn" data-unc="present">' + esc(t('ck_present')) + '</button>' +
         '<button type="button" class="unc-btn" data-unc="export">' + esc(t('ck_export')) + '</button>' +
@@ -19233,15 +19233,19 @@ else setTimeout(boot, 350);
     function show(layer) {
       ensure();
       currentLayer = layer;
+      stopPresent();                                       // manual navigation always wins over auto-play
       $$('.unc-layer-tab', shell).forEach(function (b) {
         var l = b.getAttribute('data-unc-tab');
         b.textContent = t('layer_' + l);
         b.classList.toggle('on', l === layer);
+        if (l === layer) b.setAttribute('aria-selected', 'true'); else b.removeAttribute('aria-selected');
       });
+      $$('.unc-pane', shell).forEach(function (p) { p.classList.toggle('on', p.getAttribute('data-unc-pane') === layer); });
       var hk = $('.unc-head h2', shell), hp = $('.unc-head p', shell), kk = $('.unc-head .un-kicker span', shell);
       if (hk) hk.textContent = t('ck_title');
       if (hp) hp.textContent = t('ck_sub');
       if (kk) kk.textContent = t('k0');
+      var bd = $('.unc-body', shell); if (bd) bd.scrollTop = 0;   // every layer starts at the top
       renderPane(layer);
       setText('#uncStatus', t('ck_ready') + ' • ' + t('layer_' + layer));
       setText('#uncMeta', t('ck_layer') + ' ' + (LAYERS.indexOf(layer) + 1) + ' ' + t('ck_of') + ' ' + LAYERS.length + ' • ' + t('ck_updated') + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }));
@@ -19473,7 +19477,7 @@ else setTimeout(boot, 350);
   /* ==================== EVENTS (unicef-scoped capture delegation + focus guard) ==================== */
   function onUniEvent(e) {
     var tgt = e.target;
-    if (!tgt || !tgt.closest) return;
+    if (!tgt || !tgt.closest) return false;
     var act = tgt.closest('[data-un-act]');
     if (act) {
       var a = act.getAttribute('data-un-act');
@@ -19482,14 +19486,14 @@ else setTimeout(boot, 350);
       else if (a === 'export') exportCSV();
       else if (a === 'reset') { state.levers = Object.assign({}, PRESETS.unicef); state.preset = 'unicef'; state.shock = 0; var sh = $('#uShock'); if (sh) sh.value = 0; setText('#uShockVal', '0%'); renderPresets(); renderLevers(); render(); }
       else if (a === 'gis') { runPipeline(); CK.open('geo'); }
-      return;
+      return true;
     }
     var op = tgt.closest('[data-un-open-btn]');
-    if (op) { CK.open(op.getAttribute('data-un-open-btn')); return; }
+    if (op) { CK.open(op.getAttribute('data-un-open-btn')); return true; }
     var head = tgt.closest('.un-card-head');
-    if (head && head.closest('[data-un-open]')) { CK.open(head.closest('[data-un-open]').getAttribute('data-un-open')); return; }
+    if (head && head.closest('[data-un-open]')) { CK.open(head.closest('[data-un-open]').getAttribute('data-un-open')); return true; }
     var mod = tgt.closest('[data-un-module]');
-    if (mod) { var map = { growth: 'outcomes', iycfnet: 'outcomes', rutf: 'delivery', anc: 'outcomes', schoolf: 'delivery', survey: 'audit', early: 'delivery', geo: 'geo', fund: 'investment' }; CK.open(map[mod.getAttribute('data-un-module')] || 'overview'); return; }
+    if (mod) { var map = { growth: 'outcomes', iycfnet: 'outcomes', rutf: 'delivery', anc: 'outcomes', schoolf: 'delivery', survey: 'audit', early: 'delivery', geo: 'geo', fund: 'investment' }; CK.open(map[mod.getAttribute('data-un-module')] || 'overview'); return true; }
     var pre = tgt.closest('[data-upreset]');
     if (pre) {
       var key = pre.getAttribute('data-upreset');
@@ -19498,7 +19502,7 @@ else setTimeout(boot, 350);
       var sh2 = $('#uShock'); if (sh2) sh2.value = state.shock;
       setText('#uShockVal', state.shock + '%');
       renderPresets(); renderLevers(); render(); runPipeline();
-      return;
+      return true;
     }
     var hz = tgt.closest('[data-uhorizon]');
     if (hz) {
@@ -19514,10 +19518,11 @@ else setTimeout(boot, 350);
       else if (v === 'export') exportCSV();
       else if (v === 'export-json') exportJSON();
       else if (v === 'print') window.print();
-      return;
+      return true;
     }
     var tab = tgt.closest('[data-unc-tab]');
-    if (tab) { CK.show(tab.getAttribute('data-unc-tab')); return; }
+    if (tab) { CK.show(tab.getAttribute('data-unc-tab')); return true; }
+    return false;
   }
   function onUniInput(e) {
     var el = e.target;
@@ -19541,10 +19546,9 @@ else setTimeout(boot, 350);
   document.addEventListener('click', function (e) {
     var tgt = e.target;
     if (!tgt || !tgt.closest) return;
-    if (tgt.closest('#unicefCockpit')) { onUniEvent(e); return; }        // our own surface, no interference
+    if (tgt.closest('#unicefCockpit')) { if (onUniEvent(e)) e.stopImmediatePropagation(); return; }  // our surface: handled = consumed
     if (!isUniVisible() || !ROOT.contains(tgt)) return;                  // outside our scope
-    onUniEvent(e);                                                       // handle our controls first
-    e.stopImmediatePropagation();                                        // then: no stacked legacy panel
+    if (onUniEvent(e)) e.stopImmediatePropagation();                     // handled → no stacked legacy panel
   }, true);
   document.addEventListener('input', function (e) {
     var tgt = e.target;
