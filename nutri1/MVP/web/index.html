@@ -8065,6 +8065,83 @@
           <div class="hl-legend" id="hlOopLegend"></div>
         </div>
       </div>
+
+      <!-- ================= FOOD SYSTEMS / MINISTRY OF AGRICULTURE ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card" data-hl-open="prevention">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c33k">FOOD SYSTEMS • MINISTRY OF AGRICULTURE</div>
+              <h3 data-hl="c33t">National diet: top foods consumed &amp; energy composition</h3>
+              <p class="hl-card-sub" data-hl="c33s">Share of dietary energy by food and by food group — what farms need to produce to fix the diet</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="prevention" title="Open in studio">⤢</button>
+          </div>
+          <div class="hl-grid c2" style="gap:12px">
+            <div class="hl-plot h240"><canvas id="hlDietTop"></canvas></div>
+            <div class="hl-plot h240"><canvas id="hlDietComp"></canvas></div>
+          </div>
+          <div class="hl-legend" id="hlDietLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="equite">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c34k">FOOD SECURITY</div>
+              <h3 data-hl="c34t">Diet quality vs food-import dependency</h3>
+              <p class="hl-card-sub" data-hl="c34s">Dietary diversity score, ultra-processed share and cereal import dependency, country by country</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="equite" title="Open in studio">⤢</button>
+          </div>
+          <div class="hl-plot h280"><canvas id="hlDietBench"></canvas></div>
+          <div class="hl-legend" id="hlDietBenchLegend"></div>
+        </div>
+      </div>
+      <div class="hl-card hl-diet-note">
+        <div class="hl-card-head">
+          <div>
+            <div class="hl-card-kicker" data-hl="diet_title">National diet &amp; food-system indicators</div>
+            <p class="hl-card-sub" data-hl="diet_sub">Illustrative calibration — for Ministry of Agriculture and Ministry of Health joint planning</p>
+          </div>
+        </div>
+        <div class="hl-fin" id="hlDietKpis"></div>
+        <ul class="hl-pane-ins" id="hlDietInsights"></ul>
+      </div>
+
+      <!-- ================= EXTENDED NUTRITION-LINKED DISEASE SPECTRUM ================= -->
+      <div class="hl-grid c2-1">
+        <div class="hl-card" data-hl-open="epidemiologie">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c35k">EXTENDED NCD SPECTRUM • DIET-LINKED</div>
+              <h3 data-hl="c35t">Beyond diabetes &amp; hypertension: the wider malnutrition-linked disease burden</h3>
+              <p class="hl-card-sub" data-hl="c35s">Fatty liver disease, dyslipidemia, cardiovascular events, colorectal cancer, osteoporosis and gut-transit disorders — status quo vs simulated programme</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="epidemiologie" title="Open in studio">⤢</button>
+          </div>
+          <div class="hl-plot h280"><canvas id="hlExtBurden"></canvas></div>
+          <div class="hl-legend" id="hlExtBurdenLegend"></div>
+        </div>
+        <div class="hl-card" data-hl-open="prevention">
+          <div class="hl-card-head">
+            <div>
+              <div class="hl-card-kicker" data-hl="c36k">DIET × DISEASE RISK</div>
+              <h3 data-hl="c36t">Ultra-processed food share vs composite disease-risk signal</h3>
+              <p class="hl-card-sub" data-hl="c36s">Countries with a higher share of ultra-processed foods in the diet track with a higher composite risk signal (bubble size = dietary diversity score)</p>
+            </div>
+            <button type="button" class="hl-open" data-hl-open-btn="prevention" title="Open in studio">⤢</button>
+          </div>
+          <div class="hl-plot h280"><canvas id="hlExtRisk"></canvas></div>
+        </div>
+      </div>
+      <div class="hl-card hl-diet-note">
+        <div class="hl-card-head">
+          <div>
+            <div class="hl-card-kicker" data-hl="ext_title">Nutrition-linked disease spectrum</div>
+            <p class="hl-card-sub" data-hl="ext_sub">Illustrative calibration derived from national NCD base-rates and diet composition — not sourced epidemiological data</p>
+          </div>
+        </div>
+        <ul class="hl-pane-ins" id="hlExtNcdNote"></ul>
+      </div>
       </div><!-- /hl-flags -->
 
       <!-- ================= SCENARIOS + FINANCING ================= -->
@@ -10622,7 +10699,7 @@
     /* Robust aliases used by existing selects. */
     const aliases = {
       'togo': 'TG', 'tg': 'TG', 'benin': 'BJ', 'bénin': 'BJ', 'bj': 'BJ', 'burkina faso': 'BF', 'bf': 'BF',
-      'cabo verde': 'CV', 'cape verde': 'CV', 'cv': 'CV', "côte d'ivoire": 'CI', "cote d'ivoire": 'CI",'ivory coast':'CI','ci':'CI',
+      'cabo verde': 'CV', 'cape verde': 'CV', 'cv': 'CV', "côte d'ivoire": 'CI', "cote d'ivoire": 'CI', 'ivory coast': 'CI', 'ci': 'CI',
   'the gambia': 'GM', 'gambia': 'GM', 'gm': 'GM', 'ghana': 'GH', 'gh': 'GH', 'guinea': 'GN', 'gn': 'GN',
       'guinea-bissau': 'GW', 'guinea bissau': 'GW', 'gw': 'GW', 'liberia': 'LR', 'lr': 'LR', 'mali': 'ML', 'ml': 'ML',
       'mauritania': 'MR', 'mr': 'MR', 'niger': 'NE', 'ne': 'NE', 'nigeria': 'NG', 'ng': 'NG', 'senegal': 'SN', 'sn': 'SN',
@@ -18726,7 +18803,21 @@ else setTimeout(boot, 350);
       c30k: 'LIVES', c30t: 'Cumulative lives saved & DALYs averted',
       c31k: 'RETURN BY DOLLAR', c31t: 'Return multiple per programme',
       c32k: 'FINANCIAL PROTECTION', c32t: 'Out-of-pocket & catastrophic spending',
-      m0: 'MINISTRY CAPABILITY LAYERS', m1: 'Nine health & nutrition intelligence modules — each one feeds the investment model',
+      c33k: 'FOOD SYSTEMS • MINISTRY OF AGRICULTURE', c33t: 'National diet: top foods consumed & energy composition', c33s: 'Share of dietary energy by food and by food group — what farms need to produce to fix the diet',
+      c34k: 'FOOD SECURITY', c34t: 'Diet quality vs food-import dependency', c34s: 'Dietary diversity score, ultra-processed share and cereal import dependency, country by country',
+      diet_title: 'National diet & food-system indicators', diet_sub: 'Illustrative calibration — for Ministry of Agriculture and Ministry of Health joint planning',
+      diet_top: 'Top foods consumed (share of dietary energy)', diet_comp: 'Dietary energy by food group',
+      diet_dds: 'Dietary diversity score', diet_ultra: 'Ultra-processed share of diet', diet_cerimp: 'Cereal import dependency',
+      diet_link: 'What this means for agriculture', diet_link_lowdds: 'Low dietary diversity concentrates the diet on 1-2 staples: fewer legumes, animal-source foods, fruit & vegetables — this tracks with higher stunting and anemia.',
+      diet_link_highimp: 'High cereal import dependency exposes the food supply to price shocks — domestic cereal, legume and biofortified staple production reduces this exposure and its nutrition fallout.',
+      diet_link_highultra: 'A rising ultra-processed share of the diet tracks with obesity, diabetes and hypertension — nutrition-sensitive agriculture and fresh food supply chains counterbalance it.',
+      grp_cer: 'Cereals', grp_roots: 'Roots & tubers', grp_leg: 'Legumes & pulses', grp_veg: 'Fruit & vegetables', grp_ani: 'Animal-source foods', grp_fat: 'Oils & fats', grp_sug: 'Sugar',
+      c35k: 'EXTENDED NCD SPECTRUM • DIET-LINKED', c35t: 'Beyond diabetes & hypertension: the wider malnutrition-linked disease burden', c35s: 'Fatty liver disease, dyslipidemia, cardiovascular events, colorectal cancer, osteoporosis and gut-transit disorders — status quo vs simulated programme',
+      c36k: 'DIET × DISEASE RISK', c36t: 'Ultra-processed food share vs composite disease-risk signal', c36s: 'Countries with a higher share of ultra-processed foods in the diet track with a higher composite risk signal (bubble size = dietary diversity score)',
+      ext_title: 'Nutrition-linked disease spectrum', ext_sub: 'Illustrative calibration derived from national NCD base-rates and diet composition — not sourced epidemiological data',
+      ext_link: 'What this means for the health & agriculture programme', ext_risk_axis: 'Composite disease-risk signal (%)',
+      extk_nafld: 'Fatty liver (NAFLD)', extk_dysl: 'Dyslipidemia', extk_cvd: 'CVD events (MI/stroke)', extk_crc: 'Colorectal cancer risk', extk_osteo: 'Osteoporosis (women 50+)', extk_gi: 'Chronic constipation / dysbiosis',
+      m0: 'MINISTRY CAPABILITY LAYERS', m1: 'Ten health, nutrition & agriculture intelligence modules — each one feeds the investment model',
       m2: 'Every module carries a live indicator and its trend. Click a module to open its layer in the studio.',
       m3: 'CONNECTED TO THE MODEL',
       t1k: 'INVESTMENT PROGRAMME', t1t: 'Bankable programme pipeline', t1s: 'Cost, health return, share of envelope, owner and readiness for every programme',
@@ -18757,11 +18848,13 @@ else setTimeout(boot, 350);
       lv_fiscal_s: 'Sweetened-beverage excise, reformulation, marketing rules — generates fiscal revenue',
       lv_digital_s: 'DHIS2 registry, early warning, facility analytics, workforce management',
       lv_wash_s: 'Water, sanitation in clinics & schools, food safety, enteric-disease reduction',
+      lv_agri: 'Nutrition-sensitive agriculture', lv_agri_s: 'Crop diversification, biofortified staples, home & school gardens, value-chain links between farms and food environments',
       pre_status: 'Status quo', pre_donor: 'Donor minimum', pre_national: 'National plan', pre_investor: 'Investor ramp-up',
       pre_nutrition: 'Nutrition first', pre_full: 'Full transformation',
       owner1: 'Ministry of Health — nutrition directorate', owner2: 'Education + WFP', owner3: 'Standards agency + industry',
       owner4: 'Reproductive health directorate', owner5: 'Primary care + WHO PEN', owner6: 'Primary care + WHO PEN',
       owner7: 'Finance ministry + health promotion', owner8: 'Digital health agency', owner9: 'WASH authority + municipalities',
+      owner10: 'Ministry of Agriculture — nutrition-sensitive programmes',
       phase1: 'Phase 1 — readiness', phase2: 'Phase 2 — scale-up', phase3: 'Phase 3 — full coverage',
       readiness: 'Readiness', cost: 'Cost', benefit: 'Benefit', roi: 'Return', share: 'Share', owner: 'Delivery owner',
       programme: 'Programme', indicator: 'Indicator', value: 'Value', delta: 'Change', statusq: 'Status quo',
@@ -18787,6 +18880,7 @@ else setTimeout(boot, 350);
       ins_monte: 'Downside protection', ins_monte_d: 'Probability that the programme stays value-positive under all simulated shocks.',
       ins_pay: 'Payback', ins_pay_d: 'Break-even occurs inside the political cycle — early credibility for the next budget round.',
       ins_macro: 'Macro return', ins_macro_d: 'Human-capital gains lift GDP and widen the fiscal base for future health spending.',
+      ins_agri: 'Agriculture & food-system return',
       layer_overview: 'Overview', layer_epidemiologie: 'Epidemiology', layer_prevention: 'Prevention & nutrition',
       layer_investissement: 'Investment case', layer_equite: 'Equity & geography', layer_systeme: 'Health system',
       layer_economie: 'Economy & jobs', layer_opportunite: 'Delivery & benchmark', layer_audit: 'Audit & method',
@@ -18869,7 +18963,21 @@ else setTimeout(boot, 350);
       c30t: 'Vies sauvées cumulées & DALYs évitées',
       c31k: 'RETOUR PAR DOLLAR', c31t: 'Multiple de retour par programme',
       c32k: 'PROTECTION FINANCIÈRE', c32t: 'Dépenses à charge des ménages & catastrophiques',
-      m0: 'COUCHES DE CAPACITÉ DU MINISTÈRE', m1: 'Neuf modules d’intelligence santé & nutrition — chacun alimente le modèle d’investissement',
+      c33k: 'SYSTÈMES ALIMENTAIRES • MINISTÈRE DE L’AGRICULTURE', c33t: 'Régime alimentaire national : aliments les plus consommés & composition énergétique', c33s: 'Part de l’énergie alimentaire par aliment et par groupe — ce que l’agriculture doit produire pour corriger le régime',
+      c34k: 'SÉCURITÉ ALIMENTAIRE', c34t: 'Qualité du régime vs dépendance aux importations alimentaires', c34s: 'Score de diversité alimentaire, part d’aliments ultra-transformés et dépendance aux importations de céréales, pays par pays',
+      diet_title: 'Indicateurs du régime alimentaire national & du système alimentaire', diet_sub: 'Calibration illustrative — pour une planification conjointe Ministère de l’Agriculture / Ministère de la Santé',
+      diet_top: 'Aliments les plus consommés (part de l’énergie alimentaire)', diet_comp: 'Énergie alimentaire par groupe d’aliments',
+      diet_dds: 'Score de diversité alimentaire', diet_ultra: 'Part d’aliments ultra-transformés', diet_cerimp: 'Dépendance aux importations de céréales',
+      diet_link: 'Ce que cela implique pour l’agriculture', diet_link_lowdds: 'Une faible diversité alimentaire concentre le régime sur 1 à 2 aliments de base : moins de légumineuses, d’aliments d’origine animale, de fruits & légumes — associé à davantage de retard de croissance et d’anémie.',
+      diet_link_highimp: 'Une forte dépendance aux importations de céréales expose l’approvisionnement aux chocs de prix — la production nationale de céréales, légumineuses et aliments de base biofortifiés réduit cette exposition et ses effets nutritionnels.',
+      diet_link_highultra: 'Une part croissante d’aliments ultra-transformés dans le régime est associée à l’obésité, au diabète et à l’hypertension — l’agriculture sensible à la nutrition et les filières d’aliments frais la contrebalancent.',
+      grp_cer: 'Céréales', grp_roots: 'Racines & tubercules', grp_leg: 'Légumineuses', grp_veg: 'Fruits & légumes', grp_ani: 'Aliments d’origine animale', grp_fat: 'Huiles & matières grasses', grp_sug: 'Sucre',
+      c35k: 'SPECTRE MNT ÉTENDU • LIÉ AU RÉGIME', c35t: 'Au-delà du diabète & de l’hypertension : le fardeau élargi des maladies liées à la malnutrition', c35s: 'Stéatose hépatique, dyslipidémie, événements cardiovasculaires, cancer colorectal, ostéoporose et troubles du transit — statu quo vs programme simulé',
+      c36k: 'RÉGIME × RISQUE DE MALADIE', c36t: 'Part d’aliments ultra-transformés vs signal de risque composite', c36s: 'Les pays avec une part plus élevée d’aliments ultra-transformés dans le régime présentent un signal de risque composite plus élevé (taille de bulle = score de diversité alimentaire)',
+      ext_title: 'Spectre des maladies liées à la nutrition', ext_sub: 'Calibration illustrative dérivée des taux de base nationaux de MNT et de la composition du régime — pas des données épidémiologiques sourcées',
+      ext_link: 'Ce que cela implique pour le programme santé & agriculture', ext_risk_axis: 'Signal de risque composite de maladie (%)',
+      extk_nafld: 'Stéatose hépatique (NASH)', extk_dysl: 'Dyslipidémie', extk_cvd: 'Événements CV (infarctus/AVC)', extk_crc: 'Risque de cancer colorectal', extk_osteo: 'Ostéoporose (femmes 50+)', extk_gi: 'Constipation chronique / dysbiose',
+      m0: 'COUCHES DE CAPACITÉ DU MINISTÈRE', m1: 'Dix modules d’intelligence santé, nutrition & agriculture — chacun alimente le modèle d’investissement',
       m2: 'Chaque module porte un indicateur live et sa tendance. Cliquez un module pour ouvrir sa couche dans le studio.',
       m3: 'CONNECTÉ AU MODÈLE',
       t1k: 'PROGRAMME D’INVESTISSEMENT', t1t: 'Pipeline de programmes bancables', t1s: 'Coût, retour sanitaire, part de l’enveloppe, responsable et maturité pour chaque programme',
@@ -18899,11 +19007,13 @@ else setTimeout(boot, 350);
       lv_fiscal_s: 'Taxe sur les boissons sucrées, reformulation, règles marketing — génère des recettes',
       lv_digital_s: 'Registre DHIS2, alerte précoce, analytique des formations sanitaires, gestion du personnel',
       lv_wash_s: 'Eau, assainissement dans les cliniques & écoles, sécurité alimentaire, réduction des maladies entériques',
+      lv_agri: 'Agriculture sensible à la nutrition', lv_agri_s: 'Diversification des cultures, aliments de base biofortifiés, jardins familiaux & scolaires, liens filières entre exploitations et environnements alimentaires',
       pre_status: 'Statu quo', pre_donor: 'Minimum bailleurs', pre_national: 'Plan national', pre_investor: 'Montée investisseur',
       pre_nutrition: 'Nutrition d’abord', pre_full: 'Transformation complète',
       owner1: 'Ministère de la Santé — direction nutrition', owner2: 'Éducation + PAM', owner3: 'Agence de normalisation + industrie',
       owner4: 'Direction santé de la reproduction', owner5: 'Soins primaires + OMS PEN', owner6: 'Soins primaires + OMS PEN',
       owner7: 'Ministère des Finances + promotion de la santé', owner8: 'Agence du numérique en santé', owner9: 'Autorité WASH + municipalités',
+      owner10: 'Ministère de l’Agriculture — programmes sensibles à la nutrition',
       phase1: 'Phase 1 — préparation', phase2: 'Phase 2 — montée en charge', phase3: 'Phase 3 — couverture complète',
       readiness: 'Maturité', cost: 'Coût', benefit: 'Bénéfice', roi: 'Retour', share: 'Part', owner: 'Responsable',
       programme: 'Programme', indicator: 'Indicateur', value: 'Valeur', delta: 'Gain', statusq: 'Statu quo',
@@ -18929,6 +19039,7 @@ else setTimeout(boot, 350);
       ins_monte: 'Protection à la baisse', ins_monte_d: 'Probabilité que le programme reste créateur de valeur sous tous les chocs simulés.',
       ins_pay: 'Délai de retour', ins_pay_d: 'L’équilibre est atteint dans le cycle politique — crédibilité immédiate pour la prochaine loi de finances.',
       ins_macro: 'Retour macro', ins_macro_d: 'Les gains de capital humain élèvent le PIB et élargissent la base fiscale pour la santé de demain.',
+      ins_agri: 'Retour agriculture & systèmes alimentaires',
       layer_overview: 'Synthèse', layer_epidemiologie: 'Épidémiologie', layer_prevention: 'Prévention & nutrition',
       layer_investissement: 'Dossier d’investissement', layer_equite: 'Équité & géographie', layer_systeme: 'Système de santé',
       layer_economie: 'Économie & emplois', layer_opportunite: 'Exécution & benchmark', layer_audit: 'Audit & méthode',
@@ -19009,6 +19120,62 @@ else setTimeout(boot, 350);
     TD: { n: 'Chad', pop: 19.3, st: .38, wa: .104, an: .49, ebf: .20, dm: .052, htn: .20, ob: .072, uhc: 28, hxp: 22, risk: 76, growth: .031, gdp: 700 }
   };
 
+  /* ==================== DIET & FOOD-SYSTEM EVIDENCE (illustrative, for Ministry of Agriculture use) ====================
+     foods: top-5 foods consumed, share of dietary energy (%) — illustrative FAO/DHS-style calibration
+     comp:  share of dietary energy by food group (%) — cer=cereals, roots=roots&tubers, leg=legumes/pulses,
+            veg=fruit&vegetables, ani=animal source foods, fat=oils&fats, sug=sugar — sums to 100
+     cerealImport: cereal import dependency ratio (%) — share of cereal supply from imports
+     dds: mean household dietary diversity score (0–10 food groups)
+     ultra: share of dietary energy from ultra-processed foods (%) */
+  var DIET = {
+    TG: { foods: [{en:'Maize',fr:'Maïs',pct:24}, {en:'Cassava',fr:'Manioc',pct:18}, {en:'Rice',fr:'Riz',pct:14}, {en:'Yam',fr:'Igname',pct:9}, {en:'Palm oil',fr:'Huile de palme',pct:7}], comp: {cer:45,roots:22,leg:8,veg:11,ani:8,fat:4,sug:2}, cerealImport: 42, dds: 4.3, ultra: 9 },
+    BJ: { foods: [{en:'Maize',fr:'Maïs',pct:22}, {en:'Cassava',fr:'Manioc',pct:19}, {en:'Rice',fr:'Riz',pct:13}, {en:'Groundnut',fr:'Arachide',pct:8}, {en:'Palm oil',fr:'Huile de palme',pct:7}], comp: {cer:44,roots:24,leg:9,veg:9,ani:8,fat:4,sug:2}, cerealImport: 38, dds: 4.6, ultra: 10 },
+    BF: { foods: [{en:'Sorghum',fr:'Sorgho',pct:22}, {en:'Millet',fr:'Mil',pct:20}, {en:'Maize',fr:'Maïs',pct:14}, {en:'Cowpea',fr:'Niébé',pct:9}, {en:'Groundnut',fr:'Arachide',pct:7}], comp: {cer:58,roots:6,leg:14,veg:8,ani:8,fat:4,sug:2}, cerealImport: 22, dds: 3.6, ultra: 5 },
+    CV: { foods: [{en:'Rice',fr:'Riz',pct:24}, {en:'Maize',fr:'Maïs',pct:16}, {en:'Fish',fr:'Poisson',pct:12}, {en:'Beans',fr:'Haricots',pct:9}, {en:'Wheat bread',fr:'Pain de blé',pct:8}], comp: {cer:48,roots:4,leg:10,veg:14,ani:16,fat:6,sug:2}, cerealImport: 82, dds: 6.4, ultra: 22 },
+    CI: { foods: [{en:'Rice',fr:'Riz',pct:18}, {en:'Cassava',fr:'Manioc',pct:17}, {en:'Plantain',fr:'Banane plantain',pct:13}, {en:'Maize',fr:'Maïs',pct:9}, {en:'Palm oil',fr:'Huile de palme',pct:7}], comp: {cer:40,roots:26,leg:6,veg:12,ani:9,fat:5,sug:2}, cerealImport: 46, dds: 5.1, ultra: 13 },
+    GM: { foods: [{en:'Rice',fr:'Riz',pct:26}, {en:'Millet',fr:'Mil',pct:14}, {en:'Groundnut',fr:'Arachide',pct:10}, {en:'Fish',fr:'Poisson',pct:9}, {en:'Sorghum',fr:'Sorgho',pct:6}], comp: {cer:50,roots:5,leg:12,veg:9,ani:14,fat:8,sug:2}, cerealImport: 62, dds: 4.4, ultra: 11 },
+    GH: { foods: [{en:'Maize',fr:'Maïs',pct:18}, {en:'Cassava',fr:'Manioc',pct:18}, {en:'Plantain',fr:'Banane plantain',pct:12}, {en:'Rice',fr:'Riz',pct:10}, {en:'Fish',fr:'Poisson',pct:9}], comp: {cer:38,roots:28,leg:6,veg:12,ani:10,fat:4,sug:2}, cerealImport: 44, dds: 5.6, ultra: 15 },
+    GN: { foods: [{en:'Rice',fr:'Riz',pct:28}, {en:'Cassava',fr:'Manioc',pct:12}, {en:'Maize',fr:'Maïs',pct:10}, {en:'Groundnut',fr:'Arachide',pct:7}, {en:'Palm oil',fr:'Huile de palme',pct:6}], comp: {cer:52,roots:16,leg:8,veg:10,ani:8,fat:4,sug:2}, cerealImport: 34, dds: 4.2, ultra: 8 },
+    GW: { foods: [{en:'Rice',fr:'Riz',pct:30}, {en:'Cassava',fr:'Manioc',pct:12}, {en:'Fish',fr:'Poisson',pct:9}, {en:'Groundnut',fr:'Arachide',pct:7}, {en:'Palm oil',fr:'Huile de palme',pct:6}], comp: {cer:50,roots:16,leg:8,veg:10,ani:10,fat:4,sug:2}, cerealImport: 40, dds: 4.0, ultra: 7 },
+    LR: { foods: [{en:'Rice',fr:'Riz',pct:26}, {en:'Cassava',fr:'Manioc',pct:16}, {en:'Palm oil',fr:'Huile de palme',pct:8}, {en:'Fish',fr:'Poisson',pct:8}, {en:'Plantain',fr:'Banane plantain',pct:6}], comp: {cer:46,roots:22,leg:6,veg:10,ani:10,fat:4,sug:2}, cerealImport: 58, dds: 4.3, ultra: 9 },
+    ML: { foods: [{en:'Millet',fr:'Mil',pct:24}, {en:'Sorghum',fr:'Sorgho',pct:18}, {en:'Rice',fr:'Riz',pct:12}, {en:'Maize',fr:'Maïs',pct:7}, {en:'Cowpea',fr:'Niébé',pct:7}], comp: {cer:60,roots:4,leg:14,veg:8,ani:8,fat:4,sug:2}, cerealImport: 20, dds: 3.4, ultra: 5 },
+    MR: { foods: [{en:'Rice',fr:'Riz',pct:22}, {en:'Wheat',fr:'Blé',pct:14}, {en:'Millet',fr:'Mil',pct:10}, {en:'Dates',fr:'Dattes',pct:6}, {en:'Milk & meat',fr:'Lait & viande',pct:10}], comp: {cer:55,roots:2,leg:6,veg:8,ani:22,fat:5,sug:2}, cerealImport: 72, dds: 5.0, ultra: 16 },
+    NE: { foods: [{en:'Millet',fr:'Mil',pct:28}, {en:'Sorghum',fr:'Sorgho',pct:18}, {en:'Cowpea',fr:'Niébé',pct:10}, {en:'Rice',fr:'Riz',pct:6}, {en:'Groundnut',fr:'Arachide',pct:6}], comp: {cer:62,roots:3,leg:15,veg:7,ani:8,fat:3,sug:2}, cerealImport: 24, dds: 3.0, ultra: 4 },
+    NG: { foods: [{en:'Cassava',fr:'Manioc',pct:18}, {en:'Rice',fr:'Riz',pct:15}, {en:'Maize',fr:'Maïs',pct:12}, {en:'Yam',fr:'Igname',pct:9}, {en:'Sorghum',fr:'Sorgho',pct:7}], comp: {cer:42,roots:26,leg:8,veg:10,ani:8,fat:4,sug:2}, cerealImport: 36, dds: 5.0, ultra: 14 },
+    SN: { foods: [{en:'Rice',fr:'Riz',pct:30}, {en:'Millet',fr:'Mil',pct:14}, {en:'Fish',fr:'Poisson',pct:12}, {en:'Groundnut',fr:'Arachide',pct:8}, {en:'Sorghum',fr:'Sorgho',pct:6}], comp: {cer:50,roots:5,leg:10,veg:12,ani:15,fat:5,sug:3}, cerealImport: 68, dds: 5.8, ultra: 17 },
+    SL: { foods: [{en:'Rice',fr:'Riz',pct:32}, {en:'Cassava',fr:'Manioc',pct:14}, {en:'Palm oil',fr:'Huile de palme',pct:7}, {en:'Groundnut',fr:'Arachide',pct:6}, {en:'Fish',fr:'Poisson',pct:6}], comp: {cer:52,roots:20,leg:6,veg:10,ani:8,fat:3,sug:1}, cerealImport: 44, dds: 4.1, ultra: 8 },
+    TD: { foods: [{en:'Sorghum',fr:'Sorgho',pct:26}, {en:'Millet',fr:'Mil',pct:16}, {en:'Groundnut',fr:'Arachide',pct:8}, {en:'Cowpea',fr:'Niébé',pct:8}, {en:'Milk & meat',fr:'Lait & viande',pct:10}], comp: {cer:58,roots:3,leg:13,veg:6,ani:15,fat:3,sug:2}, cerealImport: 18, dds: 3.2, ultra: 4 }
+  };
+  function diet() { return DIET[state.code] || DIET.TG; }
+
+  /* ==================== EXTENDED NUTRITION-LINKED DISEASE SPECTRUM (illustrative) ====================
+     Beyond the core stunting/wasting/anemia/diabetes/hypertension/obesity block above, a wider set of
+     conditions is strongly associated with diet quality and the double burden of malnutrition:
+     NAFLD (fatty liver), dyslipidemia, CVD events (heart attack/stroke), colorectal-cancer risk signal,
+     iron-deficiency anemia already tracked as "an" — osteoporosis proxy, and GI/gut-transit disorders
+     linked to ultra-processed intake and low fibre (legumes/vegetables). Derived deterministically from
+     the same country base-rates (C) and diet composition (DIET) — illustrative, not epidemiological data. */
+  function extNcd(sim) {
+    var c = (sim && sim.c) || C[state.code] || C.TG, d = diet();
+    var nafld = clamp(c.ob * .58 + c.dm * .22, .01, .60);                       // hepatic steatosis proxy
+    var dysl = clamp(c.htn * .52 + c.ob * .34, .01, .65);                        // hypercholesterolemia/hypertriglyceridemia proxy
+    var cvdEvents = clamp(c.htn * .050 + c.dm * .030 + c.ob * .018, .002, .09);  // annual heart-attack/stroke incidence proxy (share of adults)
+    var crc = clamp(.010 + c.ob * .022 + (d.ultra / 100) * .018 - (d.comp.veg + d.comp.leg) / 100 * .012, .004, .05); // colorectal-cancer risk signal
+    var osteo = clamp(.16 - d.comp.ani * .0022 + (1 - d.dds / 10) * .05, .05, .38); // osteoporosis proxy (women 50+)
+    var gi = clamp(.20 + (d.ultra / 100) * .55 - (d.comp.leg + d.comp.veg) / 100 * .28, .08, .52); // chronic constipation/dysbiosis proxy
+    return { nafld: nafld, dysl: dysl, cvdEvents: cvdEvents, crc: crc, osteo: osteo, gi: gi };
+  }
+  function extNcdProgramme(sim) {
+    var base = extNcd(sim);
+    var L = (sim && sim.L) || state.levers;
+    var relief = clamp(.10 + .34 * sat(num(L.screen)) + .30 * sat(num(L.pen)) + .22 * sat(num(L.fiscal)) + .16 * sat(num(L.agri)), 0, .62);
+    var giRelief = clamp(.08 + .36 * sat(num(L.agri)) + .20 * sat(num(L.school)) + .12 * sat(num(L.wash)), 0, .55);
+    return {
+      nafld: base.nafld * (1 - relief), dysl: base.dysl * (1 - relief), cvdEvents: base.cvdEvents * (1 - relief * .85),
+      crc: base.crc * (1 - relief * .70), osteo: base.osteo * (1 - relief * .55), gi: base.gi * (1 - giRelief)
+    };
+  }
+
   /* cost: $M per year per 13.7M inhabitants at lever = 100% (illustrative unit costs)
      eff:  share of the burden of each condition that full coverage of this lever removes */
   var LEVERS = [
@@ -19020,15 +19187,16 @@ else setTimeout(boot, 350);
     { k: 'pen', cost: 10.0, eff: { st: 0, wa: 0, an: 0, ebf: 0, dm: .20, htn: .24, ob: .02 }, jobs: 0.26, dl: .02 },
     { k: 'fiscal', cost: 1.0, eff: { st: 0, wa: 0, an: 0, ebf: 0, dm: .16, htn: .04, ob: .22 }, jobs: 0.04, dl: .03 },
     { k: 'digital', cost: 3.0, eff: { st: .02, wa: .02, an: .02, ebf: .05, dm: .04, htn: .03, ob: .02 }, jobs: 0.12, dl: .04 },
-    { k: 'wash', cost: 6.0, eff: { st: .10, wa: .10, an: .04, ebf: 0, dm: 0, htn: 0, ob: 0 }, jobs: 0.22, dl: .012 }
+    { k: 'wash', cost: 6.0, eff: { st: .10, wa: .10, an: .04, ebf: 0, dm: 0, htn: 0, ob: 0 }, jobs: 0.22, dl: .012 },
+    { k: 'agri', cost: 9.0, eff: { st: .04, wa: .03, an: .12, ebf: 0, dm: .02, htn: .01, ob: .06 }, jobs: 0.85, dl: .018 }
   ];
   var PRESETS = {
-    status: { c1000: 0, school: 0, fortif: 0, maternal: 0, screen: 0, pen: 0, fiscal: 0, digital: 0, wash: 0 },
-    donor: { c1000: .22, school: .12, fortif: .45, maternal: .18, screen: .08, pen: .06, fiscal: 0, digital: .15, wash: .12 },
-    national: { c1000: .34, school: .30, fortif: .38, maternal: .32, screen: .26, pen: .24, fiscal: .22, digital: .32, wash: .26 },
-    investor: { c1000: .48, school: .58, fortif: .60, maternal: .44, screen: .62, pen: .56, fiscal: .40, digital: .60, wash: .42 },
-    nutrition: { c1000: .86, school: .64, fortif: .80, maternal: .72, screen: .15, pen: .12, fiscal: .10, digital: .46, wash: .62 },
-    full: { c1000: .86, school: .76, fortif: .82, maternal: .78, screen: .72, pen: .76, fiscal: .60, digital: .78, wash: .70 }
+    status: { c1000: 0, school: 0, fortif: 0, maternal: 0, screen: 0, pen: 0, fiscal: 0, digital: 0, wash: 0, agri: 0 },
+    donor: { c1000: .22, school: .12, fortif: .45, maternal: .18, screen: .08, pen: .06, fiscal: 0, digital: .15, wash: .12, agri: .20 },
+    national: { c1000: .34, school: .30, fortif: .38, maternal: .32, screen: .26, pen: .24, fiscal: .22, digital: .32, wash: .26, agri: .34 },
+    investor: { c1000: .48, school: .58, fortif: .60, maternal: .44, screen: .62, pen: .56, fiscal: .40, digital: .60, wash: .42, agri: .50 },
+    nutrition: { c1000: .86, school: .64, fortif: .80, maternal: .72, screen: .15, pen: .12, fiscal: .10, digital: .46, wash: .62, agri: .78 },
+    full: { c1000: .86, school: .76, fortif: .82, maternal: .78, screen: .72, pen: .76, fiscal: .60, digital: .78, wash: .70, agri: .80 }
   };
   var REGIONS = [
     { en: 'Urban coastal', fr: 'Littoral urbain', st: .70, wa: .80, an: .85, ncd: 1.30, acc: 1.30, pop: .22 },
@@ -19047,7 +19215,8 @@ else setTimeout(boot, 350);
     { id: 'supply', icon: '🚚', en: 'Micronutrient supply chain', fr: 'Chaîne des micronutriments', lev: 'fortif', layer: 'systeme' },
     { id: 'ewarn', icon: '🚨', en: 'Early-warning intelligence', fr: 'Intelligence d’alerte précoce', lev: 'digital', layer: 'systeme' },
     { id: 'workforce', icon: '👥', en: 'Health workforce & CHWs', fr: 'Personnel de santé & ASC', lev: 'wash', layer: 'systeme' },
-    { id: 'gis', icon: '🗺', en: 'GIS burden hotspots', fr: 'Foyers géographiques de charge', lev: 'digital', layer: 'equite' }
+    { id: 'gis', icon: '🗺', en: 'GIS burden hotspots', fr: 'Foyers géographiques de charge', lev: 'digital', layer: 'equite' },
+    { id: 'agri', icon: '🌾', en: 'Nutrition-sensitive agriculture desk', fr: 'Cellule agriculture sensible à la nutrition', lev: 'agri', layer: 'prevention' }
   ];
   var JOBS = [
     { k: 'c1000', en: 'Community health workers', fr: 'Agents de santé communautaires', f: function (L, pop) { return num(L.c1000) * pop * 1.54; } },
@@ -19056,7 +19225,8 @@ else setTimeout(boot, 350);
     { k: 'pen', en: 'PEN clinicians', fr: 'Cliniciens PEN', f: function (L, pop) { return num(L.pen) * pop * 0.26; } },
     { k: 'maternal', en: 'Midwives & ANC staff', fr: 'Sages-femmes & personnel CPN', f: function (L, pop) { return num(L.maternal) * pop * 0.20; } },
     { k: 'digital', en: 'Data & surveillance officers', fr: 'Agents de données & surveillance', f: function (L, pop) { return num(L.digital) * pop * 0.12; } },
-    { k: 'wash', en: 'WASH technicians', fr: 'Techniciens WASH', f: function (L, pop) { return num(L.wash) * pop * 0.22; } }
+    { k: 'wash', en: 'WASH technicians', fr: 'Techniciens WASH', f: function (L, pop) { return num(L.wash) * pop * 0.22; } },
+    { k: 'agri', en: 'Agricultural extension agents', fr: 'Agents de vulgarisation agricole', f: function (L, pop) { return num(L.agri) * pop * 0.85; } }
   ];
   var RISKS = [
     { k: 'r1', en: 'Effect sizes below LiST assumptions', fr: 'Tailles d’effet sous les hypothèses LiST', p: .42, i: .78, m: 'en', mf: 'Contract for results, independent evaluation, quarterly adjustment' },
@@ -19274,7 +19444,7 @@ else setTimeout(boot, 350);
 
     /* ---- programme rows ---- */
     var totalCost = 0; LEVERS.forEach(function (lv) { totalCost += num(L[lv.k]) * lv.cost * (popM / 13.7); });
-    var DALY_KEY = { c1000: ['st', 'wa', 'an'], school: ['an', 'ob'], fortif: ['an', 'st'], maternal: ['st', 'wa', 'an'], screen: ['dm', 'ht'], pen: ['dm', 'ht'], fiscal: ['ob', 'dm'], digital: ['st'], wash: ['st', 'wa'] };
+    var DALY_KEY = { c1000: ['st', 'wa', 'an'], school: ['an', 'ob'], fortif: ['an', 'st'], maternal: ['st', 'wa', 'an'], screen: ['dm', 'ht'], pen: ['dm', 'ht'], fiscal: ['ob', 'dm'], digital: ['st'], wash: ['st', 'wa'], agri: ['an', 'st', 'ob'] };
     var effW = {}, totW = 0;
     LEVERS.forEach(function (lv) {
       var w = 0;
@@ -19470,6 +19640,10 @@ else setTimeout(boot, 350);
     out.push({ t: 'ins_pay', d: sim.payback ? (lang() === 'fr' ? 'Le point d’équilibre arrive à l’année ' + sim.payback + ' — un cycle budgétaire.' : 'Break-even arrives in year ' + sim.payback + ' — one budget cycle.') : (lang() === 'fr' ? 'Aucun équilibre dans l’horizon : allongez-le ou renforcez le levier « Nutrition d’abord ».' : 'No break-even inside the horizon: extend it or strengthen “Nutrition first”.') });
     if (sim.financing.gap / Math.max(1, sim.capex) > .06) out.push({ t: 'ins_gap', d: (lang() === 'fr' ? 'Écart résiduel de ' : 'Residual gap of ') + money(sim.financing.gap) + (lang() === 'fr' ? ' à combler par financement mixte.' : ' to close with blended finance.') });
     out.push({ t: 'ins_macro', d: (lang() === 'fr' ? 'Gain de PIB annualisé de ' : 'Annualised GDP gain of ') + money(sim.gdpGain[sim.gdpGain.length - 1]) + (lang() === 'fr' ? ' et ' : ' and ') + money(sim.taxRev[sim.taxRev.length - 1]) + (lang() === 'fr' ? ' de recettes fiscales par an.' : ' of fiscal revenue per year.') });
+    var d0 = diet();
+    out.push({ t: t('ins_agri'), d: (lang() === 'fr'
+      ? 'Le régime national tire ' + nf(d0.comp.cer, 0) + '% de son énergie des céréales et ' + nf(d0.cerealImport, 0) + '% de ces céréales sont importées : la diversification agricole (légumineuses, cultures biofortifiées, maraîchage) réduit à la fois l’exposition aux chocs de prix et le risque de retard de croissance et d’anémie.'
+      : 'The national diet draws ' + nf(d0.comp.cer, 0) + '% of its energy from cereals and ' + nf(d0.cerealImport, 0) + '% of that cereal supply is imported: agricultural diversification (legumes, biofortified crops, vegetable gardens) cuts both price-shock exposure and the risk of stunting and anemia.') });
     return out;
   }
   /* ==================== END PART 1 ==================== */
@@ -20715,6 +20889,98 @@ else setTimeout(boot, 350);
     ]);
   }
 
+  /* ---------------- diet / food-system (Ministry of Agriculture) ---------------- */
+  function dietFoodLabel(f) { return lang() === 'fr' ? f.fr : f.en; }
+  function drawDietTop(sim) {
+    var d = diet();
+    hbars('hlDietTop', {
+      labels: d.foods.map(dietFoodLabel), data: d.foods.map(function (f) { return f.pct; }),
+      fmt: function (v) { return nf(v, 0) + '%'; }, trim: 22, padL: 118,
+      colorOf: function (i) { return SER[i % SER.length]; }
+    });
+  }
+  function drawDietComp(sim) {
+    var d = diet(), c = d.comp;
+    var items = [
+      { label: t('grp_cer'), value: c.cer, color: PAL.gold },
+      { label: t('grp_roots'), value: c.roots, color: PAL.orange },
+      { label: t('grp_leg'), value: c.leg, color: PAL.teal },
+      { label: t('grp_veg'), value: c.veg, color: PAL.aqua },
+      { label: t('grp_ani'), value: c.ani, color: PAL.violet },
+      { label: t('grp_fat'), value: c.fat, color: PAL.blue },
+      { label: t('grp_sug'), value: c.sug, color: PAL.red }
+    ];
+    donut('hlDietComp', { items: items, centerValue: nf(d.dds, 1), centerLabel: t('diet_dds') });
+    legend('hlDietLegend', items.map(function (x) { return { color: x.color, label: x.label, value: x.value + '%' }; }));
+  }
+  function drawDietBench(sim) {
+    var pts = CODES.map(function (k, i) {
+      var d = DIET[k] || DIET.TG;
+      return { x: d.cerealImport, y: d.dds, r: 6 + d.ultra * .28, label: C[k].n, color: k === state.code ? PAL.red : SER[i % SER.length] };
+    });
+    scatter('hlDietBench', {
+      points: pts, x0: 0, x1: 100, y0: 0, y1: 8,
+      xFmt: function (v) { return nf(v, 0) + '%'; }, yFmt: function (v) { return nf(v, 1); },
+      yLabel: t('diet_dds') + ' • ' + t('diet_cerimp') + ' (x) • ' + t('diet_ultra') + ' (' + t('impact') + ')'
+    });
+  }
+  function renderDietKpis(sim) {
+    var d = diet();
+    var rows = [
+      { k: t('diet_dds'), v: nf(d.dds, 1) + ' / 10' },
+      { k: t('diet_ultra'), v: nf(d.ultra, 0) + '%' },
+      { k: t('diet_cerimp'), v: nf(d.cerealImport, 0) + '%' }
+    ];
+    setHtml('#hlDietKpis', rows.map(function (r) { return '<div class="hl-fin-row"><span>' + esc(r.k) + '</span><b>' + esc(r.v) + '</b></div>'; }).join(''));
+    var ins = [];
+    if (d.dds < 5) ins.push({ t: t('diet_link'), d: t('diet_link_lowdds') });
+    if (d.cerealImport >= 45) ins.push({ t: t('diet_link'), d: t('diet_link_highimp') });
+    if (d.ultra >= 12) ins.push({ t: t('diet_link'), d: t('diet_link_highultra') });
+    if (!ins.length) ins.push({ t: t('diet_link'), d: t('diet_link_lowdds') });
+    setHtml('#hlDietInsights', ins.map(function (b) { return '<li><b>' + esc(b.t) + '</b><span>' + esc(b.d) + '</span></li>'; }).join(''));
+  }
+
+  /* ---------------- extended nutrition-linked disease spectrum ---------------- */
+  function drawExtBurden(sim) {
+    var sq = extNcd(sim), pr = extNcdProgramme(sim);
+    var labels = [t('extk_nafld'), t('extk_dysl'), t('extk_cvd'), t('extk_crc'), t('extk_osteo'), t('extk_gi')];
+    var sqData = [sq.nafld, sq.dysl, sq.cvdEvents, sq.crc, sq.osteo, sq.gi].map(function (v) { return v * 100; });
+    var prData = [pr.nafld, pr.dysl, pr.cvdEvents, pr.crc, pr.osteo, pr.gi].map(function (v) { return v * 100; });
+    bars('hlExtBurden', {
+      labels: labels, labelsOn: true, fmt: function (v) { return (v >= 10 ? nf(v, 0) : nf(v, 1)) + '%'; },
+      bw: 26, rot: -34,
+      series: [
+        { name: t('sq'), data: sqData, color: PAL.orange },
+        { name: t('prog'), data: prData, color: PAL.aqua }
+      ]
+    });
+    legend('hlExtBurdenLegend', [
+      { color: PAL.orange, label: t('sq') },
+      { color: PAL.aqua, label: t('prog') }
+    ]);
+  }
+  function drawExtRisk(sim) {
+    var pts = CODES.map(function (k, i) {
+      var dd = DIET[k] || DIET.TG, cc = C[k] || C.TG;
+      var e = extNcd({ c: cc });
+      var composite = (e.nafld + e.dysl + e.cvdEvents * 4 + e.crc * 4 + e.gi) / 5 * 100;
+      return { x: dd.ultra, y: composite, r: 6 + dd.dds * 1.1, label: C[k].n, color: k === state.code ? PAL.red : SER[i % SER.length] };
+    });
+    scatter('hlExtRisk', {
+      points: pts, x0: 0, x1: 26, y0: 5, y1: 25,
+      xFmt: function (v) { return nf(v, 0) + '%'; }, yFmt: function (v) { return nf(v, 0) + '%'; },
+      yLabel: t('ext_risk_axis')
+    });
+  }
+  function renderExtNcdInsight(sim) {
+    var sq = extNcd(sim), pr = extNcdProgramme(sim), d = diet();
+    var reduction = sq.gi > 1e-6 ? (sq.gi - pr.gi) / sq.gi : 0;
+    var msg = lang() === 'fr'
+      ? 'Au-delà de la MNT « cœur » (diabète, HTA, obésité), le régime actuel (' + nf(d.ultra, 0) + '% d’aliments ultra-transformés, ' + nf(d.comp.leg + d.comp.veg, 0) + '% de légumineuses & légumes) est associé à un risque plus élevé de stéatose hépatique, dyslipidémie, événements cardiovasculaires, cancer colorectal, ostéoporose et troubles du transit — le programme simulé réduit ces risques de troubles digestifs de ' + nf(reduction * 100, 0) + '% via le dépistage, les protocoles MNT et la diversification agricole.'
+      : 'Beyond the "core" NCDs (diabetes, hypertension, obesity), the current diet (' + nf(d.ultra, 0) + '% ultra-processed share, ' + nf(d.comp.leg + d.comp.veg, 0) + '% legumes & vegetables) is associated with higher risk of fatty liver disease, dyslipidemia, cardiovascular events, colorectal cancer, osteoporosis and gut-transit disorders — the simulated programme cuts this digestive-disorder risk by ' + nf(reduction * 100, 0) + '% through screening, NCD protocols and agricultural diversification.';
+    setHtml('#hlExtNcdNote', '<li><b>' + esc(t('ext_link')) + '</b><span>' + esc(msg) + '</span></li>');
+  }
+
   function drawScenario(sim) {
     var rows = scenarioRows();
     var labels = rows.map(function (r) { return r.label; });
@@ -20746,7 +21012,8 @@ else setTimeout(boot, 350);
     ['hlCascade', drawCascade], ['hlEquity', drawEquity], ['hlGdp', drawGdp], ['hlBudget', drawBudget],
     ['hlGap', drawGap], ['hlRisk', drawRisk], ['hlTimeline', drawTimeline], ['hlBench', drawBench],
     ['hlLives', drawLives], ['hlRoi', drawRoi], ['hlOop', drawOop], ['hlScenario', drawScenario],
-    ['hlFinance', drawFinance]
+    ['hlFinance', drawFinance], ['hlDietTop', drawDietTop], ['hlDietComp', drawDietComp], ['hlDietBench', drawDietBench],
+    ['hlExtBurden', drawExtBurden], ['hlExtRisk', drawExtRisk]
   ];
   function drawAll(sim) {
     CHARTS.forEach(function (c) { try { c[1](sim); } catch (e) { DRAW_ERRORS.push('draw:' + c[0] + ' ' + e.message); } });
@@ -21131,7 +21398,7 @@ else setTimeout(boot, 350);
     var sim = SIM;
     renderHero(sim); renderRibbon(sim); renderDeal(sim); renderKpis(sim); renderLevers(sim);
     renderReadouts(sim); renderScenarioTable(sim); renderProgramTable(sim); renderIndTable(sim);
-    renderModules(sim); renderMemo(sim); renderMethod(sim);
+    renderModules(sim); renderMemo(sim); renderMethod(sim); renderDietKpis(sim); renderExtNcdInsight(sim);
     if (STUDIO.open) renderStudio(sim); else renderTeaser(sim);
     drawAll(sim);
   }
