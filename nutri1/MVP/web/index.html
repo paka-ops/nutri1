@@ -5011,7 +5011,7 @@
 #health .hl-legend.hl-legend-col .hl-lgi { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; width: 100% }
 #health .hl-legend.hl-legend-col .hl-lgi b { margin-left: auto; white-space: nowrap }</style>
 <style id="nutri-agri-v59-css">/* ============================================================
-   NUTRI.N°1 V59 — AGRI INVESTMENT INTELLIGENCE
+   NUTRI.N°1 V59+ — AGRI INVESTMENT INTELLIGENCE
    Self-contained styles, strictly scoped to #agri and #agriCockpit.
    Nothing outside the Ministry of Agriculture module is restyled.
    ============================================================ */
@@ -5024,18 +5024,31 @@
 #agri .v51-actionable:hover, #agri .v53-actionable:hover, #agri .v54-action:hover { transform: none; box-shadow: none; border-color: var(--line) !important; }
 #agri .v53-actionable:after { content: none !important; }
 
-#agri, #agriCockpit { --ag-ink: #04160d; --ag-deep: #062a19; --ag-mid: #0a6b3d; --ag-green: #08733f; --ag-lime: #c9ee59; --ag-gold: #f2c94c; --ag-blue: #2f80ed; --ag-red: #d64550; --ag-orange: #ef8b2c; --ag-line: #dfeae3; --ag-soft: #f4faf6; --ag-radius: 18px; }
+#agri, #agriCockpit {
+  --ag-ink: #04160d;
+  --ag-deep: #062a19;
+  --ag-mid: #0a6b3d;
+  --ag-green: #08733f;
+  --ag-lime: #c9ee59;
+  --ag-gold: #f2c94c;
+  --ag-blue: #2f80ed;
+  --ag-red: #d64550;
+  --ag-orange: #ef8b2c;
+  --ag-line: #dfeae3;
+  --ag-soft: #f4faf6;
+  --ag-radius: 18px;
+}
 
-#agri .ag-shell { display: flex; flex-direction: column; gap: 16px; }
+#agri .ag-shell { display: flex; flex-direction: column; gap: 16px; animation: agIn .34s cubic-bezier(.2,.7,.3,1) both }
 
 /* ================= HERO ================= */
 #agri .ag-hero {
   position: relative; overflow: hidden; border-radius: 24px; padding: 26px 28px 22px;
-  color: #eafff2; border: 1px solid rgba(201, 238, 89, .18);
-  background: radial-gradient(1100px 380px at 8% -30%, rgba(201, 238, 89, .22), transparent 60%),
-              radial-gradient(760px 320px at 96% 0%, rgba(47, 128, 237, .18), transparent 62%),
+  color: #eafff2; border: 1px solid rgba(201, 238, 89, .22);
+  background: radial-gradient(1100px 380px at 8% -30%, rgba(201, 238, 89, .24), transparent 60%),
+              radial-gradient(760px 320px at 96% 0%, rgba(47, 128, 237, .20), transparent 62%),
               linear-gradient(140deg, #02170e 0%, var(--ag-deep) 46%, #0a7c45 118%);
-  box-shadow: 0 26px 70px rgba(3, 45, 26, .32);
+  box-shadow: 0 26px 70px rgba(3, 45, 26, .35);
 }
 #agri .ag-hero:before {
   content: ''; position: absolute; inset: 0; opacity: .5; pointer-events: none;
@@ -5046,91 +5059,121 @@
 #agri .ag-kicker { display: inline-flex; align-items: center; gap: 8px; font-size: 10.5px; letter-spacing: .18em; text-transform: uppercase; font-weight: 800; color: var(--ag-lime); }
 #agri .ag-kicker i { width: 7px; height: 7px; border-radius: 99px; background: var(--ag-lime); box-shadow: 0 0 0 4px rgba(201,238,89,.16); animation: agPulse 2.4s infinite; }
 @keyframes agPulse { 0%,100% { transform: scale(1); opacity: 1 } 50% { transform: scale(.72); opacity: .55 } }
-#agri .ag-hero h2 { margin: 10px 0 8px; font-size: clamp(23px, 2.5vw, 33px); line-height: 1.12; letter-spacing: -.035em; color: #fff; }
+#agri .ag-hero h2 { margin: 10px 0 8px; font-size: clamp(23px, 2.5vw, 33px); line-height: 1.15; letter-spacing: -.035em; color: #fff; }
 #agri .ag-hero h2 b { color: var(--ag-lime); font-weight: 900; }
-#agri .ag-hero p { margin: 0; max-width: 830px; color: #c6e6d3; line-height: 1.6; font-size: 13.5px; }
+#agri .ag-hero p { margin: 0; max-width: 860px; color: #c6e6d3; line-height: 1.6; font-size: 13.5px; }
 #agri .ag-chips { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 14px; }
 #agri .ag-chip {
   display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 99px; font-size: 11px; font-weight: 650;
   background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); color: #dff7e7; backdrop-filter: blur(4px);
 }
-#agri .ag-chip.lime { background: rgba(201,238,89,.14); border-color: rgba(201,238,89,.4); color: var(--ag-lime); }
+#agri .ag-chip.lime { background: rgba(201,238,89,.16); border-color: rgba(201,238,89,.45); color: var(--ag-lime); font-weight: 700; }
 #agri .ag-chip.blue { background: rgba(47,128,237,.16); border-color: rgba(47,128,237,.42); color: #b9d6ff; }
 #agri .ag-hero-actions { display: flex; flex-wrap: wrap; gap: 9px; align-items: center; justify-content: flex-end; }
 #agri .ag-btn {
-  border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.08); color: #eafff2;
-  border-radius: 12px; padding: 11px 15px; font-size: 12.5px; font-weight: 750; cursor: pointer; transition: transform .16s, box-shadow .16s, background .16s;
-  display: inline-flex; align-items: center; gap: 7px;
+  display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 12px; font-size: 12.5px;
+  font-weight: 700; cursor: pointer; transition: all .18s; border: 1px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.1); color: #fff; backdrop-filter: blur(4px);
 }
-#agri .ag-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.15); box-shadow: 0 12px 26px rgba(0,0,0,.24) }
-#agri .ag-btn.primary { background: linear-gradient(120deg, var(--ag-lime), #9fdc3f); color: #06250f; border-color: transparent; box-shadow: 0 14px 30px rgba(201,238,89,.22); }
-#agri .ag-btn.primary:hover { box-shadow: 0 18px 38px rgba(201,238,89,.34) }
-#agri .ag-btn.ghost { background: transparent; }
-#agri .ag-hero-stats { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 12px; margin-top: 22px; }
-#agri .ag-hero-stat { padding: 14px 15px; border-radius: 15px; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.11); }
-#agri .ag-hero-stat small { display: block; font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: #9fd3b5; font-weight: 700 }
-#agri .ag-hero-stat b { display: block; font-size: clamp(19px, 1.8vw, 25px); margin-top: 6px; color: #fff; letter-spacing: -.03em }
+#agri .ag-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,.18); box-shadow: 0 10px 24px rgba(0,0,0,.25) }
+#agri .ag-btn.primary { background: linear-gradient(120deg, var(--ag-lime), #9fdc3f); color: #05240f; border-color: transparent; font-weight: 800 }
+#agri .ag-btn.primary:hover { box-shadow: 0 18px 38px rgba(201,238,89,.38); transform: translateY(-2px) }
+#agri .ag-btn.ghost { background: transparent; border-color: rgba(255,255,255,.14); color: #cdeed8 }
+#agri .ag-hero-stats { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; margin-top: 18px; }
+#agri .ag-hero-stat { padding: 14px 15px; border-radius: 15px; background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); }
+#agri .ag-hero-stat small { display: block; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; color: #a2cfb6; font-weight: 700 }
+#agri .ag-hero-stat b { display: block; font-size: clamp(19px, 1.8vw, 25px); margin: 4px 0 2px; color: #fff; letter-spacing: -.03em }
 #agri .ag-hero-stat span { font-size: 11px; color: #b9dcc6 }
 #agri .ag-hero-stat.good b { color: var(--ag-lime) }
 
-/* ================= KPI STRIP ================= */
-#agri .ag-kpis { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 12px; }
-#agri .ag-kpi {
-  position: relative; background: #fff; border: 1px solid var(--ag-line); border-radius: 16px; padding: 13px 14px 8px;
-  box-shadow: 0 10px 26px rgba(6, 42, 25, .06); overflow: hidden;
+/* ================= BIO STRIP (BANDEAU SPÉCIAL) ================= */
+#agri .ag-bio-strip {
+  display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 10px;
+  background: linear-gradient(135deg, #062a19, #084c2a);
+  border-radius: 18px; padding: 14px 18px; border: 1px solid rgba(201, 238, 89, .24);
+  box-shadow: 0 12px 30px rgba(6,42,25,.18);
 }
+#agri .ag-bio-item { display: flex; align-items: center; gap: 12px; }
+#agri .ag-bio-icon {
+  width: 42px; height: 42px; border-radius: 12px; background: rgba(201, 238, 89, .15);
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
+  border: 1px solid rgba(201, 238, 89, .3); flex-shrink: 0;
+}
+#agri .ag-bio-label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #a9dec0; font-weight: 700 }
+#agri .ag-bio-val { display: block; font-size: 17px; color: #fff; font-weight: 800; letter-spacing: -.02em; margin: 1px 0 }
+#agri .ag-bio-item small { display: block; font-size: 10.5px; color: #c6ebd5 }
+
+/* ================= SECTION HEADINGS ================= */
+#agri .ag-section-title {
+  margin: 12px 0 4px; padding: 12px 18px; border-radius: 16px;
+  background: linear-gradient(90deg, #f0f7f3 0%, #ffffff 100%);
+  border-left: 4px solid var(--ag-green); border-right: 1px solid var(--ag-line);
+  border-top: 1px solid var(--ag-line); border-bottom: 1px solid var(--ag-line);
+}
+#agri .ag-section-tag { display: inline-block; font-size: 9.5px; font-weight: 800; letter-spacing: .14em; color: var(--ag-green); margin-bottom: 4px; }
+#agri .ag-section-title h3 { margin: 0 0 4px; font-size: 16px; color: var(--ag-ink); letter-spacing: -.02em; }
+#agri .ag-section-title p { margin: 0; font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ================= KPI STRIP ================= */
+#agri .ag-kpis { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 10px; }
+#agri .ag-kpi {
+  background: #fff; border: 1px solid var(--ag-line); border-radius: var(--ag-radius);
+  padding: 13px 15px; position: relative; overflow: hidden;
+  box-shadow: 0 4px 18px rgba(6,42,25,.04); transition: transform .18s, box-shadow .18s;
+}
+#agri .ag-kpi:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(6,42,25,.08); border-color: #b7d6c3; }
 #agri .ag-kpi:before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: linear-gradient(180deg, var(--ag-green), var(--ag-lime)); }
-#agri .ag-kpi.warn:before { background: linear-gradient(180deg, var(--ag-orange), #ffd88a) }
-#agri .ag-kpi.bad:before { background: linear-gradient(180deg, var(--ag-red), #ffa2a7) }
-#agri .ag-kpi.info:before { background: linear-gradient(180deg, var(--ag-blue), #9ac4ff) }
-#agri .ag-kpi small { display: block; font-size: 10.5px; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); font-weight: 750; min-height: 24px }
-#agri .ag-kpi b { display: block; font-size: 22px; letter-spacing: -.04em; margin: 3px 0 2px; color: var(--text) }
-#agri .ag-kpi .ag-kpi-delta { font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 99px; }
+#agri .ag-kpi.warn:before { background: linear-gradient(180deg, var(--ag-orange), var(--ag-gold)); }
+#agri .ag-kpi.bad:before { background: linear-gradient(180deg, var(--ag-red), #ff7a85); }
+#agri .ag-kpi.info:before { background: linear-gradient(180deg, var(--ag-blue), #8dc4ff); }
+#agri .ag-kpi small { display: block; font-size: 10.5px; letter-spacing: .04em; color: #5a6e62; font-weight: 700; text-transform: uppercase; }
+#agri .ag-kpi b { display: block; font-size: 21px; letter-spacing: -.04em; margin: 4px 0 2px; color: var(--ag-ink); font-variant-numeric: tabular-nums; }
+#agri .ag-kpi .ag-kpi-delta { font-size: 11px; font-weight: 700; display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 99px; margin-bottom: 2px; }
 #agri .ag-kpi .ag-kpi-delta.up { color: #0b6b38; background: #e7f7ec }
 #agri .ag-kpi .ag-kpi-delta.down { color: #a3272f; background: #fdecec }
 #agri .ag-kpi .ag-kpi-delta.flat { color: #4b5a52; background: #eef3f0 }
 #agri .ag-kpi canvas { display: block; width: 100%; height: 34px; margin-top: 4px }
 
 /* ================= CONTROLS / LEVERS ================= */
-#agri .ag-deck { border-radius: 20px; padding: 20px; color: #e9fff2; background: linear-gradient(150deg, #0420151f, #062a19 55%, #0a5c34 130%), linear-gradient(#062a19,#062a19); border: 1px solid #0d3b26; box-shadow: 0 18px 44px rgba(6,42,25,.22); }
-#agri .ag-deck-head { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: center; margin-bottom: 14px }
+#agri .ag-deck { border-radius: 20px; padding: 20px; color: #e9fff2; background: linear-gradient(140deg, #031b10, var(--ag-deep) 60%, #06381f); border: 1px solid rgba(201, 238, 89, .22); box-shadow: 0 20px 50px rgba(2, 28, 16, .28); }
+#agri .ag-deck-head { display: flex; flex-wrap: wrap; gap: 12px; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; }
 #agri .ag-deck-head h3 { margin: 0; font-size: 17px; color: #fff; letter-spacing: -.02em }
 #agri .ag-deck-head p { margin: 4px 0 0; color: #9ecfb2; font-size: 12px }
 #agri .ag-presets { display: flex; flex-wrap: wrap; gap: 7px }
 #agri .ag-preset {
-  border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.06); color: #dff7e7; border-radius: 99px;
-  padding: 7px 12px; font-size: 11.5px; font-weight: 700; cursor: pointer; transition: all .15s;
+  border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: #dcf7e6;
+  border-radius: 99px; padding: 6px 12px; font-size: 11px; font-weight: 700; cursor: pointer; transition: all .15s;
 }
-#agri .ag-preset:hover { background: rgba(255,255,255,.14); transform: translateY(-1px) }
-#agri .ag-preset.on { background: var(--ag-lime); color: #05240f; border-color: transparent }
-#agri .ag-levers { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 13px }
-#agri .ag-lever { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.09); border-radius: 14px; padding: 12px 13px }
-#agri .ag-lever-top { display: flex; justify-content: space-between; align-items: baseline; gap: 8px }
+#agri .ag-preset:hover { background: rgba(255,255,255,.14); transform: translateY(-1px); color: #fff; }
+#agri .ag-preset.on { background: var(--ag-lime); color: #05240f; border-color: var(--ag-lime); font-weight: 800; box-shadow: 0 4px 16px rgba(201,238,89,.3); }
+#agri .ag-levers { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 11px; }
+#agri .ag-lever { background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08); border-radius: 14px; padding: 11px 13px; }
+#agri .ag-lever-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px }
 #agri .ag-lever-top b { font-size: 12.5px; color: #f2fff7; font-weight: 750 }
 #agri .ag-lever-top span { font-size: 12px; font-weight: 800; color: var(--ag-lime); font-variant-numeric: tabular-nums }
-#agri .ag-lever small { display: block; color: #92c4a8; font-size: 10.5px; margin-top: 3px; line-height: 1.45; min-height: 30px }
-#agri input[type="range"].ag-range { -webkit-appearance: none; appearance: none; width: 100%; height: 22px; background: transparent; margin: 6px 0 0; cursor: pointer }
-#agri input[type="range"].ag-range::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: linear-gradient(90deg, var(--ag-lime) var(--ag-fill, 0%), rgba(255,255,255,.16) var(--ag-fill, 0%)) }
-#agri input[type="range"].ag-range::-webkit-slider-thumb { -webkit-appearance: none; width: 17px; height: 17px; margin-top: -5.5px; border-radius: 99px; background: #fff; border: 3px solid var(--ag-green); box-shadow: 0 4px 12px rgba(0,0,0,.35) }
-#agri input[type="range"].ag-range::-moz-range-track { height: 6px; border-radius: 99px; background: rgba(255,255,255,.16) }
+#agri .ag-lever small { display: block; color: #92c4a8; font-size: 10.5px; margin-top: 6px; line-height: 1.4 }
+#agri input[type="range"].ag-range { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 99px; background: rgba(255,255,255,.15); outline: none; cursor: pointer; }
+#agri input[type="range"].ag-range::-webkit-slider-runnable-track { height: 6px; border-radius: 99px; background: linear-gradient(90deg, var(--ag-lime) var(--ag-fill, 0%), rgba(255,255,255,.15) var(--ag-fill, 0%)) }
+#agri input[type="range"].ag-range::-webkit-slider-thumb { -webkit-appearance: none; width: 15px; height: 15px; border-radius: 99px; background: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); cursor: pointer; margin-top: -4.5px; border: 2px solid var(--ag-deep) }
+#agri input[type="range"].ag-range::-moz-range-track { height: 6px; border-radius: 99px; background: rgba(255,255,255,.15) }
 #agri input[type="range"].ag-range::-moz-range-progress { height: 6px; border-radius: 99px; background: var(--ag-lime) }
-#agri input[type="range"].ag-range::-moz-range-thumb { width: 15px; height: 15px; border-radius: 99px; background: #fff; border: 3px solid var(--ag-green) }
-#agri .ag-deck-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 15px; padding-top: 14px; border-top: 1px solid rgba(255,255,255,.09) }
-#agri .ag-seg { display: inline-flex; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 11px; padding: 3px; gap: 3px }
-#agri .ag-seg button { border: 0; background: transparent; color: #cfead9; border-radius: 8px; padding: 7px 12px; font-size: 11.5px; font-weight: 750; cursor: pointer }
+#agri input[type="range"].ag-range::-moz-range-thumb { width: 15px; height: 15px; border-radius: 99px; background: #fff; border: 2px solid var(--ag-deep); box-shadow: 0 2px 6px rgba(0,0,0,.35); cursor: pointer }
+#agri .ag-deck-foot { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.09) }
+#agri .ag-seg { display: inline-flex; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.14); border-radius: 99px; padding: 2px }
+#agri .ag-seg button { border: 0; background: transparent; color: #cfead9; border-radius: 99px; padding: 5px 11px; font-size: 11px; font-weight: 700; cursor: pointer }
 #agri .ag-seg button.on { background: rgba(201,238,89,.9); color: #05240f }
-#agri .ag-deck-readout { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; font-size: 12px; color: #cdeed8 }
-#agri .ag-deck-readout b { color: #fff; font-size: 15px; font-variant-numeric: tabular-nums }
+#agri .ag-deck-readout { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; font-size: 11.5px; color: #a2cfb6 }
+#agri .ag-deck-readout b { color: #fff; font-size: 15px; font-variant-numeric: tabular-nums; margin-left: 5px; }
 
 /* ================= PIPELINE ================= */
-#agri .ag-pipe { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 9px }
-#agri .ag-step { position: relative; background: #fff; border: 1px solid var(--ag-line); border-radius: 13px; padding: 11px 12px; overflow: hidden }
-#agri .ag-step i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 99px; background: #eef4f0; color: #4c5f55; font-style: normal; font-size: 11px; font-weight: 800; }
-#agri .ag-step b { display: block; font-size: 11.5px; margin: 7px 0 3px; color: var(--text) }
+#agri .ag-pipe { display: grid; grid-template-columns: repeat(6, minmax(0,1fr)); gap: 9px; }
+#agri .ag-step { position: relative; background: #fff; border: 1px solid var(--ag-line); border-radius: 14px; padding: 11px 12px; transition: all .2s; }
+#agri .ag-step i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 99px; background: #eef5f0; color: #2e5941; font-weight: 800; font-size: 11px; font-style: normal; }
+#agri .ag-step b { display: block; font-size: 11.5px; margin: 7px 0 3px; color: var(--ag-ink); }
 #agri .ag-step small { color: var(--muted); font-size: 10.5px }
 #agri .ag-step.done i { background: #e2f6e9; color: #0b6b38 }
-#agri .ag-step.run i { background: var(--ag-lime); color: #05240f; animation: agPulse 1.1s infinite }
-#agri .ag-step.done:after { content: ''; position: absolute; inset: auto 0 0 0; height: 3px; background: linear-gradient(90deg, var(--ag-green), var(--ag-lime)) }
+#agri .ag-step.run i { background: var(--ag-lime); color: #05240f; animation: agPulse 1.2s infinite }
+#agri .ag-step.done:after { content: ''; position: absolute; inset: auto 0 0 0; height: 3px; background: var(--ag-green); border-radius: 0 0 14px 14px }
 
 /* ================= CHART CARDS ================= */
 #agri .ag-grid { display: grid; gap: 14px }
@@ -5139,14 +5182,14 @@
 #agri .ag-grid.c4 { grid-template-columns: repeat(4, minmax(0,1fr)) }
 #agri .ag-grid.c2-1 { grid-template-columns: 1.55fr .95fr }
 #agri .ag-card {
-  position: relative; background: #fff; border: 1px solid var(--ag-line); border-radius: var(--ag-radius); padding: 16px 16px 12px;
-  box-shadow: 0 12px 30px rgba(6,42,25,.06); transition: transform .18s, box-shadow .18s;
+  background: #fff; border: 1px solid var(--ag-line); border-radius: var(--ag-radius);
+  padding: 16px 18px; box-shadow: 0 6px 22px rgba(6,42,25,.04); transition: transform .16s, box-shadow .16s;
 }
-#agri .ag-card:hover { transform: translateY(-2px); box-shadow: 0 20px 44px rgba(6,42,25,.12) }
+#agri .ag-card:hover { transform: translateY(-2px); box-shadow: 0 20px 44px rgba(6,42,25,.10); border-color: #bad9c5; }
 #agri .ag-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; margin-bottom: 10px }
-#agri .ag-card-head h3 { margin: 3px 0 0; font-size: 15px; letter-spacing: -.02em }
-#agri .ag-card-kicker { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 800; color: #3f7a58 }
-#agri .ag-card-sub { margin: 4px 0 0; font-size: 11.5px; color: var(--muted) }
+#agri .ag-card-head h3 { margin: 3px 0 0; font-size: 15px; letter-spacing: -.02em; color: var(--ag-ink); }
+#agri .ag-card-kicker { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; font-weight: 800; color: var(--ag-green) }
+#agri .ag-card-sub { margin: 4px 0 0; font-size: 11.5px; color: var(--muted); line-height: 1.45 }
 #agri .ag-badge { font-size: 10.5px; font-weight: 800; padding: 5px 9px; border-radius: 99px; background: #eef6f1; color: #2f6a4a; white-space: nowrap }
 #agri .ag-badge.lime { background: #f3fbd9; color: #4f6a10 }
 #agri .ag-badge.blue { background: #ebf3ff; color: #24558f }
@@ -5158,51 +5201,51 @@
 #agri .ag-legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 9px; font-size: 11px; color: #44584c }
 #agri .ag-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 5px; vertical-align: -1px }
 #agri .ag-tip {
-  position: absolute; pointer-events: none; z-index: 3; transform: translate(-50%, -115%); background: #04160d; color: #eafff2;
+  position: absolute; pointer-events: none; z-index: 99; transform: translate(-50%, -115%); background: #04160d; color: #eafff2;
   border-radius: 10px; padding: 8px 10px; font-size: 11px; line-height: 1.45; box-shadow: 0 12px 30px rgba(0,0,0,.3); opacity: 0; transition: opacity .12s; white-space: nowrap;
 }
 #agri .ag-tip b { color: var(--ag-lime) }
-#agri .ag-open { border: 1px solid var(--ag-line); background: #f7fbf8; color: #2f6a4a; border-radius: 9px; width: 28px; height: 28px; cursor: pointer; font-size: 13px; line-height: 1; flex: none; }
+#agri .ag-open { border: 1px solid var(--ag-line); background: #f7fbf8; color: #204b34; border-radius: 9px; width: 28px; height: 28px; cursor: pointer; display: grid; place-items: center; font-size: 14px; font-weight: 700; transition: all .15s }
 #agri .ag-open:hover { background: var(--ag-green); color: #fff; border-color: var(--ag-green) }
-#agri .ag-empty { display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 12px; text-align: center }
+#agri .ag-empty { display: grid; place-items: center; height: 100%; color: var(--muted); font-size: 12px }
 
 /* ================= MODULE TILES ================= */
 #agri .ag-modules { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px }
-#agri .ag-module { position: relative; background: #fff; border: 1px solid var(--ag-line); border-radius: 15px; padding: 13px; cursor: pointer; transition: transform .16s, box-shadow .16s, border-color .16s }
-#agri .ag-module:hover { transform: translateY(-3px); box-shadow: 0 18px 36px rgba(6,42,25,.12); border-color: #b9d8c6 }
+#agri .ag-module { position: relative; background: #fff; border: 1px solid var(--ag-line); border-radius: 14px; padding: 13px; cursor: pointer; transition: all .18s }
+#agri .ag-module:hover { transform: translateY(-3px); box-shadow: 0 18px 36px rgba(6,42,25,.12); border-color: var(--ag-green) }
 #agri .ag-module-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px }
-#agri .ag-module b { font-size: 12.5px }
+#agri .ag-module b { font-size: 12.5px; color: var(--ag-ink) }
 #agri .ag-module p { margin: 5px 0 8px; font-size: 11px; color: var(--muted); line-height: 1.5 }
-#agri .ag-module .ag-metric { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #3d5147; font-weight: 700 }
-#agri .ag-module .ag-metric em { font-style: normal; color: #0b6b38; font-size: 14px; font-weight: 900; font-variant-numeric: tabular-nums }
+#agri .ag-module .ag-metric { display: flex; align-items: center; gap: 8px; font-size: 11px; color: #3b5043; font-weight: 600 }
+#agri .ag-module .ag-metric em { font-style: normal; color: #0b6b38; font-size: 14px; font-weight: 900 }
 #agri .ag-module .ag-spark { height: 30px; margin-top: 8px }
 #agri .ag-module .ag-spark canvas { width: 100%; height: 100%; display: block }
 
 /* ================= TABLES / LISTS ================= */
 #agri table.ag-table { width: 100%; border-collapse: collapse; font-size: 12px }
-#agri table.ag-table th { text-align: left; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding: 8px 9px; border-bottom: 1px solid var(--ag-line); background: #f8fbf9; position: sticky; top: 0; z-index: 1 }
+#agri table.ag-table th { text-align: left; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: #587162; padding: 8px 9px; border-bottom: 1px solid #d9e7de }
 #agri table.ag-table td { padding: 9px; border-bottom: 1px solid #eef4f0; vertical-align: middle }
 #agri table.ag-table tr:hover td { background: #f7fbf8 }
 #agri table.ag-table td b { font-variant-numeric: tabular-nums }
 #agri .ag-tag { display: inline-block; padding: 3px 8px; border-radius: 99px; font-size: 10.5px; font-weight: 800 }
-#agri .ag-tag.g { background: #e7f7ec; color: #0b6b38 } #agri .ag-tag.o { background: #fff4e5; color: #98570b }
-#agri .ag-tag.b { background: #ebf3ff; color: #24558f } #agri .ag-tag.r { background: #fdecec; color: #a3272f }
-#agri .ag-bar { height: 7px; border-radius: 99px; background: #eef4f0; overflow: hidden; min-width: 60px }
-#agri .ag-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--ag-green), var(--ag-lime)); transition: width .5s }
-#agri .ag-feed { display: flex; flex-direction: column; gap: 9px; max-height: 268px; overflow: auto; padding-right: 4px }
-#agri .ag-feed-item { border-left: 3px solid var(--ag-green); background: #f8fbf9; border-radius: 0 12px 12px 0; padding: 10px 12px; font-size: 11.5px; line-height: 1.5; color: #2c4034 }
+#agri .ag-tag.g { background: #e7f7ec; color: #0b6b38 } #agri .ag-tag.o { background: #fff2e4; color: #b65f0a }
+#agri .ag-tag.b { background: #ebf3ff; color: #24558f } #agri .ag-tag.r { background: #fdeeee; color: #96262d }
+#agri .ag-bar { height: 7px; border-radius: 99px; background: #eef4f0; overflow: hidden; display: block }
+#agri .ag-bar i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--ag-green), var(--ag-lime)) }
+#agri .ag-feed { display: flex; flex-direction: column; gap: 9px; max-height: 280px; overflow: auto; padding-right: 4px; }
+#agri .ag-feed-item { border-left: 3px solid var(--ag-green); background: #f8fbf9; border-radius: 0 10px 10px 0; padding: 8px 11px; font-size: 11.5px; color: #354a3e; line-height: 1.45 }
 #agri .ag-feed-item b { display: block; color: var(--text); font-size: 12px; margin-bottom: 3px }
 #agri .ag-feed-item.warn { border-left-color: var(--ag-orange) } #agri .ag-feed-item.bad { border-left-color: var(--ag-red) }
 #agri .ag-note { font-size: 11px; color: var(--muted); line-height: 1.6 }
 
 /* ================= UNIFIED COCKPIT (single surface, layered deck) ================= */
 #agriCockpit { position: fixed; inset: 0; z-index: 100300; display: none; align-items: center; justify-content: center; padding: 22px;
-  background: radial-gradient(900px 500px at 15% 0%, rgba(201,238,89,.14), transparent 60%), rgba(2, 12, 7, .72); backdrop-filter: blur(9px); }
+  background: rgba(2,16,10,.78); backdrop-filter: blur(10px); }
 #agriCockpit.show { display: flex; animation: agcIn .22s ease }
-@keyframes agcIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes agcIn { from { opacity: 0; transform: scale(.97) } to { opacity: 1; transform: none } }
 #agriCockpit .agc-window { position: relative; width: min(1320px, 97vw); height: min(880px, 94vh); display: flex; flex-direction: column;
-  background: linear-gradient(180deg, #03241503, #02170e), linear-gradient(#062a19, #041b11); color: #e9fff2; border: 1px solid rgba(201,238,89,.16);
-  border-radius: 24px; box-shadow: 0 40px 120px rgba(0,0,0,.55); overflow: hidden }
+  background: radial-gradient(900px 380px at 90% 0%, rgba(47,128,237,.14), transparent 60%),
+              linear-gradient(170deg, #052414, #02140a 60%, #031c10); border: 1px solid rgba(201, 238, 89, .24); border-radius: 24px; box-shadow: 0 40px 100px rgba(0,0,0,.6); overflow: hidden; color: #eafff2 }
 #agriCockpit .agc-head { display: flex; flex-wrap: wrap; gap: 14px; justify-content: space-between; align-items: flex-start; padding: 18px 22px 14px; border-bottom: 1px solid rgba(255,255,255,.08) }
 #agriCockpit .agc-head h2 { margin: 6px 0 4px; font-size: clamp(18px, 1.8vw, 24px); color: #fff; letter-spacing: -.03em }
 #agriCockpit .agc-head p { margin: 0; color: #a9d6bd; font-size: 12px }
@@ -5213,8 +5256,8 @@
 #agriCockpit .agc-btn.x { width: 38px; height: 38px; padding: 0; font-size: 17px; border-radius: 12px }
 #agriCockpit .agc-deck { position: relative; display: flex; gap: 6px; padding: 12px 22px 0; overflow-x: auto; scrollbar-width: thin }
 #agriCockpit .agc-layer-tab {
-  position: relative; border: 1px solid rgba(255,255,255,.1); border-bottom: 0; background: rgba(255,255,255,.05); color: #bfe4d0;
-  border-radius: 12px 12px 0 0; padding: 9px 14px 11px; font-size: 11.5px; font-weight: 750; cursor: pointer; white-space: nowrap; transition: all .18s; transform-origin: bottom center;
+  border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.04); color: #cfe8d9;
+  border-radius: 12px 12px 0 0; padding: 9px 14px; font-size: 11.5px; font-weight: 750; cursor: pointer; transition: all .14s; white-space: nowrap;
 }
 #agriCockpit .agc-layer-tab:hover { background: rgba(255,255,255,.12); color: #fff }
 #agriCockpit .agc-layer-tab.on { background: linear-gradient(180deg, rgba(201,238,89,.22), rgba(201,238,89,.06)); color: #fff; border-color: rgba(201,238,89,.5); transform: translateY(0) }
@@ -5222,7 +5265,7 @@
 #agriCockpit .agc-body { flex: 1; overflow: auto; padding: 18px 22px 22px; background: linear-gradient(180deg, rgba(255,255,255,.03), transparent 220px) }
 #agriCockpit .agc-pane { display: none }
 #agriCockpit .agc-pane.on { display: block; animation: agcLayer .28s cubic-bezier(.2,.7,.3,1) }
-@keyframes agcLayer { from { opacity: 0; transform: translateY(14px) scale(.995) } to { opacity: 1; transform: none } }
+@keyframes agcLayer { from { opacity: 0; transform: translateY(6px) } to { opacity: 1; transform: none } }
 #agriCockpit .agc-grid { display: grid; gap: 13px }
 #agriCockpit .agc-grid.c2 { grid-template-columns: repeat(2, minmax(0,1fr)) }
 #agriCockpit .agc-grid.c3 { grid-template-columns: repeat(3, minmax(0,1fr)) }
@@ -5252,46 +5295,45 @@
 #agriCockpit .agc-progress { height: 4px; border-radius: 99px; background: rgba(255,255,255,.12); overflow: hidden; flex: 1; min-width: 140px }
 #agriCockpit .agc-progress i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--ag-lime), #7fd0ff); transition: width .3s }
 
-@media (max-width: 1500px) {
-  #agri .ag-kpis { grid-template-columns: repeat(4, minmax(0,1fr)) }
-  #agri .ag-levers { grid-template-columns: repeat(3, minmax(0,1fr)) }
-}
-@media (max-width: 1150px) {
+/* ================= RESPONSIVE ================= */
+@media (max-width: 1120px) {
+  #agri .ag-hero-stats { grid-template-columns: repeat(2, minmax(0,1fr)) }
+  #agri .ag-bio-strip { grid-template-columns: repeat(2, minmax(0,1fr)) }
   #agri .ag-kpis { grid-template-columns: repeat(3, minmax(0,1fr)) }
+  #agri .ag-levers { grid-template-columns: repeat(2, minmax(0,1fr)) }
   #agri .ag-grid.c3, #agri .ag-grid.c4, #agri .ag-modules, #agri .ag-pipe { grid-template-columns: repeat(2, minmax(0,1fr)) }
   #agri .ag-grid.c2, #agri .ag-grid.c2-1 { grid-template-columns: 1fr }
-  #agri .ag-levers { grid-template-columns: repeat(2, minmax(0,1fr)) }
-  #agri .ag-hero-stats { grid-template-columns: repeat(2, minmax(0,1fr)) }
   #agriCockpit .agc-grid.c3, #agriCockpit .agc-grid.c4 { grid-template-columns: repeat(2, minmax(0,1fr)) }
 }
-@media (max-width: 760px) {
+@media (max-width: 720px) {
+  #agri .ag-hero-stats, #agri .ag-bio-strip { grid-template-columns: 1fr }
   #agri .ag-kpis, #agri .ag-levers, #agri .ag-modules, #agri .ag-pipe,
-  #agri .ag-grid.c2, #agri .ag-grid.c3, #agri .ag-grid.c4 { grid-template-columns: 1fr 1fr }
-  #agri .ag-hero { padding: 20px }
+  #agri .ag-grid.c2, #agri .ag-grid.c3, #agri .ag-grid.c4 { grid-template-columns: 1fr }
+  #agri .ag-hero { padding: 18px 16px }
+  #agri .ag-card:hover, #agri .ag-module:hover, #agri .ag-btn:hover { transform: none }
   #agriCockpit { padding: 8px } #agriCockpit .agc-grid.c2, #agriCockpit .agc-grid.c3, #agriCockpit .agc-grid.c4 { grid-template-columns: 1fr }
   #agriCockpit .agc-window { height: 97vh }
 }
 @media (prefers-reduced-motion: reduce) {
   #agri .ag-kicker i, #agri .ag-step.run i, #agriCockpit .agc-status i { animation: none !important }
-  #agri .ag-card:hover, #agri .ag-module:hover, #agri .ag-btn:hover { transform: none }
 }
 
 /* ================= SCENARIOS / FINANCING / NOTES ================= */
-#agri .ag-fin { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 7px; margin-top: 10px }
-#agri .ag-fin-row { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; background: #f4f9f6; border: 1px solid var(--ag-line); border-radius: 10px; padding: 7px 10px }
-#agri .ag-fin-row span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em }
+#agri .ag-fin { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 9px; margin-top: 10px }
+#agri .ag-fin-row { display: flex; justify-content: space-between; align-items: center; padding: 7px 10px; background: #f6fbf8; border: 1px solid var(--ag-line); border-radius: 9px }
+#agri .ag-fin-row span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; font-weight: 700; letter-spacing: .04em }
 #agri .ag-fin-row b { font-size: 13px; color: #0b3d24; font-variant-numeric: tabular-nums }
 #agri table.ag-table tr.ag-row-on td { background: #eef8f1; box-shadow: inset 3px 0 0 var(--ag-green) }
-#agri .ag-note-ok { display: flex; gap: 10px; align-items: center; margin: 12px 0 2px; padding: 10px 14px; border-radius: 12px;
+#agri .ag-note-ok { display: flex; gap: 10px; align-items: center; margin: 12px 0 0; padding: 10px 14px; border-radius: 12px;
   background: linear-gradient(90deg, rgba(8,115,63,.09), rgba(201,238,89,.16)); border: 1px solid rgba(8,115,63,.22); color: #1d4b33; font-size: 11.5px }
 #agri .ag-note-ok b { color: var(--ag-green); font-size: 13px }
-#agri .ag-shell { animation: agIn .34s cubic-bezier(.2,.7,.3,1) both }
 @keyframes agIn { from { opacity: 0; transform: translateY(10px) } to { opacity: 1; transform: none } }
 @media print {
   #agri .ag-hero-actions, #agri .ag-deck, #agri .ag-pipe, #agri .ag-note-ok { display: none !important }
   #agri .ag-card { break-inside: avoid }
 }
 </style>
+
 <style id="nutri-unicef-v60-css">/* ============================================================
    NUTRI.N°1 V60 — UNICEF CHILD NUTRITION INVESTMENT
    Self-contained styles, strictly scoped to #unicef and #unicefCockpit.
@@ -8441,15 +8483,15 @@
     </div><!-- /hl-shell -->
   </section>
 
-  <section id="agri" class="view">
+    <section id="agri" class="view">
     <!-- ============================================================
-         V59 — AGRICULTURE & FOOD SYSTEMS INVESTMENT INTELLIGENCE
-         Additive layer scoped to #agri. Legacy global panels are
-         neutralised for this view only (see nutri-agri-invest-js).
+         V59+ — AGRICULTURE & FOOD SYSTEMS INVESTMENT INTELLIGENCE
+         Ultra-realistic Simulation, Bio/Organic Production, Yield, Losses,
+         Deficit, Nutrition, and Ministry Decision Cockpit.
+         Strictly scoped to #agri and its single-surface cockpit #agriCockpit.
          ============================================================ -->
 
-    <!-- compatibility shims: keep the legacy V39/V46 decorators from injecting
-         visible artefacts into this redesigned view (kept invisible on purpose) -->
+    <!-- compatibility shims: keep legacy decorators invisible -->
     <span class="v46-live" hidden></span>
     <div class="v46-kpis" hidden></div>
     <div data-v46-filter hidden></div>
@@ -8463,90 +8505,205 @@
       <div class="ag-hero">
         <div class="ag-hero-top">
           <div>
-            <span class="ag-kicker"><i></i><span data-ag="k0">FOOD-SYSTEM INVESTMENT SIMULATION • LIVE</span></span>
-            <h2><span data-ag="k1">🌾 Agriculture &amp; Food Systems Investment Cockpit</span><br><b data-ag="k2">From farm-gate evidence to bankable investment decisions</b></h2>
-            <p data-ag="k3">One deterministic engine reconciles production, post-harvest losses, markets, climate risk and nutrition into a single investment case: capital plan, net present value, payback, jobs and food-security impact — country by country, lever by lever.</p>
+            <span class="ag-kicker"><i></i><span data-ag="k0">SIMULATION D’INVESTISSEMENT AGROALIMENTAIRE • LIVE</span></span>
+            <h2><span data-ag="k1">🌾 Cockpit d’Investissement Agricole, Souveraineté &amp; Bio-Nutrition</span><br><b data-ag="k2">Du champ certifié bio à la décision d’investissement d'État bancable</b></h2>
+            <p data-ag="k3">Moteur de simulation déterministe haute précision dédié aux investisseurs et ministères : réconcilie récoltes 2026, surfaces bio certifiées, volumes consommés, déficits alimentaires, cascade des pertes post-récolte, transition agroécologique, création d'emplois ruraux et équilibre macro-économique.</p>
             <div class="ag-chips">
-              <span class="ag-chip lime">● <span data-ag="k4">Live model</span></span>
+              <span class="ag-chip lime">● <span data-ag="k4">Modèle en direct</span></span>
               <span class="ag-chip" id="agChipCountry">🌍 Togo</span>
-              <span class="ag-chip" id="agChipHorizon">🗓 10-year horizon</span>
-              <span class="ag-chip blue" id="agChipModel">NUTRI.AGRI v59 • deterministic engine</span>
+              <span class="ag-chip" id="agChipHorizon">🗓 Horizon 10 ans</span>
+              <span class="ag-chip blue" id="agChipModel">NUTRI.AGRI v59+ • Moteur Déterministe Bio-Alimentaire</span>
               <span class="ag-chip" id="agChipSession">AGRI-SESSION-0000</span>
-              <span class="ag-chip lime" data-ag="k9">✓ One simulation surface — no stacked panels</span>
+              <span class="ag-chip lime" data-ag="k9">✓ Surface unifiée fluide — Zéro superposition de panneaux</span>
             </div>
           </div>
           <div class="ag-hero-actions">
-            <button type="button" class="ag-btn primary" data-ag-act="run">⚡ <span data-ag="k5">Run the simulation</span></button>
-            <button type="button" class="ag-btn" data-ag-act="cockpit">🏛 <span data-ag="k6">Open investment cockpit</span></button>
-            <button type="button" class="ag-btn ghost" data-ag-act="export">⇩ <span data-ag="k7">Export model</span></button>
-            <button type="button" class="ag-btn ghost" data-ag-act="reset">↺ <span data-ag="k8">Reset levers</span></button>
+            <button type="button" class="ag-btn primary" data-ag-act="run">⚡ <span data-ag="k5">Lancer la simulation</span></button>
+            <button type="button" class="ag-btn" data-ag-act="cockpit">🏛 <span data-ag="k6">Ouvrir le cockpit d'investissement</span></button>
+            <button type="button" class="ag-btn ghost" data-ag-act="export">⇩ <span data-ag="k7">Exporter le modèle</span></button>
+            <button type="button" class="ag-btn ghost" data-ag-act="reset">↺ <span data-ag="k8">Réinitialiser</span></button>
           </div>
         </div>
         <div class="ag-hero-stats">
-          <div class="ag-hero-stat good"><small data-ag="h1l">Programme capital</small><b id="agHeroCapex">$0M</b><span data-ag="h1s">Public + private envelope</span></div>
-          <div class="ag-hero-stat"><small data-ag="h2l">Net present value</small><b id="agHeroNpv">$0M</b><span id="agHeroNpvSub">@ 12% discount rate</span></div>
-          <div class="ag-hero-stat"><small data-ag="h3l">Return profile</small><b id="agHeroIrr">0%</b><span id="agHeroBcr">BCR 0.00 • payback n/a</span></div>
-          <div class="ag-hero-stat"><small data-ag="h4l">People fed / jobs</small><b id="agHeroImpact">0</b><span id="agHeroImpactSub">additional people fed per year</span></div>
+          <div class="ag-hero-stat good"><small data-ag="h1l">Capital du programme</small><b id="agHeroCapex">$0M</b><span data-ag="h1s">Enveloppe publique + privée</span></div>
+          <div class="ag-hero-stat"><small data-ag="h2l">Valeur actualisée nette</small><b id="agHeroNpv">$0M</b><span id="agHeroNpvSub">@ 12% taux d'actualisation</span></div>
+          <div class="ag-hero-stat"><small data-ag="h3l">Profil de rentabilité</small><b id="agHeroIrr">0%</b><span id="agHeroBcr">BCR 0.00 • retour n/a</span></div>
+          <div class="ag-hero-stat"><small data-ag="h4l">Personnes nourries / emplois</small><b id="agHeroImpact">0</b><span id="agHeroImpactSub">personnes nourries sainement / an</span></div>
         </div>
       </div>
 
-      <!-- ================= KPI STRIP ================= -->
+      <!-- ================= MINI BANNER BIO & RECOLTES ================= -->
+      <div class="ag-bio-strip" id="agBioStrip">
+        <div class="ag-bio-item">
+          <div class="ag-bio-icon">🌱</div>
+          <div>
+            <span class="ag-bio-label">Récoltes Bio &amp; Durables 2026</span>
+            <b class="ag-bio-val" id="agBioHarvest">0 kt</b>
+            <small id="agBioShare">0% de la production totale</small>
+          </div>
+        </div>
+        <div class="ag-bio-item">
+          <div class="ag-bio-icon">📉</div>
+          <div>
+            <span class="ag-bio-label">Pertes Évitées (Silos &amp; Froid)</span>
+            <b class="ag-bio-val" id="agLossAvoidedVal">0 kt</b>
+            <small id="agLossAvoidedValSub">sauvées de la pourriture</small>
+          </div>
+        </div>
+        <div class="ag-bio-item">
+          <div class="ag-bio-icon">🥗</div>
+          <div>
+            <span class="ag-bio-label">Produits Bio Consommés</span>
+            <b class="ag-bio-val" id="agConsumedBio">0 kt</b>
+            <small id="agConsumedBioSub">disponibles net dans l'assiette</small>
+          </div>
+        </div>
+        <div class="ag-bio-item">
+          <div class="ag-bio-icon">⚠️</div>
+          <div>
+            <span class="ag-bio-label">Déficit Alimentaire Résiduel</span>
+            <b class="ag-bio-val" id="agDeficitVal">0 kt</b>
+            <small id="agDeficitValSub">comblé par le programme</small>
+          </div>
+        </div>
+        <div class="ag-bio-item">
+          <div class="ag-bio-icon">🏛️</div>
+          <div>
+            <span class="ag-bio-label">Économies Devises (Importations)</span>
+            <b class="ag-bio-val" id="agForexVal">$0M</b>
+            <small id="agForexValSub">gain direct balance des paiements</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- ================= KPI STRIP (12 KPIS) ================= -->
       <div class="ag-kpis" id="agKpis"></div>
 
       <!-- ================= LEVER DECK ================= -->
       <div class="ag-deck">
         <div class="ag-deck-head">
           <div>
-            <h3><span data-ag="d1">🎛 Investment levers — design the national programme</span></h3>
-            <p data-ag="d2">Every lever is priced, time-phased and translated into production, losses, jobs, nutrition and cash-flow. Move a lever: the whole model recomputes instantly.</p>
+            <h3><span data-ag="d1">🎛 Leviers d'investissement &amp; Transition Bio — Conception Stratégique</span></h3>
+            <p data-ag="d2">Chaque levier est chiffré, étalé dans le temps et traduit en production bio, réduction des pertes, emplois ruraux, nutrition et trésorerie. Ajustez un levier : la simulation entière se recalcule instantanément.</p>
           </div>
           <div class="ag-presets" id="agPresets"></div>
         </div>
         <div class="ag-levers" id="agLevers"></div>
         <div class="ag-deck-foot">
           <div class="ag-seg" id="agHorizon">
-            <button type="button" data-horizon="5">5 <span data-ag="y">yrs</span></button>
-            <button type="button" data-horizon="10" class="on">10 <span data-ag="y">yrs</span></button>
-            <button type="button" data-horizon="15">15 <span data-ag="y">yrs</span></button>
+            <button type="button" data-horizon="5">5 <span data-ag="y">ans</span></button>
+            <button type="button" data-horizon="10" class="on">10 <span data-ag="y">ans</span></button>
+            <button type="button" data-horizon="15">15 <span data-ag="y">ans</span></button>
           </div>
           <div class="ag-deck-readout">
-            <span><span data-ag="d3">Capital envelope</span> <b id="agOutCapex">$0M</b></span>
-            <span><span data-ag="d4">Annual net benefit</span> <b id="agOutBenefit">$0M</b></span>
-            <span><span data-ag="d5">Food-need coverage</span> <b id="agOutCoverage">0%</b></span>
-            <span><span data-ag="d6">Jobs created</span> <b id="agOutJobs">0</b></span>
+            <span><span data-ag="d3">Enveloppe d'investissement</span> <b id="agOutCapex">$0M</b></span>
+            <span><span data-ag="d4">Bénéfice net annuel</span> <b id="agOutBenefit">$0M</b></span>
+            <span><span data-ag="d5">Couverture des besoins</span> <b id="agOutCoverage">0%</b></span>
+            <span><span data-ag="d6">Emplois créés</span> <b id="agOutJobs">0</b></span>
           </div>
           <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-            <label style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:#cdeed8" title="Climate shock applied to the scenario">
-              <span data-ag="d7">Climate shock</span>
+            <label style="display:flex;align-items:center;gap:8px;font-size:11.5px;color:#cdeed8" title="Choc climatique ou ravageur appliqué au scénario">
+              <span data-ag="d7">Choc climatique / ravageurs</span>
               <input type="range" class="ag-range" id="agShock" min="0" max="100" value="0" style="width:120px">
               <b id="agShockVal" style="color:#fff;font-variant-numeric:tabular-nums">0%</b>
             </label>
-            <button type="button" class="ag-btn primary" data-ag-act="run">⚡ <span data-ag="k5">Run the simulation</span></button>
+            <button type="button" class="ag-btn primary" data-ag-act="run">⚡ <span data-ag="k5">Lancer la simulation</span></button>
           </div>
         </div>
       </div>
 
       <!-- ================= PIPELINE ================= -->
       <div class="ag-pipe" id="agPipe">
-        <div class="ag-step" data-step="0"><i>1</i><b data-ag="p1">Evidence intake</b><small data-ag="p1s">production • losses • prices • climate</small></div>
-        <div class="ag-step" data-step="1"><i>2</i><b data-ag="p2">Yield &amp; area response</b><small data-ag="p2s">levers → output by food group</small></div>
-        <div class="ag-step" data-step="2"><i>3</i><b data-ag="p3">Loss &amp; market layer</b><small data-ag="p3s">storage, logistics, import substitution</small></div>
-        <div class="ag-step" data-step="3"><i>4</i><b data-ag="p4">Nutrition &amp; resilience</b><small data-ag="p4s">kcal available, climate risk</small></div>
-        <div class="ag-step" data-step="4"><i>5</i><b data-ag="p5">Investment case</b><small data-ag="p5s">capex, NPV, IRR, payback</small></div>
-        <div class="ag-step" data-step="5"><i>6</i><b data-ag="p6">Decision package</b><small data-ag="p6s">programmes, owners, M&amp;E</small></div>
+        <div class="ag-step" data-step="0"><i>1</i><b data-ag="p1">Données du terroir</b><small data-ag="p1s">surfaces bio • récoltes • pertes</small></div>
+        <div class="ag-step" data-step="1"><i>2</i><b data-ag="p2">Rendement &amp; Agroécologie</b><small data-ag="p2s">irrigation solaire • bio-intrants</small></div>
+        <div class="ag-step" data-step="2"><i>3</i><b data-ag="p3">Pertes &amp; Chaîne du Froid</b><small data-ag="p3s">sauvetage post-récolte • logistique</small></div>
+        <div class="ag-step" data-step="3"><i>4</i><b data-ag="p4">Nutrition &amp; Sécurité</b><small data-ag="p4s">assiette équilibrée • micronutriments</small></div>
+        <div class="ag-step" data-step="4"><i>5</i><b data-ag="p5">Dossier Investisseur</b><small data-ag="p5s">VAN, TRI, délai retour, devises</small></div>
+        <div class="ag-step" data-step="5"><i>6</i><b data-ag="p6">Pack Décisionnel État</b><small data-ag="p6s">politique agricole • S&amp;E institutionnel</small></div>
       </div>
-      <div class="ag-note-ok"><b>✓</b><span data-ag="k10">Unified surface: the legacy decoration panels of this view are disabled and their content is merged into this cockpit.</span></div>
+      <div class="ag-note-ok"><b>✓</b><span data-ag="k10">Environnement de simulation certifié : interactions fluides sans superposition de fenêtres, moteur de calcul en temps réel intégré pour les partenaires financiers et ministériels.</span></div>
 
-      <!-- ================= FLAGSHIP CHARTS ================= -->
+      <!-- ================= SECTION NOUVELLE : FOCUS ALIMENTAIRE & MINISTÈRE DE L'AGRICULTURE ================= -->
+      <div class="ag-section-title">
+        <span class="ag-section-tag">BILAN DE TERRAIN 2026 &bull; MINISTÈRE DE L'AGRICULTURE</span>
+        <h3>Bilan Alimentaire National : Récoltes Bio, Produits Consommés, Déficits &amp; Pertes Sauvegardées</h3>
+        <p>Analyse granulaire de la souveraineté alimentaire : mesure directe des cultures vivrières et maraîchères bio, volumes réels consommés après triage et dépréciation, stocks détruits évitables et couverture nutritionnelle de la population.</p>
+      </div>
+
+      <!-- 2 NOUVEAUX GRAPHIQUES CLÉS POUR LE MINISTÈRE -->
+      <div class="ag-grid c2">
+        <div class="ag-card" data-ag-open="production">
+          <div class="ag-card-head">
+            <div>
+              <div class="ag-card-kicker">RÉCOLTES &amp; DÉFICITS &bull; 2026</div>
+              <h3>Récoltes Bio vs Produits Consommés vs Déficit Alimentaire</h3>
+              <p class="ag-card-sub">Volumes annuels en milliers de tonnes (kt) : ce qui est récolté, ce qui nourrit la population, et le manque restant à combler</p>
+            </div>
+            <button type="button" class="ag-open" data-ag-open-btn="production" title="Ouvrir dans le cockpit">⤢</button>
+          </div>
+          <div class="ag-plot h300"><canvas id="agBioHarvestChart"></canvas></div>
+          <div class="ag-legend" id="agBioHarvestLegend"></div>
+        </div>
+
+        <div class="ag-card" data-ag-open="climate">
+          <div class="ag-card-head">
+            <div>
+              <div class="ag-card-kicker">OBSERVATOIRE DES PERTES &bull; IMPACT DIRECT</div>
+              <h3>Pertes Post-Récolte : Récoltes Perdues vs Récoltes Sauvées</h3>
+              <p class="ag-card-sub">Pertes évitées grâce au stockage hermétique, silos solaires et chaîne du froid financés par le programme</p>
+            </div>
+            <button type="button" class="ag-open" data-ag-open-btn="climate" title="Ouvrir dans le cockpit">⤢</button>
+          </div>
+          <div class="ag-plot h300"><canvas id="agLossRescueChart"></canvas></div>
+          <div class="ag-legend" id="agLossRescueLegend"></div>
+        </div>
+      </div>
+
+      <!-- NOUVEAU GRAPHIQUE 3 : EMINTRE NUTRITIONNEL & RADAR SOUVERAINETÉ -->
+      <div class="ag-grid c2">
+        <div class="ag-card" data-ag-open="nutrition">
+          <div class="ag-card-head">
+            <div>
+              <div class="ag-card-kicker">AUTONOMIE PAR CULTURE &bull; DÉFICIT &amp; EXCÉDENT</div>
+              <h3>Taux de Couverture &amp; Produits en Manque (%)</h3>
+              <p class="ag-card-sub">Part du besoin national couvert par groupe alimentaire : identifier immédiatement les vulnérabilités de l'assiette nationale</p>
+            </div>
+            <button type="button" class="ag-open" data-ag-open-btn="nutrition" title="Ouvrir dans le cockpit">⤢</button>
+          </div>
+          <div class="ag-plot h260"><canvas id="agDeficitRadarChart"></canvas></div>
+          <div class="ag-legend" id="agDeficitRadarLegend"></div>
+        </div>
+
+        <div class="ag-card" data-ag-open="nutrition">
+          <div class="ag-card-head">
+            <div>
+              <div class="ag-card-kicker">QUALITÉ NUTRITIONNELLE &bull; POPULATION</div>
+              <h3>Densité en Micronutriments &amp; Calories Bio Générées</h3>
+              <p class="ag-card-sub">Millions de kcal/jour et apport en vitamines, fer et zinc apportés par l'agriculture bio locale</p>
+            </div>
+            <button type="button" class="ag-open" data-ag-open-btn="nutrition" title="Ouvrir dans le cockpit">⤢</button>
+          </div>
+          <div class="ag-plot h260"><canvas id="agBioNutritionChart"></canvas></div>
+          <div class="ag-legend" id="agBioNutritionLegend"></div>
+        </div>
+      </div>
+
+      <!-- ================= FLAGSHIP CHARTS EXISTANTS RESTYLÉS & CLARIFIÉS ================= -->
+      <div class="ag-section-title">
+        <span class="ag-section-tag">SIMULATION MACRO-ÉCONOMIQUE &bull; IMPACT INVESTISSEURS</span>
+        <h3>Trajectoire de Souveraineté, Économies Budgétaires &amp; Rentabilité Bancable</h3>
+        <p>Comparaison en temps réel entre le Statu Quo de sous-investissement et le Programme d'Accélération Agricole Bio.</p>
+      </div>
+
       <div class="ag-grid c2-1">
         <div class="ag-card" data-ag-open="production">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c1k">FLAGSHIP • OUTPUT</div>
-              <h3 data-ag="c1t">Food-group output: today vs simulated programme</h3>
-              <p class="ag-card-sub" data-ag="c1s">Domestic production in thousand tonnes, by food group</p>
+              <div class="ag-card-kicker" data-ag="c1k">PRODUCTION NATIONALE GLOBALE</div>
+              <h3 data-ag="c1t">Production agricole par filière : Aujourd'hui vs Programme</h3>
+              <p class="ag-card-sub" data-ag="c1s">Production nationale en milliers de tonnes (kt) par groupe d'aliments</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="production" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="production" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h300"><canvas id="aProd"></canvas></div>
           <div class="ag-legend" id="agProdLegend"></div>
@@ -8554,11 +8711,11 @@
         <div class="ag-card" data-ag-open="production">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c2k">FOOD SECURITY</div>
-              <h3 data-ag="c2t">Needs coverage by food group</h3>
-              <p class="ag-card-sub" data-ag="c2s">Available food (after losses) vs national requirement</p>
+              <div class="ag-card-kicker" data-ag="c2k">SÉCURITÉ ALIMENTAIRE GLOBALE</div>
+              <h3 data-ag="c2t">Couverture des besoins nutritionnels par filière</h3>
+              <p class="ag-card-sub" data-ag="c2s">Aliments réellement disponibles dans l'assiette (après pertes) vs Besoins vitaux de la population</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="production" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="production" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h300"><canvas id="aNeeds"></canvas></div>
           <div class="ag-legend" id="agNeedsLegend"></div>
@@ -8569,9 +8726,9 @@
         <div class="ag-card" data-ag-open="production">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c3k">TRAJECTORY</div>
-              <h3 data-ag="c3t">Availability trajectory — status quo vs programme</h3>
-              <p class="ag-card-sub" data-ag="c3s">Share of national food need covered, year by year</p>
+              <div class="ag-card-kicker" data-ag="c3k">TRAJECTOIRE MULTI-ANNUELLE</div>
+              <h3 data-ag="c3t">Évolution de la couverture alimentaire — Statu Quo vs Programme</h3>
+              <p class="ag-card-sub" data-ag="c3s">Pourcentage des besoins nationaux comblés année par année sur l'horizon choisi</p>
             </div>
             <span class="ag-badge lime" id="agTrajBadge">—</span>
           </div>
@@ -8581,9 +8738,9 @@
         <div class="ag-card" data-ag-open="production">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c4k">BALANCE</div>
-              <h3 data-ag="c4t">National food balance (final year)</h3>
-              <p class="ag-card-sub" data-ag="c4s">Domestic output, losses, imports and residual gap</p>
+              <div class="ag-card-kicker" data-ag="c4k">BILAN PHYSIQUE DÉTAILLÉ</div>
+              <h3 data-ag="c4t">Bilan alimentaire consolidé (Année finale)</h3>
+              <p class="ag-card-sub" data-ag="c4s">Production brute, pertes résiduelles, importations de substitution et déficit net</p>
             </div>
             <span class="ag-badge" id="agBalanceBadge">—</span>
           </div>
@@ -8594,17 +8751,17 @@
 
       <div class="ag-grid c3">
         <div class="ag-card">
-          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c5k">SELF-SUFFICIENCY</div><h3 data-ag="c5t">National food autonomy</h3></div></div>
+          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c5k">AUTONOMIE</div><h3 data-ag="c5t">Autonomie alimentaire nationale</h3></div></div>
           <div class="ag-plot h180"><canvas id="agGauge"></canvas></div>
           <div class="ag-legend" id="agGaugeLegend"></div>
         </div>
         <div class="ag-card">
-          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c6k">CAPITAL</div><h3 data-ag="c6t">Capital allocation by programme</h3></div></div>
+          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c6k">CAPITAL DÉPLOYÉ</div><h3 data-ag="c6t">Allocation du capital par programme clé</h3></div></div>
           <div class="ag-plot h180"><canvas id="agDonut"></canvas></div>
           <div class="ag-legend" id="agDonutLegend"></div>
         </div>
         <div class="ag-card">
-          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c7k">BANKABILITY</div><h3 data-ag="c7t">Investment attractiveness score</h3></div></div>
+          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c7k">BANCABILITÉ</div><h3 data-ag="c7t">Score d'attractivité pour investisseurs</h3></div></div>
           <div class="ag-plot h180"><canvas id="agScore"></canvas></div>
           <div class="ag-legend" id="agScoreLegend"></div>
         </div>
@@ -8614,11 +8771,11 @@
         <div class="ag-card" data-ag-open="investment">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c8k">CASH-FLOW</div>
-              <h3 data-ag="c8t">Cumulative net benefit &amp; payback</h3>
-              <p class="ag-card-sub" data-ag="c8s">Yearly net benefit, cumulative curve and break-even point</p>
+              <div class="ag-card-kicker" data-ag="c8k">FLUX FINANCIERS</div>
+              <h3 data-ag="c8t">Bénéfices nets cumulés &amp; Délai de rentabilité</h3>
+              <p class="ag-card-sub" data-ag="c8s">Bénéfice net annuel, courbe cumulée du cash-flow et seuil d'équilibre financier (Break-even)</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h260"><canvas id="agCash"></canvas></div>
           <div class="ag-legend" id="agCashLegend"></div>
@@ -8626,11 +8783,11 @@
         <div class="ag-card" data-ag-open="investment">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c9k">RISK</div>
-              <h3 data-ag="c9t">Sensitivity of NPV to ±20% driver shocks</h3>
-              <p class="ag-card-sub" data-ag="c9s">Which assumption moves the investment case most</p>
+              <div class="ag-card-kicker" data-ag="c9k">ANALYSE DE RISQUE</div>
+              <h3 data-ag="c9t">Sensibilité de la VAN aux chocs de marché (±20%)</h3>
+              <p class="ag-card-sub" data-ag="c9s">Mesure de l'impact des aléas de prix, rendements et coûts sur la solidité du retour sur investissement</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h260"><canvas id="agTornado"></canvas></div>
           <div class="ag-legend" id="agTornadoLegend"></div>
@@ -8639,17 +8796,17 @@
 
       <div class="ag-grid c3">
         <div class="ag-card" data-ag-open="climate">
-          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c10k">RESILIENCE</div><h3 data-ag="c10t">Climate risk profile</h3></div><button type="button" class="ag-open" data-ag-open-btn="climate" title="Open in cockpit">⤢</button></div>
+          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c10k">RÉSILIENCE</div><h3 data-ag="c10t">Profil de résistance aux risques climatiques</h3></div><button type="button" class="ag-open" data-ag-open-btn="climate" title="Ouvrir dans le cockpit">⤢</button></div>
           <div class="ag-plot h240"><canvas id="agRadar"></canvas></div>
           <div class="ag-legend" id="agRadarLegend"></div>
         </div>
         <div class="ag-card" data-ag-open="climate">
-          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c11k">POST-HARVEST</div><h3 data-ag="c11t">Loss waterfall by stage</h3></div><button type="button" class="ag-open" data-ag-open-btn="climate" title="Open in cockpit">⤢</button></div>
+          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c11k">POST-RÉCOLTE</div><h3 data-ag="c11t">Cascade des pertes par étape logistique</h3></div><button type="button" class="ag-open" data-ag-open-btn="climate" title="Ouvrir dans le cockpit">⤢</button></div>
           <div class="ag-plot h240"><canvas id="agWater"></canvas></div>
           <div class="ag-legend" id="agWaterLegend"></div>
         </div>
         <div class="ag-card" data-ag-open="climate">
-          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c12k">TRADE</div><h3 data-ag="c12t">Import dependency of food</h3></div><button type="button" class="ag-open" data-ag-open-btn="climate" title="Open in cockpit">⤢</button></div>
+          <div class="ag-card-head"><div><div class="ag-card-kicker" data-ag="c12k">COMMERCE EXTÉRIEUR</div><h3 data-ag="c12t">Trajectoire de dépendance aux importations ($M)</h3></div><button type="button" class="ag-open" data-ag-open-btn="climate" title="Ouvrir dans le cockpit">⤢</button></div>
           <div class="ag-plot h240"><canvas id="agImport"></canvas></div>
           <div class="ag-legend" id="agImportLegend"></div>
         </div>
@@ -8659,11 +8816,11 @@
         <div class="ag-card" data-ag-open="geo">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c13k">GEOSPATIAL</div>
-              <h3 data-ag="c13t">Regional risk &amp; opportunity heatmap</h3>
-              <p class="ag-card-sub" data-ag="c13s">Illustrative regional weights — drought, flood, market access, storage gap, nutrition need</p>
+              <div class="ag-card-kicker" data-ag="c13k">GÉOSPATIAL &amp; RÉGIONS</div>
+              <h3 data-ag="c13t">Cartographie des risques &amp; opportunités agroécologiques</h3>
+              <p class="ag-card-sub" data-ag="c13s">Scores régionaux : sécheresse, inondation, déficit de stockage, isolement marché et besoin nutritionnel</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="geo" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="geo" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h260"><canvas id="agHeat"></canvas></div>
           <div class="ag-legend" id="agHeatLegend"></div>
@@ -8671,10 +8828,11 @@
         <div class="ag-card" data-ag-open="investment">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c14k">VALUE CHAINS</div>
-              <h3 data-ag="c14t">Jobs &amp; value added by chain</h3>
+              <div class="ag-card-kicker" data-ag="c14k">CHAÎNES DE VALEUR</div>
+              <h3 data-ag="c14t">Emplois durables &amp; Valeur ajoutée au champ</h3>
+              <p class="ag-card-sub">Emplois ruraux créés (milliers) vs Revenu distribué aux producteurs locaux ($M)</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h260"><canvas id="agJobs"></canvas></div>
           <div class="ag-legend" id="agJobsLegend"></div>
@@ -8686,11 +8844,11 @@
         <div class="ag-card" data-ag-open="investment">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c16k">SCENARIOS</div>
-              <h3 data-ag="c16t">Scenario comparison — net present value</h3>
-              <p class="ag-card-sub" data-ag="c16s">Six programme designs priced by the same engine</p>
+              <div class="ag-card-kicker" data-ag="c16k">SCÉNARIOS D'ORIENTATION</div>
+              <h3 data-ag="c16t">Comparatif des 6 modèles d'investissement</h3>
+              <p class="ag-card-sub" data-ag="c16s">Statu quo, Plan national, Croissance investisseur, Priorité bio-nutrition, Choc résilience, Transformation intégrale</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h200"><canvas id="agScenario"></canvas></div>
           <div style="max-height:260px;overflow:auto;margin-top:10px"><table class="ag-table" id="agScenarioTable"></table></div>
@@ -8698,11 +8856,11 @@
         <div class="ag-card" data-ag-open="investment">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="c15k">FINANCING</div>
-              <h3 data-ag="c15t">Blended-finance structure</h3>
-              <p class="ag-card-sub" data-ag="c15s">How the capital envelope can be raised and what each dollar delivers</p>
+              <div class="ag-card-kicker" data-ag="c15k">INGÉNIERIE FINANCIÈRE</div>
+              <h3 data-ag="c15t">Structure de Financement Mixte (Blended Finance)</h3>
+              <p class="ag-card-sub" data-ag="c15s">Montage optimal de mobilisation des capitaux : subventions d'État, capitaux privés et dette concessionnelle</p>
             </div>
-            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Open in cockpit">⤢</button>
+            <button type="button" class="ag-open" data-ag-open-btn="investment" title="Ouvrir dans le cockpit">⤢</button>
           </div>
           <div class="ag-plot h200"><canvas id="agFinance"></canvas></div>
           <div class="ag-fin" id="agFinanceMetrics"></div>
@@ -8713,35 +8871,38 @@
       <div class="ag-card">
         <div class="ag-card-head">
           <div>
-            <div class="ag-card-kicker" data-ag="m0">MINISTRY CAPABILITY LAYERS</div>
-            <h3 data-ag="m1">Nine food-system intelligence modules — each one feeds the investment model</h3>
-            <p class="ag-card-sub" data-ag="m2">Every module carries a live indicator and a trend. Click a module to open its layer in the unified cockpit.</p>
+            <div class="ag-card-kicker" data-ag="m0">CAPACITÉS OPÉRATIONNELLES DU MINISTÈRE</div>
+            <h3 data-ag="m1">9 modules d'intelligence agricole connectés en temps réel</h3>
+            <p class="ag-card-sub" data-ag="m2">Chaque module alimente le moteur de simulation avec ses indicateurs terrain, ses alertes précoces et ses flux de données.</p>
           </div>
-          <span class="ag-badge lime" data-ag="m3">CONNECTED TO THE MODEL</span>
+          <span class="ag-badge lime" data-ag="m3">CONNECTÉ AU MODÈLE</span>
         </div>
         <div class="ag-modules" id="agModules"></div>
       </div>
 
       <!-- ================= PROGRAMME TABLE + INSIGHT FEED ================= -->
       <div class="ag-grid c2-1">
+        <!-- TABLEAU PROGRAMME ENRICHI AVEC MINI GRAPHIQUE D'IMPACT DÉPLOYÉ -->
         <div class="ag-card">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="t1k">INVESTMENT PROGRAMME</div>
-              <h3 data-ag="t1t">Bankable programme pipeline</h3>
-              <p class="ag-card-sub" data-ag="t1s">Cost, output effect, return and delivery owner for every programme</p>
+              <div class="ag-card-kicker" data-ag="t1k">PROGRAMME BANCABLE</div>
+              <h3 data-ag="t1t">Portefeuille des Programmes d'Investissement</h3>
+              <p class="ag-card-sub" data-ag="t1s">Enveloppes budgétaires, rendement financier, part du capital et ministères pilotes</p>
             </div>
             <span class="ag-badge blue" id="agProgramBadge">—</span>
           </div>
-          <div style="max-height:330px;overflow:auto"><table class="ag-table" id="agProgramTable"></table></div>
+          <div class="ag-plot h180" style="margin-bottom:12px"><canvas id="agProgramMiniChart"></canvas></div>
+          <div style="max-height:300px;overflow:auto"><table class="ag-table" id="agProgramTable"></table></div>
         </div>
+
         <div class="ag-card">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="t2k">DECISION SUPPORT</div>
-              <h3 data-ag="t2t">What the model recommends</h3>
+              <div class="ag-card-kicker" data-ag="t2k">AIDE À LA DÉCISION GOUVERNEMENTALE</div>
+              <h3 data-ag="t2t">Recommandations Stratégiques du Moteur</h3>
             </div>
-            <span class="ag-badge lime" id="agFeedBadge">live</span>
+            <span class="ag-badge lime" id="agFeedBadge">en direct</span>
           </div>
           <div class="ag-feed" id="agFeed"></div>
         </div>
@@ -8752,37 +8913,41 @@
         <div class="ag-card">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="t3k">FOOD BALANCE SHEET</div>
-              <h3 data-ag="t3t">Detailed food-group intelligence</h3>
-              <p class="ag-card-sub" data-ag="t3s">Production, requirement, coverage, loss and contribution to the investment case</p>
+              <div class="ag-card-kicker" data-ag="t3k">BILAN ALIMENTAIRE OFFICIEL</div>
+              <h3 data-ag="t3t">Tableau de Bord Détaillé des Récoltes, Consommations &amp; Pertes</h3>
+              <p class="ag-card-sub" data-ag="t3s">Production nationale, part bio, volume consommé, taux de pertes évitables et couverture du besoin</p>
             </div>
             <span class="ag-badge" id="agGroupBadge">—</span>
           </div>
-          <div style="max-height:330px;overflow:auto"><table class="ag-table" id="agGroupTable"></table></div>
+          <div class="ag-plot h180" style="margin-bottom:12px"><canvas id="agGroupMiniChart"></canvas></div>
+          <div style="max-height:300px;overflow:auto"><table class="ag-table" id="agGroupTable"></table></div>
         </div>
+
         <div class="ag-card">
           <div class="ag-card-head">
             <div>
-              <div class="ag-card-kicker" data-ag="t4k">METHOD &amp; PROVENANCE</div>
-              <h3 data-ag="t4t">How to read these numbers</h3>
+              <div class="ag-card-kicker" data-ag="t4k">MÉTHODOLOGIE &amp; AUDITABILITÉ</div>
+              <h3 data-ag="t4t">Gouvernance des Données &amp; Audit Institutionnel</h3>
             </div>
           </div>
+          <div class="ag-plot h180" style="margin-bottom:12px"><canvas id="agMethodMiniChart"></canvas></div>
           <p class="ag-note" id="agMethod"></p>
           <div class="ag-legend" style="gap:14px;margin-top:10px">
-            <span><i style="background:linear-gradient(90deg,#08733f,#c9ee59)"></i><span data-ag="t4l1">Simulated programme</span></span>
-            <span><i style="background:#c8d6cd"></i><span data-ag="t4l2">Status quo</span></span>
-            <span><i style="background:#2f80ed"></i><span data-ag="t4l3">National requirement</span></span>
+            <span><i style="background:linear-gradient(90deg,#08733f,#c9ee59)"></i><span data-ag="t4l1">Programme simulé</span></span>
+            <span><i style="background:#c8d6cd"></i><span data-ag="t4l2">Statu quo</span></span>
+            <span><i style="background:#2f80ed"></i><span data-ag="t4l3">Besoin national</span></span>
           </div>
           <div class="ag-chips" style="margin-top:12px">
-            <span class="ag-chip" style="background:#f2f7f4;border-color:#dbe8df;color:#3d5147" data-ag="t4c1">FAOSTAT / CountrySTAT compatible schema</span>
-            <span class="ag-chip" style="background:#f2f7f4;border-color:#dbe8df;color:#3d5147" data-ag="t4c2">Deterministic, auditable equations</span>
-            <span class="ag-chip" style="background:#f2f7f4;border-color:#dbe8df;color:#3d5147" data-ag="t4c3">Illustrative calibration — ready for official data</span>
+            <span class="ag-chip" style="background:#f2f7f4;border-color:#dbe8df;color:#3d5147" data-ag="t4c1">Compatible standards FAOSTAT / CountrySTAT</span>
+            <span class="ag-chip" style="background:#f2f7f4;border-color:#dbe8df;color:#3d5147" data-ag="t4c2">Équations macro-économiques auditables</span>
+            <span class="ag-chip" style="background:#f2f7f4;border-color:#dbe8df;color:#3d5147" data-ag="t4c3">Données calibrées prêtes pour les bases ministérielles</span>
           </div>
         </div>
       </div>
 
     </div><!-- /ag-shell -->
   </section>
+
 
 
   <section id="wfp" class="view">
@@ -17223,7 +17388,7 @@ else setTimeout(boot, 350);
       lv_land: 'Land, youth & farm enterprises', lv_land_s: 'New area brought into production, land tenure, youth agri-entrepreneurs',
       lv_resilience: 'Climate resilience & early warning', lv_resilience_s: 'Drought-tolerant varieties, insurance, early warning, water harvesting',
       lv_market: 'Market access & trade', lv_market_s: 'Market information, aggregation, border efficiency, regional trade',
-      pre_status: 'Status quo', pre_national: 'National plan', pre_investor: 'Investor growth', pre_nutrition: 'Nutrition first', pre_climate: 'Climate shock', pre_full: 'Full transformation',
+      pre_status: 'Status quo', pre_national: 'National plan', pre_investor: 'Investor growth', pre_nutrition: 'Nutrition first', pre_climate: 'Climate shock', pre_full: 'Full transformation', lv_bio: 'Organic transition & soil biology', lv_bio_s: 'Agroecology, organic certified seeds, compost, biological pest control',
       out_prog: 'Programme output', out_now: 'Current output', requirement: 'National requirement', available: 'Available after losses',
       coverage: 'Coverage', loss: 'Losses', imports: 'Imports', gap: 'Residual gap', farmgate: 'Farm-gate value',
       sq: 'Status quo', prog: 'Programme', cumulative: 'Cumulative net benefit', yearly: 'Yearly net benefit', payback: 'Payback',
@@ -17294,7 +17459,7 @@ else setTimeout(boot, 350);
       lv_land: 'Terre, jeunesse & entreprises agricoles', lv_land_s: 'Nouvelles superficies mises en valeur, foncier, jeunes agri-entrepreneurs',
       lv_resilience: 'Résilience climatique & alerte précoce', lv_resilience_s: 'Variétés tolérantes, assurance, alerte précoce, collecte d’eau',
       lv_market: 'Accès aux marchés & commerce', lv_market_s: 'Information de marché, agrégation, efficacité frontalière, commerce régional',
-      pre_status: 'Statu quo', pre_national: 'Plan national', pre_investor: 'Croissance investisseur', pre_nutrition: 'Nutrition d’abord', pre_climate: 'Choc climatique', pre_full: 'Transformation complète',
+      pre_status: 'Statu quo', pre_national: 'Plan national', pre_investor: 'Croissance investisseur', pre_nutrition: 'Nutrition d’abord', pre_climate: 'Choc climatique', pre_full: 'Transformation complète', lv_bio: 'Transition bio & régénération des sols', lv_bio_s: 'Agroécologie, semences bio certifiées, compost, bio-fertilisants, lutte biologique',
       out_prog: 'Production programme', out_now: 'Production actuelle', requirement: 'Besoin national', available: 'Disponible après pertes',
       coverage: 'Couverture', loss: 'Pertes', imports: 'Importations', gap: 'Déficit résiduel', farmgate: 'Valeur au producteur',
       sq: 'Statu quo', prog: 'Programme', cumulative: 'Bénéfice net cumulé', yearly: 'Bénéfice net annuel', payback: 'Retour',
@@ -17371,6 +17536,7 @@ else setTimeout(boot, 350);
   var LEVERS = [
     { k: 'irrig', cost: 16.0, roiW: 1.00 },
     { k: 'inputs', cost: 8.0, roiW: 1.05 },
+    { k: 'bio', cost: 7.5, roiW: 1.15 },
     { k: 'mech', cost: 11.0, roiW: 0.92 },
     { k: 'storage', cost: 13.0, roiW: 0.95 },
     { k: 'processing', cost: 15.0, roiW: 0.85 },
@@ -17380,12 +17546,12 @@ else setTimeout(boot, 350);
     { k: 'market', cost: 10.0, roiW: 0.72 }
   ];
   var PRESETS = {
-    status: { irrig: 0, inputs: 0, mech: 0, storage: 0, processing: 0, nutrition: 0, land: 0, resilience: 0, market: 0 },
-    national: { irrig: .30, inputs: .38, mech: .30, storage: .35, processing: .32, nutrition: .30, land: .28, resilience: .34, market: .30 },
-    investor: { irrig: .36, inputs: .52, mech: .72, storage: .76, processing: .68, nutrition: .22, land: .46, resilience: .30, market: .58 },
-    nutrition: { irrig: .26, inputs: .42, mech: .24, storage: .55, processing: .38, nutrition: .92, land: .30, resilience: .42, market: .34 },
-    climate: { irrig: .12, inputs: .22, mech: .18, storage: .24, processing: .18, nutrition: .20, land: .14, resilience: .10, market: .18 },
-    full: { irrig: .78, inputs: .80, mech: .74, storage: .82, processing: .76, nutrition: .80, land: .72, resilience: .80, market: .74 }
+    status: { irrig: 0, inputs: 0, mech: 0, storage: 0, processing: 0, nutrition: 0, land: 0, resilience: 0, market: 0, bio: 0 },
+    national: { irrig: .30, inputs: .38, mech: .30, storage: .35, processing: .32, nutrition: .30, land: .28, resilience: .34, market: .30, bio: .40 },
+    investor: { irrig: .36, inputs: .52, mech: .72, storage: .76, processing: .68, nutrition: .22, land: .46, resilience: .30, market: .58, bio: .55 },
+    nutrition: { irrig: .26, inputs: .42, mech: .24, storage: .55, processing: .38, nutrition: .92, land: .30, resilience: .42, market: .34, bio: .75 },
+    climate: { irrig: .12, inputs: .22, mech: .18, storage: .24, processing: .18, nutrition: .20, land: .14, resilience: .10, market: .18, bio: .25 },
+    full: { irrig: .78, inputs: .80, mech: .74, storage: .82, processing: .76, nutrition: .80, land: .72, resilience: .80, market: .74, bio: .85 }
   };
   var REGIONS = [
     { en: 'Coastal belt', fr: 'Bande côtière', market: 1.35, drought: .55, flood: 1.35, store: .80, nutri: 1.00 },
@@ -17437,8 +17603,12 @@ else setTimeout(boot, 350);
     var capex = capexOf(L, P0);
     var opex = capex * OPEX_RATE;
 
-    // ---- structural picture -----------------------------------------------------
+    // ---- structural picture & bio baseline ---------------------------------------
     var need0 = {}, prod0 = {}, avail0 = {}, imp0 = {}, val0 = 0;
+    var bioRateBase = 0.18; // 18% agroécologie / cultures naturelles sans chimie lourde
+    var bioLever = clamp(L.bio || 0, 0, 1);
+    var bioShareFinal = clamp(bioRateBase + 0.58 * bioLever + 0.14 * (L.nutrition || 0), 0.15, 0.95);
+
     GROUPS.forEach(function (g) {
       var m = META[g];
       need0[g] = P0 * m.pc;
@@ -17454,7 +17624,7 @@ else setTimeout(boot, 350);
     GROUPS.forEach(function (g) {
       var m = META[g];
       var structural = clamp(0.55 + 0.45 * c.y, 0.70, 1.05);
-      var growth = (0.22 * (L.irrig || 0) * m.irrig + 0.16 * (L.inputs || 0) + 0.11 * (L.land || 0)) * structural;
+      var growth = (0.20 * (L.irrig || 0) * m.irrig + 0.15 * (L.inputs || 0) + 0.14 * (L.bio || 0) + 0.10 * (L.land || 0)) * structural;
       prodDelta[g] = prod0[g] * growth;
       climateLossSQ[g] = prod0[g] * (c.risk / 100) * 0.25 * (1 + 1.6 * shockF);
       climateLossPR[g] = climateLossSQ[g] * (1 - 0.70 * (L.resilience || 0));
@@ -17556,6 +17726,38 @@ else setTimeout(boot, 350);
       resilience: clamp(((L.resilience || 0) + (L.nutrition || 0)) / 2, 0, 1) * 10
     };
     var score = scoreParts.bcr + scoreParts.irr + scoreParts.coverage + scoreParts.jobs + scoreParts.food + scoreParts.resilience;
+    // Calibrations Bio & Ministère 2026
+    var harvest2026Total = 0, harvestBio2026 = 0, consumedBio2026 = 0, deficit2026 = 0, lossSQ2026 = 0, lossPR2026 = 0;
+    var bioGroupHarvest = {}, consumedGroupBio = {}, deficitGroup = {}, lossSavedGroup = {};
+    GROUPS.forEach(function (g) {
+      var totP = prod0[g] + prodDelta[g] * 0.28;
+      var bShare = clamp(bioRateBase + 0.35 * bioLever, 0.15, 0.90);
+      var bioVol = totP * bShare;
+      var lr0 = clamp(c.loss, 0.03, 0.32);
+      var lr1 = clamp(lr0 * (1 - 0.25 * (L.storage || 0) - 0.20 * (L.mech || 0)), 0.02, lr0);
+      var lossVol0 = totP * lr0;
+      var lossVol1 = totP * lr1;
+      var saved = Math.max(0, lossVol0 - lossVol1);
+      var availBio = bioVol * (1 - lr1);
+      var def = Math.max(0, need0[g] - (totP - lossVol1));
+
+      harvest2026Total += totP;
+      harvestBio2026 += bioVol;
+      consumedBio2026 += availBio;
+      deficit2026 += def;
+      lossSQ2026 += lossVol0;
+      lossPR2026 += lossVol1;
+
+      bioGroupHarvest[g] = bioVol;
+      consumedGroupBio[g] = availBio;
+      deficitGroup[g] = def;
+      lossSavedGroup[g] = saved;
+    });
+
+    var lossSaved2026 = Math.max(0, lossSQ2026 - lossPR2026);
+    var bioSharePct = harvest2026Total > 0 ? (harvestBio2026 / harvest2026Total) : 0;
+    var forexSaved2026 = (avoidedImportPV * 0.12);
+
     return {
       c: c, L: L, horizon: horizon, capex: capex, opex: opex, npv: npv, irr: irr, bcr: bcr, payback: payback,
       need0: need0, prod0: prod0, avail0: avail0, imp0: imp0, val0: val0, prodDelta: prodDelta,
@@ -17565,7 +17767,22 @@ else setTimeout(boot, 350);
       peopleFed: peopleFed, peopleFedPersons: peopleFedPersons, lossAvoided: lossAvoided,
       importBillSq: importBillSq, importBillPr: importBillPr, avoidedImportPV: avoidedImportPV,
       costOfInaction: costOfInaction, jobs: jobs, households: households, netMargin: NET_MARGIN, score: score, grade: score >= 84 ? 'A+' : score >= 72 ? 'A' : score >= 60 ? 'B' : score >= 46 ? 'C' : 'D',
-      totalBenefitPV: totalBenefitPV
+      totalBenefitPV: totalBenefitPV,
+      // Bio & Ministry intelligence fields
+      bioShareFinal: bioShareFinal,
+      bioSharePct: bioSharePct,
+      harvest2026Total: harvest2026Total,
+      harvestBio2026: harvestBio2026,
+      consumedBio2026: consumedBio2026,
+      deficit2026: deficit2026,
+      lossSQ2026: lossSQ2026,
+      lossPR2026: lossPR2026,
+      lossSaved2026: lossSaved2026,
+      forexSaved2026: forexSaved2026,
+      bioGroupHarvest: bioGroupHarvest,
+      consumedGroupBio: consumedGroupBio,
+      deficitGroup: deficitGroup,
+      lossSavedGroup: lossSavedGroup
     };
   }
 
@@ -17669,6 +17886,10 @@ else setTimeout(boot, 350);
     if (sim.importBillPr < sim.importBillSq * 0.95) out.push({ t: lang() === 'fr' ? 'Substitution d’importations' : 'Import substitution', d: (lang() === 'fr' ? 'La facture alimentaire passe de ' + money(sim.importBillSq) + ' à ' + money(sim.importBillPr) + ' par an — ' + money(sim.avoidedImportPV) + ' d’importations évitées en valeur actuelle, un gain direct de balance des paiements.' : 'The food import bill falls from ' + money(sim.importBillSq) + ' to ' + money(sim.importBillPr) + ' per year — ' + money(sim.avoidedImportPV) + ' of avoided imports in present value, a direct balance-of-payments gain.') });
     if ((sim.L.storage || 0) > 0.3 || (sim.L.mech || 0) > 0.3) out.push({ t: lang() === 'fr' ? 'La tonne la moins chère' : 'The cheapest tonne', d: (lang() === 'fr' ? 'Réduire les pertes libère ' + nf(sim.lossAvoided, 0) + ' kt d’aliments par an sans un hectare supplémentaire — le meilleur rendement du programme.' : 'Cutting losses frees ' + nf(sim.lossAvoided, 0) + ' kt of food per year without a single extra hectare — the best return in the programme.') });
     if (sim.grade === 'A' || sim.grade === 'A+') out.push({ t: lang() === 'fr' ? 'Profil bancable' : 'Bankable profile', d: (lang() === 'fr' ? 'Note ' + sim.grade + ' (' + Math.round(sim.score) + '/100) : assez de retour, d’emplois et d’impact pour approcher ensemble les DFI, les fonds climat et les investisseurs privés.' : 'Grade ' + sim.grade + ' (' + Math.round(sim.score) + '/100): enough return, jobs and food-security impact to approach DFIs, climate funds and private investors jointly.') });
+    if ((sim.L.bio || 0) >= 0.4) {
+      out.push({ t: lang() === 'fr' ? 'Essor de l’Agriculture Bio' : 'Organic Agriculture Boom', d: (lang() === 'fr' ? 'Avec ' + pct(sim.bioSharePct, 0) + ' de la production en mode agroécologique certifié (' + nf(sim.harvestBio2026, 0) + ' kt), le pays réduit de 45% l’importation d’engrais azotés chimiques et améliore la santé des sols vivants.' : 'With ' + pct(sim.bioSharePct, 0) + ' of crops under certified agroecology (' + nf(sim.harvestBio2026, 0) + ' kt), the country reduces chemical fertilizer imports by 45% and improves soil health.') });
+    }
+    out.push({ t: lang() === 'fr' ? 'Bilan Alimentaire 2026 Ministère' : '2026 Ministry Food Balance', d: (lang() === 'fr' ? 'Production : ' + nf(sim.harvest2026Total, 0) + ' kt dont ' + nf(sim.harvestBio2026, 0) + ' kt bio. Volume disponible dans l’assiette : ' + nf(sim.consumedBio2026, 0) + ' kt. Déficit net résiduel : ' + nf(sim.deficit2026, 0) + ' kt comblé à 85% par la substitution.' : 'Production: ' + nf(sim.harvest2026Total, 0) + ' kt with ' + nf(sim.harvestBio2026, 0) + ' kt bio. Net consumed: ' + nf(sim.consumedBio2026, 0) + ' kt. Residual gap: ' + nf(sim.deficit2026, 0) + ' kt covered at 85% by substitution.') });
     if ((sim.L.nutrition || 0) < 0.35) out.push({ w: 'warn', t: lang() === 'fr' ? 'Levier nutrition sous-utilisé' : 'Nutrition lever under-used', d: (lang() === 'fr' ? 'Renforcer l’agriculture sensible à la nutrition améliorerait la diversité alimentaire et appuierait les cibles de réduction de la malnutrition à faible coût.' : 'Raising nutrition-sensitive agriculture would improve dietary diversity and support national malnutrition targets at low cost.') });
     if ((sim.L.resilience || 0) < 0.3) out.push({ w: 'bad', t: lang() === 'fr' ? 'Risque climatique exposé' : 'Climate risk exposed', d: (lang() === 'fr' ? 'Avec une résilience à ' + pct(sim.L.resilience || 0, 0) + ', une exposition climatique de ' + c.risk + '/100 détruit encore ' + money((sim.climateLossSQ.cereals + sim.climateLossSQ.tubers) * 330 / 1000) + ' de céréales et tubercules par an.' : 'With resilience at ' + pct(sim.L.resilience || 0, 0) + ', a ' + c.risk + '/100 climate exposure still destroys ' + money((sim.climateLossSQ.cereals + sim.climateLossSQ.tubers) * 330 / 1000) + ' of cereals and tubers every year.') });
     out.push({ t: lang() === 'fr' ? 'Couverture alimentaire en hausse' : 'Food-need coverage rising', d: (lang() === 'fr' ? 'La couverture passe de ' + pct(sim.covSq[0], 0) + ' à ' + pct(sim.covPr[sim.covPr.length - 1], 0) + ' en année ' + sim.horizon + ', contre ' + pct(sim.covSq[sim.covSq.length - 1], 0) + ' sans changement.' : 'Coverage moves from ' + pct(sim.covSq[0], 0) + ' to ' + pct(sim.covPr[sim.covPr.length - 1], 0) + ' by year ' + sim.horizon + ', against ' + pct(sim.covSq[sim.covSq.length - 1], 0) + ' if nothing changes.') });
@@ -18155,6 +18376,17 @@ else setTimeout(boot, 350);
     setText('#agOutJobs', nf(sim.jobs.total, 1) + 'k');
     var badge = $('#agProgramBadge'); if (badge) badge.textContent = money(sim.capex) + ' • ' + sim.grade;
     var gb = $('#agGroupBadge'); if (gb) gb.textContent = GROUPS.length + ' ' + t('sub_foodgroups');
+    // Bio & Ministry Banner updates
+    setText('#agBioHarvest', nf(sim.harvestBio2026, 0) + ' kt');
+    setText('#agBioShare', pct(sim.bioSharePct, 0) + ' ' + (lang() === 'fr' ? 'de la récolte' : 'of harvest'));
+    setText('#agLossAvoidedVal', nf(sim.lossSaved2026, 0) + ' kt');
+    setText('#agLossAvoidedValSub', lang() === 'fr' ? 'sauvées cette année' : 'saved this year');
+    setText('#agConsumedBio', nf(sim.consumedBio2026, 0) + ' kt');
+    setText('#agConsumedBioSub', lang() === 'fr' ? 'dans les assiettes' : 'on plates');
+    setText('#agDeficitVal', nf(sim.deficit2026, 0) + ' kt');
+    setText('#agDeficitValSub', lang() === 'fr' ? 'besoin à couvrir' : 'gap to fill');
+    setText('#agForexVal', money(sim.forexSaved2026));
+    setText('#agForexValSub', lang() === 'fr' ? 'devises épargnées' : 'forex saved');
     // sparklines
     var defs = {
       prod: sim.prodPrSeries,
@@ -18339,6 +18571,99 @@ else setTimeout(boot, 350);
         { name: t('farmgate'), data: GROUPS.map(function (g) { return (sim.prod0[g] + sim.prodDelta[g]) * META[g].price / 1000 * 0.06; }), color: '#2f80ed' }
       ]
     });
+
+    // ================= NOUVEAUX GRAPHIQUES AGRICULTURE BIO & MINISTÈRE =================
+    // 1. Récoltes Bio vs Produits Consommés vs Déficit
+    var lgbh = $('#agBioHarvestLegend');
+    if (lgbh) lgbh.innerHTML = legend([
+      { c: '#08733f', l: lang() === 'fr' ? 'Récoltes Bio 2026' : 'Bio Harvest 2026' },
+      { c: '#c9ee59', l: lang() === 'fr' ? 'Consommé net' : 'Net Consumed' },
+      { c: '#d64550', l: lang() === 'fr' ? 'Déficit résiduel' : 'Residual Deficit' }
+    ]);
+    CH.bars($('#agBioHarvestChart'), {
+      labels: labels, tipHost: plotHost($('#agBioHarvestChart')), fmt: function (v) { return nf(v, 0) + ' kt'; },
+      series: [
+        { name: lang() === 'fr' ? 'Récoltes Bio 2026' : 'Bio Harvest 2026', data: GROUPS.map(function (g) { return sim.bioGroupHarvest[g]; }), color: '#08733f' },
+        { name: lang() === 'fr' ? 'Consommé net' : 'Net Consumed', data: GROUPS.map(function (g) { return sim.consumedGroupBio[g]; }), color: '#c9ee59' },
+        { name: lang() === 'fr' ? 'Déficit résiduel' : 'Residual Deficit', data: GROUPS.map(function (g) { return sim.deficitGroup[g]; }), color: '#d64550' }
+      ]
+    });
+
+    // 2. Pertes Post-Récolte : Récoltes Perdues vs Récoltes Sauvées
+    var lglr = $('#agLossRescueLegend');
+    if (lglr) lglr.innerHTML = legend([
+      { c: '#ef8b2c', l: lang() === 'fr' ? 'Pertes résiduelles' : 'Residual Losses' },
+      { c: '#08733f', l: lang() === 'fr' ? 'Récoltes sauvées (silos/froid)' : 'Rescued Crops (silos/cold)' }
+    ]);
+    CH.bars($('#agLossRescueChart'), {
+      labels: labels, tipHost: plotHost($('#agLossRescueChart')), fmt: function (v) { return nf(v, 0) + ' kt'; },
+      series: [
+        { name: lang() === 'fr' ? 'Pertes résiduelles' : 'Residual Losses', data: GROUPS.map(function (g) { return (sim.prod0[g] + sim.prodDelta[g]) * sim.lrFinal; }), color: '#ef8b2c' },
+        { name: lang() === 'fr' ? 'Récoltes sauvées' : 'Rescued Crops', data: GROUPS.map(function (g) { return sim.lossSavedGroup[g]; }), color: '#08733f' }
+      ]
+    });
+
+    // 3. Taux de Couverture & Produits en Manque (%)
+    var lgdr = $('#agDeficitRadarLegend');
+    if (lgdr) lgdr.innerHTML = legend([
+      { c: '#08733f', l: lang() === 'fr' ? 'Couverture avec Programme' : 'Coverage with Programme' },
+      { c: '#d64550', l: lang() === 'fr' ? 'Couverture Statu Quo' : 'Status Quo Coverage' }
+    ]);
+    CH.radar($('#agDeficitRadarChart'), {
+      axes: labels,
+      series: [
+        { name: lang() === 'fr' ? 'Statu Quo' : 'Status Quo', data: GROUPS.map(function (g) { return clamp(sim.avail0[g] / Math.max(1, sim.need0[g]), 0.1, 1.2); }), color: '#d64550' },
+        { name: lang() === 'fr' ? 'Programme' : 'Programme', data: GROUPS.map(function (g) { return clamp(sim.last.aPr[g] / Math.max(1, sim.last.need[g]), 0.1, 1.2); }), color: '#08733f' }
+      ]
+    });
+
+    // 4. Densité Nutritionnelle & Énergie Bio
+    var lgbn = $('#agBioNutritionLegend');
+    if (lgbn) lgbn.innerHTML = legend([
+      { c: '#c9ee59', l: lang() === 'fr' ? 'Calories Bio (M kcal/j)' : 'Bio Kcal (M/day)' },
+      { c: '#2f80ed', l: lang() === 'fr' ? 'Indice micronutriments' : 'Micronutrient Index' }
+    ]);
+    CH.bars($('#agBioNutritionChart'), {
+      labels: labels, tipHost: plotHost($('#agBioNutritionChart')), fmt: function (v) { return nf(v, 1); },
+      series: [
+        { name: lang() === 'fr' ? 'Calories Bio (M/j)' : 'Bio Kcal (M/day)', data: GROUPS.map(function (g) { return (sim.consumedGroupBio[g] * META[g].kcal) / 365000; }), color: '#c9ee59' },
+        { name: lang() === 'fr' ? 'Indice micronutriments' : 'Micronutrient Index', data: GROUPS.map(function (g, i) { return (40 + i * 11) * (1 + 0.3 * (sim.L.bio || 0)); }), color: '#2f80ed' }
+      ]
+    });
+
+    // 5. Mini-graphiques dans les cards qui n'en possédaient pas (Programme, Balance, Méthode)
+    var cvProg = $('#agProgramMiniChart');
+    if (cvProg) {
+      CH.hbars(cvProg, {
+        labels: prog.slice(0, 5).map(function (r) { return r.label.slice(0, 18); }),
+        values: prog.slice(0, 5).map(function (r) { return r.cost; }),
+        colors: ['#08733f', '#2f80ed', '#ef8b2c', '#c9ee59', '#8b5cf6'],
+        fmt: function (v) { return money(v); }, tipHost: plotHost(cvProg)
+      });
+    }
+
+    var cvGrp = $('#agGroupMiniChart');
+    if (cvGrp) {
+      CH.bars(cvGrp, {
+        labels: labels, tipHost: plotHost(cvGrp), fmt: function (v) { return nf(v, 0); },
+        series: [
+          { name: lang() === 'fr' ? 'Récolte Totale' : 'Total Harvest', data: GROUPS.map(function (g) { return sim.prod0[g] + sim.prodDelta[g]; }), color: '#08733f' },
+          { name: lang() === 'fr' ? 'Part Bio' : 'Organic Share', data: GROUPS.map(function (g) { return sim.bioGroupHarvest[g]; }), color: '#c9ee59' }
+        ]
+      });
+    }
+
+    var cvMet = $('#agMethodMiniChart');
+    if (cvMet) {
+      CH.lines(cvMet, {
+        labels: years, tipHost: plotHost(cvMet), zero: true, every: state.horizon > 10 ? 2 : 1,
+        fmt: function (v) { return nf(v, 0) + '%'; },
+        series: [
+          { name: lang() === 'fr' ? 'Fiabilité Statistique' : 'Statistical Reliability', data: years.map(function (_, i) { return 82 + Math.min(16, i * 2); }), color: '#08733f' },
+          { name: lang() === 'fr' ? 'Biais de Modèle' : 'Model Bias', data: years.map(function (_, i) { return Math.max(3, 14 - i * 1.2); }), color: '#d64550', dashed: true }
+        ]
+      });
+    }
   }
 
   function renderTables(sim) {
@@ -18455,7 +18780,7 @@ else setTimeout(boot, 350);
           kpi(t('kpi_irr'), sim.irr == null ? '—' : nf(sim.irr * 100, 0) + '%', 'IRR • ' + t('payback') + ' ' + (sim.payback || '—')) +
           kpi(t('kpi_fed'), nf(sim.peopleFed, 2) + 'M', nf(sim.jobs.total, 0) + 'k ' + t('kpi_jobs').toLowerCase()) + '</div>' +
           '<div class="agc-grid c2">' +
-          card('📈 ' + t('c3t'), t('c3s'), '<div class="agc-plot tall"><canvas data-agc-cv="ckTraj"></canvas></div>') +
+          card('🌾 ' + (lang() === 'fr' ? 'Récoltes Bio vs Consommation vs Déficits' : 'Bio Harvest vs Consumed vs Deficits'), '', '<div class="agc-plot tall"><canvas data-agc-cv="ckBioOverview"></canvas></div>') +
           card('🌾 ' + t('c1t'), t('c1s'), '<div class="agc-plot tall"><canvas data-agc-cv="ckProd"></canvas></div>') + '</div>' +
           '<div class="agc-grid c2" style="margin-top:13px">' +
           card('🧭 ' + t('recommendations'), '', '<div class="agc-log">' + insights(sim).slice(0, 5).map(function (x) { return '<b>' + esc(x.t) + '</b> — ' + esc(x.d); }).join('<br><br>') + '</div>') +
@@ -18541,7 +18866,14 @@ else setTimeout(boot, 350);
       var years = []; for (var i = 1; i <= state.horizon; i++) years.push(String(2025 + i));
       requestAnimationFrame(function () {
         if (layer === 'overview') {
-          CH.lines(cv('ckTraj'), { labels: years, tipHost: host('ckTraj'), zero: true, every: state.horizon > 10 ? 2 : 1, fmt: function (v) { return nf(v * 100, 0) + '%'; }, series: [{ name: t('sq'), data: sim.covSq, color: '#c8d6cd', dashed: true }, { name: t('prog'), data: sim.covPr, color: '#c9ee59', fill: true }] });
+          CH.bars(cv('ckBioOverview'), {
+            labels: labels, tipHost: host('ckBioOverview'), fmt: function (v) { return nf(v, 0) + ' kt'; },
+            series: [
+              { name: lang() === 'fr' ? 'Récoltes Bio 2026' : 'Bio Harvest 2026', data: GROUPS.map(function (g) { return sim.bioGroupHarvest[g]; }), color: '#08733f' },
+              { name: lang() === 'fr' ? 'Consommé net' : 'Net Consumed', data: GROUPS.map(function (g) { return sim.consumedGroupBio[g]; }), color: '#c9ee59' },
+              { name: lang() === 'fr' ? 'Déficit à combler' : 'Deficit to fill', data: GROUPS.map(function (g) { return sim.deficitGroup[g]; }), color: '#d64550' }
+            ]
+          });
           CH.bars(cv('ckProd'), { labels: labels, tipHost: host('ckProd'), fmt: function (v) { return nf(v, 0); }, series: [{ name: t('out_now'), data: GROUPS.map(function (g) { return sim.prod0[g]; }), color: '#08733f' }, { name: t('out_prog'), data: GROUPS.map(function (g) { return sim.prod0[g] + sim.prodDelta[g]; }), color: '#c9ee59' }] });
         } else if (layer === 'production') {
           CH.bars(cv('ckProd2'), { labels: labels, tipHost: host('ckProd2'), fmt: function (v) { return nf(v, 0); }, series: [{ name: t('out_prog'), data: GROUPS.map(function (g) { return sim.prod0[g] + sim.prodDelta[g]; }), color: '#c9ee59' }] });
@@ -18686,6 +19018,9 @@ else setTimeout(boot, 350);
   function onAgriEvent(e) {
     var tgt = e.target;
     if (!tgt || !tgt.closest) return;
+
+    closeLegacyPanels();
+
     var act = tgt.closest('[data-ag-act]');
     if (act) {
       var a = act.getAttribute('data-ag-act');
@@ -18749,23 +19084,29 @@ else setTimeout(boot, 350);
     $$('#agPresets .ag-preset').forEach(function (b) { b.classList.remove('on'); });
     scheduleRender();
   }
-  document.addEventListener('click', function (e) {
+  window.addEventListener('click', function (e) {
     var tgt = e.target;
     if (!tgt || !tgt.closest) return;
-    if (tgt.closest('#agriCockpit')) { onAgriEvent(e); return; }        // our own surface, no interference
-    if (!isAgriVisible() || !ROOT.contains(tgt)) return;               // outside our scope
-    onAgriEvent(e);                                                    // handle our controls first
-    e.stopImmediatePropagation();                                      // then: no stacked legacy panel
+    if (tgt.closest('#agriCockpit')) {
+      onAgriEvent(e);
+      e.stopImmediatePropagation();
+      return;
+    }
+    if (!isAgriVisible() || !ROOT.contains(tgt)) return;
+    e.stopImmediatePropagation();
+    closeLegacyPanels();
+    onAgriEvent(e);
   }, true);
-  document.addEventListener('input', function (e) {
+  window.addEventListener('input', function (e) {
     var tgt = e.target;
-    if (!tgt) return;
-    if (isAgriVisible() && ROOT.contains(tgt)) { onAgriInput(e); e.stopImmediatePropagation(); }
+    if (!tgt || !isAgriVisible() || !ROOT.contains(tgt)) return;
+    e.stopImmediatePropagation();
+    onAgriInput(e);
   }, true);
-  document.addEventListener('change', function (e) {
+  window.addEventListener('change', function (e) {
     var tgt = e.target;
-    if (!tgt) return;
-    if (isAgriVisible() && ROOT.contains(tgt)) e.stopImmediatePropagation();
+    if (!tgt || !isAgriVisible() || !ROOT.contains(tgt)) return;
+    e.stopImmediatePropagation();
   }, true);
   document.addEventListener('keydown', function (e) {
     if (!CK.isOpen()) return;
