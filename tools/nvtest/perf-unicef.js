@@ -1,0 +1,28 @@
+const H = require('./harness');
+(async () => {
+  const t0 = Date.now();
+  const { win, doc } = await H.load();
+  await H.waitFor(() => win.NutriUnicef && win.NutriUnicef.state.mounted, 25000, 'mounted');
+  console.log('boot + montage (jsdom, cold)      :', Date.now() - t0, 'ms');
+  await H.act(win, () => win.go('unicef'), 1200);
+  const NU = win.NutriUnicef;
+  const time = (label, fn) => { const a = Date.now(); const r = fn(); console.log(label.padEnd(38), (Date.now() - a) + ' ms'); return r; };
+  time('renderAll() complet (9 panneaux)', () => NU.render.all());
+  time('render.quick() (KPI + hero)', () => NU.render.quick());
+  time('forecast() 8 ans (froid)', () => { NU.actions.clearCaches(); return NU.engine.forecast(NU.state.country, 'stunting', 8); });
+  time('forecast() 8 ans (cache)', () => NU.engine.forecast(NU.state.country, 'stunting', 8));
+  const f = NU.engine.forecast(NU.state.country, 'stunting', 8);
+  console.log('   → modèles évalués', f.fc.models.length, '· plis de backtest', f.fc.backtest.folds, '· trajectoires', f.fc.paths.length);
+  time('simulate() 9 programmes (froid)', () => { NU.actions.clearCaches(); return NU.engine.simulate(null, { horizon: 8 }); });
+  time('simulate() (cache)', () => NU.engine.simulate(null, { horizon: 8 }));
+  time('hotspots() 12 districts', () => NU.engine.hotspots(NU.state.country));
+  time('warning() 9 indicateurs', () => NU.engine.warning(NU.state.country, 8));
+  time('export JSON (snapshot + téléchargement)', () => NU.exportData.json());
+  time('export CSV séries', () => NU.exportData.csv());
+  time('export CSV points chauds', () => NU.exportData.hotspots());
+  time('rebuild() (changement de langue)', () => NU.rebuild());
+  console.log('graphiques actifs                 :', Object.keys(NU.state.charts).length);
+  console.log('hôtes rendus avec SVG             :', doc.querySelectorAll('#unicef [data-chart] svg').length, '/', doc.querySelectorAll('#unicef [data-chart]').length);
+  console.log('noeuds DOM dans #unicef           :', doc.querySelectorAll('#unicef *').length);
+  process.exit(0);
+})().catch(e => { console.error('FATAL', e); process.exit(2); });

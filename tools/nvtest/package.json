@@ -1,0 +1,19 @@
+{
+  "name": "nutri1-nvtest",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Suites d'intégration jsdom et audit de contraste WCAG pour les cockpits NutriVision (#citizen, #unicef)",
+  "scripts": {
+    "serve": "python3 -m http.server 8000 --bind 0.0.0.0 --directory ../../nutri1/MVP/web",
+    "unicef": "node unicef-suite.js",
+    "citizen": "node test-suite.js",
+    "sections": "node smoke-sections.js",
+    "perf": "node perf-unicef.js",
+    "contrast:unicef": "node audit-contrast.js unicef",
+    "contrast:citizen": "node audit-contrast.js citizen",
+    "contrast:unicef:mobile": "NV_W=390 node audit-contrast.js unicef"
+  },
+  "dependencies": {
+    "jsdom": "^30.0.1"
+  }
+}
