@@ -1,0 +1,100 @@
+/* ============================================================================
+   NUTRI.N°1 — SECTION AGRICULTURE (v58) · couche visuelle dédiée
+   Complète NUTRICORE (assets/nutri-core/nutri-core.css) sans le modifier.
+   ========================================================================== */
+
+/* ---- cadrage dans l'application ------------------------------------------ */
+#agriRoot{margin:0 0 24px;max-width:100%}
+#agriRoot .nx-shell{gap:16px}
+#agri .main{margin:0}
+
+/* ---- bandeau KPI ---------------------------------------------------------- */
+.nx-kpi-band{
+  position:relative;z-index:4;
+  padding:10px;margin:-10px -10px 0;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(4,17,10,.94),rgba(4,17,10,.72));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 14px 30px rgba(0,0,0,.3);
+}
+.nx-kpi-band .nx-kpi{padding:12px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
+.nx-kpi-num{font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1}
+
+/* ---- barre d'onglets collante (sous la barre supérieure de l'application) --- */
+@media(min-width:900px){
+  .nx-sticky-tabs{
+    position:sticky;top:74px;z-index:5;
+    padding:8px;margin:-8px -8px 0;
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(4,17,10,.97),rgba(4,17,10,.88));
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 10px 24px rgba(0,0,0,.28);
+  }
+}
+
+/* ---- en-tête / hero ------------------------------------------------------- */
+#agriRoot .nx-card.flat:first-child{
+  position:relative;overflow:hidden;
+  background:linear-gradient(135deg,rgba(24,214,127,.14),rgba(4,17,10,.55) 46%,rgba(63,200,240,.12));
+}
+#agriRoot .nx-card.flat:first-child:after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 20%,rgba(201,238,89,.16) 45%,transparent 62%);
+  transform:translateX(-120%);
+  animation:nxScan 7.5s cubic-bezier(.4,0,.2,1) infinite;
+}
+@keyframes nxScan{0%{transform:translateX(-120%)}55%{transform:translateX(120%)}100%{transform:translateX(120%)}}
+#agriRoot .nx-h1{letter-spacing:-.02em}
+
+/* ---- cartogramme ---------------------------------------------------------- */
+#agriRoot .nx-tilemap{gap:7px}
+#agriRoot .nx-tile{min-height:66px;border-radius:12px}
+#agriRoot .nx-tile b{font-size:11.5px;line-height:1.25}
+#agriRoot .nx-tile:hover{box-shadow:0 10px 24px rgba(0,0,0,.35)}
+
+/* ---- tableaux ------------------------------------------------------------- */
+#agriRoot .nx-table{overflow-x:auto}
+#agriRoot .nx-table .nx-thead,
+#agriRoot .nx-table .nx-tr{min-width:640px}
+#agriRoot .nx-table input[type=checkbox]{width:15px;height:15px;accent-color:#18d67f;cursor:pointer;margin:0}
+
+/* ---- graphiques ----------------------------------------------------------- */
+#agriRoot .nx-chart{min-height:150px}
+#agriRoot .nx-chart:hover{cursor:crosshair}
+#agriRoot .nx-legend{font-size:11px;opacity:.9}
+#agriRoot .nx-gauge svg{max-height:130px}
+
+/* ---- mise en page des espaces de travail --------------------------------- */
+#agriRoot .nx-panel.on{animation:nxRise .45s cubic-bezier(.22,1,.36,1) both}
+#agriRoot .nx-split{align-items:start}
+#agriRoot .nx-card.accent{background:linear-gradient(180deg,rgba(24,214,127,.08),rgba(255,255,255,.02))}
+
+/* ---- mode présentation ---------------------------------------------------- */
+#agriRoot.presenting{
+  display:block;
+  background:radial-gradient(1200px 600px at 15% 0%,rgba(24,214,127,.18),transparent 60%),linear-gradient(160deg,#04100a,#061a11 55%,#040d09);
+}
+#agriRoot.presenting .nx-present-bar{
+  position:sticky;top:0;z-index:20;padding:12px 14px;margin-bottom:14px;
+  border:1px solid rgba(201,238,89,.22);border-radius:16px;
+  background:linear-gradient(180deg,rgba(6,26,17,.96),rgba(6,26,17,.8));
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+}
+#agriRoot.presenting .nx-h1{font-size:clamp(26px,3.4vw,44px)}
+#agriRoot.presenting .nx-chart{--nx-chart-h:320px}
+
+/* ---- impression ----------------------------------------------------------- */
+@media print{
+  #agriRoot{padding:0}
+  #agriRoot .nx-kpi-band,#agriRoot .nx-sticky-tabs{position:static;background:#fff;box-shadow:none;border-radius:0}
+  #agriRoot .nx-card.flat:first-child{background:#fff;color:#102418;border:0}
+  #agriRoot .nx-card.flat:first-child:after{display:none}
+  #agriRoot .nx-tile{min-height:auto}
+}
+
+/* ---- petits écrans -------------------------------------------------------- */
+@media (max-width:640px){
+  .nx-kpi-band{margin:0;padding:0;background:none;box-shadow:none}
+  .nx-sticky-tabs{position:static;top:auto}
+  #agriRoot .nx-card.flat:first-child:after{display:none}
+}
