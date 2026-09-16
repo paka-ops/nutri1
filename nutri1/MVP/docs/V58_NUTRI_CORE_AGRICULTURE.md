@@ -58,10 +58,25 @@ consumedT, nut{kcal,prot,fe,va,zn}, climateSensitivity, nutritionDensity`.
 - Le module reste autonome : navigation par `#agri/<onglet>`, réaction à
   `nutri:countryChanged` et `nutri:i18nChanged`, reconstruction sans doublon.
 
+## Mise en page
+
+- Une `.nx-grid` imbriquée dans une `.nx-grid` occupe toute la rangée
+  (`grid-column: 1/-1`) : c'est la signature des barres de KPI d'onglet.
+- `.nx-grid.nx-kpi-row` : `repeat(auto-fit, minmax(200px, 1fr))` — la règle est
+  déclarée après les classes `g-*` (même spécificité, l'ordre tranche) et
+  redéfinie dans chaque palier responsive.
+- Classes d'étendue `nx-span-5` / `nx-span-6` disponibles ; les onglets utilisent
+  des grilles de 6 colonnes dont les étendues totalisent chaque rangée.
+
 ## Calibrage et unités
 
 - Surfaces : `arable` est en millions d'hectares ; coefficient de mise en culture
   (0,62 vivrier / 0,68 rente) puis normalisation par la somme des parts de culture.
+- Climat : la série mensuelle est recalculée pour que la somme des 12 mois égale
+  la pluviométrie annuelle de référence ; `waterBalance()` (privé à l'onglet)
+  répartit le besoin en eau de chaque cycle depuis le mois qui suit le mois le
+  plus sec, et `sowingScore()` renvoie l'adéquation pluie/besoin (réponse en
+  cloche, correction thermique par culture).
 - Nutrition : apports calculés sur les volumes consommés (t → g → mg/µg) puis
   ramenés par habitant et par jour ; deux repères par nutriment (`max` population,
   `vuln` groupes vulnérables) et deux couvertures (`coverage`, `coverageVuln`).

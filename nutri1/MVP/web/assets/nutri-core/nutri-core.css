@@ -85,10 +85,15 @@
 /* --- structure ------------------------------------------------------------ */
 .nx-shell{position:relative;z-index:2;display:flex;flex-direction:column;gap:var(--nx-gap)}
 .nx-grid{display:grid;gap:var(--nx-gap);grid-template-columns:repeat(4,minmax(0,1fr))}
+/* une grille imbriquée dans une grille (barre de KPI d'un onglet) occupe toute la rangée */
+.nx-grid>.nx-grid{grid-column:1/-1}
 .nx-grid.g-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .nx-grid.g-3{grid-template-columns:repeat(3,minmax(0,1fr))}
 .nx-grid.g-5{grid-template-columns:repeat(5,minmax(0,1fr))}
 .nx-grid.g-6{grid-template-columns:repeat(6,minmax(0,1fr))}
+/* rangée de KPI : les tuiles gardent une largeur lisible et passent à la ligne
+   au besoin — déclarée après les classes g-* pour l'emporter à spécificité égale */
+.nx-grid.nx-kpi-row{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
 .nx-split{display:grid;gap:var(--nx-gap);grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
 .nx-split.rev{grid-template-columns:minmax(0,1fr) minmax(0,1.55fr)}
 .nx-split.even{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
@@ -100,7 +105,10 @@
 .nx-span-2{grid-column:span 2}
 .nx-span-3{grid-column:span 3}
 .nx-span-4{grid-column:span 4}
+.nx-span-5{grid-column:span 5}
+.nx-span-6{grid-column:span 6}
 .nx-span-full{grid-column:1/-1}
+.nx-card>*,.nx-kpi>*{min-width:0}
 .nx-hide{display:none!important}
 .nx-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 
@@ -397,19 +405,22 @@ body.nx-present{overflow:hidden}
 @media (max-width:1280px){
   .nx-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
   .nx-grid.g-5,.nx-grid.g-6{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .nx-span-4{grid-column:span 3}
+  .nx-span-4,.nx-span-5,.nx-span-6{grid-column:span 3}
+  .nx-grid.nx-kpi-row{grid-template-columns:repeat(auto-fit,minmax(170px,1fr))}
 }
 @media (max-width:1000px){
   .nx-split,.nx-split.rev,.nx-split.even{grid-template-columns:minmax(0,1fr)}
   .nx-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nx-grid.g-2,.nx-grid.g-3,.nx-grid.g-5,.nx-grid.g-6{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .nx-span-2,.nx-span-3,.nx-span-4{grid-column:span 2}
+  .nx-span-2,.nx-span-3,.nx-span-4,.nx-span-5,.nx-span-6{grid-column:span 2}
+  .nx-grid.nx-kpi-row{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
   .nx-tilemap{grid-template-columns:repeat(4,minmax(0,1fr))}
 }
 @media (max-width:640px){
   .nx-scope{padding:14px;border-radius:18px}
   .nx-grid,.nx-grid.g-2,.nx-grid.g-3,.nx-grid.g-5,.nx-grid.g-6{grid-template-columns:minmax(0,1fr)}
-  .nx-span-2,.nx-span-3,.nx-span-4{grid-column:span 1}
+  .nx-span-2,.nx-span-3,.nx-span-4,.nx-span-5,.nx-span-6{grid-column:span 1}
+  .nx-grid.nx-kpi-row{grid-template-columns:minmax(0,1fr)}
   .nx-tilemap{grid-template-columns:repeat(2,minmax(0,1fr))}
   .nx-flow-step{flex:1 1 100%}
   .nx-flow-step:after{display:none}

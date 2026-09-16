@@ -355,7 +355,7 @@
     wrap.appendChild(topbar);
 
     /* --- bandeau KPI --------------------------------------------------- */
-    kpiRow = h('div', { class: 'nx-grid g-6 nx-kpi-band' });
+    kpiRow = h('div', { class: 'nx-grid g-6 nx-kpi-band nx-kpi-row' });
     wrap.appendChild(kpiRow);
 
     /* --- onglets -------------------------------------------------------- */
@@ -675,18 +675,18 @@
       const alertsHost = h('div.nx-timeline');
       alertCard.body.appendChild(alertsHost);
 
-      const chainCard = card({ title: T('Ferme → Assiette → Santé', 'Farm → Plate → Health'), sub: T('Ce qui est produit, perdu, disponible et réellement nutritif', 'Produced, lost, available and actually nutritious'), span: 2 });
+      const chainCard = card({ title: T('Ferme → Assiette → Santé', 'Farm → Plate → Health'), sub: T('Ce qui est produit, perdu, disponible et réellement nutritif', 'Produced, lost, available and actually nutritious'), span: 3 });
       const chainHost = h('div.nx-stack');
       chainCard.body.appendChild(chainHost);
 
-      const sensCard = card({ title: T('Sensibilité du système', 'System sensitivity'), sub: T('Effet d’une variation de ±10 % des moteurs clés sur la production', 'Effect of ±10% change in key drivers on production'), span: 2 });
+      const sensCard = card({ title: T('Sensibilité du système', 'System sensitivity'), sub: T('Effet d’une variation de ±10 % des moteurs clés sur la production', 'Effect of ±10% change in key drivers on production'), span: 3 });
       const sensHost = chartHost('sm');
       sensCard.body.appendChild(sensHost);
 
       let benchMetric = 'selfSufficiency';
       const benchCard = card({
         title: T('Comparaison régionale (CEDEAO + AES)', 'Regional comparison (ECOWAS + AES)'),
-        sub: T('Le pays sélectionné face à ses pairs — classement, moyenne régionale, clic pour changer de pays', 'The selected country against its peers — ranking, regional average, click to switch country'), span: 3,
+        sub: T('Le pays sélectionné face à ses pairs — classement, moyenne régionale, clic pour changer de pays', 'The selected country against its peers — ranking, regional average, click to switch country'), span: 6,
         actions: [segmented([
           { value: 'selfSufficiency', label: T('Autosuffisance', 'Self-sufficiency') },
           { value: 'lossPct', label: T('Pertes', 'Losses') },
@@ -889,7 +889,7 @@
     id: 'production', icon: '🌾', label: T('Production & produits', 'Production & products'),
     mount(host) {
       const f = { q: '', group: 'all', sort: { id: 'productionT', dir: 'desc' }, top: 14, unit: 't', view: 'bars' };
-      const chartCard = card({ title: T('Production par produit', 'Production by product'), sub: T('Rechercher, filtrer, trier — cliquez une barre pour le détail', 'Search, filter, sort — click a bar for details'), span: 4 });
+      const chartCard = card({ title: T('Production par produit', 'Production by product'), sub: T('Rechercher, filtrer, trier — cliquez une barre pour le détail', 'Search, filter, sort — click a bar for details'), span: 3 });
       const chartHostEl = chartHost('lg');
       const controls = h('div.nx-row.between');
       const search = h('input.nx-input', { type: 'search', placeholder: T('Rechercher un produit…', 'Search a product…'), style: { maxWidth: '230px' } });
@@ -907,7 +907,7 @@
       }));
 
       const tableCard = card({
-        title: T('Registre des produits', 'Product registry'), sub: T('Triable — cliquez une ligne pour le détail du produit', 'Sortable — click a row for product detail'), span: 4,
+        title: T('Registre des produits', 'Product registry'), sub: T('Triable — cliquez une ligne pour le détail du produit', 'Sortable — click a row for product detail'), span: 3,
         actions: [btn(T('Exporter (CSV)', 'Export (CSV)'), { icon: '⇩', onClick: () => api.exportRows(filtered().map(c => ({ produit: c.fr, groupe: DATA.GROUPS[c.group].fr, production_t: Math.round(c.productionT), surface_ha: Math.round(c.areaHa), rendement_t_ha: +c.yieldTha.toFixed(2), pertes_pct: +c.lossPct.toFixed(1), autosuffisance_pct: +c.sufficiency.toFixed(1), valeur_usd: Math.round(c.valueUsd) })), 'registre-produits') })]
       });
       const tableHost = h('div');
@@ -933,7 +933,7 @@
 
       const mixCard = card({
         title: T('Concentration de la valeur produite', 'Output value concentration'),
-        sub: T('Part des 10 premiers produits dans la valeur totale', 'Share of the top 10 products in total value'), span: 3
+        sub: T('Part des 10 premiers produits dans la valeur totale', 'Share of the top 10 products in total value'), span: 2
       });
       const mixHost = chartHost('sm');
       mixCard.body.appendChild(mixHost);
@@ -946,7 +946,7 @@
       const mktNote = h('div.nx-mini.nx-muted');
       mktCard.body.appendChild(mktHost); mktCard.body.appendChild(mktNote);
 
-      host.appendChild(h('div.nx-grid.g-6', null, [chartCard.el, tableCard.el, detailCard.el, lossCard.el, dynCard.el, mixCard.el, mktCard.el]));
+      host.appendChild(h('div.nx-grid.g-6', null, [chartCard.el, tableCard.el, detailCard.el, lossCard.el, mixCard.el, dynCard.el, mktCard.el]));
 
       function filtered() {
         return ds.crops.filter(c => {
@@ -1106,7 +1106,7 @@
   registerTab({
     id: 'losses', icon: '📦', label: T('Pertes post-récolte', 'Post-harvest losses'),
     mount(host) {
-      const kpis = h('div.nx-grid.g-4');
+      const kpis = h('div.nx-grid.g-6.nx-kpi-row');
       const stageCard = card({ title: T('Pertes par étape de la chaîne', 'Losses by supply-chain stage'), sub: T('Où la valeur disparaît — et donc où investir', 'Where value disappears — and where to invest'), span: 3 });
       const stageHost = chartHost('sm');
       stageCard.body.appendChild(stageHost);
@@ -1133,11 +1133,11 @@
       simChartCard.appendChild(h('div.nx-card.flat', null, [h('h4.nx-h3', { text: T('Rentabilité sur 10 ans', '10-year profitability') }), h('div.nx-mini.nx-dim', { text: T('Bénéfice annuel cumulé vs investissement', 'Cumulative annual benefit vs investment') }), simChartHost2]));
       simCard.body.appendChild(simChartCard);
 
-      const regionCard = card({ title: T('Pertes par région', 'Losses by region'), sub: T('Cibler les zones où le stockage et le froid manquent', 'Target areas lacking storage and cold chain'), span: 4 });
+      const regionCard = card({ title: T('Pertes par région', 'Losses by region'), sub: T('Cibler les zones où le stockage et le froid manquent', 'Target areas lacking storage and cold chain'), span: 2 });
       const regionChartHost = chartHost('sm');
       regionCard.body.appendChild(regionChartHost);
 
-      host.appendChild(h('div.nx-grid.g-4', null, [kpis, stageCard.el, cropCard.el, simCard.el, regionCard.el]));
+      host.appendChild(h('div.nx-grid.g-6', null, [kpis, stageCard.el, cropCard.el, simCard.el, regionCard.el]));
 
       const LEVERS = [
         { k: 'harvest', fr: 'Formation récolte, battage, tri', en: 'Harvest, threshing, sorting training', icon: '👩🏾‍🌾' },
@@ -1264,7 +1264,7 @@
   registerTab({
     id: 'climate', icon: '🌦️', label: T('Climat & résilience', 'Climate & resilience'),
     mount(host) {
-      const kpis = h('div.nx-grid.g-4');
+      const kpis = h('div.nx-grid.g-6.nx-kpi-row');
       const monthCard = card({ title: T('Cycle annuel : pluie, température, végétation', 'Annual cycle: rain, temperature, vegetation'), sub: T('Moyennes mensuelles modélisées pour la campagne en cours', 'Modelled monthly averages for the current season'), span: 3 });
       const rainHost = chartHost('sm'), tempHost = chartHost('sm'), ndviHost = chartHost('sm');
       monthCard.body.appendChild(rainHost); monthCard.body.appendChild(tempHost); monthCard.body.appendChild(ndviHost);
@@ -1292,7 +1292,34 @@
       const rawHost = chartHost('sm');
       rawCard.body.appendChild(rawHost);
 
-      host.appendChild(h('div.nx-grid.g-4', null, [kpis, monthCard.el, stressCard.el, eventCard.el, riskCard.el, rawCard.el]));
+      /* --- bilan hydrique : la pluie utile face au besoin des cultures ----- */
+      const waterCard = card({
+        title: T('Bilan hydrique de la campagne', 'Seasonal water balance'),
+        sub: T('Pluie utile (75 % de la pluie) face au besoin en eau des cultures, mois par mois', 'Useful rain (75% of rainfall) against crop water demand, month by month'), span: 3
+      });
+      const waterHost = chartHost('lg');
+      const waterNote = h('div.nx-mini.nx-muted');
+      waterCard.body.appendChild(waterHost); waterCard.body.appendChild(waterNote);
+
+      /* --- fenêtres de semis : où et quand semer -------------------------- */
+      const sowingCard = card({
+        title: T('Fenêtres de semis optimales', 'Optimal sowing windows'),
+        sub: T('Adéquation pluie / besoin en eau du cycle selon le mois de semis (déficit comme excès d’eau pénalisent) — cliquez une case', 'Rain / cycle water-need match by sowing month (both deficit and excess are penalised) — click a cell'), span: 3
+      });
+      const sowingHost = chartHost('lg');
+      const sowingNote = h('div.nx-note');
+      sowingCard.body.appendChild(sowingHost); sowingCard.body.appendChild(sowingNote);
+
+      /* --- exposition climatique par région ------------------------------- */
+      const exposureCard = card({
+        title: T('Exposition climatique par région', 'Climate exposure by region'),
+        sub: T('Indice composite par région — cliquez une barre pour cibler la région', 'Composite index by region — click a bar to target the region'), span: 6
+      });
+      const exposureHost = chartHost('sm');
+      const exposureNote = h('div.nx-mini.nx-muted');
+      exposureCard.body.appendChild(exposureHost); exposureCard.body.appendChild(exposureNote);
+
+      host.appendChild(h('div.nx-grid.g-6', null, [kpis, monthCard.el, stressCard.el, waterCard.el, sowingCard.el, riskCard.el, eventCard.el, rawCard.el, exposureCard.el]));
 
       let keepSliders = false;
       function buildSliders() {
@@ -1336,6 +1363,119 @@
           format: v => fmt.signed(v, 1) + ' %',
           colorScale: v => v < -12 ? '#ef4444' : v < 0 ? '#f5b642' : '#18d67f'
         });
+      }
+      /* --- bilan hydrique et fenêtres de semis -------------------------------
+         Le cycle de chaque culture (cycleDays) est réparti sur des mois pleins à
+         partir du mois qui suit le mois le plus sec : c'est la campagne
+         pluviale. Le besoin en eau (waterMm, mm sur tout le cycle) est alors
+         réparti sur ces mois, pondéré par la part de surface de la culture. */
+      function cycleMonths(c) { return Math.max(2, Math.min(12, Math.round(c.cycleDays / 30))); }
+      function campaignStart(d2) {
+        let dry = 0;
+        d2.climate.monthly.forEach((x, i) => { if (x.rain < d2.climate.monthly[dry].rain) dry = i; });
+        return (dry + 1) % 12;
+      }
+      function waterBalance(d2) {
+        const M12 = d2.climate.monthly, start = campaignStart(d2);
+        const demand = new Array(12).fill(0);
+        const areaTot = Math.max(1, d2.totals.areaHa);
+        d2.crops.forEach(c => {
+          const span = cycleMonths(c), part = (c.areaHa / areaTot) * c.waterMm / span;
+          for (let k = 0; k < span; k++) demand[(start + k) % 12] += part;
+        });
+        const useful = M12.map(x => x.rain * .75);
+        const deficitMonths = useful.filter((v, i) => demand[i] > v).length;
+        return {
+          start, demand, useful,
+          rainTotal: M12.reduce((a, x) => a + x.rain, 0),
+          needTotal: demand.reduce((a, x) => a + x, 0),
+          deficitMonths,
+          worst: demand.map((v, i) => ({ i, gap: v - useful[i] })).sort((a, b) => b.gap - a.gap)[0]
+        };
+      }
+      /* Adéquation entre la pluie utile du cycle et le besoin en eau de la
+         culture si on la sème ce mois-là. La réponse est une cloche centrée sur
+         le besoin : un déficit comme un excès d'eau font baisser la note. On la
+         corrige ensuite par la sensibilité thermique propre à la culture. */
+      function sowingScore(d2, c, m) {
+        const span = cycleMonths(c), M12 = d2.climate.monthly;
+        let rain = 0, tsum = 0;
+        for (let k = 0; k < span; k++) { const x = M12[(m + k) % 12]; rain += x.rain; tsum += x.temp; }
+        const ratio = (rain * .75) / Math.max(60, c.waterMm);
+        const water = Math.exp(-Math.pow(Math.log(Math.max(.05, ratio)), 2) / .605);   // σ = 0,55
+        const heat = Math.max(.45, 1 - Math.max(0, tsum / span - 30) * (c.climateSensitivity[0] / 100) * .6);
+        return Math.round(100 * water * heat);
+      }
+      function drawWater(d2) {
+        const wb = waterBalance(d2);
+        chart('bars', waterHost, {
+          labels: d2.climate.monthly.map(m => m.m),
+          series: [
+            { name: T('Pluie utile (mm)', 'Useful rain (mm)'), data: wb.useful.map(v => Math.round(v)), color: '#3fc8f0' },
+            { name: T('Besoin en eau des cultures (mm)', 'Crop water demand (mm)'), data: wb.demand.map(v => Math.round(v)), color: '#f5b642' }
+          ],
+          format: v => fmt.num(v, 0) + ' mm'
+        });
+        const gap = wb.needTotal - wb.rainTotal * .75;
+        waterNote.innerHTML = T(
+          'Pluie annuelle <b>' + fmt.num(wb.rainTotal, 0) + ' mm</b> · besoin des cultures <b>' + fmt.num(wb.needTotal, 0) + ' mm</b> · '
+          + '<b>' + wb.deficitMonths + ' mois</b> sur 12 en déficit hydrique'
+          + (gap > 0 ? ' · déficit annuel <b>' + fmt.num(gap, 0) + ' mm</b> ≈ <b>' + fmt.num(gap * d2.totals.areaHa / 1e6, 2) + ' km³</b> d’eau d’irrigation à mobiliser' : '')
+          + '. Mois le plus critique : <b>' + d2.climate.monthly[wb.worst.i].m + '</b>.',
+          'Annual rainfall <b>' + fmt.num(wb.rainTotal, 0) + ' mm</b> · crop demand <b>' + fmt.num(wb.needTotal, 0) + ' mm</b> · '
+          + '<b>' + wb.deficitMonths + ' of 12 months</b> under water deficit'
+          + (gap > 0 ? ' · annual deficit <b>' + fmt.num(gap, 0) + ' mm</b> ≈ <b>' + fmt.num(gap * d2.totals.areaHa / 1e6, 2) + ' km³</b> of irrigation water to mobilise' : '')
+          + '. Most critical month: <b>' + d2.climate.monthly[wb.worst.i].m + '</b>.');
+      }
+      function drawSowing(d2) {
+        const crops = d2.crops.slice().sort((a, b) => b.areaHa - a.areaHa).slice(0, 8);
+        const months = d2.climate.monthly.map(m => m.m);
+        const values = crops.map(c => months.map((_, m) => sowingScore(d2, c, m)));
+        chart('heat', sowingHost, {
+          rows: crops.map(c => c.icon + ' ' + (NX.lang() === 'en' ? c.en : c.fr)),
+          cols: months,
+          values,
+          format: v => fmt.num(v, 0),
+          onSelect: (i, j, row, col, v) => {
+            const c = crops[i];
+            state.cropId = c.id;
+            overlay.toast('🌱 ' + (NX.lang() === 'en' ? c.en : c.fr) + ' · ' + col + ' : <b>' + fmt.num(v, 0) + ' %</b> ' + T('du besoin en eau couvert par la pluie', 'of the water need covered by rain'));
+            sowingNote.innerHTML = T(
+              '<b>' + (NX.lang() === 'en' ? c.en : c.fr) + '</b> ' + T('semé en', 'sown in') + ' <b>' + col + '</b> : cycle de ' + c.cycleDays + ' jours, besoin de ' + fmt.num(c.waterMm, 0) + ' mm d’eau, indice d’adéquation <b>' + fmt.num(v, 0) + ' %</b> · rendement modélisé '
+              + fmt.num(c.yieldTha, 2) + ' t/ha · surface ' + fmt.ha(c.areaHa) + '.',
+              '<b>' + (NX.lang() === 'en' ? c.en : c.fr) + '</b> sown in <b>' + col + '</b>: ' + c.cycleDays + '-day cycle, ' + fmt.num(c.waterMm, 0) + ' mm water need, match index <b>' + fmt.num(v, 0) + '%</b> · modelled yield '
+              + fmt.num(c.yieldTha, 2) + ' t/ha · area ' + fmt.ha(c.areaHa) + '.');
+          }
+        });
+        const best = crops.map(c => {
+          const scores = months.map((_, m) => sowingScore(d2, c, m));
+          const bi = scores.indexOf(Math.max.apply(null, scores));
+          return { n: NX.lang() === 'en' ? c.en : c.fr, m: months[bi], v: scores[bi] };
+        }).sort((a, b) => b.v - a.v).slice(0, 3);
+        sowingNote.innerHTML = T('Meilleures fenêtres modélisées : ', 'Best modelled windows: ')
+          + best.map(b => '<b>' + b.n + '</b> ' + T('en ', 'in ') + b.m + ' (' + b.v + ' %)').join(' · ') + '.';
+      }
+      function drawExposure(d2) {
+        const rs = d2.regions.slice().sort((a, b) => b.climateRisk - a.climateRisk);
+        const price = d2.totals.valueUsd / Math.max(1, d2.totals.productionT);
+        const avg = S.mean(rs.map(r => r.climateRisk));
+        chart('bars', exposureHost, {
+          horizontal: true,
+          labels: rs.map(r => r.name),
+          series: [{ name: T('Indice de risque climatique', 'Climate risk index'), data: rs.map(r => r.climateRisk), color: null }],
+          format: v => fmt.num(v, 0) + '/100',
+          target: avg, targetLabel: T('moyenne nationale', 'national average'),
+          colorScale: v => v > 60 ? '#ef4444' : v > 45 ? '#f5b642' : '#c9ee59',
+          onSelect: i => {
+            const r = rs[i]; if (!r) return;
+            state.region = state.region === r.name ? null : r.name;
+            overlay.toast('📍 ' + r.name + ' — ' + T('risque ', 'risk ') + fmt.num(r.climateRisk, 0) + '/100');
+          }
+        });
+        const top = rs.slice(0, 3);
+        exposureNote.innerHTML = T('Régions les plus exposées : ', 'Most exposed regions: ')
+          + top.map(r => '<b>' + r.name + '</b> (' + fmt.num(r.climateRisk, 0) + '/100 · ' + fmt.money(r.productionT * price, d2.country) + ' ' + T('de production', 'of production') + ')').join(' · ')
+          + ' · ' + T('moyenne nationale ', 'national average ') + fmt.num(avg, 0) + '/100.';
       }
       function draw(pd) {
         const d2 = pd || ds;
@@ -1385,6 +1525,7 @@
           format: v => fmt.num(v, 1) + ' %', colorScale: v => v > 15 ? '#ef4444' : v > 8 ? '#f5b642' : '#c9ee59'
         });
         buildSliders(); stress();
+        drawWater(d2); drawSowing(d2); drawExposure(d2);
       }
       return { render: draw, redraw: () => { } };
     }

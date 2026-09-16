@@ -328,11 +328,21 @@
       let s = 0; for (const z in profile.zones) s += profile.zones[z] * ((ZONES[z] || ZONES.sudan).rain[0] + (ZONES[z] || ZONES.sudan).rain[1]) / 2;
       return s;
     })();
+    /* Distribution intra-annuelle : une saison des pluies centrée sur l'été
+       boréal, recalculée pour que la somme des 12 mois retombe exactement sur la
+       pluviométrie annuelle de référence (rainBase) du pays. */
+    const rawRain = [], phaseOf = [];
+    let rawSum = 0;
     for (let m = 0; m < 12; m++) {
       const phase = Math.sin(((m - 3) / 12) * Math.PI * 2);
-      const rain = Math.max(0, rainBase / 12 * (1 + phase * 2.4) * (1 + R.between('mr|' + cc + '|' + y + '|' + m, -.22, .22)));
+      const v = Math.max(0, 1 + phase * 2.4) * (1 + R.between('mr|' + cc + '|' + y + '|' + m, -.22, .22));
+      rawRain.push(v); phaseOf.push(phase); rawSum += v;
+    }
+    for (let m = 0; m < 12; m++) {
+      const phase = phaseOf[m];
+      const rain = rainBase * rawRain[m] / rawSum;
       const temp = (ZONES[Object.keys(profile.zones)[0]] || ZONES.sudan).temp + tempAnomaly(cc, y) + Math.sin(((m - 2) / 12) * Math.PI * 2) * 2.6 + R.between('mt|' + cc + '|' + y + '|' + m, -.7, .7);
-      monthly.push({ m: months[m], rain, temp, ndvi: Math.max(.1, Math.min(.9, .35 + phase * .35 + (rain / (rainBase / 12 * 3)) * .12)) });
+      monthly.push({ m: months[m], rain, temp, ndvi: Math.max(.1, Math.min(.9, .35 + phase * .35 + (rain / (rainBase / 12 * 2.4)) * .18)) });
     }
     const events = [];
     years.forEach(yy => {

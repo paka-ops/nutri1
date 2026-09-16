@@ -23,7 +23,7 @@
     id: 'forecast', icon: '📈', label: T('Prévision & simulation', 'Forecast & simulation'),
     mount(host) {
       const cfg = state.forecastCfg;
-      const kpis = h('div.nx-grid.g-4');
+      const kpis = h('div.nx-grid.g-6.nx-kpi-row');
 
       const fCard = card({
         title: T('Prévision de production', 'Production forecast'),
@@ -76,7 +76,7 @@
       const scenHost = chartHost('sm');
       scenCard.body.appendChild(scenHost);
 
-      const btCard = card({ title: T('Qualité du modèle (backtest glissant)', 'Model quality (rolling backtest)'), span: 2 });
+      const btCard = card({ title: T('Qualité du modèle (backtest glissant)', 'Model quality (rolling backtest)'), span: 6 });
       const btHost = h('div.nx-stack');
       btCard.body.appendChild(btHost);
 
@@ -283,7 +283,7 @@
   K.registerTab({
     id: 'nutrition', icon: '🥗', label: T('Nutrition & valeur', 'Nutrition & value'),
     mount(host) {
-      const kpis = h('div.nx-grid.g-6');
+      const kpis = h('div.nx-grid.g-6.nx-kpi-row');
       const gaugeCard = card({ title: T('Couverture des besoins nutritionnels', 'Nutritional needs coverage'), sub: T('Nutriments disponibles d’origine nationale (après pertes et échanges)', 'Nationally available nutrients (after losses and trade)'), span: 3 });
       const gHost = h('div.nx-grid.g-5');
       gaugeCard.body.appendChild(gHost);
@@ -315,8 +315,8 @@
       }));
       fortCard.body.appendChild(fortOut);
 
-      const labCard = card({ title: T('Programme laboratoire NUTRI.N°1', 'NUTRI.N°1 laboratory programme'), span: 2 });
-      const labHost = h('div.nx-stack');
+      const labCard = card({ title: T('Programme laboratoire NUTRI.N°1', 'NUTRI.N°1 laboratory programme'), sub: T('Quatre axes de collecte qui alimentent directement les modèles de la section', 'Four collection streams that feed the section models directly'), span: 6 });
+      const labHost = h('div.nx-grid.g-2');
       labCard.body.appendChild(labHost);
 
       host.appendChild(h('div.nx-grid.g-6', null, [kpis, gaugeCard.el, chainCard.el, contribCard.el, densityCard.el, fortCard.el, labCard.el]));
@@ -423,7 +423,7 @@
   K.registerTab({
     id: 'investment', icon: '💰', label: T('Investissement & décision', 'Investment & decision'),
     mount(host) {
-      const kpis = h('div.nx-grid.g-6');
+      const kpis = h('div.nx-grid.g-6.nx-kpi-row');
       const cat = { list: [], selected: new Set() };
 
       const planCard = card({
@@ -630,7 +630,7 @@
       const provHost = h('div');
       provCard.body.appendChild(provHost);
 
-      const apiCard = card({ title: T('API institutionnelles (déjà exposées par la plateforme)', 'Institutional APIs (already exposed by the platform)'), span: 3 });
+      const apiCard = card({ title: T('API institutionnelles (déjà exposées par la plateforme)', 'Institutional APIs (already exposed by the platform)'), span: 2 });
       const apiHost = h('div.nx-table');
       apiCard.body.appendChild(apiHost);
 

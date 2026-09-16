@@ -38,11 +38,31 @@ remplacer les données + les modèles pour créer une autre section.
 1. **Vue nationale** — 6 KPI animés, cartogramme des régions, classement des hotspots de pertes, trajectoire 2010 → 2036 (production / rendement / surfaces / pertes / kcal), **comparaison régionale des 17 pays (classement, moyenne CEDEAO + AES, clic pour changer de pays)**, chaîne alimentaire cliquable, alertes et note de décision.
 2. **Production & produits** — recherche, filtres, tri, 3 unités (tonnes, dollars, kg/habitant), indice 2010 = 100 (production / surfaces / rendement), concentration de la valeur, **marchés & qualité (indice des prix du panier, termes de l'échange, volatilité, stockage, chaîne du froid, réseau routier, couverture laboratoire)**, détail produit, pertes par étape, export CSV.
 3. **Pertes post-récolte** — simulateur à 10 leviers (récolte, stockage, transport, transformation, marché, chaîne du froid, irrigation, semences, vulgarisation, biofortification) avec tonnes sauvées, valeur, calories, eau, CO₂, emplois, TRI/VAN/délai de retour et comparaison avant/après.
-4. **Climat & résilience** — pluie, température, NDVI, indice de stress, registre d'événements, projection à 10 ans selon ΔT°, Δpluie, adaptation et horizon.
+4. **Climat & résilience** — cycle annuel (pluie, température, NDVI), **bilan hydrique de la campagne** (pluie utile contre besoin en eau des cultures, mois par mois, déficit en mm et en volume), **fenêtres de semis optimales** (carte de chaleur cultures × mois, cliquable), simulateur de stress (ΔT°, Δpluie, adaptation, horizon), vulnérabilité par culture, **exposition climatique par région** (cliquable), registre d'événements et anomalies pluviométriques.
 5. **Prévision & simulation** — Holt-Winters amorti, 4 scénarios, bandes P10–P90, backtest glissant (MAPE/MAE/biais/R²), Monte-Carlo 10 000 tirages (probabilité de rupture, dépassement du seuil de pertes, histogramme, export CSV).
 6. **Nutrition & valeur** — couverture des besoins par nutriment, flux Ferme → Assiette → Santé, contribution par produit, densité nutritionnelle, simulateur de biofortification, programme laboratoire.
 7. **Investissement & décision** — portefeuille de mesures, budget, priorité, filtre régional, optimisation coût/bénéfice, VAN/TRI/BCR, classement régional, report du plan sur la prévision, export CSV.
 8. **Données & méthode** — piliers de qualité contre objectif 80 %, lacunes à combler, pipeline exécutable, provenance indicateur par indicateur, API institutionnelles, feuille de route 12 mois et engagement de transparence.
+
+## Mise en page (correction V58.1)
+
+Le bandeau de KPI d'un onglet était une grille imbriquée **dans** la grille des
+cartes : il n'occupait donc qu'une seule colonne et chaque tuile devenait une
+« barre » étroite et haute, illisible. Corrigé dans le socle, pour toutes les
+sections :
+
+- `.nx-grid > .nx-grid { grid-column: 1/-1 }` — une grille imbriquée (rangée de
+  KPI) occupe désormais toute la largeur de la rangée ;
+- `.nx-grid.nx-kpi-row` — rangée de KPI en `repeat(auto-fit, minmax(200px, 1fr))` :
+  les tuiles gardent une largeur lisible et passent à la ligne au besoin
+  (170 px sous 1280 px, 150 px sous 1000 px, une colonne sous 640 px) ;
+- `.nx-span-5` et `.nx-span-6` ajoutés (ils étaient absents : `span: 6` retombait
+  sur une seule colonne) et étendues de bord redéfinies à chaque palier ;
+- les grilles des onglets passent en 6 colonnes avec des étendues qui totalisent
+  exactement une rangée (2+2+2, 3+3, 4+2, 6) : plus de trou dans la mise en page.
+
+Contrôle automatisé : le banc d'essai signale toute rangée dont la somme des
+étendues n'est pas un multiple du nombre de colonnes.
 
 ## Calibrage des données (modèle)
 
@@ -54,6 +74,12 @@ remplacer les données + les modèles pour créer une autre section.
 - Les apports nutritionnels sont calculés sur les volumes **réellement consommés**
   (après pertes post-récolte, pertes ménagères et échanges) puis convertis en
   apports par habitant et par jour (t → g → nutriment).
+- La pluviométrie mensuelle est normalisée pour que la somme des 12 mois
+  retombe **exactement** sur la pluviométrie annuelle de référence du pays
+  (auparavant la courbe mensuelle dépassait le total annuel d'environ 45 %).
+- L'indice de semis compare la pluie utile du cycle au besoin en eau de la
+  culture avec une **réponse en cloche** (déficit *et* excès d'eau pénalisent),
+  corrigée par la sensibilité thermique propre à la culture.
 - Chaque nutriment est comparé à **deux repères** : le repère moyen de la
   population (FAO/OMS) et le repère des **groupes vulnérables** (femmes en âge de
   procréer, jeunes enfants) — c'est ce second repère qui révèle les carences.
@@ -95,12 +121,15 @@ runSteps, registerTab`.
 ## Vérification
 
 - `node --check` sur les cinq fichiers JavaScript : OK.
-- Banc d'essai jsdom (module seul) : 8 onglets, 103 contrôles actionnés, 0 erreur.
+- Banc d'essai jsdom (module seul) : 8 onglets, 103 contrôles actionnés, 0 erreur,
+  aucune rangée incomplète ; onglet Climat : 8 cartes et 9 graphiques (dont la
+  carte de chaleur des fenêtres de semis, 96 cases cliquables).
 - Banc d'essai jsdom (page réelle `web/index.html`) : montage de `#agriRoot`,
   8 onglets, 103 contrôles actionnés, 0 interception par les couches héritées,
   0 résidu, réactions à `nutri:countryChanged` et `nutri:i18nChanged` validées.
-- Contrôles ciblés : bandeau KPI (valeurs non nulles avant/après l'animation de
-  comptage), montant/unités des apports nutritionnels par habitant, historiques et
-  sommes régionales cohérentes avec le total national.
+- Contrôles ciblés : bandeau KPI (valeurs identiques au modèle sans animation, et
+  restaurées à l'identique après l'animation de comptage), montant/unités des
+  apports nutritionnels par habitant, historiques et sommes régionales cohérentes
+  avec le total national, cohérence pluviométrie mensuelle / annuelle.
 - Les erreurs restantes du chargement de la page sont **antérieures à V58**
   (identiques avec la version V57 témoin).
