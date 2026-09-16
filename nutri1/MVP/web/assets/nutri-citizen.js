@@ -128,6 +128,108 @@
     ['pred.converged', 'Converged (±{v})', 'Convergé (±{v})'],
     ['pred.anomaly', 'Early-warning signals', 'Signaux d\'alerte précoce'],
     ['pred.anomalySub', 'Robust anomaly detection on your series (z-score / MAD)', 'Détection robuste d\'anomalies sur vos séries (z-score / MAD)'],
+    /* moteur d'inférence IA (pipeline visible) */
+    ['ai.title', 'AI inference engine', 'Moteur d\'inférence IA'],
+    ['ai.sub', 'Multi-model ensemble · walk-forward backtest · calibrated Monte-Carlo', 'Ensemble multi-modèles · backtest walk-forward · Monte-Carlo calibré'],
+    ['ai.run', 'Run inference', 'Lancer l\'inférence'],
+    ['ai.running', 'Inference running…', 'Inférence en cours…'],
+    ['ai.start', 'Loading series and preparing the ensemble…', 'Chargement des séries et préparation de l\'ensemble…'],
+    ['ai.done', 'Inference complete in {ms} ms · {trials} trajectories · ensemble of {models} models', 'Inférence terminée en {ms} ms · {trials} trajectoires · ensemble de {models} modèles'],
+    ['ai.steps', 'Pipeline executed by the model', 'Pipeline exécuté par le modèle'],
+    ['ai.models', 'Model leaderboard', 'Classement des modèles'],
+    ['ai.modelsSub', 'Every candidate is retrained then scored on data it has never seen; weights come from a softmax on relative error.', 'Chaque candidat est ré-entraîné puis noté sur des données qu\'il n\'a jamais vues ; les poids proviennent d\'un softmax sur l\'erreur relative.'],
+    ['ai.backtest', 'One-step-ahead backtest', 'Backtest à un pas'],
+    ['ai.backtestSub', 'Model predictions against the real observations during the validation folds', 'Prédictions des modèles face aux observations réelles pendant les plis de validation'],
+    ['ai.weight', 'Ensemble weight', 'Poids dans l\'ensemble'],
+    ['ai.mae', 'MAE', 'MAE'],
+    ['ai.rmse', 'RMSE', 'RMSE'],
+    ['ai.mape', 'MAPE', 'MAPE'],
+    ['ai.status', 'Status', 'Statut'],
+    ['ai.retained', 'Retained', 'Retenu'],
+    ['ai.dropped', 'Excluded', 'Écarté'],
+    ['ai.calib', 'Interval calibration', 'Calibration des intervalles'],
+    ['ai.coverage', 'Empirical coverage (80 % target)', 'Couverture empirique (cible 80 %)'],
+    ['ai.volScale', 'Volatility factor', 'Facteur de volatilité'],
+    ['ai.unc', 'Uncertainty sources', 'Sources d\'incertitude'],
+    ['ai.uncSub', 'Variance of the horizon decomposed by three partial simulations', 'Variance à l\'horizon décomposée par trois simulations partielles'],
+    ['ai.unc.residual', 'Residual noise', 'Bruit résiduel'],
+    ['ai.unc.model', 'Model disagreement', 'Désaccord des modèles'],
+    ['ai.unc.scenario', 'Scenario drift', 'Dérive du scénario'],
+    ['ai.features', 'Extracted features', 'Caractéristiques extraites'],
+    ['ai.f.trend', 'Monthly trend', 'Tendance mensuelle'],
+    ['ai.f.r2', 'Trend fit R²', 'Qualité de tendance R²'],
+    ['ai.f.vol', 'Volatility (CV)', 'Volatilité (CV)'],
+    ['ai.f.ac1', 'Autocorrelation lag-1', 'Autocorrélation lag-1'],
+    ['ai.f.season', 'Seasonality', 'Saisonnalité'],
+    ['ai.f.anom', 'Outliers repaired', 'Valeurs aberrantes corrigées'],
+    ['ai.f.none', 'none detected', 'aucune détectée'],
+    ['ai.kpi.best', 'Best model error', 'Erreur du meilleur modèle'],
+    ['ai.kpi.folds', 'Validation folds', 'Plis de validation'],
+    ['ai.kpi.trials', 'Simulated trajectories', 'Trajectoires simulées'],
+    ['ai.kpi.time', 'Compute time', 'Temps de calcul'],
+    ['ai.kpi.kept', 'Models in the ensemble', 'Modèles dans l\'ensemble'],
+    ['ai.kpi.ic', '80 % interval at horizon', 'Intervalle 80 % à l\'horizon'],
+    ['ai.note', 'Deterministic engine: the same seed gives exactly the same trajectories, so the demo is reproducible.', 'Moteur déterministe : une même graine donne exactement les mêmes trajectoires, la démo est donc reproductible.'],
+    /* étapes du pipeline */
+    ['ai.s.ingest', 'Series ingestion', 'Ingestion des séries'],
+    ['ai.d.ingest', 'Reading the monthly observations, numeric conversion and detection of missing values.', 'Lecture des observations mensuelles, conversion numérique et détection des valeurs manquantes.'],
+    ['ai.s.clean', 'Cleaning & outliers', 'Nettoyage & valeurs aberrantes'],
+    ['ai.d.clean', 'Median absolute deviation (MAD): any point at |z| ≥ 3.5 is pulled 75 % back toward the median instead of being deleted.', 'Écart médian absolu (MAD) : tout point à |z| ≥ 3,5 est ramené de 75 % vers la médiane au lieu d\'être supprimé.'],
+    ['ai.s.features', 'Feature extraction', 'Extraction de caractéristiques'],
+    ['ai.d.features', 'Trend (OLS), variation volatility, autocorrelation at lags 1/7/12, seasonality detection.', 'Tendance (OLS), volatilité des variations, autocorrélation aux lags 1/7/12, détection de saisonnalité.'],
+    ['ai.s.train', 'Training candidate models', 'Entraînement des modèles candidats'],
+    ['ai.d.train', 'Damped Holt, Theta method, EWMA + drift, trend regression, seasonal naive and AR(1) mean reversion.', 'Holt amorti, méthode Theta, EWMA + dérive, régression de tendance, naïf saisonnier et retour à la moyenne AR(1).'],
+    ['ai.s.backtest', 'Walk-forward backtest', 'Backtest walk-forward'],
+    ['ai.d.backtest', 'Expanding window: each model is retrained and scored on observations it has never seen.', 'Fenêtre expansive : chaque modèle est ré-entraîné puis noté sur des observations jamais vues.'],
+    ['ai.s.weight', 'Performance weighting', 'Pondération par performance'],
+    ['ai.d.weight', 'Softmax on relative error; any model above 2.6× the best error is excluded from the ensemble.', 'Softmax sur l\'erreur relative ; tout modèle au-delà de 2,6× la meilleure erreur est écarté de l\'ensemble.'],
+    ['ai.s.calibrate', 'Interval calibration', 'Calibration des intervalles'],
+    ['ai.d.calibrate', 'Standardised backtest residuals measure the real shape of the tails and correct the nominal 80 % interval.', 'Les résidus standardisés du backtest mesurent la forme réelle des queues et corrigent l\'intervalle nominal de 80 %.'],
+    ['ai.s.montecarlo', 'Monte-Carlo simulation', 'Simulation de Monte-Carlo'],
+    ['ai.d.montecarlo', 'Bootstrap of calibrated residuals, autocorrelated noise, Dirichlet draw of the weights and damped scenario drift.', 'Bootstrap des résidus calibrés, bruit autocorrélé, tirage Dirichlet des poids et dérive de scénario amortie.'],
+    ['ai.s.uncertainty', 'Uncertainty decomposition', 'Décomposition de l\'incertitude'],
+    ['ai.d.uncertainty', 'Three partial simulations isolate each source: residual noise, model disagreement, scenario uncertainty.', 'Trois simulations partielles isolent chaque source : bruit résiduel, désaccord des modèles, incertitude du scénario.'],
+    ['ai.s.synthesis', 'Synthesis & publication', 'Synthèse & publication'],
+    ['ai.d.synthesis', 'Median of the trajectories gives P50, the P10–P90 envelope and the per-model contributions kept for explanation.', 'La médiane des trajectoires donne le P50, l\'enveloppe P10–P90 et les contributions par modèle conservées pour l\'explication.'],
+    ['ai.s.fallback', 'Insufficient data', 'Données insuffisantes'],
+    ['ai.d.fallback', 'Fewer than 3 usable observations: flat forecast with wide intervals.', 'Moins de 3 observations exploitables : prévision plate à intervalles larges.'],
+    /* libellés des métriques d'étape */
+    ['ai.m.points', 'points', 'points'],
+    ['ai.m.usable', 'usable', 'exploitables'],
+    ['ai.m.holes', 'missing', 'manquantes'],
+    ['ai.m.anomalies', 'outliers', 'aberrantes'],
+    ['ai.m.median', 'median', 'médiane'],
+    ['ai.m.mad', 'MAD', 'MAD'],
+    ['ai.m.slope', 'trend', 'tendance'],
+    ['ai.m.r2', 'R²', 'R²'],
+    ['ai.m.cv', 'volatility', 'volatilité'],
+    ['ai.m.ac1', 'AC(1)', 'AC(1)'],
+    ['ai.m.ac7', 'AC(7)', 'AC(7)'],
+    ['ai.m.ac12', 'AC(12)', 'AC(12)'],
+    ['ai.m.seasonal', 'season', 'saison'],
+    ['ai.m.candidates', 'candidates', 'candidats'],
+    ['ai.m.trained', 'trained', 'entraînés'],
+    ['ai.m.models', 'models', 'modèles'],
+    ['ai.m.folds', 'folds', 'plis'],
+    ['ai.m.hmax', 'max horizon', 'horizon max'],
+    ['ai.m.bestMae', 'best MAE', 'meilleure MAE'],
+    ['ai.m.evaluated', 'evaluated', 'évalués'],
+    ['ai.m.retained', 'retained', 'retenus'],
+    ['ai.m.dropped', 'excluded', 'écartés'],
+    ['ai.m.top', 'leader', 'leader'],
+    ['ai.m.volScale', 'vol. factor', 'facteur vol.'],
+    ['ai.m.coverage', 'coverage', 'couverture'],
+    ['ai.m.residuals', 'residuals', 'résidus'],
+    ['ai.m.trials', 'trajectories', 'trajectoires'],
+    ['ai.m.rho', 'noise ρ', 'ρ bruit'],
+    ['ai.m.horizon', 'horizon', 'horizon'],
+    ['ai.m.driftPerMonth', 'drift/month', 'dérive/mois'],
+    ['ai.m.p50End', 'P50', 'P50'],
+    ['ai.m.residual', 'residual', 'résiduel'],
+    ['ai.m.model', 'models', 'modèles'],
+    ['ai.m.scenario', 'scenario', 'scénario'],
+    ['ai.m.p50', 'P50', 'P50'],
+    ['ai.m.ic80', '80 % CI', 'IC 80 %'],
     /* risques */
     ['risk.t2d', 'Type 2 diabetes', 'Diabète de type 2'],
     ['risk.htn', 'Hypertension', 'Hypertension'],
@@ -933,21 +1035,44 @@
     return per[key] || 0;
   }
   const BOUNDS = { weight: [25, 320], bmi: [9, 75], waist: [40, 200], sbp: [70, 240], dbp: [40, 150], glucose: [40, 420], hba1c: [3.5, 16], chol: [80, 480], score: [5, 100], steps: [0, 60000], sleep: [2, 13], sodiumMg: [300, 15000], fruitVeg: [0, 14], diversity: [0, 10], upf: [0, 100], energy: [600, 6500], hemoglobin: [4, 20], activityMin: [0, 900] };
+  /* Prévision — ensemble multi-modèles (Holt amorti, Theta, EWMA+dérive,
+     régression de tendance, naïf saisonnier, AR-1), noté par backtest
+     walk-forward, pondéré par softmax d'erreur, puis simulé par Monte-Carlo
+     avec résidus bootstrap calibrés. Mémoïsé : plusieurs panneaux partagent
+     la même prévision et un recalcul complet coûte ~100 ms. */
+  const FC_CACHE = {};
+  function fcCacheKey(key, months, useSc, trials) {
+    return [key, months, useSc ? 1 : 0, trials, U.num(State.settings.rerun, 0),
+      U.hash(JSON.stringify(State.scenario)), U.hash(JSON.stringify(State.profile))].join('|');
+  }
   function forecastVar(key, months, withScenario) {
     const m = monthly(key, 12);
     const past = m.values;
     const b = BOUNDS[key] || [null, null];
     const useSc = withScenario !== false;
+    const H = Math.max(2, months);
+    const trials = U.clamp(State.settings.trials, 200, 4000);
+    const ck = fcCacheKey(key, H, useSc, trials);
+    if (FC_CACHE[ck]) return FC_CACHE[ck];
     /* les deux trajectoires partent du même point présent : seule la dérive
        mensuelle imposée par le scénario les fait diverger (comparaison lisible). */
     const drift = useSc ? scenarioDrift(key) * 0.55 : 0;
-    const fc = S.forecast(past, Math.max(2, months), {
-      seed: 'fc-' + key + '-' + months + (withScenario === false ? '-base' : '-sc') + '-' + U.num(State.settings.rerun, 0),
-      trials: U.clamp(State.settings.trials, 200, 4000),
-      drift: drift, min: b[0], max: b[1], vol: 1
+    const fc = S.ensembleForecast(past, H, {
+      seed: 'fc-' + key + '-' + H + (useSc ? '-sc' : '-base') + '-' + U.num(State.settings.rerun, 0),
+      trials: trials,
+      drift: drift,
+      /* incertitude sur la dérive elle-même : les coefficients physiologiques
+         ne sont pas connus exactement (±) → 3e source d'incertitude. */
+      driftSd: useSc && drift ? U.clamp(0.1 + Math.abs(drift) * 0.35, 0, 0.6) : 0,
+      min: b[0], max: b[1], btHorizon: 3, temperature: 0.55, dropRatio: 2.6
     });
-    return { past: past, labels: m.labels, fc: fc, key: key, months: months, drift: drift };
+    const out = { past: past, labels: m.labels, fc: fc, key: key, months: H, drift: drift };
+    const ks = Object.keys(FC_CACHE);
+    if (ks.length > 48) delete FC_CACHE[ks[0]];
+    FC_CACHE[ck] = out;
+    return out;
   }
+  function clearForecastCache() { for (const k in FC_CACHE) delete FC_CACHE[k]; }
 
   /* ---- cohorte de Markov (progression métabolique) ----------------------- */
   const MARKOV_STATES = ['st.healthy', 'st.atrisk', 'st.pre', 'st.t2d', 'st.comp'];
@@ -1596,6 +1721,47 @@
   ];
   function predVar(id) { return PRED_VARS.filter((v) => v.id === id)[0] || PRED_VARS[0]; }
   function predVarLabel(v) { return fr() ? v.label[1] : v.label[0]; }
+  /* ---- moteur d'inférence IA : pipeline visible ------------------------- */
+  function htmlAi() {
+    return '<div class="nv-ai" id="nvAiBox">' +
+      '<div class="nv-ai-head">' +
+        '<div class="nv-ai-title"><span class="nv-ai-orb"><i></i></span>' +
+          '<div><h4>' + U.esc(t('ai.title')) + '</h4>' +
+          '<p class="nv-sub">' + U.esc(t('ai.sub')) + '</p></div></div>' +
+        '<div class="nv-row nv-ai-actions">' +
+          UI.btn(t('ai.run'), { action: 'ai-run', icon: '▶', kind: 'primary', id: 'nvAiRun' }) +
+          UI.btn(fr() ? 'Détails des modèles' : 'Model details', { action: 'model-info', icon: '🧪', kind: 'ghost' }) +
+        '</div>' +
+      '</div>' +
+      '<div class="nv-ai-body">' +
+        '<div class="nv-ai-pipe">' +
+          '<h5>' + U.esc(t('ai.steps')) + '</h5>' +
+          '<div id="nvAiSteps"></div>' +
+        '</div>' +
+        '<div class="nv-ai-side">' +
+          '<div class="nv-grid nv-g2" id="nvAiKpis"></div>' +
+          '<h5>' + U.esc(t('ai.features')) + '</h5>' +
+          '<div class="nv-row nv-chiprow" id="nvAiFeatures"></div>' +
+          '<h5>' + U.esc(t('ai.unc')) + '</h5>' +
+          '<p class="nv-sub">' + U.esc(t('ai.uncSub')) + '</p>' +
+          '<div id="nvAiUnc"></div>' +
+          '<div class="nv-note">🔒 ' + U.esc(t('ai.note')) + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="nv-ai-models">' +
+        '<div class="nv-ai-lead">' +
+          '<h5>' + U.esc(t('ai.models')) + '</h5>' +
+          '<p class="nv-sub">' + U.esc(t('ai.modelsSub')) + '</p>' +
+          '<div id="nvAiModels"></div>' +
+        '</div>' +
+        '<div class="nv-ai-bt">' +
+          '<h5>' + U.esc(t('ai.backtest')) + '</h5>' +
+          '<p class="nv-sub">' + U.esc(t('ai.backtestSub')) + '</p>' +
+          '<div class="nv-chart-host" data-chart="backtest" style="height:206px"></div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }
   function htmlPred() {
     const trials = State.settings.trials;
     return UI.panel({
@@ -1610,6 +1776,7 @@
           '<div class="nv-field nv-grow">' + UI.slider({ key: 'horizon', id: 'nvHorizon', label: t('pred.horizon'), min: 3, max: 60, step: 3, value: State.settings.horizon, display: t('pred.months', { n: State.settings.horizon }), unit: '' }) + '</div>' +
           '<div class="nv-field">' + UI.toggle({ key: 'predScenario', on: State.settings.predScenario !== false, label: fr() ? 'Avec mon scénario' : 'With my scenario' }) + '</div>' +
         '</div>' +
+        htmlAi() +
         '<div class="nv-pred-main">' +
           '<div class="nv-pred-chartcard">' +
             '<h4>' + U.esc(t('pred.forecast')) + '</h4>' +
@@ -2468,7 +2635,12 @@
     const H = U.clamp(U.num(State.settings.horizon, 24), 3, 60);
     const useSc = State.settings.predScenario !== false;
     const f = forecastVar(v.id, H, false);
-    const fSc = useSc ? forecastVar(v.id, H, true) : null;
+    const fScRaw = useSc ? forecastVar(v.id, H, true) : null;
+    /* Un scénario dont les leviers sont aux valeurs de référence n'impose aucune
+       dérive : sa trajectoire serait strictement identique à la référence. On ne
+       trace alors qu'une seule P50 — plus de courbe « dédoublée » en fin de graphe. */
+    const scDiffers = !!fScRaw && Math.abs(scenarioDrift(v.id)) > 1e-9;
+    const fSc = scDiffers ? fScRaw : null;
     const labels = f.labels.concat(futureLabels(H));
     const past = f.past.concat(new Array(H).fill(null));
     const bridge = new Array(f.past.length - 1).fill(null).concat([f.past[f.past.length - 1]]);
@@ -2497,17 +2669,148 @@
       '<div class="nv-row">' +
         UI.chip((fr() ? 'Aujourd\'hui ' : 'Today ') + U.fmt(last, v.digits) + ' ' + v.unit, 'good') +
         UI.chip('P50 → ' + U.fmt(endP, v.digits) + ' ' + v.unit + ' (' + U.signed(((endP - last) / (Math.abs(last) || 1)) * 100, 1) + '%)', 'info') +
-        (fSc ? UI.chip((fr() ? 'Scénario → ' : 'Scenario → ') + U.fmt(endS, v.digits) + ' ' + v.unit, 'ok') : '') +
+        (fSc ? UI.chip((fr() ? 'Scénario → ' : 'Scenario → ') + U.fmt(endS, v.digits) + ' ' + v.unit, 'ok')
+             : (fScRaw ? UI.chip(fr() ? 'Scénario = référence (aucune dérive)' : 'Scenario = baseline (no drift)', 'neutral') : '')) +
         UI.chip('IC 80 % : ' + U.fmt(f.fc.p10[H - 1], v.digits) + ' – ' + U.fmt(f.fc.p90[H - 1], v.digits), 'neutral') +
         (pThr != null ? UI.chip((fr() ? 'P(seuil franchi) ' : 'P(threshold crossed) ') + U.pct(pThr * 100, 0), pThr > 0.4 ? 'risk' : pThr > 0.18 ? 'warn' : 'good') : '') +
         UI.chip(U.fmtInt(f.fc.trials) + ' ' + (fr() ? 'trajectoires' : 'trajectories'), 'neutral') +
+        (f.fc.models && f.fc.models.length ? UI.chip((fr() ? 'Ensemble : ' : 'Ensemble: ') + f.fc.models.filter((x) => !x.dropped).length + '/' + f.fc.models.length + ' ' + (fr() ? 'modèles' : 'models'), 'info') : '') +
       '</div>' +
-      '<div class="nv-note">' + U.esc((fr() ? 'Moteur : lissage de Holt à tendance amortie + résidus bootstrap (φ = 0,86). Dérive de scénario appliquée : '
-        : 'Engine: damped-trend Holt smoothing + bootstrap residuals (φ = 0.86). Scenario drift applied: ') + U.fmt(scenarioDrift(v.id), 3) + ' / ' + (fr() ? 'mois.' : 'month.')) + '</div>');
+      '<div class="nv-note">' + U.esc((fr() ? 'Moteur : ensemble pondéré (' : 'Engine: weighted ensemble (') +
+        (f.fc.models || []).filter((x) => !x.dropped).slice(0, 3).map((x) => x.label).join(' + ') +
+        (fr() ? ') noté par backtest walk-forward, résidus bootstrap calibrés. Dérive de scénario appliquée : '
+          : ') scored by walk-forward backtest, calibrated bootstrap residuals. Scenario drift applied: ') +
+        U.fmt(scenarioDrift(v.id), 3) + ' / ' + (fr() ? 'mois.' : 'month.') +
+        (f.fc.calibration ? (fr() ? ' Facteur de volatilité calibré : ' : ' Calibrated volatility factor: ') + U.fmt(f.fc.calibration.volScale, 2) + '.' : '')) + '</div>');
     setTxt('#nvForecastSub', t('pred.forecastSub') + ' · ' + predVarLabel(v) + ' · ' + t('pred.months', { n: H }));
+    renderAi(fSc || f, v, H);
     renderRiskList();
     renderMarkov();
     renderAnomalies();
+  }
+
+  /* ---- rendu du pipeline d'inférence ------------------------------------ */
+  let aiPipe = null;
+  function aiMetricKey(k) { const s = t('ai.m.' + k); return s === 'ai.m.' + k ? k : s; }
+  function aiSteps(fc) {
+    return (fc.steps || []).map((s) => {
+      const lk = 'ai.s.' + s.id, dk = 'ai.d.' + s.id;
+      return {
+        id: s.id,
+        label: t(lk) === lk ? s.label : t(lk),
+        detail: t(dk) === dk ? s.detail : t(dk),
+        metrics: s.metrics
+      };
+    });
+  }
+  function renderAi(f, v, H) {
+    const fc = f.fc;
+    if (!fc || !fc.models) return;
+    const stepsHost = root.querySelector('#nvAiSteps');
+    if (stepsHost) {
+      if (aiPipe) aiPipe.clear();
+      aiPipe = UI.pipeline(stepsHost, aiSteps(fc), {
+        fmtKey: aiMetricKey,
+        doneText: U.esc(t('ai.done', { ms: U.fmtInt(fc.ms), trials: U.fmtInt(fc.trials), models: fc.models.filter((m) => !m.dropped).length }))
+      });
+    }
+    /* KPI d'inférence */
+    const kept = fc.models.filter((m) => !m.dropped);
+    const leader = kept.slice().sort((a, b) => (a.mae == null ? 9 : a.mae) - (b.mae == null ? 9 : b.mae))[0] || fc.models[0];
+    setHtml('#nvAiKpis',
+      UI.kpi({ label: t('ai.kpi.best'), value: leader && leader.mae != null ? U.fmt(leader.mae, 3) : '—', unit: (v && v.unit) || '', icon: '🎯', tone: 'good', chip: leader ? leader.label : '', hint: '<span class="nv-note">RMSE ' + U.fmt(leader ? leader.rmse : 0, 3) + ' · MAPE ' + U.fmt(leader ? leader.mape : 0, 2) + ' %</span>' }) +
+      UI.kpi({ label: t('ai.kpi.kept'), value: kept.length + '/' + fc.models.length, icon: '🧩', tone: 'info', hint: '<span class="nv-note">' + U.esc(kept.map((m) => m.id).join(' · ')) + '</span>' }) +
+      UI.kpi({ label: t('ai.kpi.folds'), value: U.fmtInt(fc.backtest ? fc.backtest.folds : 0), icon: '🔁', tone: 'neutral', hint: '<span class="nv-note">' + U.esc(fr() ? 'horizon de validation ' : 'validation horizon ') + (fc.backtest ? fc.backtest.hmax : 0) + ' ' + (fr() ? 'mois' : 'months') + '</span>' }) +
+      UI.kpi({ label: t('ai.kpi.ic'), value: U.fmt(fc.p10[H - 1], v ? v.digits : 1) + ' → ' + U.fmt(fc.p90[H - 1], v ? v.digits : 1), unit: (v && v.unit) || '', icon: '📐', tone: 'ok', hint: '<span class="nv-note">' + U.esc(t('ai.coverage')) + ' : ' + (fc.calibration && fc.calibration.coverage != null ? U.pct(fc.calibration.coverage * 100, 0) : '—') + ' · ' + U.esc(t('ai.volScale')) + ' ' + U.fmt(fc.calibration ? fc.calibration.volScale : 1, 2) + '</span>' }) +
+      UI.kpi({ label: t('ai.kpi.trials'), value: U.fmtInt(fc.trials), icon: '🎲', tone: 'neutral', hint: '<span class="nv-note">' + U.esc(fr() ? 'bruit autocorrélé ρ 0,55 · poids Dirichlet' : 'autocorrelated noise ρ 0.55 · Dirichlet weights') + '</span>' }) +
+      UI.kpi({ label: t('ai.kpi.time'), value: U.fmtInt(fc.ms), unit: 'ms', icon: '⚡', tone: fc.ms < 400 ? 'good' : 'warn', hint: '<span class="nv-note">' + U.esc(fr() ? 'graine ' : 'seed ') + U.esc(String(fc.seed).slice(0, 26)) + '</span>' })
+    );
+    /* caractéristiques extraites */
+    const ft = fc.features || {};
+    setHtml('#nvAiFeatures',
+      UI.chip(t('ai.f.trend') + ' : ' + U.signed(ft.slope, 3) + ' ' + ((v && v.unit) || '') + '/' + (fr() ? 'mois' : 'mo'), ft.slope > 0 ? 'warn' : 'good', '📉') +
+      UI.chip(t('ai.f.r2') + ' : ' + U.fmt(ft.r2, 2), ft.r2 > 0.6 ? 'good' : 'neutral', '📈') +
+      UI.chip(t('ai.f.vol') + ' : ' + U.pct(ft.cv || 0, 1), 'neutral', '〰️') +
+      UI.chip(t('ai.f.ac1') + ' : ' + U.fmt(ft.ac1, 2), 'info', '🔗') +
+      UI.chip(t('ai.f.season') + ' : ' + (ft.seasonal ? ft.seasonal + ' ' + (fr() ? 'mois' : 'months') : t('ai.f.none')), ft.seasonal ? 'ok' : 'neutral', '🗓️') +
+      UI.chip(t('ai.f.anom') + ' : ' + U.fmtInt((fc.anomalies || []).length), (fc.anomalies || []).length ? 'warn' : 'good', '🧹')
+    );
+    /* décomposition de l'incertitude */
+    const un = fc.uncertainty && fc.uncertainty.shares ? fc.uncertainty.shares : { residual: 100, model: 0, scenario: 0 };
+    setHtml('#nvAiUnc',
+      UI.meter({ label: t('ai.unc.residual'), value: un.residual, text: U.fmt(un.residual, 0) + ' %', color: TH.tones.info }) +
+      UI.meter({ label: t('ai.unc.model'), value: un.model, text: U.fmt(un.model, 0) + ' %', color: TH.tones.ok }) +
+      UI.meter({ label: t('ai.unc.scenario'), value: un.scenario, text: U.fmt(un.scenario, 0) + ' %', color: TH.tones.warn })
+    );
+    /* classement des modèles */
+    const rows = fc.models.map((m) => ({
+      label: m.label, family: m.family, info: m.info, color: m.color,
+      mae: m.mae == null ? '—' : U.fmt(m.mae, 3),
+      rmse: m.rmse == null ? '—' : U.fmt(m.rmse, 3),
+      mape: m.mape == null ? '—' : U.fmt(m.mape, 2) + ' %',
+      weight: m.weight, dropped: m.dropped, rel: m.rel
+    }));
+    setHtml('#nvAiModels', UI.table([
+      { key: 'label', label: t('ai.models'), render: (v2, r) => '<span class="nv-mdot" style="background:' + r.color + '"></span><span><b>' + U.esc(v2) + '</b><small>' + U.esc(r.info) + '</small></span>' },
+      { key: 'mae', label: 'MAE', align: 'right' },
+      { key: 'rmse', label: 'RMSE', align: 'right' },
+      { key: 'mape', label: 'MAPE', align: 'right' },
+      { key: 'rel', label: fr() ? 'Erreur rel.' : 'Rel. error', align: 'right', render: (v2) => (v2 == null ? '—' : U.fmt(v2, 2) + '×') },
+      {
+        key: 'weight', label: t('ai.weight'), align: 'right',
+        render: (v2, r) => r.dropped
+          ? '<span class="nv-chip nv-chip-risk">' + U.esc(t('ai.dropped')) + '</span>'
+          : '<span class="nv-wcell"><i style="width:' + U.clamp(v2, 0, 100) + '%"></i><b>' + U.fmt(v2, 1) + ' %</b></span>'
+      }
+    ], rows, { cls: 'nv-table-tight' }));
+    /* graphique de backtest : prédictions à 1 pas vs observations réelles */
+    const bt = fc.backtest && fc.backtest.chart;
+    if (bt && bt.actual && bt.actual.length) {
+      const labs = (f.labels || []).slice(-bt.actual.length);
+      const btSeries = [{ name: fr() ? 'Observé' : 'Observed', data: bt.actual, color: '#ffffff', width: 3, points: true }];
+      bt.series.forEach((s) => {
+        if (!s.data || !s.data.some((x) => x != null)) return;
+        btSeries.push({
+          name: s.label, data: s.data, color: s.color, width: s.dropped ? 1.3 : 2,
+          dash: s.dropped ? '3 4' : null, points: false, glow: !s.dropped,
+          tipExtra: () => (s.dropped ? t('ai.dropped') : U.fmt(s.weight * 100, 1) + ' % ' + t('ai.weight'))
+        });
+      });
+      mountChart('backtest', chartHost('backtest'), {
+        type: 'line', height: 206, labels: labs.length ? labs : bt.labels, series: btSeries,
+        y: { unit: (v && v.unit) || '', digits: v ? v.digits : 1 }, legend: true
+      });
+    }
+  }
+  /* Rejoue l'inférence : nouvelle graine (nouveaux tirages Monte-Carlo) puis
+     animation du pipeline étape par étape avant de redessiner les courbes. */
+  function runAi(opt) {
+    const o = opt || {};
+    if (aiPipe) aiPipe.clear();
+    const box = root.querySelector('#nvAiBox');
+    if (box) box.classList.add('busy');
+    State.settings.rerun = U.num(State.settings.rerun, 0) + 1;
+    clearForecastCache();
+    const v = predVar(State.settings.predVar);
+    const H = U.clamp(U.num(State.settings.horizon, 24), 3, 60);
+    const f = forecastVar(v.id, H, State.settings.predScenario !== false);
+    const stepsHost = root.querySelector('#nvAiSteps');
+    const finish = () => {
+      if (box) box.classList.remove('busy');
+      renderPred();
+      if (!o.silent) UI.toast(t('ai.done', { ms: U.fmtInt(f.fc.ms), trials: U.fmtInt(f.fc.trials), models: f.fc.models.filter((m) => !m.dropped).length }), { tone: 'good', icon: '🧠' });
+    };
+    if (!stepsHost || U.reducedMotion() || o.instant) {
+      if (stepsHost) aiPipe = UI.pipeline(stepsHost, aiSteps(f.fc), { fmtKey: aiMetricKey, doneText: U.esc(t('ai.done', { ms: U.fmtInt(f.fc.ms), trials: U.fmtInt(f.fc.trials), models: f.fc.models.filter((m) => !m.dropped).length })) });
+      finish();
+      return;
+    }
+    aiPipe = UI.pipeline(stepsHost, aiSteps(f.fc), { fmtKey: aiMetricKey, finish: false });
+    aiPipe.run({
+      stepMs: o.stepMs || 300,
+      startText: U.esc(t('ai.start')),
+      onDone: finish
+    });
   }
   function renderRiskList() {
     const host = root.querySelector('#nvRiskList');
@@ -2625,13 +2928,20 @@
     const H = U.clamp(U.num(State.settings.horizon, 24), 3, 60);
     const fB = forecastVar(v.id, H, false), fS = forecastVar(v.id, H, true);
     const br = new Array(fB.past.length - 1).fill(null).concat([fB.past[fB.past.length - 1]]);
+    /* même garde-fou que la prévision : sans dérive, la courbe « laisser-faire »
+       et la courbe « scénario » se superposeraient pixel pour pixel. */
+    const scDiff = Math.abs(scenarioDrift(v.id)) > 1e-9;
+    const cmpSeries = [
+      { name: (fr() ? 'Historique' : 'History'), data: fB.past.concat(new Array(H).fill(null)), color: '#38f0a5', fill: true, width: 2.4, points: false }
+    ];
+    if (scDiff) cmpSeries.push({ name: t('preset.base'), data: br.concat(fB.fc.point), color: '#fb7185', dash: '6 4', width: 2, points: false });
+    cmpSeries.push({
+      name: scDiff ? t('common.scenario') : (fr() ? 'Prévision (scénario = référence)' : 'Forecast (scenario = baseline)'),
+      data: br.concat(fS.fc.point), color: '#a3e635', width: 2.6, points: false
+    });
     mountChart('simCompare', chartHost('simCompare'), {
       type: 'line', height: 210, labels: fB.labels.concat(futureLabels(H)),
-      series: [
-        { name: (fr() ? 'Historique' : 'History'), data: fB.past.concat(new Array(H).fill(null)), color: '#38f0a5', fill: true, width: 2.4, points: false },
-        { name: t('preset.base'), data: br.concat(fB.fc.point), color: '#fb7185', dash: '6 4', width: 2, points: false },
-        { name: t('common.scenario'), data: br.concat(fS.fc.point), color: '#a3e635', width: 2.6, points: false }
-      ],
+      series: cmpSeries,
       y: { unit: v.unit, digits: v.digits }
     });
     /* volet agriculture bio : la demande citoyenne oriente l'offre */
@@ -3077,6 +3387,7 @@
         pulse(root.querySelector('#nvPredPanel')); renderPred();
         UI.toast(U.fmtInt(State.settings.trials) + (fr() ? ' trajectoires simulées' : ' trajectories simulated'), { tone: 'info', icon: '🎲' }); break;
       case 'model-info': openModelModal(); break;
+      case 'ai-run': pulse(root.querySelector('#nvAiBox')); runAi(); save('settings'); break;
       case 'recompute': recompute(); break;
       /* scénarios */
       case 'preset': applyPreset(arg, el); break;
@@ -3331,7 +3642,21 @@
       profile: p, derived: State.cache.d || derived(p), intake: it,
       score: { total: sc.total, band: sc.band, parts: sc.parts },
       risks: Object.keys(r).map((k) => ({ key: k, label: r[k].label, p: Math.round(r[k].p * 10000) / 10000, ci: r[k].ci.map((x) => Math.round(x * 10000) / 10000), band: r[k].band.label, contributions: r[k].contributions.map((c) => ({ factor: c.label, logitDelta: Math.round(c.delta * 1000) / 1000 })) })),
-      forecast: PRED_VARS.map((v) => { const f = forecastVar(v.id, U.num(State.settings.horizon, 24), true); return { variable: v.id, horizonMonths: f.months, today: f.past[f.past.length - 1], p50: f.fc.point[f.fc.point.length - 1], p10: f.fc.p10[f.fc.p10.length - 1], p90: f.fc.p90[f.fc.p90.length - 1], driftPerMonth: Math.round(f.drift * 10000) / 10000, trials: f.fc.trials }; }),
+      forecast: PRED_VARS.map((v) => {
+        const f = forecastVar(v.id, U.num(State.settings.horizon, 24), true), fc = f.fc, n = fc.point.length - 1;
+        return {
+          variable: v.id, horizonMonths: f.months, today: f.past[f.past.length - 1],
+          p50: fc.point[n], p10: fc.p10[n], p25: fc.p25[n], p75: fc.p75[n], p90: fc.p90[n],
+          driftPerMonth: Math.round(f.drift * 10000) / 10000, trials: fc.trials,
+          engine: 'ensemble-6-models+walk-forward-backtest+calibrated-monte-carlo',
+          seed: fc.seed, computeMs: fc.ms,
+          features: { slope: +String(fc.features.slope).slice(0, 8), r2: +String(fc.features.r2).slice(0, 6), cv: +String(fc.features.cv).slice(0, 6), ac1: +String(fc.features.ac1).slice(0, 6), seasonality: fc.features.seasonal || null, outliersRepaired: (fc.anomalies || []).length },
+          models: (fc.models || []).map((m) => ({ id: m.id, label: m.label, family: m.family, mae: m.mae, rmse: m.rmse, mape: m.mape, relativeError: m.rel, weightPct: m.weight, status: m.dropped ? 'excluded' : 'retained' })),
+          backtest: fc.backtest ? { folds: fc.backtest.folds, horizon: fc.backtest.hmax, minTrain: fc.backtest.minTrain } : null,
+          calibration: fc.calibration, uncertainty: fc.uncertainty,
+          pipeline: (fc.steps || []).map((s) => ({ step: s.id, metrics: s.metrics }))
+        };
+      }),
       markov: (function () { const m = markovRun(p, scenarioProfile(), 10, 600); return { years: m.years, healthyYears: Math.round(m.healthyYears * 100) / 100, diabetesFreeAt10: Math.round(m.healthyAt10 * 1000) / 1000, states: MARKOV_STATES.map((s, i) => ({ state: s, shareAt10y: Math.round(m.dists[10][i] * 1000) / 1000 })), matrix: m.P.map((row) => row.map((v) => Math.round(v * 1000) / 1000)) }; })(),
       scenario: State.scenario, scenarioOutcomes: (function () { const o = simOutcomes(); return { scoreDelta: Math.round(o.score.delta * 10) / 10, healthyYearsDelta: Math.round(o.healthyYears.delta * 100) / 100, costAvoidedUsd: Math.round(o.cost.usd), productivityDays: o.cost.days, footprintDeltaKg: Math.round(o.footprint.delta * 10) / 10, riskDeltasPoints: Object.keys(o.risks.deltas).reduce((a, k) => { a[k] = Math.round(o.risks.deltas[k] * 100) / 100; return a; }, {}) }; })(),
       plan: { days: pl.days.map((d, i) => ({ day: i + 1, date: d.date.toISOString().slice(0, 10), energy: Math.round(d.totals.energy), costUsd: d.cost, organicPct: Math.round(d.organicPct), meals: d.meals.map((m) => ({ slot: m.slot, items: m.items.map((x) => ({ food: foodName(x.f), grams: x.g, kcal: x.kcal, organic: !!x.organic, inSeason: inSeason(x.f) })) })) })), coverage: Object.keys(pl.coverage).map((k) => ({ nutrient: k, pct: Math.round(pl.coverage[k].pct) })) },
@@ -3594,10 +3919,24 @@
       subtitle: U.esc(fr() ? 'Aucune boîte noire : chaque sortie est traçable, paramétrée et rejouable.' : 'No black box: every output is traceable, parameterised and replayable.'),
       body:
         '<div class="nv-grid nv-g2">' +
-        '<section><h4>📈 ' + U.esc(fr() ? 'Prévision de séries' : 'Series forecasting') + '</h4><div class="nv-note">' +
-        U.esc(fr() ? 'Lissage exponentiel de Holt à tendance amortie (φ = 0,86) sur 12 points mensuels, puis Monte-Carlo par rééchantillonnage bootstrap des résidus (σ = ' : 'Damped-trend Holt exponential smoothing (φ = 0.86) on 12 monthly points, then bootstrap Monte-Carlo on residuals (σ = ') +
-        U.fmt(S.sd(forecastVar(sel, 12, false).past), 2) + (fr() ? '). Les scénarios ajoutent une dérive mensuelle déterministe dérivée des leviers.' : '). Scenarios add a deterministic monthly drift derived from the levers.') +
-        '</div>' + UI.table(
+        '<section><h4>📈 ' + U.esc(fr() ? 'Prévision de séries — ensemble multi-modèles' : 'Series forecasting — multi-model ensemble') + '</h4><div class="nv-note">' +
+        U.esc(fr() ? 'Six modèles candidats (Holt amorti φ 0,86 · Theta · EWMA+dérive · régression de tendance · naïf saisonnier · AR-1) sont entraînés sur 12 points mensuels nettoyés (MAD, |z| ≥ 3,5 ramenés de 75 % vers la médiane), puis notés par backtest walk-forward à fenêtre expansive. Les poids viennent d\'un softmax sur l\'erreur relative (température 0,55 ; exclusion au-delà de 2,6× la meilleure MAE). La prévision centrale est la moyenne pondérée ; l\'incertitude est simulée par Monte-Carlo : bootstrap des résidus d\'ensemble standardisés, bruit autocorrélé (ρ 0,55), tirage Dirichlet des poids et dérive de scénario amortie (φ 0,965). Les intervalles sont calibrés sur la forme réelle des queues du backtest.'
+          : 'Six candidate models (damped Holt φ 0.86 · Theta · EWMA+drift · trend regression · seasonal naive · AR-1) are trained on 12 cleaned monthly points (MAD, |z| ≥ 3.5 pulled 75 % back to the median), then scored by expanding-window walk-forward backtest. Weights come from a softmax on relative error (temperature 0.55; exclusion beyond 2.6× the best MAE). The central forecast is the weighted mean; uncertainty is simulated by Monte-Carlo: bootstrap of standardised ensemble residuals, autocorrelated noise (ρ 0.55), Dirichlet draw of the weights and damped scenario drift (φ 0.965). Intervals are calibrated on the real tail shape measured in backtest.') +
+        '</div>' + (function () {
+          const fv = forecastVar(State.settings.predVar || 'weight', U.clamp(U.num(State.settings.horizon, 24), 3, 60), true);
+          const fc = fv.fc;
+          return UI.table(
+            [{ key: 'm', label: fr() ? 'Modèle' : 'Model' }, { key: 'mae', label: 'MAE', align: 'right' }, { key: 'rmse', label: 'RMSE', align: 'right' }, { key: 'mape', label: 'MAPE', align: 'right' }, { key: 'w', label: fr() ? 'Poids' : 'Weight', align: 'right' }, { key: 'st', label: fr() ? 'Statut' : 'Status' }],
+            (fc.models || []).map((mm) => ({ m: mm.label, mae: mm.mae == null ? '—' : U.fmt(mm.mae, 3), rmse: mm.rmse == null ? '—' : U.fmt(mm.rmse, 3), mape: mm.mape == null ? '—' : U.fmt(mm.mape, 2) + ' %', w: U.fmt(mm.weight, 1) + ' %', st: mm.dropped ? t('ai.dropped') : t('ai.retained'), __tone: mm.dropped ? 'risk' : '' }))
+          ) + '<div class="nv-note" style="margin-top:6px">' + U.esc(
+            (fr() ? 'Backtest : ' : 'Backtest: ') + U.fmtInt(fc.backtest ? fc.backtest.folds : 0) + (fr() ? ' plis · horizon ' : ' folds · horizon ') + (fc.backtest ? fc.backtest.hmax : 0) +
+            (fr() ? ' mois · calibration : facteur de volatilité ' : ' months · calibration: volatility factor ') + U.fmt(fc.calibration ? fc.calibration.volScale : 1, 2) +
+            (fr() ? ', couverture empirique ' : ', empirical coverage ') + (fc.calibration && fc.calibration.coverage != null ? U.pct(fc.calibration.coverage * 100, 0) : '—') +
+            (fr() ? ' (cible 80 %). Incertitude à l\'horizon : ' : ' (target 80 %). Horizon uncertainty: ') +
+            (fc.uncertainty ? U.fmt(fc.uncertainty.total, 2) + ' ' + (predVar(State.settings.predVar).unit || '') + ' — ' + t('ai.unc.residual') + ' ' + fc.uncertainty.shares.residual + ' % · ' + t('ai.unc.model') + ' ' + fc.uncertainty.shares.model + ' % · ' + t('ai.unc.scenario') + ' ' + fc.uncertainty.shares.scenario + ' %' : '—') +
+            '. ' + U.fmtInt(fc.ms) + ' ms.'
+          ) + '</div>';
+        })() + UI.table(
           [{ key: 'v', label: fr() ? 'Variable' : 'Variable' }, { key: 'today', label: fr() ? 'Aujourd\'hui' : 'Today', align: 'right' }, { key: 'p50', label: 'P50', align: 'right' }, { key: 'ic', label: 'IC 80 %', align: 'right' }, { key: 'drift', label: fr() ? 'Drive/mois' : 'Drift/mo', align: 'right' }],
           PRED_VARS.map((v) => { const f = forecastVar(v.id, U.num(State.settings.horizon, 24), true); const n = f.months; return { v: predVarLabel(v), today: U.fmt(f.past[f.past.length - 1], v.digits), p50: U.fmt(f.fc.point[n - 1], v.digits), ic: U.fmt(f.fc.p10[n - 1], v.digits) + ' – ' + U.fmt(f.fc.p90[n - 1], v.digits), drift: U.signed(f.drift, 3) }; })
         ) + '</section>' +

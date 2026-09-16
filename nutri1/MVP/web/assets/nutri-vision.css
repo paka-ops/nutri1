@@ -20,13 +20,13 @@
   --nv-line2: rgba(140, 255, 205, 0.26);
   --nv-ink: #e9fff6;
   --nv-ink2: #b6d6c9;
-  --nv-muted: #7f9d92;
+  --nv-muted: #9cb8ad;
   --nv-mint: #38f0a5;
   --nv-cyan: #22d3ee;
   --nv-lime: #a3e635;
   --nv-amber: #f5c451;
   --nv-rose: #fb7185;
-  --nv-violet: #818cf8;
+  --nv-violet: #a5b4fc;
   --nv-blue: #60a5fa;
   --nv-good: #38f0a5;
   --nv-warn: #f5c451;
@@ -606,7 +606,7 @@
 .nv-item-text { font-size: 11.2px; color: var(--nv-muted); margin-top: 2px; line-height: 1.45; }
 .nv-item-side { text-align: right; flex: 0 0 auto; }
 .nv-item-side b { display: block; font-size: 14px; color: #fff; font-variant-numeric: tabular-nums; }
-.nv-item-side span { font-size: 10px; color: var(--nv-muted); }
+.nv-item-side span:not(.nv-chip) { font-size: 10px; color: var(--nv-muted); }
 .nv-item[data-tone="risk"] { border-left: 3px solid var(--nv-risk); }
 .nv-item[data-tone="warn"] { border-left: 3px solid var(--nv-warn); }
 .nv-item[data-tone="good"] { border-left: 3px solid var(--nv-good); }
@@ -1127,3 +1127,335 @@
   .nv-busy .nv-chart-host::after { animation: none; }
   .nv-vital, .nv-ref-card, .nv-foodchip, .nv-tab, .nv-rec { transition: none; }
 }
+
+/* --------------------------------------------------------------------------
+   11. MOTEUR D'INFÉRENCE IA — pipeline visible, classement des modèles
+   ----------------------------------------------------------------------- */
+.nv-ai {
+  position: relative;
+  margin: 14px 0 6px;
+  padding: 15px 16px 16px;
+  border-radius: var(--nv-r);
+  border: 1px solid var(--nv-line);
+  background:
+    linear-gradient(150deg, rgba(56, 240, 165, .075), rgba(34, 211, 238, .05) 42%, rgba(255, 255, 255, .018));
+  overflow: hidden;
+}
+.nv-ai::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(100deg, transparent 22%, rgba(56, 240, 165, .09) 50%, transparent 78%);
+  transform: translateX(-110%);
+  animation: nvAiSweep 6s var(--nv-ease) infinite;
+}
+.nv-ai.busy::before { animation-duration: 1.4s; }
+.nv-ai.busy .nv-chart-host { opacity: .55; transition: opacity .3s; }
+@keyframes nvAiSweep { to { transform: translateX(110%); } }
+.nv-ai-head {
+  position: relative;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+.nv-ai-title { display: flex; gap: 11px; align-items: center; min-width: 0; }
+.nv-ai-title h4 { margin: 0; font-size: 15px; font-weight: 850; letter-spacing: -.01em; color: #fff; }
+.nv-ai-title .nv-sub { margin: 2px 0 0; }
+.nv-ai-actions { align-items: center; }
+.nv-ai-orb {
+  position: relative;
+  flex: 0 0 auto;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: radial-gradient(circle at 32% 28%, rgba(56, 240, 165, .6), rgba(34, 211, 238, .2) 58%, transparent 74%);
+  box-shadow: 0 0 24px rgba(56, 240, 165, .34), inset 0 0 12px rgba(255, 255, 255, .2);
+}
+.nv-ai-orb i {
+  width: 9px; height: 9px; border-radius: 50%;
+  background: #f2fffa;
+  box-shadow: 0 0 14px var(--nv-mint);
+  animation: nvAiPulse 1.9s ease-in-out infinite;
+}
+@keyframes nvAiPulse { 50% { transform: scale(1.55); opacity: .5; } }
+.nv-ai-body {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.32fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 14px;
+}
+.nv-ai-pipe h5, .nv-ai-side h5, .nv-ai-lead h5, .nv-ai-bt h5 {
+  margin: 0 0 7px;
+  font-size: 10.4px;
+  font-weight: 850;
+  letter-spacing: .13em;
+  text-transform: uppercase;
+  color: var(--nv-muted);
+}
+.nv-ai-side h5:not(:first-child) { margin-top: 13px; }
+.nv-ai-side .nv-sub { margin: -3px 0 6px; }
+.nv-ai-models {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 18px;
+  margin-top: 15px;
+  padding-top: 14px;
+  border-top: 1px dashed rgba(140, 255, 205, .16);
+}
+.nv-chiprow { flex-wrap: wrap; gap: 6px; }
+
+/* --- pipeline : étapes numérotées + métriques --------------------------- */
+.nv-pipe {
+  position: relative;
+  list-style: none;
+  margin: 0; padding: 0;
+  display: grid;
+  gap: 1px;
+}
+.nv-pipe::before {
+  content: "";
+  position: absolute;
+  left: 14px; top: 14px; bottom: 14px;
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgba(56, 240, 165, .45), rgba(34, 211, 238, .16));
+}
+.nv-pipe-step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) 16px;
+  gap: 10px;
+  align-items: start;
+  padding: 6px 8px 6px 0;
+  border-radius: 12px;
+  opacity: .4;
+  transition: opacity .3s var(--nv-ease), background .3s var(--nv-ease);
+}
+.nv-pipe-step[data-state="done"], .nv-pipe-step[data-state="active"] { opacity: 1; }
+.nv-pipe-step[data-state="active"] { background: linear-gradient(90deg, rgba(56, 240, 165, .13), transparent 72%); }
+.nv-pipe-dot {
+  position: relative;
+  z-index: 1;
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: #06170f;
+  border: 1.5px solid rgba(140, 255, 205, .22);
+  overflow: hidden;
+  transition: .3s var(--nv-ease);
+}
+.nv-pipe-dot i { font: 800 11px var(--nv-font); font-style: normal; color: var(--nv-muted); }
+.nv-pipe-step[data-state="done"] .nv-pipe-dot { border-color: rgba(56, 240, 165, .5); background: rgba(56, 240, 165, .13); }
+.nv-pipe-step[data-state="done"] .nv-pipe-dot i { color: var(--nv-mint); }
+.nv-pipe-step[data-state="active"] .nv-pipe-dot {
+  border-color: var(--nv-mint);
+  box-shadow: 0 0 0 4px rgba(56, 240, 165, .13), 0 0 20px rgba(56, 240, 165, .42);
+}
+.nv-pipe-step[data-state="active"] .nv-pipe-dot i {
+  width: 100%; height: 100%;
+  display: grid; place-items: center;
+  border-radius: 50%;
+  color: #04140f;
+  background: conic-gradient(from 0deg, var(--nv-mint), var(--nv-cyan), var(--nv-mint));
+  animation: nvAiSpin 1.05s linear infinite;
+}
+@keyframes nvAiSpin { to { transform: rotate(360deg); } }
+.nv-pipe-body { display: grid; gap: 3px; min-width: 0; }
+.nv-pipe-label { font-size: 12.6px; font-weight: 800; color: #fff; letter-spacing: -.005em; }
+.nv-pipe-detail { font-size: 11.2px; line-height: 1.5; color: var(--nv-ink2); }
+.nv-pipe-metrics { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 3px; }
+.nv-pipe-metrics:empty { display: none; }
+.nv-pipe-metrics em {
+  align-self: center;
+  font-style: normal;
+  font-size: 9.2px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: var(--nv-muted);
+}
+.nv-pipe-metrics b {
+  font: 700 10.6px var(--nv-font);
+  font-variant-numeric: tabular-nums;
+  color: #e6fff4;
+  background: rgba(56, 240, 165, .1);
+  border: 1px solid rgba(56, 240, 165, .22);
+  padding: 2px 7px;
+  border-radius: 999px;
+}
+.nv-pipe-state { padding-top: 9px; font: 800 11px var(--nv-font); color: var(--nv-mint); text-align: center; }
+.nv-pipe-step[data-state="idle"] .nv-pipe-state { color: rgba(255, 255, 255, .18); }
+.nv-pipe-bar { height: 4px; border-radius: 99px; background: rgba(255, 255, 255, .07); overflow: hidden; margin-top: 11px; }
+.nv-pipe-bar i {
+  display: block; height: 100%; width: 0;
+  border-radius: 99px;
+  background: linear-gradient(90deg, var(--nv-mint), var(--nv-cyan));
+  box-shadow: 0 0 16px rgba(56, 240, 165, .55);
+  transition: width .35s var(--nv-ease);
+}
+.nv-pipe-status { margin-top: 8px; min-height: 17px; font-size: 11.4px; color: var(--nv-ink2); }
+.nv-pipe-status b { color: #fff; }
+
+/* --- classement des modèles --------------------------------------------- */
+.nv-mdot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 8px; vertical-align: middle; box-shadow: 0 0 10px currentColor; }
+.nv-table-tight .nv-table td { padding: 5px 9px; font-size: 11.4px; }
+.nv-table-tight .nv-table th { font-size: 9.6px; }
+.nv-table td span b { color: #fff; font-weight: 800; }
+.nv-table td span small { display: block; color: var(--nv-muted); font-size: 9.8px; margin-top: 1px; }
+.nv-wcell {
+  position: relative;
+  display: inline-block;
+  min-width: 88px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .06);
+  overflow: hidden;
+}
+.nv-wcell i {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(56, 240, 165, .45), rgba(34, 211, 238, .32));
+}
+.nv-wcell b { position: relative; font: 800 11px var(--nv-font); font-variant-numeric: tabular-nums; color: #f0fffa; }
+@media (max-width: 1180px) {
+  .nv-ai-body, .nv-ai-models { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 560px) {
+  .nv-pipe-step { grid-template-columns: 26px minmax(0, 1fr) 14px; gap: 8px; }
+  .nv-pipe::before { left: 12px; }
+  .nv-pipe-dot { width: 26px; height: 26px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nv-ai::before, .nv-ai-orb i, .nv-pipe-step[data-state="active"] .nv-pipe-dot i { animation: none; }
+}
+
+/* --------------------------------------------------------------------------
+   12. NEUTRALISATION DU THÈME CLAIR HÉRITÉ DANS .nv-scope
+   ----------------------------------------------------------------------------
+   Les couches historiques (ui-refresh.css + V37→V57) posent des fonds blancs
+   (#fff, var(--card), var(--g-tint)…) avec une encre sombre. Lorsqu'un de ces
+   blocs est injecté dans le cockpit (ex. les cartes Freemium / Premium de la
+   couche V47, déposées dans #citizen), le texte clair hérité de .nv-scope
+   devenait illisible sur fond blanc. Deux protections :
+     1) les variables du thème clair sont redéfinies à l'intérieur de .nv-scope ;
+     2) les tuiles qui codent leur blanc « en dur » sont forcées en sombre
+        (important : certaines règles historiques arrivent APRÈS cette feuille
+         dans la cascade, et des couches posent des styles inline).
+   ----------------------------------------------------------------------- */
+.nv-scope {
+  --card: rgba(255, 255, 255, .045);
+  --bg: #04140f;
+  --text: var(--nv-ink);
+  --muted: var(--nv-muted);
+  --line: rgba(140, 255, 205, .16);
+  --g: var(--nv-mint);
+  --g-mid: #4ade9f;
+  --g-deep: #04140f;
+  --d: #04140f;
+  --lime: #dcfb9c;
+  --lime-ink: #eaffc9;
+  --blue: #7dd3fc;
+  --orange: #fbbf77;
+  --red: #fda4af;
+  --gold: #f6d98a;
+  --g-soft: rgba(56, 240, 165, .07);
+  --g-tint: rgba(56, 240, 165, .05);
+  --cream: rgba(255, 255, 255, .03);
+  --glass: rgba(255, 255, 255, .05);
+  --shadow: 0 14px 34px rgba(0, 0, 0, .34);
+  --shadow-hover: 0 20px 46px rgba(0, 0, 0, .44);
+  --shadow-lg: 0 26px 60px rgba(0, 0, 0, .5);
+  --radius: var(--nv-r);
+  --radius-sm: var(--nv-r-sm);
+}
+.nv-scope .v47-plan,
+.nv-scope .v47-plan.premium,
+.nv-scope .v47-research-card,
+.nv-scope .v47-research-live,
+.nv-scope .v47-research-filter select,
+.nv-scope .v38-kpi,
+.nv-scope .v45-citizen-metric,
+.nv-scope .v45-chart-card,
+.nv-scope .v46-kpi,
+.nv-scope .v46-gov-card,
+.nv-scope .v52-card,
+.nv-scope .v53-card,
+.nv-scope .v56-card,
+.nv-scope .v56-pill,
+.nv-scope .v54-badge,
+.nv-scope .core-card,
+.nv-scope .module-grid > div,
+.nv-scope .age-card,
+.nv-scope .ncd-card,
+.nv-scope .ncd-card.active,
+.nv-scope .role-card,
+.nv-scope .role-card.active,
+.nv-scope .condition-card,
+.nv-scope .condition-card.active,
+.nv-scope .executive-center-card,
+.nv-scope .mini-chart,
+.nv-scope .big-chart,
+.nv-scope .v41-chart-wrap,
+.nv-scope .card .card,
+.nv-scope .card .core-card,
+.nv-scope .card .age-card,
+.nv-scope .card .patient-stat,
+.nv-scope .card .child-stat,
+.nv-scope .card .product-card {
+  background: var(--nv-panel2) !important;
+  background-image: none !important;
+  color: var(--nv-ink) !important;
+  border-color: var(--nv-line) !important;
+  box-shadow: none !important;
+}
+/* le texte des tuiles forcées en sombre hérite de --nv-ink ; on ne règle ici
+   que les éléments qui avaient leur propre couleur dans le thème clair */
+.nv-scope .card h2, .nv-scope .card h3, .nv-scope .card h4 { color: #fff; }
+.nv-scope .v47-plan { padding: 16px; border-radius: var(--nv-r-sm); }
+.nv-scope .v47-plan.premium {
+  border: 1px solid rgba(56, 240, 165, .34) !important;
+  background: linear-gradient(160deg, rgba(56, 240, 165, .12), rgba(34, 211, 238, .06)) !important;
+  box-shadow: 0 18px 44px rgba(0, 0, 0, .4) !important;
+}
+.nv-scope .v47-plan h3 { font-size: 17px; font-weight: 850; color: #fff !important; letter-spacing: -.01em; }
+.nv-scope .v47-plan ul { margin: 9px 0 12px; padding-left: 18px; }
+.nv-scope .v47-plan li { font-size: 12px; line-height: 1.65; color: var(--nv-ink2) !important; }
+.nv-scope .v47-plan li::marker { color: var(--nv-mint); }
+.nv-scope .v47-plan .muted { color: var(--nv-muted) !important; font-size: 11.6px; }
+.nv-scope .v47-badge {
+  background: rgba(56, 240, 165, .14) !important;
+  border: 1px solid rgba(56, 240, 165, .34);
+  color: var(--nv-mint) !important;
+  letter-spacing: .1em;
+}
+.nv-scope .v47-plan.premium .v47-badge { background: rgba(34, 211, 238, .16) !important; border-color: rgba(34, 211, 238, .4); color: #b9f4ff !important; }
+.nv-scope .v47-status { color: var(--nv-muted) !important; }
+.nv-scope .v47-plan .btn { width: 100%; justify-content: center; }
+.nv-scope .v47-plan-grid { gap: 12px; }
+/* filet de sécurité : tout texte hérité reste lisible sur fond sombre */
+.nv-scope li, .nv-scope dt, .nv-scope dd, .nv-scope figcaption, .nv-scope caption { color: var(--nv-ink2); }
+.nv-scope strong, .nv-scope b { color: #fff; }
+.nv-scope a { color: var(--nv-cyan); }
+.nv-scope mark { background: rgba(245, 196, 81, .28); color: #fff2cf; }
+
+/* la teinte sémantique d'une pastille gagne toujours, quel que soit son
+   conteneur (spécificité 0,2,0 + fin de cascade) — teintes éclaircies AA */
+.nv-scope .nv-chip.nv-chip-good,    .nv-chip.nv-chip-good    { color: #6df7b6; }
+.nv-scope .nv-chip.nv-chip-ok,      .nv-chip.nv-chip-ok      { color: #cdf07a; }
+.nv-scope .nv-chip.nv-chip-warn,    .nv-chip.nv-chip-warn    { color: #ffd97a; }
+.nv-scope .nv-chip.nv-chip-risk,    .nv-chip.nv-chip-risk    { color: #ff93a6; }
+.nv-scope .nv-chip.nv-chip-info,    .nv-chip.nv-chip-info    { color: #7deefb; }
+.nv-scope .nv-chip.nv-chip-neutral, .nv-chip.nv-chip-neutral { color: #b6c0ff; }
+.nv-scope .nv-chip:not([class*="nv-chip-"]) { color: var(--nv-ink2); }
+/* les bordures/fonds de pastilles restent cohérents avec la teinte éclaircie */
+.nv-chip-warn    { border-color: rgba(255, 217, 122, .36); background: rgba(255, 217, 122, .1); }
+.nv-chip-ok      { border-color: rgba(205, 240, 122, .34); background: rgba(205, 240, 122, .1); }
+.nv-chip-risk    { border-color: rgba(255, 147, 166, .38); background: rgba(255, 147, 166, .1); }
+.nv-chip-info    { border-color: rgba(125, 238, 251, .34); background: rgba(125, 238, 251, .1); }
+.nv-chip-neutral { border-color: rgba(182, 192, 255, .34); background: rgba(182, 192, 255, .1); }
+.nv-chip-good    { border-color: rgba(109, 247, 182, .34); background: rgba(109, 247, 182, .1); }

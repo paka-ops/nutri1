@@ -274,6 +274,404 @@
       }
       return { point, p10, p90, p25, p75, level: fit.level, trend: fit.trend, sd: sdResid, trials, horizon: H, paths };
     },
+    /* ------------------------------------------------------------------ *
+     * PRÉDICTION AVANCÉE — ensemble multi-modèles, backtest walk-forward,
+     * pondération par performance, Monte-Carlo et calibration des IC.
+     * Chaque étape est tracée (opt.trace) pour pouvoir être montrée à
+     * l'utilisateur : la prédiction devient explicable de bout en bout.
+     * ------------------------------------------------------------------ */
+
+    /* Nettoyage robuste : trous ignorés, points aberrants (z MAD ≥ 3,5)
+       ramenés vers la médiane plutôt que supprimés. */
+    clean(a) {
+      const raw = (a || []).map((x) => Util.num(x, NaN));
+      const fin = raw.filter(isFinite);
+      const out = [], idx = [], holes = [];
+      let anomalies = [];
+      if (!fin.length) return { values: [], indexes: [], anomalies: [], holes: raw.map((_, i) => i), median: 0, mad: 0, repaired: 0 };
+      const med = Stats.median(fin);
+      const mad = Stats.median(fin.map((x) => Math.abs(x - med))) || Stats.sd(fin) || 1;
+      raw.forEach((x, i) => {
+        if (!isFinite(x)) { holes.push(i); return; }
+        const z = 0.6745 * (x - med) / (mad || 1);
+        if (Math.abs(z) >= 3.5) {
+          const rep = med + (x - med) * 0.25;
+          anomalies.push({ index: i, value: x, z: Util.round(z, 2), repaired: rep });
+          out.push(rep);
+        } else out.push(x);
+        idx.push(i);
+      });
+      return { values: out, indexes: idx, anomalies, holes, median: med, mad, repaired: anomalies.length };
+    },
+
+    /* Caractéristiques extraites de la série (servent aux modèles et à l'UI) */
+    features(a) {
+      const v = (a || []).map((x) => Util.num(x, 0)), n = v.length;
+      if (!n) return { n: 0 };
+      const xs = v.map((_, i) => i);
+      const lr = Stats.linreg(xs, v);
+      const mean = Stats.mean(v), sd = Stats.sd(v);
+      const ret = []; for (let i = 1; i < n; i++) ret.push(v[i] - v[i - 1]);
+      const ac = (lag) => {
+        if (n <= lag + 2) return 0;
+        const p = [], q = [];
+        for (let i = 0; i + lag < n; i++) { p.push(v[i]); q.push(v[i + lag]); }
+        return Stats.linreg(p, q).r;
+      };
+      const a1 = ac(1), a7 = ac(7), a12 = ac(12);
+      const seasonal = Math.abs(a12) >= 0.35 && n > 14 ? 12 : (Math.abs(a7) >= 0.4 && n > 9 ? 7 : 0);
+      return {
+        n, mean, sd, last: v[n - 1], first: v[0], min: Stats.min(v), max: Stats.max(v),
+        cv: mean ? sd / Math.abs(mean) : 0, slope: lr.m, r2: lr.r2, intercept: lr.b,
+        ac1: a1, ac7: a7, ac12: a12, seasonal,
+        volRet: Stats.sd(ret), driftRet: Stats.mean(ret),
+        range: Stats.max(v) - Stats.min(v),
+        trendPctMonth: mean ? (lr.m / Math.abs(mean)) * 100 : 0
+      };
+    },
+
+    /* Zoo de modèles : chacun expose fit(v, features) → { predict(h), info }.
+       Réutilisable par n'importe quel module (agri, santé publique, marché…). */
+    modelZoo() {
+      return [
+        {
+          id: 'holt', label: 'Holt à tendance amortie', family: 'Lissage exponentiel double', color: '#38f0a5',
+          min: 4, info: 'α 0,42 · β 0,18 · φ 0,86',
+          fit(v) {
+            const f = Stats.holt(v, { alpha: 0.42, beta: 0.18, phi: 0.86 });
+            return {
+              predict(h) { let s = f.level, d = 1; for (let i = 1; i <= h; i++) { d *= f.phi; s += f.trend * d; } return s; },
+              params: { level: f.level, trend: f.trend, phi: f.phi }
+            };
+          }
+        },
+        {
+          id: 'theta', label: 'Méthode Theta', family: 'Décomposition θ-lines', color: '#22d3ee',
+          min: 5, info: 'θ₂ (SES 0,30) ⊕ θ₀ (extrapolation OLS)',
+          fit(v) {
+            const n = v.length;
+            const th2 = []; const ses = Stats.ewma(v, 0.3);
+            for (let i = 0; i < n; i++) th2.push(2 * v[i] - ses[i]);
+            const l2 = Stats.ewma(th2, 0.3)[n - 1];
+            const lr = Stats.linreg(v.map((_, i) => i), v);
+            return {
+              predict(h) { const i = n - 1 + h; return 0.5 * (l2 + lr.predict(i)); },
+              params: { theta2Level: l2, slope: lr.m }
+            };
+          }
+        },
+        {
+          id: 'drift', label: 'EWMA + dérive amortie', family: 'Niveau local + pente globale', color: '#a3e635',
+          min: 4, info: 'EWMA 0,35 + pente OLS amortie (0,88^h)',
+          fit(v, f) {
+            const n = v.length, lvl = Stats.ewma(v, 0.35)[n - 1], m = (f && f.slope) || 0;
+            return { predict(h) { let s = lvl; for (let i = 1; i <= h; i++) s += m * Math.pow(0.88, i); return s; }, params: { level: lvl, slope: m } };
+          }
+        },
+        {
+          id: 'ols', label: 'Régression tendancielle', family: 'Moindres carrés', color: '#f5c451',
+          min: 4, info: 'y = a + b·t, extrapolation amortie',
+          fit(v, f) {
+            const n = v.length, lr = Stats.linreg(v.map((_, i) => i), v);
+            return { predict(h) { const i = n - 1 + h; return lr.b + lr.m * (n - 1) + lr.m * h * Math.pow(0.9, h * 0.35); }, params: { slope: lr.m, r2: lr.r2, n } };
+          }
+        },
+        {
+          id: 'snaive', label: 'Naïf saisonnier', family: 'Répétition de cycle', color: '#818cf8',
+          min: 3, info: 'lag détecté par autocorrélation (7 / 12)',
+          fit(v, f) {
+            const lag = (f && f.seasonal) || 1, n = v.length;
+            return { predict(h) { const i = n - 1 + h; return v[((i - lag) % n + n) % n]; }, params: { lag } };
+          }
+        },
+        {
+          id: 'ar1', label: 'Retour à la moyenne (AR-1)', family: 'Processus stationnaire', color: '#f472b6',
+          min: 5, info: 'ρ estimé sur les écarts à la médiane mobile',
+          fit(v) {
+            const n = v.length, med = Stats.median(v);
+            const d = v.map((x) => x - med);
+            const num = d.slice(1).reduce((s, x, i) => s + x * d[i], 0);
+            const den = d.slice(0, -1).reduce((s, x) => s + x * x, 0) || 1;
+            const rho = Util.clamp(num / den, -0.9, 0.97);
+            return { predict(h) { return med + Math.pow(rho, h) * (v[n - 1] - med); }, params: { rho, median: med } };
+          }
+        }
+      ];
+    },
+
+    /* Backtest walk-forward (fenêtre expansive) : erreurs par modèle et par
+       horizon + prédictions conservées pour la pondération et la calibration. */
+    backtest(v, fitted, opt) {
+      const o = opt || {}, n = v.length;
+      const minTrain = Math.max(o.minTrain || 4, Math.ceil(n * 0.45));
+      const hmax = Util.clamp(o.hmax || 3, 1, Math.max(1, n - minTrain));
+      const recs = [];
+      for (let k = minTrain; k <= n - 1; k++) {
+        const train = v.slice(0, k);
+        const preds = {};
+        fitted.forEach((F) => {
+          try {
+            const m = F.def.fit(train, Stats.features(train), o);
+            preds[F.def.id] = [];
+            for (let h = 1; h <= Math.min(hmax, n - k); h++) preds[F.def.id].push(m.predict(h));
+          } catch (e) { preds[F.def.id] = []; }
+        });
+        for (let h = 1; h <= Math.min(hmax, n - k); h++) {
+          recs.push({ k, h, actual: v[k + h - 1], preds });
+        }
+      }
+      const perModel = fitted.map((F) => {
+        const errs = [];
+        recs.forEach((r) => { const p = r.preds[F.def.id] && r.preds[F.def.id][r.h - 1]; if (p != null && isFinite(p)) errs.push(r.actual - p); });
+        const ae = errs.map(Math.abs);
+        const mae = ae.length ? Stats.mean(ae) : Infinity;
+        const rmse = errs.length ? Math.sqrt(Stats.mean(errs.map((e) => e * e))) : Infinity;
+        const mape = recs.length ? Stats.mean(recs.map((r) => {
+          const p = r.preds[F.def.id] && r.preds[F.def.id][r.h - 1];
+          return (p != null && isFinite(p) && r.actual) ? Math.abs((r.actual - p) / r.actual) : 0;
+        })) * 100 : Infinity;
+        return { id: F.def.id, mae, rmse, mape, n: errs.length };
+      });
+      return { folds: recs.length, minTrain, hmax, records: recs, perModel };
+    },
+
+    /* Prévision d'ensemble : pipeline complet + trace des étapes. */
+    ensembleForecast(a, horizon, opt) {
+      const o = opt || {};
+      const t0 = Date.now();
+      const steps = [];
+      const step = (id, label, detail, metrics) => { steps.push({ id, label, detail, metrics: metrics || {} }); };
+      const H = Math.max(1, horizon | 0);
+      const rng = RNG(o.seed || 'nv-ensemble');
+      const driftFn = typeof o.drift === 'function' ? o.drift : () => Util.num(o.drift, 0);
+      const driftSd = Util.num(o.driftSd, 0);
+
+      /* --- 1. ingestion --------------------------------------------------- */
+      const raw = (a || []).map((x) => Util.num(x, NaN));
+      const cl = Stats.clean(raw);
+      const v = cl.values;
+      step('ingest', o.labels && o.labels.ingest || 'Ingestion de la série',
+        (o.labels && o.labels.ingestDetail) || 'Lecture des observations, conversion numérique, détection des valeurs manquantes.',
+        { points: raw.length, usable: v.length, holes: cl.holes.length });
+
+      if (v.length < 3) {
+        const last = isFinite(Util.num(raw[raw.length - 1], NaN)) ? Util.num(raw[raw.length - 1]) : 0;
+        const flat = new Array(H).fill(last);
+        step('fallback', 'Données insuffisantes', 'Moins de 3 observations exploitables : prévision plate à intervalles larges.', { usable: v.length });
+        return {
+          point: flat, p10: flat.map((x) => x * 0.85), p90: flat.map((x) => x * 1.15), p25: flat.map((x) => x * 0.94), p75: flat.map((x) => x * 1.06),
+          p50: flat, paths: [], models: [], features: Stats.features(v), anomalies: cl.anomalies, calibration: null,
+          uncertainty: null, steps, horizon: H, trials: 0, drift: 0, ms: Date.now() - t0, degenerate: true, level: last, trend: 0, sd: 0
+        };
+      }
+
+      /* --- 2. nettoyage --------------------------------------------------- */
+      step('clean', (o.labels && o.labels.clean) || 'Nettoyage & valeurs aberrantes',
+        'Écart médian absolu (MAD) : tout point à |z| ≥ 3,5 est ramené de 75 % vers la médiane au lieu d\'être supprimé.',
+        { anomalies: cl.anomalies.length, median: Util.round(cl.median, 2), mad: Util.round(cl.mad, 3), holes: cl.holes.length });
+
+      /* --- 3. caractéristiques ------------------------------------------- */
+      const f = Stats.features(v);
+      step('features', (o.labels && o.labels.features) || 'Extraction de caractéristiques',
+        'Tendance (OLS), volatilité des variations, autocorrélation lag 1/7/12, détection de saisonnalité.',
+        { slope: Util.round(f.slope, 4), r2: Util.round(f.r2, 3), cv: Util.round(f.cv * 100, 1) + '%', ac1: Util.round(f.ac1, 2), ac7: Util.round(f.ac7, 2), ac12: Util.round(f.ac12, 2), seasonal: f.seasonal || 'aucune' });
+
+      /* --- 4. entraînement des modèles candidats -------------------------- */
+      const zoo = Stats.modelZoo().filter((d) => v.length >= (d.min || 3));
+      const fitted = [];
+      zoo.forEach((d) => { try { const m = d.fit(v, f, o); if (m && typeof m.predict === 'function' && isFinite(m.predict(1))) fitted.push({ def: d, model: m }); } catch (e) { } });
+      if (!fitted.length) fitted.push({ def: zoo[0] || Stats.modelZoo()[0], model: { predict: () => f.last } });
+      step('train', (o.labels && o.labels.train) || 'Entraînement des modèles candidats',
+        fitted.map((F) => F.def.label).join(' · '),
+        { candidates: zoo.length, trained: fitted.length, models: fitted.map((F) => F.def.id) });
+
+      /* --- 5. backtest walk-forward -------------------------------------- */
+      const bt = Stats.backtest(v, fitted, { hmax: o.btHorizon || 3, minTrain: o.minTrain });
+      const valid = bt.perModel.filter((m) => isFinite(m.mae));
+      const bestMae = valid.length ? Math.min.apply(null, valid.map((m) => m.mae)) : 0;
+      step('backtest', (o.labels && o.labels.backtest) || 'Backtest walk-forward',
+        'Fenêtre expansive : chaque modèle est ré-entraîné puis noté sur des données qu\'il n\'a jamais vues.',
+        { folds: bt.folds, hmax: bt.hmax, bestMae: Util.round(bestMae, 3), evaluated: valid.length });
+
+      /* --- 6. pondération de l'ensemble ---------------------------------- */
+      const T = o.temperature == null ? 0.55 : o.temperature;
+      const scored = fitted.map((F) => {
+        const pm = bt.perModel.filter((m) => m.id === F.def.id)[0] || { mae: Infinity, rmse: Infinity, mape: Infinity, n: 0 };
+        const rel = isFinite(pm.mae) && bestMae > 0 ? pm.mae / bestMae : (isFinite(pm.mae) ? 1 : 99);
+        return { F, mae: pm.mae, rmse: pm.rmse, mape: pm.mape, n: pm.n, rel, w: Math.exp(-rel / T) };
+      });
+      const wSum = scored.reduce((s, x) => s + x.w, 0) || 1;
+      scored.forEach((x) => {
+        x.weight = Math.max(0.02, x.w / wSum);
+        x.dropped = !(x.rel <= (o.dropRatio || 2.6)) || !isFinite(x.mae);
+        if (x.dropped) x.weight = 0;
+      });
+      const kept = scored.filter((x) => !x.dropped);
+      const kSum = kept.reduce((s, x) => s + x.weight, 0) || 1;
+      kept.forEach((x) => { x.weight = x.weight / kSum; });
+      step('weight', (o.labels && o.labels.weight) || 'Pondération par performance',
+        'Softmax sur l\'erreur relative (température ' + T + ') ; tout modèle dépassant ' + (o.dropRatio || 2.6) + '× la meilleure erreur est écarté.',
+        { retained: kept.length, dropped: scored.length - kept.length, top: (kept.slice().sort((p, q) => q.weight - p.weight)[0] || {}).id });
+
+      /* prédictions individuelles sur l'horizon */
+      const preds = {};
+      scored.forEach((x) => {
+        const arr = [];
+        for (let h = 1; h <= H; h++) { let p; try { p = x.F.model.predict(h); } catch (e) { p = f.last; } arr.push(isFinite(p) ? p : f.last); }
+        preds[x.F.def.id] = arr;
+      });
+      const ensPoint = [];
+      for (let h = 0; h < H; h++) {
+        let s = 0; kept.forEach((x) => { s += x.weight * preds[x.F.def.id][h]; });
+        ensPoint.push(s);
+      }
+
+      /* --- 7. erreurs d'ensemble (backtest) → σ par horizon -------------- */
+      const wOf = (id) => { const x = scored.filter((q) => q.F.def.id === id)[0]; return (x && !x.dropped) ? x.weight : 0; };
+      const zByH = {}, zAll = [];
+      bt.records.forEach((r) => {
+        let p = 0; Object.keys(r.preds).forEach((id) => { const q = r.preds[id][r.h - 1]; if (q != null && isFinite(q)) p += wOf(id) * q; });
+        const e = r.actual - p;
+        (zByH[r.h] = zByH[r.h] || []).push(e);
+        zAll.push({ h: r.h, e });
+      });
+      const sdByH = {};
+      Object.keys(zByH).forEach((h) => { sdByH[h] = Math.max(1e-9, Stats.sd(zByH[h].length > 1 ? zByH[h] : zAll.map((z) => z.e))); });
+      const sdGlobal = Math.max(1e-9, Stats.sd(zAll.map((z) => z.e)));
+      const sigma = (h) => (sdByH[h] != null && zByH[h] && zByH[h].length > 2 ? sdByH[h] : sdGlobal * Math.sqrt(0.55 * h + 0.45));
+
+      /* --- 8. calibration des intervalles (forme des queues) ------------- */
+      const zStd = zAll.map((z) => z.e / (sigma(z.h) || sdGlobal)).filter(isFinite);
+      let volScale = 1, coverage = null;
+      if (zStd.length > 3) {
+        const q10 = Stats.quantile(zStd, 0.10), q90 = Stats.quantile(zStd, 0.90);
+        volScale = Util.clamp(((q90 - q10) / 2) / 1.2816, 0.6, 2.2);
+        coverage = zStd.filter((z) => Math.abs(z) <= 1.2816).length / zStd.length;
+      }
+      step('calibrate', (o.labels && o.labels.calibrate) || 'Calibration des intervalles',
+        'Les résidus standardisés du backtest mesurent la forme réelle des queues ; le facteur de volatilité corrige l\'intervalle nominal de 80 %.',
+        { volScale: Util.round(volScale, 2), coverage: coverage == null ? '—' : Util.round(coverage * 100, 0) + '%', residuals: zStd.length });
+
+      /* --- 9. simulation de Monte-Carlo ---------------------------------- */
+      const trials = Util.clamp(o.trials || 800, 40, 6000);
+      const rho = o.rho == null ? 0.55 : o.rho;                 // autocorrélation du bruit
+      const bnd = { min: o.min == null ? -Infinity : o.min, max: o.max == null ? Infinity : o.max };
+      const jitterW = (rngL) => {
+        /* tirage Dirichlet approché (gamma) autour des poids retenus */
+        const conc = o.weightConcentration == null ? 14 : o.weightConcentration;
+        const g = kept.map((x) => Math.max(1e-6, x.weight) * conc);
+        const draws = g.map((shape) => {
+          /* gamma(shape,1) par Marsaglia-Tsang simplifié (shape ≥ 1 après redressement) */
+          const sh = Math.max(1, shape);
+          const d = sh - 1 / 3, c = 1 / Math.sqrt(9 * d);
+          for (let it = 0; it < 60; it++) {
+            const xx = rngL.normal(); let vv = 1 + c * xx;
+            if (vv <= 0) continue;
+            vv = vv * vv * vv;
+            const uu = rngL.next();
+            if (uu < 1 - 0.0331 * xx * xx * xx * xx || Math.log(uu) < 0.5 * xx * xx + d * (1 - vv + Math.log(vv))) return d * vv * (shape < 1 ? Math.pow(rngL.next(), 1 / shape) : 1);
+          }
+          return shape;
+        });
+        const tot = draws.reduce((s, x) => s + x, 0) || 1;
+        return draws.map((x) => x / tot);
+      };
+      const pool = zStd.length > 2 ? zStd : [0];
+      const sampleZ = () => pool[Math.floor(rng.next() * pool.length)] * rng.gauss(1, 0.25) + rng.normal() * 0.35;
+      const driftPhi = o.driftPhi == null ? 0.965 : o.driftPhi;
+      /* dérive cumulative pré-calculée (O(H) au lieu de O(H²) par trajectoire) */
+      const cumDrift = [];
+      if (typeof o.drift !== 'function') {
+        let acc = 0;
+        for (let h = 1; h <= H; h++) { acc += driftFn(h, 0) * Math.pow(driftPhi, h - 1); cumDrift.push(acc); }
+      }
+      const simulate = (nTrials, useNoise, useWeightJitter, useDriftJitter) => {
+        const out = [];
+        for (let t = 0; t < nTrials; t++) {
+          const wj = useWeightJitter ? jitterW(rng) : null;
+          const dJit = useDriftJitter && driftSd > 0 ? rng.gauss(1, driftSd) : 1;
+          let z = 0, dAcc = 0; const path = [];
+          for (let h = 1; h <= H; h++) {
+            let base = 0;
+            if (wj) { for (let i = 0; i < kept.length; i++) base += wj[i] * preds[kept[i].F.def.id][h - 1]; }
+            else base = ensPoint[h - 1];
+            const dr = cumDrift.length ? cumDrift[h - 1] : (dAcc += driftFn(h, base) * Math.pow(driftPhi, h - 1));
+            z = rho * z + Math.sqrt(1 - rho * rho) * sampleZ();
+            let val = base + dr * dJit + (useNoise ? z * sigma(Math.min(h, bt.hmax)) * volScale * Math.sqrt(0.6 + 0.4 * h) : 0);
+            val = Util.clamp(val, bnd.min, bnd.max);
+            path.push(val);
+          }
+          out.push(path);
+        }
+        return out;
+      };
+      const paths = simulate(trials, true, o.modelUncertainty !== false, driftSd > 0);
+      const point = [], p10 = [], p25 = [], p50 = [], p75 = [], p90 = [];
+      for (let h = 0; h < H; h++) {
+        const c = paths.map((p) => p[h]);
+        point.push(Stats.median(c)); p50.push(Stats.median(c));
+        p10.push(Stats.quantile(c, 0.10)); p25.push(Stats.quantile(c, 0.25));
+        p75.push(Stats.quantile(c, 0.75)); p90.push(Stats.quantile(c, 0.90));
+      }
+      step('montecarlo', (o.labels && o.labels.mc) || 'Simulation de Monte-Carlo',
+        trials + ' trajectoires : bootstrap des résidus calibrés, bruit autocorrélé (ρ ' + rho + '), tirage des poids (Dirichlet) et dérive de scénario amortie (φ ' + driftPhi + ').',
+        { trials, rho, horizon: H, driftPerMonth: Util.round(Util.num(driftFn(1, ensPoint[0]), 0), 4), p50End: Util.round(point[H - 1], 3) });
+
+      /* --- 10. décomposition de l'incertitude ---------------------------- */
+      const varAt = (arr) => { const c = arr.map((p) => p[H - 1]); const m = Stats.mean(c); return Stats.mean(c.map((x) => (x - m) * (x - m))); };
+      const nSub = Math.min(420, Math.max(80, Math.round(trials / 2)));
+      const vTot = varAt(paths);
+      const vRes = varAt(simulate(nSub, true, false, false));
+      const vMod = o.modelUncertainty === false ? 0 : varAt(simulate(nSub, false, true, false));
+      const vDri = driftSd > 0 ? varAt(simulate(nSub, false, false, true)) : 0;
+      const sum = (vRes + vMod + vDri) || 1;
+      const uncertainty = {
+        total: Math.sqrt(Math.max(0, vTot)),
+        shares: {
+          residual: Util.round((vRes / sum) * 100, 0),
+          model: Util.round((vMod / sum) * 100, 0),
+          scenario: Util.round((vDri / sum) * 100, 0)
+        }
+      };
+      step('uncertainty', (o.labels && o.labels.unc) || 'Décomposition de l\'incertitude',
+        'Trois simulations partielles isolent chaque source : bruit résiduel, désaccord entre modèles, incertitude de scénario.',
+        uncertainty.shares);
+
+      /* --- 11. synthèse --------------------------------------------------- */
+      const models = scored.map((x) => ({
+        id: x.F.def.id, label: x.F.def.label, family: x.F.def.family, color: x.F.def.color, info: x.F.def.info,
+        mae: isFinite(x.mae) ? Util.round(x.mae, 4) : null,
+        rmse: isFinite(x.rmse) ? Util.round(x.rmse, 4) : null,
+        mape: isFinite(x.mape) ? Util.round(x.mape, 2) : null,
+        weight: Util.round(x.weight * 100, 1), dropped: !!x.dropped,
+        rel: isFinite(x.rel) ? Util.round(x.rel, 2) : null,
+        forecast: preds[x.F.def.id], params: (x.F.model.params || {})
+      })).sort((p, q) => q.weight - p.weight);
+      step('synthesis', (o.labels && o.labels.synthesis) || 'Synthèse & publication',
+        'Médiane des trajectoires = P50 ; enveloppe P10–P90 ; contributions des modèles conservées pour l\'explication.',
+        { p50: Util.round(point[H - 1], 3), ic80: Util.round(p10[H - 1], 2) + ' → ' + Util.round(p90[H - 1], 2), models: models.length });
+
+      /* prédiction one-step des modèles sur l'historique (pour le graphique de backtest) */
+      const chart = { labels: v.map((_, i) => i + 1), actual: v.slice(), series: [] };
+      scored.forEach((x) => {
+        const data = new Array(v.length).fill(null);
+        bt.records.forEach((r) => {
+          if (r.h !== 1) return;
+          const p = r.preds[x.F.def.id] && r.preds[x.F.def.id][0];
+          if (p != null && isFinite(p)) data[r.k] = p;
+        });
+        chart.series.push({ id: x.F.def.id, label: x.F.def.label, color: x.F.def.color, data, dropped: !!x.dropped, weight: x.weight });
+      });
+
+      return {
+        point, p10, p25, p50, p75, p90, paths, models, features: f, anomalies: cl.anomalies,
+        calibration: { volScale: Util.round(volScale, 3), coverage: coverage == null ? null : Util.round(coverage, 3), residuals: zStd.length, sigmaH: sigma(1) },
+        uncertainty, backtest: { folds: bt.folds, hmax: bt.hmax, minTrain: bt.minTrain, chart, perModel: bt.perModel },
+        ensemble: ensPoint, steps, horizon: H, trials, drift: Util.num(driftFn(1, ensPoint[0]), 0),
+        level: f.last, trend: f.slope, sd: sdGlobal, ms: Date.now() - t0, seed: o.seed || 'nv-ensemble'
+      };
+    },
+
     /* Chaîne de Markov : distributions successives + échantillonnage de cohortes */
     markov(P, start, steps) {
       const n = P.length;
@@ -440,9 +838,10 @@
     return out;
   }
   function domainOf(spec, series, padRatio) {
+    const ok = (v) => v != null && v !== '' && isFinite(Util.num(v, NaN));
     let vals = [];
-    series.forEach((s) => { (s.data || []).forEach((v) => { if (isFinite(Util.num(v, NaN))) vals.push(Util.num(v)); }); });
-    (spec.cone ? [spec.cone.p10, spec.cone.p90, spec.cone.lo, spec.cone.hi] : []).forEach((a) => { if (a) a.forEach((v) => vals.push(Util.num(v, 0))); });
+    series.forEach((s) => { (s.data || []).forEach((v) => { if (ok(v)) vals.push(Util.num(v)); }); });
+    (spec.cone ? [spec.cone.p10, spec.cone.p90, spec.cone.p25, spec.cone.p75, spec.cone.lo, spec.cone.hi] : []).forEach((a) => { if (a) a.forEach((v) => { if (ok(v)) vals.push(Util.num(v)); }); });
     (spec.zones || []).forEach((z) => { if (isFinite(z.from)) vals.push(z.from); if (isFinite(z.to)) vals.push(z.to); });
     if (spec.goal && isFinite(Util.num(spec.goal.value, NaN))) vals.push(Util.num(spec.goal.value));
     if (spec.markers) spec.markers.forEach((m) => { if (isFinite(Util.num(m.value, NaN))) vals.push(Util.num(m.value)); });
@@ -564,6 +963,16 @@
     }
     svg.appendChild(svgEl('line', { x1: padL, y1: padT + ih, x2: padL + iw, y2: padT + ih, class: 'nv-axis-line' }));
 
+    /* Cadre de tracé : tout ce qui suit est découpé (clipPath) afin qu'aucune
+       courbe, aire ou marqueur ne puisse sortir du graphique — même si une
+       valeur aberrante ou un lissage dépasse le domaine calculé. */
+    const clipId = nextId() + '-clip';
+    const cp = svgEl('clipPath', { id: clipId });
+    cp.appendChild(svgEl('rect', { x: padL - 2, y: padT - 4, width: iw + 4, height: ih + 8, rx: 6 }));
+    defs.appendChild(cp);
+    const plot = svgEl('g', { 'clip-path': 'url(#' + clipId + ')', class: 'nv-plot' });
+    svg.appendChild(plot);
+
     /* cône d'incertitude (prévision) */
     const cone = spec.cone;
     if (cone && (cone.p10 || cone.lo)) {
@@ -577,71 +986,83 @@
       g.appendChild(svgEl('stop', { offset: '100%', 'stop-color': cone.color || Theme.tones.info, 'stop-opacity': '0.05' }));
       defs.appendChild(g);
       const d = smoothPath(up) + ' L' + down.slice().reverse().map((p) => Util.round(p[0], 2) + ',' + Util.round(p[1], 2)).join(' L') + ' Z';
-      svg.appendChild(svgEl('path', { d, fill: 'url(#' + cid + ')', class: 'nv-cone' }));
+      plot.appendChild(svgEl('path', { d, fill: 'url(#' + cid + ')', class: 'nv-cone' }));
       if (cone.p25 && cone.p75) {
         const u2 = [], d2b = [];
         for (let i = 0; i < cone.p25.length; i++) { u2.push([x(start + i), y(cone.p75[i])]); d2b.push([x(start + i), y(cone.p25[i])]); }
         const d25 = smoothPath(u2) + ' L' + d2b.slice().reverse().map((p) => Util.round(p[0], 2) + ',' + Util.round(p[1], 2)).join(' L') + ' Z';
-        svg.appendChild(svgEl('path', { d: d25, fill: Theme.withAlpha(cone.color || Theme.tones.info, 0.16), class: 'nv-cone2' }));
+        plot.appendChild(svgEl('path', { d: d25, fill: Theme.withAlpha(cone.color || Theme.tones.info, 0.16), class: 'nv-cone2' }));
       }
       /* frontière passé / prévision */
       if (spec.splitAt != null) {
-        svg.appendChild(svgEl('line', { x1: x(spec.splitAt), y1: padT, x2: x(spec.splitAt), y2: padT + ih, class: 'nv-split' }));
-        svg.appendChild(text(x(spec.splitAt) + 5, padT + 10, spec.splitLabel || 'forecast', 'nv-t nv-split-label', 'start'));
+        plot.appendChild(svgEl('line', { x1: x(spec.splitAt), y1: padT, x2: x(spec.splitAt), y2: padT + ih, class: 'nv-split' }));
+        plot.appendChild(text(x(spec.splitAt) + 5, padT + 10, spec.splitLabel || 'forecast', 'nv-t nv-split-label', 'start'));
       }
     }
 
     /* objectif */
     if (spec.goal && isFinite(Util.num(spec.goal.value, NaN))) {
       const gy = y(Util.num(spec.goal.value));
-      svg.appendChild(svgEl('line', { x1: padL, y1: gy, x2: padL + iw, y2: gy, class: 'nv-goal' }));
-      if (spec.goal.label) svg.appendChild(text(padL + 4, gy - 5, spec.goal.label, 'nv-t nv-goal-label', 'start'));
+      plot.appendChild(svgEl('line', { x1: padL, y1: gy, x2: padL + iw, y2: gy, class: 'nv-goal' }));
+      if (spec.goal.label) plot.appendChild(text(padL + 4, gy - 5, spec.goal.label, 'nv-t nv-goal-label', 'start'));
     }
 
-    /* séries */
+    /* Séries.
+       Une valeur absente (null / undefined / '') ou non finie ouvre une RUPTURE :
+       la courbe s'arrête au lieu de plonger vers 0 — c'est ce qui permet de
+       tracer « historique | prévision » sur le même graphique sans artefact. */
+    const hasVal = (v) => v != null && v !== '' && isFinite(Util.num(v, NaN));
     const ptsCache = [];
     series.forEach((s, si) => {
       const color = s.color || Theme.at(si);
       const sc = s.axis === 'y2' && y2 ? y2 : y;
-      const pts = (s.data || []).map((v, i) => [x(i), sc(Util.num(v, 0))]);
-      ptsCache.push(pts);
+      const all = (s.data || []).map((v, i) => ({ ok: hasVal(v), pt: [x(i), sc(Util.num(v, 0))] }));
+      const segs = [];
+      let cur = [];
+      all.forEach((a) => { if (a.ok) { cur.push(a.pt); } else if (cur.length) { segs.push(cur); cur = []; } });
+      if (cur.length) segs.push(cur);
+      ptsCache.push(all.map((a) => (a.ok ? a.pt : null)));
+      if (!segs.length) return;
+      const nPts = segs.reduce((k, g) => k + g.length, 0);
       const gid = nextId();
       if (s.fill) {
         const g = svgEl('linearGradient', { id: gid, x1: '0', y1: '0', x2: '0', y2: '1' });
         g.appendChild(svgEl('stop', { offset: '0%', 'stop-color': color, 'stop-opacity': s.fillOpacity == null ? 0.34 : s.fillOpacity }));
         g.appendChild(svgEl('stop', { offset: '100%', 'stop-color': color, 'stop-opacity': '0.02' }));
         defs.appendChild(g);
-        const ap = svgEl('path', { d: areaFrom(pts, padT + ih), fill: 'url(#' + gid + ')', class: 'nv-area' });
-        svg.appendChild(ap);
+        segs.forEach((seg) => plot.appendChild(svgEl('path', { d: areaFrom(seg, padT + ih), fill: 'url(#' + gid + ')', class: 'nv-area' })));
       }
-      const p = svgEl('path', {
-        d: (s.smooth === false ? linePath(pts) : smoothPath(pts)), fill: 'none', stroke: color,
-        'stroke-width': s.width || 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'nv-series'
-      });
-      if (s.dash) { p.setAttribute('stroke-dasharray', s.dash); p.dataset.dash = s.dash; p.dataset.keepDash = '1'; }
-      if (s.glow !== false) p.setAttribute('filter', 'url(#' + glowFilter(defs) + ')');
-      svg.appendChild(p);
-      animatePath(p, { dur: 900, wait: si * 90 });
-      if (s.points || (pts.length <= 24 && s.points !== false)) {
-        pts.forEach((pt, i) => {
-          if (s.dash && i % 1 !== 0) return;
-          const c = svgEl('circle', { cx: pt[0], cy: pt[1], r: pts.length > 40 ? 1.8 : 2.8, fill: color, class: 'nv-dot' });
-          c.style.opacity = pts.length > 60 ? '0' : '1';
-          svg.appendChild(c);
+      const filt = s.glow !== false ? 'url(#' + glowFilter(defs) + ')' : null;
+      segs.forEach((seg, gi) => {
+        const p = svgEl('path', {
+          d: (s.smooth === false ? linePath(seg) : smoothPath(seg)), fill: 'none', stroke: color,
+          'stroke-width': s.width || 2.4, 'stroke-linecap': 'round', 'stroke-linejoin': 'round', class: 'nv-series'
         });
+        if (s.dash) { p.setAttribute('stroke-dasharray', s.dash); p.dataset.dash = s.dash; p.dataset.keepDash = '1'; }
+        if (filt) p.setAttribute('filter', filt);
+        plot.appendChild(p);
+        animatePath(p, { dur: 900, wait: si * 90 + gi * 60 });
+      });
+      if (s.points || (nPts <= 24 && s.points !== false)) {
+        segs.forEach((seg) => seg.forEach((pt) => {
+          const c = svgEl('circle', { cx: pt[0], cy: pt[1], r: nPts > 40 ? 1.8 : 2.8, fill: color, class: 'nv-dot' });
+          c.style.opacity = nPts > 60 ? '0' : '1';
+          plot.appendChild(c);
+        }));
       }
-      if (s.lastLabel !== false && pts.length) {
-        const last = pts[pts.length - 1];
-        svg.appendChild(svgEl('circle', { cx: last[0], cy: last[1], r: 4.6, fill: color, class: 'nv-dot-last' }));
-        svg.appendChild(svgEl('circle', { cx: last[0], cy: last[1], r: 8.5, fill: 'none', stroke: color, 'stroke-opacity': '.35', class: 'nv-pulse' }));
+      if (s.lastLabel !== false) {
+        const last = segs[segs.length - 1];
+        const lp = last[last.length - 1];
+        plot.appendChild(svgEl('circle', { cx: lp[0], cy: lp[1], r: 4.6, fill: color, class: 'nv-dot-last' }));
+        plot.appendChild(svgEl('circle', { cx: lp[0], cy: lp[1], r: 8.5, fill: 'none', stroke: color, 'stroke-opacity': '.35', class: 'nv-pulse' }));
       }
     });
 
     /* marqueurs ponctuels */
     (spec.markers || []).forEach((m) => {
       const mx = x(m.index || 0), my = y(Util.num(m.value, 0));
-      svg.appendChild(svgEl('circle', { cx: mx, cy: my, r: 4, fill: m.color || Theme.tones.warn, stroke: '#04121c', 'stroke-width': 1.4 }));
-      if (m.label) svg.appendChild(text(mx, my - 9, m.label, 'nv-t nv-marker-label', 'middle'));
+      plot.appendChild(svgEl('circle', { cx: mx, cy: my, r: 4, fill: m.color || Theme.tones.warn, stroke: '#04121c', 'stroke-width': 1.4 }));
+      if (m.label) plot.appendChild(text(mx, my - 9, m.label, 'nv-t nv-marker-label', 'middle'));
     });
 
     /* crosshair + tooltip */
@@ -1562,6 +1983,69 @@
           return api;
         }
       };
+      return api;
+    },
+    /* Pipeline d'inférence : étapes + métriques, rejouable.
+       Réutilisable par tout module qui veut montrer « ce que fait l'IA ». */
+    pipeline(host, steps, opt) {
+      const o = opt || {};
+      if (!host) return null;
+      const list = (steps || []).map((s, i) => { const c = {}; for (const k in s) c[k] = s[k]; c.i = i; return c; });
+      host.classList.add('nv-pipe-host');
+      host.innerHTML =
+        '<ol class="nv-pipe">' + list.map((s) =>
+          '<li class="nv-pipe-step" data-i="' + s.i + '" data-state="idle">' +
+          '<span class="nv-pipe-dot"><i>' + Util.esc(s.icon == null ? s.i + 1 : s.icon) + '</i></span>' +
+          '<span class="nv-pipe-body">' +
+          '<b class="nv-pipe-label">' + Util.esc(s.label || '') + '</b>' +
+          (s.detail ? '<span class="nv-pipe-detail">' + Util.esc(s.detail) + '</span>' : '') +
+          '<span class="nv-pipe-metrics" data-m></span>' +
+          '</span><span class="nv-pipe-state" data-s></span></li>').join('') + '</ol>' +
+        '<div class="nv-pipe-bar"><i style="width:0%"></i></div>' +
+        (o.status !== false ? '<div class="nv-pipe-status" role="status" aria-live="polite">' + Util.esc(o.readyText || '') + '</div>' : '');
+      const els = Util.qsa('.nv-pipe-step', host);
+      const bar = Util.qs('.nv-pipe-bar i', host);
+      const status = Util.qs('.nv-pipe-status', host);
+      const metricHtml = (m, fmtKey) => Object.keys(m || {}).map((k) =>
+        '<em>' + Util.esc(fmtKey ? fmtKey(k) : k) + '</em><b>' + Util.esc(String(m[k])) + '</b>').join('');
+      const timers = [];
+      const api = {
+        steps: list,
+        clear() { timers.forEach(clearTimeout); timers.length = 0; },
+        fmtKey: o.fmtKey || null,
+        set(i, html) {
+          els.forEach((e, k) => {
+            e.dataset.state = k < i ? 'done' : (k === i ? 'active' : 'idle');
+            if (k <= i) {
+              const m = e.querySelector('[data-m]'); if (m) m.innerHTML = metricHtml(list[k].metrics, api.fmtKey);
+              const s = e.querySelector('[data-s]'); if (s) s.textContent = k < i ? '✓' : '●';
+            }
+          });
+          if (bar) bar.style.width = (list.length ? ((i + 1) / list.length) * 100 : 0) + '%';
+          if (status && html != null) status.innerHTML = html;
+        },
+        run(o2) {
+          const oo = o2 || {};
+          api.clear(); api.set(-1, Util.esc(oo.startText || o.startText || ''));
+          const delay = Util.reducedMotion() ? 0 : (oo.stepMs || o.stepMs || 300);
+          list.forEach((s, i) => {
+            timers.push(setTimeout(() => {
+              api.set(i, '<b>' + Util.esc(s.label || '') + '</b>' + (s.detail ? ' — ' + Util.esc(s.detail) : ''));
+              if (s.onStep) s.onStep(i);
+              if (oo.onStep) oo.onStep(i, s);
+            }, i * delay));
+          });
+          timers.push(setTimeout(() => { api.finish(); if (oo.onDone) oo.onDone(); if (o.onDone) o.onDone(); }, list.length * delay + 150));
+          return api;
+        },
+        finish(doneHtml) {
+          api.set(list.length - 1);
+          els.forEach((e) => { e.dataset.state = 'done'; const s = e.querySelector('[data-s]'); if (s) s.textContent = '✓'; });
+          if (bar) bar.style.width = '100%';
+          if (status) status.innerHTML = doneHtml != null ? doneHtml : (o.doneText || '');
+        }
+      };
+      if (o.finish !== false) api.finish(o.doneText);
       return api;
     },
     /* petit bloc "signal" (statut + couleur) */
