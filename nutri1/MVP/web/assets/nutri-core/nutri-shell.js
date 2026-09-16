@@ -221,7 +221,7 @@
           U.btn(T('Quitter', 'Exit'), { variant: 'danger', onClick: stopPresentation })
         ])
       ]);
-      const barWrap = h('div', null, [bar, ctrl]);
+      const barWrap = h('div.nx-present-bar', null, [bar, ctrl]);
       root.insertBefore(barWrap, root.querySelector('.nx-shell'));
       root.__presentBar = barWrap;
       clearInterval(presentTimer);

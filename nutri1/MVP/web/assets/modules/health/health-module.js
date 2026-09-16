@@ -110,7 +110,11 @@
     const yearSel = kit.select(DATA.YEARS.slice().reverse().map(y => ({ value: y, label: String(y) })), state.year,
       v => { state.year = parseInt(v, 10); kit.refresh(); });
     const scenSel = kit.select(Object.keys(M.SCENARIOS).map(k => ({ value: k, label: label(M.SCENARIOS[k]) })), state.scenario,
-      v => { state.scenario = v; kit.refresh(); kit.toast(T('Scénario appliqué : ', 'Scenario applied: ') + label(M.SCENARIOS[v])); });
+      v => {
+        state.scenario = M.SCENARIOS[v] ? v : 'prevention';               // valeur inconnue → retour au scénario de prévention
+        kit.refresh();
+        kit.toast(T('Scénario appliqué : ', 'Scenario applied: ') + label(M.SCENARIOS[state.scenario]));
+      });
     controls.push(
       h('div.nx-row', null, [kit.field(T('Pays', 'Country'), countrySel), kit.field(T('Millésime', 'Year'), yearSel)]),
       kit.field(T('Scénario de prévention', 'Prevention scenario'), scenSel),

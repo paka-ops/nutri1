@@ -316,7 +316,8 @@
             { value: 'prevention', label: T('Prévention', 'Prevention') },
             { value: 'accelerated', label: T('Accéléré', 'Accelerated') },
             { value: 'inaction', label: T('Inaction', 'Inaction') }
-          ], stt.scenario || 'prevention', v => { stt.scenario = v; drawFan(); drawScenarios(); })
+          ], M.SCENARIOS[stt.scenario] ? stt.scenario : 'prevention',
+            v => { stt.scenario = M.SCENARIOS[v] ? v : 'prevention'; drawFan(); drawScenarios(); drawMC(); })
         ]
       });
       const fanHost = K.chartHost('lg');
