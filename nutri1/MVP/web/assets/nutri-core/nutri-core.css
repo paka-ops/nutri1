@@ -430,6 +430,36 @@ body.nx-present{overflow:hidden}
   .nx-scope *{animation-duration:.001s!important;transition-duration:.001s!important}
 }
 
+/* ==========================================================================
+   PRIMITIVES DE SECTION — bandeau d'indicateurs & onglets collants
+   Partagées par toutes les sections institutionnelles (#agri, #health, …).
+   ========================================================================== */
+.nx-kpi-band{
+  position:relative;z-index:4;
+  padding:10px;margin:-10px -10px 0;
+  border-radius:16px;
+  background:linear-gradient(180deg,rgba(4,17,10,.94),rgba(4,17,10,.72));
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  box-shadow:0 14px 30px rgba(0,0,0,.3);
+}
+.nx-kpi-band .nx-kpi{padding:12px;background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.02))}
+.nx-kpi-num{font-variant-numeric:tabular-nums;font-feature-settings:'tnum' 1}
+
+@media(min-width:900px){
+  .nx-sticky-tabs{
+    position:sticky;top:74px;z-index:5;
+    padding:8px;margin:-8px -8px 0;
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(4,17,10,.97),rgba(4,17,10,.88));
+    backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+    box-shadow:0 10px 24px rgba(0,0,0,.28);
+  }
+}
+@media (max-width:640px){
+  .nx-kpi-band{margin:0;padding:0;background:none;box-shadow:none}
+  .nx-sticky-tabs{position:static;top:auto}
+}
+
 /* --- impression / rapport ------------------------------------------------- */
 @media print{
   body{background:#fff}
@@ -442,6 +472,7 @@ body.nx-present{overflow:hidden}
   .nx-card,.nx-kpi{background:#fff;border:1px solid #cfe0d5;break-inside:avoid}
   .nx-num,.nx-kpi-value{color:#102418!important}
   .nx-tabs,.nx-btn,.nx-drawer,.nx-modal{display:none!important}
+  .nx-kpi-band,.nx-sticky-tabs{position:static;background:#fff;box-shadow:none;border-radius:0}
   .nx-panel{display:flex!important}
   .nx-h1,.nx-grad,.nx-card .nx-h2{color:#08733f!important;-webkit-text-fill-color:#08733f}
 }
