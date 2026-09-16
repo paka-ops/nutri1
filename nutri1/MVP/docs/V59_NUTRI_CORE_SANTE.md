@@ -42,7 +42,7 @@ Tous les autres fichiers du dépôt sont inchangés, à l'exception de :
 | `web/assets/modules/agri/agri.css` | Règles devenues partagées retirées (déplacées dans le noyau) ; aucune règle spécifique à l'agriculture modifiée. |
 | `web/VERSION` | `V59`. |
 
-## 2. Ce que la cellule permet de faire (8 onglets)
+## 2. Ce que la cellule permet de faire (8 onglets historiques ; 9 depuis les finitions v59.1)
 
 1. **Vue nationale** — 6 KPI animés (population surveillée, retard de croissance, anémie des femmes, diabète/HTA, charge DALY, dépistage & assurance) ; trajectoire 2010 → **+10 ans** avec intervalle 80 % et cible nationale (8 indicateurs au choix) ; cascade décès → charge attribuable ; carte régionale interactive (risque, retard, diabète, dépistage) ; indice de préparation du système ; alertes précoces cliquables qui ouvrent l'onglet concerné ; **comparatif des 17 pays** (clic = le pays devient le pays analysé) ; double fardeau ; cartogramme ; chaîne alimentation → risque → maladie → coût.
 2. **Mère & enfant** — état nutritionnel par bande d'âge (4 indicateurs), couverture des programmes vs cibles, fenêtre des 1 000 jours chiffrée, **simulateur** à 5 leviers (allaitement, alimentation de complément, fortification, cantines, agents communautaires) avec coût, DALY évités, vies sauvées et coût par DALY, table régionale triable, santé de la mère.
@@ -104,6 +104,9 @@ indice de risque composite 82/100, 16 290 DALY/100 000, 40 655 décès attribuab
 
 ## 5. Vérification (bancs d'essai jsdom, aucun navigateur graphique disponible)
 
+*Tableau de la livraison initiale (8 onglets, avant les finitions v59.1) — les
+chiffres à jour figurent au § 6.6.*
+
 | Banc | Résultat |
 | --- | --- |
 | `health-check.js` (défaut) | 21 contrôles verts : 8 onglets, libellés bilingues, `#healthRoot` monté, bandeau 6 tuiles, sélecteur de pays, **rangées de cartes complètes** (somme des `span` multiple de 6), PAF bornés, optimiseur contraint par le budget, bornes de prévision P10 ≤ médiane ≤ P90 sur les 10 indicateurs. |
@@ -112,7 +115,103 @@ indice de risque composite 82/100, 16 290 DALY/100 000, 40 655 décès attribuab
 | `full-page.js` | Non régression page complète : résidus `#agri` nuls, 97 contrôles, parité des erreurs avec V57. |
 | `kpi-check.js` / `climate-check.js` | Non régression des KPI (bandeau identique au modèle) et des cartes climat. |
 
-## 6. Suite
+## 6. Finitions 2 (v59.1) — lisibilité, moteur graphique, cœur PMT-ICE
+
+Trois défauts signalés sur la cellule Santé : des **mots qui se chevauchent**, deux
+**jauges dont l'arc de valeur partait ailleurs** (« Data quality index » et
+« National diet quality index ») et un **moteur de simulation aux sorties vides,
+sans graphiques**. Analyse et corrections :
+
+### 6.1 Arc de jauge (noyau `NX.charts.gauge`, tous les modules)
+
+`arc()` utilisait `large-arc-flag = (to - from) > .5`. La jauge n'occupant qu'un
+**demi-cercle**, un balayage de 0,56 ne vaut pas 180° mais 100,8° : le drapeau
+passait à 1 dès 90° et le chemin SVG prenait **le grand arc**, c'est-à-dire le bas
+du cercle — d'où l'arc qui « part complètement ailleurs ». Le drapeau ne vaut 1
+que pour un balayage > 180° (`span > 1`) : il reste donc **toujours à 0**.
+La jauge gagne au passage : pastille de butée, graduations, libellé de valeur
+borné en largeur **et** en écart vertical (valeur et libellé ne peuvent plus se
+toucher), rayons adaptatifs (12–14 px d'épaisseur, jamais de débordement).
+
+### 6.2 Étiquettes de graphiques sans chevauchement (`NX.charts.bars`, `waterfall`)
+
+Les libellés d'axe X étaient simplement tronqués à 12 caractères puis centrés sur
+la bande : dans une carte étroite (grille `g-6`, 200–300 px) les mots se
+superposaient. Le noyau applique désormais **trois verrous successifs** :
+
+1. marge de l'axe dimensionnée sur la plus longue étiquette (et sur les graduations) ;
+2. **rotation à −34° / −55°** dès que l'étiquette dépasse la largeur de bande,
+   avec marge basse recalculée ;
+3. **décimation** (une étiquette sur N) quand même la rotation ne suffit pas,
+   selon l'emprise horizontale projetée.
+
+Le `waterfall` (rentabilité, onglet Investissement) coupe ses libellés en lignes
+bornées par la largeur de bande. Vérifié par `kit-charts.js` : 250 px / 8 régions
+→ 4 étiquettes en rotation, 900 px → 4 étiquettes horizontales complètes.
+
+### 6.3 Coquille partagée (`nutri-shell.js`)
+
+- **Identifiants de panneaux préfixés par le module** (`#nx-panel-health-hub`) :
+  `#agri` et `#health` déclaraient tous deux `nx-panel-overview`,
+  `nx-panel-forecast`… `getElementById` renvoyait donc le mauvais panneau.
+  Un attribut `data-tab` est ajouté pour les tests et le ciblage CSS.
+- **Routage d'URL corrigé** : `#section/onglet` n'est honoré que si la section du
+  hash est la section courante ; auparavant, `#agri/overview` faisait ouvrir
+  « Vue nationale » à la cellule Santé au démarrage.
+- `.nx-flow` : gouttière portée à 14 px (la flèche `›` en `right:-11px` débordait
+  sur la tuile voisine) ; `.nx-tile` et `.nx-card-head` reçoivent les garde-fous
+  `overflow:hidden` / `flex-wrap` / `overflow-wrap` qui interdisent tout débordement.
+
+### 6.4 Nouvel onglet « Vue d'ensemble & moteur » (🧭, premier onglet)
+
+Poste de pilotage de la cellule, **entièrement calculé par les modèles** :
+
+- **Cœur PMT-ICE** — trois anneaux concentriques en SVG : anneau extérieur
+  (maladies attribuables à l'alimentation, en DALY/100k dérivés des PAF),
+  anneau médian (facteurs métaboliques : HTA, obésité, hyperglycémie, lipides),
+  anneau intérieur (comportements : alimentation, inactivité, alcool, tabac, en
+  ratio au repère OMS renforcé) ; moyeu = indice de risque composite.
+  Les **12 cellules sont cliquables** : le panneau « Lecture du moteur » affiche
+  le graphique de la cellule, ses chiffres, ses facteurs et l'action recommandée.
+- **Moteur paramétrable** : indicateur suivi (8), scénario politique (4), horizon
+  (3–20 ans), intensité des leviers (0–100 %), budget (5–150 M$) — chaque
+  paramètre recalcule la prévision, les KPI de sortie et le portefeuille ;
+  le sélecteur de scénario global de la barre de commande reste synchronisé.
+- **Sorties permanentes** : courbe de prévision (réalisé / projection /
+  incertitude 80 % / cible nationale), portefeuille optimisé (anneau par famille
+  de mesures), cascade dépistage → contrôle, attribution alimentaire (PAF),
+  boucle d'apprentissage (sources → modèles → décision → suivi → recalibrage).
+- Boutons : **Lancer le moteur**, Prévision détaillée, Portefeuille, Leviers
+  (tiroir des 12 leviers), Note de décision, **Synthèse CSV**.
+
+### 6.5 Simulation nationale : sorties chiffrées **et** graphiques
+
+Le tiroir de simulation produit désormais, en plus des 6 KPI : **6 graphiques**
+(prévision avec bande d'incertitude, distribution Monte-Carlo, cascade, budget
+par famille de mesures, attribution des PAF, charge évitée par famille de leviers)
+et un **tableau millésime par millésime** (réalisé / projection / P10 / P90 /
+cible), plus l'export CSV des sorties. Chaque sortie est isolée dans un
+`try/catch` : une donnée manquante affiche une explication au lieu de laisser un
+espace vide ; le tiroir ne peut plus rester muet.
+
+### 6.6 Vérification (bancs jsdom)
+
+| Banc | Résultat |
+| --- | --- |
+| `health-hub.js` (nouveau) | 0 échec : 9 onglets, cœur (12 cellules, 12 chemins sans drapeau d'arc erroné), 3 cellules cliquées → lectures distinctes, 3 curseurs, scénario synchronisé, simulation → **6 graphiques + 7 cartes + 8 lignes de tableau**, aucune carte vide, export CSV, tiroir des 12 leviers. |
+| `gauges.js` (nouveau) | 0 échec : les deux jauges signalées — arc de valeur de y=250 (diamètre) vers y=76 / y=22, **dans le demi-cercle**, libellé séparé de 51 px. |
+| `kit-charts.js` (nouveau) | 0 échec : géométrie de jauge + étiquettes de barres en 250 px et 900 px. |
+| `health-check.js` | ✅ 9 onglets, bandeaux (section 6 + moteur 6), rangées multiples de 6, bornes de prévision ordonnées. |
+| `health-deep.js` | 0 échec (présentation, note de décision, 6 exports, tiroir PAF, recalculs pays/millésime). |
+| `health-page.js` | 9 onglets · 119 clics · 16 curseurs · 44 lignes de tableau · 21 jauges · **aucune erreur nouvelle** (parité V57 : 4 erreurs préexistantes) · résidus hérités : aucun. |
+| `agri-test.js`, `full-page.js`, `kpi-check.js`, `climate-check.js` | Non régression : 103 contrôles / 0 erreur, parité des erreurs, bandeau conforme. |
+
+Fichiers touchés par ces finitions : `nutri-core.js`, `nutri-core.css`,
+`nutri-shell.js`, `health-views.js` (nouvel onglet + cœur), `health-module.js`
+(simulation graphique, exports, familles de leviers), `health.css` (cœur, mise en
+page), plus la documentation.
+
+## 7. Suite
 
 - Migrer `#agri` sur `NX.ui` / `NX.shell` (aujourd'hui l'agriculture conserve des
   copies privées : `nutri-ui.js` et `nutri-shell.js` ne sont encore utilisés que

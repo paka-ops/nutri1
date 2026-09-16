@@ -472,17 +472,45 @@
 
     /* -------------------------------------------------------------- BARRES */
     bars(host, cfg) {
-      const c = Object.assign({ labels: [], series: [], horizontal: false, stacked: false, legend: true, format: v => fmt.compact(v), target: null, onSelect: null, selected: -1 }, cfg);
+      const c = Object.assign({ labels: [], series: [], horizontal: false, stacked: false, legend: true, format: v => fmt.compact(v), target: null, onSelect: null, selected: -1, labelAngle: null, labelSize: 10 }, cfg);
       return CH.mount(host, function (svgHost, W, H) {
         if (!c.labels.length || !c.series.length) return CH._empty(svgHost);
-        const pad = c.horizontal ? { l: 116, r: 46, t: 10, b: 26 } : { l: 58, r: 14, t: 12, b: 42 };
         const series = c.series;
         const maxima = c.labels.map((_, i) => c.stacked ? series.reduce((s, x) => s + (x.data[i] || 0), 0) : Math.max.apply(null, series.map(x => x.data[i] || 0)));
         let mx = Math.max.apply(null, maxima.concat([c.target || 0])) || 1;
         mx *= 1.08;
+        /* ------------------------------------------------ étiquettes sans collision
+           Trois verrous, dans cet ordre : marge de l'axe dimensionnée sur la plus
+           longue étiquette, rotation quand la bande est trop étroite, puis saut
+           d'une étiquette sur N lorsque même la rotation ne suffit pas. Aucun mot
+           ne peut donc se superposer au voisin (défaut signalé en v59.1). */
+        const FS = c.labelSize || 10;
+        const texts = c.labels.map(l => String(l == null ? '' : l));
+        const estW = (t, fs) => String(t == null ? '' : t).length * (fs || FS) * .56;
+        const pad = c.horizontal ? { l: 116, r: 46, t: 10, b: 26 } : { l: 58, r: 14, t: 12, b: 42 };
+        let angle = 0, every = 1, labelMax = 12;
+        if (c.horizontal) {
+          const ticks = [0, 1, 2, 3, 4].map(i => estW(c.format((i / 4) * mx), 10));
+          const widest = Math.max.apply(null, texts.map(t => estW(t, 10.5)).concat(ticks, [44])) || 44;
+          pad.l = Math.round(clamp(widest + 18, 64, Math.min(W * .46, 214)));
+        } else {
+          const ticks = [0, 1, 2, 3, 4].map(i => estW(c.format((i / 4) * mx), 10));
+          pad.l = Math.round(clamp((Math.max.apply(null, ticks.concat([22])) || 22) + 14, 44, Math.min(W * .26, 128)));
+          let band0 = (W - pad.l - pad.r) / Math.max(1, c.labels.length);
+          const widest = Math.max.apply(null, texts.map(t => estW(t, FS)).concat([16])) || 16;
+          angle = typeof c.labelAngle === 'number' ? c.labelAngle : (widest + 6 <= band0 ? 0 : band0 >= 26 ? -34 : -55);
+          if (angle !== 0) {
+            const cos = Math.abs(Math.cos(angle * Math.PI / 180)), sin = Math.abs(Math.sin(angle * Math.PI / 180));
+            every = Math.max(1, Math.ceil((widest * cos) / Math.max(6, band0)));
+            pad.b = Math.round(Math.min(widest * sin + 18, Math.max(46, H - pad.t - 40)));
+            labelMax = Math.max(4, Math.floor((pad.b - 12) / Math.max(1, FS * .56 * sin)));
+          } else {
+            labelMax = Math.max(3, Math.floor((band0 - 2) / (FS * .56)));
+          }
+        }
         const root = svg('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' });
         const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
-        const band = plotW / c.labels.length;
+        const band = plotW / Math.max(1, c.labels.length);
         const inner = band * .62;
         const bw = c.stacked ? inner : inner / series.length;
         const valueOf = (seriesIdx, i) => (series[seriesIdx].data[i] || 0);
@@ -501,11 +529,19 @@
         }
         c.labels.forEach((lab, i) => {
           const center = pad.l + band * i + band / 2;
+          const full = texts[i];
           if (!c.horizontal) {
-            const short = String(lab).length > 12 ? String(lab).slice(0, 11) + '…' : lab;
-            root.appendChild(svg('text', { x: center, y: H - pad.b + 16, 'text-anchor': 'middle', fill: 'rgba(255,255,255,.5)', 'font-size': 10, text: short }));
+            if (i % every) return;                                   // étiquettes trop denses : une sur N
+            const short = full.length > labelMax ? full.slice(0, Math.max(2, labelMax - 1)) + '…' : full;
+            if (angle === 0) {
+              root.appendChild(svg('text', { x: center, y: H - pad.b + 16, 'text-anchor': 'middle', fill: 'rgba(255,255,255,.5)', 'font-size': FS, 'font-family': 'inherit', text: short }));
+            } else {
+              const lx = center + 4, ly = H - pad.b + 12;
+              root.appendChild(svg('text', { x: lx, y: ly, 'text-anchor': 'end', fill: 'rgba(255,255,255,.5)', 'font-size': FS, 'font-family': 'inherit', transform: `rotate(${angle} ${lx} ${ly})`, text: short }));
+            }
           } else {
-            root.appendChild(svg('text', { x: pad.l - 10, y: center + 3.5, 'text-anchor': 'end', fill: 'rgba(255,255,255,.55)', 'font-size': 10.5, text: String(lab).length > 18 ? String(lab).slice(0, 17) + '…' : lab }));
+            const max = Math.max(4, Math.floor((pad.l - 14) / (10.5 * .56)));
+            root.appendChild(svg('text', { x: pad.l - 10, y: center + 3.5, 'text-anchor': 'end', fill: 'rgba(255,255,255,.55)', 'font-size': 10.5, 'font-family': 'inherit', text: full.length > max ? full.slice(0, max - 1) + '…' : full }));
           }
           let acc = 0;
           series.forEach((s, si) => {
@@ -636,9 +672,20 @@
           const y0 = y(bots[i]), y1 = y(tops[i]);
           root.appendChild(svg('rect', { x, y: y0, width: w2, height: Math.max(2, y1 - y0), rx: 4, fill: col, opacity: .9, class: 'nx-grow' }));
           root.appendChild(svg('text', { x: x + w2 / 2, y: y0 - 5, 'text-anchor': 'middle', fill: '#fff', 'font-size': 10.5, 'font-weight': 700, text: c.format(it.value) }));
-          const lab = String(it.label).split(' ').slice(0, 2).join(' ');
-          root.appendChild(svg('text', { x: x + w2 / 2, y: H - pad.b + 15, 'text-anchor': 'middle', fill: 'rgba(255,255,255,.55)', 'font-size': 10, text: lab }));
-          if (String(it.label).split(' ').length > 2) root.appendChild(svg('text', { x: x + w2 / 2, y: H - pad.b + 27, 'text-anchor': 'middle', fill: 'rgba(255,255,255,.4)', 'font-size': 10, text: String(it.label).split(' ').slice(2).join(' ') }));
+          /* une étiquette ne peut pas dépasser sa bande : troncature calculée */
+          const maxChars = Math.max(3, Math.floor((band - 4) / (10 * .56)));
+          const words = String(it.label).split(' ');
+          const lines = [];
+          let line = '';
+          words.forEach(wd => {
+            const cand = line ? line + ' ' + wd : wd;
+            if (cand.length > maxChars && line) { lines.push(line); line = wd; } else line = cand;
+          });
+          if (line) lines.push(line);
+          lines.slice(0, 2).forEach((ln, li) => {
+            const cut = ln.length > maxChars ? ln.slice(0, maxChars - 1) + '…' : ln;
+            root.appendChild(svg('text', { x: x + w2 / 2, y: H - pad.b + 15 + li * 12, 'text-anchor': 'middle', fill: li ? 'rgba(255,255,255,.4)' : 'rgba(255,255,255,.55)', 'font-size': 10, 'font-family': 'inherit', text: cut }));
+          });
           if (i < c.items.length - 1 && it.type !== 'total') {
             root.appendChild(svg('line', { x1: x + w2, x2: pad.l + band * (i + 1) + band * .18, y1: y(run), y2: y(run), stroke: 'rgba(255,255,255,.22)', 'stroke-dasharray': '3 3' }));
           }
@@ -679,22 +726,62 @@
     },
 
     /* --------------------------------------------------------------- JAUGE -- */
+    /**
+     * Jauge semi-circulaire (indice 0→max).
+     *
+     * Géométrie SVG : l'arc est décrit en coordonnées écran (y vers le bas),
+     * drapeau de balayage = 1 (sens horaire écran : gauche → sommet → droite).
+     * Le drapeau « grand arc » ne doit valoir 1 que pour un balayage > 180°,
+     * soit `to - from > 1` : la jauge n'utilisant qu'un demi-cercle, il reste
+     * TOUJOURS à 0. Sinon l'arc part par le bas et « atterrit ailleurs »
+     * (défaut corrigé en v59.1).
+     */
     gauge(host, cfg) {
-      const c = Object.assign({ value: 0, max: 100, label: '', format: v => fmt.num(v, 1) + ' %', tone: '#18d67f' }, cfg);
+      const c = Object.assign({ value: 0, max: 100, label: '', format: v => fmt.num(v, 1) + ' %', tone: '#18d67f', ticks: true }, cfg);
       return CH.mount(host, function (svgHost, W, H) {
-        const R = Math.min(W / 2, H) - 12, cx = W / 2, cy = H - 10;
-        const t = clamp(c.value / (c.max || 100), 0, 1);
+        const val = isFinite(c.value) ? c.value : 0;
+        const max = isFinite(c.max) && c.max ? c.max : 100;
+        const t = clamp(val / max, 0, 1);
+        const outer = Math.max(6, Math.min(W / 2 - 6, H - 14));
+        const band = Math.max(7, Math.min(14, outer * .16));
+        const R = outer - band, cx = W / 2, cy = Math.min(H - 8, outer + 4);
         const root = svg('svg', { viewBox: `0 0 ${W} ${H}`, width: W, height: H, role: 'img' });
-        function arc(from, to, col, width) {
-          const a0 = Math.PI + Math.PI * from, a1 = Math.PI + Math.PI * to;
-          const x1 = cx + Math.cos(a0) * R, y1 = cy + Math.sin(a0) * R;
-          const x2 = cx + Math.cos(a1) * R, y2 = cy + Math.sin(a1) * R;
-          return svg('path', { d: `M${x1} ${y1} A${R} ${R} 0 ${to - from > .5 ? 1 : 0} 1 ${x2} ${y2}`, fill: 'none', stroke: col, 'stroke-width': width, 'stroke-linecap': 'round' });
+        /* point du demi-cercle : f=0 → gauche, f=.5 → sommet, f=1 → droite */
+        const pt = (f, r) => [cx + Math.cos(Math.PI + Math.PI * f) * r, cy + Math.sin(Math.PI + Math.PI * f) * r];
+        function arc(from, to, col, width, opacity) {
+          const f0 = clamp(from, 0, 1), f1 = clamp(to, 0, 1);
+          const x1 = pt(f0, R), x2 = pt(f1, R);
+          const span = Math.abs(f1 - f0);
+          if (span < .0005) return null;
+          const large = span > 1 ? 1 : 0;                       // jamais 1 : demi-cercle
+          const o = { d: `M${x1[0]} ${x1[1]} A${R} ${R} 0 ${large} 1 ${x2[0]} ${x2[1]}`, fill: 'none', stroke: col, 'stroke-width': width, 'stroke-linecap': span > .02 ? 'round' : 'butt' };
+          if (opacity != null) o.opacity = opacity;
+          return svg('path', o);
         }
-        root.appendChild(arc(0, 1, 'rgba(255,255,255,.09)', 12));
-        root.appendChild(arc(0, t, c.tone, 12));
-        root.appendChild(svg('text', { x: cx, y: cy - R * .22, 'text-anchor': 'middle', fill: '#fff', 'font-size': Math.max(16, R * .34), 'font-weight': 900, text: c.format(c.value) }));
-        if (c.label) root.appendChild(svg('text', { x: cx, y: cy - 2, 'text-anchor': 'middle', fill: 'rgba(255,255,255,.5)', 'font-size': 10.5, text: c.label }));
+        /* rail + graduations */
+        const rail = arc(0, 1, 'rgba(255,255,255,.09)', band);
+        if (rail) root.appendChild(rail);
+        if (c.ticks) for (let i = 0; i <= 4; i++) {
+          const p1 = pt(i / 4, R - band / 2 - 3), p2 = pt(i / 4, R - band / 2 - (i % 2 ? 4 : 8));
+          root.appendChild(svg('line', { x1: p1[0], y1: p1[1], x2: p2[0], y2: p2[1], stroke: 'rgba(255,255,255,.22)', 'stroke-width': 1 }));
+        }
+        const value = arc(0, t, c.tone, band);
+        if (value) root.appendChild(value);
+        /* pastille de butée (repère visuel de la valeur exacte) */
+        const tip = pt(t, R);
+        root.appendChild(svg('circle', { cx: tip[0], cy: tip[1], r: Math.max(1.6, band * .22), fill: '#fff', opacity: .85 }));
+        /* valeur : taille bornée par la largeur utile ET par l'écart vertical
+           disponible au-dessus du libellé — les deux textes ne se touchent jamais */
+        const txt = c.format(val);
+        const roomW = Math.max(60, W - 18);
+        const gapAvail = Math.max(12, R * .34);
+        let fs = Math.max(14, Math.min(R * .34, band * 3.2, W * .22, gapAvail / .62));
+        const est = txt.length * fs * .60;
+        if (est > roomW) fs = Math.max(11, fs * (roomW / est));
+        const yv = cy - Math.max(fs * .62 + 6, R * .30);
+        const yl = cy - Math.max(6, R * .08);
+        root.appendChild(svg('text', { x: cx, y: yv, 'text-anchor': 'middle', fill: '#fff', 'font-size': fs, 'font-weight': 900, 'font-family': 'inherit', text: txt }));
+        if (c.label) root.appendChild(svg('text', { x: cx, y: yl, 'text-anchor': 'middle', fill: 'rgba(255,255,255,.55)', 'font-size': Math.max(9.5, Math.min(11.5, band * .95)), 'font-family': 'inherit', text: c.label.length > 34 ? c.label.slice(0, 33) + '…' : c.label }));
         svgHost.appendChild(root);
       }, { height: cfg && cfg.height });
     },

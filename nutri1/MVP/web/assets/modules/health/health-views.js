@@ -27,6 +27,559 @@
   }
 
   /* ======================================================================= */
+  /*  ONGLET « VUE D'ENSEMBLE & MOTEUR » — le poste de pilotage de la cellule */
+  /* ======================================================================= */
+  /*  Cœur PMT-ICE : trois anneaux concentriques entièrement pilotés par les
+      modèles (aucune valeur écrite en dur).
+        · anneau extérieur : maladies attribuables à l'alimentation (DALY/100k)
+        · anneau médian    : facteurs métaboliques (prévalences nationales)
+        · anneau intérieur : facteurs comportementaux (ratio au repère OMS)
+      Chaque cellule est cliquable : le panneau « lecture du moteur » explique la
+      valeur, trace le graphique correspondant et propose l'action.
+      P·M·T·I·C·E = Population · Métabolique · Territoire (comportements) ·
+      Impact (charge) · Coût · Équité.                                        */
+
+  /** secteurs angulaires du cœur (0 = est, sens horaire) */
+  const HEART_SECTORS = [
+    { id: 'n', fr: 'Alimentation', en: 'Diet', a0: -Math.PI / 4, a1: Math.PI / 4, color: '#c9ee59' },
+    { id: 'e', fr: 'Inactivité', en: 'Inactivity', a0: Math.PI / 4, a1: 3 * Math.PI / 4, color: '#3fc8f0' },
+    { id: 's', fr: 'Alcool', en: 'Alcohol', a0: 3 * Math.PI / 4, a1: 5 * Math.PI / 4, color: '#f472b6' },
+    { id: 'w', fr: 'Tabac', en: 'Tobacco', a0: 5 * Math.PI / 4, a1: 7 * Math.PI / 4, color: '#a78bfa' }
+  ];
+  /** matrice comportement → facteurs métaboliques → maladies (clés du modèle) */
+  const HEART_MATRIX = {
+    n: { metab: ['hta', 'obesite', 'glycemie', 'lipides'], disease: ['cardio', 'diabete', 'cancers'] },
+    e: { metab: ['obesite', 'glycemie'], disease: ['diabete', 'cancers'] },
+    s: { metab: ['hta', 'lipides'], disease: ['cardio', 'cancers'] },
+    w: { metab: ['hta', 'lipides'], disease: ['cancers', 'cardio'] }
+  };
+  const HEART_RING_OF = { alim: 'n', inact: 'e', alcool: 's', tabac: 'w' };
+
+  /** segment d'anneau (chemin SVG) ------------------------------------------ */
+  function ringSeg(cx, cy, r0, r1, a0, a1) {
+    const p = (r, a) => (cx + Math.cos(a) * r).toFixed(1) + ' ' + (cy + Math.sin(a) * r).toFixed(1);
+    const large = (a1 - a0) > Math.PI ? 1 : 0;
+    return 'M' + p(r1, a0) + ' A' + r1 + ' ' + r1 + ' 0 ' + large + ' 1 ' + p(r1, a1) +
+      ' L' + p(r0, a1) + ' A' + r0 + ' ' + r0 + ' 0 ' + large + ' 0 ' + p(r0, a0) + ' Z';
+  }
+  const escXml = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+  /**
+   * Modèle du cœur : dérivé de l'attribution des risques (PAF), des prévalences
+   * et de la charge attribuable. Renvoie les trois anneaux, le moyeu et les
+   * correspondances croisées. Aucune valeur n'est écrite en dur.
+   */
+  function heartModel(ds) {
+    const ra = M.riskAttribution(ds), ncd = ds.ncd;
+    const dietDalys = ds.burden.dalys * ds.burden.dietAttributableDalyPct / 100;
+    const per100k = ds.totals.population ? dietDalys / ds.totals.population * 1e5 : 0;
+    const pd = ra.perDisease || {};
+    const defs = [
+      { id: 'cardio', fr: 'Cardio & AVC', en: 'Cardio & stroke', keys: ['cvd', 'stroke'], color: '#ff6b5e' },
+      { id: 'diabete', fr: 'Diabète & rein', en: 'Diabetes & kidney', keys: ['diabetes', 'kidney'], color: '#f5b642' },
+      { id: 'cancers', fr: 'Cancers', en: 'Cancers', keys: ['cancer'], color: '#a78bfa' },
+      { id: 'metabo', fr: 'Obésité & HTA', en: 'Obesity & hypertension', keys: ['obesity', 'hypertension'], color: '#3fc8f0' }
+    ];
+    const disease = defs.map(d => ({ id: d.id, fr: d.fr, en: d.en, color: d.color, keys: d.keys, paf: d.keys.reduce((a, k) => a + (pd[k] || 0), 0), value: 0 }));
+    const sumD = disease.reduce((a, x) => a + x.paf, 0) || 1;
+    disease.forEach(x => { x.value = x.paf / sumD * per100k; });
+    const row = (id) => ra.rows.find(r => r.id === id) || { paf: 0, ratio: 1, color: '#9fbfac', deaths: 0, dalys: 0, action: { fr: '—', en: '—' } };
+    const sodium = row('sodium'), sugar = row('sugar'), satfat = row('satfat'), ultra = row('ultra'), fiber = row('fiber'), fruitveg = row('fruitveg');
+    const metab = [
+      { id: 'hta', fr: 'Hypertension', en: 'Hypertension', value: ncd.hypertension, unit: '%', paf: sodium.paf + ultra.paf * .25, action: sodium.action, color: '#ff6b5e' },
+      { id: 'obesite', fr: 'Obésité', en: 'Obesity', value: ncd.obesity, unit: '%', paf: sugar.paf * .5 + ultra.paf, action: ultra.action, color: '#f472b6' },
+      { id: 'glycemie', fr: 'Hyperglycémie', en: 'Hyperglycaemia', value: ncd.diabetes, unit: '%', paf: sugar.paf, action: sugar.action, color: '#f5b642' },
+      { id: 'lipides', fr: 'Lipides sanguins', en: 'Blood lipids', value: ds.diet.satFatPct, unit: '% AET', paf: satfat.paf, action: satfat.action, color: '#ffb0a7' }
+    ];
+    const behaviour = [
+      { id: 'alim', fr: 'Alimentation', en: 'Diet', ratio: Math.max(sodium.ratio, sugar.ratio, ultra.ratio), paf: (sodium.paf + sugar.paf + satfat.paf + ultra.paf + fiber.paf + fruitveg.paf) / 6, row: sodium, color: '#c9ee59', ring: 'n' },
+      { id: 'inact', fr: 'Inactivité', en: 'Inactivity', ratio: 1 + ncd.inactivity / 100, paf: ultra.paf * .7, row: ultra, color: '#3fc8f0', ring: 'e' },
+      { id: 'alcool', fr: 'Alcool', en: 'Alcohol', ratio: 1 + ncd.alcohol / 100, paf: ultra.paf * .3, row: ultra, color: '#f472b6', ring: 's' },
+      { id: 'tabac', fr: 'Tabac', en: 'Tobacco', ratio: 1 + ncd.tobacco / 100, paf: fiber.paf * .5, row: fiber, color: '#a78bfa', ring: 'w' }
+    ];
+    return { sectors: HEART_SECTORS, disease, metab, behaviour, hub: Math.round(ncd.riskScore || 0), per100k, dietDalys, excess: ra.excessShare, deaths: ra.deathsDiet, rows: ra.rows };
+  }
+
+  /** cœur SVG : 3 anneaux + moyeu ; chaque cellule porte data-cell ----------- */
+  function heartSvg(model, selected) {
+    const W = 560, H = 470, cx = W / 2, cy = H / 2 + 4;
+    const RING = [[52, 96], [104, 148], [156, 200]];
+    const mid = (a0, a1) => (a0 + a1) / 2;
+    const txt = [];
+    const put = (x, y, s, size, fill, weight) => txt.push('<text x="' + x.toFixed(1) + '" y="' + y.toFixed(1) + '" text-anchor="middle" fill="' + fill + '" font-size="' + size + '" font-weight="' + (weight || 700) + '" font-family="inherit" pointer-events="none">' + escXml(s) + '</text>');
+    let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" height="100%" preserveAspectRatio="xMidYMid meet" role="img" aria-label="' +
+      escXml(T('Cœur PMT-ICE : comportements, facteurs métaboliques et maladies attribuables à l’alimentation', 'PMT-ICE heart: behaviours, metabolic factors and diet-attributable disease')) + '">';
+    /* anneau extérieur — maladies */
+    model.disease.forEach((d, i) => {
+      const s = HEART_SECTORS[i];
+      const on = selected && selected.ring === 'disease' && selected.id === d.id;
+      svg += '<path data-cell="disease|' + d.id + '" d="' + ringSeg(cx, cy, RING[2][0], RING[2][1], s.a0, s.a1) + '" fill="' + d.color + '" opacity="' + (selected && !on ? '.32' : '.92') + '" stroke="' + (on ? '#c9ee59' : 'rgba(4,16,10,.55)') + '" stroke-width="' + (on ? 2.4 : 1) + '" style="cursor:pointer"></path>';
+      const a = mid(s.a0, s.a1), r = (RING[2][0] + RING[2][1]) / 2;
+      put(cx + Math.cos(a) * r, cy + Math.sin(a) * r - 2, label(d), 12, '#04100a', 800);
+      put(cx + Math.cos(a) * r, cy + Math.sin(a) * r + 13, fmt.compact(d.value) + ' ' + T('DALY/100k', 'DALY/100k'), 9.5, 'rgba(4,16,10,.72)', 700);
+    });
+    /* anneau médian — facteurs métaboliques */
+    model.metab.forEach((m, i) => {
+      const s = HEART_SECTORS[i];
+      const on = selected && selected.ring === 'metab' && selected.id === m.id;
+      svg += '<path data-cell="metab|' + m.id + '" d="' + ringSeg(cx, cy, RING[1][0], RING[1][1], s.a0 + .05, s.a1 - .05) + '" fill="' + m.color + '" opacity="' + (selected && !on ? '.28' : '.74') + '" stroke="' + (on ? '#c9ee59' : 'rgba(4,16,10,.55)') + '" stroke-width="' + (on ? 2.4 : 1) + '" style="cursor:pointer"></path>';
+      const a = mid(s.a0, s.a1), r = (RING[1][0] + RING[1][1]) / 2;
+      put(cx + Math.cos(a) * r, cy + Math.sin(a) * r - 2, label(m), 11, '#04100a', 800);
+      put(cx + Math.cos(a) * r, cy + Math.sin(a) * r + 12, fmt.num(m.value, 1) + ' ' + m.unit, 9.5, 'rgba(4,16,10,.72)', 700);
+    });
+    /* anneau intérieur — comportements */
+    model.behaviour.forEach((b, i) => {
+      const s = HEART_SECTORS[i];
+      const on = selected && selected.ring === 'behaviour' && selected.id === b.id;
+      svg += '<path data-cell="behaviour|' + b.id + '" d="' + ringSeg(cx, cy, RING[0][0], RING[0][1], s.a0 + .1, s.a1 - .1) + '" fill="' + b.color + '" opacity="' + (selected && !on ? '.28' : '.58') + '" stroke="' + (on ? '#c9ee59' : 'rgba(4,16,10,.55)') + '" stroke-width="' + (on ? 2.4 : 1) + '" style="cursor:pointer"></path>';
+      const a = mid(s.a0, s.a1), r = (RING[0][0] + RING[0][1]) / 2;
+      put(cx + Math.cos(a) * r, cy + Math.sin(a) * r - 2, label(b), 10.5, '#04100a', 800);
+      put(cx + Math.cos(a) * r, cy + Math.sin(a) * r + 12, fmt.num(b.ratio, 1) + '× ' + T('repère', 'ref'), 9, 'rgba(4,16,10,.72)', 700);
+    });
+    /* moyeu : indice de risque composite */
+    svg += '<circle cx="' + cx + '" cy="' + cy + '" r="' + RING[0][0] + '" fill="rgba(4,16,10,.88)" stroke="rgba(201,238,89,.35)" stroke-width="1.2"></circle>';
+    put(cx, cy + 2, String(model.hub), 26, '#fff', 900);
+    put(cx, cy + 18, '/100', 10.5, 'rgba(255,255,255,.55)', 700);
+    svg += txt.join('') + '</svg>';
+    return svg;
+  }
+
+  K.registerTab({
+    id: 'hub', icon: '🧭', label: T('Vue d’ensemble & moteur', 'Overview & engine'), labelT: ['Vue d’ensemble & moteur', 'Overview & engine'],
+    mount(host) {
+      const stt = st();
+      if (!stt.hubCell) stt.hubCell = null;
+      if (!stt.hubMetric) stt.hubMetric = stt.metric || 'stunting';
+      if (stt.hubIntensity == null) stt.hubIntensity = 50;
+
+      const kpis = K.kpiBand();
+
+      /* -------------------------------------------------- moteur : commandes */
+      const engineCard = K.card({
+        title: T('Moteur de simulation & de prévision', 'Simulation & forecast engine'),
+        sub: T('Réglez les paramètres puis lancez le moteur : il recalcule toute la chaîne et produit ses graphiques de sortie.',
+          'Set the parameters then run the engine: it recomputes the whole chain and returns its output charts.'),
+        span: 6, accent: true
+      });
+      const engineParams = h('div.nx-stack');
+      const engineHost = K.chartHost('xl');
+      const engineChips = h('div.nx-row', { style: { flexWrap: 'wrap', gap: '6px' } });
+      const engineOut = h('div.nx-grid.g-3');
+      const engineNote = h('div.nx-note');
+      engineCard.body.appendChild(engineParams);
+      engineCard.body.appendChild(h('div.nx-row', { style: { flexWrap: 'wrap' } }, [
+        K.btn(T('Lancer le moteur', 'Run engine'), { variant: 'primary', icon: '⚡', title: T('Simulation complète : sources → qualité → épidémiologie → cascade → prévision → Monte-Carlo → portefeuille', 'Full simulation: sources → quality → epidemiology → cascade → forecast → Monte-Carlo → portfolio'), onClick: () => runEngine() }),
+        K.btn(T('Prévision détaillée', 'Detailed forecast'), { icon: '📈', title: T('Ouvrir l’onglet Prévision & scénarios', 'Open the Forecast & scenarios tab'), onClick: () => K.showTab('forecast') }),
+        K.btn(T('Portefeuille', 'Portfolio'), { variant: 'lime', icon: '💰', title: T('Ouvrir l’onglet Investissement & prévention', 'Open the Investment & prevention tab'), onClick: () => K.showTab('investment') }),
+        K.btn(T('Leviers', 'Levers'), { icon: '🎚', title: T('Catalogue des leviers et intensité courante', 'Lever catalogue and current intensity'), onClick: () => openLevers() }),
+        K.btn(T('Note de décision', 'Decision brief'), { variant: 'info', icon: '📄', onClick: () => K.openBrief() }),
+        K.btn(T('Synthèse (CSV)', 'Summary (CSV)'), { icon: '⇩', title: T('Exporter la synthèse chiffrée du moteur', 'Export the engine’s quantified summary'), onClick: () => exportSummary() })
+      ]));
+      engineCard.body.appendChild(engineChips);
+      engineCard.body.appendChild(engineHost);
+      engineCard.body.appendChild(engineOut);
+      engineCard.body.appendChild(engineNote);
+
+      /* ------------------------------------------------------------- le cœur */
+      const heartCard = K.card({
+        title: T('Cœur PMT-ICE — de l’alimentation à la maladie', 'PMT-ICE heart — from diet to disease'),
+        sub: T('Population · Métabolique · Territoire · Impact · Coût · Équité — cliquez une cellule pour l’expliquer',
+          'Population · Metabolic · Territory · Impact · Cost · Equity — click a cell to explain it'),
+        span: 4
+      });
+      const heartHost = h('div.nx-heart');
+      const heartLegend = h('div.nx-stack');
+      heartCard.body.appendChild(heartHost);
+      heartCard.body.appendChild(heartLegend);
+
+      /* ------------------------------------------- lecture du moteur (drill) */
+      const drillCard = K.card({
+        title: T('Lecture du moteur', 'Engine reading'),
+        sub: T('Ce que la cellule sélectionnée signifie : chiffres, graphique et action',
+          'What the selected cell means: figures, chart and action'),
+        span: 2
+      });
+      const drillHost = K.chartHost('sm');
+      const drillMeters = h('div.nx-stack');
+      const drillNote = h('div.nx-note');
+      drillCard.body.appendChild(drillHost);
+      drillCard.body.appendChild(drillMeters);
+      drillCard.body.appendChild(drillNote);
+
+      /* ------------------------------------------------- portefeuille optimisé */
+      const mixCard = K.card({
+        title: T('Portefeuille optimisé par le moteur', 'Portfolio optimised by the engine'),
+        sub: T('Budget affecté à chaque famille de mesures, sous contrainte', 'Budget allocated to each measure family, under constraint'),
+        span: 3,
+        actions: [K.segmented([
+          { value: 'lives', label: T('Vies', 'Lives') },
+          { value: 'equity', label: T('Équité', 'Equity') },
+          { value: 'economy', label: T('Économie', 'Economy') }
+        ], stt.priority, v => { stt.priority = v; drawMix(); })]
+      });
+      const mixHost = K.chartHost('lg');
+      const mixNote = h('div.nx-note');
+      mixCard.body.appendChild(mixHost); mixCard.body.appendChild(mixNote);
+
+      /* ------------------------------------------------------ cascade de soins */
+      const cascadeCard = K.card({
+        title: T('Cascade dépistage → contrôle', 'Screening → control cascade'),
+        sub: T('Chaque barre est une étape franchie, les pertes sont chiffrées', 'Each bar is a stage reached, leakages are quantified'),
+        span: 3
+      });
+      const cascadeHost = K.chartHost('lg');
+      const cascadeNote = h('div.nx-note');
+      cascadeCard.body.appendChild(cascadeHost); cascadeCard.body.appendChild(cascadeNote);
+
+      /* ----------------------------------------------------- attribution PAF */
+      const attribCard = K.card({
+        title: T('Attribution alimentaire du risque', 'Dietary risk attribution'),
+        sub: T('Fraction attribuable (PAF) par facteur, décès et DALY évitables', 'Attributable fraction (PAF) per factor, avoidable deaths and DALYs'),
+        span: 3
+      });
+      const attribHost = K.chartHost('lg');
+      const attribNote = h('div.nx-note');
+      attribCard.body.appendChild(attribHost); attribCard.body.appendChild(attribNote);
+
+      /* --------------------------------------------------- boucle d’apprentissage */
+      const loopCard = K.card({
+        title: T('Boucle d’apprentissage de la cellule', 'Cell learning loop'),
+        sub: T('Chaque enquête, campagne et rapport recalibrent le moteur', 'Every survey, campaign and report recalibrates the engine'),
+        span: 3
+      });
+      const loopHost = h('div.nx-stack');
+      loopCard.body.appendChild(loopHost);
+
+      host.appendChild(kpis);
+      host.appendChild(h('div.nx-grid.g-6.nx-hub-grid', { style: { marginTop: '14px' } }, [
+        engineCard.el, heartCard.el, drillCard.el, mixCard.el, cascadeCard.el, attribCard.el, loopCard.el
+      ]));
+
+      /* ================================================================= vues */
+      function renderKpis() {
+        const ds = getDs(), model = heartModel(ds), rd = M.readiness(ds);
+        const sim = M.screeningSim(ds, stt.plan);
+        const opt = M.optimizeBudget(ds, M.interventions(ds), stt.budget || 45e6, { priority: stt.priority });
+        kpis.innerHTML = '';
+        [
+          K.kpi({ label: T('Risque composite NCD', 'Composite NCD risk'), value: fmt.num(model.hub, 0), unit: '/100', tone: model.hub > 70 ? 'hot' : '', foot: T('HTA ', 'Hypertension ') + fmt.pct(ds.ncd.hypertension, 1) + ' · ' + T('diabète ', 'diabetes ') + fmt.pct(ds.ncd.diabetes, 1) }),
+          K.kpi({ label: T('Charge attribuable à l’alimentation', 'Diet-attributable burden'), value: fmt.num(model.per100k, 0), unit: 'DALY/100k', tone: 'hot', foot: fmt.num(model.dietDalys / 1e3, 1) + ' ' + T('k DALY/an', 'k DALYs/yr') + ' · ' + fmt.int(model.deaths) + ' ' + T('décès/an', 'deaths/yr') }),
+          K.kpi({ label: T('DALY évités par le plan', 'DALYs averted by the plan'), value: fmt.int(sim.dalysAvoided), tone: 'good', foot: fmt.money(sim.costPerDaly, ds.country) + ' / DALY · ' + fmt.pct(sim.coverage * 100, 0) + ' ' + T('de couverture', 'coverage') }),
+          K.kpi({ label: T('Détection de la cascade', 'Cascade detection'), value: fmt.pct(M.careCascade(ds).detectionPct, 1), tone: '', foot: T('dépistage ', 'screening ') + fmt.pct(ds.services.screening, 0) + ' · ' + T('suivi ', 'follow-up ') + fmt.pct(ds.services.followUp, 0) }),
+          K.kpi({ label: T('Portefeuille optimisé', 'Optimised portfolio'), value: fmt.money(opt.spentUsd, ds.country), tone: 'good', foot: opt.plan.length + ' ' + T('mesures · ', 'measures · ') + opt.coverageRegions + ' ' + T('régions', 'regions') + ' · B/C ' + fmt.num(opt.bcr, 1) + '×' }),
+          K.kpi({ label: T('Préparation du système', 'System readiness'), value: fmt.num(rd.score, 0), unit: '/100', tone: rd.score > 65 ? 'good' : 'hot', foot: rd.level + ' · ' + T('complétude données ', 'data completeness ') + fmt.pct(ds.dataQuality.completeness, 0) })
+        ].forEach(k => kpis.appendChild(k));
+        U.animateKpis(kpis);
+      }
+
+      function drawEngineChart() {
+        const ds = getDs(), f = M.forecast(ds, { metric: stt.hubMetric, horizon: stt.horizon, scenario: stt.scenario, plan: stt.plan });
+        const mm = M.METRICS[stt.hubMetric] || M.METRICS.stunting;
+        const unit = mm.unit === '%' ? ' %' : '';
+        K.chart('line', engineHost, {
+          labels: f.labels,
+          series: [
+            { name: T('Réalisé', 'Actual'), data: f.history.concat(new Array(f.point.length).fill(null)), color: '#c9ee59', area: true, points: f.history.length <= 14 },
+            { name: T('Moteur · ', 'Engine · ') + label(M.SCENARIOS[stt.scenario] || M.SCENARIOS.prevention), data: new Array(f.history.length - 1).fill(null).concat([f.history[f.history.length - 1]]).concat(f.point), color: '#3fc8f0', dash: true, points: true },
+            { name: T('Incertitude 80 %', '80% uncertainty'), data: [], bandLo: f.history.concat(f.lo), bandHi: f.history.concat(f.hi), color: '#3fc8f0' }
+          ],
+          target: f.target, targetLabel: T('cible nationale', 'national target'), xTicks: 8,
+          format: v => fmt.num(v, 1) + unit
+        });
+        return f;
+      }
+
+      function drawEngineOutputs(f) {
+        const ds = getDs(), mc = M.burdenMC(ds, { runs: 1500, horizon: stt.horizon || 10 });
+        const sim = M.screeningSim(ds, stt.plan);
+        const opt = M.optimizeBudget(ds, M.interventions(ds), stt.budget || 45e6, { priority: stt.priority });
+        const mm = M.METRICS[stt.hubMetric] || M.METRICS.stunting;
+        stt.mc = mc;
+        const last = f.point[f.point.length - 1];
+        engineOut.innerHTML = '';
+        [
+          K.kpi({ label: T('Valeur projetée au terme', 'Projected value at horizon'), value: fmt.num(last, 1), unit: mm.unit || '', tone: 'hot', foot: '+ ' + (stt.horizon || 10) + ' ' + T('ans · erreur moyenne ', 'yrs · avg error ') + (isFinite(f.diagnostics.mape) ? fmt.num(f.diagnostics.mape, 2) + ' %' : 'n/a') }),
+          K.kpi({ label: T('Charge projetée (médiane)', 'Projected burden (median)'), value: fmt.num(mc.dalys.p50, 0), unit: 'DALY/100k', foot: 'P10 ' + fmt.num(mc.dalys.p10, 0) + ' · P90 ' + fmt.num(mc.dalys.p90, 0) + ' · ' + fmt.pct(mc.probBurdenUp, 0) + ' ' + T('de hausse', 'up') }),
+          K.kpi({ label: T('DALY évités par le plan', 'DALYs averted by the plan'), value: fmt.int(sim.dalysAvoided), tone: 'good', foot: fmt.money(opt.spentUsd, ds.country) + ' · ' + opt.plan.length + ' ' + T('mesures', 'measures') })
+        ].forEach(k => engineOut.appendChild(k));
+        engineChips.innerHTML = '';
+        [
+          T('Scénario : ', 'Scenario: ') + label(M.SCENARIOS[stt.scenario] || M.SCENARIOS.prevention),
+          T('Indicateur : ', 'Indicator: ') + label(mm),
+          T('Horizon : ', 'Horizon: ') + (stt.horizon || 10) + ' ' + T('ans', 'yrs'),
+          T('Intensité : ', 'Intensity: ') + stt.hubIntensity + ' %',
+          T('Priorité : ', 'Priority: ') + (stt.priority === 'equity' ? T('équité', 'equity') : stt.priority === 'economy' ? T('économie', 'economy') : T('vies sauvées', 'lives saved'))
+        ].forEach(t => engineChips.appendChild(h('span.nx-chip', { text: t })));
+        engineNote.innerHTML = T('<b>' + label(mm) + '</b> : ' + fmt.num(f.history[f.history.length - 1], 1) + ' aujourd’hui → <b>' + fmt.num(last, 1) + '</b> en ' + (ds.year + (stt.horizon || 10)) +
+          '. Le moteur enchaîne la tendance observée, l’intensité des leviers, le scénario politique et 1 500 tirages Monte-Carlo : la bande bleue est l’incertitude à 80 %, la ligne rouge la cible nationale. ' +
+          fmt.int(sim.dalysAvoided) + ' DALY/an évitables pour ' + fmt.money(sim.costPerDaly, ds.country) + ' par DALY.',
+          '<b>' + label(mm) + '</b>: ' + fmt.num(f.history[f.history.length - 1], 1) + ' today → <b>' + fmt.num(last, 1) + '</b> by ' + (ds.year + (stt.horizon || 10)) +
+          '. The engine chains the observed trend, lever intensity, the policy scenario and 1,500 Monte-Carlo draws: the blue band is 80% uncertainty, the red line the national target. ' +
+          fmt.int(sim.dalysAvoided) + ' DALYs/yr avoidable for ' + fmt.money(sim.costPerDaly, ds.country) + ' per DALY.');
+      }
+
+      function drawHeart() {
+        const ds = getDs(), model = heartModel(ds);
+        heartHost.innerHTML = heartSvg(model, stt.hubCell);
+        heartHost.onclick = (e) => {
+          const node = e.target && e.target.closest ? e.target.closest('[data-cell]') : null;
+          if (!node) return;
+          const parts = String(node.getAttribute('data-cell')).split('|');
+          const same = stt.hubCell && stt.hubCell.ring === parts[0] && stt.hubCell.id === parts[1];
+          stt.hubCell = same ? null : { ring: parts[0], id: parts[1] };
+          drawHeart(); drawDrill();
+          const pool = parts[0] === 'disease' ? model.disease : parts[0] === 'metab' ? model.metab : model.behaviour;
+          const found = pool.find(x => x.id === parts[1]);
+          K.toast((stt.hubCell ? '🎯 ' : '✕ ') + label(found || { fr: parts[1], en: parts[1] }));
+        };
+        heartLegend.innerHTML = '';
+        heartLegend.appendChild(h('div.nx-legend', { style: { gap: '12px' } }, model.behaviour.map(b => h('span', null, [
+          h('i', { style: { background: b.color } }),
+          label(b) + ' · ' + fmt.num(b.ratio, 1) + '× ' + T('repère OMS renforcé', 'WHO advanced ref.')
+        ]))));
+        heartLegend.appendChild(h('div.nx-legend', { style: { gap: '12px' } }, model.disease.map(d => h('span', null, [
+          h('i', { style: { background: d.color } }),
+          label(d) + ' · ' + fmt.num(d.value, 0) + ' ' + T('DALY/100k attribuables', 'attributable DALY/100k')
+        ]))));
+        heartLegend.appendChild(K.note(T('Anneau intérieur : comportements (ratio au repère OMS renforcé) · anneau médian : facteurs métaboliques (prévalence) · anneau extérieur : charge attribuable à l’alimentation ; moyeu : indice de risque composite national. <b>Cliquez une cellule</b> pour la lire.',
+          'Inner ring: behaviours (ratio to the WHO advanced reference) · middle ring: metabolic factors (prevalence) · outer ring: diet-attributable burden; hub: national composite risk index. <b>Click a cell</b> to read it.'), 'info'));
+      }
+
+      function drawDrill() {
+        const ds = getDs(), model = heartModel(ds), sel = stt.hubCell;
+        drillMeters.innerHTML = '';
+        if (!sel) {
+          K.chart('bars', drillHost, {
+            labels: model.disease.map(d => label(d)),
+            series: [{ name: T('Charge attribuable (DALY/100k)', 'Attributable burden (DALY/100k)'), data: model.disease.map(d => Math.round(d.value)), color: null }],
+            format: v => fmt.num(v, 0),
+            colorScale: (v, i) => model.disease[i].color
+          });
+          drillMeters.appendChild(K.meter(T('Part de la charge attribuable à l’alimentation', 'Share of burden attributable to diet'), model.excess, 60, { format: v => fmt.num(v, 1) + ' %', tone: 'risk' }));
+          drillMeters.appendChild(K.meter(T('Décès attribuables évitables', 'Avoidable attributable deaths'), model.deaths, Math.max(1, model.deaths * 1.6), { format: v => fmt.int(v) + ' / ' + T('an', 'yr'), tone: 'warn' }));
+          drillNote.innerHTML = T('Touchez une cellule du cœur : le moteur explique la valeur, les facteurs qui l’alimentent et l’action qui la réduit. Charge attribuable totale : <b>' + fmt.num(model.per100k, 0) + ' DALY/100k</b> · <b>' + fmt.int(model.deaths) + ' décès/an</b>.',
+            'Tap a cell of the heart: the engine explains the value, the drivers behind it and the action that reduces it. Total attributable burden: <b>' + fmt.num(model.per100k, 0) + ' DALY/100k</b> · <b>' + fmt.int(model.deaths) + ' deaths/yr</b>.');
+          return;
+        }
+        if (sel.ring === 'disease') {
+          const d = model.disease.find(x => x.id === sel.id) || model.disease[0];
+          const drivers = model.rows.filter(r => (r.diseases || []).some(k => d.keys.indexOf(k) >= 0)).sort((a, b) => b.paf - a.paf);
+          K.chart('bars', drillHost, {
+            horizontal: true,
+            labels: drivers.map(r => label(r)),
+            series: [{ name: 'PAF (%)', data: drivers.map(r => +(r.paf * 100).toFixed(1)), color: null }],
+            format: v => fmt.num(v, 1) + ' %',
+            colorScale: (v, i) => drivers[i].color
+          });
+          drivers.slice(0, 3).forEach(r => drillMeters.appendChild(K.meter(label(r), r.paf * 100, 60, { format: v => fmt.num(v, 1) + ' %', tone: r.paf > .2 ? 'risk' : 'warn' })));
+          drillNote.innerHTML = T('<b>' + label(d) + '</b> — ' + fmt.num(d.value, 0) + ' DALY/100k et ' + fmt.int(drivers.reduce((a, r) => a + r.deaths, 0)) + ' décès/an attribuables à l’alimentation. Principaux facteurs : ' +
+            drivers.slice(0, 3).map(r => label(r) + ' (' + fmt.pct(r.paf * 100, 1) + ')').join(' · ') + '. Action : ' + (drivers[0] ? label(drivers[0].action) : '—') + '.',
+            '<b>' + label(d) + '</b> — ' + fmt.num(d.value, 0) + ' DALY/100k and ' + fmt.int(drivers.reduce((a, r) => a + r.deaths, 0)) + ' deaths/yr attributable to diet. Main drivers: ' +
+            drivers.slice(0, 3).map(r => label(r) + ' (' + fmt.pct(r.paf * 100, 1) + ')').join(' · ') + '. Action: ' + (drivers[0] ? label(drivers[0].action) : '—') + '.');
+          return;
+        }
+        if (sel.ring === 'metab') {
+          const m = model.metab.find(x => x.id === sel.id) || model.metab[0];
+          const rel = model.rows.slice().sort((a, b) => b.ratio - a.ratio).slice(0, 6);
+          K.chart('bars', drillHost, {
+            horizontal: true,
+            labels: rel.map(r => label(r)),
+            series: [{ name: T('Apport ÷ repère OMS renforcé', 'Intake ÷ WHO advanced reference'), data: rel.map(r => +r.ratio.toFixed(2)), color: null }],
+            format: v => fmt.num(v, 2) + '×', target: 1, targetLabel: T('repère OMS', 'WHO reference'),
+            colorScale: (v, i) => rel[i].color
+          });
+          drillMeters.appendChild(K.meter(T('Prévalence', 'Prevalence'), m.value, 60, { format: v => fmt.num(v, 1) + ' ' + m.unit, tone: 'risk' }));
+          drillMeters.appendChild(K.meter(T('Part attribuable à l’alimentation', 'Diet-attributable share'), m.paf * 100, 60, { format: v => fmt.num(v, 1) + ' %', tone: 'warn' }));
+          drillNote.innerHTML = T('<b>' + label(m) + '</b> touche ' + fmt.num(m.value, 1) + ' ' + m.unit + ' de la population ; ' + fmt.pct(m.paf * 100, 1) + ' de ce risque est attribuable à l’alimentation. Action prioritaire : ' + label(m.action) + '.',
+            '<b>' + label(m) + '</b> affects ' + fmt.num(m.value, 1) + ' ' + m.unit + ' of the population; ' + fmt.pct(m.paf * 100, 1) + ' of that risk is diet-attributable. Priority action: ' + label(m.action) + '.');
+          return;
+        }
+        const b = model.behaviour.find(x => x.id === sel.id) || model.behaviour[0];
+        const links = HEART_MATRIX[HEART_RING_OF[b.id] || 'n'];
+        const metabs = links.metab.map(k => model.metab.find(m => m.id === k)).filter(Boolean);
+        const dis = links.disease.map(k => model.disease.find(d => d.id === k)).filter(Boolean);
+        K.chart('bars', drillHost, {
+          labels: metabs.map(m => label(m)),
+          series: [
+            { name: T('Prévalence métabolique (%)', 'Metabolic prevalence (%)'), data: metabs.map(m => +m.value.toFixed(1)), color: null }
+          ],
+          format: v => fmt.num(v, 1) + ' %',
+          colorScale: (v, i) => metabs[i].color
+        });
+        drillMeters.appendChild(K.meter(T('Ratio au repère OMS renforcé', 'Ratio to WHO advanced reference'), Math.min(100, b.ratio * 33), 100, { format: () => fmt.num(b.ratio, 2) + '×', tone: b.ratio > 1.5 ? 'risk' : 'warn' }));
+        drillMeters.appendChild(K.meter(T('PAF cumulé évitable', 'Cumulative avoidable PAF'), b.paf * 100, 60, { format: v => fmt.num(v, 1) + ' %', tone: 'risk' }));
+        drillNote.innerHTML = T('<b>' + label(b) + '</b> — apports à ' + fmt.num(b.ratio, 2) + ' fois le repère OMS renforcé. Ce comportement alimente ' + metabs.map(m => label(m)).join(', ') +
+          ' et pèse ' + fmt.pct(b.paf * 100, 1) + ' de la charge attribuable, principalement via ' + dis.map(d => label(d)).join(', ') + '. Levier recommandé : ' + label(b.row.action) + '.',
+          '<b>' + label(b) + '</b> — intakes at ' + fmt.num(b.ratio, 2) + ' times the WHO advanced reference. This behaviour feeds ' + metabs.map(m => label(m)).join(', ') +
+          ' and accounts for ' + fmt.pct(b.paf * 100, 1) + ' of the attributable burden, mainly through ' + dis.map(d => label(d)).join(', ') + '. Recommended lever: ' + label(b.row.action) + '.');
+      }
+
+      function optNow() {
+        const ds = getDs();
+        return { ds, opt: M.optimizeBudget(ds, M.interventions(ds), stt.budget || 45e6, { priority: stt.priority }) };
+      }
+
+      function drawMix() {
+        const { ds, opt } = optNow();
+        const spent = {};
+        opt.plan.forEach(x => { spent[x.lever] = (spent[x.lever] || 0) + x.costUsd; });
+        const keys = Object.keys(spent).sort((a, b) => spent[b] - spent[a]);
+        const items = keys.map((k, i) => {
+          const lev = (M.LEVERS || []).find(l => l.k === k) || { fr: k, en: k };
+          return { label: label(lev), value: spent[k], color: ['#c9ee59', '#18d67f', '#3fc8f0', '#f5b642', '#ff6b5e', '#f472b6', '#a78bfa', '#9fbfac'][i % 8] };
+        });
+        K.chart('donut', mixHost, { items, thickness: .58, format: v => fmt.money(v, ds.country), centerLabel: T('budget optimisé', 'optimised budget') });
+        const prio = stt.priority === 'equity' ? T('équité', 'equity') : stt.priority === 'economy' ? T('économie', 'economy') : T('vies sauvées', 'lives saved');
+        mixNote.innerHTML = T('Priorité « ' + prio + ' » : <b>' + opt.plan.length + ' mesures</b> dans <b>' + opt.coverageRegions + ' régions</b> pour ' + fmt.money(opt.spentUsd, ds.country) +
+          ' → ' + fmt.int(opt.dalys) + ' DALY évités, bénéfice/coût ' + fmt.num(opt.bcr, 1) + '×. Changez la priorité ou le budget : le portefeuille se recalcule.',
+          'Priority “' + prio + '”: <b>' + opt.plan.length + ' measures</b> across <b>' + opt.coverageRegions + ' regions</b> for ' + fmt.money(opt.spentUsd, ds.country) +
+          ' → ' + fmt.int(opt.dalys) + ' DALYs averted, benefit/cost ' + fmt.num(opt.bcr, 1) + '×. Change the priority or the budget: the portfolio recomputes.');
+      }
+
+      function drawCascade() {
+        const ds = getDs(), cas = M.careCascade(ds);
+        K.chart('bars', cascadeHost, {
+          labels: cas.steps.map(s => label(s)),
+          series: [{ name: T('Personnes (35 ans +)', 'People (35+)'), data: cas.steps.map(s => Math.round(s.value)), color: null }],
+          format: v => fmt.compact(v),
+          colorScale: (v, i) => cas.steps[i].color
+        });
+        const last = cas.steps[cas.steps.length - 1];
+        cascadeNote.innerHTML = T('Détection <b>' + fmt.pct(cas.detectionPct, 1) + '</b> des cas attendus · contrôle <b>' + fmt.pct(cas.controlledShare, 1) + '</b> des cas · ' + fmt.int(last.value) + ' personnes contrôlées. ' +
+          (last.leakPct ? 'Plus grosse fuite « ' + label(last.from) + ' → ' + label(last) + ' » : ' + fmt.pct(last.leakPct, 0) + '. ' : '') + 'Leviers de rattrapage dans l’onglet Dépistage & soins.',
+          'Detection <b>' + fmt.pct(cas.detectionPct, 1) + '</b> of expected cases · control <b>' + fmt.pct(cas.controlledShare, 1) + '</b> of cases · ' + fmt.int(last.value) + ' people controlled. ' +
+          (last.leakPct ? 'Largest leakage “' + label(last.from) + ' → ' + label(last) + '”: ' + fmt.pct(last.leakPct, 0) + '. ' : '') + 'Catch-up levers in the Screening & care tab.');
+      }
+
+      function drawAttrib() {
+        const ds = getDs(), ra = M.riskAttribution(ds);
+        const rows = ra.rows.slice().sort((a, b) => b.paf - a.paf);
+        K.chart('bars', attribHost, {
+          labels: rows.map(r => label(r)),
+          series: [{ name: 'PAF (%)', data: rows.map(r => +(r.paf * 100).toFixed(1)), color: null }],
+          format: v => fmt.num(v, 1) + ' %',
+          colorScale: (v, i) => rows[i].color
+        });
+        const top = rows[0];
+        attribNote.innerHTML = T('Le moteur attribue <b>' + fmt.int(ra.deathsDiet) + ' décès/an</b> et <b>' + fmt.num(ra.dalysDiet, 0) + ' DALY/an</b> à l’alimentation ; premier facteur : <b>' + label(top) + '</b> (' + fmt.pct(top.paf * 100, 1) + '). Action : ' + label(top.action) + '.',
+          'The engine attributes <b>' + fmt.int(ra.deathsDiet) + ' deaths/yr</b> and <b>' + fmt.num(ra.dalysDiet, 0) + ' DALYs/yr</b> to diet; leading factor: <b>' + label(top) + '</b> (' + fmt.pct(top.paf * 100, 1) + '). Action: ' + label(top.action) + '.');
+      }
+
+      function drawLoop() {
+        const ds = getDs(), rd = M.readiness(ds), q = ds.dataQuality;
+        loopHost.innerHTML = '';
+        loopHost.appendChild(K.flow([
+          { label: T('Sources', 'Sources'), value: fmt.pct(q.completeness, 0), sub: T('complétude DHIS2/enquêtes', 'DHIS2/survey completeness') },
+          { label: T('Modèles', 'Models'), value: fmt.num(rd.score, 0) + '/100', sub: rd.level },
+          { label: T('Décision', 'Decision'), value: fmt.int(ds.burden.dietAttributableDeaths), sub: T('décès évitables/an', 'avoidable deaths/yr') },
+          { label: T('Suivi', 'Follow-up'), value: fmt.pct(ds.services.followUp, 0), sub: T('patients suivis', 'patients followed') },
+          { label: T('Recalibrage', 'Recalibration'), value: fmt.pct(q.timeliness, 0), sub: T('actualité des données', 'data timeliness') }
+        ]));
+        loopHost.appendChild(h('div.nx-row', { style: { flexWrap: 'wrap' } }, [
+          K.btn(T('Recalculer le moteur', 'Recompute engine'), { variant: 'lime', icon: '🔄', title: T('Relancer tous les modèles sur le millésime courant', 'Re-run every model on the current year'), onClick: () => { drawAll(); renderKpis(); K.toast('🔄 ' + T('Moteur recalculé — millésime ', 'Engine recomputed — year ') + ds.year); } }),
+          K.btn(T('Méthode & données', 'Method & data'), { icon: '🧪', onClick: () => K.showTab('method') })
+        ]));
+        loopHost.appendChild(K.note(T('Boucle fermée : les enquêtes (EDS/STEPS/SMART) alimentent les modèles, les modèles orientent la décision, les campagnes produisent des données de suivi qui recalibrent les modèles. Complétude <b>' + fmt.pct(q.completeness, 0) + '</b> · appariement <b>' + fmt.pct(q.linkage, 0) + '</b> · laboratoire <b>' + fmt.pct(q.laboratory, 0) + '</b> : le moteur dit aussi où investir dans la donnée elle-même.',
+          'Closed loop: surveys (DHS/STEPS/SMART) feed the models, models guide decisions, campaigns produce follow-up data that recalibrate the models. Completeness <b>' + fmt.pct(q.completeness, 0) + '</b> · linkage <b>' + fmt.pct(q.linkage, 0) + '</b> · laboratory <b>' + fmt.pct(q.laboratory, 0) + '</b>: the engine also shows where to invest in data itself.'), ''));
+      }
+
+      /* ------------------------------------------------------ actions du moteur */
+      function runEngine() {
+        if (K.engineSim) { K.engineSim(); return; }
+        K.toast(T('Moteur indisponible', 'Engine unavailable'));
+      }
+
+      function openLevers() {
+        const ds = getDs(), body = h('div.nx-stack');
+        const sim = M.screeningSim(ds, stt.plan);
+        body.appendChild(K.note(T('<b>Leviers d’intervention</b> — l’intensité courante du plan est ' + stt.hubIntensity + ' %. Chaque levier modifie la couverture des mesures, donc la prévision et la charge évitée.',
+          '<b>Intervention levers</b> — the current plan intensity is ' + stt.hubIntensity + ' %. Each lever changes measure coverage, hence the forecast and the averted burden.'), 'info'));
+        const grid = h('div.nx-grid.g-2');
+        (M.LEVERS || []).forEach(l => grid.appendChild(K.meter(label(l), (stt.plan && stt.plan[l.k] != null ? stt.plan[l.k] : 0) * 100, 100, { format: v => fmt.num(v, 0) + ' %', tone: 'ok' })));
+        body.appendChild(grid);
+        body.appendChild(K.note(T('Couverture du plan : <b>' + fmt.pct(sim.coverage * 100, 1) + '</b> · DALY évités <b>' + fmt.int(sim.dalysAvoided) + '</b> · coût <b>' + fmt.money(sim.costPerDaly, ds.country) + ' / DALY</b>. Réglez l’intensité dans le moteur, puis relancez la simulation.',
+          'Plan coverage: <b>' + fmt.pct(sim.coverage * 100, 1) + '</b> · DALYs averted <b>' + fmt.int(sim.dalysAvoided) + '</b> · cost <b>' + fmt.money(sim.costPerDaly, ds.country) + ' / DALY</b>. Set intensity in the engine, then re-run the simulation.'), 'ok'));
+        overlay.drawer({ kicker: 'NUTRI.N°1 · ' + T('CELLULE SANITAIRE', 'HEALTH CELL'), title: T('Leviers d’intervention', 'Intervention levers'), body });
+      }
+
+      function exportSummary() {
+        const ds = getDs(), f = M.forecast(ds, { metric: stt.hubMetric, horizon: stt.horizon, scenario: stt.scenario, plan: stt.plan });
+        const ra = M.riskAttribution(ds), cas = M.careCascade(ds);
+        const opt = M.optimizeBudget(ds, M.interventions(ds), stt.budget || 45e6, { priority: stt.priority });
+        const rows = f.labels.map((y, i) => {
+          const k = i - f.history.length;
+          return {
+            annee: y, indicateur: label(M.METRICS[stt.hubMetric]), scenario: label(M.SCENARIOS[stt.scenario]),
+            realise: f.history[i] != null ? +f.history[i].toFixed(2) : null,
+            projection: k >= 0 && f.point[k] != null ? +f.point[k].toFixed(2) : null,
+            p10: k >= 0 && f.lo[k] != null ? +f.lo[k].toFixed(2) : null,
+            p90: k >= 0 && f.hi[k] != null ? +f.hi[k].toFixed(2) : null,
+            cible_nationale: f.target
+          };
+        });
+        rows.push({ annee: '', indicateur: T('Charge attribuable à l’alimentation (DALY/an)', 'Diet-attributable burden (DALY/yr)'), realise: Math.round(ra.dalysDiet) });
+        rows.push({ annee: '', indicateur: T('Décès attribuables à l’alimentation', 'Diet-attributable deaths'), realise: Math.round(ra.deathsDiet) });
+        rows.push({ annee: '', indicateur: T('Détection de la cascade (%)', 'Cascade detection (%)'), realise: +cas.detectionPct.toFixed(1) });
+        rows.push({ annee: '', indicateur: T('Budget optimisé (USD)', 'Optimised budget (USD)'), realise: Math.round(opt.spentUsd) });
+        rows.push({ annee: '', indicateur: T('DALY évités (portefeuille)', 'DALYs averted (portfolio)'), realise: Math.round(opt.dalys) });
+        K.exportRows(rows, 'moteur-sante', ds.country + '-' + ds.year);
+        K.toast('⇩ ' + T('Synthèse du moteur exportée (CSV)', 'Engine summary exported (CSV)'));
+      }
+
+      /* ------------------------------------------------------ barre de paramètres */
+      function renderParams() {
+        engineParams.innerHTML = '';
+        engineParams.appendChild(h('div.nx-row', { style: { flexWrap: 'wrap', gap: '14px', alignItems: 'flex-end' } }, [
+          K.field(T('Indicateur suivi', 'Tracked indicator'), K.segmented([
+            { value: 'stunting', label: T('Retard', 'Stunting') },
+            { value: 'anaemia', label: T('Anémie', 'Anaemia') },
+            { value: 'exclusiveBF', label: T('Allaitement', 'Breastfeeding') },
+            { value: 'diabetes', label: T('Diabète', 'Diabetes') },
+            { value: 'hypertension', label: T('HTA', 'Hypertension') },
+            { value: 'obesity', label: T('Obésité', 'Obesity') },
+            { value: 'screening', label: T('Dépistage', 'Screening') },
+            { value: 'dalysPer100k', label: T('DALY', 'DALYs') }
+          ], stt.hubMetric, v => { stt.hubMetric = v; stt.metric = v; drawAll(); })),
+          K.field(T('Scénario politique', 'Policy scenario'), K.segmented(Object.keys(M.SCENARIOS).map(k => ({ value: k, label: label(M.SCENARIOS[k]), hint: k })), stt.scenario,
+            v => {
+              stt.scenario = M.SCENARIOS[v] ? v : 'prevention';
+              if (K.scenarioSelect) K.scenarioSelect.value = stt.scenario;   // cohérence avec la barre de commande
+              drawAll();
+            }))
+        ]));
+        engineParams.appendChild(h('div.nx-row', { style: { flexWrap: 'wrap', gap: '14px' } }, [
+          K.slider({ label: T('Horizon', 'Horizon'), min: 3, max: 20, value: stt.horizon || 10, format: v => v + ' ' + T('ans', 'yrs'), oninput: v => { stt.horizon = v; drawAll(); } }),
+          K.slider({ label: T('Intensité des leviers', 'Lever intensity'), min: 0, max: 100, step: 5, value: stt.hubIntensity, format: v => v + ' %', oninput: v => { stt.hubIntensity = v; stt.plan = M.allLevers(v / 100); drawAll(); } }),
+          K.slider({ label: T('Budget de prévention', 'Prevention budget'), min: 5, max: 150, step: 5, value: Math.max(5, Math.round((stt.budget || 45e6) / 1e6)), format: v => v + ' M$', oninput: v => { stt.budget = v * 1e6; drawAll(); } })
+        ]));
+      }
+
+      /* --------------------------------------------------------------- rendu */
+      function drawAll() {
+        const f = drawEngineChart();
+        drawEngineOutputs(f);
+        drawHeart();
+        drawDrill();
+        drawMix();
+        drawCascade();
+        drawAttrib();
+        drawLoop();
+        renderKpis();
+      }
+      renderParams();
+      drawAll();
+      return { render: () => { if (!host.isConnected) return; drawAll(); } };
+    }
+  });
+
+  /* Le moteur ouvre la section : on place l'onglet en première position. */
+  (function () {
+    const tabs = K.tabs || [];
+    const i = tabs.findIndex(t => t.id === 'hub');
+    if (i > 0) tabs.unshift(tabs.splice(i, 1)[0]);
+  })();
+
+  /* ======================================================================= */
   /*  ONGLET 5 — NUTRITION & ALIMENTATION                                    */
   /* ======================================================================= */
   K.registerTab({

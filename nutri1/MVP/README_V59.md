@@ -12,12 +12,18 @@ Elle introduit aussi le **socle de section réutilisable** qui manquait :
 | --- | --- |
 | `web/assets/nutri-core/nutri-ui.js` | `NX.ui` — cartes, tuiles d'indicateurs (bandeau pleine largeur), contrôles (sélecteur, segmenté, curseur, interrupteur, bouton), jauges, notes, chaînes de valeur, tableaux, graphiques SVG. |
 | `web/assets/nutri-core/nutri-shell.js` | `NX.shell(cfg)` — coquille commune : en-tête, barre de commande, bandeau de KPI animé, onglets collants, tiroirs, note de décision, export, mode présentation, isolation des événements. |
-| `web/assets/modules/health/*` | Données (`NUTRI_HEALTH_DATA`), modèles (`NUTRI_HEALTH_MODELS`), coquille et 8 onglets de la cellule santé, feuille de style dédiée. |
+| `web/assets/modules/health/*` | Données (`NUTRI_HEALTH_DATA`), modèles (`NUTRI_HEALTH_MODELS`), coquille et 9 onglets de la cellule santé (dont « Vue d'ensemble & moteur »), feuille de style dédiée. |
 
 Aucune autre section n'est modifiée : `#agri` continue de fonctionner à
 l'identique (bancs d'essai repassés : 8 onglets, 103 contrôles, 0 erreur).
 
-## Les 8 onglets de la cellule santé
+## Les 9 onglets de la cellule santé
+
+0. **Vue d'ensemble & moteur** (🧭) — poste de pilotage : cœur PMT-ICE cliquable
+   (comportements → facteurs métaboliques → maladies attribuables, 12 cellules),
+   moteur paramétrable (indicateur, scénario, horizon, intensité des leviers,
+   budget), sorties graphiques vivantes (prévision, portefeuille, cascade,
+   attribution) et simulation nationale à **sorties chiffrées et graphiques**.
 
 1. **Vue nationale** — 6 KPI animés, trajectoire 2010 → +10 ans avec intervalle
    80 % et cible nationale, cascade décès → charge attribuable, carte régionale
@@ -57,7 +63,7 @@ Détail complet, formules et résultats de vérification :
 - `health-check.js` : 21 contrôles verts (montage, onglets bilingues, bandeau de
   6 tuiles, rangées de cartes complètes, bornes de prévision, optimiseur contraint
   par le budget) ;
-- `health-page.js` sur la page réelle : 8 onglets, 90 clics, 13 curseurs,
+- `health-page.js` sur la page réelle : 9 onglets, 119 clics, 16 curseurs,
   103 lignes de tableau, **aucune erreur nouvelle** (parité avec la page V57) et
   aucun résidu des couches héritées dans `#health` ;
 - non-régression agriculture et page complète : `agri-test.js`, `full-page.js`,

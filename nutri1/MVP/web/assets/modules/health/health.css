@@ -67,6 +67,29 @@
 #healthRoot .nx-tl-dot.warn{background:#f5b642;box-shadow:0 0 0 4px rgba(245,182,66,.16)}
 #healthRoot .nx-tl-dot.risk{background:#ff6b5e;box-shadow:0 0 0 4px rgba(255,107,94,.18)}
 
+/* ---- cœur PMT-ICE (onglet « Vue d'ensemble & moteur ») ------------------- */
+/* Le cœur occupe une hauteur explicite : en SVG « height:100% » sur un parent
+   de hauteur automatique retomberait sur le ratio intrinsèque du viewBox.     */
+#healthRoot .nx-heart{
+  position:relative;width:100%;
+  height:clamp(300px,40vw,470px);max-height:60vh;
+  display:flex;align-items:center;justify-content:center;
+}
+#healthRoot .nx-heart svg{display:block;width:100%;height:100%}
+#healthRoot .nx-heart path{transition:opacity .18s,stroke .18s,stroke-width .18s}
+#healthRoot .nx-heart path:hover{opacity:1;stroke:#c9ee59;stroke-width:2}
+#healthRoot .nx-heart text{pointer-events:none;user-select:none}
+#healthRoot .nx-hub-grid>.nx-card{min-width:0}
+#healthRoot .nx-hub-grid .nx-legend{gap:12px;line-height:1.5}
+#healthRoot .nx-hub-grid .nx-slider-row .nx-range{accent-color:#c9ee59}
+#healthRoot .nx-hub-grid .nx-chart.sm{--nx-chart-h:200px}
+@media (max-width:900px){
+  #healthRoot .nx-heart{height:clamp(280px,62vw,380px)}
+}
+@media (max-width:640px){
+  #healthRoot .nx-heart{height:clamp(250px,86vw,320px)}
+}
+
 /* ---- simulation ---------------------------------------------------------- */
 #healthRoot .nx-progress i{background:linear-gradient(90deg,#3fc8f0,#c9ee59)}
 #healthRoot .nx-sim-step.done em{color:#18d67f}

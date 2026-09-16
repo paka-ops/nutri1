@@ -21,6 +21,19 @@
   function T(fr, en) { return NX.lang() === 'en' ? en : fr; }
   const label = (o) => (NX.lang() === 'en' ? o.en : o.fr);
 
+  /* palette des graphiques du module (séquentielle, lisible sur fond sombre) */
+  const CH_COLORS = ['#c9ee59', '#18d67f', '#3fc8f0', '#f5b642', '#ff6b5e', '#f472b6', '#a78bfa', '#9fbfac'];
+  /* familles de mesures du catalogue de leviers (health-models.js) */
+  const GROUPS = {
+    depistage: { fr: 'Dépistage', en: 'Screening' },
+    soins: { fr: 'Soins & contrôle', en: 'Care & control' },
+    alimentation: { fr: 'Alimentation', en: 'Diet' },
+    'mère-enfant': { fr: 'Mère & enfant', en: 'Maternal & child' },
+    prevention: { fr: 'Prévention NCD', en: 'NCD prevention' },
+    systeme: { fr: 'Système & données', en: 'System & data' }
+  };
+  const groupLabel = (g) => label(GROUPS[g] || { fr: g, en: g });
+
   /* ------------------------------------------------------------------ état */
   const state = {
     country: (function () { try { return localStorage.getItem('nutri_country') || 'TG'; } catch (e) { return 'TG'; } })(),
@@ -89,6 +102,8 @@
   kit.ds = ds; kit.state = state;
   footerRight.push(kit.btn(T('Méthode & qualité des données', 'Method & data quality'), { icon: '🧪', onClick: () => kit.showTab('method') }));
   kit.forecast = (cfg) => M.forecast(ds, cfg || {});
+  kit.engineSim = runGlobalSim;                    // simulation complète, sorties graphiques
+  kit.engineSummary = simRows;                     // lignes CSV des sorties du moteur
   kit.region = () => ds.regions.find(r => r.name === state.region) || null;
 
   /* ------------------------------------------------ barre de commande ----- */
@@ -113,8 +128,10 @@
       v => {
         state.scenario = M.SCENARIOS[v] ? v : 'prevention';               // valeur inconnue → retour au scénario de prévention
         kit.refresh();
+        d.dispatchEvent(new CustomEvent('nutri:scenarioChanged', { detail: { scenario: state.scenario } }));
         kit.toast(T('Scénario appliqué : ', 'Scenario applied: ') + label(M.SCENARIOS[state.scenario]));
       });
+    kit.scenarioSelect = scenSel;                                     // la vue d'ensemble s'y synchronise
     controls.push(
       h('div.nx-row', null, [kit.field(T('Pays', 'Country'), countrySel), kit.field(T('Millésime', 'Year'), yearSel)]),
       kit.field(T('Scénario de prévention', 'Prevention scenario'), scenSel),
@@ -146,11 +163,15 @@
   }
 
   /* ------------------------------------------------------- simulation globale */
+  /* Le moteur rend ses sorties en trois temps : lecture chiffrée (KPI),
+     graphiques de sortie, puis recommandation. Chaque sortie est isolée dans un
+     try/catch : une donnée manquante ne peut plus laisser un espace vide, et le
+     tiroir affiche toujours soit un résultat, soit une explication. */
   function runGlobalSim() {
     const body = h('div.nx-stack');
-    body.appendChild(kit.note(T('<b>Simulation intégrée</b> — enchaînement complet : ingestion des sources (DHIS2, enquêtes, laboratoires), contrôle qualité, épidémiologie, dépistage et cascade de soins, prévision, Monte-Carlo et optimisation du portefeuille de prévention.',
-      '<b>Integrated simulation</b> — full chain: source ingestion (DHIS2, surveys, laboratories), quality control, epidemiology, screening and care cascade, forecast, Monte-Carlo and prevention portfolio optimisation.'), 'info'));
-    const steps = h('div.nx-sim'), progress = h('div.nx-progress', null, [h('i')]), result = h('div');
+    body.appendChild(kit.note(T('<b>Simulation intégrée</b> — enchaînement complet : ingestion des sources (DHIS2, enquêtes, laboratoires), contrôle qualité, épidémiologie, dépistage et cascade de soins, prévision, Monte-Carlo et optimisation du portefeuille de prévention. Les sorties sont chiffrées <b>et</b> graphiques.',
+      '<b>Integrated simulation</b> — full chain: source ingestion (DHIS2, surveys, laboratories), quality control, epidemiology, screening and care cascade, forecast, Monte-Carlo and prevention portfolio optimisation. Outputs are numeric <b>and</b> graphical.'), 'info'));
+    const steps = h('div.nx-sim'), progress = h('div.nx-progress', null, [h('i')]), result = h('div.nx-stack');
     body.appendChild(steps); body.appendChild(progress); body.appendChild(result);
     overlay.drawer({ kicker: 'NUTRI.N°1 · ' + T('CELLULE SANITAIRE', 'HEALTH CELL'), title: T('Simulation nationale — ', 'National simulation — ') + ds.countryName + ' ' + ds.year, body });
     kit.runSteps(steps, [
@@ -165,33 +186,185 @@
     ], {
       step: 360,
       onDone: function () {
-        const mc = M.burdenMC(ds, { runs: 4000, horizon: state.horizon });
-        const sim = M.screeningSim(ds, state.plan);
-        const cat = M.interventions(ds);
-        const opt = M.optimizeBudget(ds, cat, state.budget, { priority: state.priority });
-        state.mc = mc;
         progress.querySelector('i').style.width = '100%';
-        result.appendChild(h('div.nx-grid.g-3', { style: { marginTop: '12px' } }, [
+        result.innerHTML = '';
+        let mc, sim, cat, opt, fc;
+        try {
+          mc = M.burdenMC(ds, { runs: 4000, horizon: state.horizon || 10 });
+          sim = M.screeningSim(ds, state.plan);
+          cat = M.interventions(ds);
+          opt = M.optimizeBudget(ds, cat, state.budget || 45e6, { priority: state.priority });
+          fc = M.forecast(ds, { metric: state.metric || 'stunting', horizon: state.horizon || 10, scenario: state.scenario, plan: state.plan });
+          state.mc = mc;
+        } catch (err) {
+          console.error('[NUTRI_HEALTH] simulation', err);
+          result.appendChild(kit.note(T('Le moteur n’a pas pu terminer sur ce millésime : changez de pays ou d’année puis relancez la simulation.',
+            'The engine could not complete on this vintage: change country or year and re-run the simulation.'), 'warn'));
+          return;
+        }
+        const mm = M.METRICS[state.metric || 'stunting'] || M.METRICS.stunting;
+        const cas = M.careCascade(ds), ra = M.riskAttribution(ds);
+
+        /* ------------------------------------------------ en-tête de résultat */
+        result.appendChild(h('div.nx-row.between', { style: { marginTop: '12px' } }, [
+          h('span.nx-chip.lime', { text: '✓ ' + T('Sorties du moteur', 'Engine outputs') }),
+          h('span.nx-mini.nx-dim', { text: ds.countryName + ' · ' + ds.year + ' · ' + label(M.SCENARIOS[state.scenario] || M.SCENARIOS.prevention) + ' · ' + (state.horizon || 10) + ' ' + T('ans', 'yrs') })
+        ]));
+
+        /* ------------------------------------------------------- lecture KPI */
+        result.appendChild(h('div.nx-grid.g-3', null, [
           kit.kpi({ label: T('Charge projetée (médiane)', 'Projected burden (median)'), value: fmt.num(mc.dalys.p50, 0), unit: 'DALY/100k', tone: 'hot', foot: 'P10 ' + fmt.num(mc.dalys.p10, 0) + ' · P90 ' + fmt.num(mc.dalys.p90, 0) }),
-          kit.kpi({ label: T('Probabilité de hausse', 'Probability of increase'), value: fmt.num(mc.probBurdenUp, 1), unit: '%', tone: mc.probBurdenUp > 60 ? 'hot' : '' , foot: fmt.int(mc.runs) + ' ' + T('tirages', 'runs') }),
+          kit.kpi({ label: T('Probabilité de hausse', 'Probability of increase'), value: fmt.num(mc.probBurdenUp, 1), unit: '%', tone: mc.probBurdenUp > 60 ? 'hot' : '', foot: fmt.int(mc.runs) + ' ' + T('tirages', 'runs') }),
           kit.kpi({ label: T('DALY évités par le plan', 'DALYs averted by the plan'), value: fmt.num(sim.dalysAvoided, 0), tone: 'good', foot: T('coût ', 'cost ') + fmt.money(sim.costPerDaly, ds.country) + ' / DALY' })
         ]));
-        result.appendChild(h('div.nx-grid.g-3', { style: { marginTop: '12px' } }, [
+        result.appendChild(h('div.nx-grid.g-3', null, [
           kit.kpi({ label: T('Portefeuille optimisé', 'Optimised portfolio'), value: fmt.money(opt.spentUsd, ds.country), foot: opt.plan.length + ' ' + T('mesures', 'measures') + ' · ' + opt.coverageRegions + ' ' + T('régions', 'regions') }),
           kit.kpi({ label: T('Bénéfice / coût', 'Benefit / cost'), value: fmt.num(opt.bcr, 1), unit: '×', tone: 'good', foot: fmt.num(opt.dalysPerMillion, 0) + ' DALY / M$' }),
-          kit.kpi({ label: T('Retard de croissance visé', 'Stunting target'), value: fmt.pct(sim.stuntingAfter, 1), tone: 'good', foot: T('actuel ', 'current ') + fmt.pct(ds.nutrition.stunting, 1) })
+          kit.kpi({ label: T('Stunting visé au terme', 'Stunting target at horizon'), value: fmt.pct(sim.stuntingAfter, 1), tone: 'good', foot: T('actuel ', 'current ') + fmt.pct(ds.nutrition.stunting, 1) + ' · ' + label(mm) + ' ' + fmt.num(fc.point[fc.point.length - 1], 1) })
         ]));
-        result.appendChild(kit.note(T('<b>Recommandation de la cellule :</b> prioriser la cascade dépistage → traitement → contrôle dans les régions à faible couverture, puis la fenêtre des 1 000 premiers jours (allaitement, alimentation de complément, fortification) — c\'est la combinaison au meilleur rapport coût-efficacité.',
-          '<b>Cell recommendation:</b> prioritise the screening → treatment → control cascade in low-coverage regions, then the first 1,000 days (breastfeeding, complementary feeding, fortification) — the most cost-effective combination.'), 'ok'));
-        result.appendChild(h('div.nx-row', { style: { marginTop: '10px' } }, [
+
+        /* ----------------------------------------------- graphiques de sortie */
+        const g = h('div.nx-grid.g-2', { style: { marginTop: '10px' } });
+        const mk = (title, sub) => { const c = kit.card({ title: title, sub: sub }); return c; };
+        const fanCard = mk(T('Prévision — ' + label(mm), 'Forecast — ' + label(mm)), T('Réalisé, projection du moteur, incertitude 80 % et cible nationale', 'Actual, engine projection, 80% uncertainty and national target'));
+        const fanHost = kit.chartHost('lg'); fanCard.body.appendChild(fanHost);
+        const mcCard = mk(T('Monte-Carlo de la charge future', 'Monte-Carlo of future burden'), fmt.int(mc.runs) + ' ' + T('tirages · distribution des DALY/100k', 'runs · distribution of DALYs/100k'));
+        const mcHost = kit.chartHost('lg'); mcCard.body.appendChild(mcHost);
+        const casCard = mk(T('Cascade dépistage → contrôle', 'Screening → control cascade'), T('Étapes franchies et fuites chiffrées', 'Stages reached and quantified leakages'));
+        const casHost = kit.chartHost('lg'); casCard.body.appendChild(casHost);
+        const portCard = mk(T('Portefeuille par famille de mesures', 'Portfolio by measure family'), T('Budget optimisé, priorité courante', 'Optimised budget, current priority'));
+        const portHost = kit.chartHost('lg'); portCard.body.appendChild(portHost);
+        const pafCard = mk(T('Attribution alimentaire évitable', 'Avoidable dietary attribution'), T('Fraction attribuable par facteur', 'Attributable fraction per factor'));
+        const pafHost = kit.chartHost('lg'); pafCard.body.appendChild(pafHost);
+        const tuneCard = mk(T('Effet des leviers sur la charge', 'Effect of levers on burden'), T('Charge évitée par famille d’intervention', 'Burden averted per intervention family'));
+        const tuneHost = kit.chartHost('lg'); tuneCard.body.appendChild(tuneHost);
+        [fanCard.el, mcCard.el, casCard.el, portCard.el, pafCard.el, tuneCard.el].forEach(n => g.appendChild(n));
+        result.appendChild(g);
+
+        /* -------------------------------------------------- tableau détaillé */
+        const tableCard = mk(T('Sorties détaillées de la projection', 'Detailed projection outputs'), T('Millésime par millésime : réalisé, projection, intervalle P10–P90 et cible', 'Year by year: actual, projection, P10–P90 band and target'));
+        const tableHost = h('div'); tableCard.body.appendChild(tableHost);
+        result.appendChild(tableCard.el);
+
+        /* ------------------------------------------------------ recommandation */
+        result.appendChild(kit.note(T('<b>Recommandation de la cellule :</b> prioriser la cascade dépistage → traitement → contrôle dans les régions à faible couverture, puis la fenêtre des 1 000 premiers jours (allaitement, alimentation de complément, fortification) — c’est la combinaison au meilleur rapport coût-efficacité. Charge évitable identifiée : <b>' + fmt.int(ra.deathsDiet) + ' décès/an</b> et <b>' + fmt.num(ra.dalysDiet, 0) + ' DALY/an</b>.',
+          '<b>Cell recommendation:</b> prioritise the screening → treatment → control cascade in low-coverage regions, then the first 1,000 days (breastfeeding, complementary feeding, fortification) — the most cost-effective combination. Identified avoidable burden: <b>' + fmt.int(ra.deathsDiet) + ' deaths/yr</b> and <b>' + fmt.num(ra.dalysDiet, 0) + ' DALYs/yr</b>.'), 'ok'));
+        result.appendChild(h('div.nx-row', { style: { flexWrap: 'wrap' } }, [
           kit.btn(T('Voir la prévision', 'Open forecast'), { variant: 'primary', icon: '📈', onClick: () => { overlay.closeDrawer(); kit.showTab('forecast'); } }),
           kit.btn(T('Voir le plan de prévention', 'Open prevention plan'), { variant: 'lime', icon: '💰', onClick: () => { overlay.closeDrawer(); kit.showTab('investment'); } }),
-          kit.btn(T('Note de décision', 'Decision brief'), { variant: 'info', icon: '📄', onClick: () => kit.openBrief() })
+          kit.btn(T('Vue d’ensemble & moteur', 'Overview & engine'), { variant: 'info', icon: '🧭', onClick: () => { overlay.closeDrawer(); kit.showTab('hub'); } }),
+          kit.btn(T('Note de décision', 'Decision brief'), { variant: 'info', icon: '📄', onClick: () => kit.openBrief() }),
+          kit.btn(T('Exporter les sorties', 'Export outputs'), { icon: '⇩', onClick: () => { kit.exportRows(simRows(), 'simulation-sante', ds.country + '-' + ds.year); } })
         ]));
+
+        /* ------------------------------------------------------------- tracés */
+        function safe(name, fn) { try { fn(); } catch (e) { console.error('[NUTRI_HEALTH] sortie « ' + name + ' »', e); } }
+        safe('prévision', function () {
+          kit.chart('line', fanHost, {
+            labels: fc.labels,
+            series: [
+              { name: T('Réalisé', 'Actual'), data: fc.history.concat(new Array(fc.point.length).fill(null)), color: '#c9ee59', area: true },
+              { name: T('Projection du moteur', 'Engine projection'), data: new Array(fc.history.length - 1).fill(null).concat([fc.history[fc.history.length - 1]]).concat(fc.point), color: '#3fc8f0', dash: true, points: true },
+              { name: T('Incertitude 80 %', '80% uncertainty'), data: [], bandLo: fc.history.concat(fc.lo), bandHi: fc.history.concat(fc.hi), color: '#3fc8f0' }
+            ],
+            target: fc.target, targetLabel: T('cible nationale', 'national target'), xTicks: 8,
+            format: v => fmt.num(v, mm.unit === '%' ? 1 : 0)
+          });
+        });
+        safe('monte-carlo', function () {
+          kit.chart('bars', mcHost, {
+            labels: mc.hist.centers.map(v => fmt.num(v, 0)),
+            series: [{ name: T('Tirages', 'Runs'), data: mc.hist.counts, color: null }],
+            format: v => fmt.int(v),
+            target: ds.burden.dalysPer100k, targetLabel: T('charge actuelle', 'current burden')
+          });
+        });
+        safe('cascade', function () {
+          kit.chart('bars', casHost, {
+            labels: cas.steps.map(s => label(s)),
+            series: [{ name: T('Personnes (35 ans +)', 'People (35+)'), data: cas.steps.map(s => Math.round(s.value)), color: null }],
+            format: v => fmt.compact(v),
+            colorScale: (v, i) => cas.steps[i].color
+          });
+        });
+        safe('portefeuille', function () {
+          const spent = {};
+          opt.plan.forEach(x => { spent[x.lever] = (spent[x.lever] || 0) + x.costUsd; });
+          const keys = Object.keys(spent).sort((a, b) => spent[b] - spent[a]);
+          kit.chart('donut', portHost, {
+            items: keys.map((k, i) => { const l = (M.LEVERS || []).find(z => z.k === k) || { fr: k, en: k }; return { label: label(l), value: spent[k], color: CH_COLORS[i % CH_COLORS.length] }; }),
+            thickness: .56, format: v => fmt.money(v, ds.country), centerLabel: T('budget optimisé', 'optimised budget')
+          });
+        });
+        safe('attribution', function () {
+          const rows = ra.rows.slice().sort((a, b) => b.paf - a.paf);
+          kit.chart('bars', pafHost, {
+            labels: rows.map(r => label(r)),
+            series: [{ name: 'PAF (%)', data: rows.map(r => +(r.paf * 100).toFixed(1)), color: null }],
+            format: v => fmt.num(v, 1) + ' %',
+            colorScale: (v, i) => rows[i].color
+          });
+        });
+        safe('leviers', function () {
+          const byGroup = {};
+          opt.plan.forEach(x => { const gp = x.group || 'autre'; byGroup[gp] = (byGroup[gp] || 0) + x.dalys; });
+          const keys = Object.keys(byGroup).sort((a, b) => byGroup[b] - byGroup[a]);
+          kit.chart('bars', tuneHost, {
+            labels: keys.map(k => groupLabel(k)),
+            series: [{ name: T('DALY évités', 'DALYs averted'), data: keys.map(k => Math.round(byGroup[k])), color: null }],
+            horizontal: true, format: v => fmt.compact(v)
+          });
+        });
+        safe('tableau', function () {
+          const rows = fc.labels.map((y, i) => {
+            const k = i - fc.history.length;
+            return {
+              year: y, phase: k >= 0 ? T('Projection', 'Projection') : T('Réalisé', 'Actual'),
+              value: k >= 0 ? fc.point[k] : fc.history[i],
+              p10: k >= 0 ? fc.lo[k] : null, p90: k >= 0 ? fc.hi[k] : null, target: fc.target
+            };
+          }).filter(r => r.value != null);
+          tableHost._t = kit.dataTable(tableHost, {
+            columns: [
+              { id: 'year', label: T('Millésime', 'Year'), align: 'right', format: (r, v) => fmt.int(v) },
+              { id: 'phase', label: T('Régime', 'Regime') },
+              { id: 'value', label: label(mm), align: 'right', format: (r, v) => fmt.num(v, 1), bar: r => r.phase === T('Projection', 'Projection') ? 60 : 0 },
+              { id: 'p10', label: 'P10', align: 'right', format: (r, v) => v == null ? '—' : fmt.num(v, 1) },
+              { id: 'p90', label: 'P90', align: 'right', format: (r, v) => v == null ? '—' : fmt.num(v, 1) },
+              { id: 'target', label: T('Cible', 'Target'), align: 'right', format: (r, v) => v == null ? '—' : fmt.num(v, 0) }
+            ],
+            rows, pageSize: 8
+          });
+        });
       }
     });
   }
 
+  /** lignes CSV des sorties de simulation (réutilisées par le tiroir) */
+  function simRows() {
+    const mc = state.mc || M.burdenMC(ds, { runs: 1500, horizon: state.horizon || 10 });
+    const sim = M.screeningSim(ds, state.plan);
+    const opt = M.optimizeBudget(ds, M.interventions(ds), state.budget || 45e6, { priority: state.priority });
+    const cas = M.careCascade(ds), ra = M.riskAttribution(ds);
+    const rows = [
+      { bloc: 'charge', indicateur: 'DALY/100k médiane projetée', valeur: Math.round(mc.dalys.p50) },
+      { bloc: 'charge', indicateur: 'P10', valeur: Math.round(mc.dalys.p10) },
+      { bloc: 'charge', indicateur: 'P90', valeur: Math.round(mc.dalys.p90) },
+      { bloc: 'charge', indicateur: 'probabilité de hausse (%)', valeur: +mc.probBurdenUp.toFixed(1) },
+      { bloc: 'plan', indicateur: 'DALY évités', valeur: Math.round(sim.dalysAvoided) },
+      { bloc: 'plan', indicateur: 'coût par DALY (USD)', valeur: Math.round(sim.costPerDaly) },
+      { bloc: 'plan', indicateur: 'couverture (%)', valeur: +(sim.coverage * 100).toFixed(1) },
+      { bloc: 'portefeuille', indicateur: 'budget engagé (USD)', valeur: Math.round(opt.spentUsd) },
+      { bloc: 'portefeuille', indicateur: 'mesures retenues', valeur: opt.plan.length },
+      { bloc: 'portefeuille', indicateur: 'bénéfice/coût', valeur: +opt.bcr.toFixed(2) },
+      { bloc: 'cascade', indicateur: 'détection (%)', valeur: +cas.detectionPct.toFixed(1) },
+      { bloc: 'cascade', indicateur: 'contrôle (%)', valeur: +cas.controlledShare.toFixed(1) },
+      { bloc: 'attribution', indicateur: 'décès attribuables/an', valeur: Math.round(ra.deathsDiet) },
+      { bloc: 'attribution', indicateur: 'DALY attribuables/an', valeur: Math.round(ra.dalysDiet) }
+    ];
+    ra.rows.forEach(r => rows.push({ bloc: 'PAF', indicateur: (NX.lang() === 'en' ? r.en : r.fr), valeur: +(r.paf * 100).toFixed(2) }));
+    return rows;
+  }
   /* ------------------------------------------------------------ export */
   function exportMenu(K) {
     const body = h('div.nx-stack');

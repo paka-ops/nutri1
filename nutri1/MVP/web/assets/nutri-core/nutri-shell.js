@@ -152,7 +152,9 @@
       const panels = h('div');
       wrap.appendChild(panels);
       TABS.forEach(t => {
-        t.panel = h('div.nx-panel', { id: 'nx-panel-' + t.id, role: 'tabpanel', 'aria-label': t.label });
+        /* id préfixé par le module : deux sections sur la même page ne peuvent plus
+           se disputer un même identifiant (getElementById renverrait le mauvais panneau) */
+        t.panel = h('div.nx-panel', { id: 'nx-panel-' + c.module + '-' + t.id, 'data-tab': t.id, role: 'tabpanel', 'aria-label': t.label });
         t.button = h('button.nx-tab', { type: 'button', 'aria-selected': 'false', onclick: () => showTab(t.id) }, [
           h('span.nx-tab-ico', { text: t.icon }), h('span', { text: t.label })
         ]);
@@ -197,7 +199,14 @@
       Object.keys(mounted).forEach(k => delete mounted[k]);
       shell();
       renderKpis();
-      const hash = (function () { try { return (location.hash || '').split('/')[1]; } catch (e) { return null; } })();
+      /* #section/onglet : on n'obéit au hash que s'il désigne CETTE section, sinon
+         la navigation d'une autre section ouvrirait le premier onglet homonyme */
+      const hash = (function () {
+        try {
+          const parts = (location.hash || '').replace('#', '').split('/');
+          return parts[0] === c.module ? parts[1] : null;
+        } catch (e) { return null; }
+      })();
       const first = keep && TABS.some(t => t.id === keep) ? keep : (TABS.some(t => t.id === hash) ? hash : (TABS[0] && TABS[0].id));
       if (first) showTab(first, { scroll: false });
       return root;
