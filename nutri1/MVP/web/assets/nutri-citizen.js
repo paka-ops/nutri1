@@ -1441,8 +1441,8 @@
     if (U.num(p.activityMin, 0) < 150) add({ id: 'act', icon: '🏃🏾', tone: 'warn', priority: 2, category: fr() ? 'Activité' : 'Activity', title: fr() ? '150 minutes d\'activité par semaine' : '150 minutes of activity per week', text: fr() ? 'Marche active 30 min × 5, montée d\'escaliers, vélo pour les trajets courts ; ajoutez 2 séances de renforcement.' : 'Brisk walking 30 min × 5, stair climbing, cycling for short trips; add 2 strength sessions.', impact: '−' + U.fmt(Math.min(7, (150 - U.num(p.activityMin, 0)) * 0.045), 1) + ' pts ' + t('risk.htn') + ' · −' + U.fmt(Math.min(6, (150 - U.num(p.activityMin, 0)) * 0.035), 1) + ' pts ' + t('risk.t2d'), why: U.fmtInt(p.activityMin) + ' / 150 min', evidence: ev(3), level: 3, actions: ['sim'] });
     if (U.num(p.upf, 0) > 25) add({ id: 'upf', icon: '🍪', tone: 'warn', priority: 2, category: fr() ? 'Transformation' : 'Processing', title: fr() ? 'Réduire les ultra-transformés sous 20 %' : 'Cut ultra-processed food below 20%', text: fr() ? 'Substituez sodas et biscuits par eau infusée au bissap/gingembre, arachides grillées et fruits de saison.' : 'Swap sodas and biscuits for hibiscus/ginger infused water, roasted groundnuts and seasonal fruit.', impact: '+' + U.fmt(Math.min(8, (U.num(p.upf, 0) - 20) * 0.35), 0) + ' pts NutriScore', why: U.fmtInt(p.upf) + ' % UPF', evidence: ev(2), level: 2, actions: ['plan', 'foods'] });
     if (U.num(p.sleep, 7) < 6.5) add({ id: 'sleep', icon: '😴', tone: 'info', priority: 3, category: fr() ? 'Sommeil' : 'Sleep', title: fr() ? 'Stabiliser 7 h de sommeil' : 'Stabilise 7 hours of sleep', text: fr() ? 'Coucher régulier, dernier repas 3 h avant, écran réduit le soir : effet direct sur la glycémie à jeun.' : 'Regular bedtime, last meal 3 h before, less evening screen time: direct effect on fasting glucose.', impact: (fr() ? 'Glycémie −' : 'Glucose −') + U.fmt(Math.min(9, (7 - U.num(p.sleep, 7)) * 4.2), 0) + ' mg/dL', why: U.fmt(p.sleep, 1) + ' h/nuit', evidence: ev(2), level: 2, actions: ['sim'] });
-    if (State.scenario.organic < 40) add({ id: 'organic', icon: '🌱', tone: 'good', priority: 3, category: fr() ? 'Agriculture bio' : 'Organic farming', title: fr() ? 'Passer à 50 % d\'aliments locaux & bio' : 'Move to 50% local & organic food', text: (fr() ? 'Le pays dispose de ' : 'This country has ') + U.pct(organicSupply() * 100, 0) + (fr() ? ' d\'offre bio tracée — vos achats orientent la production locale.' : ' of traceable organic supply — your purchases steer local production.'), impact: (fr() ? 'Empreinte −' : 'Footprint −') + U.fmt(Math.min(48, (50 - U.num(State.scenario.orgic, 30)) * 1.6), 0) + ' kg CO₂e/an', why: U.fmtInt(State.scenario.organic) + ' % ' + t('sim.organic'), evidence: ev(1), level: 1, actions: ['market', 'sim'] });
-    if (r.t2d.p > 0.12 || r.htn.p > 0.25) add({ id: 'pro', icon: '👩🏾‍⚕️', tone: 'risk', priority: 1, category: fr() ? 'Suivi professionnel' : 'Professional follow-up', title: fr() ? 'Consulter un nutritionniste du réseau' : 'Consult a network nutritionist', text: fr() ? 'Votre profil justifie un avis professionnel : bilan, plan personnalisé et suivi à 3 mois.' : 'Your profile warrants professional advice: assessment, personalised plan and 3-month follow-up.', impact: fr() ? 'Adhésion au plan ×2,3' : 'Plan adherence ×2.3', why: t('risk.t2d') + ' ' + U.pct(r.t2d.p * 100, 1), evidence: ev(1), level: 1, actions: ['book'] });
+    if (State.scenario.organic < 40) add({ id: 'organic', icon: '🌱', tone: 'good', priority: 3, category: fr() ? 'Agriculture bio' : 'Organic farming', title: fr() ? 'Passer à 50 % d\'aliments locaux & bio' : 'Move to 50% local & organic food', text: (fr() ? 'Le pays dispose de ' : 'This country has ') + U.pct(organicSupply(), 0) + (fr() ? ' d\'offre bio tracée — vos achats orientent la production locale.' : ' of traceable organic supply — your purchases steer local production.'), impact: (fr() ? 'Empreinte −' : 'Footprint −') + U.fmt(Math.min(48, (50 - U.num(State.scenario.orgic, 30)) * 1.6), 0) + ' kg CO₂e/an', why: U.fmtInt(State.scenario.organic) + ' % ' + t('sim.organic'), evidence: ev(1), level: 1, actions: ['market', 'sim'] });
+    if (r.t2d.p > 0.12 || r.htn.p > 0.25) add({ id: 'pro', icon: '👩🏾‍⚕️', tone: 'risk', priority: 1, category: fr() ? 'Suivi professionnel' : 'Professional follow-up', title: fr() ? 'Consulter un nutritionniste du réseau' : 'Consult a network nutritionist', text: fr() ? 'Votre profil justifie un avis professionnel : bilan, plan personnalisé et suivi à 3 mois.' : 'Your profile warrants professional advice: assessment, personalised plan and 3-month follow-up.', impact: fr() ? 'Adhésion au plan ×2,3' : 'Plan adherence ×2.3', why: t('risk.t2d') + ' ' + U.pct(r.t2d.p, 1), evidence: ev(1), level: 1, actions: ['book'] });
     if (!out.length) add({ id: 'keep', icon: '✅', tone: 'good', priority: 3, category: fr() ? 'Maintien' : 'Maintenance', title: fr() ? 'Profil solide — maintenez le cap' : 'Strong profile — keep going', text: fr() ? 'Continuez le suivi hebdomadaire, la diversité alimentaire et l\'activité régulière.' : 'Keep weekly monitoring, dietary diversity and regular activity.', impact: 'NutriScore ' + sc.total, why: sc.total + '/100', evidence: ev(1), level: 1, actions: ['plan'] });
     return out.sort((a, b) => (a.priority - b.priority) || (b.tone === 'risk' ? 1 : 0));
   }
@@ -2371,8 +2371,8 @@
     const mk = markovLight();
     const al = alerts(State.profile);
     host.innerHTML =
-      UI.kpi({ label: fr() ? 'Risque dominant (10 ans)' : 'Dominant 10-y risk', value: U.pct(r[top].p * 100, 1), icon: '🎯', tone: r[top].band.tone, chip: r[top].label, hint: '<span class="nv-note">IC 90 % : ' + U.pct(r[top].ci[0] * 100, 1) + ' – ' + U.pct(r[top].ci[1] * 100, 1) + '</span>' }) +
-      UI.kpi({ label: t('pred.healthyYears'), value: U.fmt(mk.healthyYears, 1), unit: '/10', icon: '🌿', tone: mk.healthyYears > 8 ? 'good' : mk.healthyYears > 6.5 ? 'warn' : 'risk', hint: '<span class="nv-note">' + U.pct(mk.healthyAt10 * 100, 0) + ' ' + (fr() ? 'des jumeaux sans diabète à 10 ans' : 'of twins diabetes-free at 10 y') + '</span>' }) +
+      UI.kpi({ label: fr() ? 'Risque dominant (10 ans)' : 'Dominant 10-y risk', value: U.pct(r[top].p, 1), icon: '🎯', tone: r[top].band.tone, chip: r[top].label, hint: '<span class="nv-note">IC 90 % : ' + U.pct(r[top].ci[0], 1) + ' – ' + U.pct(r[top].ci[1], 1) + '</span>' }) +
+      UI.kpi({ label: t('pred.healthyYears'), value: U.fmt(mk.healthyYears, 1), unit: '/10', icon: '🌿', tone: mk.healthyYears > 8 ? 'good' : mk.healthyYears > 6.5 ? 'warn' : 'risk', hint: '<span class="nv-note">' + U.pct(mk.healthyAt10, 0) + ' ' + (fr() ? 'des jumeaux sans diabète à 10 ans' : 'of twins diabetes-free at 10 y') + '</span>' }) +
       UI.kpi({ label: fr() ? 'Alertes actives' : 'Active alerts', value: String(al.length), icon: '🚨', tone: al.some((a) => a.tone === 'risk') ? 'risk' : al.length ? 'warn' : 'good', hint: '<span class="nv-note">' + U.esc(al.filter((a) => a.tone === 'risk').length + ' ' + (fr() ? 'prioritaires' : 'priority')) + '</span>' }) +
       UI.kpi({ label: t('hero.twin'), value: U.fmtInt(State.settings.trials), icon: '🧬', tone: 'info', hint: '<span class="nv-note">' + U.esc(t('hero.twinSub', { n: U.fmtInt(State.settings.trials) })) + '</span>' });
   }
@@ -2672,7 +2672,7 @@
         (fSc ? UI.chip((fr() ? 'Scénario → ' : 'Scenario → ') + U.fmt(endS, v.digits) + ' ' + v.unit, 'ok')
              : (fScRaw ? UI.chip(fr() ? 'Scénario = référence (aucune dérive)' : 'Scenario = baseline (no drift)', 'neutral') : '')) +
         UI.chip('IC 80 % : ' + U.fmt(f.fc.p10[H - 1], v.digits) + ' – ' + U.fmt(f.fc.p90[H - 1], v.digits), 'neutral') +
-        (pThr != null ? UI.chip((fr() ? 'P(seuil franchi) ' : 'P(threshold crossed) ') + U.pct(pThr * 100, 0), pThr > 0.4 ? 'risk' : pThr > 0.18 ? 'warn' : 'good') : '') +
+        (pThr != null ? UI.chip((fr() ? 'P(seuil franchi) ' : 'P(threshold crossed) ') + U.pct(pThr, 0), pThr > 0.4 ? 'risk' : pThr > 0.18 ? 'warn' : 'good') : '') +
         UI.chip(U.fmtInt(f.fc.trials) + ' ' + (fr() ? 'trajectoires' : 'trajectories'), 'neutral') +
         (f.fc.models && f.fc.models.length ? UI.chip((fr() ? 'Ensemble : ' : 'Ensemble: ') + f.fc.models.filter((x) => !x.dropped).length + '/' + f.fc.models.length + ' ' + (fr() ? 'modèles' : 'models'), 'info') : '') +
       '</div>' +
@@ -2721,7 +2721,7 @@
       UI.kpi({ label: t('ai.kpi.best'), value: leader && leader.mae != null ? U.fmt(leader.mae, 3) : '—', unit: (v && v.unit) || '', icon: '🎯', tone: 'good', chip: leader ? leader.label : '', hint: '<span class="nv-note">RMSE ' + U.fmt(leader ? leader.rmse : 0, 3) + ' · MAPE ' + U.fmt(leader ? leader.mape : 0, 2) + ' %</span>' }) +
       UI.kpi({ label: t('ai.kpi.kept'), value: kept.length + '/' + fc.models.length, icon: '🧩', tone: 'info', hint: '<span class="nv-note">' + U.esc(kept.map((m) => m.id).join(' · ')) + '</span>' }) +
       UI.kpi({ label: t('ai.kpi.folds'), value: U.fmtInt(fc.backtest ? fc.backtest.folds : 0), icon: '🔁', tone: 'neutral', hint: '<span class="nv-note">' + U.esc(fr() ? 'horizon de validation ' : 'validation horizon ') + (fc.backtest ? fc.backtest.hmax : 0) + ' ' + (fr() ? 'mois' : 'months') + '</span>' }) +
-      UI.kpi({ label: t('ai.kpi.ic'), value: U.fmt(fc.p10[H - 1], v ? v.digits : 1) + ' → ' + U.fmt(fc.p90[H - 1], v ? v.digits : 1), unit: (v && v.unit) || '', icon: '📐', tone: 'ok', hint: '<span class="nv-note">' + U.esc(t('ai.coverage')) + ' : ' + (fc.calibration && fc.calibration.coverage != null ? U.pct(fc.calibration.coverage * 100, 0) : '—') + ' · ' + U.esc(t('ai.volScale')) + ' ' + U.fmt(fc.calibration ? fc.calibration.volScale : 1, 2) + '</span>' }) +
+      UI.kpi({ label: t('ai.kpi.ic'), value: U.fmt(fc.p10[H - 1], v ? v.digits : 1) + ' → ' + U.fmt(fc.p90[H - 1], v ? v.digits : 1), unit: (v && v.unit) || '', icon: '📐', tone: 'ok', hint: '<span class="nv-note">' + U.esc(t('ai.coverage')) + ' : ' + (fc.calibration && fc.calibration.coverage != null ? U.pct(fc.calibration.coverage, 0) : '—') + ' · ' + U.esc(t('ai.volScale')) + ' ' + U.fmt(fc.calibration ? fc.calibration.volScale : 1, 2) + '</span>' }) +
       UI.kpi({ label: t('ai.kpi.trials'), value: U.fmtInt(fc.trials), icon: '🎲', tone: 'neutral', hint: '<span class="nv-note">' + U.esc(fr() ? 'bruit autocorrélé ρ 0,55 · poids Dirichlet' : 'autocorrelated noise ρ 0.55 · Dirichlet weights') + '</span>' }) +
       UI.kpi({ label: t('ai.kpi.time'), value: U.fmtInt(fc.ms), unit: 'ms', icon: '⚡', tone: fc.ms < 400 ? 'good' : 'warn', hint: '<span class="nv-note">' + U.esc(fr() ? 'graine ' : 'seed ') + U.esc(String(fc.seed).slice(0, 26)) + '</span>' })
     );
@@ -2824,8 +2824,8 @@
         '<span class="nv-item-icon">' + icons[k] + '</span>' +
         '<span class="nv-item-body"><span class="nv-item-title">' + U.esc(x.label) + '</span>' +
         '<span class="nv-meter nv-meter-compact"><span class="nv-meter-track"><i style="width:' + U.clamp(x.p * 100 * 1.6, 2, 100) + '%;background:' + TH.tone(x.band.tone === 'good' ? 'good' : x.band.tone === 'ok' ? 'ok' : x.band.tone === 'warn' ? 'warn' : 'risk') + '"></i></span></span>' +
-        '<span class="nv-item-text">IC 90 % ' + U.pct(x.ci[0] * 100, 1) + ' – ' + U.pct(x.ci[1] * 100, 1) + '</span></span>' +
-        '<span class="nv-item-side"><b>' + U.pct(x.p * 100, 1) + '</b><span class="nv-chip nv-chip-' + x.band.tone + '">' + U.esc(x.band.label) + '</span></span>' +
+        '<span class="nv-item-text">IC 90 % ' + U.pct(x.ci[0], 1) + ' – ' + U.pct(x.ci[1], 1) + '</span></span>' +
+        '<span class="nv-item-side"><b>' + U.pct(x.p, 1) + '</b><span class="nv-chip nv-chip-' + x.band.tone + '">' + U.esc(x.band.label) + '</span></span>' +
         '</button>';
     }).join('');
     renderAttribution();
@@ -2867,8 +2867,8 @@
     const annual = 1 - Math.pow(1 - U.clamp(State.cache.risks.t2d.p, 0.001, 0.95), 1 / 10);
     setHtml('#nvMarkovKpis',
       UI.kpi({ label: t('pred.healthyYears'), value: U.fmt(run.healthyYears, 2), unit: '/10', tone: run.healthyYears > 8 ? 'good' : run.healthyYears > 6.5 ? 'warn' : 'risk', icon: '🌿' }) +
-      UI.kpi({ label: fr() ? 'Sans diabète à 10 ans' : 'Diabetes-free at 10 y', value: U.pct(run.healthyAt10 * 100, 0), tone: run.healthyAt10 > 0.8 ? 'good' : run.healthyAt10 > 0.55 ? 'warn' : 'risk', icon: '🛡️' }) +
-      UI.kpi({ label: fr() ? 'Progression annuelle' : 'Annual progression', value: U.pct(annual * 100, 2), tone: annual > 0.03 ? 'risk' : annual > 0.015 ? 'warn' : 'good', icon: '📈' }) +
+      UI.kpi({ label: fr() ? 'Sans diabète à 10 ans' : 'Diabetes-free at 10 y', value: U.pct(run.healthyAt10, 0), tone: run.healthyAt10 > 0.8 ? 'good' : run.healthyAt10 > 0.55 ? 'warn' : 'risk', icon: '🛡️' }) +
+      UI.kpi({ label: fr() ? 'Progression annuelle' : 'Annual progression', value: U.pct(annual, 2), tone: annual > 0.03 ? 'risk' : annual > 0.015 ? 'warn' : 'good', icon: '📈' }) +
       UI.kpi({ label: fr() ? 'État actuel' : 'Current state', value: t(MARKOV_STATES[run.start]).split(' ')[0], tone: run.start <= 1 ? 'good' : run.start === 2 ? 'warn' : 'risk', icon: '📍' }));
     setTxt('#nvMarkovSub', t('pred.markovSub', { n: U.fmtInt(run.trials), y: run.years }) + ' · ' + (useSc ? t('common.scenario') : (fr() ? 'trajectoire actuelle' : 'current trajectory')));
     setTxt('#nvMarkovNote', (fr() ? 'Poids de santé : sain 1,00 · à risque 0,93 · prédiabète 0,76 · diabète 0,50 · complications 0,22. Matrice recalculée depuis vos risques et votre adhésion au plan.'
@@ -2952,8 +2952,8 @@
     if (box) {
       box.innerHTML = '<h4>🌱 ' + U.esc(t('sim.organic')) + '</h4>' +
         '<p class="nv-sub">' + U.esc(t('sim.organicSub')) + '</p>' +
-        UI.meter({ label: fr() ? 'Votre demande bio' : 'Your organic demand', value: demand * 100, text: U.pct(demand * 100, 0), color: TH.tones.good, marker: supply * 100, markerLabel: fr() ? 'Offre nationale' : 'National supply' }) +
-        UI.meter({ label: fr() ? 'Offre bio tracée — ' + countryName() : 'Traceable organic supply — ' + countryName(), value: supply * 100, text: U.pct(supply * 100, 0), color: TH.tones.info }) +
+        UI.meter({ label: fr() ? 'Votre demande bio' : 'Your organic demand', value: demand * 100, text: U.pct(demand, 0), color: TH.tones.good, marker: supply * 100, markerLabel: fr() ? 'Offre nationale' : 'National supply' }) +
+        UI.meter({ label: fr() ? 'Offre bio tracée — ' + countryName() : 'Traceable organic supply — ' + countryName(), value: supply * 100, text: U.pct(supply, 0), color: TH.tones.info }) +
         '<div class="nv-row">' +
           UI.chip((fr() ? 'Dépense hebdo estimée chez les producteurs bio : ' : 'Est. weekly spend with organic farms: ') + money(weeklyUsd), 'good') +
           UI.chip(demand > supply ? (fr() ? 'Signal de demande > offre → opportunité agricole' : 'Demand signal > supply → farming opportunity') : (fr() ? 'Offre suffisante' : 'Supply sufficient'), demand > supply ? 'warn' : 'ok') +
@@ -3120,7 +3120,7 @@
         return '<article class="nv-meal"><header><h4>' + U.esc(t('slot.' + m.slot)) + '</h4>' +
           '<span class="nv-chip nv-chip-neutral">' + U.fmtInt(tot.energy) + ' kcal</span>' +
           '<span class="nv-chip nv-chip-neutral">' + money(tot.cost) + '</span>' +
-          '<span class="nv-chip nv-chip-neutral">' + U.pct(m.share * 100, 0) + ' ' + (fr() ? 'de l\'énergie' : 'of energy') + '</span>' +
+          '<span class="nv-chip nv-chip-neutral">' + U.pct(m.share, 0) + ' ' + (fr() ? 'de l\'énergie' : 'of energy') + '</span>' +
           '<span style="flex:1"></span>' +
           '<button class="nv-btn sm" data-nv-action="plan-log" data-nv-arg="' + m.slot + '"><i>📥</i><span>' + U.esc(fr() ? 'Ajouter au journal' : 'Log to journal') + '</span></button>' +
           '</header><ul class="nv-meal-items">' +
@@ -3713,7 +3713,7 @@
       line(fr() ? 'Années en bonne santé (10 ans)' : 'Healthy years (10 y)', U.fmt(markovRun(p, scenarioProfile(), 10, 400).healthyYears, 2) + '/10') +
       '</table>' +
       '<h2>' + U.esc(fr() ? 'Risques à 10 ans' : '10-year risks') + '</h2><table><tr><th>' + U.esc(fr() ? 'Pathologie' : 'Condition') + '</th><th>P</th><th>IC 90 %</th><th>' + U.esc(fr() ? 'Bande' : 'Band') + '</th></tr>' +
-      Object.keys(r).map((k) => '<tr><td>' + U.esc(r[k].label) + '</td><td>' + U.pct(r[k].p * 100, 1) + '</td><td>' + U.pct(r[k].ci[0] * 100, 1) + '–' + U.pct(r[k].ci[1] * 100, 1) + '</td><td>' + U.esc(r[k].band.label) + '</td></tr>').join('') + '</table>' +
+      Object.keys(r).map((k) => '<tr><td>' + U.esc(r[k].label) + '</td><td>' + U.pct(r[k].p, 1) + '</td><td>' + U.pct(r[k].ci[0], 1) + '–' + U.pct(r[k].ci[1], 1) + '</td><td>' + U.esc(r[k].band.label) + '</td></tr>').join('') + '</table>' +
       '<h2>' + U.esc(fr() ? 'Impact du scénario sélectionné' : 'Impact of the selected scenario') + '</h2><table>' +
       line('NutriScore', U.signed(o.score.delta, 0) + ' pts (' + o.score.base + ' → ' + o.score.scen + ')') +
       line(fr() ? 'Années en bonne santé' : 'Healthy years', U.signed(o.healthyYears.delta, 2)) +
@@ -3826,7 +3826,7 @@
         { key: 'sodium', label: 'Na (mg)', align: 'right' },
         { key: 'gi', label: 'IG', align: 'right', render: (v) => v ? U.fmt(v, 0) : '—' },
         { key: 'price', label: '$/kg', align: 'right' },
-        { key: 'organic', label: fr() ? 'Bio' : 'Organic', align: 'center', render: (v) => v > 0.5 ? '🌱 ' + U.pct(v * 100, 0) : v > 0.2 ? U.pct(v * 100, 0) : '—' },
+        { key: 'organic', label: fr() ? 'Bio' : 'Organic', align: 'center', render: (v) => v > 0.5 ? '🌱 ' + U.pct(v, 0) : v > 0.2 ? U.pct(v, 0) : '—' },
         { key: 'season', label: fr() ? 'Saison' : 'Season', align: 'center', render: (v, r) => inSeason(r) ? '<span class="nv-chip nv-chip-good">' + U.esc(fr() ? 'oui' : 'yes') + '</span>' : '<span class="nv-chip nv-chip-warn">' + U.esc(fr() ? 'non' : 'no') + '</span>' },
         { key: 'add', label: '', align: 'center', render: (v, r) => '<button class="nv-btn sm" data-nv-action="fd-add" data-nv-arg="' + r.id + '">📥</button>' }
       ];
@@ -3931,7 +3931,7 @@
           ) + '<div class="nv-note" style="margin-top:6px">' + U.esc(
             (fr() ? 'Backtest : ' : 'Backtest: ') + U.fmtInt(fc.backtest ? fc.backtest.folds : 0) + (fr() ? ' plis · horizon ' : ' folds · horizon ') + (fc.backtest ? fc.backtest.hmax : 0) +
             (fr() ? ' mois · calibration : facteur de volatilité ' : ' months · calibration: volatility factor ') + U.fmt(fc.calibration ? fc.calibration.volScale : 1, 2) +
-            (fr() ? ', couverture empirique ' : ', empirical coverage ') + (fc.calibration && fc.calibration.coverage != null ? U.pct(fc.calibration.coverage * 100, 0) : '—') +
+            (fr() ? ', couverture empirique ' : ', empirical coverage ') + (fc.calibration && fc.calibration.coverage != null ? U.pct(fc.calibration.coverage, 0) : '—') +
             (fr() ? ' (cible 80 %). Incertitude à l\'horizon : ' : ' (target 80 %). Horizon uncertainty: ') +
             (fc.uncertainty ? U.fmt(fc.uncertainty.total, 2) + ' ' + (predVar(State.settings.predVar).unit || '') + ' — ' + t('ai.unc.residual') + ' ' + fc.uncertainty.shares.residual + ' % · ' + t('ai.unc.model') + ' ' + fc.uncertainty.shares.model + ' % · ' + t('ai.unc.scenario') + ' ' + fc.uncertainty.shares.scenario + ' %' : '—') +
             '. ' + U.fmtInt(fc.ms) + ' ms.'
@@ -3989,7 +3989,7 @@
         '<h4 style="margin:14px 0 6px">' + U.esc(fr() ? 'Risques à 10 ans' : '10-year risks') + '</h4>' +
         UI.table(
           [{ key: 'l', label: fr() ? 'Pathologie' : 'Condition' }, { key: 'p', label: 'P', align: 'right' }, { key: 'ci', label: 'IC 90 %', align: 'right' }, { key: 'b', label: fr() ? 'Bande' : 'Band' }, { key: 'd', label: fr() ? 'Scénario (Δ pts)' : 'Scenario (Δ pts)', align: 'right' }],
-          Object.keys(r).map((k) => ({ l: r[k].label, p: U.pct(r[k].p * 100, 1), ci: U.pct(r[k].ci[0] * 100, 1) + ' – ' + U.pct(r[k].ci[1] * 100, 1), b: '<span class="nv-chip nv-chip-' + r[k].band.tone + '">' + U.esc(r[k].band.label) + '</span>', d: U.signed(o.risks.deltas[k], 1) }))
+          Object.keys(r).map((k) => ({ l: r[k].label, p: U.pct(r[k].p, 1), ci: U.pct(r[k].ci[0], 1) + ' – ' + U.pct(r[k].ci[1], 1), b: '<span class="nv-chip nv-chip-' + r[k].band.tone + '">' + U.esc(r[k].band.label) + '</span>', d: U.signed(o.risks.deltas[k], 1) }))
         ) +
         '<h4 style="margin:14px 0 6px">' + U.esc(fr() ? 'Recommandations prioritaires' : 'Priority recommendations') + '</h4>' +
         '<div class="nv-list">' + recommendations(p).slice(0, 5).map((x) =>
@@ -4028,7 +4028,7 @@
         list.map((x) => ({ i: x.f.icon, n: foodName(x.f) + (inSeason(x.f) ? '' : ' 📅'), g: U.fmtInt(x.grams) + ' g', c: money(x.cost), o: x.organic ? U.fmtInt(x.organic) + '/7 🌱' : '—' }))
       ) + '<div class="nv-row" style="margin-top:10px">' + UI.chip(fr() ? 'Total 7 jours : ' + money(total) : 'Total 7 days: ' + money(total), 'good') +
         UI.chip(fr() ? '≈ ' + money(total / 7) + ' / jour' : '≈ ' + money(total / 7) + ' / day', 'ok') +
-        UI.chip(fr() ? 'Part bio : ' + U.pct(organicShare * 100, 0) : 'Organic share: ' + U.pct(organicShare * 100, 0), 'info') +
+        UI.chip(fr() ? 'Part bio : ' + U.pct(organicShare, 0) : 'Organic share: ' + U.pct(organicShare, 0), 'info') +
         UI.chip(fr() ? 'Dépense reversée aux producteurs locaux' : 'Spending returned to local producers', 'neutral') + '</div>',
       actions: UI.btn(fr() ? 'Exporter CSV' : 'Export CSV', { action: 'sh2-csv', icon: '⇩', kind: 'primary' }) + UI.btn(fr() ? 'Voir le marché bio' : 'Open organic market', { action: 'sh2-go', icon: '🛒' }) + UI.btn(fr() ? 'Fermer' : 'Close', { action: 'sh2-close', kind: 'ghost' })
     });

@@ -2135,6 +2135,89 @@
       relang() { modules.forEach((m) => { if (m.__mounted && m.render) { try { m.render(m.__root); } catch (e) { } } }); }
     };
   })();
+  /* ==========================================================================
+     NV.guard — REPRISE DE CONTRÔLE SUR LES COUCHES DE DÉMONSTRATION HÉRITÉES
+     --------------------------------------------------------------------------
+     Plusieurs couches historiques de la page (V54 « live overlay », V56
+     « intercept », V57 « operational simulation ») écoutent les clics et les
+     changements au niveau du document — V56 en phase de capture — et ouvrent des
+     fenêtres de démonstration qui masquent les cockpits NutriVision. Elles
+     restent utiles sur le reste de la page : on ne les supprime jamais, on les
+     empêche seulement d'atteindre les contrôles d'un module, en écoutant plus
+     tôt qu'elles (fenêtre + capture) sur le périmètre du module.
+
+     Usage (réutilisable par toute section) :
+       const g = NV.guard.scope(root, {
+         click:  function (el, e) { ... ; return true; },   // true = consommé
+         change: function (el, e) { ... ; return true; }
+       });
+       NV.guard.mark(legacySelect);   // élément hérité repris par le module
+       NV.guard.release(g);           // au démontage
+     ========================================================================== */
+  const Guard = (function () {
+    const DEFAULT_OWNED = '.nv-panel, .nv-hero-panel, .nv-kpis, .nv-kpi, .nv-list, .nv-item, ' +
+      '.nv-table, .nv-chart-host, .nv-chart, .nv-seg, .nv-slider, .nv-lever, .nv-stepper, ' +
+      '.nv-ring, .nv-gisbar, .nv-uni-gis, .nv-uni-gisbar, .nv-uni-lever, .nv-uni-tile, ' +
+      '[data-nv-action], [data-nv-arg], [data-nv-chart], [data-nv-seg], [data-nv-slider], [data-nv-owned]';
+    const scopes = [];
+    let installed = false;
+    function owner(t) {
+      for (let i = 0; i < scopes.length; i++) {
+        const s = scopes[i];
+        if (!s.root || !s.root.contains || !s.root.contains(t)) continue;
+        /* les modales vivent hors des sections : les couches héritées les ignorent */
+        if (t.closest && t.closest('.nv-modal-backdrop')) continue;
+        if ((t.hasAttribute && t.hasAttribute('data-nv-owned')) || t.__nvOwned) return s;
+        if (t.closest && t.closest(s.owned || DEFAULT_OWNED)) return s;
+      }
+      return null;
+    }
+    function install() {
+      if (installed || !global.addEventListener) return;
+      installed = true;
+      global.addEventListener('click', function (e) {
+        const t = e.target;
+        if (!t || !t.closest) return;
+        const s = owner(t);
+        if (!s || typeof s.click !== 'function') return;
+        const el = t.closest('[data-nv-action], [data-nv-owned], [role="button"]') || t;
+        let done = false;
+        try { done = s.click(el, e) !== false; } catch (err) { done = false; }
+        if (!done) return;
+        e.stopPropagation();                       /* V54 / V56 / V57 ne verront pas ce clic */
+        if (el.tagName === 'BUTTON' || (el.hasAttribute && el.hasAttribute('data-nv-action'))) e.preventDefault();
+      }, true);
+      global.addEventListener('change', function (e) {
+        const t = e.target;
+        if (!t) return;
+        const s = owner(t);
+        if (!s || typeof s.change !== 'function') return;
+        let done = false;
+        try { done = s.change(t, e) !== false; } catch (err) { done = false; }
+        if (done) e.stopPropagation();             /* pas de « Context recalculation » V54 */
+      }, true);
+    }
+    return {
+      scope(root, opt) {
+        if (!root) return null;
+        const o = opt || {};
+        const s = { root: root, owned: o.owned || DEFAULT_OWNED, click: o.click, change: o.change };
+        scopes.push(s);
+        install();
+        return s;
+      },
+      release(s) { const i = scopes.indexOf(s); if (i >= 0) scopes.splice(i, 1); },
+      mark(el) {
+        if (!el) return el;
+        el.__nvOwned = true;
+        try { el.setAttribute('data-nv-owned', '1'); } catch (e) { }
+        return el;
+      },
+      ownedSelector: DEFAULT_OWNED
+    };
+  })();
+  NV.guard = Guard;
+
   NV.app = App;
 
   /* boot automatique */

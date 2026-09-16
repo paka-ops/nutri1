@@ -1459,3 +1459,133 @@
 .nv-chip-info    { border-color: rgba(125, 238, 251, .34); background: rgba(125, 238, 251, .1); }
 .nv-chip-neutral { border-color: rgba(182, 192, 255, .34); background: rgba(182, 192, 255, .1); }
 .nv-chip-good    { border-color: rgba(109, 247, 182, .34); background: rgba(109, 247, 182, .1); }
+
+/* ---------------------------------------------------------------------------
+   12.b SURFACES HÉRITÉES DES SECTIONS INSTITUTIONNELLES
+   Les sections UNICEF / OMS / WFP / FAO / santé / agriculture réutilisent des
+   classes historiques à fond clair codé « en dur ». Toute section portant
+   .nv-scope bénéficie de la même neutralisation (aucune duplication par module).
+   ------------------------------------------------------------------------- */
+.nv-scope .gis-demo,
+.nv-scope .map,
+.nv-scope .v53-map,
+.nv-scope .v38-chart-wrap,
+.nv-scope .v38-controls,
+.nv-scope .evidence-flow,
+.nv-scope .trace-flow,
+.nv-scope .food-pathway,
+.nv-scope .pill,
+.nv-scope .v56-pill,
+.nv-scope .alert-panel,
+.nv-scope .inst-kpi {
+  background: var(--nv-panel2) !important;
+  background-image: none !important;
+  color: var(--nv-ink) !important;
+  border-color: var(--nv-line) !important;
+  box-shadow: none !important;
+}
+.nv-scope .evidence-flow span,
+.nv-scope .trace-flow span,
+.nv-scope .food-pathway span {
+  background: rgba(255, 255, 255, .06) !important;
+  color: var(--nv-ink) !important;
+  border-color: var(--nv-line) !important;
+}
+/* pistes (barres de progression, jauges de cartes) : sombres, jamais #e8eee9 */
+.nv-scope .bar-wrap,
+.nv-scope .progress,
+.nv-scope .match-meter,
+.nv-scope .v43-progress,
+.nv-scope .v46-progress,
+.nv-scope .v53-progress,
+.nv-scope .v56-progress { background: rgba(255, 255, 255, .09) !important; }
+.nv-scope .bar-fill,
+.nv-scope .progress i { background: linear-gradient(90deg, var(--nv-mint), var(--nv-cyan)) !important; }
+/* étiquette posée par .gis-demo::after (fond blanc d'origine) */
+.nv-scope .gis-demo::after {
+  background: rgba(4, 20, 15, .84) !important;
+  color: var(--nv-ink2) !important;
+  border-color: var(--nv-line) !important;
+}
+/* textes des tuiles institutionnelles (KPI, tranches d'âge, lignes, alertes) */
+.nv-scope .inst-kpi span,
+.nv-scope .age-card span,
+.nv-scope .age-card small,
+.nv-scope .feeding-row span,
+.nv-scope .maternal-row span,
+.nv-scope .risk-row span,
+.nv-scope .alert-row span,
+.nv-scope .v38-kpi-label,
+.nv-scope .v38-kpi-trend { color: var(--nv-ink2) !important; }
+.nv-scope .inst-kpi b,
+.nv-scope .age-card b,
+.nv-scope .feeding-row b,
+.nv-scope .maternal-row b,
+.nv-scope .risk-row b,
+.nv-scope .v38-kpi-value { color: #fff !important; }
+.nv-scope .pill { color: var(--nv-mint) !important; letter-spacing: .08em; }
+.nv-scope .alert-row strong { color: var(--nv-warn) !important; }
+.nv-scope .feeding-row,
+.nv-scope .maternal-row,
+.nv-scope .risk-row,
+.nv-scope .alert-row { border-bottom-color: var(--nv-line) !important; }
+
+/* ---------------------------------------------------------------------------
+   12.c COUCHES DE DÉMONSTRATION HÉRITÉES (V54 « live overlay » / V57 « op. sim »)
+   Elles ajoutent .v54-action / .v57-clickable aux boutons, cartes et lignes de
+   tableau des sections institutionnelles, avec un survol clair (décalage, ombre,
+   bordure bleue, voile bleu). Dans une section enrichie, les contrôles
+   NutriVision conservent leur propre survol ; le reste est calmé pour rester
+   dans la palette sombre du cockpit (le clic hérité continue de fonctionner).
+   ------------------------------------------------------------------------- */
+.nv-scope .v54-action:not(.nv-btn):not(.nv-seg-btn):not(.nv-tile):hover,
+.nv-scope .v57-clickable:not(.nv-btn):not(.nv-seg-btn):hover {
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: var(--nv-line2) !important;
+}
+.nv-scope .nv-table tr.v54-action:hover,
+.nv-scope .nv-table tr.v57-clickable:hover { background: transparent !important; }
+.nv-scope .v54-action, .nv-scope .v57-clickable { cursor: pointer; }
+
+/* ---------------------------------------------------------------------------
+   12.d BANNIÈRE HÉRITÉE (.hero / .institution-hero) ET BADGES DE DÉMO
+   Le dégradé vert d'origine fait chuter le contraste des pastilles posées dessus
+   (mesuré à 3.5:1, sous le seuil AA de 4.5:1). Dans une section enrichie, la
+   bannière passe sur la surface du cockpit : même structure, mêmes accents
+   menthe / citron, mais un fond opaque sombre qui garantit le texte AA.
+   ------------------------------------------------------------------------- */
+.nv-scope .hero {
+  background:
+    radial-gradient(760px 300px at 10% -12%, rgba(56, 240, 165, .17), transparent 62%),
+    radial-gradient(620px 280px at 98% 122%, rgba(34, 211, 238, .13), transparent 60%),
+    linear-gradient(135deg, #07231a, #04140f 60%, #061a13) !important;
+  border-color: var(--nv-line) !important;
+  color: var(--nv-ink) !important;
+}
+.nv-scope .hero::before { opacity: .45; }
+.nv-scope .hero::after { background: radial-gradient(circle, rgba(201, 238, 89, .16), transparent 68%); }
+.nv-scope .hero h1 { color: #fff !important; }
+.nv-scope .hero p { color: var(--nv-ink2) !important; opacity: 1; }
+.nv-scope .hero .btn.primary,
+.nv-scope .hero-center-btn.primary {
+  background: var(--nv-mint) !important;
+  color: #04140f !important;
+  box-shadow: 0 10px 26px rgba(56, 240, 165, .22) !important;
+}
+.nv-scope .hero .btn.secondary,
+.nv-scope .hero-center-btn {
+  background: rgba(255, 255, 255, .07) !important;
+  color: var(--nv-ink) !important;
+  border-color: var(--nv-line2) !important;
+}
+.nv-scope .institution-hero { border-left-color: var(--nv-mint) !important; }
+/* badges de démonstration des couches héritées (V44 / V47 / V52 / V53) */
+.nv-scope .v44-demo-badge,
+.nv-scope .v47-badge,
+.nv-scope .v52-chip,
+.nv-scope .v53-chip {
+  background: rgba(56, 240, 165, .13) !important;
+  color: #6df7b6 !important;
+  border-color: rgba(109, 247, 182, .34) !important;
+}
