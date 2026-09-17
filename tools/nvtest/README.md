@@ -39,6 +39,7 @@ npm run serve &                   # sert nutri1/MVP/web sur http://localhost:800
 | `test-suite.js` | suite d'intégration `#citizen` |
 | `audit-contrast.js` | moteur de cascade + calcul de contraste WCAG (résout `var()`, dégradés, premier fond opaque ancêtre) |
 | `smoke-sections.js` | non-régression des autres sections |
+| `who-suite.js` | contrat du cockpit V62 `#who` : surface unique anti-superposition, invariants du modèle, tracés réels, fr/en, exports |
 | `perf-unicef.js` | mesures de performance |
 
 ## Limites connues de l'environnement
@@ -51,3 +52,12 @@ npm run serve &                   # sert nutri1/MVP/web sur http://localhost:800
   contrôles du cockpit, et la suite le vérifie.
 * Les graphiques sont rendus en SVG ; les largeurs mesurées sont forcées à 720 px par le
   harnais (jsdom renvoie 0).
+* Le harnais attendait `NutriCitizen.state.mounted` / `NutriUnicef.state.mounted` : ces
+  globaux (et `NutriVision`) ne sont définis par **aucun** build de `index.html` — toutes les
+  suites mouraient d'un `FATAL timeout` avant le premier test. `H.ready()` accepte maintenant
+  le premier module de cockpit réellement exposé (`NUTRI_UNICEF`, `NUTRI_HEALTH`, `NUTRI_AGRI`,
+  `NUTRI_WHO`, `NUTRI_I18N`). Les suites `citizen`, `unicef` et `perf` restent écrites contre
+  les API absentes : elles échouent pour cette raison, indépendamment de `#who`.
+* jsdom ne fournit pas de contexte 2D : `who-suite.js` installe un contexte enregistreur pour
+  que le tracé des graphes du cockpit soit réellement exécuté (une erreur de dessin remonte
+  alors au lieu d'être masquée).
