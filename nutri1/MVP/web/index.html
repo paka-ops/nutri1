@@ -7499,6 +7499,47 @@ body > .u6-tip span { color: #dff2fb; }
 
       <!-- ================= HERO ================= -->
       <div class="un-hero">
+        <div class="un-hero-top">
+          <div>
+            <span class="un-kicker"><i></i><span data-un="k0">CHILD SURVIVAL INVESTMENT SIMULATION • LIVE</span></span>
+            <h2><span data-un="k1">🧒 UNICEF Child Nutrition Investment Cockpit</span><br><b data-un="k2">From survey
+                evidence to bankable child-survival programmes</b></h2>
+            <p data-un="k3">One deterministic engine reconciles DHS/MICS surveys, wasting and stunting burden, coverage,
+              equity and delivery capacity into a single investment case: programme envelope, lives saved, stunting
+              averted, anaemia reduced and cost per DALY averted — country by country, package by package.</p>
+            <div class="un-chips">
+              <span class="un-chip lime">● <span data-un="k4">Live model</span></span>
+              <span class="un-chip" id="uChipCountry">🌍 Togo</span>
+              <span class="un-chip" id="uChipHorizon">🗓 10-year horizon</span>
+              <span class="un-chip blue" id="uChipModel">NUTRI.CN v60 • deterministic engine</span>
+              <span class="un-chip" id="uChipSession">UNICEF-SESSION-0000</span>
+              <span class="un-chip lime" data-un="k9">✓ One simulation surface — no stacked panels</span>
+            </div>
+          </div>
+          <div class="un-hero-actions">
+            <div class="un-filters">
+              <label>Country<select id="unicefCountry" class="un-select" onchange="renderUNICEF()"></select></label>
+              <label>Level<select id="unicefLevel" class="un-select" onchange="renderUNICEF()">
+                  <option data-i18n="ui.national">National</option>
+                  <option data-i18n="ui.region">Region</option>
+                  <option data-i18n="ui.district">District</option>
+                </select></label>
+              <label>Year<select id="unicefYear" class="un-select" onchange="renderUNICEF()">
+                  <option>2026</option>
+                  <option>2025</option>
+                  <option>2024</option>
+                  <option>2023</option>
+                  <option>2022</option>
+                </select></label>
+            </div>
+            <button type="button" class="un-btn primary" data-un-act="run">⚡ <span data-un="k5">Run the
+                simulation</span></button>
+            <button type="button" class="un-btn" data-un-act="cockpit">🏛 <span data-un="k6">Open investment
+                cockpit</span></button>
+            <button type="button" class="un-btn ghost" data-un-act="export">⇩ <span data-un="k7">Export model</span></button>
+            <button type="button" class="un-btn ghost" data-un-act="reset">↺ <span data-un="k8">Reset packages</span></button>
+          </div>
+        </div>
         <div class="un-hero-stats">
           <div class="un-hero-stat good"><small data-un="h1l">Programme envelope</small><b id="uHeroCap">$0M</b><span
               data-un="h1s">Durable funding per year</span></div>
@@ -8824,6 +8865,30 @@ body > .u6-tip span { color: #dff2fb; }
 
       <!-- ================= HERO ================= -->
       <div class="hl-hero">
+        <div class="hl-hero-top">
+          <div>
+            <span class="hl-kicker"><i></i><span data-hl="k0">HEALTH &amp; NUTRITION INVESTMENT SIMULATION • LIVE</span></span>
+            <h2><span data-hl="k1">🏥 Ministry of Health Investment Cockpit</span><br><b data-hl="k2">A bankable health &amp; nutrition investment case, built from population evidence</b></h2>
+            <p data-hl="k3">One deterministic engine reconciles malnutrition, maternal health, NCD trends, service coverage, workforce and system capacity into a single investment case: capital plan, net present value, benefit-cost ratio, lives saved, DALYs averted and jobs — country by country, lever by lever, with auditable equations.</p>
+            <div class="hl-chips">
+              <span class="hl-chip aqua">● <span data-hl="k4">Live model</span></span>
+              <span class="hl-chip" id="hlChipCountry">🌍 —</span>
+              <span class="hl-chip" id="hlChipHorizon">🗓 —</span>
+              <span class="hl-chip blue" id="hlChipModel">NUTRI.HEALTH v61</span>
+              <span class="hl-chip" id="hlChipSession">HLTH-SESSION-0000</span>
+              <span class="hl-chip gold" data-hl="k9">✓ One simulation surface — no stacked panels</span>
+            </div>
+          </div>
+          <div class="hl-hero-actions">
+            <button type="button" class="hl-btn primary" data-hl-act="run">⚡ <span data-hl="k5">Run the simulation</span></button>
+            <button type="button" class="hl-btn" data-hl-act="studio">🏛 <span data-hl="k6">Open the simulation studio</span></button>
+            <button type="button" class="hl-btn ghost" data-hl-act="export">⇩ <span data-hl="k7">Export model</span></button>
+            <button type="button" class="hl-btn ghost" data-hl-act="reset">↺ <span data-hl="k8">Reset levers</span></button>
+          </div>
+        </div>
+
+        <!-- live investor ticker -->
+        <div class="hl-ribbon" id="hlRibbon"></div>
 
         <div class="hl-hero-stats">
           <div class="hl-hero-stat good"><small data-hl="h1l">Programme capital</small><b id="hlHeroCapex">—</b><span id="hlHeroCapexSub" data-hl="h1s">Public + donor + private envelope</span></div>
@@ -8834,6 +8899,7 @@ body > .u6-tip span { color: #dff2fb; }
       </div>
 
       <!-- ================= DEAL STRIP ================= -->
+      <div class="hl-deal" id="hlDeal"></div>
 
       <!-- ================= KPI STRIP ================= -->
       <div class="hl-kpis" id="hlKpis"></div>
@@ -9376,6 +9442,27 @@ body > .u6-tip span { color: #dff2fb; }
 
       <!-- ================= HERO ================= -->
       <div class="ag-hero">
+        <div class="ag-hero-top">
+          <div>
+            <span class="ag-kicker"><i></i><span data-ag="k0">SIMULATION D’INVESTISSEMENT AGROALIMENTAIRE • LIVE</span></span>
+            <h2><span data-ag="k1">🌾 Cockpit d’Investissement Agricole, Souveraineté &amp; Bio-Nutrition</span><br><b data-ag="k2">Du champ certifié bio à la décision d’investissement d'État bancable</b></h2>
+            <p data-ag="k3">Moteur de simulation déterministe haute précision dédié aux investisseurs et ministères : réconcilie récoltes 2026, surfaces bio certifiées, volumes consommés, déficits alimentaires, cascade des pertes post-récolte, transition agroécologique, création d'emplois ruraux et équilibre macro-économique.</p>
+            <div class="ag-chips">
+              <span class="ag-chip lime">● <span data-ag="k4">Modèle en direct</span></span>
+              <span class="ag-chip" id="agChipCountry">🌍 Togo</span>
+              <span class="ag-chip" id="agChipHorizon">🗓 Horizon 10 ans</span>
+              <span class="ag-chip blue" id="agChipModel">NUTRI.AGRI v59+ • Moteur Déterministe Bio-Alimentaire</span>
+              <span class="ag-chip" id="agChipSession">AGRI-SESSION-0000</span>
+              <span class="ag-chip lime" data-ag="k9">✓ Surface unifiée fluide — Zéro superposition de panneaux</span>
+            </div>
+          </div>
+          <div class="ag-hero-actions">
+            <button type="button" class="ag-btn primary" data-ag-act="run">⚡ <span data-ag="k5">Lancer la simulation</span></button>
+            <button type="button" class="ag-btn" data-ag-act="cockpit">🏛 <span data-ag="k6">Ouvrir le cockpit d'investissement</span></button>
+            <button type="button" class="ag-btn ghost" data-ag-act="export">⇩ <span data-ag="k7">Exporter le modèle</span></button>
+            <button type="button" class="ag-btn ghost" data-ag-act="reset">↺ <span data-ag="k8">Réinitialiser</span></button>
+          </div>
+        </div>
         <div class="ag-hero-stats">
           <div class="ag-hero-stat good"><small data-ag="h1l">Capital du programme</small><b id="agHeroCapex">$0M</b><span data-ag="h1s">Enveloppe publique + privée</span></div>
           <div class="ag-hero-stat"><small data-ag="h2l">Valeur actualisée nette</small><b id="agHeroNpv">$0M</b><span id="agHeroNpvSub">@ 12% taux d'actualisation</span></div>
