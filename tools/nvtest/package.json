@@ -8,6 +8,7 @@
     "unicef": "node unicef-suite.js",
     "citizen": "node test-suite.js",
     "sections": "node smoke-sections.js",
+    "who": "node who-suite.js",
     "perf": "node perf-unicef.js",
     "contrast:unicef": "node audit-contrast.js unicef",
     "contrast:citizen": "node audit-contrast.js citizen",

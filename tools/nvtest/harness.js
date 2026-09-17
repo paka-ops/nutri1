@@ -52,9 +52,22 @@ async function load(opt) {
     }
     return gBCR.call(this);
   };
-  await waitFor(() => win.NutriCitizen && win.NutriCitizen.state && win.NutriCitizen.state.mounted, 25000, 'NutriCitizen mounted');
+  await waitFor(() => ready(win), o.readyMs || 25000, 'cockpit modules ready');
   if (o.view !== false) { await act(win, () => win.go && win.go('citizen')); await sleep(o.settle == null ? 900 : o.settle); }
   return { dom, win, doc: win.document, logs };
+}
+
+/* index.html ne définit ni NutriCitizen ni NutriUnicef (aucun build de ce fichier n'a
+   jamais exposé ces globaux ni state.mounted) : la grille de prêt attend donc le premier
+   module de cockpit réellement exposé. Les anciens globaux restent acceptés s'ils
+   réapparaissent un jour — sinon toutes les suites meurent d'un timeout avant le 1er test. */
+function ready(w) {
+  if (typeof w.go !== 'function' || !w.document || w.document.readyState === 'loading') return false;
+  return [
+    w.NutriCitizen && w.NutriCitizen.state && w.NutriCitizen.state.mounted,
+    w.NutriUnicef && w.NutriUnicef.state && w.NutriUnicef.state.mounted,
+    w.NUTRI_UNICEF, w.NUTRI_HEALTH, w.NUTRI_AGRI, w.NUTRI_WHO, w.NUTRI_I18N
+  ].some(Boolean);
 }
 
 function sleep(ms) { return new Promise((r) => setTimeout(r, ms)); }
@@ -96,4 +109,4 @@ function pathPoints(d) {
   return out;
 }
 
-module.exports = { load, sleep, waitFor, act, click, clickAction, selectValue, pathPoints };
+module.exports = { load, sleep, waitFor, act, click, clickAction, selectValue, pathPoints, ready };
