@@ -33241,33 +33241,7 @@ q0k: 'FOCUS PATHOLOGIES', q0t: 'Huit pathologies liées à l’alimentation, un 
     var csv = rows.map(function (r) { return r.map(function (c) { var s = String(c == null ? '' : c); return s.indexOf(',') >= 0 ? '"' + s + '"' : s; }).join(','); }).join('\n');
     download('nutri1-who-diet-ncd-model-' + state.code + '-' + state.horizon + 'y.csv', csv, 'text/csv');
   }
-  function exportBrief() {
-    var sim = SIM || render(), fr = lang() === 'fr';
-    var ins = insights(sim), ce = costEffectiveness(sim);
-    var html = '<html lang="' + (fr ? 'fr' : 'en') + '"><head><meta charset="utf-8"><title>' + esc(fr ? 'Note investisseur — NUTRI.N°1 WHO' : 'Investor brief — NUTRI.N°1 WHO') + '</title>' +
-      '<style>body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#170a12;margin:38px;max-width:940px;line-height:1.55}' +
-      'h1{font-size:24px;margin:0 0 4px;letter-spacing:-.03em}h2{font-size:14px;margin:26px 0 8px;text-transform:uppercase;letter-spacing:.1em;color:#b83257}' +
-      '.muted{color:#6c545c;font-size:12px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border-bottom:1px solid #eee;text-align:left;padding:6px 8px}' +
-      'th{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#6c545c}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}' +
-      '.k{border:1px solid #eee;border-radius:12px;padding:10px 12px}.k small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#6c545c}.k b{font-size:19px}' +
-      'blockquote{border-left:3px solid #d7f45b;background:#fafbee;padding:10px 14px;border-radius:0 10px 10px 0;font-size:12.5px}</style></head><body>' +
-      '<h1>' + esc(fr ? 'Cockpit d’investissement OMS — alimentation, nutrition & MNT' : 'WHO diet, nutrition & NCD investment cockpit') + '</h1>' +
-      '<div class="muted">' + esc(sim.c.n) + ' • ' + sim.years[0] + '–' + sim.years[sim.horizon - 1] + ' • ' + SESSION + ' • NUTRI.WHO v62 • ' + new Date().toLocaleString() + '</div>' +
-      '<h2>' + (fr ? 'La thèse' : 'The thesis') + '</h2><div class="kpis">' +
-      [['NPV / VAN', money(sim.npv)], ['BCR', nf(sim.bcr, 2) + '×'], ['IRR / TRI', (sim.irr == null || sim.npv <= 0) ? 'n/a' : pct(sim.irr, 1)], ['Payback', sim.payback ? sim.payback + ' ' + (fr ? 'ans' : 'yrs') : '—'],
-      ['DALYs averted', dalyStr(sim.dalysAv)], ['Cost / DALY', '$' + nf(sim.cpd, 0)], ['Capital', money(sim.capex)], ['Score', nf(sim.score, 0) + '/100 ' + sim.grade]]
-        .map(function (x) { return '<div class="k"><small>' + x[0] + '</small><b>' + x[1] + '</b></div>'; }).join('') + '</div>' +
-      '<blockquote>' + esc((fr ? 'L’épidémie de MNT liée à l’alimentation est un risque budgétaire et un actif d’investissement : ' : 'The diet-related NCD epidemic is both a fiscal risk and an investable asset: ') +
-        ins.map(function (b) { return b.t + ' — ' + b.d; }).join(' ')) + '</blockquote>' +
-      '<h2>' + (fr ? 'Programme' : 'Programme') + '</h2><table><tr><th>' + (fr ? 'Levier' : 'Lever') + '</th><th>' + (fr ? 'Couverture' : 'Coverage') + '</th><th>' + (fr ? 'Coût' : 'Cost') + '</th><th>ROI</th><th>' + (fr ? 'Porteur' : 'Owner') + '</th></tr>' +
-      sim.programmeRows.map(function (r) { return '<tr><td>' + esc(r.label) + '</td><td>' + nf(r.cov * 100, 0) + '%</td><td>' + money(r.cost) + '</td><td>' + nf(r.roi, 1) + '×</td><td>' + esc(r.owner) + '</td></tr>'; }).join('') + '</table>' +
-      '<h2>' + (fr ? 'Pathologies' : 'Conditions') + '</h2><table><tr><th>' + (fr ? 'Pathologie' : 'Condition') + '</th><th>' + (fr ? 'Aujourd’hui' : 'Today') + '</th><th>' + (fr ? 'Statu quo' : 'Status quo') + '</th><th>' + (fr ? 'Programme' : 'Programme') + '</th></tr>' +
-      CONDS.map(function (c) { return '<tr><td>' + esc(condLabel(c)) + '</td><td>' + nf(prevAt(sim, c.k, 'prevSqT', 0), 1) + '%</td><td>' + nf(prevAt(sim, c.k, 'prevSqT', sim.horizon - 1), 1) + '%</td><td>' + nf(prevAt(sim, c.k, 'prevPrT', sim.horizon - 1), 1) + '%</td></tr>'; }).join('') + '</table>' +
-      '<h2>' + (fr ? 'Sécurité du rendement' : 'Return safety') + '</h2><p class="muted">' + esc((fr ? 'P(VAN>0) = ' : 'P(NPV>0) = ') + pct(MONTE.pos, 0) + ' • P10 ' + money(MONTE.p10) + ' • P50 ' + money(MONTE.p50) + ' • P90 ' + money(MONTE.p90) + ' • ' + MONTE.draws.length + ' ' + (fr ? 'tirages déterministes' : 'deterministic draws')) + '</p>' +
-      '<h2>' + (fr ? 'Méthode' : 'Method') + '</h2><p class="muted">' + esc(fr ? 'Moteur déterministe auditable, calibration illustrative (OMS/WHO GHO, World Bank ICP, FAO). Brancher les données officielles produit des résultats opposables. Aucune autre vue de la plateforme n’est modifiée.' : 'Auditable deterministic engine, illustrative calibration (WHO GHO, World Bank ICP, FAO). Connecting official country data yields defensible results. No other view of the platform is modified.') + '</p>' +
-      '</body></html>';
-    download('nutri1-who-investor-brief-' + state.code + '.html', html, 'text/html');
-  }
+ 
 
   /* ==================== BOOT ==================== */
   function boot() {
@@ -35897,33 +35871,6 @@ q0k: 'FOCUS PATHOLOGIES', q0t: 'Huit pathologies liées à l’alimentation, un 
     download('nutri1-wfp-food-security-model-' + state.code + '-' + state.horizon + 'y.csv', csv, 'text/csv');
   }
   function prev2(sim, k, which, t) { return sim[which][k][t] * 100; }
-  function exportBrief() {
-    var sim = SIM || render(), fr = lang() === 'fr';
-    var ins = insights(sim);
-    var html = '<html lang="' + (fr ? 'fr' : 'en') + '"><head><meta charset="utf-8"><title>' + esc(fr ? 'Note investisseur — NUTRI.N°1 PAM' : 'Investor brief — NUTRI.N°1 WFP') + '</title>' +
-      '<style>body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:#0c1710;margin:38px;max-width:940px;line-height:1.55}' +
-      'h1{font-size:24px;margin:0 0 4px;letter-spacing:-.03em}h2{font-size:14px;margin:26px 0 8px;text-transform:uppercase;letter-spacing:.1em;color:#1d4a2e}' +
-      '.muted{color:#5d6f62;font-size:12px}table{border-collapse:collapse;width:100%;font-size:12px}th,td{border-bottom:1px solid #eee;text-align:left;padding:6px 8px}' +
-      'th{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#5d6f62}.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}' +
-      '.k{border:1px solid #eee;border-radius:12px;padding:10px 12px}.k small{display:block;font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#5d6f62}.k b{font-size:19px}' +
-      'blockquote{border-left:3px solid #c9f04f;background:#f7fbf0;padding:10px 14px;border-radius:0 10px 10px 0;font-size:12.5px}</style></head><body>' +
-      '<h1>' + esc(fr ? 'Cockpit d’investissement PAM — sécurité alimentaire, marchés & nutrition' : 'WFP food security, market & nutrition investment cockpit') + '</h1>' +
-      '<div class="muted">' + esc(sim.c.n) + ' • ' + sim.years[0] + '–' + sim.years[sim.horizon - 1] + ' • ' + SESSION + ' • NUTRI.WFP v63 • ' + new Date().toLocaleString() + '</div>' +
-      '<h2>' + (fr ? 'La thèse' : 'The thesis') + '</h2><div class="kpis">' +
-      [['NPV / VAN', money(sim.npv)], ['BCR', nf(sim.bcr, 2) + '×'], ['TRI social / Social IRR', (sim.irr == null || sim.npv <= 0) ? 'n/a' : pct(sim.irr, 1)], ['TRI plateforme / Platform IRR', sim.platform.irr != null ? pct(sim.platform.irr, 0) : 'n/a'], ['Payback', sim.payback ? sim.payback + ' ' + (fr ? 'ans' : 'yrs') : '—'],
-      [fr ? 'Personnes protégées' : 'People protected', pplStr(sim.peopleHead * 1e6)], [fr ? 'Coût / DALY' : 'Cost / DALY', '$' + nf(sim.cpd, 0)], [t('capex'), money(sim.capex)], [t('score'), nf(sim.score, 0) + '/100 ' + sim.grade]]
-        .map(function (x) { return '<div class="k"><small>' + x[0] + '</small><b>' + x[1] + '</b></div>'; }).join('') + '</div>' +
-      '<blockquote>' + esc((fr ? 'La faim est un risque budgétaire et un actif d’investissement : ' : 'Hunger is both a fiscal risk and an investable asset: ') +
-        ins.map(function (b) { return b.t + ' — ' + b.d; }).join(' ')) + '</blockquote>' +
-      '<h2>' + (fr ? 'Programme' : 'Programme') + '</h2><table><tr><th>' + (fr ? 'Levier' : 'Lever') + '</th><th>' + (fr ? 'Couverture' : 'Coverage') + '</th><th>' + (fr ? 'Coût' : 'Cost') + '</th><th>ROI</th><th>' + (fr ? 'Porteur' : 'Owner') + '</th></tr>' +
-      sim.programmeRows.map(function (r) { return '<tr><td>' + esc(r.label) + '</td><td>' + nf(r.cov * 100, 0) + '%</td><td>' + money(r.cost) + '</td><td>' + nf(r.roi, 1) + '×</td><td>' + esc(r.owner) + '</td></tr>'; }).join('') + '</table>' +
-      '<h2>' + (fr ? 'Résultats' : 'Outcomes') + '</h2><table><tr><th>' + (fr ? 'Résultat' : 'Outcome') + '</th><th>' + (fr ? 'Aujourd’hui' : 'Today') + '</th><th>' + (fr ? 'Statu quo' : 'Status quo') + '</th><th>' + (fr ? 'Programme' : 'Programme') + '</th></tr>' +
-      OUTCOMES.map(function (o) { return '<tr><td>' + esc(outLabel(o)) + '</td><td>' + nf(prev2(sim, o.k, 'prevSqT', 0), 1) + '</td><td>' + nf(prev2(sim, o.k, 'prevSqT', sim.horizon - 1), 1) + '</td><td>' + nf(prev2(sim, o.k, 'prevPrT', sim.horizon - 1), 1) + '</td></tr>'; }).join('') + '</table>' +
-      '<h2>' + (fr ? 'Sécurité du rendement' : 'Return safety') + '</h2><p class="muted">' + esc((fr ? 'P(VAN>0) = ' : 'P(NPV>0) = ') + pct(MONTE.pos, 0) + ' • P10 ' + money(MONTE.p10) + ' • P50 ' + money(MONTE.p50) + ' • P90 ' + money(MONTE.p90) + ' • ' + MONTE.draws.length + ' ' + (fr ? 'tirages déterministes' : 'deterministic draws')) + '</p>' +
-      '<h2>' + (fr ? 'Méthode' : 'Method') + '</h2><p class="muted">' + esc(fr ? 'Moteur déterministe auditable, calibration illustrative (PAM, OMS, Banque mondiale). Brancher les données officielles produit des résultats opposables. Aucune autre vue de la plateforme n’est modifiée.' : 'Auditable deterministic engine, illustrative calibration (WFP, WHO, World Bank). Connecting official country data yields defensible results. No other view of the platform is modified.') + '</p>' +
-      '</body></html>';
-    download('nutri1-wfp-investor-brief-' + state.code + '.html', html, 'text/html');
-  }
 
   /* ==================== BOOT ==================== */
   function boot() {
