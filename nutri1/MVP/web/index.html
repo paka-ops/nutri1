@@ -1500,7 +1500,7 @@
       padding: 14px;
       border: 1px solid rgba(0, 0, 0, .08);
       border-radius: 15px;
-      background: var(--card, #fff)
+      background: var(--card, #fff);
     }
 
     .v38-chart-wrap canvas {
@@ -12504,15 +12504,7 @@ body > .u6-tip span { color: #dff2fb; }
         return def.keys.some(k => t.includes(k.toLowerCase()));
       });
     }
-    function ensureCanvas(root, id) {
-      let c = root.querySelector("#" + id);
-      if (!c) {
-        const wrap = document.createElement("div"); wrap.className = "v38-chart-wrap";
-        c = document.createElement("canvas"); c.id = id; c.height = 220; wrap.appendChild(c);
-        root.appendChild(wrap);
-      }
-      return c;
-    }
+    
     function chart(root, id, type, labels, data, label) {
       const c = ensureCanvas(root, id);
       if (window.Chart) {
