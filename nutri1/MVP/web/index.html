@@ -8,6 +8,8 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- WHO NUTRITION SURVEILLANCE · module autonome (fichiers séparés, voir assets/who/) -->
   <link rel="stylesheet" href="assets/who/who-surveillance.css">
+  <!-- PAM / WFP FOOD SECURITY ANALYTICS · module autonome (fichiers séparés, voir assets/wfp/) -->
+  <link rel="stylesheet" href="assets/wfp/wfp-dashboard.css">
   <style>
     :root {
       --g: #08733f;
@@ -38907,6 +38909,17 @@ q0k: 'FOCUS PATHOLOGIES', q0t: 'Huit pathologies liées à l’alimentation, un 
 <script src="assets/who/who-charts.js"></script>
 <script src="assets/who/who-surveillance.js"></script>
 <script src="assets/who/who-ncd.js"></script>
+
+<!-- ===========================================================================
+     PAM · WFP FOOD SECURITY ANALYTICS · AFRIQUE DE L'OUEST
+     Composants externes injectés dans la section #wfp (page allégée).
+     wfp-data.js      : pays, phases IPC, séries FCS, prix, pipeline, budget
+     wfp-charts.js    : 15 graphiques + minis KPI, 100 % Canvas API
+     wfp-dashboard.js : markup, filtres, rapport, initialisation paresseuse
+     ============================================================================ -->
+<script src="assets/wfp/wfp-data.js"></script>
+<script src="assets/wfp/wfp-charts.js"></script>
+<script src="assets/wfp/wfp-dashboard.js"></script>
 </body>
 
 </html>
