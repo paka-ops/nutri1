@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>UNICEF · Child Nutrition Analytics — prévisualisation du composant</title>
+  <link rel="stylesheet" href="unicef-dashboard.css">
+  <style>
+    /* Cadre de prévisualisation : le composant ne dépend que de la section
+       #unicef ci-dessous. Rien ici n'est repris par index.html. */
+    html, body { margin: 0; background: #E6F4FD; color: #082F49; font: 14px "Segoe UI", system-ui, sans-serif; }
+    .pv-head {
+      max-width: 1560px; margin: 0 auto; padding: 22px 22px 0;
+      display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: baseline;
+    }
+    .pv-head h1 { margin: 0; font-size: 19px; font-weight: 850; letter-spacing: -.02em; }
+    .pv-head p { margin: 0; font-size: 12.5px; color: #5B7C93; }
+    .pv-head code { background: #F0F9FF; border: 1px solid #BAE6FD; border-radius: 6px; padding: 1px 5px; font-size: 12px; }
+    .pv-note {
+      max-width: 1560px; margin: 14px auto 0; padding: 11px 14px;
+      border: 1px solid #BAE6FD; border-radius: 14px; background: #FFFFFF;
+      font-size: 12.5px; color: #36586C;
+    }
+    .pv-frame { max-width: 1560px; margin: 14px auto 40px; padding: 0 22px; }
+    /* la section est affichée en permanence dans cette page de contrôle */
+    #unicef { display: block !important; }
+  </style>
+</head>
+
+<body>
+  <header class="pv-head">
+    <h1>UNICEF · Child Nutrition Analytics · Afrique de l'Ouest</h1>
+    <p>Prévisualisation isolée du composant <code>assets/unicef/</code> — 5 KPI, 15 graphiques Canvas, scorecard CRENAS.</p>
+  </header>
+  <div class="pv-note">
+    Cette page ne charge que le composant : <code>unicef-dashboard.css</code>,
+    <code>unicef-data.js</code>, <code>unicef-charts.js</code>,
+    <code>unicef-dashboard.js</code>. Dans l'application, la même section
+    <code>#unicef</code> est injectée dans <code>index.html</code> au premier
+    affichage de la vue (fichiers séparés, page allégée).
+  </div>
+  <div class="pv-frame">
+    <section id="unicef" class="view on"></section>
+  </div>
+
+  <script src="unicef-data.js"></script>
+  <script src="unicef-charts.js"></script>
+  <script src="unicef-dashboard.js"></script>
+</body>
+
+</html>
