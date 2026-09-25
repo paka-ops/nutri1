@@ -3254,6 +3254,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/health/who-surveillance.css">
   <style id="nutri-ui-investor-refresh">
     :root {
       --g: #08733f;
@@ -8760,13 +8762,9 @@ section[data-cockpit-moved] .v43-live-stage { display: none !important; }
     </div>
   </section>
 
-  <section id="who" class="view" data-who-cockpit="1" data-cockpit-moved="1">
-    <div class="hero institution-hero">
-      <span class="pill">NUTRI.N°1</span>
-      <h1>🌍 WHO Nutrition & NCD Intelligence Center</h1>
-      <p>Le cockpit d'investissement OMS — studio, leviers et graphiques — n'est plus dans cette section. Il se trouve uniquement dans <b>Projects, Surveys &amp; Nutrition Surveillance</b>.</p>
-      <button type="button" class="btn primary" onclick="openInvestment('who')">Ouvrir le cockpit OMS</button>
-    </div>
+  <section id="who" class="view" data-who-cockpit="1">
+    <!-- WHO Nutrition Surveillance is maintained as a scoped vanilla module. -->
+    <div id="whoNutritionMount"></div>
   </section>
 
   <section id="wfp" class="view" data-wfp-cockpit="1" data-cockpit-moved="1">
@@ -38891,6 +38889,7 @@ q0k: 'FOCUS PATHOLOGIES', q0t: 'Huit pathologies liées à l’alimentation, un 
 
 
 
+<script src="assets/health/who-surveillance.js" defer></script>
 </body>
 
 </html>
