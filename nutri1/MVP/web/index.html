@@ -6,6 +6,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>NUTRI.N°1 V50 — Africa Food, Nutrition & Health Intelligence Infrastructure</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- WHO NUTRITION SURVEILLANCE · module autonome (fichiers séparés, voir assets/who/) -->
+  <link rel="stylesheet" href="assets/who/who-surveillance.css">
   <style>
     :root {
       --g: #08733f;
@@ -38891,6 +38893,16 @@ q0k: 'FOCUS PATHOLOGIES', q0t: 'Huit pathologies liées à l’alimentation, un 
 
 
 
+<!-- ============================================================================
+     WHO NUTRITION SURVEILLANCE · AFRIQUE DE L'OUEST
+     Composants externes injectés dans la section #who (page allégée).
+     who-data.js      : données de surveillance (16 pays, séries, seuils OMS)
+     who-charts.js    : moteur de graphiques 100 % Canvas API
+     who-surveillance.js : markup de la section + interactions
+     ============================================================================ -->
+<script src="assets/who/who-data.js"></script>
+<script src="assets/who/who-charts.js"></script>
+<script src="assets/who/who-surveillance.js"></script>
 </body>
 
 </html>
