@@ -871,13 +871,20 @@
       hc.style.cursor = "pointer";
     }
 
-    /* tri tableau */
+    /* tri tableau : clic ET clavier (Entrée / Espace) */
+    function sortBy(thEl) {
+      var k = thEl.getAttribute("data-key");
+      if (state.sortKey === k) state.sortDir *= -1;
+      else { state.sortKey = k; state.sortDir = k === "name" ? 1 : -1; }
+      renderTable();
+    }
     $$("#g15 thead th[data-key]").forEach(function (thEl) {
-      thEl.addEventListener("click", function () {
-        var k = thEl.getAttribute("data-key");
-        if (state.sortKey === k) state.sortDir *= -1;
-        else { state.sortKey = k; state.sortDir = k === "name" ? 1 : -1; }
-        renderTable();
+      thEl.setAttribute("tabindex", "0");
+      thEl.setAttribute("role", "button");
+      thEl.setAttribute("title", "Trier par " + thEl.textContent.trim());
+      thEl.addEventListener("click", function () { sortBy(thEl); });
+      thEl.addEventListener("keydown", function (e) {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sortBy(thEl); }
       });
     });
 
@@ -927,7 +934,15 @@
     });
     var c = code === "ALL" ? null : D.BY_CODE[code];
     var more = $("#wsvMoreCountries");
-    if (more && code === "ALL") more.selectedIndex = 0;
+    if (more) {
+      /* le sélecteur reflète toujours le filtre actif */
+      more.selectedIndex = 0;
+      if (c) {
+        for (var i = 0; i < more.options.length; i++) {
+          if (more.options[i].text.indexOf(c.name) > -1) { more.selectedIndex = i; break; }
+        }
+      }
+    }
     $("#wsvScope").textContent = c
       ? c.name + " · données " + state.year + " · " + c.subregion
       : "Afrique de l'Ouest · 16 pays · Données " + state.year;
@@ -978,6 +993,17 @@
     /* second passage : les polices peuvent décaler la largeur des canvas */
     setTimeout(function () { CH.repaintAll(); }, 350);
     setTimeout(function () { CH.repaintAll(); }, 1200);
+
+    /* Au retour dans la vue, les canvas sont redessinés : leur bitmap devient
+       caduc si la fenête a été redimensionnée pendant que la vue était masquée
+       (display:none remet la largeur du canvas à 0). */
+    if (typeof MutationObserver === "function") {
+      var vis = new MutationObserver(function () {
+        if (!root.classList.contains("on")) return;
+        setTimeout(function () { CH.repaintAll(); }, 90);
+      });
+      vis.observe(root, { attributes: true, attributeFilter: ["class"] });
+    }
   }
 
   /* Démarrage paresseux : le module ne se construit qu'au premier affichage de

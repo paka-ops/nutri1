@@ -55,6 +55,8 @@ dédiés, reliés à la page par **quatre balises** seulement :
 | En-têtes de la heatmap | Trie les pays par indicateur |
 | En-têtes du tableau | Trie la colonne (▲/▼) |
 | Recherche du tableau | Filtre instantané par pays |
+| En-têtes du tableau | Tri au clavier aussi (Entrée / Espace) |
+| Navigation dans la vue | Les canvas sont redessinés au retour (bitmap caduc après masquage) |
 | « Exporter PDF » | `window.print()` — la feuille d'impression n'imprime que `#who` |
 | « Exporter CSV » | Télécharge la scorecard filtrée |
 
