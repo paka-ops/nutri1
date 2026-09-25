@@ -193,7 +193,16 @@
     });
     const api = {
       update: function (cfg2) {
-        if (cfg2 !== undefined) cfg = cfg2;
+        /* La config est remplacée EN PLACE : les fonctions draw() et les
+           gestionnaires de survol lisent l'objet cfg capturé à la création.
+           (Réassigner la variable locale ne suffisait pas : update() rejouait
+           l'animation avec les anciennes données.) Chaque graphique travaille
+           sur une copie privée (voir own()), les données de l'appelant ne
+           sont donc jamais modifiées.                                        */
+        if (cfg2 !== undefined && cfg2 !== cfg) {
+          Object.keys(cfg).forEach(function (k) { delete cfg[k]; });
+          Object.assign(cfg, cfg2);
+        }
         const c0 = ctxOf(canvas);
         if (!c0) return;
         tween(canvas, DUR, function (p) {
@@ -282,11 +291,6 @@
         ctx.lineTo(w - P.r, y);
         ctx.stroke();
         ctx.restore();
-        ctx.fillStyle = "#EF4444";
-        ctx.font = FONT(700, 9.5);
-        ctx.textAlign = "right";
-        ctx.textBaseline = "bottom";
-        ctx.fillText(cfg.threshold.label, w - P.r - 2, y - 3);
       }
 
       /* courbes : tracé séquentiel gauche → droite */
@@ -330,6 +334,36 @@
           ctx.stroke();
         });
       });
+
+      /* libellé du seuil : dessiné APRÈS les courbes, avec un halo blanc,
+         pour rester lisible quand une courbe le croise.
+         threshold.align = "left" le place au début de l'axe.            */
+      if (cfg.threshold && cfg.threshold.label) {
+        const y = Y(cfg.threshold.value);
+        const left = cfg.threshold.align === "left";
+        ctx.font = FONT(700, 9.5);
+        ctx.textAlign = left ? "left" : "right";
+        ctx.textBaseline = "bottom";
+        ctx.lineWidth = 3;
+        ctx.lineJoin = "round";
+        ctx.strokeStyle = "rgba(255,255,255,.92)";
+        const tx = left ? P.l + 6 : w - P.r - 2;
+        if (cfg.threshold.pill) {
+          /* pastille blanche : lisible même si une courbe passe dessous */
+          const tw = ctx.measureText(cfg.threshold.label).width;
+          const bx = left ? tx - 5 : tx - tw - 5;
+          ctx.fillStyle = "rgba(255,255,255,.96)";
+          roundRect(ctx, bx, y - 18, tw + 10, 15, 7.5);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(239,68,68,.45)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        } else {
+          ctx.strokeText(cfg.threshold.label, tx, y - 3);
+        }
+        ctx.fillStyle = "#EF4444";
+        ctx.fillText(cfg.threshold.label, tx, cfg.threshold.pill ? y - 5.5 : y - 3);
+      }
 
       /* survol */
       if (st.hover > -1 && st.hover < labels.length) {
@@ -384,12 +418,20 @@
   /* ===================================================================== */
   function hbar(canvas, cfg) {
     const st = { hover: -1 };
+    /* Bandes de couleur : par défaut celles du brief (stunting) ; un
+       indicateur peut fournir les siennes via cfg.bands = [{min, color}]
+       triées par seuil décroissant (ex. obésité, hypertension, diabète). */
     const colorFor = function (v) {
+      if (cfg.bands && cfg.bands.length) {
+        for (let i = 0; i < cfg.bands.length; i++) if (v >= cfg.bands[i].min) return cfg.bands[i].color;
+        return cfg.bands[cfg.bands.length - 1].color;
+      }
       if (v > 35) return "#EF4444";
       if (v >= 20) return "#F59E0B";
       if (v >= 10) return "#10B981";
       return "#0066CC";
     };
+    const fmt = function (v) { return cfg.fmt ? cfg.fmt(v) : v + (cfg.unit || "%"); };
     const draw = function (c, p) {
       const ctx = c.ctx, w = c.w, h = c.h;
       const rows = cfg.rows, n = rows.length;
@@ -412,9 +454,12 @@
         ctx.restore();
         ctx.fillStyle = "#EF4444";
         ctx.font = FONT(700, 9.5);
-        ctx.textAlign = "left";
         ctx.textBaseline = "top";
-        ctx.fillText(cfg.threshold.label, x + 5, T - 12);
+        /* libellé à droite du repère, ou à gauche s'il sortirait du cadre */
+        const tw = ctx.measureText(cfg.threshold.label).width;
+        const flip = x + 5 + tw > w - 2;
+        ctx.textAlign = flip ? "right" : "left";
+        ctx.fillText(cfg.threshold.label, flip ? x - 5 : x + 5, T - 12);
       }
 
       rows.forEach(function (r, i) {
@@ -442,7 +487,7 @@
           ctx.font = FONT(800, 11);
           ctx.fillStyle = col;
           ctx.textAlign = "left";
-          ctx.fillText(r.value + (cfg.unit || "%"), L + (r.value / max) * pw + 7, y + bh / 2);
+          ctx.fillText(fmt(r.value), L + (r.value / max) * pw + 7, y + bh / 2);
         }
       });
     };
@@ -460,8 +505,9 @@
       showTip(
         '<div class="wsv-tip-t">' + r.flag + " " + r.label + "</div>" +
         '<div class="wsv-tip-r"><i style="background:' + colorFor(r.value) + '"></i>' + cfg.title +
-        "<b>" + r.value + (cfg.unit || "%") + "</b></div>" +
-        '<div class="wsv-tip-s">Rang régional : ' + r.rank + "/" + cfg.total + "</div>", ev
+        "<b>" + fmt(r.value) + "</b></div>" +
+        '<div class="wsv-tip-s">Rang régional : ' + r.rank + "/" + cfg.total +
+        (cfg.note ? " · " + cfg.note : "") + "</div>", ev
       );
     });
     canvas.__hoverClear = function () { st.hover = -1; ctrl.repaint(); };
@@ -1099,7 +1145,7 @@
       showTip(
         '<div class="wsv-tip-t">' + row.flag + " " + row.name + " · " + ind.label + "</div>" +
         '<div class="wsv-tip-r">Valeur<b>' + cell.text + "</b></div>" +
-        '<div class="wsv-tip-r">Rang régional<b>' + cell.rank + "/" + cfg.rows.length + "</b></div>" +
+        '<div class="wsv-tip-r">Rang régional<b>' + cell.rank + "/" + (cfg.total || cfg.rows.length) + "</b></div>" +
         '<div class="wsv-tip-r">' + ind.thresholdLabel + "</div>" +
         '<div class="wsv-tip-s">STATUT : ' + cell.status + "</div>", ev
       );
@@ -1382,11 +1428,19 @@
         const qy0 = clamp(Y(q.y1), P.t, P.t + ph), qy1 = clamp(Y(q.y0), P.t, P.t + ph);
         ctx.fillStyle = q.color;
         ctx.fillRect(qx0, qy0, qx1 - qx0, qy1 - qy0);
-        ctx.fillStyle = "rgba(15,23,42,.32)";
+        ctx.fillStyle = q.ink || "rgba(15,23,42,.32)";
         ctx.font = FONT(700, 8.5);
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(q.label, (qx0 + qx1) / 2, (qy0 + qy1) / 2);
+        if (cfg.quadCorner) {
+          /* coin extérieur du quadrant : zone généralement vide de points */
+          const left = q.x0 <= x0, bottom = q.y0 <= y0;
+          ctx.textAlign = left ? "left" : "right";
+          ctx.textBaseline = bottom ? "bottom" : "top";
+          ctx.fillText(q.label, left ? qx0 + 7 : qx1 - 7, bottom ? qy1 - 6 : qy0 + 6);
+        } else {
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(q.label, (qx0 + qx1) / 2, (qy0 + qy1) / 2);
+        }
       });
 
       ctx.font = FONT(500, 9.5);
@@ -1404,10 +1458,19 @@
       });
       ctx.textAlign = "center";
       ctx.textBaseline = "top";
-      niceTicks(x0, x1, 4).forEach(function (v) { ctx.fillText(v + "%", X(v), P.t + ph + 6); });
+      niceTicks(x0, x1, cfg.xTicks || 4).forEach(function (v) { ctx.fillText(v + "%", X(v), P.t + ph + 6); });
       ctx.fillStyle = "#64748B";
       ctx.font = FONT(700, 9.5);
       ctx.fillText(cfg.xLabel, P.l + pw / 2, h - 11);
+      if (cfg.yLabel) {
+        ctx.save();
+        ctx.translate(9, P.t + ph / 2);
+        ctx.rotate(-Math.PI / 2);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(cfg.yLabel, 0, 0);
+        ctx.restore();
+      }
 
       if (cfg.regression) {
         const rg = cfg.regression;
@@ -1433,6 +1496,7 @@
         const r = pt.r * (st.hover === i ? 1.35 : 1) * (0.4 + 0.6 * prog);
         if (r <= 0.3) return;
         const x = X(pt.x), y = Y(pt.y);
+        ctx.globalAlpha = pt.dim && st.hover !== i ? 0.22 : 1;
         ctx.beginPath();
         ctx.arc(x, y, r, 0, Math.PI * 2);
         ctx.fillStyle = rgba(pt.color, st.hover === i ? 0.6 : 0.45);
@@ -1447,6 +1511,7 @@
           ctx.textBaseline = "top";
           ctx.fillText(pt.name, x, y + r + 2);
         }
+        ctx.globalAlpha = 1;
       });
     };
     const ctrl = mount(canvas, cfg, draw);
@@ -1462,10 +1527,12 @@
       ctrl.repaint();
       if (idx < 0) { hideTip(); return; }
       const pt = cfg.points[idx];
+      const f = cfg.fmt || function (v) { return v + "%"; };
       showTip('<div class="wsv-tip-t">' + pt.flag + " " + pt.name + "</div>" +
-        '<div class="wsv-tip-r">Eau potable<b>' + pt.x + "%</b></div>" +
-        '<div class="wsv-tip-r">Stunting<b>' + pt.y + "%</b></div>" +
-        '<div class="wsv-tip-s">' + pt.subregion + "</div>", ev);
+        '<div class="wsv-tip-r">' + (cfg.tipX || "Eau potable") + "<b>" + f(pt.x) + "</b></div>" +
+        '<div class="wsv-tip-r">' + (cfg.tipY || "Stunting") + "<b>" + f(pt.y) + "</b></div>" +
+        (pt.tip || "") +
+        '<div class="wsv-tip-s">' + (pt.note || pt.subregion) + "</div>", ev);
     });
     canvas.__hoverClear = function () { st.hover = -1; ctrl.repaint(); };
     return ctrl;
@@ -1688,6 +1755,374 @@
   }
 
   /* ===================================================================== */
+  /* MNT 1 — Haltères (dumbbell) : écart femmes / hommes                   */
+  /* cfg.rows = [{code, label, flag, a, b, mid, extra}] · a = hommes,      */
+  /* b = femmes, mid = ensemble · cfg.means = {a, b} · cfg.focus = code    */
+  /* ===================================================================== */
+  const frNum = function (v, d) {
+    const k = d === undefined ? 1 : d;
+    return (Math.round(v * Math.pow(10, k)) / Math.pow(10, k)).toFixed(k).replace(".", ",");
+  };
+
+  function dumbbell(canvas, cfg) {
+    const st = { hover: -1 };
+    const L = 124, R = 48, T = 30, B = 20;
+    const draw = function (c, p) {
+      const ctx = c.ctx, w = c.w, h = c.h;
+      const rows = cfg.rows, n = rows.length;
+      const pw = w - L - R, ph = h - T - B;
+      const slot = ph / Math.max(1, n);
+      const max = cfg.max || 40;
+      const X = (v) => L + (clamp(v, 0, max) / max) * pw;
+      const ca = cfg.aColor || "#0066CC", cb = cfg.bColor || "#7C3AED";
+
+      /* grille verticale + graduations */
+      ctx.font = FONT(500, 9.5);
+      ctx.textAlign = "center";
+      ctx.textBaseline = "top";
+      niceTicks(0, max, 4).forEach(function (v) {
+        const x = X(v);
+        ctx.strokeStyle = "rgba(148,163,184,.20)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, T - 4);
+        ctx.lineTo(x, T + ph);
+        ctx.stroke();
+        ctx.fillStyle = "#94A3B8";
+        ctx.fillText(Math.round(v) + "%", x, T + ph + 5);
+      });
+
+      /* moyennes régionales (pointillés) */
+      if (cfg.means) {
+        [["a", ca, "right", cfg.aShort || "H"], ["b", cb, "left", cfg.bShort || "F"]].forEach(function (m) {
+          const v = cfg.means[m[0]];
+          if (v === undefined || v === null) return;
+          const x = X(v);
+          ctx.save();
+          ctx.setLineDash([4, 4]);
+          ctx.strokeStyle = rgba(m[1], 0.55);
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(x, T - 8);
+          ctx.lineTo(x, T + ph);
+          ctx.stroke();
+          ctx.restore();
+          ctx.fillStyle = m[1];
+          ctx.font = FONT(800, 9);
+          ctx.textAlign = m[2];
+          ctx.textBaseline = "bottom";
+          ctx.fillText("Moy. " + m[3] + " " + frNum(v) + " %", x + (m[2] === "left" ? 4 : -4), T - 10);
+        });
+      }
+
+      rows.forEach(function (r, i) {
+        const y = T + i * slot + slot / 2;
+        const prog = stagger(i, n, p, 0.03);
+        const isFocus = !!cfg.focus && cfg.focus === r.code;
+        const dim = !!cfg.focus && !isFocus && st.hover !== i;
+        ctx.globalAlpha = dim ? 0.28 : 1;
+        if (st.hover === i || isFocus) {
+          ctx.fillStyle = isFocus ? "rgba(0,102,204,.09)" : "rgba(0,102,204,.05)";
+          ctx.fillRect(0, y - slot / 2 + 1, w, slot - 2);
+        }
+        /* drapeau + pays */
+        ctx.fillStyle = "#334155";
+        ctx.font = FONT(isFocus ? 800 : 600, 10.5);
+        ctx.textAlign = "left";
+        ctx.textBaseline = "middle";
+        const name = r.label.length > 14 ? r.label.slice(0, 13) + "…" : r.label;
+        ctx.fillText((r.flag ? r.flag + " " : "") + name, 4, y);
+
+        /* les deux points partent de la valeur « ensemble » et s'écartent */
+        const mid = r.mid !== undefined ? r.mid : (r.a + r.b) / 2;
+        const xa = X(mid + (r.a - mid) * prog), xb = X(mid + (r.b - mid) * prog);
+        const g = ctx.createLinearGradient(Math.min(xa, xb), 0, Math.max(xa, xb) + 1, 0);
+        g.addColorStop(0, rgba(xa <= xb ? ca : cb, 0.45));
+        g.addColorStop(1, rgba(xa <= xb ? cb : ca, 0.45));
+        ctx.strokeStyle = g;
+        ctx.lineWidth = 4;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(xa, y);
+        ctx.lineTo(xb, y);
+        ctx.stroke();
+        ctx.lineCap = "butt";
+        /* repère « ensemble » */
+        ctx.beginPath();
+        ctx.arc(X(mid), y, 2.4, 0, Math.PI * 2);
+        ctx.fillStyle = "#0F172A";
+        ctx.fill();
+        const big = st.hover === i || isFocus;
+        [[xa, ca], [xb, cb]].forEach(function (d) {
+          ctx.beginPath();
+          ctx.arc(d[0], y, big ? 6 : 5, 0, Math.PI * 2);
+          ctx.fillStyle = d[1];
+          ctx.fill();
+          ctx.lineWidth = 1.6;
+          ctx.strokeStyle = "#fff";
+          ctx.stroke();
+        });
+        /* valeurs : la plus forte à droite, la plus faible à gauche */
+        if (prog > 0.6) {
+          const hiB = r.b >= r.a;
+          ctx.font = FONT(800, 9.5);
+          ctx.textBaseline = "middle";
+          ctx.lineWidth = 3;
+          ctx.lineJoin = "round";
+          ctx.strokeStyle = "#fff";
+          ctx.fillStyle = hiB ? cb : ca;
+          ctx.textAlign = "left";
+          const tHi = frNum(Math.max(r.a, r.b)) + " %", tLo = frNum(Math.min(r.a, r.b));
+          ctx.strokeText(tHi, Math.max(xa, xb) + 9, y);
+          ctx.fillText(tHi, Math.max(xa, xb) + 9, y);
+          ctx.fillStyle = hiB ? ca : cb;
+          ctx.textAlign = "right";
+          ctx.strokeText(tLo, Math.min(xa, xb) - 9, y);
+          ctx.fillText(tLo, Math.min(xa, xb) - 9, y);
+        }
+        ctx.globalAlpha = 1;
+      });
+    };
+    const ctrl = mount(canvas, cfg, draw);
+    hit(canvas, function (ev, mx, my) {
+      const n = cfg.rows.length;
+      const slot = (canvas.clientHeight - T - B) / Math.max(1, n);
+      const i = Math.floor((my - T) / slot);
+      if (i < 0 || i >= n) {
+        if (st.hover !== -1) { st.hover = -1; ctrl.repaint(); }
+        hideTip();
+        return;
+      }
+      if (st.hover !== i) { st.hover = i; ctrl.repaint(); }
+      const r = cfg.rows[i];
+      const ratio = r.a > 0 ? Math.max(r.a, r.b) / Math.min(r.a, r.b) : 0;
+      showTip(
+        '<div class="wsv-tip-t">' + (r.flag || "") + " " + r.label + "</div>" +
+        '<div class="wsv-tip-r"><span><i style="background:' + (cfg.bColor || "#7C3AED") + '"></i>' + (cfg.bName || "Femmes") + "</span><b>" + frNum(r.b) + " %</b></div>" +
+        '<div class="wsv-tip-r"><span><i style="background:' + (cfg.aColor || "#0066CC") + '"></i>' + (cfg.aName || "Hommes") + "</span><b>" + frNum(r.a) + " %</b></div>" +
+        (r.mid !== undefined ? '<div class="wsv-tip-r"><span><i style="background:#0F172A"></i>' + (cfg.midName || "Ensemble") + "</span><b>" + frNum(r.mid) + " %</b></div>" : "") +
+        '<div class="wsv-tip-s">Écart ' + (r.b >= r.a ? "F/H" : "H/F") + " : ×" + frNum(ratio) + (r.extra ? "<br>" + r.extra : "") + "</div>", ev
+      );
+    });
+    canvas.__hoverClear = function () { st.hover = -1; ctrl.repaint(); };
+    return ctrl;
+  }
+
+  /* ===================================================================== */
+  /* MNT 2 — Cascade de soins (diagnostic → traitement → contrôle)          */
+  /* cfg.steps = [{label, sub, value, color, ink, note}] (en % de la base)  */
+  /* cfg.ghost = repères mondiaux · cfg.compare = repères régionaux         */
+  /* cfg.target = {index, value, label}                                     */
+  /* ===================================================================== */
+  function fitText(ctx, txt, x, y, maxW, weight, size) {
+    let sz = size, t = String(txt);
+    ctx.font = FONT(weight, sz);
+    while (ctx.measureText(t).width > maxW && sz > 7) { sz -= 0.5; ctx.font = FONT(weight, sz); }
+    while (ctx.measureText(t).width > maxW && t.length > 2) t = t.slice(0, -2) + "…";
+    ctx.fillText(t, x, y);
+  }
+
+  function topRect(ctx, x, y, w, h, r) {
+    const rr = Math.max(0, Math.min(r, w / 2, h));
+    ctx.beginPath();
+    ctx.moveTo(x, y + h);
+    ctx.lineTo(x, y + rr);
+    ctx.quadraticCurveTo(x, y, x + rr, y);
+    ctx.lineTo(x + w - rr, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + rr);
+    ctx.lineTo(x + w, y + h);
+    ctx.closePath();
+  }
+
+  function cascade(canvas, cfg) {
+    const st = { hover: -1 };
+    const P = { l: 38, r: 10, t: 30, b: 44 };
+    const geo = function (w, h) {
+      const n = cfg.steps.length;
+      const pw = w - P.l - P.r, ph = h - P.t - P.b;
+      const slot = pw / Math.max(1, n);
+      const bw = Math.min(70, slot * 0.44);
+      return {
+        n: n, pw: pw, ph: ph, slot: slot, bw: bw,
+        X: (i) => P.l + i * slot + (slot - bw) / 2,
+        Y: (v) => P.t + ph - (clamp(v, 0, 100) / 100) * ph,
+      };
+    };
+    const draw = function (c, p) {
+      const ctx = c.ctx, w = c.w, h = c.h;
+      const G = geo(w, h);
+      const steps = cfg.steps;
+
+      /* axe Y 0-100 % */
+      ctx.font = FONT(500, 9.5);
+      ctx.textAlign = "right";
+      ctx.textBaseline = "middle";
+      [0, 25, 50, 75, 100].forEach(function (v) {
+        const y = G.Y(v);
+        ctx.strokeStyle = "rgba(148,163,184,.18)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(P.l, y);
+        ctx.lineTo(w - P.r, y);
+        ctx.stroke();
+        ctx.fillStyle = "#94A3B8";
+        ctx.fillText(v + "%", P.l - 6, y);
+      });
+
+      /* cible (ex. pays performants ≥ 50 % contrôlés) */
+      if (cfg.target) {
+        const t = cfg.target;
+        const x0 = P.l + t.index * G.slot + 4, x1 = P.l + (t.index + 1) * G.slot - 4, y = G.Y(t.value);
+        ctx.save();
+        ctx.setLineDash([5, 4]);
+        ctx.strokeStyle = "#047857";
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.moveTo(x0, y);
+        ctx.lineTo(x1, y);
+        ctx.stroke();
+        ctx.restore();
+        ctx.fillStyle = "#047857";
+        ctx.font = FONT(800, 9);
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        const tw = ctx.measureText(t.label).width;
+        const tx = clamp((x0 + x1) / 2, P.l + tw / 2 + 2, w - P.r - tw / 2 - 2);
+        ctx.fillText(t.label, tx, y - 4);
+      }
+
+      steps.forEach(function (s, i) {
+        const prog = stagger(i, steps.length, p, 0.12);
+        const x = G.X(i), y0 = G.Y(0);
+        const bh = (clamp(s.value, 0, 100) / 100) * G.ph * prog;
+        const g = ctx.createLinearGradient(0, y0 - Math.max(bh, 1), 0, y0);
+        g.addColorStop(0, st.hover === i ? lighten(s.color, 0.12) : s.color);
+        g.addColorStop(1, rgba(s.color, 0.55));
+        ctx.fillStyle = g;
+        topRect(ctx, x, y0 - bh, G.bw, bh, 7);
+        ctx.fill();
+
+        /* repère régional (quand un pays est filtré) : pointillés bleus */
+        if (cfg.compare && cfg.compare[i] !== undefined && prog > 0.5) {
+          const yc = G.Y(cfg.compare[i]);
+          ctx.save();
+          ctx.setLineDash([3, 3]);
+          ctx.strokeStyle = "#0066CC";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x - 7, yc);
+          ctx.lineTo(x + G.bw + 7, yc);
+          ctx.stroke();
+          ctx.restore();
+        }
+        /* repère mondial : trait plein ardoise + losange */
+        if (cfg.ghost && cfg.ghost[i] !== undefined && prog > 0.5) {
+          const yg = G.Y(cfg.ghost[i]);
+          ctx.strokeStyle = "#0F172A";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(x - 7, yg);
+          ctx.lineTo(x + G.bw + 7, yg);
+          ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(x + G.bw + 7, yg - 3.5);
+          ctx.lineTo(x + G.bw + 10.5, yg);
+          ctx.lineTo(x + G.bw + 7, yg + 3.5);
+          ctx.lineTo(x + G.bw + 3.5, yg);
+          ctx.closePath();
+          ctx.fillStyle = "#0F172A";
+          ctx.fill();
+        }
+        /* valeur au-dessus de la barre */
+        if (prog > 0.55) {
+          const txt = (s.value >= 100 ? "100" : frNum(s.value)) + " %";
+          const ty = Math.max(P.t - 2, y0 - bh - 6);
+          ctx.font = FONT(900, 13);
+          ctx.textAlign = "center";
+          ctx.textBaseline = "bottom";
+          ctx.lineWidth = 4;
+          ctx.lineJoin = "round";
+          ctx.strokeStyle = "#fff";
+          ctx.strokeText(txt, x + G.bw / 2, ty);
+          ctx.fillStyle = s.ink || s.color;
+          ctx.fillText(txt, x + G.bw / 2, ty);
+        }
+        /* libellés */
+        const cx = P.l + i * G.slot + G.slot / 2;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "top";
+        ctx.fillStyle = "#334155";
+        fitText(ctx, s.label, cx, y0 + 8, G.slot - 6, 800, 10.5);
+        if (s.sub) {
+          ctx.fillStyle = "#94A3B8";
+          fitText(ctx, s.sub, cx, y0 + 22, G.slot - 6, 600, 9);
+        }
+      });
+
+      /* pertes entre étapes : pastille rouge « −x pts » */
+      if (p > 0.72) {
+        ctx.globalAlpha = clamp((p - 0.72) / 0.28, 0, 1);
+        for (let i = 0; i < steps.length - 1; i++) {
+          const loss = steps[i].value - steps[i + 1].value;
+          if (loss <= 0) continue;
+          const xa = G.X(i) + G.bw, xb = G.X(i + 1);
+          const ya = G.Y(steps[i].value), yb = G.Y(steps[i + 1].value);
+          ctx.save();
+          ctx.setLineDash([2, 3]);
+          ctx.strokeStyle = "rgba(239,68,68,.55)";
+          ctx.lineWidth = 1.2;
+          ctx.beginPath();
+          ctx.moveTo(xa, ya);
+          ctx.lineTo(xb, yb);
+          ctx.stroke();
+          ctx.restore();
+          /* la pastille doit tenir dans l'intervalle entre deux barres, sans
+             mordre sur les valeurs : texte court si la place manque */
+          const gap = xb - xa;
+          ctx.font = FONT(800, 9);
+          let txt = "−" + frNum(loss) + " pts";
+          if (ctx.measureText(txt).width + 10 > gap - 4) { txt = "−" + frNum(loss); ctx.font = FONT(800, 8.5); }
+          const tw = ctx.measureText(txt).width + 10;
+          const px = (xa + xb) / 2, py = (ya + yb) / 2;
+          ctx.fillStyle = "#FEF2F2";
+          roundRect(ctx, px - tw / 2, py - 8, tw, 16, 8);
+          ctx.fill();
+          ctx.strokeStyle = "rgba(239,68,68,.35)";
+          ctx.lineWidth = 1;
+          ctx.stroke();
+          ctx.fillStyle = "#B91C1C";
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+          ctx.fillText(txt, px, py + 0.5);
+        }
+        ctx.globalAlpha = 1;
+      }
+    };
+    const ctrl = mount(canvas, cfg, draw);
+    hit(canvas, function (ev, mx) {
+      const G = geo(canvas.clientWidth, canvas.clientHeight);
+      const i = Math.floor((mx - P.l) / G.slot);
+      if (i < 0 || i >= G.n) {
+        if (st.hover !== -1) { st.hover = -1; ctrl.repaint(); }
+        hideTip();
+        return;
+      }
+      if (st.hover !== i) { st.hover = i; ctrl.repaint(); }
+      const s = cfg.steps[i];
+      const prev = i > 0 ? cfg.steps[i - 1] : null;
+      showTip(
+        '<div class="wsv-tip-t">' + s.label + (s.sub ? " · " + s.sub : "") + "</div>" +
+        '<div class="wsv-tip-r"><span><i style="background:' + s.color + '"></i>' + (cfg.scopeLabel || "Valeur") + "</span><b>" + frNum(s.value) + " %</b></div>" +
+        (cfg.compare && cfg.compare[i] !== undefined ? '<div class="wsv-tip-r"><span><i style="background:#0066CC"></i>' + (cfg.compareLabel || "Moyenne régionale") + "</span><b>" + frNum(cfg.compare[i]) + " %</b></div>" : "") +
+        (cfg.ghost && cfg.ghost[i] !== undefined ? '<div class="wsv-tip-r"><span><i style="background:#0F172A"></i>' + (cfg.ghostLabel || "Référence") + "</span><b>" + frNum(cfg.ghost[i]) + " %</b></div>" : "") +
+        '<div class="wsv-tip-s">' + (s.note || "") + (prev ? (s.note ? " · " : "") + "perte : −" + frNum(prev.value - s.value) + " pts" : "") + "</div>", ev
+      );
+    });
+    canvas.__hoverClear = function () { st.hover = -1; ctrl.repaint(); };
+    return ctrl;
+  }
+
+  /* ===================================================================== */
   /* Mini-graphiques KPI                                                   */
   /* ===================================================================== */
   function sparkBars(canvas, cfg) {
@@ -1714,8 +2149,12 @@
   function arcGauge(canvas, cfg) {
     return mount(canvas, cfg, function (c, p) {
       const ctx = c.ctx, w = c.w, h = c.h;
-      const cx = w / 2, cy = h * 0.56;
-      const R = Math.min(w / 2, h) - 8;
+      /* Un arc de 270° occupe 1,707 × R en hauteur (R au-dessus du centre,
+         R·sin 45° en dessous) : l'ancien calcul (R = h - 8) débordait des
+         mini-canvas de 44 px et la jauge apparaissait rognée.            */
+      const lw = 8;
+      const R = Math.max(6, Math.min(w / 2 - lw, (h - lw - 2) / 1.7071));
+      const cx = w / 2, cy = lw / 2 + 1 + R;
       const a0 = Math.PI * 0.75, a1 = Math.PI * 2.25;
       ctx.beginPath();
       ctx.arc(cx, cy, R, a0, a1);
@@ -1746,7 +2185,7 @@
       const ctx = c.ctx, w = c.w, h = c.h;
       const rows = cfg.rows, n = rows.length;
       const slot = h / n, bh = Math.min(9, slot - 5);
-      const L = 52, R = 30;
+      const L = cfg.labelW || 52, R = cfg.valueW || 30;
       const pw = w - L - R;
       const max = cfg.max || 100;
       rows.forEach(function (r, i) {
@@ -1760,16 +2199,17 @@
         roundRect(ctx, L, y, pw, bh, 3);
         ctx.fill();
         const prog = stagger(i, n, p, 0.08);
+        const col = r.color || cfg.color; /* couleur par ligne optionnelle */
         const g = ctx.createLinearGradient(L, 0, L + pw, 0);
-        g.addColorStop(0, rgba(cfg.color, 0.75));
-        g.addColorStop(1, cfg.color);
+        g.addColorStop(0, rgba(col, 0.75));
+        g.addColorStop(1, col);
         ctx.fillStyle = g;
         roundRect(ctx, L, y, Math.max(1, (r.value / max) * pw * prog), bh, 3);
         ctx.fill();
         ctx.fillStyle = "#0F172A";
         ctx.font = FONT(800, 9);
         ctx.textAlign = "left";
-        ctx.fillText(r.value + "%", L + pw + 5, y + bh / 2);
+        ctx.fillText(cfg.fmt ? cfg.fmt(r.value) : r.value + "%", L + pw + 5, y + bh / 2);
       });
     });
   }
@@ -1876,28 +2316,37 @@
     });
   }
 
+  /* Chaque graphique reçoit une copie superficielle privée de sa config :
+     update() peut la remplacer en place sans jamais toucher aux objets de
+     l'appelant (ex. WHO_SURV.WATERFALL passé tel quel).                    */
+  const own = function (fn) {
+    return function (canvas, cfg) { return fn(canvas, Object.assign({}, cfg || {})); };
+  };
+
   root.WHOCharts = {
-    multiLine: multiLine,
-    hbar: hbar,
-    radar: radar,
-    dualArea: dualArea,
-    donut: donut,
-    bubble: bubble,
-    waterfall: waterfall,
-    heatmap: heatmap,
-    groupedHBar: groupedHBar,
-    stackedArea: stackedArea,
-    polar: polar,
-    scatter: scatter,
-    timeline: timeline,
-    gauges: gauges,
-    sparkBars: sparkBars,
-    arcGauge: arcGauge,
-    miniBars: miniBars,
-    progressBar: progressBar,
-    donutMini: donutMini,
-    sparkLine: sparkLine,
-    bullet: bullet,
+    multiLine: own(multiLine),
+    hbar: own(hbar),
+    radar: own(radar),
+    dualArea: own(dualArea),
+    donut: own(donut),
+    bubble: own(bubble),
+    waterfall: own(waterfall),
+    heatmap: own(heatmap),
+    groupedHBar: own(groupedHBar),
+    stackedArea: own(stackedArea),
+    polar: own(polar),
+    scatter: own(scatter),
+    timeline: own(timeline),
+    gauges: own(gauges),
+    sparkBars: own(sparkBars),
+    arcGauge: own(arcGauge),
+    miniBars: own(miniBars),
+    progressBar: own(progressBar),
+    donutMini: own(donutMini),
+    sparkLine: own(sparkLine),
+    bullet: own(bullet),
+    dumbbell: own(dumbbell),
+    cascade: own(cascade),
     repaintAll: repaintAll,
     colorForScore: function (s) {
       if (s <= 25) return ["#DCFCE7", "#166534"];

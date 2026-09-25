@@ -138,11 +138,14 @@
   ];
 
   /* ------------------------------------------------- graphique 2 : classement */
+  /* short / group : libellé et groupe du sélecteur (<optgroup>).
+     D'autres modules peuvent enrichir cet objet (ex. who-ncd-data.js). */
+  const RANK_LEGEND = "Rouge > 35 % · orange 20-35 % · vert 10-20 % · bleu < 10 %";
   const RANK_INDICATORS = {
-    stunting: { key: "stunting", label: "Retard de croissance (stunting)", unit: "%", threshold: 20, thresholdLabel: "Seuil OMS 20 %" },
-    wasting: { key: "wasting", label: "Malnutrition aigüe (wasting)", unit: "%", threshold: 10, thresholdLabel: "Seuil urgence OMS 10 %" },
-    anemia: { key: "anemia", label: "Anémie (femmes 15-49 ans)", unit: "%", threshold: 40, thresholdLabel: "Objectif OMS 40 %" },
-    vitA: { key: "vitA", label: "Couverture vitamine A", unit: "%", threshold: 80, thresholdLabel: "Objectif OMS 80 %" },
+    stunting: { key: "stunting", short: "Stunting", group: "Nutrition", label: "Retard de croissance (stunting)", unit: "%", threshold: 20, thresholdLabel: "Seuil OMS 20 %", legend: RANK_LEGEND },
+    wasting: { key: "wasting", short: "Wasting", group: "Nutrition", label: "Malnutrition aigüe (wasting)", unit: "%", threshold: 10, thresholdLabel: "Seuil urgence OMS 10 %", legend: RANK_LEGEND },
+    anemia: { key: "anemia", short: "Anémie", group: "Nutrition", label: "Anémie (femmes 15-49 ans)", unit: "%", threshold: 40, thresholdLabel: "Objectif OMS 40 %", legend: RANK_LEGEND },
+    vitA: { key: "vitA", short: "Vit. A", group: "Nutrition", label: "Couverture vitamine A", unit: "%", threshold: 80, thresholdLabel: "Objectif OMS 80 %", legend: RANK_LEGEND },
   };
 
   const RANK_ROWS = {};

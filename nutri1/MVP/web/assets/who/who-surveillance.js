@@ -4,7 +4,9 @@
 
    Pourquoi ce fichier ? La page index.html fait déjà ~39 000 lignes : tout le
    module OMS (structure, interactions, 15 graphiques Canvas) vit ici, dans des
-   fichiers séparés, et n'est relié à index.html que par 4 balises (1 CSS + 3 JS).
+   fichiers séparés, et n'est relié à index.html que par quelques balises
+   (1 CSS + 5 JS, dont le module « Maladies chroniques » who-ncd*.js qui se
+   branche via l'API window.WHOSurv et les événements wsv:ready / wsv:filter).
    ==========================================================================*/
 (function () {
   "use strict";
@@ -99,6 +101,21 @@
       '<div class="wsv-kpi-foot">' + o.foot + "</div>" +
       "</div>"
     );
+  }
+
+  /* Options du classement (graphique 2) générées depuis les données :
+     un module peut ajouter des indicateurs (ex. obésité, HTA, diabète). */
+  function rankOptions() {
+    var groups = {}, order = [];
+    Object.keys(D.RANK_INDICATORS).forEach(function (id) {
+      var ind = D.RANK_INDICATORS[id], g = ind.group || "Indicateurs";
+      if (!groups[g]) { groups[g] = []; order.push(g); }
+      groups[g].push('<option value="' + esc(id) + '">' + esc(ind.short || ind.label) + "</option>");
+    });
+    if (order.length === 1) return groups[order[0]].join("");
+    return order.map(function (g) {
+      return '<optgroup label="' + esc(g) + '">' + groups[g].join("") + "</optgroup>";
+    }).join("");
   }
 
   function cardHead(title, sub, icon, tools, id) {
@@ -212,11 +229,9 @@
     /* 2 */
     '<section class="wsv-card wsv-c5" id="g2" style="animation-delay:320ms">' +
     cardHead("Prévalence par pays 2024", "Classement régional · 16 pays", ICO.ruler,
-      '<select class="wsv-select" id="wsvRankSel">' +
-      '<option value="stunting">Stunting</option><option value="wasting">Wasting</option>' +
-      '<option value="anemia">Anémie</option><option value="vitA">Vit. A</option></select>') +
+      '<select class="wsv-select" id="wsvRankSel" aria-label="Indicateur du classement">' + rankOptions() + "</select>") +
     '<div class="wsv-canvas h320"><canvas id="wsvChart2"></canvas></div>' +
-    '<div class="wsv-card-foot"><span>Rouge &gt; 35 % · orange 20-35 % · vert 10-20 % · bleu &lt; 10 %</span></div>' +
+    '<div class="wsv-card-foot"><span id="wsvRankFoot">' + esc(D.RANK_INDICATORS.stunting.legend || "") + "</span></div>" +
     "</section>" +
 
     /* 3 */
@@ -526,6 +541,7 @@
     }
     return {
       indicators: D.HEAT_INDICATORS,
+      total: D.COUNTRIES.length, /* rang affiché « x/16 » même filtré sur un pays */
       regional: D.HEAT_INDICATORS.map(function (ind) {
         var vals = D.COUNTRIES.map(function (c) { return c[ind.key]; });
         var m = vals.reduce(function (a, b) { return a + b; }, 0) / vals.length;
@@ -704,8 +720,11 @@
       max: Math.ceil((maxVal * 1.18) / 5) * 5,
       unit: "%",
       title: ind.label,
-      total: D.COUNTRIES.length,
+      total: D.RANK_ROWS[id].length,
       threshold: { value: ind.threshold, label: ind.thresholdLabel },
+      bands: ind.bands || null,
+      note: ind.note || "",
+      fmt: function (v) { return (ind.decimals !== undefined ? nf(v, ind.decimals) : fmtPct(v)) + "%"; },
     };
   }
 
@@ -765,13 +784,14 @@
   /* ============================================================ ÉVÉNEMENTS */
   function wire() {
     /* sidebar */
-    $$("#wsvNav button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        $$("#wsvNav button").forEach(function (x) { x.classList.remove("on"); });
-        b.classList.add("on");
-        var t = document.getElementById(b.getAttribute("data-target"));
-        if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
+    /* clic délégué : les entrées ajoutées plus tard (module MNT) fonctionnent */
+    $("#wsvNav").addEventListener("click", function (e) {
+      var b = e.target.closest("button[data-target]");
+      if (!b) return;
+      $$("#wsvNav button").forEach(function (x) { x.classList.remove("on"); });
+      b.classList.add("on");
+      var t = document.getElementById(b.getAttribute("data-target"));
+      if (t) t.scrollIntoView({ behavior: "smooth", block: "start" });
     });
     var oc = $("#wsvOpenCockpit");
     if (oc) oc.addEventListener("click", function () {
@@ -795,9 +815,12 @@
     /* export CSV */
     $("#wsvCsv").addEventListener("click", function () {
       var rows = tableRows();
-      var head = ["Pays", "Stunting %", "Wasting %", "Anemie %", "VitA %", "Score", "Statut"];
+      var extra = D.CSV_EXTRA || [];
+      var head = ["Pays", "Stunting %", "Wasting %", "Anemie %", "VitA %", "Score", "Statut"]
+        .concat(extra.map(function (e) { return e.label; }));
       var body = rows.map(function (c) {
-        return [c.name, c.stunting, c.wasting, c.anemia, c.vitA, c.score, D.statusOf(c.score).label];
+        return [c.name, c.stunting, c.wasting, c.anemia, c.vitA, c.score, D.statusOf(c.score).label]
+          .concat(extra.map(function (e) { var v = e.get(c); return v === undefined || v === null ? "" : v; }));
       });
       var csv = [head].concat(body).map(function (r) { return r.join(";"); }).join("\n");
       var blob = new Blob(["\ufeff" + csv], { type: "text/csv;charset=utf-8" });
@@ -836,6 +859,8 @@
     $("#wsvRankSel").addEventListener("change", function (e) {
       state.rank = e.target.value;
       charts.g2.update(rankCfg());
+      var foot = $("#wsvRankFoot");
+      if (foot) foot.textContent = D.RANK_INDICATORS[state.rank].legend || "";
     });
 
     /* selects radar */
@@ -899,7 +924,8 @@
       var b = e.target.closest("[data-report]");
       if (!b) return;
       var c = D.BY_CODE[b.getAttribute("data-report")];
-      toast("Rapport " + c.name + " — stunting " + c.stunting + " %, wasting " + c.wasting + " %, score " + c.score + "/100");
+      var more = typeof D.REPORT_EXTRA === "function" ? D.REPORT_EXTRA(c) : "";
+      toast("Rapport " + c.name + " — stunting " + c.stunting + " %, wasting " + c.wasting + " %, score " + c.score + "/100" + (more ? " · " + more : ""));
     });
 
     /* reset bulles */
@@ -951,6 +977,7 @@
     applySeries();
     renderTable();
     if (state.ready && charts.g8) charts.g8.update(heatCfg());
+    emit("wsv:filter");
   }
 
   function applySeries() {
@@ -976,7 +1003,31 @@
     renderKpis();
     applySeries();
     renderTable();
+    emit("wsv:filter");
   }
+
+  /* ================================================== API D'EXTENSION
+     Les modules complémentaires (ex. who-ncd.js — maladies chroniques)
+     écoutent sur #who :
+       wsv:ready  — le tableau de bord est construit (grille, barre latérale)
+       wsv:filter — le filtre pays ou la période a changé
+     detail = { country: "ALL" | code, year }                            */
+  function emit(name) {
+    if (!state.ready) return;
+    var detail = { country: state.country, year: state.year };
+    var ev;
+    try { ev = new CustomEvent(name, { detail: detail }); }
+    catch (e) { ev = document.createEvent("CustomEvent"); ev.initCustomEvent(name, false, false, detail); }
+    root.dispatchEvent(ev);
+  }
+
+  window.WHOSurv = {
+    root: root,
+    isReady: function () { return state.ready; },
+    getState: function () { return { country: state.country, year: state.year }; },
+    setCountry: function (code) { if (state.ready && code !== state.country) setCountry(code || "ALL"); },
+    ui: { ICO: ICO, C: C, kpiCard: kpiCard, cardHead: cardHead, nf: nf, fmtPct: fmtPct, esc: esc, toast: toast },
+  };
 
   /* ============================================================== BOOT */
   function isVisible() { return root.classList.contains("on"); }
@@ -990,6 +1041,8 @@
     wire();
     buildCharts();
     state.ready = true;
+    root.setAttribute("data-wsv-init", "1");
+    emit("wsv:ready");
     /* second passage : les polices peuvent décaler la largeur des canvas */
     setTimeout(function () { CH.repaintAll(); }, 350);
     setTimeout(function () { CH.repaintAll(); }, 1200);
