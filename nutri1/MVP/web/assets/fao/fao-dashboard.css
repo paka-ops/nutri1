@@ -1,0 +1,627 @@
+/* ============================================================================
+   NUTRI.N°1 — FAO · FOOD SYSTEMS INTELLIGENCE · AFRIQUE DE L'OUEST
+   fao-dashboard.css
+
+   Tous les sélecteurs sont strictement scopés sous #fao et préfixés .fao-
+   Palette exclusive FAO :
+     - Primaire    : #059669 (vert FAO émeraude)
+     - Secondaire  : #D97706 (ambre récolte)
+     - Tertiaire   : #0891B2 (cyan eau)
+     - Quaternaire : #7C3AED (violet analyse)
+     - Danger      : #DC2626 (rouge pertes)
+     - Fond sidebar: #052E16 (vert forêt profond)
+     - Fond global : #F0FDF4 (vert très très clair)
+     - Bordure     : 1px solid #BBF7D0
+     - Accent KPI  : gradient #059669 → #10B981
+   ============================================================================ */
+
+#fao {
+  --fao-primary: #059669;
+  --fao-primary-light: #10B981;
+  --fao-secondary: #D97706;
+  --fao-tertiary: #0891B2;
+  --fao-quaternary: #7C3AED;
+  --fao-danger: #DC2626;
+  --fao-side-bg: #052E16;
+  --fao-bg: #F0FDF4;
+  --fao-border: #BBF7D0;
+  --fao-card-bg: #FFFFFF;
+  --fao-text-ink: #062312;
+  --fao-text-muted: #4B6354;
+  --fao-radius: 16px;
+
+  background-color: var(--fao-bg) !important;
+  color: var(--fao-text-ink);
+  font-family: "Segoe UI", "Avenir Next", system-ui, -apple-system, sans-serif;
+  padding: 12px;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+#fao * {
+  box-sizing: border-box;
+}
+
+/* Neutralisation des décorations v46/v52/v53 injectées par l'app hôte */
+#fao .v46-live,
+#fao .v46-kpis,
+#fao .hero.institution-hero[data-fao-legacy="1"] {
+  display: none !important;
+}
+
+/* Layout Shell */
+#fao .fao-shell {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  max-width: 1720px;
+  margin: 0 auto;
+}
+
+/* ==========================================================================
+   SIDEBAR FAO (#052E16 vert forêt profond)
+   ========================================================================== */
+#fao .fao-sidebar {
+  flex: 0 0 240px;
+  width: 240px;
+  position: sticky;
+  top: 14px;
+  align-self: flex-start;
+  background:
+    radial-gradient(280px 180px at 20% 0%, rgba(16, 185, 129, 0.22), transparent 70%),
+    linear-gradient(180deg, #06371B 0%, var(--fao-side-bg) 45%, #031D0E 100%);
+  border: 1px solid rgba(187, 247, 208, 0.25);
+  border-radius: 20px;
+  padding: 18px 14px 16px;
+  color: #FFFFFF;
+  box-shadow: 0 16px 36px rgba(5, 46, 22, 0.32);
+  z-index: 20;
+}
+
+#fao .fao-side-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(187, 247, 208, 0.18);
+}
+
+#fao .fao-side-logo {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  background: #032110;
+  border: 1.5px solid #10B981;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 4px rgba(5, 150, 105, 0.25);
+}
+
+#fao .fao-side-logo svg {
+  width: 26px;
+  height: 26px;
+  display: block;
+}
+
+#fao .fao-side-titles b {
+  display: block;
+  font-size: 16px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+#fao .fao-side-titles span {
+  display: block;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #6EE7B7;
+}
+
+#fao .fao-side-nav {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#fao .fao-side-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.78);
+  font: 600 13px "Segoe UI", system-ui, sans-serif;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  text-decoration: none;
+}
+
+#fao .fao-side-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #FFFFFF;
+  transform: translateX(3px);
+}
+
+#fao .fao-side-item.active {
+  background: rgba(16, 185, 129, 0.18);
+  color: #A7F3D0;
+  font-weight: 800;
+  box-shadow: inset 3px 0 0 #10B981;
+}
+
+#fao .fao-side-item span.fao-ico {
+  font-size: 15px;
+  line-height: 1;
+}
+
+#fao .fao-side-foot {
+  margin-top: 20px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(187, 247, 208, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+#fao .fao-side-btn {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(5, 150, 105, 0.15);
+  color: #A7F3D0;
+  font: 700 11px "Segoe UI", system-ui, sans-serif;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+#fao .fao-side-btn:hover {
+  background: rgba(5, 150, 105, 0.3);
+  color: #FFFFFF;
+  border-color: #10B981;
+}
+
+/* ==========================================================================
+   MAIN CONTENT AREA
+   ========================================================================== */
+#fao .fao-main {
+  flex: 1 1 0%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Top Banner Header */
+#fao .fao-header {
+  background: var(--fao-card-bg);
+  border: 1px solid var(--fao-border);
+  border-radius: 20px;
+  padding: 18px 22px;
+  box-shadow: 0 10px 24px rgba(5, 46, 22, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+#fao .fao-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 6px;
+  height: 100%;
+  background: linear-gradient(180deg, var(--fao-primary), var(--fao-primary-light));
+}
+
+#fao .fao-header-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+#fao .fao-badge-inst {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ECFDF5;
+  color: #047857;
+  border: 1px solid #A7F3D0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+#fao .fao-badge-inst i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #059669;
+}
+
+#fao .fao-header h1 {
+  margin: 6px 0 3px;
+  font-size: clamp(20px, 2.2vw, 29px);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  color: #052E16;
+  line-height: 1.15;
+}
+
+#fao .fao-header h1 span {
+  color: #059669;
+}
+
+#fao .fao-header p {
+  margin: 0;
+  font-size: 13px;
+  color: var(--fao-text-muted);
+  font-weight: 500;
+}
+
+#fao .fao-header-tools {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+#fao .fao-select {
+  appearance: none;
+  padding: 8px 30px 8px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--fao-border);
+  background: #FFFFFF url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6'><path d='M0 0l5 6 5-6z' fill='%23059669'/></svg>") no-repeat right 10px center;
+  color: #062312;
+  font: 700 12px "Segoe UI", system-ui, sans-serif;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+
+#fao .fao-select:hover {
+  border-color: #059669;
+}
+
+#fao .fao-btn-action {
+  padding: 8px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--fao-border);
+  background: #FFFFFF;
+  color: #052E16;
+  font: 700 12px "Segoe UI", system-ui, sans-serif;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+#fao .fao-btn-action:hover {
+  background: #ECFDF5;
+  border-color: #059669;
+  color: #059669;
+}
+
+#fao .fao-btn-action.fao-btn-primary {
+  background: #059669;
+  color: #FFFFFF;
+  border-color: #059669;
+}
+
+#fao .fao-btn-action.fao-btn-primary:hover {
+  background: #047857;
+}
+
+/* ==========================================================================
+   5 KPI CARDS FAO
+   ========================================================================== */
+#fao .fao-kpis-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#fao .fao-kpi-card {
+  background: var(--fao-card-bg);
+  border: 1px solid var(--fao-border);
+  border-radius: var(--fao-radius);
+  padding: 14px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(5, 46, 22, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 180px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+#fao .fao-kpi-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(5, 46, 22, 0.08);
+}
+
+#fao .fao-kpi-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #059669, #10B981);
+}
+
+#fao .fao-kpi-card.kpi-danger .fao-kpi-accent {
+  background: linear-gradient(90deg, #DC2626, #EF4444);
+}
+
+#fao .fao-kpi-card.kpi-warn .fao-kpi-accent {
+  background: linear-gradient(90deg, #D97706, #F59E0B);
+}
+
+#fao .fao-kpi-card.kpi-info .fao-kpi-accent {
+  background: linear-gradient(90deg, #0891B2, #06B6D4);
+}
+
+#fao .fao-kpi-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+#fao .fao-kpi-title {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fao-text-muted);
+}
+
+#fao .fao-kpi-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 7px;
+  border-radius: 999px;
+  font-size: 9.5px;
+  font-weight: 800;
+}
+
+#fao .fao-kpi-badge.good { background: #ECFDF5; color: #047857; }
+#fao .fao-kpi-badge.bad { background: #FEF2F2; color: #B91C1C; }
+#fao .fao-kpi-badge.warn { background: #FFFBEB; color: #B45309; }
+
+#fao .fao-kpi-val {
+  margin-top: 8px;
+  font-size: clamp(24px, 2.1vw, 32px);
+  font-weight: 900;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+#fao .fao-kpi-val.green { color: #059669; }
+#fao .fao-kpi-val.red { color: #DC2626; }
+#fao .fao-kpi-val.orange { color: #D97706; }
+#fao .fao-kpi-val.cyan { color: #0891B2; }
+
+#fao .fao-kpi-sub {
+  margin-top: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fao-text-muted);
+}
+
+#fao .fao-kpi-extra {
+  margin-top: 3px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #111827;
+}
+
+#fao .fao-kpi-canvas {
+  margin-top: 10px;
+  width: 100%;
+  height: 52px;
+  position: relative;
+}
+
+#fao .fao-kpi-canvas canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ==========================================================================
+   15 GRAPHIQUES FAO — GRILLE & CARTES
+   ========================================================================== */
+#fao .fao-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  width: 100%;
+}
+
+/* Width specifications from prompt */
+#fao .fao-card-60 {
+  flex: 0 0 calc(60% - 8px);
+  max-width: calc(60% - 8px);
+}
+
+#fao .fao-card-40 {
+  flex: 0 0 calc(40% - 8px);
+  max-width: calc(40% - 8px);
+}
+
+#fao .fao-card-100 {
+  flex: 0 0 100%;
+  max-width: 100%;
+}
+
+#fao .fao-card-55 {
+  flex: 0 0 calc(55% - 8px);
+  max-width: calc(55% - 8px);
+}
+
+#fao .fao-card-45 {
+  flex: 0 0 calc(45% - 8px);
+  max-width: calc(45% - 8px);
+}
+
+#fao .fao-card-33 {
+  flex: 0 0 calc(33.333% - 10.7px);
+  max-width: calc(33.333% - 10.7px);
+}
+
+#fao .fao-card-50 {
+  flex: 0 0 calc(50% - 8px);
+  max-width: calc(50% - 8px);
+}
+
+/* General Chart Card */
+#fao .fao-card {
+  background: var(--fao-card-bg);
+  border: 1px solid var(--fao-border);
+  border-radius: var(--fao-radius);
+  padding: 16px 18px 14px;
+  box-shadow: 0 8px 24px rgba(5, 46, 22, 0.04);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+#fao .fao-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+#fao .fao-card-title-group h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #052E16;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#fao .fao-card-title-group p {
+  margin: 3px 0 0;
+  font-size: 11px;
+  color: var(--fao-text-muted);
+  line-height: 1.35;
+}
+
+#fao .fao-card-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+#fao .fao-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 750;
+  background: #F3F4F6;
+  color: #374151;
+  border: 1px solid #E5E7EB;
+}
+
+#fao .fao-badge-pill.gold {
+  background: #FEF3C7;
+  color: #B45309;
+  border-color: #FCD34D;
+}
+
+#fao .fao-badge-pill.red {
+  background: #FEE2E2;
+  color: #DC2626;
+  border-color: #FCA5A5;
+}
+
+#fao .fao-badge-pill.green {
+  background: #ECFDF5;
+  color: #059669;
+  border-color: #A7F3D0;
+}
+
+#fao .fao-canvas-wrap {
+  position: relative;
+  width: 100%;
+  flex: 1 1 auto;
+  border-radius: 12px;
+  background: #FFFFFF;
+}
+
+#fao .fao-canvas-wrap.h260 { height: 260px; }
+#fao .fao-canvas-wrap.h300 { height: 300px; }
+#fao .fao-canvas-wrap.h320 { height: 320px; }
+#fao .fao-canvas-wrap.h360 { height: 360px; }
+
+#fao .fao-canvas-wrap canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 1280px) {
+  #fao .fao-kpis-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  #fao .fao-card-60,
+  #fao .fao-card-40,
+  #fao .fao-card-55,
+  #fao .fao-card-45,
+  #fao .fao-card-33,
+  #fao .fao-card-50 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 900px) {
+  #fao .fao-shell {
+    flex-direction: column;
+  }
+  #fao .fao-sidebar {
+    width: 100%;
+    position: relative;
+    top: 0;
+  }
+  #fao .fao-kpis-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  #fao .fao-kpis-strip {
+    grid-template-columns: 1fr;
+  }
+}
