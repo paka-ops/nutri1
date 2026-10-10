@@ -1,0 +1,295 @@
+/* ============================================================================
+ * UNICEF NutriChildApp · Styles du Shadow DOM (chargés par le composant)
+ * ----------------------------------------------------------------------------
+ * Palette officielle : #1CABE2 (cyan), #80BD41 (vert), #F26A21 (orange),
+ * #DDA63A (doré), #E5243B (rouge), #002952 (sidebar), #F0F9FF / #BAE6FD (fonds).
+ * Cartes : rayon 20 px, padding 28 px. Grille de 100 colonnes (classes c33, c55…).
+ * ========================================================================== */
+
+:host { display: block; }
+
+* { box-sizing: border-box; }
+
+.uni-app {
+  position: relative;
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  color: #0B2238;
+  background: #F0F9FF;
+}
+
+/* ---------------------------------------------------------------- Sidebar */
+.uni-side {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 16px;
+  background: #002952;
+  color: #E0F2FE;
+}
+.uni-brand { display: flex; align-items: center; gap: 12px; padding: 4px 8px 24px; }
+.uni-brand b { display: block; font-size: 15px; letter-spacing: .04em; color: #fff; }
+.uni-brand span { font-size: 12px; color: #BAE6FD; }
+
+.uni-nav { display: flex; flex-direction: column; gap: 6px; }
+.uni-nav button {
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 10px 12px; border: 0; border-left: 3px solid transparent;
+  border-radius: 12px; background: transparent; color: inherit; text-align: left; cursor: pointer;
+  font: inherit;
+  transition: background .2s, border-color .2s;
+}
+.uni-nav button:hover { background: rgba(28, 171, 226, .12); }
+.uni-nav button:focus-visible { outline: 2px solid #1CABE2; outline-offset: 2px; }
+.uni-nav button.on { background: rgba(28, 171, 226, .2); border-left-color: #1CABE2; }
+.nav-icon { font-size: 18px; width: 24px; text-align: center; flex: none; }
+.nav-text { display: flex; flex-direction: column; min-width: 0; }
+.nav-text b { font-size: 13px; font-weight: 600; color: #fff; }
+.nav-text small { font-size: 11px; color: #93C5FD; }
+
+.uni-side-foot {
+  margin-top: auto; padding: 14px 10px 4px; font-size: 11px; line-height: 1.5; color: #93C5FD;
+  border-top: 1px solid rgba(186, 230, 253, .15);
+}
+.uni-side-foot em { color: #BAE6FD; font-style: normal; }
+
+/* ------------------------------------------------------------ Main / header */
+.uni-main { min-width: 0; display: flex; flex-direction: column; }
+
+.uni-header {
+  position: sticky; top: 0; z-index: 20;
+  padding: 18px 28px 14px;
+  background: rgba(240, 249, 255, .94);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid #BAE6FD;
+}
+.uni-crumbs { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #64748B; margin-bottom: 6px; }
+.uni-crumbs i { font-style: normal; color: #94A3B8; }
+.uni-crumbs b { color: #002952; font-weight: 600; }
+
+.uni-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.uni-bar-titles h2 { margin: 0; font-size: 22px; font-weight: 700; color: #002952; }
+.uni-bar-titles p { margin: 2px 0 0; font-size: 13px; color: #475569; }
+
+.uni-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+
+.seg {
+  display: inline-flex; padding: 3px; gap: 2px; border-radius: 12px;
+  background: #E0F2FE; border: 1px solid #BAE6FD;
+}
+.seg button {
+  border: 0; border-radius: 9px; padding: 7px 12px; background: transparent;
+  color: #0C4A6E; font: 600 12px Inter, system-ui, sans-serif; cursor: pointer; white-space: nowrap;
+  transition: background .2s, color .2s, box-shadow .2s;
+}
+.seg button:hover { background: rgba(255, 255, 255, .6); }
+.seg button:focus-visible { outline: 2px solid #1CABE2; outline-offset: 1px; }
+.seg button[aria-pressed="true"] { background: #fff; color: #002952; box-shadow: 0 1px 3px rgba(0, 41, 82, .18); }
+.seg-mini button { padding: 4px 9px; font-size: 11px; }
+
+.uni-select {
+  display: inline-flex; align-items: center; gap: 8px; padding: 6px 12px;
+  border-radius: 12px; background: #fff; border: 1px solid #BAE6FD; font-size: 12px; color: #475569;
+}
+.uni-select select {
+  border: 0; background: transparent; font: 600 13px Inter, system-ui, sans-serif; color: #002952; cursor: pointer; outline: none;
+}
+.uni-select select:focus-visible { outline: 2px solid #1CABE2; border-radius: 6px; }
+
+.uni-sync {
+  display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #475569;
+  padding: 6px 10px; border-radius: 999px; background: #fff; border: 1px solid #BAE6FD;
+}
+.pulse {
+  width: 8px; height: 8px; border-radius: 50%; background: #80BD41; box-shadow: 0 0 0 0 rgba(128, 189, 65, .6);
+  animation: uni-pulse 2s infinite;
+}
+@keyframes uni-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(128, 189, 65, .6); }
+  70% { box-shadow: 0 0 0 8px rgba(128, 189, 65, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(128, 189, 65, 0); }
+}
+
+.uni-btn {
+  border: 0; border-radius: 12px; padding: 10px 16px; cursor: pointer;
+  background: #1CABE2; color: #fff; font: 700 13px Inter, system-ui, sans-serif;
+  box-shadow: 0 6px 16px rgba(28, 171, 226, .3);
+  transition: transform .15s, background .2s;
+}
+.uni-btn:hover { background: #0E96C8; transform: translateY(-1px); }
+.uni-btn:focus-visible { outline: 2px solid #002952; outline-offset: 2px; }
+
+.uni-chips { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 12px; }
+.chips-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: #64748B; margin-right: 2px; }
+.chips-sep { width: 1px; height: 18px; background: #BAE6FD; margin: 0 6px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px;
+  border: 1px solid #BAE6FD; background: #fff; color: #0C4A6E; font: 600 12px Inter, system-ui, sans-serif; cursor: pointer;
+  transition: background .2s, color .2s, border-color .2s;
+}
+.chip i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.chip:hover { border-color: #1CABE2; }
+.chip:focus-visible { outline: 2px solid #1CABE2; outline-offset: 2px; }
+.chip[aria-pressed="true"] { background: #1CABE2; border-color: #1CABE2; color: #fff; }
+.chip[aria-pressed="true"] i { background: #fff !important; }
+.uni-chips .chip-country[aria-pressed="true"] { background: #002952; border-color: #002952; }
+
+/* --------------------------------------------------------------- Contenu */
+.uni-content { padding: 28px; display: flex; flex-direction: column; gap: 20px; }
+
+.uni-card {
+  position: relative; min-width: 0;
+  background: #fff; border-radius: 20px; padding: 28px;
+  border: 1px solid #E0F2FE;
+  box-shadow: 0 1px 2px rgba(0, 41, 82, .04), 0 8px 24px rgba(0, 41, 82, .05);
+  transition: outline-color .4s, box-shadow .4s;
+}
+.uni-card.flash {
+  outline: 3px solid #1CABE2; outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(28, 171, 226, .15), 0 8px 24px rgba(0, 41, 82, .05);
+}
+.card-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 10px 12px; margin-bottom: 14px; }
+.card-titles h3 { margin: 0; font-size: 15px; font-weight: 700; color: #002952; }
+.card-titles p { margin: 3px 0 0; font-size: 12px; line-height: 1.45; color: #64748B; }
+.card-titles { min-width: 0; flex: 1 1 260px; }
+.card-head .seg { flex: 0 1 auto; max-width: 100%; flex-wrap: wrap; }
+
+.chart-box { position: relative; width: 100%; }
+.chart-box canvas { display: block; width: 100%; height: 100%; }
+
+/* ---------------------------------------------------------------- KPI */
+.uni-kpis { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 20px; }
+.kpi { display: flex; flex-direction: column; gap: 6px; border-top: 4px solid var(--kc, #1CABE2); padding-top: 24px; }
+.kpi-red { --kc: #E5243B; }
+.kpi-orange { --kc: #F26A21; }
+.kpi-green { --kc: #80BD41; }
+.kpi-cyan { --kc: #1CABE2; }
+.kpi-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 8px; }
+.kpi-icon { font-size: 22px; }
+.kpi-label { font-size: 12px; font-weight: 600; color: #475569; line-height: 1.35; min-height: 32px; }
+.kpi-value { font-size: 34px; font-weight: 800; letter-spacing: -.02em; color: #002952; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.kpi-sub { font-size: 11.5px; line-height: 1.4; color: #64748B; min-height: 32px; }
+.kpi-chart { margin-top: 4px; }
+.kpi-badge {
+  display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 999px;
+  font-size: 10.5px; font-weight: 700; line-height: 1.3; text-align: center; max-width: 100%;
+}
+.kpi-badge.blink { animation: uni-blink 1.4s steps(2, start) infinite; }
+@keyframes uni-blink { to { visibility: hidden; } }
+
+.kpi-progress { position: relative; height: 10px; margin-top: 26px; border-radius: 999px; background: #E0F2FE; }
+.kpi-progress-fill { height: 100%; width: 0; border-radius: 999px; background: linear-gradient(90deg, #1CABE2, #80BD41); transition: width .9s cubic-bezier(.2, .8, .2, 1); }
+.kpi-progress-target { position: absolute; top: -6px; bottom: -6px; width: 2px; background: #002952; transform: translateX(-1px); }
+.kpi-progress-target span {
+  position: absolute; top: -20px; left: 50%; transform: translateX(-50%);
+  font-size: 10px; font-weight: 600; color: #002952; white-space: nowrap;
+}
+
+/* Tonalités sémantiques (badges, pastilles du tableau). */
+.tone-ok, .tone-secondary { background: #ECFCCB; color: #3F6212; }
+.tone-warn, .tone-quaternary { background: #FEF3C7; color: #92400E; }
+.tone-tertiary { background: #FFEDD5; color: #9A3412; }
+.tone-danger { background: #FDE2E6; color: #B4182D; }
+.tone-primary { background: #E0F2FE; color: #0C4A6E; }
+
+/* ---------------------------------------------------------- Grille 15 cartes */
+/* Pas de gouttière sur les 100 colonnes (sinon 99 × gap déborde) : l'espace entre
+ * cartes vient d'une marge interne de 10 px, les largeurs en % restent exactes. */
+.uni-grid {
+  display: grid;
+  grid-template-columns: repeat(100, minmax(0, 1fr));
+  column-gap: 0;
+  row-gap: 20px;
+}
+.uni-grid > .uni-card { margin: 0 10px; }
+.uni-span-c33 { grid-column: span 33; }
+.uni-span-c40 { grid-column: span 40; }
+.uni-span-c45 { grid-column: span 45; }
+.uni-span-c50 { grid-column: span 50; }
+.uni-span-c55 { grid-column: span 55; }
+.uni-span-c60 { grid-column: span 60; }
+.uni-span-c100 { grid-column: span 100; }
+
+.uni-foot { margin: 4px 0 0; font-size: 11.5px; line-height: 1.5; color: #64748B; }
+
+/* ------------------------------------------------------------- Tableau G15 */
+.uni-table-wrap { overflow-x: auto; margin: 0 -4px; }
+.uni-table { width: 100%; border-collapse: collapse; font-size: 12.5px; min-width: 640px; }
+.uni-table th {
+  text-align: left; padding: 9px 10px; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+  color: #475569; background: #F0F9FF; border-bottom: 1px solid #BAE6FD; white-space: nowrap;
+}
+.uni-table td { padding: 8px 10px; border-bottom: 1px solid #E0F2FE; vertical-align: middle; }
+.uni-table tbody tr { transition: background .15s; }
+.uni-table tbody tr[data-row-code] { cursor: pointer; }
+.uni-table tbody tr[data-row-code]:hover { background: #F0F9FF; }
+.uni-table tr.is-total td { font-weight: 700; background: #F0F9FF; color: #002952; }
+.uni-table .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.uni-table .name { font-weight: 600; color: #002952; white-space: nowrap; }
+.uni-table th:nth-child(n+2) { text-align: right; }
+.uni-table th:last-child, .uni-table td:last-child { text-align: left; }
+.pill {
+  display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; font-variant-numeric: tabular-nums;
+}
+.muted-sm { display: block; margin-top: 2px; font-size: 10.5px; color: #64748B; }
+.spark-box { width: 130px; height: 28px; margin-left: auto; }
+.spark-box canvas { display: block; width: 100%; height: 100%; }
+
+/* ------------------------------------------------------------- Utilitaires */
+.is-hidden { display: none !important; }
+.is-disabled { opacity: .55; }
+.is-disabled:hover { border-color: #BAE6FD; }
+
+/* Info-bulle partagée (créée par NS.Tooltip dans .uni-app). */
+.uni-tip {
+  position: absolute; left: 0; top: 0; z-index: 60; pointer-events: none;
+  min-width: 140px; max-width: 260px; padding: 9px 11px; border-radius: 10px;
+  background: #002952; color: #fff; font-size: 12px; line-height: 1.4;
+  border-left: 4px solid #1CABE2; box-shadow: 0 10px 28px rgba(0, 41, 82, .28);
+  opacity: 0; transition: opacity .15s;
+}
+.uni-tip.on { opacity: 1; }
+.uni-tip b { color: #fff; }
+.uni-tip .tip-row { display: flex; justify-content: space-between; gap: 12px; color: #BAE6FD; }
+.uni-tip .tip-row span:last-child { color: #fff; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.uni-toast {
+  position: fixed; right: 24px; bottom: 24px; z-index: 90; max-width: 360px;
+  padding: 12px 16px; border-radius: 14px; background: #002952; color: #fff; font-size: 13px; font-weight: 600;
+  box-shadow: 0 12px 30px rgba(0, 41, 82, .3); border-left: 4px solid #80BD41;
+  opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .25s, transform .25s;
+}
+.uni-toast.on { opacity: 1; transform: translateY(0); }
+
+:focus-visible { outline: 2px solid #1CABE2; outline-offset: 2px; }
+
+/* --------------------------------------------------------- Responsive */
+@media (max-width: 1400px) {
+  .uni-kpis { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1100px) {
+  .uni-app { grid-template-columns: 1fr; }
+  .uni-side { position: static; height: auto; }
+  .uni-nav { flex-direction: row; flex-wrap: wrap; }
+  .uni-nav button { width: auto; }
+  .uni-side-foot { display: none; }
+  .uni-span-c33, .uni-span-c40, .uni-span-c45, .uni-span-c50, .uni-span-c55, .uni-span-c60 { grid-column: 1 / -1; }
+  .uni-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 720px) {
+  .uni-header, .uni-content { padding-left: 16px; padding-right: 16px; }
+  .uni-kpis { grid-template-columns: 1fr; }
+  .uni-grid { grid-template-columns: minmax(0, 1fr); }
+  .uni-card { padding: 20px; }
+  .uni-controls { width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uni-app *, .uni-app *::before, .uni-app *::after { animation: none !important; transition: none !important; }
+}

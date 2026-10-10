@@ -1,0 +1,18 @@
+/* UNICEF NutriChildApp : feuille hôte légère, requise dans le <head> de index.html.
+ * L'interface complète est chargée dans le Shadow DOM du Custom Element. */
+unicef-nutrichild-dashboard { display: block; min-height: 100vh; }
+unicef-nutrichild-dashboard:not(:defined) {
+  display: block;
+  min-height: 100vh;
+  background: linear-gradient(90deg, #002952 0 240px, #F0F9FF 240px);
+}
+
+/* Le composant peut passer en plein écran : il devient son propre conteneur défilant. */
+unicef-nutrichild-dashboard:fullscreen,
+unicef-nutrichild-dashboard:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #F0F9FF;
+}
