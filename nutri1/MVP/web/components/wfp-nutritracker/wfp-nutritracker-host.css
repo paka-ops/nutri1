@@ -1,0 +1,19 @@
+/* ============================================================================
+ * WFP NutriTracker · wfp-nutritracker-host.css
+ * Seule feuille chargée dans le <head> de index.html (le reste des styles vit
+ * dans le Shadow DOM du composant). Rôle :
+ *   1. Réserver la place du composant avant son initialisation (squelette).
+ *   2. Lorsque le tableau de bord est actif dans la section #wfp, masquer les
+ *      anciens modules « WFP Food Security » (conservés dans le DOM car
+ *      d'autres scripts de la page en dépendent, notamment renderWFP()).
+ *      Le bouton « Afficher les modules WFP historiques » de la sidebar du
+ *      composant ajoute .wf-show-legacy pour les réafficher.
+ * ========================================================================== */
+wfp-nutritracker-dashboard { display: block; min-height: 100vh; }
+wfp-nutritracker-dashboard:not(:defined) {
+  border-radius: 20px;
+  border: 1px solid #FDE68A;
+  background: linear-gradient(90deg, #1C1008 0 240px, #FFFBF0 240px);
+}
+#wfp.wf-takeover:not(.wf-show-legacy) > :not(wfp-nutritracker-dashboard) { display: none !important; }
+#wfp.wf-takeover.wf-show-legacy > wfp-nutritracker-dashboard { margin-bottom: 24px; }
