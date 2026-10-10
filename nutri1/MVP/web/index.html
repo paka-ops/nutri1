@@ -635,38 +635,9 @@
 
 
 <section id="wfp" class="view">
-  <div class="hero institution-hero"><span class="pill">WFP • FOOD SECURITY & NUTRITION</span>
-  <h1>🍚 WFP Food Security Intelligence Center</h1>
-  <p>Localized intelligence connecting food access, markets, vulnerability, nutrition, climate shocks and program impact — complementary to existing WFP global systems.</p></div>
-  <div class="card"><div class="section-head"><div><h2>🌍 Country & Food Security Explorer</h2><p class="muted">Explore food-security indicators by country and geography.</p></div>
-  <div class="institution-filters"><label>Country<select id="wfpCountry" onchange="renderWFP()"></select></label><label>Level<select id="wfpLevel" onchange="renderWFP()"><option>National</option><option>Region</option><option>District</option><option>Market</option></select></label><label>Year<select id="wfpYear" onchange="renderWFP()"><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select></label></div></div></div>
-  <div class="institution-kpis">
-    <div class="card inst-kpi"><span>Food Security Risk</span><b id="wfpRisk">—</b></div>
-    <div class="card inst-kpi"><span>Healthy Diet Affordability</span><b id="wfpAfford">—</b></div>
-    <div class="card inst-kpi"><span>Dietary Diversity</span><b id="wfpDiversity">—</b></div>
-    <div class="card inst-kpi"><span>Price Pressure</span><b id="wfpPrice">—</b></div>
-    <div class="card inst-kpi"><span>Nutrition Risk</span><b id="wfpNutrition">—</b></div>
-  </div>
-  <div class="grid3">
-    <div class="card"><h3>🚨 Food Security Early Warning</h3><div id="wfpEarly"></div></div>
-    <div class="card"><h3>💰 Food Price & Access</h3><div id="wfpMarket"></div></div>
-    <div class="card"><h3>🥗 Food Consumption & Nutrition</h3><div id="wfpDiet"></div></div>
-  </div>
-  <div class="grid2">
-    <div class="card"><h3>🏫 School Feeding & Local Procurement</h3><div id="wfpSchool"></div></div>
-    <div class="card"><h3>🌦️ Climate → Food Security Risk</h3><div id="wfpClimate"></div></div>
-  </div>
-  <div class="card"><h3>🗺️ Vulnerability & Priority Intervention Map</h3><div class="gis-demo" id="wfpGIS"></div></div>
-  <div class="card"><h3>📊 WFP Program Impact Engine</h3><div id="wfpImpact"></div></div>
-  <div class="card"><h3>📦 WFP Data Products</h3>
-  <table><tr><th>Product</th><th>Data generated</th><th>Operational use</th></tr>
-  <tr><td>Household Food Security Monitor</td><td>Consumption, diversity, access, coping</td><td>Vulnerability targeting</td></tr>
-  <tr><td>Food Price Intelligence</td><td>Prices, availability, anomalies</td><td>Market monitoring</td></tr>
-  <tr><td>Healthy Diet Affordability</td><td>Food basket cost + access gap</td><td>Program design</td></tr>
-  <tr><td>School Feeding Intelligence</td><td>Meals, quality, local sourcing, waste</td><td>School meal optimization</td></tr>
-  <tr><td>Climate Food-Security Early Warning</td><td>Shock signals + localized risk</td><td>Early action</td></tr>
-  <tr><td>Intervention Impact</td><td>Baseline, follow-up, outcomes</td><td>Evaluation & scale-up</td></tr>
-  </table></div>
+<!-- WFP NutriTracker · Surveillance Communautaire Afrique de l'Ouest — composant autonome (Shadow DOM).
+     Code : components/wfp-dashboard/ (noyau, donnees, modele, charts/*.js, gabarit, composant). -->
+<wfp-dashboard id="wfpDashboard" aria-label="WFP NutriTracker · Surveillance Communautaire Afrique de l'Ouest"></wfp-dashboard>
 </section>
 <section id="fao" class="view">
 <div class="hero institution-hero"><span class="pill">FAO • FOOD SYSTEMS & AGRIFOOD INTELLIGENCE</span><h1>🌾 FAO Food Systems Intelligence Center</h1><p>End-to-end intelligence connecting production, post-harvest losses, markets, prices, food availability, processing, food safety, climate and nutrition-sensitive agriculture.</p></div>
@@ -2725,4 +2696,15 @@ const st=document.createElement('style');st.textContent=`.v57-clickable{cursor:p
 <script src="components/who-nutritracker/charts/charts-special.js"></script>
 <script src="components/who-nutritracker/nutritracker-template.js"></script>
 <script src="components/who-nutritracker/nutritracker-dashboard.js"></script>
+<!-- WFP NutriTracker (section #wfp) : modules du composant wfp-dashboard, dans cet ordre -->
+<script src="components/wfp-dashboard/wfp-core.js"></script>
+<script src="components/wfp-dashboard/wfp-data.js"></script>
+<script src="components/wfp-dashboard/wfp-geo.js"></script>
+<script src="components/wfp-dashboard/wfp-model.js"></script>
+<script src="components/wfp-dashboard/charts/charts-distribution.js"></script>
+<script src="components/wfp-dashboard/charts/charts-trends.js"></script>
+<script src="components/wfp-dashboard/charts/charts-compare.js"></script>
+<script src="components/wfp-dashboard/charts/charts-map.js"></script>
+<script src="components/wfp-dashboard/wfp-template.js"></script>
+<script src="components/wfp-dashboard/wfp-dashboard.js"></script>
 </body></html>
