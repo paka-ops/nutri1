@@ -50,6 +50,11 @@
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
+/* Apparition progressive des cards et des KPI (800 ms max, ease-out) */
+@keyframes wf-reveal {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
 .wf-app *, .wf-app *::before, .wf-app *::after { box-sizing: border-box; }
 .wf-app button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
 .wf-app input, .wf-app select { font-family: inherit; font-size: 13px; color: var(--value); }
@@ -269,14 +274,16 @@
   position: relative; overflow: hidden;
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 20px; box-shadow: var(--shadow);
-  opacity: 0; transform: translateY(14px);
-  transition: opacity .5s ease-out, transform .5s ease-out, box-shadow .2s;
+  transition: box-shadow .2s;
+  /* Apparition : animation autonome. Elle ne dépend d'aucune classe posée sur
+   * l'élément hôte (hors Shadow DOM), donc le contenu reste visible même si le
+   * JS ne signale jamais « prêt ». */
+  animation: wf-reveal .55s ease-out both;
 }
-.wf-ready .wf-kpi { opacity: 1; transform: none; }
-.wf-kpi:nth-child(2) { transition-delay: .06s; }
-.wf-kpi:nth-child(3) { transition-delay: .12s; }
-.wf-kpi:nth-child(4) { transition-delay: .18s; }
-.wf-kpi:nth-child(5) { transition-delay: .24s; }
+.wf-kpi:nth-child(2) { animation-delay: .06s; }
+.wf-kpi:nth-child(3) { animation-delay: .12s; }
+.wf-kpi:nth-child(4) { animation-delay: .18s; }
+.wf-kpi:nth-child(5) { animation-delay: .24s; }
 .wf-kpi:hover { box-shadow: var(--shadow-lg); }
 .wf-kpi::before {
   content: ''; position: absolute; inset: 0 0 auto 0; height: 3px;
@@ -310,10 +317,16 @@
   grid-column: span 12;
   background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
   padding: var(--pad); box-shadow: var(--shadow);
-  opacity: 0; transform: translateY(16px);
-  transition: opacity .55s ease-out, transform .55s ease-out, box-shadow .2s;
+  transition: box-shadow .2s;
+  animation: wf-reveal .55s ease-out both;
 }
-.wf-ready .wf-card { opacity: 1; transform: none; }
+.wf-card:nth-child(2) { animation-delay: .05s; }
+.wf-card:nth-child(3) { animation-delay: .1s; }
+.wf-card:nth-child(4) { animation-delay: .15s; }
+.wf-card:nth-child(5) { animation-delay: .2s; }
+.wf-card:nth-child(6) { animation-delay: .25s; }
+/* Pendant l'impression du rapport : aucune animation, contenu garanti visible */
+:host(.wf-printing) .wf-card, :host(.wf-printing) .wf-kpi { animation: none; opacity: 1; transform: none; }
 .wf-card:hover { box-shadow: var(--shadow-lg); }
 .wf-card.s-4 { grid-column: span 4; }
 .wf-card.s-5 { grid-column: span 5; }
@@ -485,7 +498,7 @@
   .wf-sidebar, .wf-header-top, .wf-header-actions, .wf-filters, .wf-toast, .wf-menu-pop, .wf-legacy-btn { display: none !important; }
   .wf-header { position: static; border-bottom: 2px solid var(--primary); }
   .wf-content { padding: 0; }
-  .wf-card, .wf-kpi { break-inside: avoid; box-shadow: none; opacity: 1 !important; transform: none !important; }
+  .wf-card, .wf-kpi { break-inside: avoid; box-shadow: none; animation: none !important; opacity: 1 !important; transform: none !important; }
   .wf-kpis { grid-template-columns: repeat(5, 1fr); }
   .wf-grid { grid-template-columns: repeat(12, 1fr); }
   .wf-card.s-4 { grid-column: span 4; }
