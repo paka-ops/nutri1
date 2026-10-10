@@ -105,3 +105,28 @@ Deux harnais Node (hors dépôt) ont été exécutés sur ce composant :
    bascule sur les 16 pays (≈ 484 000 primitives), toggles de légende, chips
    radar, recherche et tri du scorecard, changements de période, export CSV,
    export PDF, badge de synchro, masquage des modules historiques.
+3. **CSS ↔ DOM** (css-tree + jsdom) — injecte la vraie feuille dans le vrai
+   Shadow DOM : les 233 sélecteurs sont rattachés à un élément réel, aucune
+   règle ne dépend d'une classe posée sur l'hôte (`wf-ready`, `wf-printing`
+   sont lues dans le source JS), `opacity(.wf-card)` et `opacity(.wf-kpi)`
+   valent 1, et les 15 conteneurs de graphique ont une hauteur. Ce harnais est
+   **sensible** : rétablir l'ancien motif `.wf-ready .wf-card` redonne bien
+   `opacity: 0`.
+4. **Navigation & plein écran** (jsdom) — vérifie que les 6 cibles de la
+   sidebar existent, que `scrollContainer()` renvoie l'hôte en plein écran et
+   le document sinon, et qu'un clic sur chaque item anime réellement
+   `scrollTop` vers la position attendue (568 · 1968 · 3468 · 4968 · 6468 ·
+   7968) en déplaçant l'item actif. Contrôle aussi que la CSS hôte déclare
+   `overflow-y: auto` sur `:fullscreen` et que la sidebar n'est pas rognée.
+
+### Défilement : page hôte ou plein écran
+
+Le composant ne crée jamais de conteneur défilant imbriqué : c'est la page
+`index.html` qui défile (l'en-tête collant utilise `scroll-margin-top: 132px`).
+En plein écran, `requestFullscreen()` porte sur `<wfp-nutritracker-dashboard>` :
+la feuille agent du navigateur lui impose alors `position: fixed` et
+`height: 100% !important`, ce qui suspend le défilement du document. C'est
+pourquoi `wfp-nutritracker-host.css` déclare l'hôte conteneur défilant
+(`overflow-y: auto`) dans `:fullscreen`, et `scrollContainer()` le détecte pour
+animer `scrollTop` sur le bon élément — sinon rien ne défile et la navigation
+latérale semble morte.

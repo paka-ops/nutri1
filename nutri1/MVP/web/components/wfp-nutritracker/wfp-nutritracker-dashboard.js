@@ -492,14 +492,52 @@
     /* ------------------------------------------------------------------ */
     /* Navigation, scrollspy, divers                                       */
     /* ------------------------------------------------------------------ */
-    /* Le défilement peut être porté par la page hôte (index.html) ou par le
-     * composant : scrollIntoView + scroll-margin-top couvrent les deux cas. */
+    /* Le défilement peut être porté par la page hôte (index.html) ou par
+     * l'élément hôte lui-même en plein écran : on résout d'abord le conteneur
+     * réellement défilant, puis on anime scrollTop en requestAnimationFrame.
+     * Les 132 px retranchés correspondent à la hauteur de l'en-tête collant. */
+    scrollContainer() {
+      /* En plein écran, requestFullscreen() a été appelé sur l'élément hôte :
+       * c'est lui qui défile (voir wfp-nutritracker-host.css). Hors plein
+       * écran, c'est le document de la page hôte. */
+      if (document.fullscreenElement === this && this.scrollHeight > this.clientHeight) return this;
+      return global.document.scrollingElement || global.document.documentElement;
+    }
     navigate(id) {
       const item = WFP.NAV.filter((n) => n.id === id)[0];
       if (!item) return;
-      const target = this.$('#' + item.target);
-      if (target && target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      /* L'item actif est mis à jour immédiatement, avant même le défilement. */
       this.$$('[data-nav]').forEach((b) => b.classList.toggle('active', b.dataset.nav === id));
+      const target = this.$('#' + item.target);
+      if (!target) return;
+      const box = this.scrollContainer();
+      /* Repli natif quand le conteneur n'a rien à défiler (hauteur insuffisante
+       * ou navigateur sans dimensions de mise en page). */
+      if (box.scrollHeight <= box.clientHeight) {
+        if (target.scrollIntoView) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        return;
+      }
+      /* Origine du conteneur dans le repère viewport : 0 pour le document,
+       * son propre rect.top pour un élément défilant. */
+      const isDoc = box === (global.document.scrollingElement || global.document.documentElement);
+      const boxTop = isDoc ? 0 : box.getBoundingClientRect().top;
+      const to = Math.max(0, box.scrollTop + (target.getBoundingClientRect().top - boxTop) - 132);
+      this.scrollTo(box, to);
+    }
+    /* Défilement animé (ease-out cubique, 520 ms) sur n'importe quel conteneur */
+    scrollTo(box, to) {
+      if (this._scrollRAF && global.cancelAnimationFrame) { global.cancelAnimationFrame(this._scrollRAF); this._scrollRAF = null; }
+      const from = box.scrollTop;
+      const delta = to - from;
+      if (Math.abs(delta) < 1) return;
+      const t0 = global.performance.now();
+      const step = (now) => {
+        const t = Math.min(1, (now - t0) / 520);
+        box.scrollTop = from + delta * (1 - Math.pow(1 - t, 3));
+        this._scrollRAF = t < 1 && global.requestAnimationFrame ? global.requestAnimationFrame(step) : null;
+      };
+      this._scrollRAF = global.requestAnimationFrame ? global.requestAnimationFrame(step) : null;
+      if (!this._scrollRAF) box.scrollTop = to;
     }
     /* Scrollspy basé sur getBoundingClientRect : fonctionne quel que soit
      * l'élément qui défile (fenêtre hôte ou conteneur interne). */
@@ -518,6 +556,10 @@
       global.addEventListener('scroll', onScroll, { passive: true });
       const main = this.$('.wf-main');
       if (main) main.addEventListener('scroll', onScroll, { passive: true });
+      /* En plein écran, le conteneur défilant est l'élément hôte lui-même
+       * (requestFullscreen porte sur <wfp-nutritracker-dashboard>) : il faut
+       * donc aussi écouter son propre défilement pour suivre la section active. */
+      this.addEventListener('scroll', onScroll, { passive: true });
     }
 
     renderSync() {

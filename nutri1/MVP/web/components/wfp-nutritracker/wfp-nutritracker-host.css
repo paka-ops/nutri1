@@ -17,3 +17,30 @@ wfp-nutritracker-dashboard:not(:defined) {
 }
 #wfp.wf-takeover:not(.wf-show-legacy) > :not(wfp-nutritracker-dashboard) { display: none !important; }
 #wfp.wf-takeover.wf-show-legacy > wfp-nutritracker-dashboard { margin-bottom: 24px; }
+
+/* ----------------------------------------------------------------------------
+ * 3. PLEIN ÉCRAN — l'élément hôte devient le conteneur défilant.
+ *    Le bouton « Plein écran » du composant appelle requestFullscreen() sur
+ *    <wfp-nutritracker-dashboard> lui-même. Or la feuille agent du navigateur
+ *    impose à tout élément plein écran :
+ *        position: fixed !important; inset: 0 !important;
+ *        width: 100% !important; height: 100% !important;
+ *    L'élément est donc exactement de la taille de l'écran et le défilement du
+ *    document est suspendu : sans overflow, tout le contenu sous la ligne de
+ *    flottaison devient inaccessible (symptôme : « ça ne défile pas »).
+ *    On le déclare donc conteneur défilant, et on laisse la grille interne
+ *    remplir au moins la hauteur visible.
+ * ------------------------------------------------------------------------- */
+wfp-nutritracker-dashboard:fullscreen {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FFFBF0;
+  /* L'en-tête collant du composant se cale sur ce nouveau référentiel. */
+  overscroll-behavior: contain;
+}
+/* Repli pour les navigateurs qui n'exposent que le préfixe historique. */
+wfp-nutritracker-dashboard:-webkit-full-screen {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FFFBF0;
+}
