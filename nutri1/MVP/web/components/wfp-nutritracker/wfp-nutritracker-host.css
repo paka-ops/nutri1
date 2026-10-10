@@ -1,0 +1,46 @@
+/* ============================================================================
+ * WFP NutriTracker · wfp-nutritracker-host.css
+ * Seule feuille chargée dans le <head> de index.html (le reste des styles vit
+ * dans le Shadow DOM du composant). Rôle :
+ *   1. Réserver la place du composant avant son initialisation (squelette).
+ *   2. Lorsque le tableau de bord est actif dans la section #wfp, masquer les
+ *      anciens modules « WFP Food Security » (conservés dans le DOM car
+ *      d'autres scripts de la page en dépendent, notamment renderWFP()).
+ *      Le bouton « Afficher les modules WFP historiques » de la sidebar du
+ *      composant ajoute .wf-show-legacy pour les réafficher.
+ * ========================================================================== */
+wfp-nutritracker-dashboard { display: block; min-height: 100vh; }
+wfp-nutritracker-dashboard:not(:defined) {
+  border-radius: 20px;
+  border: 1px solid #FDE68A;
+  background: linear-gradient(90deg, #1C1008 0 240px, #FFFBF0 240px);
+}
+#wfp.wf-takeover:not(.wf-show-legacy) > :not(wfp-nutritracker-dashboard) { display: none !important; }
+#wfp.wf-takeover.wf-show-legacy > wfp-nutritracker-dashboard { margin-bottom: 24px; }
+
+/* ----------------------------------------------------------------------------
+ * 3. PLEIN ÉCRAN — l'élément hôte devient le conteneur défilant.
+ *    Le bouton « Plein écran » du composant appelle requestFullscreen() sur
+ *    <wfp-nutritracker-dashboard> lui-même. Or la feuille agent du navigateur
+ *    impose à tout élément plein écran :
+ *        position: fixed !important; inset: 0 !important;
+ *        width: 100% !important; height: 100% !important;
+ *    L'élément est donc exactement de la taille de l'écran et le défilement du
+ *    document est suspendu : sans overflow, tout le contenu sous la ligne de
+ *    flottaison devient inaccessible (symptôme : « ça ne défile pas »).
+ *    On le déclare donc conteneur défilant, et on laisse la grille interne
+ *    remplir au moins la hauteur visible.
+ * ------------------------------------------------------------------------- */
+wfp-nutritracker-dashboard:fullscreen {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FFFBF0;
+  /* L'en-tête collant du composant se cale sur ce nouveau référentiel. */
+  overscroll-behavior: contain;
+}
+/* Repli pour les navigateurs qui n'exposent que le préfixe historique. */
+wfp-nutritracker-dashboard:-webkit-full-screen {
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: #FFFBF0;
+}
