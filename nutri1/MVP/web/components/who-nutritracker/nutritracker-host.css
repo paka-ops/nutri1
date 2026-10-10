@@ -1,0 +1,17 @@
+/* ============================================================================
+ * NutriTracker · nutritracker-host.css
+ * Seule feuille chargée dans le <head> de index.html (le reste des styles vit
+ * dans le Shadow DOM du composant). Rôle :
+ *   1. Réserver la place du composant avant son initialisation.
+ *   2. Lorsque le tableau de bord est actif dans la section #who, masquer les
+ *      anciens modules "WHO NCD" (conservés dans le DOM car d'autres scripts
+ *      de la page en dépendent). Le bouton "Afficher les modules WHO NCD" de
+ *      la sidebar du composant ajoute .nt-show-legacy pour les réafficher.
+ * ========================================================================== */
+nutritracker-dashboard { display: block; min-height: 100vh; }
+nutritracker-dashboard:not(:defined) {
+  border-radius: 24px; border: 1px solid #E0EEFF;
+  background: linear-gradient(90deg, #0A1628 0 240px, #F0F6FF 240px);
+}
+#who.nt-takeover:not(.nt-show-legacy) > :not(nutritracker-dashboard) { display: none !important; }
+#who.nt-takeover.nt-show-legacy > nutritracker-dashboard { margin-bottom: 24px; }
