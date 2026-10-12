@@ -1,0 +1,14 @@
+/* ============================================================================
+ * NutriApp Santé · moh-nutriapp-host.css
+ * Feuille chargée dans <head> de index.html.
+ *   1. Réserve la place du composant avant initialisation.
+ *   2. Lorsque le dashboard est actif dans la section #health, masque les
+ *      anciens modules (conservés dans le DOM car d'autres scripts existent).
+ * ========================================================================== */
+moh-nutriapp-dashboard { display: block; min-height: 100vh; }
+moh-nutriapp-dashboard:not(:defined) {
+  border-radius: 24px; border: 1px solid #DDD6FE;
+  background: linear-gradient(90deg, #1E0A3C 0 240px, #FAF5FF 240px);
+}
+#health.moh-takeover:not(.moh-show-legacy) > :not(moh-nutriapp-dashboard) { display: none !important; }
+#health.moh-takeover.moh-show-legacy > moh-nutriapp-dashboard { margin-bottom: 24px; }
