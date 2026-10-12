@@ -1,0 +1,22 @@
+/* ============================================================================
+ * NutriApp Santé · health-nutriapp-host.css
+ * Seule feuille chargée dans le <head> de index.html (tout le reste des styles
+ * vit dans le Shadow DOM du composant). Rôle :
+ *   1. Réserver la place du composant avant son initialisation.
+ *   2. Lorsque le tableau de bord est actif dans la section #health, masquer
+ *      les anciens modules « Ministry of Health Command Center » (regroupés
+ *      dans .hn-legacy) : ils restent dans le DOM car d'autres scripts globaux
+ *      de la page les utilisent (healthCharts, healthEnhance…).
+ * ========================================================================== */
+health-nutriapp-dashboard { display: block; min-height: 100vh; }
+
+/* Placeholder pendant le chargement (squelette aux couleurs du Ministère) */
+health-nutriapp-dashboard:not(:defined) {
+  display: block; min-height: 480px; border-radius: 24px; border: 1px solid #DDD6FE;
+  background: linear-gradient(90deg, #1E0A3C 0 240px, #FAF5FF 240px);
+}
+
+/* Prise de contrôle de la section : masque les modules historiques */
+#health.hn-takeover > .hn-legacy { display: none !important; }
+#health.hn-takeover { padding: 0; }
+#health.hn-takeover.hn-show-legacy > .hn-legacy { display: block !important; }
