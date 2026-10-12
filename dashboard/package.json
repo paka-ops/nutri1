@@ -1,0 +1,16 @@
+{
+  "name": "nutriapp-dashboard-min-sante",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NutriApp — tableau de bord de surveillance nutritionnelle (Ministère de la Santé, Afrique de l'Ouest). HTML/CSS/JS pur, Canvas 2D natif, zéro framework.",
+  "scripts": {
+    "build": "bash build.sh",
+    "serve": "python3 -m http.server 8080 --bind 0.0.0.0",
+    "test": "npm run test:fonctionnel && npm run test:geometrie",
+    "test:fonctionnel": "node tests/test-fonctionnel.js",
+    "test:geometrie": "node tests/test-geometrie.js"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  }
+}

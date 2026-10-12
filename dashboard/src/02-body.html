@@ -1,0 +1,509 @@
+<body>
+<div class="app">
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       SIDEBAR DE NAVIGATION FIXE (260px) — dégradé #1E0A3C → #11052C
+       ════════════════════════════════════════════════════════════════════ -->
+  <aside class="sidebar" aria-label="Navigation principale NutriApp">
+    <div class="sb-halo"></div>
+
+    <!-- Logo : croix médicale + caducée (SVG) + smartphone NutriApp -->
+    <div class="sb-brand">
+      <div class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" fill="none">
+          <!-- Croix médicale -->
+          <path d="M20 6h8v14h14v8H28v14h-8V28H6v-8h14z" fill="#fff" opacity=".95"/>
+          <!-- Caducée stylisé (serpents entrelacés) -->
+          <path d="M24 9v30" stroke="#7C3AED" stroke-width="2" stroke-linecap="round"/>
+          <path d="M18 14c3 3 9 3 12 0M18 22c3 3 9 3 12 0M18 30c3 3 9 3 12 0"
+                stroke="#06B6D4" stroke-width="1.9" stroke-linecap="round" fill="none"/>
+          <circle cx="24" cy="9" r="3.1" fill="#10B981"/>
+        </svg>
+      </div>
+      <div class="brand-txt">
+        <h1>NutriApp Santé</h1>
+        <p>Ministère de la Santé</p>
+      </div>
+    </div>
+
+    <nav class="sb-scroll" id="nav">
+      <div class="sb-label">Pilotage national</div>
+      <button class="nav-item active" data-view="overview">
+        <span class="ico" aria-hidden="true">🏥</span><span class="txt">Vue d'ensemble</span><span class="cnt">5</span>
+      </button>
+      <button class="nav-item" data-view="crenas">
+        <span class="ico" aria-hidden="true">📊</span><span class="txt">CRENAS / CRENAM</span><span class="cnt">4</span>
+      </button>
+      <button class="nav-item" data-view="atpe">
+        <span class="ico" aria-hidden="true">💊</span><span class="txt">Suivi des Stocks ATPE</span><span class="cnt">2</span>
+      </button>
+      <button class="nav-item" data-view="anemie">
+        <span class="ico" aria-hidden="true">🩸</span><span class="txt">Anémie &amp; Micronutriments</span><span class="cnt">2</span>
+      </button>
+      <button class="nav-item" data-view="mnt">
+        <span class="ico" aria-hidden="true">⚖️</span><span class="txt">Double Fardeau &amp; MNT</span><span class="cnt">3</span>
+      </button>
+
+      <div class="sb-label">Qualité de la donnée</div>
+      <button class="nav-item" data-view="synchro">
+        <span class="ico" aria-hidden="true">📋</span><span class="txt">Synchro &amp; Qualité App</span><span class="cnt">3</span>
+      </button>
+
+      <!-- Encart télémétrie terrain -->
+      <div class="sb-card">
+        <h4>Télémétrie terrain</h4>
+        <p id="sbCardTxt">1 842 points de distribution suivis · 3 214 agents connectés</p>
+        <div class="sb-bar"><i id="sbCardBar" style="width:72%"></i></div>
+        <div class="sb-meta"><span>Synchro 24 h</span><span id="sbCardPct">72 %</span></div>
+      </div>
+    </nav>
+
+    <div class="sb-foot">
+      <b>NutriApp v5.7</b> · Build 2026.10<br />
+      Source : DHIS2 + enquêtes ménages<br />
+      © Ministère de la Santé — CEDEAO
+    </div>
+  </aside>
+
+  <!-- ════════════════════════════════════════════════════════════════════
+       ZONE PRINCIPALE (fluide, à droite de la sidebar)
+       ════════════════════════════════════════════════════════════════════ -->
+  <div class="main">
+
+    <!-- ── Header persistant 72px · glassmorphism ─────────────────────── -->
+    <header class="topbar">
+      <div class="tb-left">
+        <!-- Fil d'ariane interactif dynamique (mis à jour par la navigation) -->
+        <nav class="crumb" id="crumb" aria-label="Fil d'ariane">
+          <a data-view="overview">NutriApp</a><span class="sep">›</span>
+          <a data-view="overview">Afrique de l'Ouest</a><span class="sep">›</span>
+          <span class="here">Vue d'ensemble</span>
+        </nav>
+        <h2 class="dash-title" id="dashTitle">Surveillance Nutritionnelle Clinique, Communautaire &amp; MNT</h2>
+      </div>
+
+      <div class="tb-right">
+        <!-- Sélecteur de mode de périmètre : global vs détaillé par pays -->
+        <div class="seg" role="group" aria-label="Périmètre d'analyse">
+          <button class="seg-btn on" id="btnGlobal" aria-pressed="true">
+            <span class="car" aria-hidden="true">🌍</span><span class="lbl">Vue Globale Afrique de l'Ouest</span>
+          </button>
+          <button class="seg-btn" id="btnCountry" aria-pressed="false">
+            <span class="car" aria-hidden="true">🏳️</span><span class="lbl">Vue Détaillée par Pays</span>
+            <span class="car" style="font-size:8px;opacity:.7">▾</span>
+          </button>
+        </div>
+
+        <!-- Sélecteur de pays contextuel (actif uniquement en mode pays) -->
+        <div class="country-picker" id="countryPicker">
+          <button class="cp-btn" id="cpBtn" aria-expanded="false" aria-haspopup="listbox">
+            <span class="cp-flag" id="cpFlag">🇳🇪</span>
+            <span>
+              <span class="cp-name" id="cpName">Niger</span>
+              <span class="cp-sub" id="cpSub">8 districts · 214 points ATPE</span>
+            </span>
+            <span class="cp-caret" aria-hidden="true">▼</span>
+          </button>
+          <div class="cp-menu" id="cpMenu" role="listbox" aria-label="Choisir un pays">
+            <input class="cp-search" id="cpSearch" type="search" placeholder="Rechercher un pays (16)…" autocomplete="off" />
+            <div id="cpList"></div>
+          </div>
+        </div>
+
+        <span class="vr" aria-hidden="true"></span>
+
+        <!-- Badge animé « Synchro NutriApp LIVE » -->
+        <div class="live" id="liveBadge" title="Flux temps réel des fiches terrain">
+          <span class="dot" aria-hidden="true"></span>
+          <span>Synchro NutriApp LIVE</span>
+          <small id="liveCount">· 1 284 fiches/min</small>
+        </div>
+
+        <span class="vr" aria-hidden="true"></span>
+
+        <!-- BOUTON NATIF DE PLEIN ÉCRAN (Fullscreen API) : mode immersif investisseur -->
+        <button class="icon-btn" id="btnFull" title="Basculer en mode plein écran investisseur" aria-label="Plein écran">
+          <svg class="i-enter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+          </svg>
+          <svg class="i-exit" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1"
+               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 9h4a1 1 0 0 0 1-1V4m6 20v-4a1 1 0 0 1 1-1h4M20 15h-4a1 1 0 0 0-1 1v4M9 4v4a1 1 0 0 1-1 1H4"/>
+          </svg>
+        </button>
+
+        <!-- Export de la vue courante (PNG via canvas) -->
+        <button class="icon-btn" id="btnPrint" title="Exporter la vue (impression / PDF)" aria-label="Exporter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round"
+               stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3v12m0 0 4-4m-4 4-4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- ── Bandeau de contexte du périmètre (région / pays + districts) ── -->
+      <section class="scope-bar" id="scopeBar" aria-live="polite"></section>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VUE 1 — 🏥 VUE D'ENSEMBLE (5 KPI + graphiques 1, 2, 10)
+           ════════════════════════════════════════════════════════════════ -->
+      <section class="view active" id="view-overview" data-title="Vue d'ensemble">
+
+        <!-- Les 5 KPI cards dynamiques sont injectées par JavaScript :
+             elles s'adaptent automatiquement au périmètre (région ou pays). -->
+        <div class="kpi-grid" id="kpiGrid"></div>
+
+        <div class="sec-head">
+          <h2>Prise en charge nutritionnelle &amp; flux NutriApp</h2>
+          <span>Dernière synchronisation il y a <b id="lastSyncA">2 min</b></span>
+          <div class="rule"></div>
+        </div>
+
+        <div class="grid">
+          <!-- GRAPHIQUE 1 · Dual Area Chart — Admissions CRENAS sur 24 mois -->
+          <article class="card span-4">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Admissions CRENAS saisies dans NutriApp (24 mois)</h3>
+                <p class="card-sub">Comparaison 2025 (violet) vs 2024 (gris) · surlignage ambre de la période de soudure</p>
+              </div>
+              <div class="card-tools"><span class="tag">Flux App</span><span class="tag cyan">24 mois</span></div>
+            </div>
+            <div class="chart h-320" data-chart="c1"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:linear-gradient(180deg,#7C3AED,#A855F7)"></i>Admissions 2025</span>
+              <span class="legend-i"><i style="background:#CBD5E1"></i>Admissions 2024</span>
+              <span class="legend-i"><i style="background:rgba(245,158,11,.35)"></i>Période de soudure (juin → sept.)</span>
+            </div>
+            <div class="card-foot"><span class="src">Source :</span><span>Registres CRENAS/CRENAM synchronisés par les agents communautaires (module « Admission »), consolidation DHIS2 mensuelle.</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 2 · Scatter 4 quadrants — normes Sphère -->
+          <article class="card span-2">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Performance des prises en charge</h3>
+                <p class="card-sub">Taux de guérison vs taux d'abandon · seuils Sphère 75 % / 15 %</p>
+              </div>
+              <div class="card-tools"><span class="tag green">Sphère</span></div>
+            </div>
+            <div class="chart h-320" data-chart="c2"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#10B981"></i>Conforme Sphère</span>
+              <span class="legend-i"><i style="background:#F59E0B"></i>À surveiller</span>
+              <span class="legend-i"><i style="background:#EF4444"></i>Sous-performance</span>
+            </div>
+            <div class="card-foot"><span class="src">Lecture :</span><span>la taille des bulles est proportionnelle au volume d'admissions terrain déclaré dans l'App.</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 10 · Small multiples — 6 métriques NutriApp -->
+          <article class="card span-6">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Small multiples : tendances des 6 métriques NutriApp</h3>
+                <p class="card-sub">Mini-graphiques en aires sur 24 mois avec indicateurs de tendance directionnelle</p>
+              </div>
+              <div class="card-tools"><span class="tag">24 mois</span><span class="tag grey">Tendance 90 j</span></div>
+            </div>
+            <div class="chart h-300" data-chart="c10"></div>
+            <div class="card-foot"><span class="src">Méthode :</span><span>tendance calculée par régression linéaire sur les 6 derniers mois ; flèche verte = amélioration, rouge = dégradation de l'indicateur.</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VUE 2 — 📊 CRENAS / CRENAM (graphiques 4, 5, 12, 13)
+           ════════════════════════════════════════════════════════════════ -->
+      <section class="view" id="view-crenas" data-title="CRENAS / CRENAM">
+        <div class="grid">
+          <!-- GRAPHIQUE 4 · Heatmap matricielle zones × 8 indicateurs -->
+          <article class="card span-4">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Matrice de performance des districts NutriApp</h3>
+                <p class="card-sub">Zones × 8 indicateurs clés · colorimétrie conditionnelle normalisée</p>
+              </div>
+              <div class="card-tools"><span class="tag">Matrice</span><span class="tag cyan" id="tagMatriceScope">16 pays</span></div>
+            </div>
+            <div class="chart h-420" data-chart="c4"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#EF4444"></i>Critique</span>
+              <span class="legend-i"><i style="background:#F59E0B"></i>Insuffisant</span>
+              <span class="legend-i"><i style="background:#FDE68A"></i>Proche de la cible</span>
+              <span class="legend-i"><i style="background:#10B981"></i>Performant</span>
+            </div>
+            <div class="card-foot"><span class="src">Note :</span><span>chaque indicateur est normalisé indépendamment (0 → 100) afin de rendre comparables des unités hétérogènes (%, jours, points).</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 5 · Polar rose chart — saisonnalité -->
+          <article class="card span-2">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Saisonnalité des signalements NutriApp</h3>
+                <p class="card-sub">Distribution mensuelle des cas dépistés · 3 cycles annuels</p>
+              </div>
+              <div class="card-tools"><span class="tag amber">Soudure</span></div>
+            </div>
+            <div class="chart h-420" data-chart="c5"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#DDD6FE"></i>2023</span>
+              <span class="legend-i"><i style="background:#A855F7"></i>2024</span>
+              <span class="legend-i"><i style="background:#7C3AED"></i>2025</span>
+            </div>
+            <div class="card-foot"><span class="src">Lecture :</span><span>le pic de juin à septembre correspond à la soudure agro-pastorale et à la saison palustre.</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 12 · Multi-line — canaux de dépistage -->
+          <article class="card span-3">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Évolution des canaux de dépistage NutriApp (2018-2024)</h3>
+                <p class="card-sub">Part relative des dépistages CPN, pédiatrie, PB communautaire et auto-dépistage</p>
+              </div>
+              <div class="card-tools"><span class="tag">% du total</span></div>
+            </div>
+            <div class="chart h-340" data-chart="c12"></div>
+            <div class="legend">
+              <span class="legend-i line"><i style="background:#7C3AED"></i>CPN (consultations prénatales)</span>
+              <span class="legend-i line"><i style="background:#06B6D4"></i>Pédiatrie / formations sanitaires</span>
+              <span class="legend-i line"><i style="background:#10B981"></i>PB communautaire (agents ASC)</span>
+              <span class="legend-i line"><i style="background:#F59E0B"></i>Auto-dépistage mobile</span>
+            </div>
+          </article>
+
+          <!-- GRAPHIQUE 13 · Lollipop — score composite -->
+          <article class="card span-3">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Score composite NutriApp par zone</h3>
+                <p class="card-sub">Classement tiges &amp; cercles · objectif global 70 points</p>
+              </div>
+              <div class="card-tools"><span class="tag green">Cible 70</span></div>
+            </div>
+            <div class="chart h-340" data-chart="c13"></div>
+            <div class="card-foot"><span class="src">Composition :</span><span>40 % couverture dépistage · 25 % qualité des fiches · 20 % disponibilité ATPE · 15 % régularité de synchronisation.</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VUE 3 — 💊 SUIVI DES STOCKS ATPE (graphiques 3, 15)
+           ════════════════════════════════════════════════════════════════ -->
+      <section class="view" id="view-atpe" data-title="Suivi des stocks ATPE">
+        <div class="grid">
+          <!-- GRAPHIQUE 3 · Bullet chart vertical multi-zones -->
+          <article class="card span-6">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Niveaux de stocks ATPE géolocalisés dans NutriApp</h3>
+                <p class="card-sub">Couverture en jours de stock par zone · seuil critique de rupture à 30 jours (ligne rouge fixe)</p>
+              </div>
+              <div class="card-tools"><span class="tag red">Seuil 30 j</span><span class="tag">Inventaire mobile</span></div>
+            </div>
+            <div class="chart h-380" data-chart="c3"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#EF4444"></i>Rupture &lt; 15 j</span>
+              <span class="legend-i"><i style="background:#F59E0B"></i>Alerte 15 – 30 j</span>
+              <span class="legend-i"><i style="background:#10B981"></i>Sécurité 30 – 90 j</span>
+              <span class="legend-i"><i style="background:#06B6D4"></i>Surstock &gt; 90 j</span>
+              <span class="legend-i"><i style="background:rgba(124,58,237,.28)"></i>Couverture théorique (commande en cours)</span>
+            </div>
+            <div class="card-foot"><span class="src">Source :</span><span>module « Inventaire ATPE » — comptages physiques saisis par les points focaux, géolocalisation GPS de la structure, fréquence hebdomadaire.</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 15 · Scorecard tabulaire avec sparklines canvas -->
+          <article class="card span-6">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Scorecard synthétique des unités NutriApp</h3>
+                <p class="card-sub">Tableau de bord tabulaire · mini-sparklines canvas intégrées et badges de statut interactifs (indicateurs MNT inclus)</p>
+              </div>
+              <div class="card-tools"><span class="tag cyan" id="tagScoreScope">16 pays</span><span class="tag grey">Tri actif</span></div>
+            </div>
+            <div class="tbl-wrap">
+              <table class="score" id="scoreTable">
+                <thead><tr id="scoreHead"></tr></thead>
+                <tbody id="scoreBody"></tbody>
+              </table>
+            </div>
+            <div class="tbl-foot">
+              <span><b>Lecture :</b> cliquez sur un en-tête pour trier la colonne.</span>
+              <span class="pill ok"><i></i>Conforme</span>
+              <span class="pill warn"><i></i>À surveiller</span>
+              <span class="pill crit"><i></i>Critique</span>
+              <span style="margin-left:auto" id="scoreUpdated">Mise à jour : —</span>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VUE 4 — 🩸 ANÉMIE & MICRONUTRIMENTS (graphiques 6, 9)
+           ════════════════════════════════════════════════════════════════ -->
+      <section class="view" id="view-anemie" data-title="Anémie &amp; Micronutriments">
+        <div class="grid">
+          <!-- GRAPHIQUE 6 · Grouped bars + line — anémie vs couverture fer -->
+          <article class="card span-4">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Prévalence de l'anémie vs couverture en suppléments (App)</h3>
+                <p class="card-sub">Barres groupées par catégorie de population saisie + courbe du taux de distribution de fer/acide folique</p>
+              </div>
+              <div class="card-tools"><span class="tag">Micronutriments</span></div>
+            </div>
+            <div class="chart h-360" data-chart="c6"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#EF4444"></i>Anémie sévère (Hb &lt; 7 g/dL)</span>
+              <span class="legend-i"><i style="background:#F59E0B"></i>Anémie modérée (7 – 9,9)</span>
+              <span class="legend-i"><i style="background:#FDE68A"></i>Anémie légère (10 – 11,9)</span>
+              <span class="legend-i line"><i style="background:#06B6D4"></i>Couverture supplémentation fer (axe droit)</span>
+            </div>
+            <div class="card-foot"><span class="src">Source :</span><span>dépistages Hémocue saisis en clinique mobile + registres de distribution de fer/acide folique (grossesses suivies dans NutriApp).</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 9 · Funnel — dépistage CPN -->
+          <article class="card span-2">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Funnel du dépistage CPN dans NutriApp</h3>
+                <p class="card-sub">Entonnoir de conversion · gap de 59 % de femmes non dépistées</p>
+              </div>
+              <div class="card-tools"><span class="tag red">Gap 59 %</span></div>
+            </div>
+            <div class="chart h-360" data-chart="c9"></div>
+            <div class="card-foot"><span class="src">Étapes :</span><span>grossesses attendues → CPN1 enregistrée → dépistage anémie → supplémentation effective → suivi post-partum.</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VUE 5 — ⚖️ DOUBLE FARDEAU & MNT (graphiques 8, 11, 14)
+           ════════════════════════════════════════════════════════════════ -->
+      <section class="view" id="view-mnt" data-title="Double fardeau &amp; MNT">
+        <div class="grid">
+          <!-- GRAPHIQUE 8 · Dumbbell chart 2015 vs 2024 -->
+          <article class="card span-3">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Maladies chroniques &amp; nutrition (2015 vs 2024)</h3>
+                <p class="card-sub">Dumbbell : évolution de la tension liée au sel, du diabète T2, de l'obésité et de la malnutrition chronique</p>
+              </div>
+              <div class="card-tools"><span class="tag">Δ 9 ans</span></div>
+            </div>
+            <div class="chart h-360" data-chart="c8"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#CBD5E1"></i>2015 (enquête ménage)</span>
+              <span class="legend-i"><i style="background:#7C3AED"></i>2024 (NutriApp)</span>
+            </div>
+          </article>
+
+          <!-- GRAPHIQUE 11 · Treemap comorbidités -->
+          <article class="card span-3">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Treemap : comorbidités &amp; MNT associées à la nutrition</h3>
+                <p class="card-sub">Rectangles proportionnels aux cas enregistrés dans l'App (pathologies chroniques et infectieuses)</p>
+              </div>
+              <div class="card-tools"><span class="tag amber">App Data</span></div>
+            </div>
+            <div class="chart h-360" data-chart="c11"></div>
+            <div class="card-foot"><span class="src">Lecture :</span><span>surface = nombre de cas ; les teintes violettes signalent les MNT liées à l'alimentation, les teintes cyan les pathologies infectieuses.</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 14 · Stacked bar 100% — double fardeau -->
+          <article class="card span-6">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Stacked bar 100 % : le double fardeau nutritionnel</h3>
+                <p class="card-sub">Coexistence de la sous-nutrition (MAS, MAM, retard de croissance) et des MNT liées à l'alimentation (surpoids, obésité, risque hypertensif)</p>
+              </div>
+              <div class="card-tools"><span class="tag red">Double fardeau</span><span class="tag cyan" id="tagBurdenScope">16 pays</span></div>
+            </div>
+            <div class="chart h-420" data-chart="c14"></div>
+            <div class="legend" id="legendBurden"></div>
+            <div class="card-foot"><span class="src">Indice de double fardeau :</span><span>part des ménages cumulant au moins un enfant en retard de croissance et un adulte en surpoids/obésité ou à risque hypertensif.</span></div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════════
+           VUE 6 — 📋 SYNCHRO & QUALITÉ APP (graphiques 7, 3 bis)
+           ════════════════════════════════════════════════════════════════ -->
+      <section class="view" id="view-synchro" data-title="Synchro &amp; qualité App">
+        <div class="grid">
+          <!-- GRAPHIQUE 7 · Heatmap calendaire 52 semaines -->
+          <article class="card span-3">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Heatmap de synchronisation hebdomadaire NutriApp</h3>
+                <p class="card-sub">Grille calendaire 52 semaines · régularité des rapports transmis par les relais mobiles</p>
+              </div>
+              <div class="card-tools"><span class="tag cyan">Qualité data</span></div>
+            </div>
+            <div class="chart h-300" data-chart="c7"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#F3EEFF"></i>&lt; 40 %</span>
+              <span class="legend-i"><i style="background:#C4B5FD"></i>60 %</span>
+              <span class="legend-i"><i style="background:#8B5CF6"></i>80 %</span>
+              <span class="legend-i"><i style="background:#4C1D95"></i>&gt; 95 %</span>
+            </div>
+          </article>
+
+          <!-- GRAPHIQUE 3 (rappel) · Stocks ATPE sous l'angle logistique -->
+          <article class="card span-3">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Ruptures ATPE &amp; délais de réapprovisionnement</h3>
+                <p class="card-sub">Couverture en jours de stock par zone — vue logistique des alertes remontées par l'App</p>
+              </div>
+              <div class="card-tools"><span class="tag red">Seuil 30 j</span></div>
+            </div>
+            <div class="chart h-300" data-chart="c3b"></div>
+            <div class="card-foot"><span class="src">Alertes :</span><span>chaque structure sous 30 jours de couverture déclenche une notification « RÉAPPRO URGENT » au point focal district.</span></div>
+          </article>
+
+          <!-- GRAPHIQUE 15 (rappel qualité) · Scorecard -->
+          <article class="card span-6">
+            <div class="card-head">
+              <div class="txt">
+                <h3 class="card-title">Qualité de la donnée par unité — scorecard détaillée</h3>
+                <p class="card-sub">Complétude des fiches, délai de synchronisation et score composite par zone suivie dans NutriApp</p>
+              </div>
+              <div class="card-tools"><span class="tag">Audit continu</span></div>
+            </div>
+            <div class="chart h-380" data-chart="c15b"></div>
+            <div class="legend">
+              <span class="legend-i"><i style="background:#7C3AED"></i>Complétude des fiches (%)</span>
+              <span class="legend-i"><i style="background:#06B6D4"></i>Synchro &lt; 24 h (%)</span>
+              <span class="legend-i"><i style="background:#10B981"></i>Score composite (0-100)</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="note">
+          <span class="ni" aria-hidden="true">ℹ️</span>
+          <span><b>Qualité de la donnée.</b> Les indicateurs de cette section sont calculés sur les fiches effectivement synchronisées. Un taux de synchronisation inférieur à 70 % entraîne une sous-déclaration mécanique des admissions : les valeurs du périmètre concerné sont alors marquées <b>« estimé »</b> dans la scorecard et dans les tooltips.</span>
+        </div>
+      </section>
+
+      <!-- ── Pied de page institutionnel ───────────────────────────────── -->
+      <footer class="page-foot">
+        <b>NutriApp · Ministère de la Santé</b>
+        <span class="dotsep">•</span>
+        <span>Surveillance nutritionnelle clinique, communautaire &amp; maladies non transmissibles</span>
+        <span class="dotsep">•</span>
+        <span>16 pays d'Afrique de l'Ouest · 1 842 points de distribution</span>
+        <span class="dotsep">•</span>
+        <span id="footStamp">Extraction : —</span>
+        <span style="margin-left:auto">Rendu Canvas 2D natif — zéro framework</span>
+      </footer>
+    </main>
+  </div>
+</div>
+
+<!-- Tooltip natif commun à tous les graphiques canvas -->
+<div class="tip" id="tip" role="tooltip" aria-hidden="true"></div>

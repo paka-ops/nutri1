@@ -1,0 +1,572 @@
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 4 · Heatmap matricielle — Performance des districts NutriApp
+   Croisement zones × 8 indicateurs clés, colorimétrie conditionnelle.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawHeatmapMatrix(ctx, W, H, prog, hover, s){
+  const zones = s.zones.slice(0, 16);                 // 16 pays ou districts du pays
+  const inds = INDICATEURS_MATRICE;
+  /* Marge gauche mesurée sur les libellés réels (drapeau + nom tronqué) */
+  const pad = { l: padLeftZones(ctx, zones, { W:W, font:'600 11px Inter, sans-serif', maxChars:18, min:56, max:150 }),
+                r: 14, t: 52, b: 42 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const cw = plotW / inds.length, ch = plotH / zones.length;
+  const gap = 2.4;
+
+  /* En-têtes de colonnes (indicateurs) — taille de police adaptée à la largeur
+     disponible pour éviter tout chevauchement en colonne étroite. */
+  ctx.save();
+  inds.forEach((ind, j) => {
+    const cx = pad.l + cw * j + cw / 2;
+    const isHovCol = hover && hover.col === j;
+    let titre = ind.nom.toUpperCase();
+    let fs = 10;
+    ctx.font = '700 ' + fs + 'px Inter, sans-serif';
+    while (ctx.measureText(titre).width > cw - 4 && fs > 7){
+      fs -= .2; ctx.font = '700 ' + fs + 'px Inter, sans-serif';
+    }
+    /* Ultime recours : troncature si la police minimale ne suffit pas */
+    titre = fitText(ctx, titre, cw - 4);
+    ctx.textAlign = 'center';
+    ctx.fillStyle = isHovCol ? C.primaryDeep : C.muted;
+    ctx.fillText(titre, cx, pad.t - 24);
+    const cible = 'cible ' + (ind.inv ? '≤ ' : '≥ ') + (ind.inv ? ind.min : ind.max) + ind.unite;
+    let fs2 = 9;
+    ctx.font = '500 ' + fs2 + 'px Inter, sans-serif';
+    while (ctx.measureText(cible).width > cw - 4 && fs2 > 7){
+      fs2 -= .2; ctx.font = '500 ' + fs2 + 'px Inter, sans-serif';
+    }
+    ctx.fillStyle = C.muted2;
+    ctx.fillText(cible, cx, pad.t - 11);
+  });
+  ctx.restore();
+
+  const hits = [];
+  zones.forEach((z, i) => {
+    const isHovRow = hover && hover.row === i;
+    /* Libellé de zone */
+    ctx.save();
+    ctx.font = (isHovRow ? '700 ' : '600 ') + '11px Inter, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillStyle = isHovRow ? C.primaryDeep : (hover ? '#B9C2D0' : C.ink3);
+    const label = fitText(ctx, (z.drapeau ? z.drapeau + ' ' : '') + z.nom, pad.l - 14);
+    ctx.fillText(label, pad.l - 12, pad.t + ch * i + ch / 2 + 4);
+    ctx.restore();
+
+    inds.forEach((ind, j) => {
+      const v = valeurIndicateur(z, ind);
+      const t = normalise(v, ind);
+      const col = couleurPerformance(t);
+      const delay = (j / inds.length) * .45 + (i / zones.length) * .25;
+      const p = easeOutCubic(clamp((prog - delay) / .4, 0, 1));
+      const isCell = hover && hover.row === i && hover.col === j;
+      const x = pad.l + cw * j + gap / 2, y = pad.t + ch * i + gap / 2;
+      const w = cw - gap, h = ch - gap;
+
+      ctx.save();
+      ctx.globalAlpha = p * (hover && !isCell ? (isHovRow || hover.col === j ? .95 : .35) : 1);
+      fillRR(ctx, x, y, w, h, 5, col);
+      /* Reflet supérieur discret */
+      const g = ctx.createLinearGradient(0, y, 0, y + h);
+      g.addColorStop(0, 'rgba(255,255,255,.22)'); g.addColorStop(.55, 'rgba(255,255,255,0)');
+      ctx.fillStyle = g; rr(ctx, x, y, w, h, 5); ctx.fill();
+      if (isCell){
+        ctx.strokeStyle = '#0F172A'; ctx.lineWidth = 2; rr(ctx, x - 1, y - 1, w + 2, h + 2, 6); ctx.stroke();
+      }
+      /* Valeur numérique dans la cellule (si la place le permet) */
+      if (p > .8 && w > 30 && h > 17){
+        ctx.font = '700 ' + Math.min(10.5, h * .44) + 'px Inter, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillStyle = t > .55 ? 'rgba(255,255,255,.96)' : 'rgba(15,23,42,.82)';
+        const txt = ind.unite === ' j' ? aff(v, 0) + ' j' : aff(v, v < 10 ? 1 : 0) + ind.unite;
+        ctx.fillText(txt, x + w / 2, y + h / 2 + 3.6);
+      }
+      ctx.restore();
+
+      const st = statutPerformance(t);
+      hits.push({
+        id:'c' + i + '_' + j, type:'rect', x, y, w, h, row:i, col:j,
+        tip:{ title: z.nom + (z.pays ? ' · ' + z.pays : ''), sub: ind.nom + ' — ' + ind.desc, color: col,
+              rows:[
+                { c: col, k:'Valeur relevée (App)', v: aff(v, 1) + ind.unite },
+                { c:'transparent', k:'Cible ' + (ind.inv ? 'maximale' : 'minimale'),
+                  v: (ind.inv ? '≤ ' : '≥ ') + (ind.inv ? ind.min : ind.max) + ind.unite,
+                  d: st.txt, dc: t < .35 ? 'down' : (t < .8 ? 'flat' : 'up') },
+                { c:'#7C3AED', k:'Performance normalisée', v: aff(t * 100, 0) + ' / 100' },
+                { c:'#06B6D4', k:'Volume d\'admissions', v: nf(z.adm) }
+              ],
+              note: t < .35 ? '⚠ Indicateur critique : supervision terrain et plan de rattrapage requis.'
+                          : (t < .6 ? 'Sous la cible : suivi hebdomadaire recommandé par le point focal district.'
+                                    : 'Conforme : maintenir la fréquence de saisie actuelle.') }
+      });
+    });
+  });
+
+  /* Échelle colorimétrique continue */
+  ctx.save();
+  const lx = pad.l, ly = H - 22, lw = Math.min(230, plotW * .5);
+  const g = ctx.createLinearGradient(lx, 0, lx + lw, 0);
+  for (let i = 0; i <= 10; i++) g.addColorStop(i / 10, couleurPerformance(i / 10));
+  fillRR(ctx, lx, ly, lw, 8, 4, g);
+  ctx.font = '600 9.5px Inter, sans-serif'; ctx.fillStyle = C.muted2;
+  ctx.textAlign = 'left';  ctx.fillText('Critique', lx, ly - 5);
+  ctx.textAlign = 'center'; ctx.fillText('Insuffisant', lx + lw * .42, ly - 5);
+  ctx.textAlign = 'right'; ctx.fillText('Performant', lx + lw, ly - 5);
+  ctx.restore();
+  watermark(ctx, W, H, 'Matrice NutriApp · 8 indicateurs');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 5 · Polar Rose Chart — Saisonnalité des signalements NutriApp
+   12 secteurs mensuels × 3 cycles annuels (2023, 2024, 2025).
+   ───────────────────────────────────────────────────────────────────────── */
+function drawPolarRose(ctx, W, H, prog, hover, s){
+  const cx = W / 2, cy = H / 2 + 6;
+  const R = Math.max(38, Math.min(W / 2 - 42, H / 2 - 46));
+  const r0 = R * .20;                                    // rayon intérieur (cœur)
+  const total25 = s.agg.admS.m2025.reduce((a, b) => a + b, 0);
+  /* Les trois cycles annuels sont recalés sur les ratios régionaux observés
+     (2023 = 79 % de 2025, 2024 = 89 % de 2025) puis bruités de façon stable. */
+  const r = rngFrom('rose|' + (s.global ? 'REG' : s.pays.iso));
+  const annees = [
+    { an: 2023, c:'#DDD6FE', bord:'#C4B5FD', facteur:.79 },
+    { an: 2024, c:'#A855F7', bord:'#8B5CF6', facteur:.89 },
+    { an: 2025, c:'#7C3AED', bord:'#5B21B6', facteur:1.00 }
+  ];
+  const data = annees.map(a => ({
+    ...a,
+    vals: s.agg.admS.m2025.map((v, i) => Math.max(1, Math.round(v * a.facteur * (1 + (r() - .5) * .07))))
+  }));
+  const maxV = Math.max.apply(null, data.map(d => Math.max.apply(null, d.vals)));
+  const YR = v => r0 + (v / maxV) * (R - r0);
+
+  /* ── Anneaux de grille polaire ─────────────────────────────────────── */
+  ctx.save();
+  [.25, .5, .75, 1].forEach((f, i) => {
+    ctx.beginPath(); ctx.arc(cx, cy, r0 + (R - r0) * f, 0, Math.PI * 2);
+    ctx.strokeStyle = i === 3 ? '#DDD6FE' : '#F1EDFE'; ctx.lineWidth = 1; ctx.stroke();
+    if (R > 74){   // graduations lisibles uniquement si le rayon le permet
+      ctx.font = '600 9px Inter, sans-serif'; ctx.fillStyle = '#B7C0CE'; ctx.textAlign = 'left';
+      ctx.fillText(nfc(maxV * f), cx + 3, cy - (r0 + (R - r0) * f) - 3);
+    }
+  });
+  /* Rayons des 12 mois */
+  for (let m = 0; m < 12; m++){
+    const a0 = (m / 12) * Math.PI * 2 - Math.PI / 2;
+    ctx.beginPath();
+    ctx.moveTo(cx + Math.cos(a0) * r0, cy + Math.sin(a0) * r0);
+    ctx.lineTo(cx + Math.cos(a0) * R, cy + Math.sin(a0) * R);
+    ctx.strokeStyle = '#F4F1FE'; ctx.lineWidth = 1; ctx.stroke();
+  }
+  ctx.restore();
+
+  /* ── Secteur de la soudure (juin → septembre) surligné en ambre ────── */
+  ctx.save();
+  ctx.globalAlpha = .35 * prog;
+  ctx.beginPath();
+  ctx.moveTo(cx, cy);
+  ctx.arc(cx, cy, R + 6, (5 / 12) * Math.PI * 2 - Math.PI / 2, (9 / 12) * Math.PI * 2 - Math.PI / 2);
+  ctx.closePath();
+  const gS = ctx.createRadialGradient(cx, cy, r0, cx, cy, R + 6);
+  gS.addColorStop(0, 'rgba(245,158,11,.05)'); gS.addColorStop(1, 'rgba(245,158,11,.42)');
+  ctx.fillStyle = gS; ctx.fill();
+  ctx.restore();
+  /* Libellé du secteur de soudure */
+  const aMid = (7 / 12) * Math.PI * 2 - Math.PI / 2;
+  ctx.save();
+  ctx.globalAlpha = prog;
+  ctx.font = '800 9px Inter, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#B45309';
+  ctx.fillText('SOUDURE', cx + Math.cos(aMid) * (R + 18), cy + Math.sin(aMid) * (R + 18) + 3);
+  ctx.restore();
+
+  /* ── Pétales (3 anneaux concentriques par mois) ────────────────────── */
+  const pas = Math.PI * 2 / 12, ouverture = pas * .30;   // anneau = 30 % du secteur
+  const hits = [];
+  for (let m = 0; m < 12; m++){
+    const a0 = m * pas - Math.PI / 2;
+    const delay = m / 12 * .4;
+    const p = easeOutCubic(clamp((prog - delay) / .6, 0, 1));
+    data.forEach((d, k) => {
+      const aS = a0 + pas * .14 + k * ouverture;
+      const aE = aS + ouverture * .86;
+      const rad = lerp(r0, YR(d.vals[m]), p);
+      const isHov = hover && hover.id === 'r' + m;
+      ctx.save();
+      ctx.globalAlpha = isHov ? 1 : (hover ? .35 : .94);        // opacification 35 % (charte)
+      ctx.beginPath();
+      ctx.arc(cx, cy, rad, aS, aE);
+      ctx.arc(cx, cy, r0, aE, aS, true);
+      ctx.closePath();
+      const g = ctx.createRadialGradient(cx, cy, r0, cx, cy, rad);
+      g.addColorStop(0, rgba(d.c, .55)); g.addColorStop(1, d.c);
+      ctx.fillStyle = g; ctx.fill();
+      if (isHov){ ctx.strokeStyle = '#0F172A'; ctx.lineWidth = 1.6; ctx.stroke(); }
+      else { ctx.strokeStyle = rgba('#fff', .75); ctx.lineWidth = .8; ctx.stroke(); }
+      ctx.restore();
+    });
+    /* Libellé du mois en périphérie */
+    const aC = a0 + pas / 2;
+    ctx.save();
+    ctx.font = (hover && hover.id === 'r' + m ? '800 ' : '600 ') + '10.5px Inter, sans-serif';
+    ctx.fillStyle = (hover && hover.id === 'r' + m) ? C.primaryDeep : C.muted2;
+    ctx.textAlign = 'center';
+    const lx = clamp(cx + Math.cos(aC) * (R + 26), 18, W - 18);
+    const ly = clamp(cy + Math.sin(aC) * (R + 26) + 3.5, 12, H - 6);
+    ctx.fillText(MOIS_COURTS[m].toUpperCase(), lx, ly);
+    ctx.restore();
+
+    hits.push({
+      id:'r' + m, type:'sector',
+      /* Survol angulaire exact : secteur de 30° centré sur le mois */
+      cx, cy, r0: r0 * .9, r1: R + 10,
+      a0: m * pas, a1: (m + 1) * pas,
+      tip:{ title: MOIS_LONGS[m], sub: 'Signalements dépistés dans NutriApp', color:'#7C3AED',
+            rows: data.map(d => ({ c: d.c, k:'Cycle ' + d.an, v: nf(d.vals[m]),
+                                   d: d.an === 2025 ? (d.vals[m] > data[1].vals[m] ? '+' + aff(pctChange(d.vals[m], data[1].vals[m]), 1) + ' % vs 2024' : '') : '',
+                                   dc:'up' })),
+            note: SOUDURE_MONTHS.indexOf(m) >= 0
+              ? '⚠ Mois de soudure : hausse des admissions MAS/MAM, tension sur les stocks ATPE et pic palustre.'
+              : 'Mois hors soudure : activité de dépistage communautaire de routine.' }
+    });
+  }
+
+  /* ── Cœur du diagramme (total annuel) ──────────────────────────────── */
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx, cy, r0 - 2, 0, Math.PI * 2);
+  const gc = ctx.createLinearGradient(cx - r0, cy - r0, cx + r0, cy + r0);
+  gc.addColorStop(0, '#fff'); gc.addColorStop(1, '#F5F0FF');
+  ctx.fillStyle = gc; ctx.fill();
+  ctx.strokeStyle = '#DDD6FE'; ctx.lineWidth = 1; ctx.stroke();
+  ctx.textAlign = 'center';
+  ctx.font = '800 ' + Math.max(9, r0 * .42) + 'px Inter, sans-serif';
+  ctx.fillStyle = C.primary;
+  ctx.fillText(nfc(total25), cx, cy + r0 * .12);
+  ctx.font = '700 ' + Math.max(6.5, r0 * .20) + 'px Inter, sans-serif';
+  ctx.fillStyle = C.muted2;
+  ctx.fillText('CAS 2025', cx, cy + r0 * .52);
+  ctx.restore();
+  watermark(ctx, W, H, 'Saisonnalité NutriApp · 3 cycles');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 10 · Small multiples — Tendances des 6 métriques NutriApp
+   Grille de mini-graphiques en aires + indicateurs de tendance directionnelle.
+   ───────────────────────────────────────────────────────────────────────── */
+function smallMultiplesData(s){
+  const a = s.agg, r = rngFrom('sm|' + (s.global ? 'REG' : s.pays.iso));
+  const serieCure = a.syncS.map((v, i) => rnd(clamp(a.cure - 3.4 + i * .29 + (r() - .5) * 1.7, 35, 98), 1));
+  const serieRupt = a.admS.m2024.concat(a.admS.m2025).map((v, i) =>
+    Math.max(0, Math.round(a.stk * (.58 + .5 * (v / Math.max(1, a.adm / 12))) * (1 + (r() - .5) * .22))));
+  /* Série obésité cohérente avec le facteur 2023 du KPI 2 (cf. §5) */
+  const serieObes = Array.from({ length: 24 }, (_, i) =>
+    rnd(a.obes * (FACTEUR_OBESITE_2023 + (1 - FACTEUR_OBESITE_2023) * (i / 23)) + (r() - .5) * .12, 2));
+  const serieHta  = Array.from({ length: 24 }, (_, i) => rnd(a.hta * (.945 + .0024 * i) + (r() - .5) * .22, 2));
+  const ad = a.admS.m2024.concat(a.admS.m2025);
+  return [
+    { nom:'Admissions CRENAS', unite:'', c:'#7C3AED', data: ad, fmt: v => nfc(v), bon:'up',
+      sous:'enfants / mois' },
+    { nom:'Taux de guérison', unite:'%', c:'#10B981', data: serieCure, fmt: v => aff(v, 1) + ' %', bon:'up',
+      sous:'norme Sphère 75 %' },
+    { nom:'Structures en rupture', unite:'', c:'#EF4444', data: serieRupt, fmt: v => nf(v), bon:'down',
+      sous:'points ATPE < 30 j' },
+    { nom:'Obésité adulte', unite:'%', c:'#F59E0B', data: serieObes, fmt: v => aff(v, 1) + ' %', bon:'down',
+      sous:'enquêtes ménages' },
+    { nom:'Hypertension / sel', unite:'%', c:'#F43F5E', data: serieHta, fmt: v => aff(v, 1) + ' %', bon:'down',
+      sous:'sel > 9 g/jour' },
+    { nom:'Synchro NutriApp', unite:'%', c:'#06B6D4', data: a.syncS, fmt: v => aff(v, 0) + ' %', bon:'up',
+      sous:'fiches < 24 h' }
+  ];
+}
+function drawSmallMultiples(ctx, W, H, prog, hover, s){
+  const mets = smallMultiplesData(s);
+  const cols = W > 900 ? 3 : 2;
+  const rows = Math.ceil(mets.length / cols);
+  const padOut = 8, gap = 14;
+  const cw = (W - padOut * 2 - gap * (cols - 1)) / cols;
+  const ch = (H - padOut * 2 - gap * (rows - 1)) / rows;
+  const hits = [];
+
+  mets.forEach((m, idx) => {
+    const col = idx % cols, row = Math.floor(idx / cols);
+    const x = padOut + col * (cw + gap), y = padOut + row * (ch + gap);
+    const isHov = hover && hover.id === 'sm' + idx;
+    const dim = hover && !isHov;
+    const padBox = { l: 10, r: 10, t: 34, b: 18 };
+    const pw = cw - padBox.l - padBox.r, ph = ch - padBox.t - padBox.b;
+    const min = Math.min.apply(null, m.data), max = Math.max.apply(null, m.data);
+    const span = (max - min) || 1;
+    const pts = m.data.map((v, i) => ({ x: x + padBox.l + i / (m.data.length - 1) * pw,
+                                        y: y + padBox.t + (1 - (v - min) / span) * ph, v, i }));
+    const p = easeOutCubic(clamp((prog - idx * .07) / .7, 0, 1));
+    const visible = partialPoints(pts, p);
+
+    ctx.save();
+    ctx.globalAlpha = dim ? .35 : 1;                       // opacification des voisins au survol
+    /* Fond de panneau */
+    fillRR(ctx, x, y, cw, ch, 14, isHov ? '#FCFAFF' : '#FDFCFF');
+    ctx.strokeStyle = isHov ? rgba(m.c, .55) : '#EDE9FE'; ctx.lineWidth = isHov ? 1.6 : 1;
+    rr(ctx, x, y, cw, ch, 14); ctx.stroke();
+
+    /* Titre + sous-titre */
+    ctx.font = '700 11px Inter, sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = C.ink2;
+    ctx.fillText(m.nom, x + padBox.l, y + 17);
+    ctx.font = '500 9px Inter, sans-serif'; ctx.fillStyle = C.muted2;
+    ctx.fillText(m.sous, x + padBox.l, y + 28);
+
+    /* Aire dégradée + courbe lisse */
+    if (visible.length > 1){
+      areaPath(ctx, visible, y + padBox.t + ph, m.c, .30, 0);
+      linePath(ctx, visible, m.c, 2.1, isHov);
+    }
+    /* Ligne de base */
+    ctx.beginPath();
+    ctx.moveTo(x + padBox.l, y + padBox.t + ph + .5); ctx.lineTo(x + padBox.l + pw, y + padBox.t + ph + .5);
+    ctx.strokeStyle = '#EDE9FE'; ctx.lineWidth = 1; ctx.stroke();
+
+    /* Valeur courante + flèche de tendance (régression sur 6 mois) */
+    const last = m.data[m.data.length - 1];
+    const pente = trend(m.data.slice(-6));
+    const amelioration = (m.bon === 'up') ? pente >= 0 : pente <= 0;
+    ctx.font = '800 15px Inter, sans-serif'; ctx.textAlign = 'right';
+    ctx.fillStyle = m.c;
+    ctx.fillText(m.fmt(last), x + cw - padBox.r - 22, y + 22);
+    /* Flèche directionnelle */
+    const fx = x + cw - padBox.r - 12, fy = y + 16;
+    ctx.beginPath();
+    if (pente >= 0) { ctx.moveTo(fx - 4, fy + 3); ctx.lineTo(fx, fy - 3); ctx.lineTo(fx + 4, fy + 3); }
+    else            { ctx.moveTo(fx - 4, fy - 3); ctx.lineTo(fx, fy + 3); ctx.lineTo(fx + 4, fy - 3); }
+    ctx.closePath();
+    ctx.fillStyle = amelioration ? '#10B981' : '#EF4444'; ctx.fill();
+
+    /* Point final + étiquette de période */
+    if (p > .9){
+      const l = pts[pts.length - 1];
+      ctx.beginPath(); ctx.arc(l.x, l.y, 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#fff'; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = m.c; ctx.stroke();
+    }
+    ctx.font = '600 8.5px Inter, sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = '#B7C0CE';
+    ctx.fillText('jan 24', x + padBox.l, y + ch - 6);
+    ctx.textAlign = 'right';
+    ctx.fillText('déc 25', x + cw - padBox.r, y + ch - 6);
+    ctx.restore();
+
+    const premier = m.data[0];
+    hits.push({
+      id:'sm' + idx, type:'rect', x, y, w: cw, h: ch,
+      tip:{ title: m.nom, sub: s.nomScope + ' · 24 mois', color: m.c,
+            rows:[
+              { c: m.c, k:'Valeur actuelle (déc. 2025)', v: m.fmt(last) },
+              { c:'#CBD5E1', k:'Valeur il y a 24 mois', v: m.fmt(premier),
+                d:(last >= premier ? '+' : '−') + Math.abs(rnd(pctChange(last, premier), 1)) + ' %',
+                dc: amelioration ? 'up' : 'down' },
+              { c:'#7C3AED', k:'Minimum / maximum', v: m.fmt(min) + ' → ' + m.fmt(max) },
+              { c:'#06B6D4', k:'Pente (6 derniers mois)', v: (pente >= 0 ? '+' : '−') + Math.abs(rnd(pente, 2)) + ' / mois' }
+            ],
+            note: amelioration ? '✓ Tendance favorable : évolution dans le sens de l\'objectif programme.'
+                               : '⚠ Tendance défavorable : point d\'attention pour le prochain COPIL nutrition.' }
+    });
+  });
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 6 · Combiné — Anémie (barres groupées) + couverture fer (ligne)
+   Double axe : prévalences à gauche, taux de distribution à droite.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawAnemiaCombo(ctx, W, H, prog, hover, s){
+  const data = anemiaData(s);
+  const pad = { l: 50, r: 52, t: 26, b: 66 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  /* Graduations « nice » : l'échelle s'aligne dessus pour qu'aucun tick ne
+     puisse sortir de la zone de tracé. */
+  const sc = niceTicks(0, Math.max(72, Math.max.apply(null, data.map(d => d.sev + d.mod + d.leg)) * 1.08), 5);
+  const maxG = sc.max;
+  const Y = v => pad.t + plotH - (v - sc.min) / (sc.max - sc.min || 1) * plotH;
+  const Y2 = v => pad.t + plotH - v / 100 * plotH;
+
+  /* Grille */
+  drawFrame({ ctx, W, H, pad, ticks: sc.ticks, min: sc.min, max: sc.max, yFmt: v => v + ' %', dashGrid: true, xLabels: [] });
+  /* Axe droit (couverture fer) */
+  ctx.save();
+  ctx.font = '500 11px Inter, sans-serif'; ctx.textAlign = 'left'; ctx.fillStyle = '#0E7490';
+  [0,25,50,75,100].forEach(t => {
+    if (pad.l + plotW + 10 + ctx.measureText(t + ' %').width > W - 2) return;  // borne droite
+    ctx.fillText(t + ' %', pad.l + plotW + 10, Y2(t) + 3.5);
+  });
+  /* Titre de l'axe droit aligné à droite : jamais de débordement */
+  ctx.font = '600 9.5px Inter, sans-serif'; ctx.textAlign = 'right';
+  ctx.fillText('COUVERTURE FER', W - 4, pad.t - 10);
+  ctx.restore();
+  if (plotH > 150)   // titre vertical seulement si la hauteur le permet
+    rotText(ctx, 'Anémie (%)', 12, pad.t + plotH / 2, -90, 'center', C.muted, '600 10.5px Inter, sans-serif');
+
+  const n = data.length;
+  const slot = plotW / n;
+  const groupW = Math.min(slot * .74, 132);
+  const bw = (groupW - 10) / 3;
+  const couleurs = [['sev','#EF4444','Anémie sévère (Hb < 7 g/dL)'],
+                    ['mod','#F59E0B','Anémie modérée (7 – 9,9 g/dL)'],
+                    ['leg','#FDE68A','Anémie légère (10 – 11,9 g/dL)']];
+  const hits = [];
+
+  data.forEach((d, i) => {
+    const gx = pad.l + slot * i + (slot - groupW) / 2;
+    const isHov = hover && hover.id === 'a' + i;
+    ctx.save();
+    ctx.globalAlpha = hover && !isHov ? .35 : 1;        // voisines opacifiées à 35 % (charte)
+    couleurs.forEach((cfg, k) => {
+      const v = d[cfg[0]];
+      const p = easeOutCubic(clamp((prog - i * .05 - k * .03) / .7, 0, 1));
+      const h = Math.max(1.5, (pad.t + plotH - Y(v)) * p);
+      const x = gx + k * (bw + 5);
+      const g = ctx.createLinearGradient(0, pad.t + plotH - h, 0, pad.t + plotH);
+      g.addColorStop(0, cfg[1]); g.addColorStop(1, mixHex(cfg[1], '#0F172A', .18));
+      ctx.fillStyle = g;
+      barTop(ctx, x, pad.t + plotH - h, bw, h, 6); ctx.fill();
+      if (isHov){ ctx.shadowColor = rgba(cfg[1], .55); ctx.shadowBlur = 12; ctx.fill(); ctx.shadowBlur = 0; }
+      /* Valeur au sommet de la barre */
+      if (p > .9 && bw > 16){
+        ctx.font = '700 9.5px Inter, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillStyle = k === 2 ? '#B45309' : cfg[1];
+        ctx.fillText(rnd(v, 0), x + bw / 2, pad.t + plotH - h - 6);
+      }
+    });
+    ctx.restore();
+
+    /* Libellé de catégorie (2 lignes si besoin) */
+    ctx.save();
+    ctx.font = (isHov ? '700 ' : '600 ') + '10.5px Inter, sans-serif';
+    ctx.textAlign = 'center'; ctx.fillStyle = isHov ? C.primaryDeep : C.ink3;
+    const mots = d.court.split(' ');
+    if (mots.length > 1 && slot < 150){
+      ctx.fillText(mots[0], pad.l + slot * (i + .5), pad.t + plotH + 19);
+      ctx.fillText(mots.slice(1).join(' '), pad.l + slot * (i + .5), pad.t + plotH + 32);
+    } else {
+      ctx.fillText(d.court, pad.l + slot * (i + .5), pad.t + plotH + 22);
+    }
+    ctx.restore();
+
+    const total = rnd(d.sev + d.mod + d.leg, 1);
+    hits.push({
+      id:'a' + i, type:'rect', x: pad.l + slot * i, y: pad.t, w: slot, h: plotH,
+      tip:{ title: d.nom, sub: d.sous + ' · ' + s.nomScope, color:'#EF4444',
+            rows:[
+              { c:'#EF4444', k:'Anémie sévère (Hb < 7)', v: d.sev + ' %' },
+              { c:'#F59E0B', k:'Anémie modérée (7 – 9,9)', v: d.mod + ' %' },
+              { c:'#FDE68A', k:'Anémie légère (10 – 11,9)', v: d.leg + ' %' },
+              { c:'#7C3AED', k:'Prévalence totale', v: total + ' %',
+                d: total > 40 ? 'urgence santé publique' : (total > 20 ? 'problème modéré' : 'faible'),
+                dc: total > 40 ? 'down' : 'up' },
+              { c:'#06B6D4', k:'Couverture supplémentation fer', v: d.fer + ' %',
+                d: d.fer >= 60 ? 'cible atteinte' : 'écart ' + (60 - d.fer) + ' pts', dc: d.fer >= 60 ? 'up' : 'down' }
+            ],
+            note: 'Seuils OMS : une prévalence ≥ 40 % chez la femme enceinte constitue un problème grave de santé publique.' }
+    });
+  });
+
+  /* ── Ligne de couverture en fer (axe droit) ────────────────────────── */
+  const ptsFer = data.map((d, i) => ({ x: pad.l + slot * (i + .5), y: Y2(d.fer), v: d.fer, i }));
+  const pFer = partialPoints(ptsFer, prog);
+  ctx.save();
+  ctx.globalAlpha = .9;
+  linePath(ctx, pFer, '#06B6D4', 2.6, true);
+  ptsFer.forEach((p, i) => {
+    if (i / ptsFer.length > prog) return;
+    const isHov = hover && hover.id === 'a' + i;
+    ctx.beginPath(); ctx.arc(p.x, p.y, isHov ? 5.4 : 3.8, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff'; ctx.fill();
+    ctx.lineWidth = 2.4; ctx.strokeStyle = '#06B6D4'; ctx.stroke();
+  });
+  ctx.restore();
+  /* Cible programmatique 60 % de couverture */
+  refLine(ctx, pad.l, Y2(60), pad.l + plotW, Y2(60), '#0891B2', 'Cible 60 %', { width: 1.4, dash:[5,4], labelX: pad.l + 4, labelY: Y2(60) - 19 });
+  watermark(ctx, W, H, 'Dépistages Hémocue · NutriApp');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 7 · Heatmap calendaire — 52 semaines de synchronisation
+   Grille 7 jours × 52 semaines, intensité = taux de fiches transmises.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawCalendarSync(ctx, W, H, prog, hover, s){
+  const jours = s.jours;                                 // 364 valeurs (52 × 7)
+  const pad = { l: 34, r: 14, t: 26, b: 34 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const cellW = plotW / 52, cellH = plotH / 7;
+  const gap = Math.min(2, cellW * .18);
+  const JOURS = ['L','M','M','J','V','S','D'];
+
+  /* Libellés des jours */
+  ctx.save();
+  ctx.font = '600 9.5px Inter, sans-serif'; ctx.fillStyle = C.muted2; ctx.textAlign = 'right';
+  JOURS.forEach((d, i) => { if (i % 2 === 0) ctx.fillText(d, pad.l - 7, pad.t + cellH * i + cellH / 2 + 3); });
+  ctx.restore();
+
+  const hits = [];
+  const moisVus = [];
+  for (let w = 0; w < 52; w++){
+    /* Libellé du mois au changement de mois (calendrier glissant sur 12 mois) */
+    const moisIdx = Math.floor(w / 52 * 12);
+    if (moisVus.indexOf(moisIdx) < 0){
+      moisVus.push(moisIdx);
+      ctx.save();
+      ctx.font = '700 9.5px Inter, sans-serif'; ctx.fillStyle = C.muted; ctx.textAlign = 'left';
+      ctx.fillText(MOIS_COURTS[(moisIdx + 9) % 12].toUpperCase(), pad.l + cellW * w + 1, pad.t - 10);
+      ctx.restore();
+    }
+    for (let d = 0; d < 7; d++){
+      const v = jours[w * 7 + d];
+      const idx = w * 7 + d;
+      const p = easeOutCubic(clamp((prog - idx / 364 * .55) / .45, 0, 1));
+      const x = pad.l + cellW * w + gap / 2, y = pad.t + cellH * d + gap / 2;
+      const cw2 = Math.max(1.5, cellW - gap), ch2 = Math.max(1.5, cellH - gap);
+      const isHov = hover && hover.id === 'd' + idx;
+      ctx.save();
+      ctx.globalAlpha = p * (hover && !isHov ? .35 : 1);   // opacification 35 % (charte)
+      fillRR(ctx, x, y, cw2, ch2, Math.min(3, cw2 / 2), ramp(RAMP_SYNC, v / 100));
+      if (isHov){ ctx.strokeStyle = '#0F172A'; ctx.lineWidth = 1.6; rr(ctx, x - 1, y - 1, cw2 + 2, ch2 + 2, 4); ctx.stroke(); }
+      ctx.restore();
+      hits.push({
+        id:'d' + idx, type:'rect', x, y, w: cw2, h: ch2,
+        tip:{ title:'Semaine ' + (w + 1) + ' · ' + ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'][d],
+              sub:'Régularité des rapports des relais mobiles', color: ramp(RAMP_SYNC, v/100),
+              rows:[
+                { c: ramp(RAMP_SYNC, v/100), k:'Fiches synchronisées', v: aff(v, 0) + ' %' },
+                { c:'#CBD5E1', k:'Moyenne 52 semaines', v: Math.round(jours.reduce((a,b)=>a+b,0)/364) + ' %',
+                  d: v >= 70 ? 'au-dessus' : 'en dessous', dc: v >= 70 ? 'up' : 'down' },
+                { c:'#7C3AED', k:'Semaine (rang)', v: 'S' + (w + 1) + ' / 52' },
+                { c:'#06B6D4', k:'Jour', v: ['lundi','mardi','mercredi','jeudi','vendredi','samedi','dimanche'][d] }
+              ],
+              note: d >= 5 ? 'Week-end : transmissions réduites (permanences des relais).'
+                           : (v < 45 ? '⚠ Coupure réseau ou relais inactif : relance automatique envoyée par l\'App.'
+                                     : 'Journée conforme au protocole de remontée quotidienne.') }
+      });
+    }
+  }
+
+  /* Statistiques de synthèse à droite */
+  const moy = jours.reduce((a, b) => a + b, 0) / jours.length;
+  const sous70 = jours.filter(v => v < 70).length / jours.length * 100;
+  ctx.save();
+  ctx.textAlign = 'right';
+  ctx.font = '800 13px Inter, sans-serif'; ctx.fillStyle = C.primary;
+  ctx.fillText(aff(moy, 0) + ' %', W - pad.r, pad.t - 10);
+  ctx.font = '600 9.5px Inter, sans-serif'; ctx.fillStyle = C.muted2;
+  ctx.fillText('moyenne annuelle · ' + aff(sous70, 0) + ' % de jours < 70 %', W - pad.r - 34, pad.t - 10);
+  ctx.restore();
+
+  /* Échelle d'intensité */
+  ctx.save();
+  const lx = W - pad.r - 118, ly = H - 18, lw = 96;
+  const g = ctx.createLinearGradient(lx, 0, lx + lw, 0);
+  for (let i = 0; i <= 8; i++) g.addColorStop(i / 8, ramp(RAMP_SYNC, i / 8));
+  fillRR(ctx, lx, ly, lw, 8, 4, g);
+  ctx.font = '600 9px Inter, sans-serif'; ctx.fillStyle = C.muted2;
+  ctx.textAlign = 'right'; ctx.fillText('0 %', lx - 5, ly + 8);
+  ctx.textAlign = 'left'; ctx.fillText('100 %', lx + lw + 5, ly + 8);
+  ctx.restore();
+  watermark(ctx, W, H, 'Journal de synchronisation NutriApp');
+  return { hits };
+}

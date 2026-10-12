@@ -1,0 +1,3 @@
+# Dépendances de test uniquement (le livrable index.html est autonome)
+node_modules/
+npm-debug.log*

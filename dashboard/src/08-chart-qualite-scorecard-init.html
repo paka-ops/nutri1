@@ -1,0 +1,543 @@
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE « QUALITÉ » (rappel du 15 en section Synchro) — barres groupées
+   Complétude des fiches / Synchro < 24 h / Score composite par unité.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawQualityBars(ctx, W, H, prog, hover, s){
+  const rows = qualityRows(s).slice(0, 16);
+  const pad = { l: padLeftZones(ctx, rows, { W:W, font:'600 10.5px Inter, sans-serif', maxChars:16, min:56, max:140 }),
+                r: 22, t: 22, b: 32 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const rowH = plotH / rows.length;
+  const metrics = [
+    { cle:'complete', nom:'Complétude des fiches', c:'#7C3AED' },
+    { cle:'sync',     nom:'Synchro < 24 h',        c:'#06B6D4' },
+    { cle:'score',    nom:'Score composite',       c:'#10B981' }
+  ];
+  const bh = Math.min(rowH * .22, 8), ecart = 2.4;
+  const groupe = bh * 3 + ecart * 2;
+  const X = v => pad.l + v / 100 * plotW;
+
+  /* Grille */
+  ctx.save();
+  ctx.font = '500 10.5px Inter, sans-serif'; ctx.textAlign = 'center';
+  for (let t = 0; t <= 100; t += 20){
+    ctx.beginPath(); ctx.moveTo(X(t), pad.t - 4); ctx.lineTo(X(t), pad.t + plotH);
+    ctx.strokeStyle = t === 0 ? '#DDD6FE' : '#F4F1FE'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = C.muted2; ctx.fillText(t + ' %', X(t), pad.t + plotH + 17);
+  }
+  ctx.restore();
+  /* Seuil de qualité acceptable (70 %) */
+  refLine(ctx, X(70), pad.t - 6, X(70), pad.t + plotH, '#F59E0B', 'Seuil 70 %', { width: 1.6, dash:[6,4], labelX: X(70) - 30, labelY: pad.t - 18 });
+
+  const hits = [];
+  rows.forEach((r, i) => {
+    const cy = pad.t + rowH * (i + .5);
+    const isHovRow = hover && hover.row === i;
+    const p = easeOutCubic(clamp((prog - i * .035) / .6, 0, 1));
+    ctx.save();
+    ctx.globalAlpha = hover && !isHovRow ? .35 : 1;
+    ctx.textAlign = 'right';
+    ctx.font = (isHovRow ? '800 ' : '600 ') + '10.5px Inter, sans-serif';
+    ctx.fillStyle = isHovRow ? C.primaryDeep : C.ink3;
+    ctx.fillText(fitText(ctx, (r.drapeau ? r.drapeau + ' ' : '') + r.nom, pad.l - 12), pad.l - 10, cy + 3.6);
+    metrics.forEach((m, k) => {
+      const v = r[m.cle];
+      const y = cy - groupe / 2 + k * (bh + ecart);
+      const w = Math.max(1, (X(v) - pad.l) * p);
+      const isSeg = hover && hover.row === i && hover.seg === k;
+      const g = ctx.createLinearGradient(pad.l, 0, pad.l + w, 0);
+      g.addColorStop(0, rgba(m.c, .55)); g.addColorStop(1, m.c);
+      ctx.fillStyle = g;
+      barRight(ctx, pad.l, y, w, bh, 3.5); ctx.fill();
+      if (isSeg){ ctx.shadowColor = rgba(m.c, .6); ctx.shadowBlur = 10; ctx.fill(); ctx.shadowBlur = 0; }
+      if (w > 26 && p > .9){
+        ctx.font = '800 8.5px Inter, sans-serif'; ctx.textAlign = 'left';
+        ctx.fillStyle = 'rgba(255,255,255,.95)';
+        ctx.fillText(aff(v, 0) + ' %', pad.l + 5, y + bh - 1.6);
+        ctx.textAlign = 'right';
+      }
+      hits.push({
+        id:'q' + i + '_' + k, row:i, seg:k, type:'rect', x: pad.l, y: y - 1, w: Math.max(w, 10), h: bh + 2,
+        tip:{ title: r.nom + (r.pays ? ' · ' + r.pays : ''), sub: m.nom + ' — qualité de la donnée', color: m.c,
+              rows:[
+                { c: m.c, k: m.nom, v: aff(v, 1) + ' %',
+                  d: v >= 70 ? 'au-dessus du seuil' : '−' + aff(70 - v, 1) + ' pts', dc: v >= 70 ? 'up' : 'down' },
+                { c:'#7C3AED', k:'Complétude des fiches', v: aff(r.complete, 1) + ' %' },
+                { c:'#06B6D4', k:'Synchro < 24 h', v: aff(r.sync, 1) + ' %' },
+                { c:'#10B981', k:'Score composite', v: r.score + ' / 100' },
+                { c:'#F59E0B', k:'Admissions déclarées (12 m)', v: nf(r.admS.m2025.reduce((a, b) => a + b, 0)) }
+              ],
+              note: r.sync < 70 ? '⚠ Synchronisation sous 70 % : risque de sous-déclaration, valeurs marquées « estimé ».'
+                                : 'Flux fiable : la zone alimente le tableau de bord national en quasi-temps réel.' }
+      });
+    });
+    ctx.restore();
+  });
+  watermark(ctx, W, H, 'Audit qualité · NutriApp');
+  return { hits };
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   §9 — GRAPHIQUE 15 · SCORECARD TABULAIRE DES UNITÉS NUTRIAPP
+   Tableau HTML + mini-sparklines Canvas intégrées + badges de statut.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/** Définition des colonnes de la scorecard (clé, libellé, format, statut). */
+const COLONNES_SCORE = [
+  { cle:'zone',     nom:'Zone suivie',            fmt:'zone' },
+  { cle:'adm',      nom:'Admissions 12 m',        fmt:'spark' },
+  { cle:'cure',     nom:'Guérison',               fmt:'pct',  cible:75, bon:'up'   },
+  { cle:'aban',     nom:'Abandon',                fmt:'pct',  cible:15, bon:'down' },
+  { cle:'stk',      nom:'Ruptures ATPE',          fmt:'rupt' },
+  { cle:'obes',     nom:'Obésité',                fmt:'bar',  max:30, c:'#F59E0B' },
+  { cle:'hta',      nom:'HTA / sel',              fmt:'bar',  max:40, c:'#EF4444' },
+  { cle:'diab',     nom:'Diabète T2',             fmt:'pct1', cible:6, bon:'down' },
+  { cle:'complete', nom:'Complétude',             fmt:'pct',  cible:85, bon:'up'  },
+  { cle:'sync',     nom:'Synchro 24 h',           fmt:'pct',  cible:70, bon:'up'  },
+  { cle:'score',    nom:'Score',                  fmt:'score' },
+  { cle:'statut',   nom:'Statut',                 fmt:'statut' }
+];
+
+/** Valeur d'une cellule (avec repli calculé pour les districts). */
+function valCell(z, cle){
+  if (z[cle] !== undefined) return z[cle];
+  if (cle === 'complete') return rnd((z.sync || 70) * 1.12, 1);
+  if (cle === 'diab') return z.diab;
+  return 0;
+}
+
+/** Statut global d'une unité (règle métier à 3 niveaux). */
+function statutZone(z){
+  const sync = valCell(z, 'sync'), cure = valCell(z, 'cure'), aban = valCell(z, 'aban'), stk = z.stk || 0;
+  if (sync < 65 || cure < 70 || aban > 20 || stk >= 6) return { cls:'crit', txt:'Critique' };
+  if (sync < 75 || cure < 78 || aban > 15 || stk >= 3) return { cls:'warn', txt:'À surveiller' };
+  return { cls:'ok', txt:'Conforme' };
+}
+
+/** Construit et injecte la scorecard (en-têtes triables + corps). */
+function renderScoreTable(){
+  const s = getScope();
+  const head = document.getElementById('scoreHead');
+  const body = document.getElementById('scoreBody');
+  if (!head || !body) return;
+
+  /* En-têtes cliquables (tri) */
+  head.innerHTML = COLONNES_SCORE.map(c => {
+    const sorted = ETAT.tri.cle === c.cle;
+    const ar = sorted ? (ETAT.tri.dir > 0 ? '▲' : '▼') : '↕';
+    return '<th data-cle="' + c.cle + '" class="' + (sorted ? 'sorted' : '') + '" scope="col">' +
+             c.nom + '<span class="ar">' + ar + '</span></th>';
+  }).join('');
+
+  /* Tri des lignes selon la colonne active (clic sur un en-tête) */
+  const rows = s.zones.slice();
+  const cle = ETAT.tri.cle, dir = ETAT.tri.dir;
+  const ORDRE_STATUT = { crit:0, warn:1, ok:2 };
+  rows.sort((a, b) => {
+    if (cle === 'zone') return a.nom.localeCompare(b.nom, 'fr') * dir;
+    const va = (cle === 'statut') ? ORDRE_STATUT[statutZone(a).cls] : valCell(a, cle);
+    const vb = (cle === 'statut') ? ORDRE_STATUT[statutZone(b).cls] : valCell(b, cle);
+    return (va - vb) * dir;
+  });
+
+  body.innerHTML = rows.map(z => {
+    const st = statutZone(z);
+    const cure = valCell(z, 'cure'), aban = valCell(z, 'aban');
+    const sync = valCell(z, 'sync'), comp = valCell(z, 'complete');
+    const delta = z.syncS ? rnd(z.syncS[11] - z.syncS[5], 1) : rnd(sync * .06, 1);
+    const clsDelta = delta >= 0 ? 'up' : 'down';
+    const cellulePct = (v, cible, bon) => {
+      const ok = bon === 'up' ? v >= cible : v <= cible;
+      return '<td style="color:' + (ok ? '#047857' : '#B91C1C') + '">' + aff(v, 1) + ' %</td>';
+    };
+    return '<tr data-zone="' + (z.iso || z.nom) + '">' +
+      /* Zone */
+      '<td><span class="zone-c">' +
+        '<span class="zone-f">' + (z.drapeau || '📍') + '</span>' +
+        '<span><span class="zone-n">' + z.nom + '</span><br />' +
+        '<span class="zone-m">' + (z.pays ? 'District · ' + z.pays : z.region || 'Pays · ' + z.iso) +
+        ' · ' + nf(z.agents || 0) + ' agents</span></span></span></td>' +
+      /* Admissions + sparkline canvas 12 mois */
+      '<td><span class="spark-cell"><canvas data-spark="' + (z.iso || z.nom.replace(/\s/g,'')) + '" ' +
+        'data-values="' + (z.admS ? z.admS.m2025.join(',') : '') + '" data-color="#7C3AED"></canvas>' +
+        '<b>' + nf(z.adm) + '</b></span></td>' +
+      cellulePct(cure, 75, 'up') +
+      cellulePct(aban, 15, 'down') +
+      /* Ruptures ATPE */
+      '<td><span class="delta ' + (z.stk > 0 ? 'down' : 'up') + '">' + (z.stk || 0) + '</span> ' +
+        '<span style="color:#94A3B8;font-weight:600">/ ' + z.pts + '</span>' +
+        ' <span style="color:' + (z.stockD < 30 ? '#B91C1C' : '#047857') + ';font-weight:700">' + z.stockD + ' j</span></td>' +
+      /* Obésité & HTA : mini-barres proportionnelles */
+      '<td><span class="mini-bar"><i style="width:' + clamp(valCell(z,'obes') / 30 * 100, 3, 100) + '%;background:#F59E0B"></i></span>' + aff(valCell(z,'obes'), 1) + ' %</td>' +
+      '<td><span class="mini-bar"><i style="width:' + clamp(valCell(z,'hta') / 40 * 100, 3, 100) + '%;background:#EF4444"></i></span>' + aff(valCell(z,'hta'), 1) + ' %</td>' +
+      '<td>' + aff(valCell(z,'diab'), 1) + ' %</td>' +
+      cellulePct(comp, 85, 'up') +
+      /* Synchro + évolution 6 mois */
+      '<td><b style="color:' + (sync >= 70 ? '#0E7490' : '#B91C1C') + '">' + aff(sync, 0) + ' %</b> ' +
+        '<span class="delta ' + clsDelta + '" title="Évolution de la synchronisation sur 6 mois">' +
+          signe(delta, 1, '') + '</span></td>' +
+      /* Score composite */
+      '<td><b style="color:' + (z.score >= 70 ? '#047857' : (z.score >= 55 ? '#B45309' : '#B91C1C')) + '">' + z.score + '</b>' +
+        '<span style="color:#CBD5E1"> /100</span></td>' +
+      /* Statut */
+      '<td><span class="pill ' + st.cls + '" title="' + st.txt + '"><i></i>' + st.txt + '</span></td>' +
+    '</tr>';
+  }).join('');
+
+  /* Fils de tri */
+  head.querySelectorAll('th').forEach(th => {
+    th.addEventListener('click', () => {
+      const c = th.getAttribute('data-cle');
+      if (c === 'statut' || c === 'zone' || true){
+        if (ETAT.tri.cle === c) ETAT.tri.dir *= -1;
+        else { ETAT.tri.cle = c; ETAT.tri.dir = (c === 'zone') ? 1 : -1; }
+        renderScoreTable();
+      }
+    });
+  });
+
+  /* Sparklines canvas des cellules (rendues après injection DOM) */
+  body.querySelectorAll('canvas[data-spark]').forEach(cv => {
+    const vals = (cv.getAttribute('data-values') || '').split(',').map(Number).filter(v => !isNaN(v));
+    if (vals.length > 1) drawCellSparkline(cv, vals, cv.getAttribute('data-color') || '#7C3AED');
+  });
+
+  document.getElementById('tagScoreScope').textContent = s.global ? '16 pays' : s.pays.districts.length + ' districts';
+  document.getElementById('scoreUpdated').textContent = 'Mise à jour : ' +
+    new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' }) + ' · ' + s.libelle;
+}
+
+/** Mini-sparkline de cellule (76 × 26 px) : aire + courbe + point final. */
+function drawCellSparkline(cv, vals, color){
+  const r = cv.getBoundingClientRect();
+  const W = r.width || 76, H = r.height || 26;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, W, H);
+  const min = Math.min.apply(null, vals), max = Math.max.apply(null, vals);
+  const span = (max - min) || 1;
+  const pad = 2.5;
+  const pts = vals.map((v, i) => ({
+    x: pad + i / (vals.length - 1) * (W - pad * 2),
+    y: pad + (1 - (v - min) / span) * (H - pad * 2.6)
+  }));
+  areaPath(ctx, pts, H, color, .26, 0);
+  linePath(ctx, pts, color, 1.6);
+  const l = pts[pts.length - 1];
+  ctx.beginPath(); ctx.arc(l.x, l.y, 2.1, 0, Math.PI * 2);
+  ctx.fillStyle = color; ctx.fill();
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   §10 — NAVIGATION, PÉRIMÈTRE, PLEIN ÉCRAN, TEMPS RÉEL, INITIALISATION
+   ════════════════════════════════════════════════════════════════════════ */
+
+/** Métadonnées des sections de la sidebar. */
+const SECTIONS = {
+  overview: { titre:"Vue d'ensemble (NutriApp)",             ico:'🏥',
+              sous:"Synthèse régionale des 5 indicateurs clés et des flux de prise en charge" },
+  crenas:   { titre:'CRENAS / CRENAM (Prise en charge)',      ico:'📊',
+              sous:"Performance des unités nutritionnelles, saisonnalité et canaux de dépistage" },
+  atpe:     { titre:'Suivi des stocks ATPE',                  ico:'💊',
+              sous:'Inventaire géolocalisé des points de distribution et scorecard des unités' },
+  anemie:   { titre:'Anémie & micronutriments',               ico:'🩸',
+              sous:'Prévalences par catégorie de population et entonnoir du dépistage CPN' },
+  mnt:      { titre:'Double fardeau & MNT',                   ico:'⚖️',
+              sous:'Obésité, hypertension liée au sel, diabète de type 2 et comorbidités associées' },
+  synchro:  { titre:'Taux de synchro & qualité App',          ico:'📋',
+              sous:'Régularité des remontées terrain, complétude des fiches et audit qualité' }
+};
+
+/** Construit les graphiques du périmètre courant (création ou mise à jour). */
+function buildAllCharts(s){
+  const d = (fn, extra) => (ctx, W, H, prog, hover) => fn(ctx, W, H, prog, hover, s, extra || {});
+  makeChart('c1',  d(drawAdmissions),     { hoverRedraw:true });
+  makeChart('c2',  d(drawScatterSphered), { hoverRedraw:true });
+  makeChart('c3',  d(drawBulletStock),    { hoverRedraw:true });
+  makeChart('c3b', d(drawBulletStock),    { hoverRedraw:true, compact:true });
+  makeChart('c4',  d(drawHeatmapMatrix),  { hoverRedraw:true });
+  makeChart('c5',  d(drawPolarRose),      { hoverRedraw:true });
+  makeChart('c6',  d(drawAnemiaCombo),    { hoverRedraw:true });
+  makeChart('c7',  d(drawCalendarSync),   { hoverRedraw:true });
+  makeChart('c8',  d(drawDumbbell),       { hoverRedraw:true });
+  makeChart('c9',  d(drawFunnelCpn),      { hoverRedraw:true });
+  makeChart('c10', d(drawSmallMultiples), { hoverRedraw:true });
+  makeChart('c11', d(drawTreemap),        { hoverRedraw:true });
+  makeChart('c12', d(drawChannels),       { hoverRedraw:true });
+  makeChart('c13', d(drawLollipop),       { hoverRedraw:true });
+  makeChart('c14', d(drawBurdenStack),    { hoverRedraw:true });
+  makeChart('c15b', d(drawQualityBars),   { hoverRedraw:true });
+}
+
+/** Rafraîchissement complet du dashboard après tout changement d'état. */
+function refresh(replay, force){
+  const s = getScope();
+  renderScopeBar(s);
+  renderKpis(s);
+  buildAllCharts(s);
+  renderScoreTable();
+  /* Étiquettes de périmètre dans les cartes */
+  const tagM = document.getElementById('tagMatriceScope');
+  const tagB = document.getElementById('tagBurdenScope');
+  if (tagM) tagM.textContent = s.global ? '16 pays' : s.pays.districts.length + ' districts';
+  if (tagB) tagB.textContent = s.global ? '16 pays' : s.pays.districts.length + ' districts';
+  renderBurdenLegend();
+  renderVisibleCharts(!!replay, force);
+  updateCrumb();
+}
+
+/** Génère la légende du stacked bar 100 % (double fardeau) depuis le modèle. */
+function renderBurdenLegend(){
+  const el = document.getElementById('legendBurden');
+  if (!el || el.childElementCount) return;
+  el.innerHTML = SEGMENTS_FARDEAU.map(sg =>
+    '<span class="legend-i"><i style="background:' + sg.c + '"></i>' + sg.nom +
+    ' <b style="color:#94A3B8;font-weight:600">· ' + sg.famille + '</b></span>').join('');
+}
+
+/** Fil d'ariane interactif + titre courant. */
+function updateCrumb(){
+  const s = getScope();
+  const sec = SECTIONS[ETAT.section];
+  const crumbs = [
+    { t:'NutriApp', act: () => { ETAT.mode = 'global'; ETAT.section = 'overview'; majMode(); refresh(true); } },
+    { t: s.global ? "Afrique de l'Ouest (16 pays)" : s.pays.nom,
+      act: () => { if (!s.global){ ETAT.section = 'overview'; } showSection(s.global ? 'overview' : ETAT.section); } }
+  ];
+  const el = document.getElementById('crumb');
+  el.innerHTML = crumbs.map((c, i) =>
+    '<a data-crumb="' + i + '">' + c.t + '</a><span class="sep">›</span>').join('') +
+    '<span class="here">' + sec.ico + ' ' + sec.titre + '</span>';
+  el.querySelectorAll('a[data-crumb]').forEach(a => {
+    a.addEventListener('click', () => crumbs[+a.getAttribute('data-crumb')].act());
+  });
+  const t = document.getElementById('dashTitle');
+  if (t) t.textContent = s.global
+    ? 'Surveillance Nutritionnelle Clinique, Communautaire & MNT'
+    : s.pays.nom + ' · Surveillance Nutritionnelle & MNT (détail districts)';
+  document.title = 'NutriApp · ' + sec.titre + ' — ' + (s.global ? "Afrique de l'Ouest" : s.pays.nom);
+}
+
+/** Affiche une section et masque les autres (puis relance les animations). */
+function showSection(id){
+  ETAT.section = id;
+  document.querySelectorAll('.view').forEach(v => v.classList.toggle('active', v.id === 'view-' + id));
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.toggle('active', b.getAttribute('data-view') === id));
+  updateCrumb();
+  /* Les canvas d'une section masquée ont une taille nulle : on les redimensionne
+     maintenant qu'ils sont visibles, puis on rejoue l'animation d'entrée. */
+  requestAnimationFrame(() => {
+    const s = getScope();
+    buildAllCharts(s);
+    renderVisibleCharts(true);
+    if (id === 'atpe' || id === 'synchro') renderScoreTable();
+  });
+}
+
+/** Applique le mode de périmètre (global / pays) sur l'interface du header. */
+function majMode(){
+  const g = ETAT.mode === 'global';
+  document.getElementById('btnGlobal').classList.toggle('on', g);
+  document.getElementById('btnCountry').classList.toggle('on', !g);
+  document.getElementById('btnGlobal').setAttribute('aria-pressed', String(g));
+  document.getElementById('btnCountry').setAttribute('aria-pressed', String(!g));
+  document.getElementById('countryPicker').classList.toggle('show', !g);
+  majPaysUI();
+}
+
+/** Met à jour le bouton + la liste du sélecteur de pays. */
+function majPaysUI(){
+  const p = PAYS_PAR_ISO[ETAT.pays];
+  if (!p) return;
+  document.getElementById('cpFlag').textContent = p.drapeau;
+  document.getElementById('cpName').textContent = p.nom;
+  document.getElementById('cpSub').textContent = p.districts.length + ' districts · ' + p.pts + ' points ATPE';
+  document.querySelectorAll('.cp-opt').forEach(o =>
+    o.classList.toggle('sel', o.getAttribute('data-iso') === ETAT.pays));
+}
+
+/** Construit la liste des 16 pays du sélecteur contextuel. */
+function buildCountryList(filtre){
+  const liste = document.getElementById('cpList');
+  const f = (filtre || '').trim().toLowerCase();
+  liste.innerHTML = PAYS
+    .filter(p => !f || p.nom.toLowerCase().indexOf(f) >= 0 || p.iso.toLowerCase() === f ||
+                 p.region.toLowerCase().indexOf(f) >= 0)
+    .map(p => '<button class="cp-opt' + (p.iso === ETAT.pays ? ' sel' : '') + '" data-iso="' + p.iso + '" role="option">' +
+        '<span class="f">' + p.drapeau + '</span>' +
+        '<span class="n">' + p.nom + '</span>' +
+        '<span class="m">' + p.districts.length + ' dist. · ' + nf(p.adm) + ' adm.</span>' +
+      '</button>').join('') ||
+      '<div style="padding:14px;text-align:center;font-size:12px;color:#94A3B8">Aucun pays ne correspond.</div>';
+  liste.querySelectorAll('.cp-opt').forEach(b => {
+    b.addEventListener('click', () => {
+      ETAT.pays = b.getAttribute('data-iso');
+      ETAT.mode = 'country';
+      fermerMenuPays();
+      majMode();
+      refresh(true);                       // mise à jour instantanée de tous les KPI/charts
+    });
+  });
+}
+function ouvrirMenuPays(){
+  const menu = document.getElementById('cpMenu');
+  menu.classList.add('open');
+  document.getElementById('cpBtn').setAttribute('aria-expanded', 'true');
+  buildCountryList(document.getElementById('cpSearch').value);
+  setTimeout(() => document.getElementById('cpSearch').focus(), 40);
+}
+function fermerMenuPays(){
+  document.getElementById('cpMenu').classList.remove('open');
+  document.getElementById('cpBtn').setAttribute('aria-expanded', 'false');
+}
+
+/* ── 10.1 Plein écran natif (Fullscreen API) ─────────────────────────── */
+function initFullscreen(){
+  const btn = document.getElementById('btnFull');
+  const supporte = document.fullscreenEnabled || document.webkitFullscreenEnabled;
+  if (!supporte){ btn.title = 'Plein écran non disponible dans ce navigateur'; }
+  btn.addEventListener('click', () => {
+    const doc = document;
+    const actif = doc.fullscreenElement || doc.webkitFullscreenElement;
+    if (!actif){
+      const el = doc.documentElement;
+      const p = (el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen);
+      if (p) p.call(el, { navigationUI: 'hide' });
+    } else {
+      const q = (doc.exitFullscreen || doc.webkitExitFullscreen || doc.msExitFullscreen);
+      if (q) q.call(doc);
+    }
+  });
+  /* Le passage en plein écran modifie les dimensions : on recalcule tout. */
+  const maj = () => {
+    const actif = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    document.body.classList.toggle('is-fullscreen', actif);
+    setTimeout(() => { renderVisibleCharts(false); renderScoreTable(); }, 220);
+  };
+  document.addEventListener('fullscreenchange', maj);
+  document.addEventListener('webkitfullscreenchange', maj);
+}
+
+/* ── 10.2 Badge « Synchro NutriApp LIVE » (compteur temps réel simulé) ── */
+function initLive(){
+  const el = document.getElementById('liveCount');
+  const badge = document.getElementById('liveBadge');
+  const lastSync = document.getElementById('lastSyncA');
+  let secondes = 120, fiches = ETAT.fichesMin;
+  setInterval(() => {
+    /* Le débit fluctue autour de 1 280 fiches/min selon l'heure de saisie */
+    fiches = Math.round(clamp(fiches + (Math.random() - .46) * 74, 840, 2140));
+    el.textContent = '· ' + nf(fiches) + ' fiches/min';
+    badge.animate(
+      [{ transform:'scale(1)' }, { transform:'scale(1.035)' }, { transform:'scale(1)' }],
+      { duration: 420, easing: 'cubic-bezier(.22,.61,.36,1)' });
+  }, 2600);
+  setInterval(() => {
+    secondes += 30;
+    const min = Math.floor(secondes / 60);
+    lastSync.textContent = min < 60 ? min + ' min' : Math.floor(min / 60) + ' h ' + (min % 60);
+  }, 30000);
+}
+
+/* ── 10.3 Raccourcis clavier (productivité des analystes) ────────────── */
+function initClavier(){
+  document.addEventListener('keydown', e => {
+    const dansChamp = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement.tagName);
+    if (e.key === 'Escape'){ fermerMenuPays(); return; }
+    if (dansChamp) return;
+    if (e.key === 'f' || e.key === 'F'){ document.getElementById('btnFull').click(); }
+    const ordre = ['overview','crenas','atpe','anemie','mnt','synchro'];
+    const n = parseInt(e.key, 10);
+    if (n >= 1 && n <= ordre.length) showSection(ordre[n - 1]);
+    if (e.key === 'g' || e.key === 'G'){ ETAT.mode = 'global'; majMode(); refresh(true); }
+    if (e.key === 'p' || e.key === 'P'){ ETAT.mode = 'country'; majMode(); refresh(true); ouvrirMenuPays(); }
+  });
+}
+
+/* ── 10.4 Export / impression de la vue courante ─────────────────────── */
+function initExport(){
+  document.getElementById('btnPrint').addEventListener('click', () => {
+    /* Astuce d'export : on fige les canvas en image puis on ouvre la boîte
+       d'impression (l'utilisateur choisit « Enregistrer en PDF »). */
+    const s = getScope();
+    const nom = 'NutriApp_' + (s.global ? 'Afrique_Ouest' : s.pays.nom.replace(/\s/g,'_')) +
+                '_' + ETAT.section + '.pdf';
+    document.title = nom;
+    setTimeout(() => { window.print(); document.title = 'NutriApp · Surveillance Nutritionnelle'; }, 60);
+  });
+}
+
+/* ── 10.5 Initialisation générale ────────────────────────────────────── */
+function boot(){
+  TIP.init();
+
+  /* Navigation sidebar */
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.addEventListener('click', () => showSection(b.getAttribute('data-view')));
+  });
+
+  /* Sélecteur de périmètre : Vue globale ↔ Vue détaillée par pays */
+  document.getElementById('btnGlobal').addEventListener('click', () => {
+    const dejaGlobal = (ETAT.mode === 'global');
+    ETAT.mode = 'global';
+    majMode();
+    /* Même si le mode était déjà global, on resynchronise l'affichage :
+       garantit que le DOM reflète toujours l'état du périmètre courant. */
+    refresh(true);
+    if (dejaGlobal) fermerMenuPays();
+  });
+  document.getElementById('btnCountry').addEventListener('click', () => {
+    ETAT.mode = 'country'; majMode();
+    if (!document.getElementById('cpMenu').classList.contains('open')) ouvrirMenuPays();
+    refresh(true);
+  });
+  document.getElementById('cpBtn').addEventListener('click', e => {
+    e.stopPropagation();
+    document.getElementById('cpMenu').classList.contains('open') ? fermerMenuPays() : ouvrirMenuPays();
+  });
+  document.getElementById('cpMenu').addEventListener('click', e => e.stopPropagation());
+  document.getElementById('cpSearch').addEventListener('input', e => buildCountryList(e.target.value));
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#countryPicker')) fermerMenuPays();
+  });
+
+  buildCountryList('');
+  majMode();
+  initFullscreen();
+  initLive();
+  initClavier();
+  initExport();
+
+  /* Premier rendu complet (forcé, avant observation) puis mise sous observation */
+  refresh(true, true);
+  initObserver();
+
+  /* Sécurité : si les polices Google arrivent après le premier rendu,
+     on redessine pour des mesures de texte exactes. */
+  if (document.fonts && document.fonts.ready){
+    document.fonts.ready.then(() => {
+      renderVisibleCharts(false);
+      renderScoreTable();
+      renderKpis(getScope());
+    });
+  }
+
+  /* Accueil console (utile au débogage terrain) */
+  if (window.console){
+    console.log('%c NutriApp · Dashboard de surveillance nutritionnelle ',
+      'background:#7C3AED;color:#fff;font-weight:700;border-radius:6px;padding:4px 8px');
+    console.log('16 pays · ' + NB_DISTRICTS + ' districts · ' + nf(TOTAL_PTS) + ' points ATPE · ' +
+                nf(TOTAL_AGENTS) + ' agents · Canvas 2D natif (zéro framework).');
+    console.log('Raccourcis : 1-6 sections · G vue globale · P vue pays · F plein écran.');
+  }
+}
+
+/* Lancement : le DOM est déjà présent puisque le script est en fin de body. */
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+</script>
+</body>
+</html>

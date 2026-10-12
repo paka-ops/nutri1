@@ -1,0 +1,612 @@
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 8 · Dumbbell chart — Maladies chroniques & nutrition (2015 vs 2024)
+   Points connectés mesurant l'évolution de 4 marqueurs du double fardeau.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawDumbbell(ctx, W, H, prog, hover, s){
+  const data = dumbbellData(s);
+  /* Marges mesurées : libellés d'indicateurs à gauche, pastille d'écart à droite */
+  ctx.save();
+  ctx.font = '700 11.5px Inter, sans-serif';
+  const wLbl = Math.max.apply(null, data.map(d => ctx.measureText(trunc(d.nom, 26)).width));
+  const wDelta = ctx.measureText('+00,0 pts').width + 26;
+  ctx.restore();
+  const pad = { l: clamp(Math.ceil(wLbl) + 28, 58, Math.min(152, W * .34)),
+                r: clamp(Math.ceil(wDelta), 52, Math.min(98, W * .26)), t: 30, b: 40 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const maxV = Math.ceil(Math.max.apply(null, data.map(d => Math.max(d.v2015, d.v2024))) / 10) * 10 + 4;
+  const X = v => pad.l + v / maxV * plotW;
+  const rowH = plotH / data.length;
+
+  /* Grille verticale */
+  const sc = niceTicks(0, maxV, 5);
+  ctx.save();
+  ctx.font = '500 11px Inter, sans-serif'; ctx.textAlign = 'center';
+  sc.ticks.forEach(t => {
+    const x = X(t);
+    ctx.beginPath(); ctx.moveTo(x, pad.t - 6); ctx.lineTo(x, pad.t + plotH);
+    ctx.strokeStyle = t === 0 ? '#DDD6FE' : '#F4F1FE'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = C.muted2; ctx.fillText(t + ' %', x, pad.t + plotH + 20);
+  });
+  ctx.restore();
+
+  const hits = [];
+  data.forEach((d, i) => {
+    const cy = pad.t + rowH * (i + .5);
+    const isHov = hover && hover.id === 'db' + i;
+    const p = easeOutCubic(clamp((prog - i * .09) / .62, 0, 1));
+    const x1 = X(d.v2015), x2 = lerp(X(d.v2015), X(d.v2024), p);
+    const hausse = d.v2024 >= d.v2015;
+    const deltaPts = rnd(d.v2024 - d.v2015, 1);
+    const colDelta = hausse ? '#EF4444' : '#10B981';        // une hausse est défavorable ici
+
+    ctx.save();
+    ctx.globalAlpha = hover && !isHov ? .35 : 1;        // voisines opacifiées à 35 % (charte)
+    /* Fond de ligne */
+    fillRR(ctx, pad.l - 8, cy - rowH * .34, plotW + 16, rowH * .68, 12, isHov ? 'rgba(124,58,237,.06)' : 'transparent');
+    /* Libellé de l'indicateur */
+    ctx.textAlign = 'right';
+    ctx.font = (isHov ? '800 ' : '700 ') + '11.5px Inter, sans-serif';
+    ctx.fillStyle = isHov ? C.primaryDeep : C.ink2;
+    ctx.fillText(fitText(ctx, d.nom, pad.l - 20), pad.l - 18, cy - 2);
+    ctx.font = '500 9.5px Inter, sans-serif'; ctx.fillStyle = C.muted2;
+    ctx.fillText(fitText(ctx, aff(d.v2015, 1) + ' % → ' + aff(d.v2024, 1) + ' %', pad.l - 20), pad.l - 18, cy + 12);
+
+    /* Connecteur (tige) */
+    ctx.beginPath();
+    ctx.moveTo(x1, cy); ctx.lineTo(x2, cy);
+    const g = ctx.createLinearGradient(x1, 0, x2, 0);
+    g.addColorStop(0, '#CBD5E1'); g.addColorStop(1, d.c);
+    ctx.strokeStyle = g; ctx.lineWidth = isHov ? 5 : 3.6; ctx.lineCap = 'round';
+    ctx.stroke();
+
+    /* Point 2015 (gris) */
+    ctx.beginPath(); ctx.arc(x1, cy, isHov ? 6.4 : 5.2, 0, Math.PI * 2);
+    ctx.fillStyle = '#E2E8F0'; ctx.fill();
+    ctx.strokeStyle = '#94A3B8'; ctx.lineWidth = 1.6; ctx.stroke();
+    /* Point 2024 (couleur de l'indicateur) */
+    ctx.beginPath(); ctx.arc(x2, cy, isHov ? 8.6 : 7, 0, Math.PI * 2);
+    ctx.fillStyle = d.c; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 2.4; ctx.stroke();
+    if (isHov){
+      ctx.beginPath(); ctx.arc(x2, cy, 13, 0, Math.PI * 2);
+      ctx.strokeStyle = rgba(d.c, .35); ctx.lineWidth = 2; ctx.stroke();
+    }
+    /* Étiquette de variation à droite */
+    const txt = (deltaPts >= 0 ? '+' : '−') + Math.abs(deltaPts) + ' pts';
+    ctx.font = '800 10.5px Inter, sans-serif';
+    const tw = ctx.measureText(txt).width + 12;
+    /* Position bornée : la pastille ne sort jamais du canvas */
+    const px = clamp(pad.l + plotW + 8, 4, Math.max(4, W - tw - 4));
+    fillRR(ctx, px, cy - 9, tw, 18, 6, rgba(colDelta, .14));
+    ctx.fillStyle = colDelta; ctx.textAlign = 'left';
+    ctx.fillText(txt, px + 6, cy + 4);
+    ctx.restore();
+
+    hits.push({
+      id:'db' + i, type:'rect', x: 4, y: cy - rowH / 2, w: W - 8, h: rowH,
+      tip:{ title: d.nom, sub: 'Évolution 2015 → 2024 · ' + s.nomScope, color: d.c,
+            rows:[
+              { c:'#CBD5E1', k:'Enquête 2015', v: d.v2015 + ' %' },
+              { c: d.c, k:'NutriApp 2024', v: aff(d.v2024, 1) + ' %',
+                d:(deltaPts >= 0 ? '+' : '−') + Math.abs(deltaPts) + ' pts', dc: hausse ? 'down' : 'up' },
+              { c:'transparent', k:'Variation relative', v:(hausse ? '+' : '−') + Math.abs(rnd(pctChange(d.v2024, d.v2015), 1)) + ' %' },
+              { c:'#7C3AED', k:'Projection 2030 (tendance)', v: aff(d.v2024 + deltaPts * .62, 1) + ' %' }
+            ],
+            note: hausse
+              ? '⚠ Progression défavorable : le fardeau des MNT liées à l\'alimentation s\'aggrave (sel, sucre, sédentarité).'
+              : '✓ Recul favorable : effet des programmes de nutrition et du dépistage communautaire.' }
+    });
+  });
+
+  /* En-tête de comparaison */
+  ctx.save();
+  ctx.font = '700 9.5px Inter, sans-serif'; ctx.textAlign = 'left';
+  ctx.fillStyle = C.muted2;
+  ctx.fillText('● 2015', Math.min(pad.l, W - 120), pad.t - 14);
+  ctx.fillStyle = C.primary;
+  ctx.fillText('● 2024', Math.min(pad.l + 52, W - 68), pad.t - 14);
+  ctx.fillStyle = C.muted2; ctx.font = '600 9.5px Inter, sans-serif';
+  const txtEcart = 'Écart en points de prévalence';
+  if (pad.l + 104 + ctx.measureText(txtEcart).width < W - 4)
+    ctx.fillText(txtEcart, pad.l + 104, pad.t - 14);
+  ctx.restore();
+  watermark(ctx, W, H, 'Enquêtes ménages SMART · NutriApp');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 9 · Funnel du dépistage CPN dans NutriApp
+   Entonnoir vertical + mise en évidence du gap de 59 % de femmes non dépistées.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawFunnelCpn(ctx, W, H, prog, hover, s){
+  const data = funnelData(s);
+  const pad = { l: 12, r: 12, t: 18, b: 26 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const n = data.length;
+  const stepH = plotH / n;
+  const maxV = data[0].v;
+  const widthFor = v => Math.max(plotW * .17, v / maxV * plotW);
+  const cx = pad.l + plotW / 2;
+  const hits = [];
+
+  for (let i = 0; i < n; i++){
+    const st = data[i];
+    const yT = pad.t + stepH * i + 3;
+    const yB = pad.t + stepH * (i + 1) - 3;
+    const wT = widthFor(st.v);
+    const wB = widthFor(i < n - 1 ? data[i + 1].v : st.v * .86);
+    const p = easeOutCubic(clamp((prog - i * .10) / .58, 0, 1));
+    const isHov = hover && hover.id === 'f' + i;
+    const wTa = lerp(wT * .25, wT, p), wBa = lerp(wT * .25, wB, p);
+
+    ctx.save();
+    ctx.globalAlpha = hover && !isHov ? .35 : 1;        // voisines opacifiées à 35 % (charte)
+    /* Corps de l'étape (trapèze arrondi) */
+    ctx.beginPath();
+    ctx.moveTo(cx - wTa / 2, yT);
+    ctx.lineTo(cx + wTa / 2, yT);
+    ctx.lineTo(cx + wBa / 2, yB);
+    ctx.lineTo(cx - wBa / 2, yB);
+    ctx.closePath();
+    const g = ctx.createLinearGradient(cx - wTa / 2, yT, cx + wTa / 2, yB);
+    g.addColorStop(0, rgba(st.c, isHov ? 1 : .92));
+    g.addColorStop(1, rgba(mixHex(st.c, '#0F172A', .22), isHov ? 1 : .88));
+    ctx.fillStyle = g; ctx.fill();
+    ctx.strokeStyle = rgba('#fff', .8); ctx.lineWidth = 1.4; ctx.stroke();
+    if (isHov){ ctx.shadowColor = rgba(st.c, .55); ctx.shadowBlur = 18; ctx.fill(); ctx.shadowBlur = 0; }
+
+    /* Libellés internes */
+    if (p > .55){
+      ctx.textAlign = 'center';
+      ctx.font = '700 ' + Math.min(11.5, stepH * .26) + 'px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,.97)';
+      ctx.fillText(trunc(st.nom, wTa > 190 ? 34 : 22), cx, yT + stepH * .38);
+      ctx.font = '800 ' + Math.min(15, stepH * .34) + 'px Inter, sans-serif';
+      ctx.fillStyle = '#fff';
+      ctx.fillText(nf(st.v), cx, yT + stepH * .72);
+    }
+    ctx.restore();
+
+    /* Taux de conversion entre étapes (à droite) */
+    if (i > 0 && p > .4){
+      const conv = st.v / data[i - 1].v * 100;
+      const y = pad.t + stepH * i + 2;
+      const lblConv = '↓ ' + aff(conv, 1) + ' %';
+      ctx.save();
+      ctx.font = '800 10px Inter, sans-serif';
+      const wLbl = ctx.measureText(lblConv).width;
+      /* Emplacement borné : à droite de l'entonnoir, sinon à gauche, sinon centré */
+      let xc = cx + Math.max(wTa, wB) / 2 + 8;
+      ctx.textAlign = 'left';
+      if (xc + wLbl > W - 3){
+        xc = cx - Math.max(wTa, wB) / 2 - 8 - wLbl;
+        if (xc < 3){ xc = clamp(W - wLbl - 4, 3, W - wLbl - 3); ctx.textAlign = 'left'; }
+      }
+      ctx.fillStyle = conv < 50 ? '#B91C1C' : (conv < 75 ? '#B45309' : '#047857');
+      ctx.fillText(lblConv, xc, y + 4);
+      ctx.restore();
+      /* Callout du gap critique de 59 % (étape dépistage) */
+      if (i === 2){
+        ctx.save();
+        const gap = 100 - conv;
+        ctx.font = '800 10px Inter, sans-serif';
+        const lbl = '⚠ ' + aff(gap, 0) + ' % non dépistées';
+        const tw = ctx.measureText(lbl).width + 14;
+        /* Emplacement préféré à gauche de l'entonnoir, repli à droite, puis
+           bornage strict dans le canvas (cartes étroites) */
+        let ox = cx - Math.max(wTa, wB) / 2 - 8 - tw;
+        if (ox < 2){
+          ox = cx + Math.max(wTa, wB) / 2 + 8;
+          if (ox + tw > W - 2) ox = clamp((W - tw) / 2, 2, Math.max(2, W - tw - 2));
+        }
+        ctx.textAlign = 'left';
+        fillRR(ctx, ox, y - 9, tw, 19, 7, 'rgba(239,68,68,.13)');
+        ctx.strokeStyle = 'rgba(239,68,68,.4)'; ctx.lineWidth = 1; rr(ctx, ox, y - 9, tw, 19, 7); ctx.stroke();
+        ctx.fillStyle = '#B91C1C';
+        ctx.fillText(lbl, ox + 7, y + 4);
+        ctx.restore();
+      }
+    }
+
+    hits.push({
+      id:'f' + i, type:'rect', x: cx - plotW / 2, y: yT, w: plotW, h: stepH - 6,
+      tip:{ title: st.nom, sub: st.sous + ' · ' + s.nomScope, color: st.c,
+            rows:[
+              { c: st.c, k:'Volume enregistré', v: nf(st.v) },
+              { c:'#7C3AED', k:'Part des grossesses attendues', v: aff(st.v / maxV * 100, 1) + ' %' },
+              { c:'#06B6D4', k:'Conversion depuis l\'étape précédente',
+                v: i === 0 ? '—' : aff(st.v / data[i-1].v * 100, 1) + ' %',
+                d: i > 0 ? (st.v / data[i-1].v < .5 ? 'perte majeure' : 'acceptable') : '',
+                dc: i > 0 ? (st.v / data[i-1].v < .5 ? 'down' : 'up') : 'flat' },
+              { c:'#EF4444', k:'Perdues à cette étape', v: i === 0 ? '0' : nf(data[i-1].v - st.v) }
+            ],
+            note: i === 2 ? '⚠ Gap de 59 % : la majorité des femmes vues en CPN1 ne bénéficie pas d\'un dépistage Hb documenté dans NutriApp.'
+                          : 'Flux alimenté par les consultations prénatales et les visites à domicile des ASC.' }
+    });
+  }
+  watermark(ctx, W, H, 'Module CPN · NutriApp');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 11 · Treemap des comorbidités & MNT associées à la nutrition
+   Algorithme « squarified treemap » implémenté à la main (Bruls et al.).
+   ───────────────────────────────────────────────────────────────────────── */
+function squarify(items, x, y, w, h){
+  const total = items.reduce((s, i) => s + i.v, 0) || 1;
+  const scale = (w * h) / total;
+  const rows = items.map(i => ({ ...i, a: i.v * scale }));
+  const out = [];
+  let cx = x, cy = y, cw = w, ch = h;
+
+  const worst = (row, len) => {
+    if (!row.length) return Infinity;
+    const sum = row.reduce((s, r) => s + r.a, 0);
+    const mx = Math.max.apply(null, row.map(r => r.a)), mn = Math.min.apply(null, row.map(r => r.a));
+    const s2 = sum * sum, l2 = len * len;
+    return Math.max((l2 * mx) / s2, s2 / (l2 * mn));
+  };
+  const layoutRow = (row, vertical) => {
+    const len = vertical ? ch : cw;
+    const sum = row.reduce((s, r) => s + r.a, 0);
+    const thick = sum / (len || 1);
+    let off = 0;
+    row.forEach(r => {
+      const size = (r.a / (sum || 1)) * len;
+      if (vertical) out.push({ ...r, x: cx, y: cy + off, w: thick, h: size });
+      else          out.push({ ...r, x: cx + off, y: cy, w: size, h: thick });
+      off += size;
+    });
+    if (vertical){ cx += thick; cw -= thick; } else { cy += thick; ch -= thick; }
+  };
+
+  let row = [];
+  rows.forEach(r => {
+    const vertical = cw >= ch;
+    const len = vertical ? ch : cw;
+    const avant = worst(row, len);
+    const apres = worst(row.concat([r]), len);
+    if (!row.length || apres <= avant){ row.push(r); }
+    else { layoutRow(row, vertical); row = [r]; }
+  });
+  if (row.length) layoutRow(row, cw >= ch);
+  return out;
+}
+function drawTreemap(ctx, W, H, prog, hover, s){
+  const d = comorbiditesData(s);
+  const items = d.items.slice().sort((a, b) => b.v - a.v);
+  const pad = 8;
+  const rects = squarify(items, pad, pad, W - pad * 2, H - pad * 2 - 12);
+  const hits = [];
+  const maxA = Math.max.apply(null, rects.map(r => r.w * r.h));
+
+  rects.forEach((r, i) => {
+    const p = easeOutCubic(clamp((prog - i * .035) / .55, 0, 1));
+    const isHov = hover && hover.id === 't' + i;
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    /* Réduction depuis le centre pour l'animation d'entrée */
+    const w = r.w * p, h = r.h * p;
+    const x = cx - w / 2, y = cy - h / 2;
+    ctx.save();
+    ctx.globalAlpha = hover && !isHov ? .35 : 1;        // voisines opacifiées à 35 % (charte)
+    const g = ctx.createLinearGradient(x, y, x + w, y + h);
+    g.addColorStop(0, mixHex(r.c, '#ffffff', isHov ? .16 : .04));
+    g.addColorStop(1, mixHex(r.c, '#0F172A', isHov ? .06 : .16));
+    fillRR(ctx, x + 1.5, y + 1.5, Math.max(0, w - 3), Math.max(0, h - 3), Math.min(12, w / 4, h / 4), g);
+    ctx.strokeStyle = rgba('#fff', .85); ctx.lineWidth = 1.6;
+    rr(ctx, x + 1.5, y + 1.5, Math.max(0, w - 3), Math.max(0, h - 3), Math.min(12, w / 4, h / 4)); ctx.stroke();
+
+    /* Libellés (uniquement si la tuile est assez grande) */
+    if (p > .85 && w > 66 && h > 34){
+      ctx.textAlign = 'center';
+      const fs = clamp(Math.min(w / 12, h / 5.2), 8.5, 12.5);
+      ctx.font = '700 ' + fs + 'px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,.98)';
+      /* Retour à la ligne manuel sur 2 lignes maximum */
+      const mots = r.nom.split(' ');
+      let l1 = '', l2 = '';
+      mots.forEach(mot => {
+        if (ctx.measureText(l1 + ' ' + mot).width < w - 14 || !l1) l1 = (l1 + ' ' + mot).trim();
+        else if (ctx.measureText(l2 + ' ' + mot).width < w - 14 || !l2) l2 = (l2 + ' ' + mot).trim();
+      });
+      ctx.fillText(trunc(l1, 26), cx, cy - (l2 ? 3 : -4) - h * .04);
+      if (l2){ ctx.font = '600 ' + (fs - 1.4) + 'px Inter, sans-serif'; ctx.fillStyle = 'rgba(255,255,255,.80)';
+               ctx.fillText(trunc(l2, 26), cx, cy + fs * .92 - h * .04); }
+      if (h > 54){
+        ctx.font = '800 ' + (fs + 1.5) + 'px Inter, sans-serif';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(nfc(r.v), cx, cy + h * .30);
+      }
+    } else if (p > .85 && w > 34 && h > 20){
+      ctx.textAlign = 'center'; ctx.font = '800 9.5px Inter, sans-serif';
+      ctx.fillStyle = 'rgba(255,255,255,.95)';
+      ctx.fillText(nfc(r.v), cx, cy + 3);
+    }
+    ctx.restore();
+
+    hits.push({
+      id:'t' + i, type:'rect', x, y, w, h,
+      tip:{ title: r.nom, sub: 'Comorbidité · groupe « ' + r.grp + ' »', color: r.c,
+            rows:[
+              { c: r.c, k:'Cas enregistrés (12 mois)', v: nf(r.v) },
+              { c:'#7C3AED', k:'Part du total comorbidités', v: aff(r.v / d.total * 100, 1) + ' %' },
+              { c:'#06B6D4', k:'Rang dans le treemap', v: (i + 1) + ' / ' + rects.length },
+              { c:'#10B981', k:'Poids relatif', v: aff(r.w * r.h / maxA * 100, 0) + ' % de surface' }
+            ],
+            note: r.grp === 'MNT' ? 'Maladie non transmissible liée à l\'alimentation : sel, sucre, graisses saturées, sédentarité.'
+                 : r.grp === 'Infectieuse' ? 'Pathologie infectieuse aggravant l\'état nutritionnel (cercle vicieux infection–dénutrition).'
+                 : r.grp === 'Carences' ? 'Carence en micronutriments : supplémentation et fortification alimentaire à renforcer.'
+                 : 'Malnutrition aiguë/chronique prise en charge dans les CRENAS/CRENAM suivis par l\'App.' }
+    });
+  });
+  ctx.save();
+  ctx.font = '600 9.5px Inter, sans-serif'; ctx.fillStyle = C.muted2; ctx.textAlign = 'left';
+  ctx.fillText('Total : ' + nf(d.total) + ' cas · surface proportionnelle au volume', pad + 2, H - 4);
+  ctx.restore();
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 12 · Multi-line — Évolution des canaux de dépistage (2018-2024)
+   ───────────────────────────────────────────────────────────────────────── */
+function drawChannels(ctx, W, H, prog, hover, s){
+  const d = channelsData(s);
+  /* Marge droite adaptative : elle doit contenir les étiquettes de fin de
+     ligne (nom du canal + valeur) sans jamais les faire déborder de la carte. */
+  ctx.save();
+  ctx.font = '700 10.5px Inter, sans-serif';
+  const besoin = Math.max.apply(null, d.series.map(o => ctx.measureText(o.nom).width)) + 24;
+  ctx.restore();
+  const pad = { l: 44, r: clamp(Math.ceil(besoin), 40, Math.min(150, W * .30)), t: 24, b: 40 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const maxV = Math.ceil(Math.max.apply(null, d.series.map(o => Math.max.apply(null, o.vals))) / 10) * 10 + 4;
+  const X = i => pad.l + i / (d.annees.length - 1) * plotW;
+  const Y = v => pad.t + plotH - v / maxV * plotH;
+
+  const sc = niceTicks(0, maxV, 5);
+  drawFrame({ ctx, W, H, pad, ticks: sc.ticks, min: 0, max: maxV, yFmt: v => v + ' %', dashGrid: true,
+              xLabels: d.annees.map((a, i) => ({ x: X(i), text: String(a) })) });
+  rotText(ctx, 'Part des dépistages (%) →', 12, pad.t + plotH / 2, -90, 'center', C.muted, '600 10.5px Inter, sans-serif');
+
+  /* Colonne survolée */
+  const idxHov = hover && hover.idx !== undefined ? hover.idx : null;
+  if (idxHov !== null){
+    ctx.save();
+    ctx.beginPath(); ctx.setLineDash([4,4]);
+    ctx.moveTo(X(idxHov), pad.t); ctx.lineTo(X(idxHov), pad.t + plotH);
+    ctx.strokeStyle = rgba('#7C3AED', .5); ctx.lineWidth = 1.4; ctx.stroke();
+    ctx.restore();
+  }
+
+  const hits = [];
+  d.series.forEach((o, k) => {
+    const pts = o.vals.map((v, i) => ({ x: X(i), y: Y(v), v, i }));
+    const vis = partialPoints(pts, prog);
+    const emphasize = idxHov !== null;
+    ctx.save();
+    ctx.globalAlpha = emphasize ? .45 : 1;
+    /* Aire très légère sous la courbe du canal dominant */
+    if (k === 0) areaPath(ctx, vis, pad.t + plotH, o.c, .07, 0);
+    linePath(ctx, vis, o.c, emphasize ? 2 : 2.7, !emphasize);
+    pts.forEach((p, i) => {
+      if (i / (pts.length - 1) > prog) return;
+      const on = idxHov === i;
+      ctx.beginPath(); ctx.arc(p.x, p.y, on ? 5.6 : 3.2, 0, Math.PI * 2);
+      ctx.fillStyle = on ? o.c : '#fff'; ctx.fill();
+      ctx.lineWidth = on ? 2.6 : 2; ctx.strokeStyle = o.c; ctx.stroke();
+    });
+    /* Étiquette de fin de ligne — bornée à droite du canvas */
+    const last = pts[pts.length - 1];
+    ctx.globalAlpha = prog;
+    ctx.font = '700 10.5px Inter, sans-serif';
+    const wNom = ctx.measureText(o.nom).width;
+    const place = W - last.x - 14;                     // largeur disponible à droite
+    const aGauche = place < wNom;                       // pas la place → à gauche du point
+    ctx.textAlign = aGauche ? 'right' : 'left';
+    const lx = aGauche ? last.x - 12 : last.x + 12;
+    ctx.fillStyle = o.c;
+    ctx.fillText(aGauche ? fitText(ctx, o.nom, Math.max(40, last.x - 16)) : o.nom, lx, last.y - 3);
+    ctx.font = '800 11.5px Inter, sans-serif';
+    ctx.fillText(aff(last.v, 1) + ' %', lx, last.y + 11);
+    ctx.restore();
+  });
+
+  /* Zones de survol : une par année (affiche les 4 canaux) */
+  d.annees.forEach((an, i) => {
+    const w = plotW / (d.annees.length - 1);
+    hits.push({
+      id:'y' + i, idx: i, type:'rect', x: X(i) - w / 2, y: pad.t, w, h: plotH,
+      tip:{ title:'Année ' + an, sub:'Répartition des canaux de dépistage · ' + s.nomScope, color:'#7C3AED',
+            rows: d.series.map(o => ({ c: o.c, k: o.nom, v: aff(o.vals[i], 1) + ' %',
+                                       d: i > 0 ? ((o.vals[i] - o.vals[i-1] >= 0 ? '+' : '−') + Math.abs(rnd(o.vals[i] - o.vals[i-1], 1)) + ' pts') : '',
+                                       dc: o.vals[i] >= o.vals[0] ? 'up' : 'down' })),
+            note: an === 2020 ? 'Pandémie : repli des dépistages en formation sanitaire, montée du communautaire.'
+                 : (an === 2024 ? 'Le PB communautaire + auto-dépistage représentent ' + aff(d.series[2].vals[6] + d.series[3].vals[6], 0) + ' % des cas détectés.'
+                                : 'Déploiement progressif du module de dépistage mobile hors les murs.') }
+    });
+  });
+  watermark(ctx, W, H, 'Canaux de dépistage NutriApp');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 13 · Lollipop — Score composite NutriApp par zone
+   Classement tiges & cercles, objectif global 70 points.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawLollipop(ctx, W, H, prog, hover, s){
+  const zones = s.zones.slice().sort((a, b) => b.score - a.score).slice(0, 16);
+  /* Marge gauche = libellé de zone + numéro de rang (24 px) */
+  const padL = padLeftZones(ctx, zones, { W:W, font:'600 11px Inter, sans-serif', maxChars:16, min:58, max:150, extra:26 });
+  const montreRang = padL >= 96;                       // pas de rang si la place manque
+  const pad = { l: padL, r: 46, t: 24, b: 32 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const rowH = plotH / zones.length;
+  const X = v => pad.l + v / 100 * plotW;
+  const CIBLE = 70;
+
+  /* Grille */
+  ctx.save();
+  ctx.font = '500 11px Inter, sans-serif'; ctx.textAlign = 'center';
+  [0,20,40,60,80,100].forEach(t => {
+    ctx.beginPath(); ctx.moveTo(X(t), pad.t - 4); ctx.lineTo(X(t), pad.t + plotH);
+    ctx.strokeStyle = '#F4F1FE'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = C.muted2; ctx.fillText(t, X(t), pad.t + plotH + 18);
+  });
+  ctx.restore();
+
+  /* Objectif global 70 points */
+  refLine(ctx, X(CIBLE), pad.t - 8, X(CIBLE), pad.t + plotH, '#7C3AED', 'Objectif 70', { width: 1.8, dash:[6,4], labelX: X(CIBLE) - 32, labelY: pad.t - 20 });
+
+  const hits = [];
+  zones.forEach((z, i) => {
+    const cy = pad.t + rowH * (i + .5);
+    const isHov = hover && hover.id === 'l' + i;
+    const p = easeOutCubic(clamp((prog - i * .045) / .55, 0, 1));
+    const col = z.score >= CIBLE ? '#10B981' : (z.score >= 55 ? '#F59E0B' : '#EF4444');
+    const xEnd = lerp(pad.l, X(z.score), p);
+
+    ctx.save();
+    ctx.globalAlpha = hover && !isHov ? .35 : 1;        // voisines opacifiées à 35 % (charte)
+    /* Rang (masqué si la marge est trop étroite) */
+    if (montreRang){
+      ctx.font = '800 9.5px Inter, sans-serif'; ctx.textAlign = 'right'; ctx.fillStyle = '#C3CAD6';
+      ctx.fillText(String(i + 1).padStart(2, '0'), pad.l - (padL - 58) - 4, cy + 3.5);
+    }
+    /* Libellé de zone */
+    ctx.font = (isHov ? '800 ' : '600 ') + '11px Inter, sans-serif';
+    ctx.fillStyle = isHov ? C.primaryDeep : C.ink3;
+    ctx.fillText(fitText(ctx, (z.drapeau ? z.drapeau + ' ' : '') + z.nom, pad.l - 14 - (montreRang ? 20 : 0)),
+                 pad.l - 12, cy + 4);
+    /* Piste de fond */
+    fillRR(ctx, pad.l, cy - 3, plotW, 6, 3, '#F1EDFE');
+    /* Tige */
+    const g = ctx.createLinearGradient(pad.l, 0, xEnd, 0);
+    g.addColorStop(0, rgba(col, .35)); g.addColorStop(1, col);
+    ctx.fillStyle = g;
+    fillRR(ctx, pad.l, cy - (isHov ? 4.6 : 3.4), Math.max(0, xEnd - pad.l), isHov ? 9.2 : 6.8, 4, g);
+    /* Cercle (sucette) */
+    ctx.beginPath(); ctx.arc(xEnd, cy, isHov ? 9.4 : 7.4, 0, Math.PI * 2);
+    ctx.fillStyle = col; ctx.fill();
+    ctx.lineWidth = 2.6; ctx.strokeStyle = '#fff'; ctx.stroke();
+    if (isHov){
+      ctx.beginPath(); ctx.arc(xEnd, cy, 14, 0, Math.PI * 2);
+      ctx.strokeStyle = rgba(col, .35); ctx.lineWidth = 2; ctx.stroke();
+    }
+    /* Valeur */
+    ctx.font = '800 10.5px Inter, sans-serif'; ctx.textAlign = 'left';
+    ctx.fillStyle = col;
+    ctx.fillText(z.score, xEnd + 14, cy + 4);
+    ctx.restore();
+
+    const ecart = z.score - CIBLE;
+    hits.push({
+      id:'l' + i, type:'rect', x: 4, y: cy - rowH / 2, w: W - 8, h: rowH,
+      tip:{ title: z.nom + (z.pays ? ' · ' + z.pays : ''), sub:'Score composite NutriApp · rang ' + (i + 1) + '/' + zones.length, color: col,
+            rows:[
+              { c: col, k:'Score composite', v: z.score + ' / 100',
+                d:(ecart >= 0 ? '+' : '−') + Math.abs(ecart) + ' vs cible', dc: ecart >= 0 ? 'up' : 'down' },
+              { c:'#7C3AED', k:'Couverture dépistage (40 %)', v: aff(clamp(z.cpn * .55 + z.iron * .45, 0, 100), 1) + ' pts' },
+              { c:'#06B6D4', k:'Qualité des fiches (25 %)', v: aff(z.complete * .25, 1) + ' pts' },
+              { c:'#10B981', k:'Disponibilité ATPE (20 %)', v: aff(clamp(z.stockD / 60 * 100, 0, 100) * .20, 1) + ' pts' },
+              { c:'#F59E0B', k:'Régularité synchro (15 %)', v: aff(z.sync * .15, 1) + ' pts' }
+            ],
+            note: ecart >= 0 ? '✓ Objectif national atteint : zone éligible au transfert de supervision vers le niveau district.'
+                             : '⚠ Sous l\'objectif : prioriser la formation des ASC et la fiabilisation des inventaires ATPE.' }
+    });
+  });
+  watermark(ctx, W, H, 'Score composite · NutriApp');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 14 · Stacked bar 100 % — Le double fardeau nutritionnel
+   Sous-nutrition (MAS, MAM, retard) vs sur-nutrition / MNT (surpoids,
+   obésité, risque hypertensif lié au sel).
+   ───────────────────────────────────────────────────────────────────────── */
+function drawBurdenStack(ctx, W, H, prog, hover, s){
+  const rows = burdenRows(s).slice(0, 16);
+  const pad = { l: padLeftZones(ctx, rows, { W:W, font:'600 11px Inter, sans-serif', maxChars:16, min:56, max:140 }),
+                r: 20, t: 22, b: 30 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const rowH = plotH / rows.length;
+  const bh = Math.min(rowH * .62, 22);
+
+  /* Grille verticale 0 → 100 % */
+  ctx.save();
+  ctx.font = '500 10.5px Inter, sans-serif'; ctx.textAlign = 'center';
+  for (let t = 0; t <= 100; t += 20){
+    const x = pad.l + t / 100 * plotW;
+    ctx.beginPath(); ctx.moveTo(x, pad.t - 4); ctx.lineTo(x, pad.t + plotH);
+    ctx.strokeStyle = t === 0 ? '#DDD6FE' : '#F4F1FE'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = C.muted2; ctx.fillText(t + ' %', x, pad.t + plotH + 17);
+  }
+  ctx.restore();
+
+  const hits = [];
+  rows.forEach((r, i) => {
+    const cy = pad.t + rowH * (i + .5);
+    const y = cy - bh / 2;
+    const isHovRow = hover && hover.row === i;
+    const p = easeOutCubic(clamp((prog - i * .04) / .58, 0, 1));
+    ctx.save();
+    ctx.globalAlpha = hover && !isHovRow ? .35 : 1;    // voisines opacifiées à 35 % (charte)
+    /* Libellé */
+    ctx.textAlign = 'right';
+    ctx.font = (isHovRow ? '800 ' : '600 ') + '11px Inter, sans-serif';
+    ctx.fillStyle = isHovRow ? C.primaryDeep : C.ink3;
+    ctx.fillText(fitText(ctx, (r.drapeau ? r.drapeau + ' ' : '') + r.nom, pad.l - 12), pad.l - 10, cy + 4);
+    /* Piste de fond */
+    fillRR(ctx, pad.l, y, plotW, bh, 6, '#F7F4FF');
+    /* Segments empilés (animation : remplissage de gauche à droite) */
+    let xCur = pad.l;
+    SEGMENTS_FARDEAU.forEach((sg, k) => {
+      const wSeg = r.pct[sg.cle] / 100 * plotW * p;
+      if (wSeg <= 0) return;
+      const isSeg = hover && hover.row === i && hover.seg === k;
+      ctx.save();
+      ctx.beginPath();
+      ctx.rect(xCur, y - 1, wSeg, bh + 2); ctx.clip();
+      const g = ctx.createLinearGradient(0, y, 0, y + bh);
+      g.addColorStop(0, mixHex(sg.c, '#ffffff', isSeg ? .22 : .10));
+      g.addColorStop(1, mixHex(sg.c, '#0F172A', isSeg ? .04 : .14));
+      ctx.fillStyle = g;
+      ctx.fillRect(xCur, y, wSeg, bh);
+      ctx.restore();
+      /* Séparateur blanc */
+      ctx.beginPath(); ctx.moveTo(xCur + wSeg, y); ctx.lineTo(xCur + wSeg, y + bh);
+      ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 1.2; ctx.stroke();
+      /* Pourcentage inscrit si le segment est assez large */
+      if (wSeg > 30 && p > .9){
+        ctx.font = '800 9.5px Inter, sans-serif'; ctx.textAlign = 'center';
+        ctx.fillStyle = 'rgba(255,255,255,.96)';
+        ctx.fillText(aff(r.pct[sg.cle], 0) + '%', xCur + wSeg / 2, cy + 3.4);
+      }
+      xCur += wSeg;
+      hits.push({
+        id:'s' + i + '_' + k, row:i, seg:k, type:'rect',
+        x: xCur - wSeg, y, w: wSeg, h: bh,
+        tip:{ title: r.nom + (r.pays ? ' · ' + r.pays : ''), sub: sg.famille + ' — ' + sg.nom, color: sg.c,
+              rows:[
+                { c: sg.c, k:'Part du fardeau total', v: aff(r.pct[sg.cle], 1) + ' %' },
+                { c:'transparent', k:'Prévalence brute', v: aff(r.vals[sg.cle], 2) + ' %' },
+                { c:'#7C3AED', k:'Indice de double fardeau', v: r.indice + ' / 100',
+                  d: r.indice >= 45 ? 'coexistence forte' : (r.indice >= 30 ? 'coexistence modérée' : 'faible'),
+                  dc: r.indice >= 45 ? 'down' : 'flat' },
+                { c:'#06B6D4', k:'Sous-nutrition cumulée', v: aff(r.pct.mas + r.pct.mam + r.pct.retard, 1) + ' %' },
+                { c:'#F59E0B', k:'Sur-nutrition / MNT cumulées', v: aff(r.pct.sp + r.pct.obes + r.pct.hta, 1) + ' %' }
+              ],
+              note: sg.famille === 'Sous-nutrition'
+                ? 'Prise en charge CRENAS/CRENAM + ATPE : la part reste dominante dans les zones à forte insécurité alimentaire.'
+                : 'MNT liées à l\'alimentation : réduction du sel, dépistage HTA/diabète en CPN et en consultation adulte.' }
+      });
+    });
+    /* Contour de la barre */
+    ctx.strokeStyle = isHovRow ? rgba('#7C3AED', .6) : 'rgba(221,214,254,.9)';
+    ctx.lineWidth = isHovRow ? 1.8 : 1;
+    rr(ctx, pad.l, y, plotW * p, bh, 6); ctx.stroke();
+    ctx.restore();
+  });
+  watermark(ctx, W, H, 'Double fardeau · enquêtes ménages NutriApp');
+  return { hits };
+}

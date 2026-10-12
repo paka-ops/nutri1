@@ -1,0 +1,700 @@
+
+/* ════════════════════════════════════════════════════════════════════════
+   §5 — DONNÉES DE TÉLÉMÉTRIE NUTRIAPP (16 PAYS D'AFRIQUE DE L'OUEST)
+   ────────────────────────────────────────────────────────────────────────
+   Jeu de données consolidé issu de l'application mobile de suivi terrain :
+     • saisies des agents de santé communautaires (ASC) et cliniques mobiles,
+     • dépistages PB/MUAC (périmètre brachial) chez les 6-59 mois,
+     • enquêtes ménages (SMART / PASSE) pour le double fardeau et les MNT,
+     • inventaires ATPE géolocalisés des points de distribution,
+     • journaux de synchronisation (offline-first → serveur DHIS2).
+   Les valeurs sont cohérentes avec les ordres de grandeur régionaux
+   (CEDEAO + Mauritanie) et servent de socle de démonstration.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Nomenclature des 16 pays suivis.
+ * adm      : admissions CRENAS/CRENAM saisies dans NutriApp (12 derniers mois)
+ * cure     : taux de guérison (%)              aban : taux d'abandon (%)
+ * deces    : taux de décès (%)                 pts  : points de distribution ATPE suivis
+ * stk      : structures en rupture de stock ATPE
+ * stockD   : couverture médiane de stock (jours)
+ * agents   : agents communautaires actifs sur l'App
+ * obes     : prévalence surpoids/obésité adulte (%)   hta : hypertension liée au sel (%)
+ * diab     : diabète de type 2 (%)                    sel : consommation moyenne de sel (g/j)
+ * retard   : malnutrition chronique / retard de croissance (%)
+ * mas, mam : malnutrition aiguë sévère / modérée (%)
+ * sync     : taux de synchronisation des fiches dans les 24 h (%)
+ * complete : complétude des fiches (%)
+ * score    : score composite NutriApp (0-100)
+ * anemia   : [grosses (sév/mod/lég), enf 6-23m, enf 2-5a, adolescentes, post-partum] en %
+ * iron     : couverture de la supplémentation en fer/acide folique (%)
+ * cpn      : couverture CPN1 (%)
+ * popM     : population (millions) — sert au calcul des volumes attendus
+ * densite  : part de la population urbaine (%) — corrélée au double fardeau
+ */
+const PAYS = [
+  { iso:'NE', nom:'Niger',            drapeau:'🇳🇪', region:'Sahel',
+    districts:['Niamey','Tillabéri','Dosso','Tahoua','Maradi','Zinder','Agadez','Diffa'],
+    adm:12450, cure:71.4, aban:18.6, deces:3.1, pts:212, stk:12, stockD:34, agents:486,
+    obes:8.6,  hta:27.4, diab:4.9, sel:11.4, retard:42.1, mas:2.8, mam:9.4,
+    sync:64, complete:79, score:58, popM:26.2, densite:17,
+    anemia:[[4.1,18.4,31.2],[68.4,22.1,6.2],[61.8,25.4,8.1],[52.3,26.8,12.4],[58.9,24.1,10.2]], iron:41, cpn:54 },
+
+  { iso:'ML', nom:'Mali',             drapeau:'🇲🇱', region:'Sahel',
+    districts:['Bamako','Koulikoro','Sikasso','Ségou','Mopti','Tombouctou','Gao','Kayes'],
+    adm:8620, cure:69.8, aban:20.4, deces:3.6, pts:193, stk:7, stockD:31, agents:432,
+    obes:9.3, hta:27.0, diab:4.6, sel:11.1, retard:40.2, mas:2.5, mam:8.9,
+    sync:66, complete:76, score:55, popM:22.4, densite:18,
+    anemia:[[4.4,19.1,30.6],[69.1,21.8,6.0],[63.4,24.6,7.8],[54.1,25.9,11.9],[60.2,23.4,10.0]], iron:38, cpn:51 },
+
+  { iso:'BF', nom:'Burkina Faso',     drapeau:'🇧🇫', region:'Sahel',
+    districts:['Centre','Hauts-Bassins','Boucle du Mouhoun','Nord','Est','Centre-Nord','Sahel','Cascades'],
+    adm:7583, cure:73.2, aban:16.8, deces:2.9, pts:185, stk:5, stockD:38, agents:398,
+    obes:8.1,  hta:25.8, diab:4.3, sel:10.6, retard:37.8, mas:2.2, mam:8.1,
+    sync:71, complete:81, score:61, popM:22.1, densite:19,
+    anemia:[[3.9,17.8,31.8],[66.2,23.4,6.8],[60.4,26.1,8.4],[51.2,27.4,12.1],[57.6,25.0,10.4]], iron:44, cpn:58 },
+
+  { iso:'SN', nom:'Sénégal',          drapeau:'🇸🇳', region:'Côtes / Sahel',
+    districts:['Dakar','Thiès','Diourbel','Kaolack','Saint-Louis','Tambacounda','Kolda','Matam'],
+    adm:3616, cure:79.6, aban:12.4, deces:1.8, pts:170, stk:3, stockD:52, agents:364,
+    obes:15.6, hta:27.2, diab:6.2, sel:10.9, retard:26.4, mas:1.2, mam:5.6,
+    sync:84, complete:89, score:74, popM:17.6, densite:34,
+    anemia:[[3.2,15.1,33.4],[58.4,27.6,8.2],[52.1,29.8,10.4],[46.8,30.2,13.1],[50.4,28.6,11.2]], iron:58, cpn:72 },
+
+  { iso:'GN', nom:'Guinée',           drapeau:'🇬🇳', region:'Côtes / Sahel',
+    districts:['Conakry','Kindia','Boké','Kankan','Labé','Nzérékoré','Faranah'],
+    adm:3054, cure:74.1, aban:16.2, deces:2.6, pts:122, stk:3, stockD:36, agents:276,
+    obes:10.0, hta:28.2, diab:4.8, sel:11.6, retard:36.1, mas:1.9, mam:7.4,
+    sync:67, complete:77, score:57, popM:13.9, densite:22,
+    anemia:[[4.3,18.9,30.1],[67.8,22.4,6.4],[62.1,25.2,7.9],[53.4,26.1,11.8],[59.1,24.0,10.1]], iron:39, cpn:56 },
+
+  { iso:'CI', nom:"Côte d'Ivoire",    drapeau:'🇨🇮', region:'Côtes / Sahel',
+    districts:['Abidjan','Yamoussoukro','Bouaké','San-Pédro','Korhogo','Daloa','Man'],
+    adm:2598, cure:78.4, aban:13.1, deces:2.0, pts:146, stk:3, stockD:49, agents:312,
+    obes:14.2, hta:26.5, diab:6.8, sel:10.2, retard:27.9, mas:1.3, mam:5.9,
+    sync:81, complete:87, score:72, popM:28.9, densite:32,
+    anemia:[[3.4,16.2,32.8],[60.1,26.4,7.6],[54.2,28.1,9.8],[48.1,29.4,12.6],[52.6,27.8,10.8]], iron:55, cpn:69 },
+
+  { iso:'GH', nom:'Ghana',            drapeau:'🇬🇭', region:'Côtes / Sahel',
+    districts:['Grand Accra','Ashanti','Northern','Eastern','Western','Volta','Upper East'],
+    adm:2054, cure:82.6, aban:9.4, deces:1.4, pts:160, stk:2, stockD:61, agents:344,
+    obes:18.7, hta:25.0, diab:7.9, sel:9.4, retard:23.1, mas:0.9, mam:4.8,
+    sync:87, complete:92, score:79, popM:33.5, densite:38,
+    anemia:[[2.8,13.6,34.9],[54.2,28.8,9.1],[48.6,30.4,11.2],[42.1,31.8,14.0],[46.2,30.1,12.4]], iron:63, cpn:78 },
+
+  { iso:'NG', nom:'Nigeria',          drapeau:'🇳🇬', region:'Côtes / Sahel',
+    districts:['Lagos','Kano','Kaduna','Rivers','Oyo','Enugu','Borno'],
+    adm:2537, cure:76.2, aban:14.8, deces:2.3, pts:183, stk:3, stockD:44, agents:402,
+    obes:16.3, hta:29.1, diab:7.4, sel:10.8, retard:31.6, mas:1.6, mam:6.8,
+    sync:77, complete:84, score:68, popM:218.5, densite:29,
+    anemia:[[3.8,17.1,32.0],[64.8,24.1,7.2],[58.4,26.8,9.1],[49.6,28.4,12.9],[55.1,26.2,11.0]], iron:48, cpn:63 },
+
+  { iso:'MR', nom:'Mauritanie',       drapeau:'🇲🇷', region:'Sahel',
+    districts:['Nouakchott','Trarza','Brakna','Gorgol','Adrar'],
+    adm:755, cure:70.4, aban:19.2, deces:3.4, pts:67, stk:2, stockD:29, agents:154,
+    obes:13.0, hta:30.4, diab:6.4, sel:12.1, retard:33.4, mas:2.1, mam:7.8,
+    sync:62, complete:74, score:52, popM:4.9, densite:26,
+    anemia:[[4.6,19.6,29.8],[70.4,21.1,5.8],[64.8,24.1,7.4],[55.6,25.4,11.6],[61.4,23.1,9.8]], iron:36, cpn:49 },
+
+  { iso:'SL', nom:'Sierra Leone',     drapeau:'🇸🇱', region:'Côtes / Sahel',
+    districts:['Western Area','Bo','Kenema','Kailahun','Port Loko'],
+    adm:1088, cure:72.8, aban:17.4, deces:3.0, pts:73, stk:2, stockD:33, agents:186,
+    obes:7.5,  hta:25.3, diab:4.1, sel:10.4, retard:37.2, mas:2.0, mam:7.6,
+    sync:64, complete:75, score:54, popM:8.6, densite:21,
+    anemia:[[4.2,18.7,30.4],[68.9,22.0,6.1],[63.1,24.9,7.7],[53.8,26.0,11.7],[60.1,23.6,10.1]], iron:37, cpn:55 },
+
+  { iso:'LR', nom:'Liberia',          drapeau:'🇱🇷', region:'Côtes / Sahel',
+    districts:['Montserrado','Nimba','Bong','Grand Gedeh','Lofa'],
+    adm:860, cure:71.6, aban:18.1, deces:3.2, pts:61, stk:1, stockD:30, agents:164,
+    obes:8.2,  hta:24.6, diab:3.9, sel:10.1, retard:35.8, mas:1.8, mam:7.1,
+    sync:63, complete:73, score:53, popM:5.3, densite:20,
+    anemia:[[4.4,19.0,30.0],[69.6,21.6,5.9],[63.8,24.4,7.6],[54.6,25.6,11.5],[60.8,23.2,9.9]], iron:35, cpn:52 },
+
+  { iso:'GW', nom:'Guinée-Bissau',    drapeau:'🇬🇼', region:'Côtes / Sahel',
+    districts:['Bissau','Bafatá','Gabú','Cacheu','Oio'],
+    adm:544, cure:68.4, aban:21.6, deces:3.9, pts:43, stk:1, stockD:27, agents:118,
+    obes:6.8,  hta:23.9, diab:3.6, sel:9.8, retard:39.4, mas:2.2, mam:8.0,
+    sync:58, complete:70, score:48, popM:2.1, densite:19,
+    anemia:[[4.8,20.1,29.4],[71.2,20.8,5.6],[65.4,23.9,7.2],[56.1,25.1,11.3],[62.0,22.8,9.6]], iron:32, cpn:47 },
+
+  { iso:'GM', nom:'Gambie',           drapeau:'🇬🇲', region:'Côtes / Sahel',
+    districts:['Greater Banjul','West Coast','North Bank','Upper River','Central River'],
+    adm:474, cure:75.8, aban:14.6, deces:2.4, pts:37, stk:1, stockD:41, agents:104,
+    obes:11.0, hta:25.9, diab:5.1, sel:10.7, retard:30.1, mas:1.5, mam:6.4,
+    sync:72, complete:82, score:63, popM:2.7, densite:28,
+    anemia:[[3.7,17.4,31.6],[63.1,24.4,7.4],[57.2,27.1,9.3],[48.9,28.8,12.7],[53.4,26.6,10.9]], iron:46, cpn:61 },
+
+  { iso:'BJ', nom:'Bénin',            drapeau:'🇧🇯', region:'Côtes / Sahel',
+    districts:['Littoral','Atlantique','Zou','Borgou','Atacora','Ouémé','Mono'],
+    adm:1036, cure:77.1, aban:13.9, deces:2.1, pts:95, stk:1, stockD:46, agents:212,
+    obes:11.6, hta:26.2, diab:5.6, sel:10.3, retard:31.2, mas:1.4, mam:6.1,
+    sync:75, complete:85, score:67, popM:13.4, densite:27,
+    anemia:[[3.5,16.6,32.4],[61.4,25.2,7.2],[55.6,27.4,9.4],[47.8,29.1,12.8],[52.1,27.4,11.0]], iron:51, cpn:66 },
+
+  { iso:'TG', nom:'Togo',             drapeau:'🇹🇬', region:'Côtes / Sahel',
+    districts:['Grand Lomé','Maritime','Plateaux','Centrale','Savanes'],
+    adm:667, cure:76.4, aban:14.2, deces:2.2, pts:71, stk:1, stockD:43, agents:176,
+    obes:11.2, hta:25.6, diab:5.4, sel:10.0, retard:32.4, mas:1.4, mam:6.3,
+    sync:73, complete:83, score:65, popM:8.9, densite:26,
+    anemia:[[3.6,16.9,32.1],[62.1,24.8,7.1],[56.2,27.0,9.2],[48.4,28.8,12.6],[52.8,27.1,10.8]], iron:49, cpn:64 },
+
+  { iso:'CV', nom:'Cap-Vert',         drapeau:'🇨🇻', region:'Insulaire',
+    districts:['Praia','São Vicente','Sal','Boa Vista','Santo Antão'],
+    adm:298, cure:86.2, aban:6.4, deces:0.9, pts:24, stk:0, stockD:74, agents:68,
+    obes:20.7, hta:28.7, diab:9.1, sel:9.2, retard:13.8, mas:0.5, mam:3.2,
+    sync:91, complete:95, score:86, popM:0.6, densite:46,
+    anemia:[[2.4,11.8,36.1],[48.2,31.4,10.8],[42.6,33.1,12.4],[36.8,34.2,15.1],[40.1,32.6,13.8]], iron:71, cpn:84 }
+];
+
+/* Index de recherche rapide par code ISO */
+const PAYS_PAR_ISO = {};
+PAYS.forEach(p => { PAYS_PAR_ISO[p.iso] = p; });
+
+/** Nombre total de pays, de points ATPE et d'agents (affiché dans l'encart sidebar). */
+const TOTAL_PTS    = PAYS.reduce((s, p) => s + p.pts, 0);        // 1 842
+const TOTAL_AGENTS = PAYS.reduce((s, p) => s + p.agents, 0);     // 3 214
+const TOTAL_ADM    = PAYS.reduce((s, p) => s + p.adm, 0);        // ≈ 48 234
+const NB_DISTRICTS = PAYS.reduce((s, p) => s + p.districts.length, 0);
+
+/* ── 5.1 Séries mensuelles (24 mois : janvier 2024 → décembre 2025) ───── */
+
+/**
+ * Profils de saisonnalité (poids mensuels) :
+ *  • ADMISSIONS : pic marqué de la soudure agro-pastorale (juin → septembre),
+ *    creux post-récolte (novembre → janvier) ;
+ *  • SYNCHRONISATION : dégradation pendant l'hivernage (routes coupées,
+ *    couverture réseau dégradée), amélioration continue grâce au mode offline.
+ */
+const POIDS_SAISON_ADM  = [.78,.74,.84,.92,.98,1.50,1.77,1.88,1.62,.94,.80,.74];
+const POIDS_SAISON_SYNC = [.98,.99,1.00,1.01,1.00,.95,.91,.90,.93,.98,1.01,1.03];
+
+/**
+ * Facteur de restitution de l'obésité adulte en 2023 à partir de la valeur 2025.
+ * 0.831 ⇒ +20,3 % en deux ans, soit +2,4 pts pour une prévalence de 14,2 % :
+ * rythme de la transition nutritionnelle urbaine observé dans les enquêtes
+ * ménages (SMART/PASSE) de la région. Sert au badge du KPI 2 et à la série
+ * « obésité » des small multiples, afin que les deux restent cohérents.
+ */
+const FACTEUR_OBESITE_2023 = .831;
+
+/**
+ * Répartit un total annuel en 12 valeurs mensuelles.
+ * Méthode du plus fort reste : la SOMME des mois est exactement le total
+ * demandé (aucune dérive due au bruit ou aux arrondis) — indispensable pour
+ * qu'un KPI annuel et sa courbe mensuelle affichent le même chiffre.
+ */
+function repartir(total, poids, rndFn, bruit){
+  const s = poids.reduce((a, b) => a + b, 0);
+  /* Cibles théoriques avec bruit multiplicatif (variabilité de saisie terrain) */
+  const cibles = poids.map(w => Math.max(0, total * w / s * (1 + (rndFn() - .5) * (bruit || .06))));
+  const entiers = cibles.map(Math.floor);
+  let reste = Math.round(total) - entiers.reduce((a, b) => a + b, 0);
+  /* Attribution des unités restantes aux plus forts restes fractionnaires */
+  const ordre = cibles
+    .map((c, i) => ({ i, frac: c - Math.floor(c) }))
+    .sort((a, b) => b.frac - a.frac);
+  let k = 0, garde = 0;
+  while (reste > 0 && garde < 240){ entiers[ordre[k % ordre.length].i] += 1; reste -= 1; k++; garde++; }
+  while (reste < 0 && garde < 480){
+    const idx = ordre[k % ordre.length].i;
+    if (entiers[idx] > 0){ entiers[idx] -= 1; reste += 1; }
+    k++; garde++;
+  }
+  return entiers;
+}
+
+/**
+ * Série mensuelle des admissions CRENAS sur 24 mois pour une zone.
+ * @returns {{m2024:number[], m2025:number[], total2025:number, picSoudure:number}}
+ */
+function serieAdmissions(nom, total2025, seed){
+  const r = rngFrom(seed || ('adm|' + nom));
+  const m2025 = repartir(total2025, POIDS_SAISON_ADM, r, .07);
+  const croissance = .855 + r() * .08;               // 2024 ≈ 85,5 % à 93,5 % de 2025
+  const m2024 = repartir(total2025 * croissance, POIDS_SAISON_ADM, r, .09);
+  const pic = SOUDURE_MONTHS.reduce((s, m) => s + m2025[m], 0);
+  const horsSoudure = m2025.reduce((s, v, i) => s + (SOUDURE_MONTHS.indexOf(i) < 0 ? v : 0), 0) / 8;
+  return { m2024, m2025, total2025: m2025.reduce((a, b) => a + b, 0),
+           picSoudure: pic / horsSoudure - 1, moy2024: m2024.reduce((a,b)=>a+b,0)/12 };
+}
+
+/** Série mensuelle du taux de synchronisation (%) sur 24 mois. */
+function serieSync(nom, cible, seed){
+  const r = rngFrom(seed || ('sync|' + nom));
+  const out = [];
+  for (let i = 0; i < 24; i++){
+    const t = i / 23;
+    const progression = (cible * .84) + (cible * .22) * t;   // amélioration tendancielle
+    const saison = POIDS_SAISON_SYNC[i % 12];
+    out.push(rnd(clamp(progression * saison + (r() - .5) * 5, 18, 99.4), 1));
+  }
+  return out;
+}
+
+/** Série mensuelle de complétude des fiches (%) sur 24 mois. */
+function serieCompletude(nom, cible, seed){
+  const r = rngFrom(seed || ('comp|' + nom));
+  const out = [];
+  for (let i = 0; i < 24; i++){
+    const t = i / 23;
+    out.push(rnd(clamp(cible * .93 + cible * .10 * t + (r() - .5) * 3.4, 40, 99.8), 1));
+  }
+  return out;
+}
+
+/**
+ * Grille calendaire de synchronisation : 52 semaines × 7 jours (364 valeurs).
+ * Effet « fin de semaine » (les relais transmettent moins le week-end) et
+ * coupures réseau ponctuelles.
+ */
+function serieJoursSync(nom, cible, seed){
+  const r = rngFrom(seed || ('jours|' + nom));
+  const out = [];
+  for (let s = 0; s < 52; s++){
+    const tendance = cible * (.9 + .16 * (s / 51));         // montée en charge progressive
+    const choc = r() < .05 ? .45 + r() * .25 : 1;           // 5 % de semaines dégradées
+    for (let d = 0; d < 7; d++){
+      const weekend = (d >= 5) ? .74 : 1;
+      out.push(rnd(clamp(tendance * weekend * choc + (r() - .5) * 14, 0, 100), 1));
+    }
+  }
+  return out;
+}
+
+/* ── 5.2 Décomposition par districts / provinces (vue pays) ──────────── */
+
+/** Cache mémoïsé : une zone n'est générée qu'une seule fois. */
+const _CACHE_DISTRICTS = {};
+/** Cache du référentiel régional (identique quel que soit le pays affiché). */
+const _CACHE_REF = {};
+
+/**
+ * Génère de façon DÉTERMINISTE les districts d'un pays à partir de ses
+ * indicateurs nationaux, en appliquant une dispersion réaliste (la capitale
+ * concentre davantage d'admissions et de structures, les zones rurales ont
+ * une synchronisation plus faible).
+ */
+function districtsDe(p){
+  if (_CACHE_DISTRICTS[p.iso]) return _CACHE_DISTRICTS[p.iso];
+  const n = p.districts.length;
+  const r = rngFrom('dist|' + p.iso);
+  // Poids démographiques : le premier district (capitale/pôle) pèse plus lourd
+  const poidsBruts = p.districts.map((d, i) => (i === 0 ? 1.75 : 1) * (.7 + r() * .62));
+  const sommePoids = poidsBruts.reduce((a, b) => a + b, 0);
+  const jitter = (amp) => 1 + (r() - .5) * 2 * amp;
+
+  const out = p.districts.map((nom, i) => {
+    const w = poidsBruts[i] / sommePoids;
+    const capitale = i === 0;
+    return {
+      iso: p.iso + '-' + i, nom, pays: p.nom, drapeau: p.drapeau, capitale,
+      parts: w,
+      adm:    Math.max(28, Math.round(p.adm * w * jitter(.10))),
+      cure:   rnd(clamp(p.cure * jitter(.065) + (capitale ? 1.9 : 0), 45, 97), 1),
+      aban:   rnd(clamp(p.aban * jitter(.16) - (capitale ? 1.1 : 0), 1.5, 42), 1),
+      deces:  rnd(clamp(p.deces * jitter(.18), .2, 9), 1),
+      pts:    Math.max(3, Math.round(p.pts * w * jitter(.12))),
+      stk:    0,                                            // calculé après (somme = p.stk)
+      stockD: Math.round(clamp(p.stockD * jitter(.32), 5, 132)),
+      agents: Math.max(4, Math.round(p.agents * w * jitter(.12))),
+      obes:   rnd(clamp(p.obes * jitter(.16) + (capitale ? 3.4 : 0), 2.5, 42), 1),
+      hta:    rnd(clamp(p.hta * jitter(.11) + (capitale ? 1.6 : 0), 10, 48), 1),
+      diab:   rnd(clamp(p.diab * jitter(.18) + (capitale ? .9 : 0), .8, 18), 1),
+      sel:    rnd(clamp(p.sel * jitter(.09), 6.5, 15.5), 1),
+      retard: rnd(clamp(p.retard * jitter(.14) - (capitale ? 3.2 : 0), 4, 62), 1),
+      mas:    rnd(clamp(p.mas * jitter(.22), .1, 6.5), 2),
+      mam:    rnd(clamp(p.mam * jitter(.16), .8, 18), 1),
+      sync:   rnd(clamp(p.sync * jitter(.13) + (capitale ? 4.5 : -1.5), 18, 99.5), 1),
+      complete: rnd(clamp(p.complete * jitter(.08) + (capitale ? 2.4 : 0), 42, 99.6), 1),
+      score:  0,                                            // calculé après (score composite)
+      iron:   rnd(clamp(p.iron * jitter(.14) + (capitale ? 3.2 : 0), 12, 96), 0),
+      cpn:    rnd(clamp(p.cpn * jitter(.12) + (capitale ? 4.1 : 0), 22, 96), 0),
+      popM:   rnd(p.popM * w, 2)
+    };
+  });
+
+  /* Répartition entière des ruptures ATPE du pays entre ses districts,
+     en privilégiant ceux dont la couverture de stock est la plus faible. */
+  const ordre = out.slice().sort((a, b) => a.stockD - b.stockD);
+  let reste = p.stk;
+  ordre.forEach((d, i) => {
+    if (reste <= 0) return;
+    const prend = (i < ordre.length - 1) ? (r() < .78 ? 1 : 0) : reste;
+    const v = Math.min(prend, reste);
+    d.stk = v; reste -= v;
+    if (v) d.stockD = Math.min(d.stockD, Math.round(6 + r() * 24));  // rupture ⇒ stock faible
+  });
+
+  /* ── Cohérence arithmétique avec la fiche nationale ──────────────────
+     La somme des districts doit retomber EXACTEMENT sur les totaux du pays
+     (admissions, points ATPE, agents) : sans cela les KPI du périmètre pays
+     afficheraient un total différent de celui du pays dans la vue globale. */
+  const resorber = (cle, cible, minimum) => {
+    const ecart = cible - out.reduce((a, d) => a + d[cle], 0);
+    if (!ecart) return;
+    const ordre = out.slice().sort((a, b) => b[cle] - a[cle]);
+    const pas = ecart > 0 ? 1 : -1;
+    let i = 0, garde = 0;
+    while (ecart !== 0 && garde < 20000){
+      const d = ordre[i % ordre.length];
+      if (pas > 0 || d[cle] > minimum){ d[cle] += pas; }
+      i++; garde++;
+      if (ordre.reduce((a, d2) => a + d2[cle], 0) === cible) break;
+    }
+  };
+  resorber('adm', p.adm, 20);
+  resorber('pts', p.pts, 3);
+  resorber('agents', p.agents, 4);
+
+  /* Score composite NutriApp (barème officiel) :
+       40 % couverture dépistage · 25 % qualité des fiches
+       20 % disponibilité ATPE   · 15 % régularité de synchronisation       */
+  out.forEach(d => {
+    const couv = clamp((d.cpn * .55 + d.iron * .45), 0, 100);
+    const dispo = clamp(d.stockD / 60 * 100, 0, 100);
+    d.score = Math.round(clamp(couv * .40 + d.complete * .25 + dispo * .20 + d.sync * .15, 5, 99));
+  });
+
+  _CACHE_DISTRICTS[p.iso] = out;
+  return out;
+}
+
+/* ── 5.3 Séries rattachées à chaque pays (mémoïsées) ─────────────────── */
+PAYS.forEach(p => {
+  p.admS   = serieAdmissions(p.nom, p.adm, 'adm|' + p.iso);
+  p.syncS  = serieSync(p.nom, p.sync, 'sync|' + p.iso);
+  p.compS  = serieCompletude(p.nom, p.complete, 'comp|' + p.iso);
+  p.joursS = serieJoursSync(p.nom, p.sync, 'jours|' + p.iso);
+  p.disp   = districtsDe(p);
+});
+
+/** Série d'admissions pour un district (déterministe, à partir de son nom). */
+function serieDistrictAdm(d){
+  if (d._admS) return d._admS;
+  d._admS = serieAdmissions(d.pays + '|' + d.nom, d.adm, 'admd|' + d.iso);
+  return d._admS;
+}
+function serieDistrictSync(d){
+  if (!d._syncS) d._syncS = serieSync(d.pays + '|' + d.nom, d.sync, 'syncd|' + d.iso);
+  return d._syncS;
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   §6 — MOTEUR DE PÉRIMÈTRE (Vue globale région ↔ Vue détaillée pays)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/** État applicatif global : périmètre, pays sélectionné, section active, tri. */
+const ETAT = {
+  mode: 'global',                 // 'global' | 'country'
+  pays: 'NE',                     // pays actif en mode détaillé
+  section: 'overview',            // section de la sidebar
+  tri: { cle: 'adm', dir: -1 },   // tri de la scorecard
+  fichesMin: 1284                 // compteur temps réel du badge LIVE
+};
+
+/** Moyenne pondérée par une liste de poids (ou moyenne simple si absents). */
+function wavg(list, cle, poids){
+  let s = 0, w = 0;
+  list.forEach((o, i) => { const p = poids ? poids[i] : 1; s += o[cle] * p; w += p; });
+  return w ? s / w : 0;
+}
+
+/** Agrège une liste de zones en un « objet zone » représentatif du périmètre. */
+function aggregate(list){
+  const poids = list.map(z => z.adm || 1);
+  const tot = cle => list.reduce((s, z) => s + (z[cle] || 0), 0);
+  const o = {
+    nom: 'Région', adm: tot('adm'), pts: tot('pts'), stk: tot('stk'), agents: tot('agents'),
+    popM: rnd(tot('popM'), 1),
+    cure: rnd(wavg(list, 'cure', poids), 1),
+    aban: rnd(wavg(list, 'aban', poids), 1),
+    deces: rnd(wavg(list, 'deces', poids), 1),
+    stockD: Math.round(wavg(list, 'stockD', list.map(z => z.pts || 1))),
+    obes: rnd(wavg(list, 'obes', list.map(z => z.popM)), 1),
+    hta: rnd(wavg(list, 'hta', list.map(z => z.popM)), 1),
+    diab: rnd(wavg(list, 'diab', list.map(z => z.popM)), 1),
+    sel: rnd(wavg(list, 'sel', list.map(z => z.popM)), 1),
+    retard: rnd(wavg(list, 'retard', list.map(z => z.popM)), 1),
+    mas: rnd(wavg(list, 'mas', poids), 2),
+    mam: rnd(wavg(list, 'mam', poids), 1),
+    sync: rnd(wavg(list, 'sync', list.map(z => z.agents || 1)), 0),
+    complete: rnd(wavg(list, 'complete', list.map(z => z.agents || 1)), 0),
+    score: Math.round(wavg(list, 'score', list.map(z => z.agents || 1))),
+    iron: Math.round(wavg(list, 'iron', poids)),
+    cpn: Math.round(wavg(list, 'cpn', poids))
+  };
+  /* Séries mensuelles agrégées (somme pour les admissions, moyenne pondérée
+     par le nombre d'agents pour les indicateurs de qualité). */
+  o.admS = {
+    m2024: Array(12).fill(0), m2025: Array(12).fill(0)
+  };
+  list.forEach(z => {
+    const s = z.admS || serieDistrictAdm(z);
+    for (let i = 0; i < 12; i++){ o.admS.m2024[i] += s.m2024[i]; o.admS.m2025[i] += s.m2025[i]; }
+  });
+  o.admS.total2025 = o.admS.m2025.reduce((a, b) => a + b, 0);
+  const wAgents = list.map(z => z.agents || 1);
+  o.syncS = Array(24).fill(0); o.compS = Array(24).fill(0);
+  list.forEach((z, k) => {
+    const ss = z.syncS || serieDistrictSync(z);
+    const cs = z.compS || serieCompletude(z.nom, z.complete || 80, 'compd|' + (z.iso || z.nom));
+    for (let i = 0; i < 24; i++){ o.syncS[i] += ss[i] * wAgents[k]; o.compS[i] += cs[i] * wAgents[k]; }
+  });
+  const sommeAgents = wAgents.reduce((a, b) => a + b, 0) || 1;
+  o.syncS = o.syncS.map(v => rnd(v / sommeAgents, 1));
+  o.compS = o.compS.map(v => rnd(v / sommeAgents, 1));
+  return o;
+}
+
+/**
+ * Construit le modèle de données complet du périmètre courant.
+ * C'est LA fonction appelée par tous les graphiques et tous les KPI :
+ * un changement de pays met donc instantanément à jour l'ensemble du dashboard.
+ */
+function getScope(){
+  const global = (ETAT.mode === 'global');
+  const zones = global ? PAYS.slice() : districtsDe(PAYS_PAR_ISO[ETAT.pays]).slice();
+  zones.sort((a, b) => b.adm - a.adm);                  // ordre par volume d'admissions
+  const agg = aggregate(zones);
+  agg.nom = global ? "Afrique de l'Ouest" : PAYS_PAR_ISO[ETAT.pays].nom;
+
+  const p = global ? null : PAYS_PAR_ISO[ETAT.pays];
+  const nomScope = agg.nom;
+
+  /* Référentiel de comparaison : TOUJOURS l'agrégat régional des 16 pays.
+     En vue pays, c'est ce qui permet d'afficher l'écart du pays à la région
+     (sinon la comparaison porterait sur le pays lui-même et vaudrait 0). */
+  const ref = _CACHE_REF.region || (_CACHE_REF.region = aggregate(PAYS.slice()));
+
+  /* Série calendaire 52 semaines (vue globale : moyenne des 16 pays) */
+  let jours;
+  if (global){
+    jours = Array(364).fill(0);
+    PAYS.forEach(q => { const w = q.agents; for (let i = 0; i < 364; i++) jours[i] += q.joursS[i] * w; });
+    const sw = PAYS.reduce((s, q) => s + q.agents, 0);
+    jours = jours.map(v => rnd(v / sw, 1));
+  } else { jours = p.joursS.slice(); }
+
+  return {
+    global, pays: p, zones, agg, ref, nomScope, jours,
+    libelle: global ? 'Vue globale · 16 pays' : 'Vue détaillée · ' + p.nom,
+    sousTitre: global
+      ? 'CEDEAO + Mauritanie · ' + NB_DISTRICTS + ' districts sanitaires suivis'
+      : p.districts.length + ' districts / provinces · ' + p.pts + ' points de distribution ATPE',
+    /* Écart relatif du pays au référentiel régional (badge de comparaison KPI) */
+    ecart: function(cle){
+      const base = ref[cle] || 1;
+      return pctChange(agg[cle], base);
+    }
+  };
+}
+
+/* ── 6.1 Dérivations métier par périmètre ─────────────────────────────── */
+
+/** Anémie par catégorie de population + couverture de supplémentation en fer. */
+const CATEGORIES_ANEMIE = [
+  { cle:'femmes',  nom:'Femmes enceintes',   court:'F. enceintes',  sous:'CPN suivies dans NutriApp' },
+  { cle:'e623',    nom:'Enfants 6-23 mois',  court:'6-23 mois',     sous:'Dépistage Hémocue clinique mobile' },
+  { cle:'e25',     nom:'Enfants 2-5 ans',    court:'2-5 ans',       sous:'Visites à domicile des ASC' },
+  { cle:'ado',     nom:'Adolescentes 15-19', court:'Adolescentes',  sous:'Milieu scolaire + centres ados' },
+  { cle:'pp',      nom:'Femmes post-partum', court:'Post-partum',   sous:'Suivi 0-42 jours après accouchement' }
+];
+/**
+ * Résout le pays parent d'une zone : la zone elle-même (vue globale) ou le
+ * pays dont elle est un district (vue détaillée). Résultat mémoïsé car appelé
+ * pour chaque catégorie de population et à chaque rendu.
+ */
+function paysParent(z){
+  if (z._parent !== undefined) return z._parent;
+  let p = null;
+  if (z.anemia) p = z;                                    // c'est déjà un pays
+  else if (z.pays) p = PAYS_PAR_ISO[z.pays] || PAYS.filter(x => x.nom === z.pays)[0] || null;
+  if (!p && typeof z.iso === 'string' && z.iso.length > 2) p = PAYS_PAR_ISO[z.iso.slice(0, 2)] || null;
+  z._parent = p;
+  return p;
+}
+
+/**
+ * Moyenne pondérée d'une valeur dérivée (ex. anemia[i][j]) sur les zones.
+ * Les districts ne portent pas de tableau « anemia » : on le reconstitue à
+ * partir de l'indicateur national du pays parent, avec une dispersion locale.
+ */
+function wavgDerive(s, fn, poids){
+  const w = poids || s.zones.map(z => z.popM || 1);
+  let somme = 0, tot = 0;
+  s.zones.forEach((z, i) => {
+    const src = z.anemia ? z : (paysParent(z) || z);
+    let v = fn(src);
+    if (typeof v !== 'number' || !isFinite(v)) v = 0;     // filet de sécurité
+    if (!src.anemia){
+      /* Dispersion district (stable) autour de la valeur nationale */
+      const r = rngFrom('anem|' + (z.iso || z.nom));
+      v = v * (1 + (r() - .5) * .16);
+    }
+    somme += v * (w[i] || 0); tot += (w[i] || 0);
+  });
+  return tot ? somme / tot : 0;
+}
+function anemiaData(s){
+  const poidsPop = s.zones.map(z => z.popM || 1);
+  const poidsAdm = s.zones.map(z => z.adm || 1);
+  return CATEGORIES_ANEMIE.map((c, i) => ({
+    cle: c.cle, nom: c.nom, court: c.court, sous: c.sous,
+    sev: rnd(wavgDerive(s, z => z.anemia[i][0], poidsPop), 1),
+    mod: rnd(wavgDerive(s, z => z.anemia[i][1], poidsPop), 1),
+    leg: rnd(wavgDerive(s, z => z.anemia[i][2], poidsPop), 1),
+    fer: Math.round(wavgDerive(s, z => z.iron, poidsAdm) * (1 + (i - 2) * .045))
+  }));
+}
+
+/** Funnel du dépistage CPN (consultations prénatales) dans NutriApp. */
+function funnelData(s){
+  const grossesses = Math.round(s.agg.popM * 1e6 * .029);   // ≈ 2,9 % de la population
+  const cpn1 = Math.round(grossesses * s.agg.cpn / 100);
+  const dep  = Math.round(cpn1 * .412);                     // 58,8 % des CPN1 non dépistées ⇒ gap 59 %
+  const fer  = Math.round(dep * s.agg.iron / 100);
+  const pp   = Math.round(fer * .641);
+  return [
+    { nom:'Grossesses attendues',   sous:'Projection démographique district', v: grossesses, c:'#7C3AED' },
+    { nom:'CPN1 enregistrées App',  sous:'Première consultation prénatale',   v: cpn1,       c:'#8B5CF6' },
+    { nom:'Dépistage anémie (Hb)',  sous:'Hémocue saisi en clinique mobile',  v: dep,        c:'#06B6D4' },
+    { nom:'Supplémentation fer/FA', sous:'Fer + acide folique délivrés',      v: fer,        c:'#10B981' },
+    { nom:'Suivi post-partum',      sous:'Visite 0-42 jours complétée',       v: pp,         c:'#F59E0B' }
+  ];
+}
+
+/** Répartition des canaux de dépistage (2018 → 2024), en % du total. */
+function channelsData(s){
+  const base = [
+    { nom:'CPN',                 vals:[46,43,40,36,32,29,26], c:'#7C3AED' },
+    { nom:'Pédiatrie / FS',      vals:[32,30,27,24,21,18,15], c:'#06B6D4' },
+    { nom:'PB communautaire',    vals:[18,22,26,30,33,35,37], c:'#10B981' },
+    { nom:'Auto-dépistage mobile', vals:[4,5,7,10,14,18,22],  c:'#F59E0B' }
+  ];
+  const r = rngFrom('chan|' + (s.global ? 'REG' : s.pays.iso));
+  const urbain = s.global ? 27 : s.pays.densite;
+  const biaisAuto = urbain / 27;                 // l'auto-dépistage progresse plus vite en milieu urbain
+  const out = base.map((b, i) => ({
+    nom: b.nom, c: b.c,
+    vals: b.vals.map(v => {
+      const j = 1 + (r() - .5) * (s.global ? .03 : .09);
+      return Math.max(1, v * j * (i === 3 ? clamp(biaisAuto, .55, 1.7) : 1));
+    })
+  }));
+  /* Normalisation : chaque année doit totaliser exactement 100 % */
+  for (let y = 0; y < 7; y++){
+    const tot = out.reduce((s2, o) => s2 + o.vals[y], 0);
+    out.forEach(o => { o.vals[y] = rnd(o.vals[y] / tot * 100, 1); });
+  }
+  return { series: out, annees: [2018,2019,2020,2021,2022,2023,2024] };
+}
+
+/** Comorbidités & MNT enregistrées dans l'App (cas cumulés 12 mois). */
+function comorbiditesData(s){
+  const f = s.global ? 1 : s.agg.adm / TOTAL_ADM * 16;    // mise à l'échelle du périmètre
+  const r = rngFrom('como|' + (s.global ? 'REG' : s.pays.iso));
+  const w = (v) => clamp(v * (1 + (r() - .5) * (s.global ? .02 : .14)), .2, 4);
+  const items = [
+    { nom:'Hypertension artérielle (sel > 9 g/j)', v: Math.round(205000 * f * w(s.agg.hta / 27.8)),  c:'#7C3AED', grp:'MNT' },
+    { nom:'Diabète de type 2',                     v: Math.round(132000 * f * w(s.agg.diab / 6.1)),  c:'#8B5CF6', grp:'MNT' },
+    { nom:'Obésité morbide (IMC ≥ 35)',            v: Math.round(88000  * f * w(s.agg.obes / 14.2)), c:'#A855F7', grp:'MNT' },
+    { nom:'Surpoids adulte (IMC 25-29,9)',         v: Math.round(164000 * f * w(s.agg.obes / 14.2)), c:'#C4B5FD', grp:'MNT' },
+    { nom:'Dyslipidémie / risque cardiovasculaire',v: Math.round(74000  * f * w(s.agg.hta / 27.8)),  c:'#6D28D9', grp:'MNT' },
+    { nom:'Malnutrition aiguë sévère (MAS)',       v: Math.round(s.agg.adm * .19),                   c:'#06B6D4', grp:'Aiguë' },
+    { nom:'Malnutrition aiguë modérée (MAM)',      v: Math.round(s.agg.adm * .62),                   c:'#22D3EE', grp:'Aiguë' },
+    { nom:'Retard de croissance (chronique)',      v: Math.round(s.agg.adm * 1.15 * w(s.agg.retard / 32)), c:'#0891B2', grp:'Chronique' },
+    { nom:'Anémie ferriprive',                     v: Math.round(s.agg.adm * .88 * w((100 - s.agg.iron) / 50)), c:'#67E8F9', grp:'Carences' },
+    { nom:'Paludisme (comorbidité nutritionnelle)',v: Math.round(s.agg.adm * .42 * w(1.1)),          c:'#F59E0B', grp:'Infectieuse' },
+    { nom:'Diarrhée aiguë / maladies hydriques',   v: Math.round(s.agg.adm * .31),                   c:'#FBBF24', grp:'Infectieuse' },
+    { nom:'Infections respiratoires aiguës',       v: Math.round(s.agg.adm * .24),                   c:'#FCD34D', grp:'Infectieuse' },
+    { nom:'Carence en vitamine A',                 v: Math.round(s.agg.adm * .27 * w(1.2)),          c:'#10B981', grp:'Carences' },
+    { nom:'Goitre / carence en iode',              v: Math.round(s.agg.adm * .09),                   c:'#34D399', grp:'Carences' },
+    { nom:'Troubles rénaux (HTA / diabète)',       v: Math.round(s.agg.adm * .07 * w(s.agg.hta/27.8)), c:'#DDD6FE', grp:'MNT' }
+  ];
+  const total = items.reduce((a, b) => a + b.v, 0);
+  return { items, total };
+}
+
+/** Dumbbell : évolution 2015 → 2024 des quatre marqueurs du double fardeau. */
+function dumbbellData(s){
+  const r = rngFrom('dumb|' + (s.global ? 'REG' : s.pays.iso));
+  const j = amp => 1 + (r() - .5) * amp;
+  const g = s.global;
+  return [
+    { nom:'Hypertension liée au sel',   court:'HTA / sel',     v2015: rnd((g?21.4:s.pays.hta*.72) * j(.03),1), v2024: s.agg.hta,   unite:'%', bon:'down', c:'#EF4444' },
+    { nom:'Diabète de type 2',          court:'Diabète T2',    v2015: rnd((g?4.1 :s.pays.diab*.63) * j(.05),1), v2024: s.agg.diab, unite:'%', bon:'down', c:'#7C3AED' },
+    { nom:'Surpoids & obésité adulte',  court:'Obésité',       v2015: rnd((g?11.8:s.pays.obes*.82) * j(.04),1), v2024: s.agg.obes,  unite:'%', bon:'down', c:'#F59E0B' },
+    { nom:'Malnutrition chronique',     court:'Retard',        v2015: rnd((g?39.5:s.pays.retard*1.18) * j(.04),1), v2024: s.agg.retard, unite:'%', bon:'down', c:'#06B6D4' }
+  ];
+}
+
+/** Segments du « double fardeau » pour le stacked bar 100 %. */
+const SEGMENTS_FARDEAU = [
+  { cle:'mas',    nom:'MAS (aiguë sévère)',        c:'#EF4444', famille:'Sous-nutrition' },
+  { cle:'mam',    nom:'MAM (aiguë modérée)',       c:'#F59E0B', famille:'Sous-nutrition' },
+  { cle:'retard', nom:'Retard de croissance',      c:'#FBBF24', famille:'Sous-nutrition' },
+  { cle:'sp',     nom:'Surpoids adulte',           c:'#A855F7', famille:'Sur-nutrition / MNT' },
+  { cle:'obes',   nom:'Obésité',                   c:'#7C3AED', famille:'Sur-nutrition / MNT' },
+  { cle:'hta',    nom:'Risque hypertensif (sel)',  c:'#06B6D4', famille:'Sur-nutrition / MNT' }
+];
+function burdenRows(s){
+  return s.zones.map(z => {
+    const sp = rnd(z.obes * .46, 2);                       // part du surpoids dans l'obésité élargie
+    const obesite = rnd(z.obes - sp, 2);
+    const vals = { mas: z.mas, mam: z.mam, retard: z.retard, sp, obes: obesite, hta: z.hta };
+    const tot = SEGMENTS_FARDEAU.reduce((a, sg) => a + vals[sg.cle], 0);
+    const pct = {}; SEGMENTS_FARDEAU.forEach(sg => pct[sg.cle] = rnd(vals[sg.cle] / tot * 100, 2));
+    /* Indice de double fardeau : coexistence retard de croissance + sur-nutrition */
+    const sous = vals.mas + vals.mam + vals.retard;
+    const sur = vals.sp + vals.obes + vals.hta;
+    return { nom: z.nom, drapeau: z.drapeau || '', pays: z.pays || '',
+             adm: z.adm, vals, pct, tot, indice: rnd(Math.min(sous, sur) / (sous + sur) * 200, 1) };
+  });
+}
+
+/** Huit indicateurs clés de la matrice de performance (graphique 4). */
+const INDICATEURS_MATRICE = [
+  { cle:'cure',     nom:'Guérison',        desc:'Taux de guérison CRENAS/CRENAM',        min:55, max:92, inv:false, unite:'%' },
+  { cle:'aban',     nom:'Abandon',         desc:'Taux d\'abandon avant la fin du protocole', min:2,  max:26, inv:true,  unite:'%' },
+  { cle:'stockD',   nom:'Stock ATPE',      desc:'Couverture médiane en jours de stock',  min:15, max:85, inv:false, unite:' j' },
+  { cle:'cpn',      nom:'Dépistage CPN',   desc:'Couverture des consultations prénatales', min:35, max:92, inv:false, unite:'%' },
+  { cle:'sync',     nom:'Synchro 24 h',    desc:'Fiches synchronisées dans les 24 heures', min:45, max:96, inv:false, unite:'%' },
+  { cle:'complete', nom:'Complétude',      desc:'Champs obligatoires renseignés',        min:60, max:98, inv:false, unite:'%' },
+  { cle:'iron',     nom:'Fer / folates',   desc:'Couverture de la supplémentation',      min:25, max:80, inv:false, unite:'%' },
+  { cle:'score',    nom:'Score composite', desc:'Score global NutriApp (cible 70)',      min:40, max:92, inv:false, unite:'' }
+];
+/** Valeur d'un indicateur pour une zone (calculée à la volée si nécessaire). */
+function valeurIndicateur(z, ind){
+  if (z[ind.cle] !== undefined) return z[ind.cle];
+  const r = rngFrom('ind|' + (z.iso || z.nom) + '|' + ind.cle);
+  if (ind.cle === 'observance') return rnd(clamp(z.cure * .92 + r() * 8, 40, 99), 1);
+  if (ind.cle === 'depistage')  return rnd(clamp(z.cpn || 55, 20, 98), 1);
+  return rnd(clamp(z.score || 60, 20, 99), 1);
+}
+/** Normalisation 0 → 1 d'un indicateur (avec inversion si « plus bas = mieux »). */
+function normalise(v, ind){
+  const t = clamp((v - ind.min) / (ind.max - ind.min), 0, 1);
+  return ind.inv ? 1 - t : t;
+}
+/** Couleur conditionnelle associée à une performance normalisée. */
+function couleurPerformance(t){ return ramp(RAMP_TRAFFIC, t); }
+/** Statut textuel d'une performance normalisée (0 → 1). */
+function statutPerformance(t){
+  if (t < .35) return { txt:'Critique',      cls:'crit', c:C.danger };
+  if (t < .60) return { txt:'Insuffisant',   cls:'warn', c:C.quaternary };
+  if (t < .80) return { txt:'Proche cible',  cls:'warn', c:'#D97706' };
+  return { txt:'Performant', cls:'ok', c:C.tertiary };
+}
+
+/** Trois métriques de qualité de la donnée (section Synchro). */
+function qualityRows(s){
+  return s.zones.map(z => ({
+    nom: z.nom, drapeau: z.drapeau || '', pays: z.pays || '',
+    complete: z.complete !== undefined ? z.complete : rnd(z.sync * 1.12, 1),
+    sync: z.sync, score: z.score,
+    syncS: z.syncS || serieDistrictSync(z),
+    compS: z.compS || serieCompletude(z.nom, z.complete || 80, 'compd|' + (z.iso || z.nom)),
+    admS: z.admS || serieDistrictAdm(z)
+  }));
+}

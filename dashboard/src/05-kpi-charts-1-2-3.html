@@ -1,0 +1,623 @@
+
+/* ════════════════════════════════════════════════════════════════════════
+   §7 — KPI CARDS DYNAMIQUES (adaptatives région / pays)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Construit la définition des 5 KPI en fonction du périmètre actif.
+ * En vue globale : agglomérats régionaux CEDEAO + Mauritanie.
+ * En vue pays    : valeurs du pays + badge de comparaison à la région.
+ */
+function buildKpis(s){
+  const g = s.global, a = s.agg, ref = s.ref;
+  /* Nom affiché dans les libellés : « Afrique de l'Ouest » ou le pays choisi */
+  const nomScope = s.nomScope;
+  const moisAdm = a.admS.m2025, moisAdm24 = a.admS.m2024;
+  const picSoudure = moisAdm[7];                              // août = pic de soudure
+  const moyenne = moisAdm.reduce((x, y) => x + y, 0) / 12;
+  const syncMois = a.syncS.slice(-12);
+  const evolSync = syncMois[11] - syncMois[0];
+  const ruptPct = a.stk / Math.max(1, a.pts) * 100;
+  const moisLib = MOIS_COURTS[11];                            // dernier mois synchronisé
+
+  /* ── Badge du KPI 1 : deux évolutions RÉELLEMENT calculées ─────────────
+     • « vs 2024 »     = campagne 2025 comparée à la campagne 2024
+                         → +12 % au niveau régional (référence programme) ;
+     • « Pic soudure » = pic d'août comparé à la moyenne mensuelle annuelle
+                         → +67/+68 % au niveau régional.
+     La comparaison porte sur les totaux annuels (et non sur un mois isolé) :
+     elle est stable et ne dépend pas du bruit de saisie du dernier mois.
+     En vue pays, les deux valeurs reflètent la saisonnalité du pays choisi. */
+  const mCourant = moisAdm[11], mPrecedent = moisAdm[10];
+  const total2025 = moisAdm.reduce((x, y) => x + y, 0);
+  const total2024 = moisAdm24.reduce((x, y) => x + y, 0);
+  const deltaAnnuel = pctChange(total2025, total2024);         // +12 % (région)
+  const deltaMois   = pctChange(mCourant, mPrecedent);         // déc. vs nov.
+  const ecartPic    = pctChange(picSoudure, moyenne);          // +67 % (région)
+
+  /* Obésité : référence 2023 restituée par le facteur documenté (cf. §5) */
+  const obes2023 = a.obes * FACTEUR_OBESITE_2023;
+  const deltaObes = a.obes - obes2023;                         // ≈ +2,4 pts (région)
+
+  return [
+    /* ── KPI 1 · Admissions CRENAS saisies dans NutriApp ─────────────── */
+    { id:'adm', accent:'#7C3AED', ico:'🏥',
+      label: g ? 'Admissions CRENAS · NutriApp' : 'Admissions CRENAS · ' + nomScope,
+      val: nf(a.adm), unite:'enfants',
+      sub: "Enfants dépistés & pris en charge via l'application mobile",
+      badge: { up: deltaAnnuel >= 0 ? '↑' : '↓',
+               txt:' ' + signe(deltaAnnuel, 0, ' %') + ' vs 2024',
+               txt2:' · Pic soudure ' + signe(ecartPic, 0, ' %'), spark: moisAdm, c:'#7C3AED' },
+      /* Ligne de contexte : dernier mois synchronisé. Le badge porte, lui, sur
+         la campagne annuelle (total 2025 vs total 2024) : les deux lectures se
+         complètent sans jamais se contredire. */
+      delta: g
+        ? { l: moisLib + '. 2025 : ', v: nf(mCourant),
+            s:' admissions · ' + signe(deltaMois, 0, ' %') + ' vs nov.' }
+        : { l:'Part régionale : ', v: aff(a.adm / ref.adm * 100, 1) + ' %',
+            s:' · ' + moisLib + '. : ' + nf(mCourant) + ' (' + signe(deltaMois, 0, ' %') + ')' } },
+
+    /* ── KPI 2 · Prévalence de l'obésité adulte (double fardeau) ─────── */
+    { id:'obes', accent:'#F59E0B', ico:'⚖️',
+      label: g ? 'Obésité adulte (double fardeau)' : 'Obésité adulte · ' + nomScope,
+      val: rnd(a.obes, 1), unite:'%',
+      sub:'Surpoids & obésité urbaine · données enquêtes ménages NutriApp',
+      badge: { up: deltaObes >= 0 ? '↑' : '↓',
+               txt:' ' + signe(deltaObes, 1, ' pts') + ' vs 2023',
+               txt2:' · coexistence sous-/sur-nutrition', c:'#F59E0B' },
+      delta: { l:'2023 : ', v: aff(obes2023, 1) + ' %',
+               s:' · urbain ' + aff(a.obes * 1.28, 1) + ' % / rural ' + aff(a.obes * .71, 1) + ' %' +
+                 (g ? '' : ' · ' + signe(a.obes - ref.obes, 1, ' pts') + ' vs région') } },
+
+    /* ── KPI 3 · Hypertension liée à la consommation excessive de sel ── */
+    { id:'hta', accent:'#EF4444', ico:'🩸',
+      label: g ? 'Hypertension liée au sel' : 'Hypertension · ' + nomScope,
+      val: rnd(a.hta, 1), unite:'%',
+      sub:'Adultes hypertendus identifiés · consommation moyenne de sel ' + aff(a.sel, 1) + ' g/j (> 9 g)',
+      badge: { warn:'⚠', txt:' Risque cardiovasculaire élevé', c:'#EF4444', pulse:false },
+      delta: { l:'Sel moyen : ', v: aff(a.sel, 1) + ' g/j',
+               s:' · cible OMS 5 g/j' + (g ? '' : ' · ' + signe(a.hta - ref.hta, 1, ' pts') + ' vs région') } },
+
+    /* ── KPI 4 · Structures en rupture ATPE (inventaire NutriApp) ────── */
+    { id:'stk', accent:'#EF4444', ico:'💊',
+      label: g ? 'Structures en rupture ATPE' : 'Ruptures ATPE · ' + nomScope,
+      val: nf(a.stk), unite:'structures',
+      sub:'Sur ' + nf(a.pts) + ' points de distribution suivis dans l\'App (' + aff(ruptPct, 1) + ' %)',
+      badge: { warn:'⚠', txt:' URGENT RÉAPPRO', c:'#EF4444', pulse:true },
+      delta: g ? { l:'Couverture médiane : ', v: a.stockD + ' j', s:' · seuil critique 30 j' }
+               : { l:'Couverture médiane : ', v: a.stockD + ' j', s:' · ' + (a.stockD < 30 ? 'sous seuil' : 'au-dessus du seuil') } },
+
+    /* ── KPI 5 · Taux de synchronisation NutriApp terrain ────────────── */
+    { id:'sync', accent:'#06B6D4', ico:'📡',
+      label: g ? 'Synchro NutriApp terrain' : 'Synchro · ' + nomScope,
+      val: Math.round(a.sync), unite:'%',
+      sub:'Fiches d\'enquêtes synchronisées dans les 24 h',
+      badge: { net:'◉', txt:' Réseau actif ' + (g ? '16 pays' : s.pays.districts.length + ' districts'), c:'#06B6D4',
+               spark: syncMois },
+      delta: { l:'Tendance 12 mois : ', v: signe(evolSync, 1, ' pts'),
+               s:' · complétude ' + aff(a.complete, 0) + ' %' +
+                   (g ? '' : ' · ' + signe(a.sync - ref.sync, 1, ' pts') + ' vs région') } }
+  ];
+}
+
+/** Injecte les 5 cartes KPI dans le DOM et anime compteurs + sparklines. */
+function renderKpis(s){
+  const grid = document.getElementById('kpiGrid');
+  const defs = buildKpis(s);
+  grid.innerHTML = defs.map(k => {
+    const accentSoft = rgba(k.accent, .10), accentLine = rgba(k.accent, .24);
+    const deep = mixHex(k.accent, '#0F172A', .28);
+    const b = k.badge;
+    return '' +
+    '<article class="kpi" data-kpi="' + k.id + '" style="--accent:' + k.accent + ';--accent-soft:' + accentSoft +
+      ';--accent-line:' + accentLine + ';--accent-deep:' + deep + '">' +
+      '<canvas class="bg-spark" data-sparkbg="' + k.id + '" aria-hidden="true"></canvas>' +
+      '<div class="kpi-top">' +
+        '<span class="kpi-ico" aria-hidden="true">' + k.ico + '</span>' +
+        '<span class="kpi-label">' + k.label + '</span>' +
+      '</div>' +
+      '<div class="kpi-val"><span class="kpi-num" data-num="' + (typeof k.val === 'number' ? k.val : k.val) + '">' +
+        (REDUCED ? k.val : (typeof k.val === 'number' ? 0 : k.val)) + '</span>' +
+        (k.unite ? '<span class="kpi-unit">' + k.unite + '</span>' : '') + '</div>' +
+      '<p class="kpi-sub">' + k.sub + '</p>' +
+      '<div class="kpi-badge' + (b.pulse ? ' pulse' : '') + '">' +
+        (b.spark ? '<canvas data-sparkbadge="' + k.id + '" aria-hidden="true"></canvas>' : '') +
+        '<span>' + (b.up || b.warn || b.net || '') + (b.txt || '') + (b.txt2 ? '<span style="opacity:.72;font-weight:600">' + b.txt2 + '</span>' : '') + '</span>' +
+      '</div>' +
+      (k.delta ? '<div class="kpi-delta"><span>' + k.delta.l + '</span><b>' + k.delta.v + '</b><span>' + k.delta.s + '</span></div>' : '') +
+    '</article>';
+  }).join('');
+
+  /* Animation du compteur numérique (38px/800) sur 800 ms */
+  defs.forEach(k => {
+    const el = grid.querySelector('[data-kpi="' + k.id + '"] .kpi-num');
+    if (!el || typeof k.val !== 'number') return;
+    const cible = k.val, decimals = (String(cible).indexOf('.') >= 0) ? 1 : 0;
+    if (REDUCED){ el.textContent = nf(cible, decimals); return; }
+    const t0 = performance.now();
+    const step = now => {
+      const p = Math.min(1, (now - t0) / ANIM_MS);
+      el.textContent = nf(cible * easeOutCubic(p), decimals);
+      if (p < 1) requestAnimationFrame(step); else el.textContent = nf(cible, decimals);
+    };
+    requestAnimationFrame(step);
+    /* Attribut data-num : valeur cible pour re-jeu ultérieur */
+    el.setAttribute('data-num', cible);
+    el.setAttribute('data-dec', decimals);
+  });
+
+  /* Sparklines de fond + de badge (mini canvas décoratifs) */
+  defs.forEach(k => {
+    const bg = grid.querySelector('[data-sparkbg="' + k.id + '"]');
+    if (bg) drawKpiSparkline(bg, k.badge.spark || (k.id === 'obes' ? [k.val * .82, k.val * .86, k.val * .9, k.val * .93, k.val * .96, k.val] : null), k.accent, true);
+    const bd = grid.querySelector('[data-sparkbadge="' + k.id + '"]');
+    if (bd && k.badge.spark) drawKpiSparkline(bd, k.badge.spark, k.accent, false);
+  });
+}
+
+/**
+ * Sparkline minimaliste (décorative) : courbe lisse + aire dégradée.
+ * @param {boolean} decor  true = sparkline de fond de carte (haute, estompée)
+ */
+function drawKpiSparkline(cv, data, color, decor){
+  if (!cv || !data || !data.length) return;
+  const r = cv.getBoundingClientRect();
+  if (r.width < 4) return;
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  cv.width = Math.round(r.width * dpr); cv.height = Math.round(r.height * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, r.width, r.height);
+  const W = r.width, H = r.height, pad = decor ? 3 : 2;
+  const min = Math.min.apply(null, data), max = Math.max.apply(null, data);
+  const span = (max - min) || 1;
+  const pts = data.map((v, i) => ({
+    x: pad + i / (data.length - 1) * (W - pad * 2),
+    y: pad + (1 - (v - min) / span) * (H - pad * 2)
+  }));
+  areaPath(ctx, pts, H, color, decor ? .34 : .30, 0);
+  linePath(ctx, pts, color, decor ? 1.8 : 1.3);
+  if (decor){
+    /* Point final : dernier mois synchronisé */
+    const l = pts[pts.length - 1];
+    ctx.beginPath(); ctx.arc(l.x, l.y, 2.6, 0, Math.PI * 2);
+    ctx.fillStyle = color; ctx.fill();
+  }
+}
+
+/** Bandeau de contexte du périmètre (chiffres clés + badge de comparaison). */
+function renderScopeBar(s){
+  const el = document.getElementById('scopeBar');
+  const a = s.agg;
+  const zones = s.zones.length;
+  const chips = s.global
+    ? [
+        { c:'', t:'Pays suivis', v:'16' },
+        { c:'cyan', t:'Districts sanitaires', v: nf(NB_DISTRICTS) },
+        { c:'green', t:'Agents connectés', v: nf(TOTAL_AGENTS) },
+        { c:'', t:'Admissions 12 m', v: nf(a.adm) },
+        { c:'amber', t:'Guérison', v: a.cure + ' %' },
+        { c:'red', t:'Ruptures ATPE', v: a.stk }
+      ]
+    : [
+        { c:'', t:'Région', v: s.pays.region },
+        { c:'cyan', t:'Districts / provinces', v: zones },
+        { c:'green', t:'Points ATPE', v: nf(a.pts) },
+        { c:'', t:'Admissions 12 m', v: nf(a.adm) },
+        { c: a.cure >= 75 ? 'green' : 'amber', t:'Guérison', v: a.cure + ' %' },
+        { c: a.sync >= 70 ? 'green' : 'red', t:'Synchro 24 h', v: aff(a.sync, 0) + ' %' }
+      ];
+  el.innerHTML =
+    '<span class="scope-ico" aria-hidden="true">' + (s.global ? '🌍' : s.pays.drapeau) + '</span>' +
+    '<span class="scope-txt"><h3>' + (s.global ? "Périmètre régional — Afrique de l'Ouest (CEDEAO + Mauritanie)"
+                                                : 'Périmètre national — ' + s.pays.nom) + '</h3>' +
+    '<p>' + s.sousTitre + (s.global ? '' : ' · comparaison automatique à la moyenne régionale') + '</p></span>' +
+    '<span class="scope-chips">' + chips.map(c =>
+      '<span class="chip ' + c.c + '">' + c.t + ' <b>' + c.v + '</b></span>').join('') + '</span>';
+
+  /* Encart de télémétrie dans la sidebar */
+  const pct = Math.round(a.sync);
+  document.getElementById('sbCardBar').style.width = pct + '%';
+  document.getElementById('sbCardPct').textContent = pct + ' %';
+  document.getElementById('sbCardTxt').textContent = nf(a.pts) + ' points de distribution · ' + nf(a.agents) + ' agents connectés';
+  document.getElementById('footStamp').textContent = 'Extraction : ' +
+    new Date().toLocaleDateString('fr-FR', { day:'2-digit', month:'long', year:'numeric' }) +
+    ' · ' + new Date().toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   §8 — GRAPHIQUES CANVAS (1 à 15)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Tronque une série à une progression donnée (0 → 1) pour l'animation
+ * d'entrée « progressive » : on révèle les points un par un, le dernier
+ * étant interpolé pour éviter tout saut visuel.
+ */
+function partialPoints(pts, prog){
+  if (prog >= 1 || pts.length < 2) return pts.slice();
+  const exact = (pts.length - 1) * prog;
+  const n = Math.floor(exact);
+  const frac = exact - n;
+  const out = pts.slice(0, n + 1);
+  if (n < pts.length - 1 && frac > 0){
+    out.push({ x: lerp(pts[n].x, pts[n+1].x, frac), y: lerp(pts[n].y, pts[n+1].y, frac), i: n + 1, partiel: true });
+  }
+  return out;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 1 · Dual Area Chart — Admissions CRENAS (24 mois)
+   Comparaison 2025 (violet dégradé) vs 2024 (gris) + bande de soudure ambre.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawAdmissions(ctx, W, H, prog, hover, s){
+  const pad = { l: 60, r: 22, t: 26, b: 46 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const m25 = s.agg.admS.m2025, m24 = s.agg.admS.m2024;
+  const maxV = Math.max.apply(null, m25.concat(m24));
+  const sc = niceTicks(0, maxV * 1.14, 5);
+  const X = i => pad.l + i / 11 * plotW;
+  /* L'échelle s'aligne sur les graduations arrondies (sc.min/sc.max) :
+     aucun tick ne peut alors sortir de la zone de tracé. */
+  const Y = v => pad.t + plotH - (v - sc.min) / (sc.max - sc.min || 1) * plotH;
+
+  /* ── Bandeau de la période de soudure (juin → septembre 2025) ───────── */
+  const xS1 = X(5), xS2 = X(8);
+  ctx.save();
+  const gS = ctx.createLinearGradient(0, pad.t, 0, pad.t + plotH);
+  gS.addColorStop(0, 'rgba(245,158,11,.20)'); gS.addColorStop(1, 'rgba(245,158,11,.05)');
+  ctx.fillStyle = gS;
+  ctx.globalAlpha = prog;
+  ctx.fillRect(xS1, pad.t, xS2 - xS1, plotH);
+  /* Hachures diagonales discrètes */
+  ctx.beginPath();
+  ctx.rect(xS1, pad.t, xS2 - xS1, plotH); ctx.clip();
+  ctx.strokeStyle = 'rgba(245,158,11,.20)'; ctx.lineWidth = 1;
+  for (let x = xS1 - plotH; x < xS2; x += 9){
+    ctx.beginPath(); ctx.moveTo(x, pad.t + plotH); ctx.lineTo(x + plotH, pad.t); ctx.stroke();
+  }
+  ctx.restore();
+  /* Libellé du bandeau */
+  ctx.save();
+  ctx.globalAlpha = prog;
+  ctx.font = '700 10px Inter, sans-serif'; ctx.textAlign = 'center';
+  ctx.fillStyle = '#B45309';
+  ctx.fillText('PÉRIODE DE SOUDURE', (xS1 + xS2) / 2, pad.t - 9);
+  ctx.restore();
+
+  /* ── Grille + axes ──────────────────────────────────────────────────── */
+  drawFrame({ ctx, W, H, pad, ticks: sc.ticks, min: sc.min, max: sc.max,
+              yFmt: v => nfc(v), dashGrid: true,
+              xLabels: [0,2,4,5,6,7,8,9,11].map(i => ({ x: X(i), text: monthShort(i) })) });
+
+  const pts24 = m24.map((v, i) => ({ x: X(i), y: Y(v), v, i }));
+  const pts25 = m25.map((v, i) => ({ x: X(i), y: Y(v), v, i }));
+
+  /* ── Série 2024 (gris) : courbe + aire très estompée ───────────────── */
+  const p24 = partialPoints(pts24, prog);
+  areaPath(ctx, p24, pad.t + plotH, '#94A3B8', .13, 0);
+  linePath(ctx, p24, '#CBD5E1', 2, false);
+
+  /* ── Série 2025 (violet dégradé) : courbe principale ───────────────── */
+  const p25 = partialPoints(pts25, prog);
+  areaPath(ctx, p25, pad.t + plotH, '#7C3AED', .34, 0);
+  linePath(ctx, p25, '#7C3AED', 2.8, true);
+
+  /* Point final mis en avant (dernier mois synchronisé) */
+  if (prog > .96){
+    const l = pts25[11];
+    ctx.save();
+    ctx.beginPath(); ctx.arc(l.x, l.y, 6.5, 0, Math.PI * 2);
+    ctx.fillStyle = rgba('#7C3AED', .18); ctx.fill();
+    ctx.beginPath(); ctx.arc(l.x, l.y, 3.6, 0, Math.PI * 2);
+    ctx.fillStyle = '#7C3AED'; ctx.fill();
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.8; ctx.stroke();
+    /* Étiquette de valeur */
+    const txt = nf(l.v);
+    ctx.font = '800 11px Inter, sans-serif';
+    const tw = ctx.measureText(txt).width + 12;
+    fillRR(ctx, l.x - tw - 4, l.y - 9, tw, 18, 6, '#7C3AED');
+    ctx.fillStyle = '#fff'; ctx.textAlign = 'center'; ctx.fillText(txt, l.x - tw/2 - 4, l.y + 4);
+    ctx.restore();
+  }
+
+  /* ── Survol : crosshair vertical + points de lecture ───────────────── */
+  const hits = [];
+  for (let i = 0; i < 12; i++){
+    const colW = plotW / 11;
+    hits.push({
+      id: 'm' + i, type: 'rect', x: X(i) - colW/2, y: pad.t, w: colW, h: plotH,
+      tip: {
+        title: MOIS_LONGS[i] + ' 2025', sub: s.nomScope, color: '#7C3AED',
+        rows: [
+          { c:'#7C3AED', k:'Admissions 2025', v: nf(m25[i]) },
+          { c:'#CBD5E1', k:'Admissions 2024', v: nf(m24[i]),
+            d:(m25[i] >= m24[i] ? '+' : '−') + Math.abs(rnd(pctChange(m25[i], m24[i], 1), 1)) + ' %',
+            dc: m25[i] >= m24[i] ? 'up' : 'down' },
+          { c:'transparent', k:'Écart vs moyenne 2025',
+            v:(m25[i] >= moyenne12(m25) ? '+' : '−') + nf(Math.abs(m25[i] - moyenne12(m25))) ,
+            d: SOUDURE_MONTHS.indexOf(i) >= 0 ? 'soudure' : '', dc:'flat' }
+        ],
+        note: SOUDURE_MONTHS.indexOf(i) >= 0
+          ? '⚠ Mois de soudure agro-pastorale : pic des admissions MAS/MAM et de la pression sur les stocks ATPE.'
+          : 'Fiches synchronisées par les ASC (module Admission CRENAS).'
+      }
+    });
+  }
+  if (hover && hover.id && hover.id[0] === 'm'){
+    const i = +hover.id.slice(1);
+    ctx.save();
+    ctx.beginPath(); ctx.setLineDash([4,4]);
+    ctx.moveTo(X(i), pad.t); ctx.lineTo(X(i), pad.t + plotH);
+    ctx.strokeStyle = rgba('#7C3AED', .55); ctx.lineWidth = 1.4; ctx.stroke();
+    ctx.setLineDash([]);
+    [[pts25[i], '#7C3AED'], [pts24[i], '#94A3B8']].forEach(pair => {
+      ctx.beginPath(); ctx.arc(pair[0].x, pair[0].y, 5.6, 0, Math.PI*2);
+      ctx.fillStyle = '#fff'; ctx.fill();
+      ctx.lineWidth = 2.6; ctx.strokeStyle = pair[1]; ctx.stroke();
+    });
+    ctx.restore();
+  }
+  watermark(ctx, W, H, 'NutriApp · admissions CRENAS/CRENAM');
+  return { hits };
+}
+/** Moyenne d'un tableau (utilisée par le tooltip du graphique 1). */
+function moyenne12(arr){ return arr.reduce((a, b) => a + b, 0) / arr.length; }
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 2 · Scatter 4 quadrants — Performance des prises en charge
+   Corrélation guérison (%) × abandon (%) · seuils Sphère 75 % / 15 %.
+   Taille des bulles = volume d'admissions terrain.
+   ───────────────────────────────────────────────────────────────────────── */
+function drawScatterSphered(ctx, W, H, prog, hover, s){
+  const pad = { l: 46, r: 16, t: 20, b: 44 };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const zones = s.zones;
+  const xBrut = Math.max(24, Math.ceil(Math.max.apply(null, zones.map(z => z.aban)) / 5) * 5 + 2);
+  const yBas  = Math.max(40, Math.floor(Math.min.apply(null, zones.map(z => z.cure)) / 10) * 10 - 5);
+  const yHaut = Math.min(100, Math.ceil(Math.max.apply(null, zones.map(z => z.cure)) / 5) * 5 + 4);
+  /* Graduations « nice » puis échelle alignée sur ces graduations :
+     c'est ce qui garantit que les ticks restent dans la zone de tracé. */
+  const sx = niceTicks(0, xBrut, 5), sy = niceTicks(yBas, yHaut, 5);
+  const X = v => pad.l + (v - sx.min) / (sx.max - sx.min || 1) * plotW;
+  const Y = v => pad.t + plotH - (v - sy.min) / (sy.max - sy.min || 1) * plotH;
+
+  /* ── Teintes de quadrant (lecture immédiate de la conformité Sphère) ── */
+  const xS = X(15), yS = Y(75);
+  ctx.save();
+  ctx.globalAlpha = .5 * prog;
+  ctx.fillStyle = 'rgba(16,185,129,.09)';   ctx.fillRect(xS, pad.t, pad.l + plotW - xS, yS - pad.t);      // conforme
+  ctx.fillStyle = 'rgba(245,158,11,.10)';   ctx.fillRect(pad.l, pad.t, xS - pad.l, yS - pad.t);           // abandon ok, guérison faible
+  ctx.fillStyle = 'rgba(239,68,68,.08)';    ctx.fillRect(pad.l, yS, plotW, pad.t + plotH - yS);           // sous-performance
+  ctx.restore();
+
+  /* Grille légère + axes (libellés filtrés s'ils sortent du canvas) */
+  ctx.save();
+  ctx.font = '500 11px Inter, sans-serif'; ctx.fillStyle = C.muted2;
+  sx.ticks.forEach(t => {
+    const x = X(t);
+    if (x < pad.l - 1 || x > pad.l + plotW + 1) return;
+    ctx.beginPath(); ctx.moveTo(x, pad.t); ctx.lineTo(x, pad.t + plotH);
+    ctx.strokeStyle = C.gridSoft; ctx.lineWidth = 1; ctx.stroke();
+    if (x - 14 < 0 || x + 14 > W) return;                 // libellé hors canvas
+    ctx.textAlign = 'center'; ctx.fillText(t + ' %', x, pad.t + plotH + 19);
+  });
+  sy.ticks.forEach(t => {
+    const y = Y(t);
+    if (y < pad.t - 1 || y > pad.t + plotH + 1) return;
+    ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(pad.l + plotW, y);
+    ctx.strokeStyle = C.gridSoft; ctx.stroke();
+    if (y + 12 > H) return;
+    ctx.textAlign = 'right'; ctx.fillText(t + ' %', pad.l - 9, y + 3.5);
+  });
+  ctx.restore();
+
+  /* Axes + libellés */
+  ctx.save();
+  ctx.strokeStyle = '#DDD6FE'; ctx.lineWidth = 1.2;
+  ctx.beginPath(); ctx.moveTo(pad.l, pad.t + plotH); ctx.lineTo(pad.l + plotW, pad.t + plotH); ctx.stroke();
+  ctx.font = '600 10.5px Inter, sans-serif'; ctx.fillStyle = C.muted; ctx.textAlign = 'center';
+  ctx.fillText("Taux d'abandon (%) →", clamp(pad.l + plotW / 2, 70, W - 70), H - 6);
+  ctx.restore();
+  if (plotH > 150)   // titre d'axe vertical uniquement si la hauteur le permet
+    rotText(ctx, 'Guérison (%)', 13, pad.t + plotH / 2, -90, 'center', C.muted, '600 10.5px Inter, sans-serif');
+
+  /* Lignes de référence Sphère (75 % guérison / 15 % abandon) */
+  refLine(ctx, pad.l, yS, pad.l + plotW, yS, '#10B981', 'Sphère 75 %', { labelX: pad.l + 4, labelY: yS - 20 });
+  refLine(ctx, xS, pad.t, xS, pad.t + plotH, '#F59E0B', 'Sphère 15 %', { labelX: xS + 6, labelY: pad.t + plotH - 24 });
+
+  /* Étiquettes de quadrant */
+  ctx.save();
+  ctx.font = '700 9px Inter, sans-serif';
+  ctx.globalAlpha = .75 * prog;
+  ctx.fillStyle = '#047857'; ctx.textAlign = 'right';
+  ctx.fillText('CONFORME', pad.l + plotW - 8, pad.t + 14);
+  ctx.fillStyle = '#B45309'; ctx.textAlign = 'left';
+  ctx.fillText(plotW > 300 ? 'GUÉRISON INSUFFISANTE' : 'GUÉRISON < 75 %', pad.l + 8, pad.t + 14);
+  ctx.fillStyle = '#B91C1C'; ctx.textAlign = 'right';
+  ctx.fillText('SOUS-PERFORMANCE', pad.l + plotW - 8, pad.t + plotH - 10);
+  ctx.restore();
+
+  /* ── Bulles (apparition décalée pour une animation vivante) ────────── */
+  const maxAdm = Math.max.apply(null, zones.map(z => z.adm));
+  const minAdm = Math.min.apply(null, zones.map(z => z.adm));
+  const hits = [];
+  zones.forEach((z, i) => {
+    const delay = i / Math.max(1, zones.length) * .45;
+    const p = clamp((prog - delay) / (1 - delay), 0, 1);
+    const e = easeOutCubic(p);
+    const rad = (6 + Math.sqrt((z.adm - minAdm) / Math.max(1, maxAdm - minAdm)) * 20) * e;
+    const cx = lerp(X(15), X(z.aban), e), cy = lerp(Y(75), Y(z.cure), e);
+    const okSph = z.cure >= 75 && z.aban <= 15;
+    const col = okSph ? '#10B981' : (z.cure >= 70 && z.aban <= 20 ? '#F59E0B' : '#EF4444');
+    const isHover = hover && hover.id === 'z' + i;
+    ctx.save();
+    ctx.globalAlpha = isHover ? 1 : (hover ? .35 : .92);   // bulles voisines opacifiées à 35 %
+    /* Halo */
+    const g = ctx.createRadialGradient(cx, cy, rad * .2, cx, cy, rad * 2.1);
+    g.addColorStop(0, rgba(col, .30)); g.addColorStop(1, rgba(col, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(cx, cy, rad * 2.1, 0, Math.PI * 2); ctx.fill();
+    /* Bulle */
+    ctx.beginPath(); ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+    const gb = ctx.createLinearGradient(cx - rad, cy - rad, cx + rad, cy + rad);
+    gb.addColorStop(0, rgba(col, .92)); gb.addColorStop(1, rgba(mixHex(col, '#0F172A', .25), .92));
+    ctx.fillStyle = gb; ctx.fill();
+    ctx.lineWidth = isHover ? 2.6 : 1.4; ctx.strokeStyle = isHover ? '#fff' : rgba('#fff', .72); ctx.stroke();
+    /* Libellé des grosses bulles */
+    if (rad > 15 && e > .8){
+      ctx.font = '700 9.5px Inter, sans-serif'; ctx.textAlign = 'center'; ctx.fillStyle = '#fff';
+      ctx.fillText(trunc(z.nom, 9), cx, cy + 3.2);
+    }
+    ctx.restore();
+    hits.push({
+      id:'z' + i, type:'circle', x:cx, y:cy, r: Math.max(rad, 7),
+      tip:{ title: z.nom, sub: (z.pays ? z.pays + ' · district' : s.nomScope) + ' · ' + nf(z.adm) + ' admissions',
+            color: col,
+            rows:[
+              { c:'#10B981', k:'Taux de guérison', v: z.cure + ' %',
+                d: z.cure >= 75 ? 'Sphère ✓' : '−' + aff(75 - z.cure, 1) + ' pts', dc: z.cure >= 75 ? 'up' : 'down' },
+              { c:'#F59E0B', k:"Taux d'abandon", v: z.aban + ' %',
+                d: z.aban <= 15 ? 'Sphère ✓' : '+' + aff(z.aban - 15, 1) + ' pts', dc: z.aban <= 15 ? 'up' : 'down' },
+              { c:'#EF4444', k:'Taux de décès', v: z.deces + ' %', d: z.deces <= 3 ? 'ok' : 'élevé', dc: z.deces <= 3 ? 'up' : 'down' },
+              { c:'#7C3AED', k:'Volume admis (App)', v: nf(z.adm) },
+              { c:'#06B6D4', k:'Agents actifs', v: nf(z.agents || 0) }
+            ],
+            note: okSph ? '✓ Unité conforme aux standards Sphère (guérison ≥ 75 %, abandon ≤ 15 %).'
+                        : '⚠ Écart Sphère : plan d\'action recommandé (relances domicile, ration ATPE, supervision).'
+          }
+    });
+  });
+  watermark(ctx, W, H, 'Normes Sphère 2024 · NutriApp');
+  return { hits };
+}
+
+/* ─────────────────────────────────────────────────────────────────────────
+   GRAPHIQUE 3 · Bullet chart vertical — Stocks ATPE géolocalisés
+   Seuils : rupture < 15 j (rouge), alerte 15-30 j (ambre), sécurité 30-90 j
+   (vert), surstock > 90 j (cyan). Ligne rouge fixe à 30 jours.
+   ───────────────────────────────────────────────────────────────────────── */
+function bulletStockColor(j){
+  if (j < 15) return '#EF4444';
+  if (j < 30) return '#F59E0B';
+  if (j <= 90) return '#10B981';
+  return '#06B6D4';
+}
+function bulletStockStatut(j){
+  if (j < 15) return 'Rupture imminente';
+  if (j < 30) return 'Alerte réappro';
+  if (j <= 90) return 'Stock de sécurité';
+  return 'Surstock (rotation lente)';
+}
+/** Jours de couverture théorique (commandes en cours incluses), déterministe. */
+function couvertureTheorique(z){
+  const r = rngFrom('lead|' + (z.iso || z.nom));
+  return Math.round(z.stockD + 22 + r() * 58);
+}
+function drawBulletStock(ctx, W, H, prog, hover, s, opts){
+  opts = opts || {};
+  const compact = !!opts.compact;
+  const zones = s.zones.slice().sort((a, b) => a.stockD - b.stockD);   // pire situation en premier
+  /* Marge basse calculée pour que les libellés pivotés restent dans le canvas */
+  const angleLbl = (W / Math.max(1, zones.length) < 42 || compact) ? 52 : 38;
+  const pad = { l: 52, r: 18, t: 26,
+                b: padBottomRotated(ctx, zones.map(z => trunc(z.nom, compact ? 11 : 16)),
+                                    { angle: angleLbl, H: H, font:'500 ' + (compact ? 9.5 : 10.5) + 'px Inter, sans-serif',
+                                      min: compact ? 54 : 62, max: 96 }) };
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  const scJ = niceTicks(0, Math.max(140, Math.max.apply(null, zones.map(couvertureTheorique)) * 1.05), 5);
+  const maxJ = scJ.max;
+  const Y = v => pad.t + plotH - (v - scJ.min) / (scJ.max - scJ.min || 1) * plotH;
+
+  /* Bandeau d'alerte 0 → 30 jours (zone de rupture) */
+  ctx.save();
+  ctx.globalAlpha = prog;
+  const gAlert = ctx.createLinearGradient(0, Y(30), 0, Y(0));
+  gAlert.addColorStop(0, 'rgba(239,68,68,.11)'); gAlert.addColorStop(1, 'rgba(239,68,68,.03)');
+  ctx.fillStyle = gAlert; ctx.fillRect(pad.l, Y(30), plotW, Y(0) - Y(30));
+  ctx.restore();
+
+  /* Grille horizontale + axe Y (jours de couverture) */
+  drawFrame({ ctx, W, H, pad, ticks: scJ.ticks, min: scJ.min, max: scJ.max, yFmt: v => v + ' j', dashGrid: true, xLabels: [] });
+  if (plotH > 150)
+    rotText(ctx, 'Stock (jours)', 13, pad.t + plotH / 2, -90, 'center', C.muted, '600 10.5px Inter, sans-serif');
+
+  /* SEUIL CRITIQUE DE RUPTURE — ligne rouge fixe à 30 jours */
+  refLine(ctx, pad.l, Y(30), pad.l + plotW, Y(30), '#EF4444', 'Seuil critique 30 j', { width: 2, dash: [7,4], labelX: pad.l + plotW - 132, labelY: Y(30) - 9 });
+
+  /* Barres */
+  const n = zones.length;
+  const slot = plotW / n;
+  const bw = Math.min(compact ? 20 : 34, slot * .58);
+  const hits = [];
+  zones.forEach((z, i) => {
+    const cx = pad.l + slot * (i + .5);
+    const isHov = hover && hover.id === 'b' + i;
+    const dim = hover && !isHov;
+    const theo = couvertureTheorique(z);
+    const p = easeOutCubic(clamp((prog - i / n * .35) / .65, 0, 1));
+    ctx.save();
+    ctx.globalAlpha = dim ? .35 : 1;                              // opacification des voisines au survol
+    /* 1) Jauge de fond = couverture théorique (commande en cours) */
+    fillRR(ctx, cx - bw/2, Y(theo * p), bw, (Y(0) - Y(theo * p)), 6, 'rgba(124,58,237,.10)');
+    ctx.strokeStyle = 'rgba(124,58,237,.22)'; ctx.lineWidth = 1;
+    rr(ctx, cx - bw/2, Y(theo * p), bw, (Y(0) - Y(theo * p)), 6); ctx.stroke();
+    /* 2) Jauge de couverture réelle (code couleur dynamique) */
+    const col = bulletStockColor(z.stockD);
+    const h = Math.max(2, Y(0) - Y(z.stockD * p));
+    const gb = ctx.createLinearGradient(0, Y(z.stockD * p), 0, Y(0));
+    gb.addColorStop(0, col); gb.addColorStop(1, mixHex(col, '#0F172A', .22));
+    ctx.fillStyle = gb;
+    barTop(ctx, cx - bw/2 + (compact ? 2 : 3), Y(z.stockD * p), bw - (compact ? 4 : 6), h, 6);
+    ctx.fill();
+    if (isHov){ ctx.shadowColor = rgba(col, .75); ctx.shadowBlur = 16; ctx.fill(); ctx.shadowBlur = 0; }
+    /* 3) Repère de stock minimal acceptable (trait sombre) */
+    ctx.strokeStyle = rgba('#0F172A', .35); ctx.lineWidth = 1.6;
+    ctx.beginPath();
+    ctx.moveTo(cx - bw/2 - 2, Y(Math.min(theo, z.stockD + 20) * p));
+    ctx.lineTo(cx + bw/2 + 2, Y(Math.min(theo, z.stockD + 20) * p));
+    ctx.stroke();
+    /* 4) Valeur au-dessus de la barre */
+    if (!compact || isHov){
+      ctx.font = '800 10.5px Inter, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillStyle = col;
+      ctx.fillText(z.stockD + ' j', cx, Y(z.stockD * p) - 8);
+    }
+    /* 5) Pastille de rupture si structures en alerte */
+    if (z.stk > 0 && p > .6){
+      ctx.beginPath(); ctx.arc(cx + bw/2 - 1, Y(z.stockD * p) + 6, 4.2, 0, Math.PI*2);
+      ctx.fillStyle = '#EF4444'; ctx.fill();
+      ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.4; ctx.stroke();
+    }
+    ctx.restore();
+
+    /* Libellé de zone (incliné, tronqué à la largeur disponible) */
+    const policeLbl = (isHov ? '700 ' : '500 ') + (compact ? '9.5' : '10.5') + 'px Inter, sans-serif';
+    ctx.save(); ctx.font = policeLbl;
+    const dispo = Math.max(24, (pad.b - 22) / Math.sin(angleLbl * Math.PI / 180));
+    const lbl = fitText(ctx, z.nom, dispo);
+    ctx.restore();
+    /* Le premier libellé est borné à gauche pour ne pas sortir du canvas */
+    const xLbl = (i === 0) ? Math.max(cx, pad.l + 2) : cx;
+    rotText(ctx, lbl, xLbl, pad.t + plotH + 14, -angleLbl,
+            'right', dim ? '#CBD5E1' : (isHov ? C.primaryDeep : C.muted2), policeLbl);
+
+    hits.push({
+      id:'b' + i, type:'rect', x: cx - slot/2, y: pad.t, w: slot, h: plotH,
+      tip:{ title: z.nom + (z.pays ? ' · ' + z.pays : ''), sub: bulletStockStatut(z.stockD), color: col,
+            rows:[
+              { c: col, k:'Couverture réelle', v: z.stockD + ' jours',
+                d: z.stockD < 30 ? 'sous seuil' : 'conforme', dc: z.stockD < 30 ? 'down' : 'up' },
+              { c:'rgba(124,58,237,.5)', k:'Couverture théorique (cmd en cours)', v: theo + ' j' },
+              { c:'#EF4444', k:'Structures en rupture', v: z.stk + ' / ' + z.pts },
+              { c:'#F59E0B', k:'Part des points ATPE', v: aff(z.stk / Math.max(1, z.pts) * 100, 1) + ' %' },
+              { c:'#06B6D4', k:'Délai réappro estimé', v: Math.max(0, theo - z.stockD) + ' j' }
+            ],
+            note: z.stockD < 30
+              ? '⚠ Notification « RÉAPPRO URGENT » déclenchée vers le point focal district et le dépôt régional.'
+              : 'Stock suffisant pour la campagne en cours ; prochaine rotation planifiée automatiquement par l\'App.' }
+    });
+  });
+  watermark(ctx, W, H, 'Inventaire ATPE géolocalisé · NutriApp');
+  return { hits };
+}

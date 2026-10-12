@@ -1,0 +1,680 @@
+<script>
+"use strict";
+/* ══════════════════════════════════════════════════════════════════════════
+   NutriApp · Moteur du tableau de bord de surveillance nutritionnelle
+   ──────────────────────────────────────────────────────────────────────────
+   Architecture du script (tout en JavaScript pur, zéro dépendance) :
+     §1  Utilitaires (nombres, dates, RNG déterministe, couleurs)
+     §2  Couche de dessin Canvas (grilles, courbes de Bézier, barres…)
+     §3  Tooltip natif commun à tous les graphiques
+     §4  Registre des graphiques + animations (rAF + IntersectionObserver)
+     §5  Données de télémétrie NutriApp (16 pays d'Afrique de l'Ouest)
+     §6  Moteur de périmètre (Vue globale région ↔ Vue détaillée pays/districts)
+     §7  KPI cards dynamiques
+     §8  Graphiques 1 à 15 (Canvas API)
+     §9  Scorecard tabulaire (graphique 15) avec sparklines canvas
+     §10 Navigation, sélecteurs de périmètre, plein écran, temps réel
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* ════════════════════════════════════════════════════════════════════════
+   §1 — UTILITAIRES
+   ════════════════════════════════════════════════════════════════════════ */
+
+/** Palette officielle Ministère de la Santé (rappelée côté JS pour le canvas). */
+const C = {
+  primary:'#7C3AED', primary2:'#A855F7', primaryDeep:'#5B21B6',
+  secondary:'#06B6D4', tertiary:'#10B981', quaternary:'#F59E0B', danger:'#EF4444',
+  ink:'#0F172A', ink2:'#1E293B', ink3:'#334155',
+  muted:'#64748B', muted2:'#94A3B8', grid:'#EDE9FE', gridSoft:'#F4F1FE',
+  border:'#DDD6FE', bg:'#FAF5FF'
+};
+
+/** Formatage français des entiers : 48234 → « 48 234 » (espace insécable fine). */
+const nf = (v, d = 0) => Number(v).toLocaleString('fr-FR', { minimumFractionDigits:d, maximumFractionDigits:d });
+
+/** Formatage compact pour les axes : 1 250 000 → « 1,25 M ». */
+function nfc(v){
+  const a = Math.abs(v);
+  if (a >= 1e6) return (v/1e6).toLocaleString('fr-FR',{maximumFractionDigits:2}) + ' M';
+  if (a >= 1e3) return (v/1e3).toLocaleString('fr-FR',{maximumFractionDigits:a>=1e4?0:1}) + ' k';
+  return nf(v, a < 10 && a % 1 !== 0 ? 1 : 0);
+}
+
+/**
+ * Formate un nombre pour l'AFFICHAGE au format français : virgule décimale et
+ * espace insécable comme séparateur de milliers. Toute valeur présentée à
+ * l'écran (axes, infobulles, KPI, tableau) passe par cette fonction.
+ */
+const aff = (v, d = 0) => Number(v || 0).toLocaleString('fr-FR', {
+  minimumFractionDigits: d, maximumFractionDigits: d });
+
+/** Arrondi à n décimales (évite les artefacts flottants dans les tooltips). */
+const rnd = (v, n = 1) => Math.round(v * Math.pow(10, n)) / Math.pow(10, n);
+
+/** Bornage d'une valeur dans un intervalle. */
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+
+/** Interpolation linéaire. */
+const lerp = (a, b, t) => a + (b - a) * t;
+
+/** Hachage déterministe d'une chaîne → entier 32 bits (sert de graine RNG). */
+function hashStr(s){
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return h >>> 0;
+}
+
+/**
+ * Générateur pseudo-aléatoire « mulberry32 ».
+ * Les données de simulation terrain (districts, séries mensuelles, bruit de
+ * synchronisation) doivent être STRICTEMENT IDENTIQUES à chaque rechargement :
+ * on utilise donc un RNG amorcé par le nom de la zone, jamais Math.random().
+ */
+function rngFrom(seed){
+  let a = (typeof seed === 'string' ? hashStr(seed) : seed) >>> 0;
+  return function(){
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/** Conversion hexadécimal → rgba(a) pour les dégradés et transparences. */
+function rgba(hex, a){
+  let h = hex.replace('#','');
+  if (h.length === 3) h = h.split('').map(c => c + c).join('');
+  const n = parseInt(h, 16);
+  return 'rgba(' + ((n >> 16) & 255) + ',' + ((n >> 8) & 255) + ',' + (n & 255) + ',' + a + ')';
+}
+
+/** Mélange de deux couleurs hexadécimales (t = 0 → c1, t = 1 → c2). */
+function mixHex(c1, c2, t){
+  const p = h => { h = h.replace('#',''); if (h.length === 3) h = h.split('').map(c=>c+c).join(''); const n = parseInt(h,16); return [(n>>16)&255,(n>>8)&255,n&255]; };
+  const a = p(c1), b = p(c2);
+  const to = v => Math.round(v).toString(16).padStart(2,'0');
+  return '#' + to(lerp(a[0],b[0],t)) + to(lerp(a[1],b[1],t)) + to(lerp(a[2],b[2],t));
+}
+
+/** Rampe colorimétrique multi-crans (utilisée par les heatmaps). */
+function ramp(stops, t){
+  t = clamp(t, 0, 1);
+  const seg = (stops.length - 1) * t;
+  const i = Math.min(stops.length - 2, Math.floor(seg));
+  return mixHex(stops[i], stops[i+1], seg - i);
+}
+
+/** Rampe « qualité NutriApp » : rouge → ambre → vert. */
+const RAMP_TRAFFIC = ['#EF4444','#F59E0B','#FDE68A','#10B981'];
+/** Rampe « intensité de synchronisation » : violet très clair → violet profond. */
+const RAMP_SYNC = ['#F6F2FF','#DDD6FE','#A78BFA','#7C3AED','#4C1D95'];
+
+/** Easing : cubic out (décélération naturelle pour les animations d'entrée). */
+const easeOutCubic = t => 1 - Math.pow(1 - t, 3);
+/** Easing : cubic in-out (utilisé pour les transitions de survol). */
+const easeInOut = t => t < .5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3)/2;
+
+/** Mois français (indices 0 → 11). */
+const MOIS_COURTS = ['jan','fév','mar','avr','mai','juin','juil','août','sept','oct','nov','déc'];
+const MOIS_LONGS  = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+
+/** Libellé d'un mois à partir d'un indice absolu (0 = janvier 2024). */
+function monthLabel(i){ return MOIS_COURTS[i % 12] + ' ' + (2024 + Math.floor(i / 12)); }
+function monthShort(i){ return MOIS_COURTS[i % 12] + ' ' + String(2024 + Math.floor(i / 12)).slice(2); }
+
+/** Mois de la « soudure » agro-pastorale (juin → septembre). */
+const SOUDURE_MONTHS = [5,6,7,8];
+const SOUDURE_START_IDX = 17; // juin 2025 dans la fenêtre de 24 mois
+const SOUDURE_END_IDX   = 20; // septembre 2025
+
+/** Tendance par régression linéaire (pente moyenne par point). */
+function trend(arr){
+  const n = arr.length; if (n < 2) return 0;
+  let sx = 0, sy = 0, sxy = 0, sxx = 0;
+  for (let i = 0; i < n; i++){ sx += i; sy += arr[i]; sxy += i*arr[i]; sxx += i*i; }
+  const d = n*sxx - sx*sx;
+  return d === 0 ? 0 : (n*sxy - sx*sy) / d;
+}
+
+/**
+ * Formate une variation avec son signe et le bon séparateur :
+ * signe(+12.4, 1, ' %') → « +12,4 % » · signe(-5, 0, ' %') → « −5 % ».
+ */
+function signe(v, dec, suffixe){
+  const x = rnd(v || 0, dec === undefined ? 1 : dec);
+  return (x >= 0 ? '+' : '−') + Math.abs(x).toLocaleString('fr-FR', {
+    minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }) + (suffixe || '');
+}
+
+/** Variation relative en % entre deux valeurs (gère les divisions par zéro). */
+function pctChange(a, b){ return b === 0 ? 0 : (a - b) / Math.abs(b) * 100; }
+
+/** Troncature d'un libellé pour les axes (« Guinée-Bissau » → « Guinée-Bis… »). */
+function trunc(s, n){ return s.length > n ? s.slice(0, n - 1).trimEnd() + '…' : s; }
+
+/* ════════════════════════════════════════════════════════════════════════
+   §2 — COUCHE DE DESSIN CANVAS (primitives réutilisables)
+   ════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * Prépare un canvas pour le rendu : gère le devicePixelRatio (écrans Retina),
+ * réinitialise la matrice et renvoie les dimensions LOGIQUES en pixels CSS.
+ */
+function setupCanvas(cv){
+  const r = cv.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const w = Math.max(1, Math.round(r.width)), h = Math.max(1, Math.round(r.height));
+  const needW = Math.round(w * dpr), needH = Math.round(h * dpr);
+  if (cv.width !== needW || cv.height !== needH){ cv.width = needW; cv.height = needH; }
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  ctx.textBaseline = 'alphabetic';
+  return { ctx, w, h, dpr };
+}
+
+/** Rectangle à coins arrondis (chemin uniquement, sans remplissage). */
+function rr(ctx, x, y, w, h, r){
+  r = Math.max(0, Math.min(r, Math.abs(w)/2, Math.abs(h)/2));
+  ctx.beginPath();
+  ctx.moveTo(x + r, y);
+  ctx.lineTo(x + w - r, y);      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x + r, y + h);      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+  ctx.lineTo(x, y + r);          ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.closePath();
+}
+
+/** Rectangle arrondi rempli (et éventuellement cerclé). */
+function fillRR(ctx, x, y, w, h, r, fill, stroke, lw){
+  rr(ctx, x, y, w, h, r);
+  if (fill){ ctx.fillStyle = fill; ctx.fill(); }
+  if (stroke){ ctx.strokeStyle = stroke; ctx.lineWidth = lw || 1; ctx.stroke(); }
+}
+
+/** Barre verticale avec uniquement les deux coins supérieurs arrondis (6 px). */
+function barTop(ctx, x, y, w, h, r){
+  r = Math.max(0, Math.min(r, w/2, Math.abs(h)));
+  ctx.beginPath();
+  ctx.moveTo(x, y + h);
+  ctx.lineTo(x, y + r);
+  ctx.quadraticCurveTo(x, y, x + r, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h);
+  ctx.closePath();
+}
+
+/** Barre horizontale avec uniquement les deux coins droits arrondis. */
+function barRight(ctx, x, y, w, h, r){
+  r = Math.max(0, Math.min(r, Math.abs(w), h/2));
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + w - r, y);
+  ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+  ctx.lineTo(x + w, y + h - r);
+  ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+  ctx.lineTo(x, y + h);
+  ctx.closePath();
+}
+
+/**
+ * Chemin de courbe ULTRA-LISSE : spline de Catmull-Rom convertie en segments
+ * de Bézier cubiques. Aucune cassure visible, tension réglable (0.5 = standard).
+ */
+function smoothPath(ctx, pts, tension){
+  tension = (tension === undefined) ? .5 : tension;
+  if (!pts.length) return;
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  if (pts.length === 1) return;
+  if (pts.length === 2){ ctx.lineTo(pts[1].x, pts[1].y); return; }
+  for (let i = 0; i < pts.length - 1; i++){
+    const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+    const c1x = p1.x + (p2.x - p0.x) / 6 * tension * 2;
+    const c1y = p1.y + (p2.y - p0.y) / 6 * tension * 2;
+    const c2x = p2.x - (p3.x - p1.x) / 6 * tension * 2;
+    const c2y = p2.y - (p3.y - p1.y) / 6 * tension * 2;
+    ctx.bezierCurveTo(c1x, c1y, c2x, c2y, p2.x, p2.y);
+  }
+}
+
+/** Courbe lisse + remplissage en aire avec dégradé vertical vers transparence 0. */
+function areaPath(ctx, pts, baseY, color, alphaTop, alphaBottom){
+  if (pts.length < 2) return;
+  ctx.save();
+  smoothPath(ctx, pts);
+  ctx.lineTo(pts[pts.length-1].x, baseY);
+  ctx.lineTo(pts[0].x, baseY);
+  ctx.closePath();
+  const g = ctx.createLinearGradient(0, pts.reduce((m,p)=>Math.min(m,p.y), baseY), 0, baseY);
+  g.addColorStop(0, rgba(color, alphaTop === undefined ? .38 : alphaTop));
+  g.addColorStop(.65, rgba(color, (alphaTop === undefined ? .38 : alphaTop) * .35));
+  g.addColorStop(1, rgba(color, alphaBottom === undefined ? 0 : alphaBottom));
+  ctx.fillStyle = g; ctx.fill();
+  ctx.restore();
+}
+
+/** Ligne lisse (contour seul), avec ombre douce optionnelle. */
+function linePath(ctx, pts, color, width, glow){
+  if (pts.length < 2) return;
+  ctx.save();
+  if (glow){ ctx.shadowColor = rgba(color, .35); ctx.shadowBlur = 10; ctx.shadowOffsetY = 3; }
+  smoothPath(ctx, pts);
+  ctx.strokeStyle = color; ctx.lineWidth = width || 2.4;
+  ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+  ctx.stroke();
+  ctx.restore();
+}
+
+/** Calcul de graduations « propres » (algorithme nice numbers). */
+function niceTicks(min, max, count){
+  count = count || 5;
+  if (min === max){ max = min + 1; }
+  const raw = (max - min) / count;
+  const mag = Math.pow(10, Math.floor(Math.log10(Math.abs(raw) || 1)));
+  const norm = raw / mag;
+  const step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+  const nmin = Math.floor(min / step) * step;
+  const nmax = Math.ceil(max / step) * step;
+  const out = [];
+  for (let v = nmin; v <= nmax + step * .5; v += step) out.push(rnd(v, 6));
+  return { ticks: out, min: nmin, max: nmax, step };
+}
+
+/**
+ * Trame de fond d'un graphique : grille horizontale, graduations d'axe Y,
+ * libellés d'axe X, ligne de base. 11px / 500 / #94A3B8 selon la charte.
+ */
+function drawFrame(o){
+  const ctx = o.ctx, pad = o.pad, W = o.W, H = o.H;
+  const plotW = W - pad.l - pad.r, plotH = H - pad.t - pad.b;
+  ctx.save();
+  ctx.font = '500 11px Inter, sans-serif';
+  // Lignes de grille horizontales
+  o.ticks.forEach((t, i) => {
+    const y = pad.t + plotH - (t - o.min) / (o.max - o.min || 1) * plotH;
+    if (y < pad.t - 1 || y > pad.t + plotH + 1) return;
+    ctx.beginPath();
+    ctx.moveTo(pad.l, Math.round(y) + .5);
+    ctx.lineTo(pad.l + plotW, Math.round(y) + .5);
+    ctx.strokeStyle = (i === 0 && o.baseline !== false) ? '#DDD6FE' : (o.grid || C.gridSoft);
+    ctx.lineWidth = 1;
+    if (i !== 0 && o.dashGrid){ ctx.setLineDash([3,4]); } else { ctx.setLineDash([]); }
+    ctx.stroke();
+    ctx.setLineDash([]);
+    // Graduation Y (alignée à droite de la zone de marge)
+    if (o.yLabels !== false){
+      ctx.fillStyle = C.muted2; ctx.textAlign = 'right';
+      ctx.fillText(o.yFmt ? o.yFmt(t) : nfc(t), pad.l - 10, y + 3.5);
+    }
+  });
+  // Libellés X
+  if (o.xLabels){
+    ctx.textAlign = 'center'; ctx.fillStyle = C.muted2;
+    o.xLabels.forEach(l => {
+      if (l.x < pad.l - 20 || l.x > pad.l + plotW + 20) return;
+      ctx.fillText(l.text, l.x, pad.t + plotH + 20);
+    });
+  }
+  ctx.restore();
+  return { plotW, plotH };
+}
+
+/**
+ * Ajuste un texte à une largeur pixel disponible (troncature avec ellipse).
+ * Indispensable en cartes étroites : aucun libellé ne doit sortir du canvas.
+ */
+function fitText(ctx, text, maxW){
+  text = String(text);
+  if (maxW <= 0) return '';
+  if (ctx.measureText(text).width <= maxW) return text;
+  let t = text;
+  while (t.length > 1 && ctx.measureText(t.trimEnd() + '…').width > maxW) t = t.slice(0, -1);
+  return t.trimEnd() + '…';
+}
+
+/**
+ * Marge gauche adaptative : mesurée sur le plus long libellé de zone, bornée
+ * pour ne jamais écraser la zone de tracé (min 54 px, max 42 % de la largeur).
+ */
+function padLeftZones(ctx, zones, opts){
+  opts = opts || {};
+  ctx.save();
+  ctx.font = opts.font || '600 11px Inter, sans-serif';
+  const maxChars = opts.maxChars || 18;
+  let wmax = 0;
+  zones.forEach(z => {
+    const t = (z.drapeau ? z.drapeau + ' ' : '') + trunc(z.nom, maxChars);
+    wmax = Math.max(wmax, ctx.measureText(t).width);
+  });
+  ctx.restore();
+  return clamp(Math.ceil(wmax) + (opts.extra === undefined ? 22 : opts.extra),
+               opts.min || 54, Math.min(opts.max || 172, opts.W * .42));
+}
+
+/**
+ * Marge basse adaptative pour libellés d'axe pivotés : garantit que le texte
+ * incliné tient dans le canvas (hauteur + débordement horizontal).
+ */
+function padBottomRotated(ctx, labels, opts){
+  opts = opts || {};
+  const ang = Math.abs(opts.angle || 38) * Math.PI / 180;
+  ctx.save();
+  ctx.font = opts.font || '500 10.5px Inter, sans-serif';
+  let wmax = 0;
+  labels.forEach(l => { wmax = Math.max(wmax, ctx.measureText(String(l)).width); });
+  ctx.restore();
+  const besoin = Math.ceil(wmax * Math.sin(ang)) + 26;
+  return clamp(besoin, opts.min || 48, Math.min(opts.max || 96, opts.H * .34));
+}
+
+/** Texte pivoté (libellés d'axe inclinés à -38° pour les zones longues). */
+function rotText(ctx, text, x, y, angleDeg, align, color, font){
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.rotate(angleDeg * Math.PI / 180);
+  ctx.font = font || '500 11px Inter, sans-serif';
+  ctx.fillStyle = color || C.muted2;
+  ctx.textAlign = align || 'right';
+  ctx.fillText(text, 0, 0);
+  ctx.restore();
+}
+
+/** Badge/pastille dessiné dans le canvas (arrondi + texte centré). */
+function chip(ctx, x, y, text, color, bg, alpha){
+  ctx.save();
+  ctx.font = '700 10px Inter, sans-serif';
+  const w = ctx.measureText(text).width + 14, h = 18;
+  fillRR(ctx, x, y - h/2, w, h, 6, bg || rgba(color, .14));
+  ctx.fillStyle = color; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  ctx.globalAlpha = alpha === undefined ? 1 : alpha;
+  ctx.fillText(text, x + w/2, y + .5);
+  ctx.restore();
+  return w;
+}
+
+/** Ligne de référence (seuil Sphère, objectif, seuil de rupture…). */
+function refLine(ctx, x1, y1, x2, y2, color, label, opts){
+  opts = opts || {};
+  ctx.save();
+  ctx.beginPath();
+  ctx.setLineDash(opts.dash || [6,4]);
+  ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
+  ctx.strokeStyle = color; ctx.lineWidth = opts.width || 1.6;
+  ctx.stroke(); ctx.setLineDash([]);
+  if (label){
+    ctx.font = '700 10px Inter, sans-serif';
+    const w = ctx.measureText(label).width + 12;
+    const lx = opts.labelX === undefined ? x2 - w - 4 : opts.labelX;
+    const ly = opts.labelY === undefined ? y1 - 9 : opts.labelY;
+    fillRR(ctx, lx, ly, w, 17, 5, '#fff');
+    ctx.strokeStyle = rgba(color, .45); ctx.lineWidth = 1; ctx.stroke();
+    ctx.fillStyle = color; ctx.textAlign = 'center';
+    ctx.fillText(label, lx + w/2, ly + 11.5);
+  }
+  ctx.restore();
+}
+
+/**
+ * Dessine le filigrane discret « NutriApp » en bas à droite d'une carte :
+ * repère visuel d'authenticité de la source de données.
+ */
+function watermark(ctx, W, H, text){
+  ctx.save();
+  ctx.font = '700 9.5px Inter, sans-serif';
+  ctx.fillStyle = 'rgba(148,163,184,.55)';
+  ctx.textAlign = 'right';
+  ctx.fillText((text || 'NutriApp · télémétrie terrain'), W - 4, H - 3);
+  ctx.restore();
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   §3 — TOOLTIP NATIF CANVAS (carte blanche flottante, bordure gauche 4px)
+   ════════════════════════════════════════════════════════════════════════ */
+const TIP = {
+  el: null, raf: 0, visible: false,
+  init(){ this.el = document.getElementById('tip'); },
+  /**
+   * Affiche le tooltip près du curseur.
+   * @param {number} x,y   Coordonnées CLIENT (page) du point d'ancrage.
+   * @param {object} d      { title, sub, color, rows:[{c,k,v,d}], note }
+   */
+  show(x, y, d){
+    const el = this.el; if (!el) return;
+    let html = '<div class="tip-h"><div class="tip-t">' + d.title + '</div>' +
+               (d.sub ? '<div class="tip-s">' + d.sub + '</div>' : '') + '</div>';
+    (d.rows || []).forEach(r => {
+      html += '<div class="tip-row">' +
+        (r.c ? '<i style="background:' + r.c + '"></i>' : (r.noDot ? '' : '<i style="background:transparent"></i>')) +
+        '<span class="k">' + r.k + '</span>' +
+        (r.v !== undefined && r.v !== null ? '<span class="v">' + r.v + '</span>' : '') +
+        (r.d ? '<span class="d ' + (r.dc || 'flat') + '">' + r.d + '</span>' : '') +
+      '</div>';
+    });
+    if (d.note) html += '<div class="tip-note">' + d.note + '</div>';
+    el.innerHTML = html;
+    el.style.setProperty('--tc', d.color || C.primary);
+    el.classList.add('show');
+    el.setAttribute('aria-hidden', 'false');
+    this.visible = true;
+    // Positionnement avec retournement automatique si débordement viewport
+    cancelAnimationFrame(this.raf);
+    this.raf = requestAnimationFrame(() => {
+      const r = el.getBoundingClientRect();
+      let left = x + 18, top = y - r.height / 2;
+      if (left + r.width > window.innerWidth - 10) left = x - r.width - 18;
+      top = clamp(top, 10, window.innerHeight - r.height - 10);
+      el.style.left = Math.max(8, left) + 'px';
+      el.style.top = top + 'px';
+    });
+  },
+  hide(){
+    if (!this.el) return;
+    this.el.classList.remove('show');
+    this.el.setAttribute('aria-hidden', 'true');
+    this.visible = false;
+  }
+};
+
+/* ════════════════════════════════════════════════════════════════════════
+   §4 — REGISTRE DES GRAPHIQUES, ANIMATIONS 800ms, INTERSECTION OBSERVER
+   ════════════════════════════════════════════════════════════════════════ */
+const CHARTS = {};                       // id → instance de graphique
+const ANIM_MS = 800;                     // durée d'entrée imposée par la charte
+const REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/**
+ * Crée (ou met à jour) un graphique canvas.
+ * @param {string}   id    Identifiant unique (attribut data-chart du conteneur).
+ * @param {Function} draw  Fonction de rendu (ctx, W, H, prog, hover) → { hits }
+ * @param {object}   opts  { hoverRedraw, onMove, onLeave, h }
+ */
+function makeChart(id, draw, opts){
+  opts = opts || {};
+  const wrap = document.querySelector('[data-chart="' + id + '"]');
+  if (!wrap) return null;
+  if (opts.h) wrap.style.height = opts.h + 'px';
+  const cv = wrap.querySelector('canvas') || document.createElement('canvas');
+  if (!cv.parentElement) wrap.appendChild(cv);
+  cv.setAttribute('role', 'img');
+  cv.setAttribute('tabindex', '0');
+
+  let inst = CHARTS[id];
+  if (!inst){
+    inst = CHARTS[id] = {
+      id, wrap, cv, draw, opts,
+      prog: 0, hover: null, hits: [], visible: false, animated: false,
+      raf: 0, lastW: 0, lastH: 0
+    };
+    bindChartEvents(inst);
+  } else {
+    inst.draw = draw; inst.opts = opts;
+  }
+  layoutChart(inst);
+  return inst;
+}
+
+/** Dimensionne le canvas (DPR compris) puis relance un rendu à progression constante. */
+function layoutChart(inst){
+  const r = inst.wrap.getBoundingClientRect();
+  if (r.width < 2 || r.height < 2) return;              // section masquée : on ignore
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const w = Math.round(r.width), h = Math.round(r.height);
+  if (inst.lastW !== w || inst.lastH !== h){
+    inst.lastW = w; inst.lastH = h;
+    inst.cv.width = Math.round(w * dpr); inst.cv.height = Math.round(h * dpr);
+  }
+  /* Tant que l'animation d'entrée n'a pas démarré (graphique hors viewport),
+     on ne dessine pas : l'IntersectionObserver prendra le relais. */
+  if (!inst.animated && inst.prog <= 0 && !inst.visible) return;
+  renderChart(inst, inst.prog);
+}
+
+/** Rendu effectif : nettoie, exécute la fonction draw, mémorise les zones de survol. */
+function renderChart(inst, prog){
+  const dpr = Math.min(window.devicePixelRatio || 1, 2.5);
+  const w = inst.cv.width / dpr, h = inst.cv.height / dpr;
+  if (w < 2 || h < 2) return;
+  const ctx = inst.cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  inst.hits = [];
+  try {
+    const res = inst.draw(ctx, w, h, prog === undefined ? 1 : prog, inst.hover);
+    if (res && res.hits) inst.hits = res.hits;
+  } catch (err){
+    // Filet de sécurité : un graphique en erreur ne doit pas casser le dashboard
+    ctx.save();
+    ctx.font = '600 12px Inter, sans-serif'; ctx.fillStyle = '#94A3B8'; ctx.textAlign = 'center';
+    ctx.fillText('Rendu indisponible (' + err.message + ')', w/2, h/2);
+    ctx.restore();
+    if (window.console) console.error('[chart ' + inst.id + ']', err);
+  }
+}
+
+/** Animation d'entrée progressive sur 800 ms via requestAnimationFrame (60 fps). */
+function animateChart(inst){
+  cancelAnimationFrame(inst.raf);
+  if (REDUCED){ inst.prog = 1; inst.animated = true; renderChart(inst, 1); return; }
+  const t0 = performance.now();
+  const step = now => {
+    const p = Math.min(1, (now - t0) / ANIM_MS);
+    inst.prog = easeOutCubic(p);
+    renderChart(inst, inst.prog);
+    if (p < 1) inst.raf = requestAnimationFrame(step);
+    else { inst.prog = 1; inst.animated = true; }
+  };
+  inst.raf = requestAnimationFrame(step);
+}
+
+/** Relance l'animation d'entrée (changement de périmètre / de pays). */
+function replayChart(inst){ if (inst){ inst.animated = false; inst.hover = null; animateChart(inst); } }
+
+/** Survol : détection de zone + tooltip + rendu si le graphique est interactif. */
+function bindChartEvents(inst){
+  const cv = inst.cv;
+  cv.addEventListener('mousemove', e => {
+    const r = cv.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    let hit = null;
+    for (let i = inst.hits.length - 1; i >= 0; i--){
+      const z = inst.hits[i];
+      if (z.type === 'circle'){
+        const dx = x - z.x, dy = y - z.y;
+        if (dx*dx + dy*dy <= (z.r + 5) * (z.r + 5)){ hit = z; break; }
+      } else if (z.type === 'sector'){
+        /* Secteur angulaire (rose polaire) : test rayon + angle, bien plus
+           précis qu'une boîte englobante pour un diagramme circulaire. */
+        const dx = x - z.cx, dy = y - z.cy;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist >= z.r0 && dist <= z.r1){
+          let a = Math.atan2(dy, dx) + Math.PI / 2;          // origine à 12 h
+          if (a < 0) a += Math.PI * 2;
+          if (a >= z.a0 && a <= z.a1){ hit = z; break; }
+        }
+      } else if (z.type === 'rect' || !z.type){
+        const x1 = Math.min(z.x, z.x + z.w), x2 = Math.max(z.x, z.x + z.w);
+        const y1 = Math.min(z.y, z.y + z.h), y2 = Math.max(z.y, z.y + z.h);
+        if (x >= x1 && x <= x2 && y >= y1 && y <= y2){ hit = z; break; }
+      }
+    }
+    const changed = (hit && hit.id) !== (inst.hover && inst.hover.id);
+    if (hit){
+      cv.style.cursor = 'pointer';
+      if (hit.tip) TIP.show(e.clientX, e.clientY, hit.tip); else TIP.hide();
+    } else {
+      cv.style.cursor = 'default';
+      TIP.hide();
+    }
+    if (changed){
+      inst.hover = hit;
+      if (inst.opts.hoverRedraw || (hit && hit.onEnter)) renderChart(inst, inst.prog);
+    } else if (hit && hit.onMove){
+      renderChart(inst, inst.prog);
+    }
+    // Callback personnalisé (crosshair, ligne de lecture…)
+    if (inst.opts.onMove) inst.opts.onMove(x, y, hit, inst);
+  });
+  cv.addEventListener('mouseleave', () => {
+    TIP.hide();
+    if (inst.hover){ inst.hover = null; renderChart(inst, inst.prog); }
+    cv.style.cursor = 'default';
+    if (inst.opts.onLeave) inst.opts.onLeave(inst);
+  });
+  // Accessibilité clavier : focus → annonce du résumé textuel
+  cv.addEventListener('focus', () => {
+    if (inst.opts.summary) cv.setAttribute('aria-label', inst.opts.summary);
+  });
+}
+
+/**
+ * Rend tous les graphiques visibles (après changement de périmètre ou resize).
+ * @param {boolean} replay  true → rejoue l'animation d'entrée sur 800 ms
+ * @param {boolean} force   true → ignore le filtre « déjà vu à l'écran »
+ *                          (utile au tout premier rendu, avant l'observateur)
+ */
+function renderVisibleCharts(replay, force){
+  Object.keys(CHARTS).forEach(id => {
+    const inst = CHARTS[id];
+    if (!inst.wrap.offsetParent) return;                 // section masquée
+    const r = inst.wrap.getBoundingClientRect();
+    if (r.width < 2 || r.height < 2) return;
+    if (!force && !inst.visible) return;                 // pas encore entré dans le viewport
+    layoutChart(inst);
+    if (replay) animateChart(inst);
+  });
+}
+
+/** Observateur d'intersection : déclenche l'animation à l'entrée dans le viewport. */
+let IO = null;
+function initObserver(){
+  if (!('IntersectionObserver' in window)){
+    Object.keys(CHARTS).forEach(id => { CHARTS[id].visible = true; animateChart(CHARTS[id]); });
+    return;
+  }
+  IO = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      const inst = CHARTS[en.target.getAttribute('data-chart')];
+      if (!inst) return;
+      if (en.isIntersecting && en.intersectionRatio > .12){
+        inst.visible = true;
+        if (!inst.animated) animateChart(inst);
+      }
+    });
+  }, { root: null, threshold: [.12, .4, .8] });
+  document.querySelectorAll('.chart[data-chart]').forEach(el => IO.observe(el));
+}
+
+/** Redimensionnement global (debounce) : recalcule tous les canvas visibles. */
+let resizeTimer = 0;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(() => {
+    renderVisibleCharts(false);
+    renderScoreTable();
+  }, 140);
+});
+
+/* Changement d'orientation / zoom mobile */
+window.addEventListener('orientationchange', () => setTimeout(() => renderVisibleCharts(false), 260));
