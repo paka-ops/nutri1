@@ -64,6 +64,8 @@
       const wrap = document.createElement('div');
       wrap.innerHTML = window.AgriNutriTemplate.shell();
       this.shadowRoot.appendChild(wrap);
+      if (window.NutriSectionsI18N) window.NutriSectionsI18N.watch(this.shadowRoot);
+    if (window.NutriSectionsI18N) window.NutriSectionsI18N.onChange(() => { try { this.refresh(); } catch (e) { console.error(e); } });
       this._fillCountrySelect();
       this._bindEvents();
       this._mountCharts();

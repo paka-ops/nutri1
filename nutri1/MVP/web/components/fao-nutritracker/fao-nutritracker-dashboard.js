@@ -31,6 +31,8 @@
         const template = document.createElement('template');
         template.innerHTML = FAO.template();
         this.root.appendChild(template.content.cloneNode(true));
+        if (global.NutriSectionsI18N) global.NutriSectionsI18N.watch(this.root);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.onChange(() => { try { this.update(); } catch (e) { console.error(e); } });
       }
       this._booted = true;
       this.$ = (selector) => this.root.querySelector(selector);
@@ -340,7 +342,7 @@
     toast(message) {
       const element = this.$('[data-toast]');
       if (!element) return;
-      element.textContent = message;
+      element.textContent = global.NutriSectionsI18N ? global.NutriSectionsI18N.t(message) : message;
       element.classList.add('is-visible');
       global.clearTimeout(this._toastTimer);
       this._toastTimer = global.setTimeout(() => element.classList.remove('is-visible'), 2800);
@@ -370,7 +372,8 @@
       view.kpis.items.forEach((item) => rows.push([item.label, item.value, item.sub]));
       rows.push([], ['Zone', 'Production céréalière (Mt)', 'Besoins estimés (Mt)', 'Autosuffisance (%)', 'Pertes (%)', 'HDDS', 'Fortification (%)', 'Revenu annuel moyen (USD)']);
       view.rows.forEach((row) => rows.push([row.name, row.production.toFixed(2), row.needs.toFixed(2), (row.selfSufficiency * 100).toFixed(1), row.loss.toFixed(1), row.hdds.toFixed(1), row.fortification.toFixed(0), row.income]));
-      const csv = '\uFEFF' + rows.map((row) => row.map((cell) => '"' + String(cell == null ? '' : cell).replace(/"/g, '""') + '"').join(';')).join('\r\n');
+      const T = global.NutriSectionsI18N ? global.NutriSectionsI18N.t : function (s) { return s; };
+      const csv = '\uFEFF' + rows.map((row) => row.map((cell) => '"' + T(String(cell == null ? '' : cell)).replace(/"/g, '""') + '"').join(';')).join('\r\n');
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
       const link = document.createElement('a');

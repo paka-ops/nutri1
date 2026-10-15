@@ -210,7 +210,8 @@
     constructor(canvas, opts) {
       this.canvas = canvas;
       this.opts = Object.assign({ height: 280 }, opts || {});
-      this.ctx = canvas.getContext('2d');
+      const _rawCtx = canvas.getContext('2d');
+    this.ctx = window.NutriSectionsI18N ? window.NutriSectionsI18N.wrapCtx(_rawCtx) : _rawCtx;
       this.L = { w: 0, h: 0 };
       this.hover = null;
       this.pos = null;

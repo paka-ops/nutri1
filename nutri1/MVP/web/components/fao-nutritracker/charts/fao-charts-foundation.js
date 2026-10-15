@@ -9,7 +9,7 @@
   const C = U.colors;
   FAO.charts = FAO.charts || {};
 
-  const shortName = (name, max) => name.length > max ? name.slice(0, max - 1) + '…' : name;
+  const shortName = (name, max) => { name = (global.NutriSectionsI18N ? global.NutriSectionsI18N.t(name) : name); return name.length > max ? name.slice(0, max - 1) + '…' : name; };
   const monthRange = (start, end) => FAO.DATA.months[start] + '–' + FAO.DATA.months[Math.max(start, end - 1)];
 
   /* G1 — Barres horizontales normalisées sur les besoins estimés. */

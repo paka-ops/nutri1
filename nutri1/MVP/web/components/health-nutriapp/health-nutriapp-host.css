@@ -20,5 +20,5 @@ health-nutriapp-dashboard:not(:defined) {
   background: linear-gradient(90deg, #1E0A3C 0 260px, #FAF5FF 260px);
   min-height: 640px;
 }
-#health.ha-takeover:not(.ha-show-legacy) > :not(health-nutriapp-dashboard) { display: none !important; }
-#health.ha-takeover.ha-show-legacy > health-nutriapp-dashboard { margin-bottom: 24px; }
+#health.ha-takeover:not(.ha-show-legacy) health-section > :not(health-nutriapp-dashboard) { display: none !important; }
+#health.ha-takeover.ha-show-legacy health-section > health-nutriapp-dashboard { margin-bottom: 24px; }

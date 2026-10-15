@@ -56,6 +56,8 @@
       const tpl = document.createElement('template');
       tpl.innerHTML = WFP.template();
       root.appendChild(tpl.content);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.watch(root);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.onChange(() => { try { this.update(); } catch (e) { console.error(e); } });
       setTimeout(() => this.classList.add('wf-ready'), 1500); // filet de sécurité
 
       this.$ = (q) => root.querySelector(q);
@@ -610,7 +612,8 @@
     }
     exportCSV() {
       const v = this.view;
-      const head = ['Zone', 'FCS 2024', 'FCS 2020', 'CSI', 'IPC', 'MUAC %', 'Index prix', 'Accès économique %', 'HDDS', 'Insécurité (M)', 'Bénéficiaires (M)', 'Population (M)'];
+      const T = global.NutriSectionsI18N ? global.NutriSectionsI18N.t : function (s) { return s; };
+      const head = ['Zone', 'FCS 2024', 'FCS 2020', 'CSI', 'IPC', 'MUAC %', 'Index prix', 'Accès économique %', 'HDDS', 'Insécurité (M)', 'Bénéficiaires (M)', 'Population (M)'].map(T);
       const lines = [head.join(';')].concat(v.zones.map((z) => [
         z.name, z.fcs, z.fcsPrev, z.csi, z.ipc, z.muac, z.priceIndex, z.access, z.hdds, z.insecure, z.beneficiaries, z.pop
       ].join(';')));
@@ -626,7 +629,7 @@
     toast(msg) {
       const el = this.$('[data-toast]');
       if (!el) return;
-      el.textContent = msg;
+      el.textContent = global.NutriSectionsI18N ? global.NutriSectionsI18N.t(msg) : msg;
       el.classList.add('on');
       clearTimeout(this._toastT);
       this._toastT = setTimeout(() => el.classList.remove('on'), 2600);

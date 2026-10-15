@@ -57,6 +57,8 @@
       const tpl = document.createElement('template');
       tpl.innerHTML = HA.template();
       root.appendChild(tpl.content);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.watch(root);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.onChange(() => { try { this.update(); } catch (e) { console.error(e); } });
       setTimeout(() => this.classList.add('ha-ready'), 1500); // filet de sécurité
 
       this.$ = (q) => root.querySelector(q);
@@ -522,8 +524,9 @@
     }
     exportCSV() {
       const rows = this.view.rows;
-      const head = 'Zone;Admissions;Guerison_%;Abandon_%;Stock_jours;Anemie_%;Fer_%;Obesite_%;HTA_sel_%;Diabete_%;Synchro_%;Score;Statut';
-      const lines = rows.map((r) => [r.name, r.admissions, r.recovery, r.dropout, r.stockDays, r.aneC, r.iron, r.obesity, r.hyper, r.diabetes, r.sync, r.score, r.status.label].join(';'));
+      const T = global.NutriSectionsI18N ? global.NutriSectionsI18N.t : function (s) { return s; };
+      const head = T('Zone;Admissions;Guerison_%;Abandon_%;Stock_jours;Anemie_%;Fer_%;Obesite_%;HTA_sel_%;Diabete_%;Synchro_%;Score;Statut');
+      const lines = rows.map((r) => [r.name, r.admissions, r.recovery, r.dropout, r.stockDays, r.aneC, r.iron, r.obesity, r.hyper, r.diabetes, r.sync, r.score, T(r.status.label)].join(';'));
       const blob = new Blob(['﻿' + head + '\n' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
@@ -538,7 +541,7 @@
       if (!w) { this.toast('Autorisez les fenêtres pop-up pour le rapport PDF'); return; }
       const rows = view.rows.map((r, i) =>
         '<tr><td>' + (i + 1) + '</td><td><b>' + esc(r.name) + '</b></td><td>' + HA.fmtInt(r.admissions) + '</td><td>' + r.recovery + ' %</td><td>' + r.stockDays + ' j</td><td>' + r.sync + ' %</td><td>' + r.score + '</td><td>' + r.status.label + '</td></tr>').join('');
-      w.document.write('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>NutriApp Santé — Rapport ' + (view.isRegion ? 'Région' : esc(view.country.name)) + '</title>' +
+      w.document.write((global.NutriSectionsI18N ? global.NutriSectionsI18N.translateHtml : function (x) { return x; })('<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>NutriApp Santé — Rapport ' + (view.isRegion ? 'Région' : esc(view.country.name)) + '</title>' +
         '<style>body{font:13px Inter,Arial;color:#1E293B;padding:32px}h1{font-size:22px;color:#7C3AED}h2{font-size:15px;margin-top:26px;color:#1E0A3C}.kpis{display:flex;gap:12px;margin:16px 0}.kpi{flex:1;border:1px solid #DDD6FE;border-radius:12px;padding:12px}.kpi b{font-size:20px;color:#7C3AED}table{width:100%;border-collapse:collapse;margin-top:8px}th,td{border-bottom:1px solid #EDE9FE;padding:7px;text-align:left;font-size:12px}th{background:#F5F3FF;color:#7C3AED}.foot{margin-top:18px;color:#94A3B8;font-size:11px}</style></head><body>' +
         '<h1>NutriApp · Surveillance Nutritionnelle — ' + (view.isRegion ? 'Afrique de l’Ouest (16 pays)' : esc(view.country.name)) + '</h1>' +
         '<p>Ministère de la Santé · Données NutriApp 2024 · généré le ' + new Date().toLocaleDateString('fr-FR') + '</p>' +
@@ -550,7 +553,7 @@
         '<h2>Scorecard des unités (' + view.rows.length + ' zones)</h2>' +
         '<table><tr><th>#</th><th>Zone</th><th>Admissions</th><th>Guérison</th><th>Stock</th><th>Synchro</th><th>Score</th><th>Statut</th></tr>' + rows + '</table>' +
         '<p class="foot">Source : application mobile de suivi terrain NutriApp (agents communautaires, cliniques mobiles, dépistages PB/MUAC, enquêtes ménages, inventaires ATPE) · données de démonstration.</p>' +
-        '<script>window.onload=function(){window.print()}<\/script></body></html>');
+        '<script>window.onload=function(){window.print()}<\/script></body></html>'));
       w.document.close();
       this.toast('Rapport PDF — utilisez « Enregistrer au format PDF »');
     }
@@ -613,7 +616,7 @@
     toast(msg) {
       const t = this.$('[data-toast]');
       if (!t) return;
-      t.textContent = msg;
+      t.textContent = global.NutriSectionsI18N ? global.NutriSectionsI18N.t(msg) : msg;
       t.classList.add('on');
       clearTimeout(this._toastT);
       this._toastT = setTimeout(() => t.classList.remove('on'), 2600);

@@ -58,6 +58,8 @@
       const tpl = document.createElement('template');
       tpl.innerHTML = NT.template();
       root.appendChild(tpl.content);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.watch(root);
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.onChange(() => { try { this.update(); } catch (e) { console.error(e); } });
       setTimeout(() => this.classList.add('nt-ready'), 1500); // filet de sécurité
 
       this.$ = (q) => root.querySelector(q);
@@ -704,7 +706,7 @@
     }
     toast(msg) {
       const t = this.$('[data-toast]');
-      t.textContent = msg;
+      t.textContent = global.NutriSectionsI18N ? global.NutriSectionsI18N.t(msg) : msg;
       t.classList.add('on');
       clearTimeout(this._toastT);
       this._toastT = setTimeout(() => t.classList.remove('on'), 2600);
@@ -728,9 +730,10 @@
     }
     exportCSV() {
       const V = this.view;
-      const head = ['Zone', 'Code', 'Stunting (%)', 'Emaciation PB (%)', 'Anemie (%)', 'Vitamine A (%)', 'Diversite ANJE (%)', 'Score global', 'Statut', 'Score 2020', 'Score 2021', 'Score 2022', 'Score 2023', 'Score 2024'];
+      const T = global.NutriSectionsI18N ? global.NutriSectionsI18N.t : function (s) { return s; };
+      const head = ['Zone', 'Code', 'Stunting (%)', 'Emaciation PB (%)', 'Anemie (%)', 'Vitamine A (%)', 'Diversite ANJE (%)', 'Score global', 'Statut', 'Score 2020', 'Score 2021', 'Score 2022', 'Score 2023', 'Score 2024'].map(T);
       const q = (v) => '"' + String(v).replace(/"/g, '""') + '"';
-      const lines = [head.map(q).join(';')].concat(V.g15.rows.map((r) => [r.name, r.code || '', r.stunting, r.wasting, r.anemia, r.vitA, r.diversity, r.score, r.status.label].concat(r.trend).map((v) => q(typeof v === 'number' ? String(v).replace('.', ',') : v)).join(';')));
+      const lines = [head.map(q).join(';')].concat(V.g15.rows.map((r) => [r.name, r.code || '', r.stunting, r.wasting, r.anemia, r.vitA, r.diversity, r.score, T(r.status.label)].concat(r.trend).map((v) => q(typeof v === 'number' ? String(v).replace('.', ',') : v)).join(';')));
       this.download(this.fileBase() + '.csv', '\uFEFF' + lines.join('\r\n'), 'text/csv;charset=utf-8');
       this.toast('Export CSV généré · ' + V.g15.rows.length + ' lignes');
     }
@@ -764,10 +767,10 @@
         '<script>window.onload=function(){setTimeout(function(){window.print()},400)}<\/script></body></html>';
       const w = global.open('', '_blank');
       if (w && w.document) {
-        w.document.open(); w.document.write(html); w.document.close();
+        w.document.open(); w.document.write(global.NutriSectionsI18N ? global.NutriSectionsI18N.translateHtml(html) : html); w.document.close();
         this.toast('Rapport ouvert · choisissez « Enregistrer en PDF » dans la boîte d’impression');
       } else {
-        this.download(this.fileBase() + '.html', html, 'text/html;charset=utf-8');
+        this.download(this.fileBase() + '.html', global.NutriSectionsI18N ? global.NutriSectionsI18N.translateHtml(html) : html, 'text/html;charset=utf-8');
         this.toast('Pop-up bloquée · rapport téléchargé (ouvrir puis imprimer en PDF)');
       }
     }
