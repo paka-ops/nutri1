@@ -570,19 +570,7 @@
 <div class="card"><div class="section-head"><div><h2 data-i18n="ui.nutrition_hotspot_map">🗺️ Nutrition Hotspot Map</h2><p class="muted" data-i18n="ui.gis_demonstration_layer">GIS demonstration layer.</p></div><button class="btn primary" onclick="toast('UNICEF GIS layer opened')" data-i18n="ui.explore_gis">Explore GIS</button></div><div class="gis-demo" id="unicefGIS"></div></div>
 <div class="card alert-panel"><h2 data-i18n="ui.early_nutrition_signals">🚨 Early Nutrition Signals</h2><div id="unicefAlerts"></div></div>
 </section>
-<section id="who" class="view">
-<!-- NutriTracker West Africa · Surveillance Communautaire — composant autonome (Shadow DOM).
-     Code : components/who-nutritracker/ · les modules WHO NCD ci-dessous restent dans le DOM (masqués). -->
-<nutritracker-dashboard id="whoNutriTracker" aria-label="NutriTracker West Africa · Surveillance Communautaire"></nutritracker-dashboard>
-<div class="hero institution-hero"><span class="pill" data-i18n="ui.who_nutrition_noncommunicable_diseases">WHO • NUTRITION & NONCOMMUNICABLE DISEASES</span><h1 data-i18n="ui.who_nutrition_ncd_intelligence_center">🌍 WHO Nutrition & NCD Intelligence Center</h1><p data-i18n="ui.dynamic_intelligence_on_diet_related_noncommunicable_diseases_and_meta">Dynamic intelligence on diet-related noncommunicable diseases and metabolic risk.</p></div>
-<div class="card"><div class="section-head"><div><h2 data-i18n="ui.country_ncd_explorer">🌍 Country & NCD Explorer</h2><p class="muted" data-i18n="ui.explore_population_level_indicators">Explore population-level indicators.</p></div><div class="institution-filters"><label>Country<select id="whoCountry" onchange="renderWHO()"></select></label><label>Level<select id="whoLevel" onchange="renderWHO()"><option data-i18n="ui.national">National</option><option data-i18n="ui.region">Region</option><option data-i18n="ui.district">District</option></select></label><label>Year<select id="whoYear" onchange="renderWHO()"><option>2026</option><option>2025</option><option>2024</option><option>2023</option><option>2022</option></select></label></div></div></div>
-<div class="institution-kpis"><div class="card inst-kpi"><span data-i18n="ui.diabetes">Diabetes</span><b id="whoDiabetes">—</b></div><div class="card inst-kpi"><span data-i18n="ui.hypertension">Hypertension</span><b id="whoHypertension">—</b></div><div class="card inst-kpi"><span data-i18n="ui.obesity">Obesity</span><b id="whoObesity">—</b></div><div class="card inst-kpi"><span data-i18n="ui.cardiovascular">Cardiovascular</span><b id="whoCVD">—</b></div><div class="card inst-kpi"><span data-i18n="ui.stroke">Stroke</span><b id="whoStroke">—</b></div></div>
-<div class="condition-dashboard-grid"><button class="ncd-card active" onclick="selectWHOCondition('diabetes',this)">🩸<b data-i18n="ui.diabetes">Diabetes</b><small data-i18n="ui.metabolic_health">Metabolic health</small></button><button class="ncd-card" onclick="selectWHOCondition('hypertension',this)">❤️<b data-i18n="ui.hypertension">Hypertension</b></button><button class="ncd-card" onclick="selectWHOCondition('obesity',this)">⚖️<b data-i18n="ui.obesity">Obesity</b></button><button class="ncd-card" onclick="selectWHOCondition('cancer',this)">🎗️<b data-i18n="ui.cancer">Cancer</b></button><button class="ncd-card" onclick="selectWHOCondition('kidney',this)">🫘<b data-i18n="ui.kidney_disease">Kidney disease</b></button><button class="ncd-card" onclick="selectWHOCondition('stroke',this)">🧠<b data-i18n="ui.stroke">Stroke</b></button><button class="ncd-card" onclick="selectWHOCondition('cvd',this)">❤️<b data-i18n="ui.cardiovascular_disease">Cardiovascular disease</b></button><button class="ncd-card" onclick="selectWHOCondition('diet',this)">🥗<b data-i18n="ui.dietary_risk">Dietary risk</b></button></div>
-<div class="grid2"><div class="card"><h2 id="whoConditionTitle" data-i18n="ui.diabetes_intelligence">Diabetes Intelligence</h2><div class="big-chart" id="whoTrendChart"></div><p id="whoConditionSummary" class="muted"></p></div><div class="card"><h2 data-i18n="ui.risk_factor_dashboard">📊 Risk Factor Dashboard</h2><div id="whoRiskFactors"></div></div></div>
-<div class="card"><div class="section-head"><div><h2 data-i18n="ui.africa_ncd_intelligence_map">🗺️ Africa NCD Intelligence Map</h2><p class="muted" data-i18n="ui.gis_demonstration_layer">GIS demonstration layer.</p></div><button class="btn primary" onclick="toast('WHO NCD GIS layer opened')" data-i18n="ui.explore_gis">Explore GIS</button></div><div class="gis-demo" id="whoGIS"></div></div>
-<div class="card alert-panel"><h2 data-i18n="ui.population_health_signals">🚨 Population Health Signals</h2><div id="whoAlerts"></div></div>
-<div class="card"><h2 data-i18n="ui.evidence_graph_connection">🔬 Evidence Graph Connection</h2><div class="evidence-flow"><span data-i18n="ui.diet">Diet</span><b data-i18n="ui.text_2">→</b><span data-i18n="ui.nutrients">Nutrients</span><b data-i18n="ui.text_2">→</b><span data-i18n="ui.biomarkers">Biomarkers</span><b data-i18n="ui.text_2">→</b><span data-i18n="ui.risk_factors">Risk factors</span><b data-i18n="ui.text_2">→</b><span data-i18n="ui.ncd_outcomes">NCD outcomes</span></div></div>
-</section>
+<section id="who" class="view"><who-section></who-section></section>
 <section id="foodcloud" class="view"><div class="card"><h2 data-i18n="ui.african_food_cloud_dynamic_data_workbench">🌍 African Food Cloud — Dynamic Data Workbench</h2>
 <details class="accordion" open><summary>➕ Food / Ingredient Entry</summary><div class="inner"><div class="form"><label>Food name<input></label><label>Local name<input></label><label>Country<select id="foodCountry"></select></label><label>Food group<select><option data-i18n="ui.cereals">Cereals</option><option data-i18n="ui.tubers_roots">Tubers & Roots</option><option data-i18n="ui.fruits_vegetables_2">Fruits & Vegetables</option><option data-i18n="ui.legumes">Legumes</option><option data-i18n="ui.oilseeds">Oilseeds</option><option data-i18n="ui.animal_source_foods">Animal-source foods</option></select></label><label>State<select><option data-i18n="ui.raw">Raw</option><option data-i18n="ui.cooked">Cooked</option><option data-i18n="ui.dried">Dried</option><option data-i18n="ui.fermented">Fermented</option></select></label><label>Source<input placeholder="FAO/INFOODS, national table, lab..."></label></div><button class="btn primary" onclick="toast('Food observation queued for validation')" data-i18n="ui.add_observation">Add observation</button></div></details>
 <details class="accordion"><summary>🍲 Recipe / Traditional Dish</summary><div class="inner"><div class="form"><label>Country<select class="countryList"></select></label><label>Local name<input></label><label>Serving size<input></label></div><p data-i18n="ui.ingredients_amounts_preparation_cooking_serving_calculated_composition">Ingredients → amounts → preparation → cooking → serving → calculated composition.</p><button class="btn primary" onclick="toast('Recipe draft created')" data-i18n="ui.create_recipe">Create recipe</button></div></details>
@@ -593,83 +581,14 @@
 <div class="grid3"><div class="card"><h3 data-i18n="ui.food_ontology">Food Ontology</h3><div class="metric">13,200+</div><span class="pill" data-i18n="ui.records">records</span></div><div class="card"><h3 data-i18n="ui.composition">Composition</h3><div class="metric">9,800+</div><span class="pill" data-i18n="ui.observations">observations</span></div><div class="card"><h3 data-i18n="ui.validated_recipes">Validated recipes</h3><div class="metric">3,400+</div><span class="pill" data-i18n="ui.country_aware">country-aware</span></div></div>
 </div></section>
 
-<section id="health" class="view">
-<!-- NutriApp Santé · Surveillance Nutritionnelle Clinique, Communautaire & MNT — composant autonome (Shadow DOM).
-     Code : components/health-nutriapp/ · les modules Santé historiques ci-dessous restent dans le DOM (masqués). -->
-<health-nutriapp-dashboard id="healthNutriApp" aria-label="NutriApp Santé · Surveillance Nutritionnelle Clinique, Communautaire et Maladies Chroniques"></health-nutriapp-dashboard>
-<div class="card"><h2 data-i18n="ui.ministry_of_health_command_center">🏥 Ministry of Health Command Center</h2><div class="grid"><div class="card">Children<div class="metric">—</div><span class="pill" data-i18n="ui.double_burden">double burden</span></div><div class="card">Pregnant women<div class="metric">—</div></div><div class="card">Lactating women<div class="metric">—</div></div><div class="card">NCDs<div class="metric">—</div></div></div>
-<div class="grid2"><div class="card"><h3 data-i18n="ui.children_double_burden">Children — double burden</h3><div class="chart"><canvas id="hChildren"></canvas></div></div><div class="card"><h3 data-i18n="ui.pregnant_lactating_women">Pregnant & lactating women</h3><div class="chart"><canvas id="hWomen"></canvas></div></div></div>
-<div class="grid2"><div class="card"><h3 data-i18n="ui.ncd_trends">NCD trends</h3><div class="chart"><canvas id="hNcd"></canvas></div></div><div class="card"><h3 data-i18n="ui.health_gis">Health GIS</h3><div class="map"><span class="pin" style="left:15%;top:40%" data-i18n="ui.region_a">Region A</span><span class="pin" style="left:48%;top:23%" data-i18n="ui.region_b">Region B</span><span class="pin" style="left:70%;top:55%" data-i18n="ui.region_c">Region C</span></div></div></div>
-<div class="card"><h3 data-i18n="ui.priority_ncd_modules">Priority NCD modules</h3><div class="grid3"><div data-i18n="ui.diabetes_2">🩸 Diabetes</div><div data-i18n="ui.hypertension_2">❤️ Hypertension</div><div data-i18n="ui.cardiovascular_disease_2">🫀 Cardiovascular disease</div><div data-i18n="ui.cancers">🎗 Cancers</div><div data-i18n="ui.kidney_disease_2">🫘 Kidney disease</div><div data-i18n="ui.other_priority_ncds">➕ Other priority NCDs</div></div></div></div>
-<div class="card institutional-module">
-  <div class="section-head"><div><h2>🩺 Nutrition → NCD Intelligence</h2><p class="muted">Population and service intelligence focused on diet-related noncommunicable diseases.</p></div><span class="pill">MINISTRY OF HEALTH</span></div>
-  <div class="module-grid">
-    <div><b>🩸 Diabetes Prevention</b><span>Food quality, physical activity, BMI, glucose/HbA1c where available, follow-up and trends.</span></div>
-    <div><b>❤️ Hypertension & CVD</b><span>Blood pressure, sodium exposure, weight, activity and cardiovascular risk factors.</span></div>
-    <div><b>🍬 Sugar Intelligence</b><span>Estimated free-sugar exposure, sweetened beverages and population trends.</span></div>
-    <div><b>🧂 Sodium Intelligence</b><span>Estimated sodium exposure, food sources and reduction-program monitoring.</span></div>
-    <div><b>⚖️ Obesity Observatory</b><span>Overweight, obesity, waist circumference, dietary patterns and activity.</span></div>
-    <div><b>📱 Screening & Follow-up</b><span>Campaign collection, professional review, referral and longitudinal monitoring.</span></div>
-    <div><b>🚨 NCD Early Warning</b><span>Emerging dietary and metabolic risk signals for investigation and public-health action.</span></div>
-    <div><b>📈 Intervention Impact</b><span>Baseline → intervention → follow-up → outcome reporting for prevention programs.</span></div>
-  </div>
-</div>
-<div class="card"><h3>📦 Ministry of Health Data Products</h3>
-<table><tr><th>Product</th><th>Primary output</th><th>Decision use</th></tr>
-<tr><td>National Nutrition & NCD Observatory</td><td>Risk-factor trends + GIS</td><td>National planning</td></tr>
-<tr><td>Diabetes & Hypertension Monitor</td><td>Control/follow-up indicators</td><td>Care improvement</td></tr>
-<tr><td>Food-NCD Risk Engine</td><td>Dietary risk profiles</td><td>Prevention targeting</td></tr>
-<tr><td>Screening Campaign Platform</td><td>Aggregated screening intelligence</td><td>Campaign management</td></tr>
-<tr><td>Prevention Impact Engine</td><td>Before/after outcomes</td><td>Program evaluation</td></tr>
-</table></div>
-</section>
+<section id="health" class="view"><health-section></health-section></section>
 
-<!-- AgriNutri Intelligence (#agri) : tableau de bord Ministère de l'Agriculture, composant séparé dans components/agri-nutriapp/ -->
-<section id="agri" class="view"><agri-nutriapp-dashboard id="agriNutriApp"></agri-nutriapp-dashboard></section>
+<!-- AgriNutri Intelligence (#agri) : composant de section dans components/sections/agri-section.js (tableau de bord dans components/agri-nutriapp/) -->
+<section id="agri" class="view"><agri-section></agri-section></section>
 
 
-<section id="wfp" class="view">
-<!-- WFP NutriTracker · Surveillance Communautaire Afrique de l'Ouest — composant autonome (Shadow DOM).
-     Code : components/wfp-nutritracker/ · les modules WFP Food Security ci-dessous restent dans le DOM (masqués). -->
-<wfp-nutritracker-dashboard id="wfpNutriTracker" aria-label="WFP NutriTracker · Surveillance Communautaire Afrique de l'Ouest"></wfp-nutritracker-dashboard>
-  <div class="hero institution-hero"><span class="pill">WFP • FOOD SECURITY & NUTRITION</span>
-  <h1>🍚 WFP Food Security Intelligence Center</h1>
-  <p>Localized intelligence connecting food access, markets, vulnerability, nutrition, climate shocks and program impact — complementary to existing WFP global systems.</p></div>
-  <div class="card"><div class="section-head"><div><h2>🌍 Country & Food Security Explorer</h2><p class="muted">Explore food-security indicators by country and geography.</p></div>
-  <div class="institution-filters"><label>Country<select id="wfpCountry" onchange="renderWFP()"></select></label><label>Level<select id="wfpLevel" onchange="renderWFP()"><option>National</option><option>Region</option><option>District</option><option>Market</option></select></label><label>Year<select id="wfpYear" onchange="renderWFP()"><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select></label></div></div></div>
-  <div class="institution-kpis">
-    <div class="card inst-kpi"><span>Food Security Risk</span><b id="wfpRisk">—</b></div>
-    <div class="card inst-kpi"><span>Healthy Diet Affordability</span><b id="wfpAfford">—</b></div>
-    <div class="card inst-kpi"><span>Dietary Diversity</span><b id="wfpDiversity">—</b></div>
-    <div class="card inst-kpi"><span>Price Pressure</span><b id="wfpPrice">—</b></div>
-    <div class="card inst-kpi"><span>Nutrition Risk</span><b id="wfpNutrition">—</b></div>
-  </div>
-  <div class="grid3">
-    <div class="card"><h3>🚨 Food Security Early Warning</h3><div id="wfpEarly"></div></div>
-    <div class="card"><h3>💰 Food Price & Access</h3><div id="wfpMarket"></div></div>
-    <div class="card"><h3>🥗 Food Consumption & Nutrition</h3><div id="wfpDiet"></div></div>
-  </div>
-  <div class="grid2">
-    <div class="card"><h3>🏫 School Feeding & Local Procurement</h3><div id="wfpSchool"></div></div>
-    <div class="card"><h3>🌦️ Climate → Food Security Risk</h3><div id="wfpClimate"></div></div>
-  </div>
-  <div class="card"><h3>🗺️ Vulnerability & Priority Intervention Map</h3><div class="gis-demo" id="wfpGIS"></div></div>
-  <div class="card"><h3>📊 WFP Program Impact Engine</h3><div id="wfpImpact"></div></div>
-  <div class="card"><h3>📦 WFP Data Products</h3>
-  <table><tr><th>Product</th><th>Data generated</th><th>Operational use</th></tr>
-  <tr><td>Household Food Security Monitor</td><td>Consumption, diversity, access, coping</td><td>Vulnerability targeting</td></tr>
-  <tr><td>Food Price Intelligence</td><td>Prices, availability, anomalies</td><td>Market monitoring</td></tr>
-  <tr><td>Healthy Diet Affordability</td><td>Food basket cost + access gap</td><td>Program design</td></tr>
-  <tr><td>School Feeding Intelligence</td><td>Meals, quality, local sourcing, waste</td><td>School meal optimization</td></tr>
-  <tr><td>Climate Food-Security Early Warning</td><td>Shock signals + localized risk</td><td>Early action</td></tr>
-  <tr><td>Intervention Impact</td><td>Baseline, follow-up, outcomes</td><td>Evaluation & scale-up</td></tr>
-  </table></div>
-</section>
-<section id="fao" class="view">
-<h1 hidden>FAO AgriNutriApp · Surveillance des systèmes alimentaires (Afrique de l’Ouest)</h1>
-<!-- FAO AgriNutriApp · tableau de bord autonome en Custom Element (Shadow DOM). -->
-<fao-nutritracker-dashboard id="faoNutriTracker" aria-label="FAO AgriNutriApp · Surveillance des systèmes alimentaires en Afrique de l’Ouest"></fao-nutritracker-dashboard>
-</section>
+<section id="wfp" class="view"><wfp-section></wfp-section></section>
+<section id="fao" class="view"><fao-section></fao-section></section>
 
 <section id="monitoring" class="view">
 <div class="hero institution-hero"><span class="pill">NUTRI.N°1 • MONITORING, EVALUATION & SURVEILLANCE</span><h1>📋 Projects, Surveys & Nutrition Surveillance Center</h1><p>One institutional workspace for baseline studies, nutrition and food surveys, routine surveillance, project monitoring, impact evaluation and evidence generation.</p></div>
@@ -684,6 +603,19 @@
 
 <section id="market" class="view"><div class="card"><h2 data-i18n="ui.data_marketplace_apis">☁ Data Marketplace & APIs</h2><table><tr><th data-i18n="ui.api">API</th><th data-i18n="ui.customer">Customer</th><th data-i18n="ui.purpose">Purpose</th></tr><tr><td data-i18n="ui.food_api">Food API</td><td data-i18n="ui.apps_industry">Apps / industry</td><td data-i18n="ui.food_resolution">Food resolution</td></tr><tr><td data-i18n="ui.composition_api">Composition API</td><td data-i18n="ui.research_food_industry">Research / food industry</td><td data-i18n="ui.nutrient_data">Nutrient data</td></tr><tr><td data-i18n="ui.recipe_api">Recipe API</td><td data-i18n="ui.apps_institutions">Apps / institutions</td><td data-i18n="ui.traditional_recipes">Traditional recipes</td></tr><tr><td data-i18n="ui.consumption_api">Consumption API</td><td data-i18n="ui.governments">Governments</td><td data-i18n="ui.dietary_patterns">Dietary patterns</td></tr><tr><td data-i18n="ui.national_intelligence_api">National Intelligence API</td><td data-i18n="ui.government">Government</td><td data-i18n="ui.indicators_gis">Indicators + GIS</td></tr></table></div></section>
 </main><div id="toast" class="toast"></div><div id="v51Live" class="v51-live" role="status" aria-live="polite"><button class="v51-close" onclick="closeV51Sim()">×</button><h3 id="v51LiveTitle">NUTRI.N°1 Intelligence</h3><div id="v51LiveSub" class="v51-sub">Live application simulation</div><div class="v51-progress"><i></i></div><div id="v51LiveSteps" class="v51-steps"></div><div id="v51LiveResult" class="v51-result"></div></div>
+
+<!-- Composants de sections institutionnelles + moteur i18n FR/EN (chargés avant les scripts de page) -->
+<script src="components/i18n/sections-i18n.js"></script>
+<script src="components/agri-nutriapp/agri-nutriapp-i18n.js"></script>
+<script src="components/health-nutriapp/health-nutriapp-i18n.js"></script>
+<script src="components/who-nutritracker/nutritracker-i18n.js"></script>
+<script src="components/wfp-nutritracker/wfp-nutritracker-i18n.js"></script>
+<script src="components/fao-nutritracker/fao-nutritracker-i18n.js"></script>
+<script src="components/sections/agri-section.js"></script>
+<script src="components/sections/health-section.js"></script>
+<script src="components/sections/who-section.js"></script>
+<script src="components/sections/wfp-section.js"></script>
+<script src="components/sections/fao-section.js"></script>
 
 <script>
 const countries=[["BJ","Benin"],["BF","Burkina Faso"],["CV","Cabo Verde"],["CI","Côte d’Ivoire"],["GM","The Gambia"],["GH","Ghana"],["GN","Guinea"],["GW","Guinea-Bissau"],["LR","Liberia"],["ML","Mali"],["MR","Mauritania"],["NE","Niger"],["NG","Nigeria"],["SN","Senegal"],["SL","Sierra Leone"],["TG","Togo"],["TD","Chad"]];
@@ -1009,35 +941,11 @@ function renderPatientFoodBridge(){const e=document.getElementById('patientFoodB
 function openPatientFoodMarketplace(){if(typeof go==='function')go('citizen');if(typeof toast==='function')toast('Patient Dashboard 360° opened — marketplace recommendations are connected')}
 
 
-let whoCondition="diabetes";
 const demoCountryMetrics={TG:{children:184000,stunting:18,wasting:7,anaemia:42,ebf:58,diabetes:5.8,hypertension:27,obesity:9,cvd:14,stroke:4},GH:{children:620000,stunting:16,wasting:6,anaemia:39,ebf:55,diabetes:6.4,hypertension:29,obesity:11,cvd:15,stroke:5},SN:{children:510000,stunting:17,wasting:5,anaemia:41,ebf:57,diabetes:6.1,hypertension:26,obesity:10,cvd:13,stroke:4},NG:{children:2200000,stunting:29,wasting:8,anaemia:46,ebf:32,diabetes:7.2,hypertension:31,obesity:12,cvd:17,stroke:6},BF:{children:430000,stunting:25,wasting:9,anaemia:45,ebf:47,diabetes:5.1,hypertension:24,obesity:8,cvd:12,stroke:4},CI:{children:740000,stunting:22,wasting:7,anaemia:43,ebf:50,diabetes:6.3,hypertension:28,obesity:10,cvd:14,stroke:5},default:{children:300000,stunting:20,wasting:7,anaemia:42,ebf:55,diabetes:6,hypertension:27,obesity:10,cvd:14,stroke:5}};
 function fillInstCountries(){if(typeof countries==='undefined')return;['unicefCountry','whoCountry','wfpCountry','faoCountry'].forEach(id=>{const e=document.getElementById(id);if(e){e.innerHTML=countries.map(x=>`<option value="${x[0]}" data-i18n="ui.x_1">${x[1]}</option>`).join('');e.value=document.getElementById('country')?.value||countries[0][0]}});renderUNICEF();renderWFP();renderWHO();renderFAO();renderMonitoring()}
 
-function renderWFP(){
- const c=document.getElementById('wfpCountry')?.value||'TG',m=demoCountryMetrics[c]||demoCountryMetrics.default;
- const risk=Math.min(95,Math.round((m.obesity+m.diabetes+m.hypertension)*1.15));
- const afford=Math.max(28,Math.round(100-m.obesity*1.2-m.diabetes*.5));
- const diversity=Math.max(35,Math.round(82-m.obesity*.7));
- const price=Math.min(95,Math.round(28+m.obesity*.9));
- const nutr=Math.min(95,Math.round((m.stunting||18)*1.5));
- document.getElementById('wfpRisk').textContent=risk+' / 100';
- document.getElementById('wfpAfford').textContent=afford+' / 100';
- document.getElementById('wfpDiversity').textContent=diversity+' / 100';
- document.getElementById('wfpPrice').textContent=price+' / 100';
- document.getElementById('wfpNutrition').textContent=nutr+' / 100';
- document.getElementById('wfpEarly').innerHTML=`<div class="risk-row"><span>Overall signal</span><b>${risk>70?'🔴 High':'🟠 Monitor'}</b></div><div class="risk-row"><span>Price anomaly</span><b>${price>65?'Detected':'Stable'}</b></div><div class="risk-row"><span>Climate shock</span><b>Watch</b></div>`;
- document.getElementById('wfpMarket').innerHTML=`<div class="risk-row"><span>Healthy diet affordability</span><b>${afford}/100</b></div><div class="risk-row"><span>Market availability</span><b>Monitored</b></div><div class="risk-row"><span>Price trend</span><b>${price>60?'Rising':'Stable'}</b></div>`;
- document.getElementById('wfpDiet').innerHTML=`<div class="risk-row"><span>Dietary diversity</span><b>${diversity}/100</b></div><div class="risk-row"><span>Food consumption</span><b>Monitored</b></div><div class="risk-row"><span>Nutrition risk</span><b>${nutr}/100</b></div>`;
- document.getElementById('wfpSchool').innerHTML=`<div class="risk-row"><span>Meals tracked</span><b>Active</b></div><div class="risk-row"><span>Local procurement</span><b>Opportunities mapped</b></div><div class="risk-row"><span>Meal quality</span><b>Scored</b></div>`;
- document.getElementById('wfpClimate').innerHTML=`<div class="risk-row"><span>Production shock</span><b>Monitored</b></div><div class="risk-row"><span>Food-price transmission</span><b>Analyzed</b></div><div class="risk-row"><span>Early action signal</span><b>${risk>70?'Priority':'Watch'}</b></div>`;
- document.getElementById('wfpGIS').innerHTML=`<div class="map"><span class="pin" style="left:16%;top:42%">Priority A</span><span class="pin" style="left:48%;top:25%">Market B</span><span class="pin" style="left:71%;top:58%">Nutrition C</span></div>`;
- document.getElementById('wfpImpact').innerHTML=`<div class="grid3"><div class="reference good"><b>Baseline</b><br>Food security indicators established</div><div class="reference info"><b>Follow-up</b><br>Consumption and access tracked</div><div class="reference warn"><b>Outcome</b><br>Program impact calculated</div></div>`;
-}
-function renderFAO(){if(!document.getElementById('faoProduction'))return;const c=document.getElementById('faoCountry')?.value||'TG',m=demoCountryMetrics[c]||demoCountryMetrics.default;const prod=Math.max(55,Math.round(100-m.stunting*.7)),loss=Math.min(35,Math.round(8+m.wasting*.7)),price=Math.min(95,Math.round(35+m.obesity*1.2)),avail=Math.max(45,Math.round(86-m.diabetes*.8)),safety=m.anaemia>44?'Watch':'Stable';document.getElementById('faoProduction').textContent=prod+'/100';document.getElementById('faoLoss').textContent=loss+'%';document.getElementById('faoPrice').textContent=price+'/100';document.getElementById('faoAvailability').textContent=avail+'/100';document.getElementById('faoSafety').textContent=safety;document.getElementById('faoProductionPanel').innerHTML=`<div class="risk-row"><span>Crop forecast</span><b>${prod}/100</b></div><div class="risk-row"><span>Yield monitoring</span><b>Active</b></div><div class="risk-row"><span>Production gap</span><b>${prod<70?'High':'Moderate'}</b></div>`;document.getElementById('faoLossPanel').innerHTML=`<div class="risk-row"><span>Estimated loss signal</span><b>${loss}%</b></div><div class="risk-row"><span>Loss hotspots</span><b>Mapped</b></div><div class="risk-row"><span>Main stages</span><b>Storage · transport · processing</b></div>`;document.getElementById('faoMarketPanel').innerHTML=`<div class="risk-row"><span>Price pressure</span><b>${price}/100</b></div><div class="risk-row"><span>Market availability</span><b>Monitored</b></div><div class="risk-row"><span>Anomaly detection</span><b>${price>60?'Triggered':'Stable'}</b></div>`;document.getElementById('faoNutritionPanel').innerHTML=`<div class="risk-row"><span>Diverse food availability</span><b>${avail}/100</b></div><div class="risk-row"><span>Biofortified crops</span><b>Tracked</b></div><div class="risk-row"><span>Healthy food basket</span><b>Modeled</b></div>`;document.getElementById('faoSafetyPanel').innerHTML=`<div class="risk-row"><span>Laboratory results</span><b>Integrated</b></div><div class="risk-row"><span>Aflatoxin / microbiology</span><b>Monitored</b></div><div class="risk-row"><span>Traceability</span><b>Lot → market</b></div>`;document.getElementById('faoClimatePanel').innerHTML=`<div class="risk-row"><span>Drought / flood</span><b>Monitored</b></div><div class="risk-row"><span>Crop stress</span><b>Satellite / field</b></div><div class="risk-row"><span>Early action</span><b>${prod<70?'Priority':'Watch'}</b></div>`;document.getElementById('faoValuePanel').innerHTML=`<div class="risk-row"><span>Processing yield</span><b>Tracked</b></div><div class="risk-row"><span>Value addition</span><b>Modeled</b></div><div class="risk-row"><span>Local transformation</span><b>Mapped</b></div>`;document.getElementById('faoGIS').innerHTML='<div class="map"><span class="pin" style="left:15%;top:55%">Production</span><span class="pin" style="left:44%;top:28%">Loss hotspot</span><span class="pin" style="left:70%;top:62%">Market</span></div>'}
 function renderMonitoring(){const p=document.getElementById('meIndicatorPanel');if(p)p.innerHTML='<div class="risk-row"><span>Coverage</span><b>88%</b></div><div class="risk-row"><span>Target achievement</span><b>76%</b></div><div class="risk-row"><span>Equity disaggregation</span><b>Available</b></div><div class="risk-row"><span>Outcome trend</span><b>Improving</b></div>';const g=document.getElementById('meGIS');if(g)g.innerHTML='<div class="map"><span class="pin" style="left:18%;top:35%">Survey A</span><span class="pin" style="left:48%;top:58%">Round B</span><span class="pin" style="left:73%;top:25%">District C</span></div>';const a=document.getElementById('meAlerts');if(a)a.innerHTML='<div class="alert-row"><strong>🟢 Validated</strong><span>92% of current records pass quality checks.</span></div><div class="alert-row"><strong>🟠 Review</strong><span>8% require completeness or outlier review.</span></div><div class="alert-row"><strong>🔵 Governance</strong><span>Consent, provenance and role-based access applied.</span></div>'}
 function renderUNICEF(){const c=document.getElementById('unicefCountry')?.value||'TG',m=demoCountryMetrics[c]||demoCountryMetrics.default;document.getElementById('unicefChildren').textContent=m.children.toLocaleString();document.getElementById('unicefStunting').textContent=m.stunting+'%';document.getElementById('unicefWasting').textContent=m.wasting+'%';document.getElementById('unicefAnaemia').textContent=m.anaemia+'%';document.getElementById('unicefEBF').textContent=m.ebf+'%';const a=[['0–6 months',m.ebf,'Breastfeeding'],['6–24 months',m.stunting,'Stunting'],['24–59 months',m.wasting,'Wasting'],['5–12 years',m.obesity,'Overweight'],['12 years+',Math.round((m.obesity+m.diabetes)/2),'Adolescent nutrition']];document.getElementById('unicefAgeCards').innerHTML=a.map(x=>`<div class="age-card"><span data-i18n="ui.x_0">${x[0]}</span><b data-i18n="ui.x_1_2">${x[1]}%</b><div class="bar-wrap"><div class="bar-fill" style="width:${Math.min(x[1]*2,100)}%"></div></div><small data-i18n="ui.x_2">${x[2]}</small></div>`).join('');document.getElementById('unicefFeedingIndicators').innerHTML=`<div class="feeding-row"><span data-i18n="ui.exclusive_breastfeeding_0_5_months">Exclusive breastfeeding 0–5 months</span><b data-i18n="ui.m_ebf">${m.ebf}%</b></div><div class="feeding-row"><span data-i18n="ui.complementary_feeding_from_6_months">Complementary feeding from 6 months</span><b data-i18n="ui.tracked">Tracked</b></div><div class="feeding-row"><span data-i18n="ui.continued_breastfeeding_12_23_months">Continued breastfeeding 12–23 months</span><b data-i18n="ui.tracked">Tracked</b></div><div class="feeding-row"><span data-i18n="ui.dietary_diversity">Dietary diversity</span><b data-i18n="ui.tracked">Tracked</b></div>`;document.getElementById('unicefMaternal').innerHTML=`<div class="maternal-row"><span data-i18n="ui.pregnancy_anaemia">Pregnancy — anaemia</span><b data-i18n="ui.m_anaemia">${m.anaemia}%</b></div><div class="maternal-row"><span data-i18n="ui.maternal_nutrition_status">Maternal nutrition status</span><b data-i18n="ui.monitored">Monitored</b></div><div class="maternal-row"><span data-i18n="ui.lactation_support">Lactation support</span><b data-i18n="ui.monitored">Monitored</b></div>`;document.getElementById('unicefAnaemiaPanel').innerHTML=`<div class="maternal-row"><span data-i18n="ui.children">Children</span><b data-i18n="ui.m_anaemia">${m.anaemia}%</b></div><div class="maternal-row"><span data-i18n="ui.women_of_reproductive_age">Women of reproductive age</span><b data-i18n="ui.tracked">Tracked</b></div><div class="maternal-row"><span data-i18n="ui.pregnant_women">Pregnant women</span><b data-i18n="ui.tracked">Tracked</b></div>`;document.getElementById('unicefTrendChart').innerHTML='<div class="trend-bars">'+[m.stunting+5,m.stunting+3,m.stunting,m.stunting-1,m.stunting-2].map(v=>`<i style="height:${Math.max(v,3)*3}%"></i>`).join('')+'</div>';document.getElementById('unicefAlerts').innerHTML='<div class="alert-row"><strong data-i18n="ui.monitor">🟠 Monitor</strong><span data-i18n="ui.child_nutrition_indicators_require_continued_monitoring">Child nutrition indicators require continued monitoring.</span></div><div class="alert-row"><strong data-i18n="ui.watch">🟡 Watch</strong><span data-i18n="ui.review_breastfeeding_and_complementary_feeding_coverage">Review breastfeeding and complementary feeding coverage.</span></div>'}
-function selectWHOCondition(c,el){whoCondition=c;document.querySelectorAll('.ncd-card').forEach(x=>x.classList.remove('active'));el.classList.add('active');renderWHO()}
-function renderWHO(){const c=document.getElementById('whoCountry')?.value||'TG',m=demoCountryMetrics[c]||demoCountryMetrics.default;document.getElementById('whoDiabetes').textContent=m.diabetes+'%';document.getElementById('whoHypertension').textContent=m.hypertension+'%';document.getElementById('whoObesity').textContent=m.obesity+'%';document.getElementById('whoCVD').textContent=m.cvd+'%';document.getElementById('whoStroke').textContent=m.stroke+'%';const d={diabetes:[m.diabetes,'Diabetes'],hypertension:[m.hypertension,'Hypertension'],obesity:[m.obesity,'Obesity'],cancer:[4.2,'Cancer'],kidney:[3.8,'Kidney disease'],stroke:[m.stroke,'Stroke'],cvd:[m.cvd,'Cardiovascular disease'],diet:[34,'Dietary risk']}[whoCondition]||[m.diabetes,'Diabetes'];document.getElementById('whoConditionTitle').textContent=d[1]+' Intelligence';document.getElementById('whoConditionSummary').textContent='Population indicator: '+d[0]+'%. Demonstration data — production connects validated authorized datasets.';document.getElementById('whoTrendChart').innerHTML='<div class="trend-bars">'+[d[0]+4,d[0]+2,d[0],d[0]-1,d[0]+1].map(v=>`<i style="height:${Math.max(v,3)*2.5}%"></i>`).join('')+'</div>';document.getElementById('whoRiskFactors').innerHTML=`<div class="risk-row"><span data-i18n="ui.dietary_pattern">Dietary pattern</span><b data-i18n="ui.monitored">Monitored</b></div><div class="risk-row"><span data-i18n="ui.physical_activity">Physical activity</span><b data-i18n="ui.monitored">Monitored</b></div><div class="risk-row"><span data-i18n="ui.obesity">Obesity</span><b data-i18n="ui.m_obesity">${m.obesity}%</b></div><div class="risk-row"><span data-i18n="ui.hypertension">Hypertension</span><b data-i18n="ui.m_hypertension">${m.hypertension}%</b></div><div class="risk-row"><span data-i18n="ui.diabetes">Diabetes</span><b data-i18n="ui.m_diabetes">${m.diabetes}%</b></div>`;document.getElementById('whoAlerts').innerHTML='<div class="alert-row"><strong data-i18n="ui.monitor">🟠 Monitor</strong><span data-i18n="ui.population_health_trend_requires_surveillance">Population health trend requires surveillance.</span></div><div class="alert-row"><strong data-i18n="ui.watch">🟡 Watch</strong><span data-i18n="ui.connect_dietary_and_metabolic_indicators_to_the_evidence_graph">Connect dietary and metabolic indicators to the Evidence Graph.</span></div>'}
 
 
 
@@ -1184,9 +1092,17 @@ function v29Install(){
 }
 
 function init(){document.getElementById('country').innerHTML=countries.map(x=>`<option value="${x[0]}" data-i18n="ui.x_1">${x[1]}</option>`).join('');document.getElementById('foodCountry').innerHTML=countries.map(x=>`<option data-i18n="ui.x_1">${x[1]}</option>`).join('');countryChanged();updateReferences()}
+/* updateReferences() est référencé par les contrôles du tableau citoyen mais
+   n'est pas défini dans cette page : on fournit un stub sûr pour ne pas
+   interrompre la chaîne d'initialisation (fillInstCountries, rendus WHO/WFP…). */
+if (typeof window.updateReferences !== 'function') window.updateReferences = function () {};
 init(); setTimeout(v29Install,120);
 
- fillInstCountries(); renderFAO(); renderMonitoring(); v28TranslateAll(); populateGeneralStoreCountry();renderGeneralHealthyStore();renderPatientFoodBridge();setTimeout(()=>{const m=document.getElementById('country');if(m)m.addEventListener('change',()=>{const e=document.getElementById('generalStoreCountry');if(e){e.value=m.value;renderGeneralHealthyStore()}renderPatientFoodBridge()})},100); populateClinicalFoodCountry();renderClinicalFood();setTimeout(()=>{const m=document.getElementById('country');if(m)m.addEventListener('change',()=>{const e=document.getElementById('clinicalFoodCountry');if(e){e.value=m.value;renderClinicalFood()}})},80); populateMarketCountry();filterMarket();renderCart(); loadPatientDashboard();loadFamilyChildDashboard(); populateNutritionistCountries();
+ /* Séquence d'initialisation : chaque module est isolé (safe) pour qu'une
+    erreur dans l'un d'eux n'empêche pas les suivants de démarrer. */
+ (function(){const safe=function(fn){try{fn()}catch(e){}};
+ safe(fillInstCountries); safe(renderFAO); safe(renderMonitoring); safe(v28TranslateAll); safe(populateGeneralStoreCountry);safe(renderGeneralHealthyStore);safe(renderPatientFoodBridge);setTimeout(()=>{const m=document.getElementById('country');if(m)m.addEventListener('change',()=>{const e=document.getElementById('generalStoreCountry');if(e){e.value=m.value;renderGeneralHealthyStore()}renderPatientFoodBridge()})},100); safe(populateClinicalFoodCountry);safe(renderClinicalFood);setTimeout(()=>{const m=document.getElementById('country');if(m)m.addEventListener('change',()=>{const e=document.getElementById('clinicalFoodCountry');if(e){e.value=m.value;renderClinicalFood()}})},80); safe(populateMarketCountry);safe(filterMarket);safe(renderCart); safe(loadPatientDashboard);safe(loadFamilyChildDashboard); safe(populateNutritionistCountries);
+ })();
 setTimeout(()=>{
   const main=document.getElementById('country');
   const n=document.getElementById('nutritionistCountry');
@@ -1311,7 +1227,9 @@ window.NUTRI_V34_COUNTRY={
  },
  available(code){
    const c=this.manifest.countries.find(x=>x.code===code);
-   return c?[...new Set([...(c.official||[]),...(c.local||[])])]:['en'];
+   /* Anglais et français (langues officielles de la plateforme) toujours proposés. */
+   const base=['en','fr'];
+   return c?[...new Set([...base,...(c.official||[]),...(c.local||[])])]:base;
  },
  rebuildLanguages(code){
    const s=this.languageSelect();if(!s)return;

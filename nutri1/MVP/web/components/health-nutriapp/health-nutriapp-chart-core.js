@@ -226,6 +226,7 @@
   };
   /* Texte tronqué avec ellipse */
   HA.ellipsis = (ctx, text, maxW) => {
+    text = (global.NutriSectionsI18N ? global.NutriSectionsI18N.t(text) : text);
     if (ctx.measureText(text).width <= maxW) return text;
     let t = text;
     while (t.length > 1 && ctx.measureText(t + '…').width > maxW) t = t.slice(0, -1);
@@ -269,7 +270,8 @@
       this.def = def;
       this.canvas = document.createElement('canvas');
       this.canvas.setAttribute('role', 'img');
-      this.ctx = this.canvas.getContext('2d');
+      const _rawCtx = this.canvas.getContext('2d');
+      this.ctx = global.NutriSectionsI18N ? global.NutriSectionsI18N.wrapCtx(_rawCtx) : _rawCtx;
       this.tip = document.createElement('div');
       this.tip.className = 'ha-tooltip';
       host.appendChild(this.canvas);
@@ -403,7 +405,9 @@
     /* Tooltip : card blanche, ombre, liseré gauche couleur de la série */
     _showTip(hit, e) {
       const t = hit.tip;
-      if (this._tipKey !== hit.key) {
+      const _lang = global.NutriSectionsI18N ? global.NutriSectionsI18N.getLang() : '';
+      if (this._tipKey !== hit.key || this._tipLang !== _lang) {
+        this._tipLang = _lang;
         this._tipKey = hit.key;
         let html = '<div class="ha-tip-title">' + HA.escape(t.title) + '</div>';
         if (t.sub) html += '<div class="ha-tip-sub">' + HA.escape(t.sub) + '</div>';
@@ -412,7 +416,7 @@
             '<span>' + HA.escape(r.label) + '</span><b>' + HA.escape(r.value) + '</b></div>';
         });
         if (t.note) html += '<div class="ha-tip-note">' + HA.escape(t.note) + '</div>';
-        this.tip.innerHTML = html;
+        this.tip.innerHTML = global.NutriSectionsI18N ? global.NutriSectionsI18N.translateHtml(html) : html;
         this.tip.style.borderLeftColor = t.color || HA.COLORS.primary;
       }
       const r = this.canvas.getBoundingClientRect();

@@ -13,5 +13,5 @@ nutritracker-dashboard:not(:defined) {
   border-radius: 24px; border: 1px solid #E0EEFF;
   background: linear-gradient(90deg, #0A1628 0 240px, #F0F6FF 240px);
 }
-#who.nt-takeover:not(.nt-show-legacy) > :not(nutritracker-dashboard) { display: none !important; }
-#who.nt-takeover.nt-show-legacy > nutritracker-dashboard { margin-bottom: 24px; }
+#who.nt-takeover:not(.nt-show-legacy) who-section > :not(nutritracker-dashboard) { display: none !important; }
+#who.nt-takeover.nt-show-legacy who-section > nutritracker-dashboard { margin-bottom: 24px; }

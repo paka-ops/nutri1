@@ -15,8 +15,8 @@ wfp-nutritracker-dashboard:not(:defined) {
   border: 1px solid #FDE68A;
   background: linear-gradient(90deg, #1C1008 0 240px, #FFFBF0 240px);
 }
-#wfp.wf-takeover:not(.wf-show-legacy) > :not(wfp-nutritracker-dashboard) { display: none !important; }
-#wfp.wf-takeover.wf-show-legacy > wfp-nutritracker-dashboard { margin-bottom: 24px; }
+#wfp.wf-takeover:not(.wf-show-legacy) wfp-section > :not(wfp-nutritracker-dashboard) { display: none !important; }
+#wfp.wf-takeover.wf-show-legacy wfp-section > wfp-nutritracker-dashboard { margin-bottom: 24px; }
 
 /* ----------------------------------------------------------------------------
  * 3. PLEIN ÉCRAN — l'élément hôte devient le conteneur défilant.

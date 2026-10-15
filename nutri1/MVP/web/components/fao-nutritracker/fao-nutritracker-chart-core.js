@@ -185,7 +185,8 @@
       this.canvas = document.createElement('canvas');
       this.canvas.setAttribute('aria-hidden', 'true');
       this.host.appendChild(this.canvas);
-      this.ctx = this.canvas.getContext('2d', { alpha: true });
+      const _rawCtx = this.canvas.getContext('2d', { alpha: true });
+      this.ctx = global.NutriSectionsI18N ? global.NutriSectionsI18N.wrapCtx(_rawCtx) : _rawCtx;
       this.tooltip = document.createElement('div');
       this.tooltip.className = 'ft-tooltip';
       this.tooltip.hidden = true;
@@ -345,6 +346,7 @@
         this.tooltip.appendChild(row);
       });
       this.tooltip.style.setProperty('--tooltip-color', hit.color || '#059669');
+      if (global.NutriSectionsI18N) global.NutriSectionsI18N.translateTree(this.tooltip);
       this.tooltip.hidden = false;
       const left = Math.max(4, Math.min((x || 0) + 12, this.width - Math.min(this.tooltip.offsetWidth, 220) - 5));
       const top = Math.max(4, Math.min((y || 0) + 12, this.height - Math.min(this.tooltip.offsetHeight, 115) - 5));

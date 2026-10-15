@@ -8,7 +8,7 @@
   const C = U.colors;
   FAO.charts = FAO.charts || {};
 
-  function shortLabel(value, max) { return value.length > max ? value.slice(0, max - 1) + '…' : value; }
+  function shortLabel(value, max) { value = (global.NutriSectionsI18N ? global.NutriSectionsI18N.t(value) : value); return value.length > max ? value.slice(0, max - 1) + '…' : value; }
   function countryAction(row, chart) {
     return row.type === 'country' ? () => chart.dashboard.selectCountry(row.code) : null;
   }
@@ -161,7 +161,7 @@
       const x = xAt(mean);
       const color = mean >= 6 ? '#059669' : mean >= 4.5 ? '#D97706' : '#DC2626';
       if (index % 2 === 1) { ctx.fillStyle = 'rgba(248,250,252,.7)'; ctx.fillRect(left, top + index * rowHeight, plotWidth, rowHeight); }
-      U.text(ctx, row.name.length > 14 ? row.name.slice(0, 13) + '…' : row.name, left - 7, y, { size: rowHeight < 16 ? 7 : 8, color: '#475569', align: 'right' });
+      U.text(ctx, (function(n){ n = (global.NutriSectionsI18N ? global.NutriSectionsI18N.t(n) : n); return n.length > 14 ? n.slice(0, 13) + '…' : n; })(row.name), left - 7, y, { size: rowHeight < 16 ? 7 : 8, color: '#475569', align: 'right' });
       U.line(ctx, Math.min(targetX, x), y, Math.max(targetX, x), y, color, 1.8);
       U.circle(ctx, x, y, chart.hoverId === 'g13-' + row.code ? 6 : 4.2, color, '#FFFFFF', 1);
       U.hitCircle(chart, x, y, 7, row.name + ' · HDDS', [
