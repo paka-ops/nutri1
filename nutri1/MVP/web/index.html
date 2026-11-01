@@ -18,6 +18,9 @@
 <link rel="stylesheet" href="components/agri-nutriapp/agri-nutriapp-host.css">
 <!-- Connected Devices Lab (#devices) : feuille de style du module (intro + Shadow DOM) -->
 <link rel="stylesheet" href="components/connected-devices/connected-devices.css">
+<!-- Moteur IA de nutrition & de prévention (#ai) : feuille de style premium du module -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="components/ai-prevention/ai-prevention.css">
 <style>
 :root{--g:#08733f;--d:#032d1a;--lime:#c9ee59;--bg:#f3f7f4;--card:#fff;--line:#dbe8df;--text:#14251a;--muted:#68776d;--blue:#2469aa;--orange:#b96c1b;--red:#a62f35}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,system-ui,Arial}.side{position:fixed;left:0;top:0;bottom:0;width:300px;padding:18px;background:linear-gradient(155deg,var(--d),#08733f);color:#fff;overflow:auto}.brand{font-size:29px;font-weight:900}.brand b{color:var(--lime)}.sub{font-size:11px;opacity:.72;line-height:1.5}.nav{margin-top:16px}.nav button{display:block;width:100%;padding:10px 12px;margin:2px 0;border:0;border-radius:9px;background:transparent;color:#fff;text-align:left;cursor:pointer}.nav button:hover,.nav button.on{background:#ffffff1e}.main{margin-left:300px;padding:18px;max-width:1850px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.controls{display:flex;gap:7px}select,input,textarea{border:1px solid var(--line);border-radius:9px;padding:9px;background:#fff}.view{display:none}.view.on{display:block}.hero{padding:30px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#032d1a,#08733f)}.hero h1{font-size:36px;margin:0 0 7px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:13px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:13px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:13px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 7px 25px #17351f0b}.metric{font-size:28px;font-weight:900;margin:4px 0}.muted,.kpi{color:var(--muted)}.pill{display:inline-block;padding:5px 8px;border-radius:20px;background:#edf6ef;color:var(--g);font-size:11px}.btn{border:0;border-radius:9px;padding:10px 14px;cursor:pointer}.primary{background:var(--g);color:#fff}.secondary{background:#edf6ef;color:var(--g)}.danger{background:#fff0f0;color:var(--red)}.form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.form label{display:flex;flex-direction:column;gap:5px;font-weight:650}.chart{height:280px}.reference{background:#f3f7f4;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px}.reference.good{border-left:4px solid var(--g)}.reference.warn{border-left:4px solid var(--orange)}.reference.info{border-left:4px solid var(--blue)}.progress{height:10px;background:#e6eee8;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--g);transition:width .45s}.wizard{display:flex;gap:7px;flex-wrap:wrap}.step{padding:7px 10px;border-radius:20px;background:#edf6ef}.step.active{background:var(--g);color:#fff}.chat{height:270px;overflow:auto;background:#f4f8f5;padding:12px;border-radius:12px}.msg{padding:9px;margin:7px 0;background:#e3f1e7;border-radius:10px;max-width:80%}.msg.me{margin-left:auto;background:#d9edf9}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.day{padding:9px;background:#f2f6f3;border-radius:7px;min-height:65px}.slot{background:#dcefe2;padding:5px;border-radius:5px;margin-top:4px;font-size:11px}.accordion{border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#fff;overflow:hidden}.accordion summary{padding:12px;font-weight:700;cursor:pointer;list-style:none}.accordion summary:after{content:'＋';float:right}.accordion[open] summary:after{content:'−'}.accordion .inner{padding:12px;border-top:1px solid var(--line)}.map{height:300px;border-radius:15px;background:linear-gradient(135deg,#e9f3eb,#c8dfce);position:relative;overflow:hidden}.pin{position:absolute;padding:9px 12px;background:var(--g);color:#fff;border-radius:30px}.toast{display:none;position:fixed;right:18px;bottom:18px;background:var(--d);color:#fff;padding:13px 16px;border-radius:10px;z-index:20}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left}.mini{font-size:12px}.tag{font-size:11px;padding:4px 7px;border-radius:14px;background:#eef3f0;margin-right:4px;display:inline-block}.heat{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}.heat div{height:30px;border-radius:5px;background:#dbece0}.heat div:nth-child(3n){background:#a7d2b3}.heat div:nth-child(4n){background:#67aa7f}.heat div:nth-child(5n){background:#08733f}.rank{display:flex;justify-content:space-between;padding:9px;border-bottom:1px solid var(--line)}@media(max-width:980px){.side{display:none}.main{margin:0}.grid,.grid3,.grid2,.form{grid-template-columns:1fr 1fr}}@media(max-width:600px){.grid,.grid3,.grid2,.form{grid-template-columns:1fr}}
@@ -457,10 +460,13 @@
 <div class="card"><h3 data-i18n="ui.product">🏷 Product</h3><p data-i18n="ui.barcode_label_product_data">Barcode / label → product data.</p><button class="btn primary" onclick="runScan('Product')" data-i18n="ui.scan_now">Scan now</button></div></div>
 <div class="card"><h3 data-i18n="ui.live_ai_pipeline">Live AI pipeline</h3><div class="wizard" id="scanWizard"><span class="step active" data-i18n="ui.capture">Capture</span><span class="step" data-i18n="ui.detect">Detect</span><span class="step" data-i18n="ui.ontology">Ontology</span><span class="step" data-i18n="ui.composition">Composition</span><span class="step" data-i18n="ui.portion">Portion</span><span class="step" data-i18n="ui.confirm">Confirm</span></div><p id="scanStatus" data-i18n="ui.ready">Ready.</p></div></div></section>
 
-<section id="ai" class="view"><div class="card"><h2 data-i18n="ui.ai_nutrition_prevention_engine">🥗 AI Nutrition & Prevention Engine</h2><p>Demonstrate exactly how <b data-i18n="ui.generate_personalized_plan">Generate personalized plan</b> works.</p>
-<div class="wizard" id="aiWizard"><span class="step active" data-i18n="ui.1_profile">1. Profile</span><span class="step" data-i18n="ui.2_diet">2. Diet</span><span class="step" data-i18n="ui.3_clinical">3. Clinical</span><span class="step" data-i18n="ui.4_country_foods">4. Country foods</span><span class="step" data-i18n="ui.5_nutrient_gaps">5. Nutrient gaps</span><span class="step" data-i18n="ui.6_prevention">6. Prevention</span><span class="step" data-i18n="ui.7_meal_plan">7. Meal plan</span><span class="step" data-i18n="ui.8_explain">8. Explain</span></div>
-<div style="margin:14px 0"><div class="progress"><i id="aiProgress"></i></div><p id="aiStatus" data-i18n="ui.ready_to_generate">Ready to generate.</p></div><button class="btn primary" onclick="generatePlan()" data-i18n="ui.generate_personalized_plan">Generate personalized plan</button>
-<div id="planCards" class="grid3"></div></div></section>
+<section id="ai" class="view">
+<h2 class="aip-visually-hidden">AI Nutrition &amp; Prevention Engine</h2>
+<!-- Moteur IA de nutrition et de prévention : rendu par components/ai-prevention/.
+     Quatre étapes — capteurs & données, simulation, prédictions & timeline, programme 7 jours. -->
+<div id="aiPrevention" class="aip-root"></div>
+<noscript><div class="card"><p>The AI Nutrition &amp; Prevention Engine requires JavaScript. The rest of the platform remains fully usable without it.</p></div></noscript>
+</section>
 
 <section id="network" class="view"><div class="card"><h2 data-i18n="ui.nutritionist_network">👩🏾‍⚕️ Nutritionist Network</h2>
 <div class="card patient-care-panel" id="patientCareDashboard">
@@ -836,37 +842,6 @@
     };
   }
 
-  if (typeof window.generatePlan !== 'function') {
-    window.generatePlan = function () {
-      var wiz = document.getElementById('aiWizard'), bar = document.getElementById('aiProgress'), st = document.getElementById('aiStatus'), out = document.getElementById('planCards');
-      var steps = wiz ? wiz.querySelectorAll('.step') : [];
-      var labels = ['Profile', 'Diet', 'Clinical', 'Country foods', 'Nutrient gaps', 'Prevention', 'Meal plan', 'Explain'];
-      var i = 0;
-      steps.forEach(function (s, k) { if (k > 0) s.classList.remove('active'); });
-      if (st) st.textContent = 'Generating\u2026';
-      var timer = setInterval(function () {
-        if (i < steps.length) {
-          if (steps[i]) steps[i].classList.add('active');
-          if (st) st.textContent = 'Step ' + (i + 1) + '/8 \u2014 ' + (labels[i] || '') + '\u2026';
-          if (bar) bar.style.width = Math.round(((i + 1) / steps.length) * 100) + '%';
-          i++;
-        } else {
-          clearInterval(timer);
-          if (st) st.textContent = 'Personalized plan ready \u2014 adapted to your profile and local foods.';
-          if (out) {
-            out.innerHTML = [
-              ['\u{1F373} Breakfast', 'Millet porridge + groundnut paste + seasonal fruit', 'Energy \u2022 iron \u2022 fiber'],
-              ['\u{1F35B} Lunch', 'Rice or fonio + cowpea + leafy vegetables + fish', 'Protein \u2022 vitamin A'],
-              ['\u{1F357} Dinner', 'Sweet potato + legumes + lightly cooked vegetables', 'Light \u2022 balanced']
-            ].map(function (c) {
-              return '<div class="card"><h3>' + c[0] + '</h3><p>' + c[1] + '</p><span class="pill">' + c[2] + '</span></div>';
-            }).join('');
-          }
-          if (typeof toast === 'function') toast('Personalized plan generated');
-        }
-      }, 430);
-    };
-  }
 
   if (typeof window.startTeleconsultation !== 'function') {
     window.startTeleconsultation = function () {
@@ -3027,6 +3002,17 @@ const st=document.createElement('style');st.textContent=`.v57-clickable{cursor:p
 <script src="components/connected-devices/connected-devices-i18n.js"></script>
 <script src="components/connected-devices/connected-devices-charts.js"></script>
 <script src="components/connected-devices/connected-devices.js"></script>
+
+<!-- ============================================================
+     AI NUTRITION & PREVENTION ENGINE (#ai) — data → i18n → model → charts → template → controller
+     Files live in components/ai-prevention/ so index.html stays light.
+     ============================================================ -->
+<script src="components/ai-prevention/ai-prevention-data.js"></script>
+<script src="components/ai-prevention/ai-prevention-i18n.js"></script>
+<script src="components/ai-prevention/ai-prevention-model.js"></script>
+<script src="components/ai-prevention/ai-prevention-charts.js"></script>
+<script src="components/ai-prevention/ai-prevention-template.js"></script>
+<script src="components/ai-prevention/ai-prevention.js"></script>
 <script src="assets/institutional-i18n.js"></script>
 <script src="assets/institutional-i18n-engine.js"></script>
 <!-- Lien profond : index.html#unicef (ou #who, #fao…) ouvre directement la section demandée -->
