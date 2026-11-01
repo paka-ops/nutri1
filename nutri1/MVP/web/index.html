@@ -1611,9 +1611,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  function ensureCanvas(root,id){
    let c=root.querySelector("#"+id);
    if(!c){
-     const wrap=document.createElement("div"); wrap.className="v38-chart-wrap";
-     c=document.createElement("canvas"); c.id=id; c.height=220; wrap.appendChild(c);
-     root.appendChild(wrap);
+    
    }
    return c;
  }
