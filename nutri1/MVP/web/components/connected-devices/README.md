@@ -4,9 +4,10 @@ Simulation immersive du parcours **appareil de santé → passerelle chiffrée �
 normalisation FHIR → graphe de preuves NUTRI.N°1**, pour la page *Connected Devices &
 Automatic Sync* du MVP web (`web/index.html`, section `#devices`).
 
-Le module remplace l'ancienne grille statique de six cartes « Connect » par un laboratoire
-de session complet : appairage Bluetooth, consentement granulaire, flux temps réel,
-pipeline d'ingestion, alertes cliniques et historique de synchronisation.
+**Édition Premium (v2)** : centre de commande sombre de luxe — verre dépoli obsidienne,
+accents émeraude & or, aurora animée en arrière-plan, graphe héros avec halo, mini-tendances
+par catégorie vitale, anneaux d'activité, débit d'ingestion temps réel et score de bien-être
+composite — le tout piloté par les données vivantes des appareils connectés.
 
 ---
 
@@ -15,11 +16,13 @@ pipeline d'ingestion, alertes cliniques et historique de synchronisation.
 | Fichier | Rôle |
 | --- | --- |
 | `connected-devices-data.js` | Catalogue des appareils, catégories de données (LOINC/FHIR), passerelles pays, générateurs physiologiques, seuils cliniques. Aucun accès au DOM. |
-| `connected-devices-i18n.js` | Dictionnaire local **FR / EN** (≈150 clés) + `t(key, params)`, `loc({fr,en})`, `currentLocale()`. |
-| `connected-devices.js` | Rendu Shadow DOM, machine à états des appareils, moteur de synchronisation, alertes, journal, export, boucle de simulation. |
-| `connected-devices.css` | Styles du module (préfixe `ds-`) + styles de l'intro en light DOM (`.devsim-*`). |
+| `connected-devices-i18n.js` | Dictionnaire local **FR / EN** (~190 clés) + `t(key, params)`, `loc({fr,en})`, `currentLocale()`. |
+| `connected-devices-charts.js` | Moteur de graphiques premium exposé via `window.NUTRI_DEVICES_CHARTS` : graphe héros dual-axe (SVG, glow + crosshair), mini-tendances, anneaux, barres de débit, champ de particules aurora (canvas rAF), compteurs animés, score bien-être. |
+| `connected-devices.js` | Rendu Shadow DOM, machine à états des appareils, moteur de synchronisation, alertes, journal, export, boucle de simulation, intégration du moteur premium. |
+| `connected-devices.css` | Styles de base du module (préfixe `ds-`) + styles de l'intro en light DOM (`.devsim-*`). |
+| `connected-devices-premium.css` | Couche design luxe chargée dans le Shadow DOM : tokens sombres, verre dépoli, halos, shimmer, keyframes premium, `prefers-reduced-motion`. |
 
-## 2. Intégration dans `index.html` (3 ajouts seulement)
+## 2. Intégration dans `index.html` (4 ajouts seulement)
 
 ```html
 <!-- <head> -->
@@ -31,6 +34,7 @@ pipeline d'ingestion, alertes cliniques et historique de synchronisation.
 <!-- avant les scripts i18n institutionnels -->
 <script src="components/connected-devices/connected-devices-data.js"></script>
 <script src="components/connected-devices/connected-devices-i18n.js"></script>
+<script src="components/connected-devices/connected-devices-charts.js"></script>
 <script src="components/connected-devices/connected-devices.js"></script>
 ```
 
@@ -41,8 +45,8 @@ les traducteurs de texte v28/v29.
 ## 3. Ce que la simulation propose
 
 ### Session (bandeau HUD)
-- État LIVE, passerelle locale (ville + pays selon le sélecteur `#country`), TLS 1.3 / AES-256,
-  latence moyenne, identifiant de session, horloge, chrono de session.
+- État LIVE + badge ÉDITION PREMIUM, passerelle locale (ville + pays selon le sélecteur `#country`),
+  TLS 1.3 / AES-256, latence moyenne, identifiant de session, horloge, chrono de session.
 - **Démo guidée** (autopilote) : associe les appareils un par un puis lance une synchronisation.
 - **Pause / Reprendre**, **vitesse ×1 / ×2 / ×4**, **Réinitialiser**.
 
@@ -60,15 +64,23 @@ les traducteurs de texte v28/v29.
 5. **Récapitulatif** — appareil, catégories, mesures importées, latence.
 
 ### Moniteur temps réel
-- Cadran de montre avec ECG animé (SVG), BPM, SpO₂, batterie, signal.
-- Constantes : glycémie, tension, poids, pas, sommeil.
+- Cadran de montre avec ECG animé (SVG, halo lumineux), BPM, SpO₂, batterie, signal.
+- Constantes : glycémie, tension, poids, pas, sommeil — avec flash à chaque nouvelle mesure.
 - Notification mobile simulée à chaque mesure synchronisée.
 
-### Graphique & pipeline
-- Courbe glycémie + fréquence cardiaque en fenêtre glissante (SVG natif, **sans Chart.js**),
-  bande de cible glycémique 3,9 – 7,8 mmol/L, point de curseur animé.
-- Chaîne d'ingestion en 5 étapes (collecte BLE → passerelle → consentement → FHIR → graphe)
-  avec animation de paquets et compteurs reçues / normalisées / rejetées / stockées.
+### Graphiques dynamiques (toutes les données des appareils)
+- **Graphe héros** (pleine largeur) : glycémie + fréquence cardiaque en fenêtre glissante,
+  aires dégradées, ligne glycémie avec halo pulsant, bande de cible 3,9 – 7,8 mmol/L,
+  crosshair + infobulle au survol. Si la CGM n'est pas encore associée, le graphe suit le
+  seul flux FC (jamais un cadre vide).
+- **Tendances vitales** : 6 tuiles animées (glycémie, FC, tension, poids, pas, sommeil),
+  chacune avec sa mini-courbe dégradée, la valeur courante et le delta vs lecture précédente ;
+  flash doré sur la tuile quand la donnée arrive.
+- **Anneaux & bien-être** : anneaux d'activité (pas / 8 000, sommeil / 7,5 h, qualité signal),
+  **score de bien-être composite 0–100** (glycémie, FC, tension, pas, sommeil) avec statut
+  (Excellent → À surveiller), et **débit d'ingestion** (mesures/tick, barres 26 ticks).
+- **Chaîne d'ingestion** en 5 étapes avec animation de paquets et compteurs
+  reçues / normalisées / rejetées / stockées.
 - Barre de synchronisation (`#syncbar` / `#syncText` conservés pour compatibilité).
 
 ### Journal, consentement, alertes, historique
@@ -81,7 +93,7 @@ les traducteurs de texte v28/v29.
 
 ### Première visite
 À la première ouverture de la vue, la montre et le capteur de glucose sont présentés comme
-« déjà associés au compte » : le moniteur et le graphique sont vivants immédiatement.
+« déjà associés au compte » : le moniteur et les graphiques sont vivants immédiatement.
 
 ## 4. API publique
 
@@ -91,6 +103,9 @@ window.NUTRI_DEVICES_SIM.sync();               // synchronise les appareils conn
 window.NUTRI_DEVICES_SIM.reset();
 window.NUTRI_DEVICES_SIM.export();
 window.NUTRI_DEVICES_SIM.state;                // état complet (lecture)
+
+// Moteur de graphiques (si besoin ailleurs)
+window.NUTRI_DEVICES_CHARTS.wellnessScore({ glucose: 5.6, hr: 72, bp: { sys: 118, dia: 76 }, steps: 6400, sleep: 7.2 });
 ```
 
 Compatibilité avec l'ancienne page :
@@ -106,19 +121,21 @@ window.runSync();                      // → moteur de synchronisation du nouve
   puis `localStorage.nutri_language` (défaut : anglais).
 - Il écoute `nutri:i18nChanged` et le `change` du sélecteur `#language`, et se re-localise
   également à chaque ouverture de la vue.
+- Toutes les clés internes (HUD, tuiles, anneaux, score, journal, alertes…) existent en **FR et EN** ;
+  le changement de langue re-rend les graphiques, tuiles et axes sans perdre la session.
 - L'intro (light DOM) utilise 5 clés `ui.devsim_*` ajoutées à `locales/{en,fr,es,ewe,kab}.json`
   et au dictionnaire embarqué (`NUTRI_EMBEDDED_LOCALES`), ce qui garde
   `tools/validate_i18n.py` au vert.
-- Les messages dynamiques (journal, alertes) sont stockés sous forme de clé + paramètres :
-  changer de langue re-rend le journal sans perdre la session.
 
 ## 6. Accessibilité & performance
 
 - Boutons réels, `aria-busy`, `role="dialog"`, `aria-modal`, fermeture par `Échap`,
   libellés de bascules, focus visible.
-- `prefers-reduced-motion: reduce` neutralise les animations (ECG, radar, paquets).
-- Une seule boucle `setInterval` de 100 ms ; le rendu est ignoré quand la vue est masquée,
-  les minuteries sont annulées au reset. Aucune dépendance externe.
+- `prefers-reduced-motion: reduce` neutralise les animations (ECG, radar, paquets, aurora,
+  halo, shimmer).
+- Boucle `setInterval` de 100 ms pour la simulation ; le rendu est ignoré quand la vue est
+  masquée ; l'aurora utilise `requestAnimationFrame` + `ResizeObserver`. Aucune dépendance
+  externe (pas de Chart.js).
 
 ## 7. Non-régression
 
@@ -128,5 +145,8 @@ window.runSync();                      // → moteur de synchronisation du nouve
   V39 (`visibleSection`) pour ses KPI/charts : ces couches continuent de s'afficher.
 - V43/V44 cherchaient des boutons « connect » dans `#devices` : ils ne trouvent plus de cible,
   ce qui est sans effet (aucune erreur) et évite deux animations concurrentes.
-- Vérifié par test DOM (jsdom) : appairage complet, synchronisation, consentement,
-  changement de langue, autopilote, reset, et absence d'erreur provenant du module.
+- IDs historiques `#syncbar` / `#syncText` conservés.
+- Vérifié par test DOM (jsdom) : montage premium, auto-démarrage (montre + CGM), séries
+  glycémie/FC, graphe héros, mini-tendances, anneaux, appairage modal complet, synchronisation,
+  changement de langue FR↔EN, pause, autopilote, révocation de consentement, reset, et absence
+  d'erreur provenant du module.
