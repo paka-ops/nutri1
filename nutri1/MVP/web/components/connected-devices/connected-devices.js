@@ -5,19 +5,25 @@
  * journey: BLE discovery → secure pairing → granular consent → first import →
  * live telemetry → ingestion pipeline → clinical alerts → sync history.
  *
+ * Premium edition (v2): dark-luxury command centre with aurora ambience,
+ * animated hero chart, per-vital mini trends, activity rings, ingestion
+ * throughput and a composite wellness score — all driven by live device data
+ * through the NUTRI_DEVICES_CHARTS engine (connected-devices-charts.js).
+ *
  * Design rules
  *   • Mounted in a Shadow DOM: no global CSS, no global MutationObserver and no
  *     interference with the platform's versioned layers (V39…V58) or with the
  *     v28/v29 text translators.
  *   • Additive only: the legacy globals connectDevice() and runSync() are
  *     re-routed to this engine so every existing onclick keeps working.
- *   • No external dependency (no Chart.js): the live chart is hand-drawn SVG.
+ *   • No external dependency (no Chart.js): charts are hand-drawn SVG.
  * ========================================================================== */
 (function () {
   'use strict';
 
   var DATA = window.NUTRI_DEVICES_SIM_DATA;
   var I18N = window.NUTRI_DEVICES_SIM_I18N;
+  var CHARTS = window.NUTRI_DEVICES_CHARTS;
   if (!DATA || !I18N) { console.warn('[devices-sim] data/i18n bundle missing'); return; }
 
   var host = document.getElementById('devicesSim');
@@ -66,6 +72,7 @@
   var sessionIntervals = [];
   var modalTimers = [];
   var modalIntervals = [];
+  var ambientCtl = null;
 
   function schedule(bucket, fn, ms) {
     var id = setTimeout(function () {
@@ -124,7 +131,12 @@
       devices: DATA.devices.map(DATA.instantiate),
       consent: {},
       gen: DATA.createGenerators(),
-      series: { glucose: [], hr: [] },
+      series: {
+        glucose: [], hr: [], bpSys: [], bpDia: [],
+        weight: [], steps: [], sleep: [], spo2: []
+      },
+      throughput: [],
+      lastTickAccepted: 0,
       counters: { received: 0, normalized: 0, rejected: 0, stored: 0 },
       readings: 0,
       syncs: { ok: 0, fail: 0 },
@@ -185,7 +197,10 @@
   function shellHtml() {
     return '' +
       '<link rel="stylesheet" href="' + CSS_HREF + '">' +
-      '<div class="ds-root">' +
+      '<link rel="stylesheet" href="components/connected-devices/connected-devices-premium.css">' +
+      '<div class="ds-root ds-premium">' +
+      '<canvas class="ds-ambient" aria-hidden="true"></canvas>' +
+      '<div class="ds-sheen" aria-hidden="true"></div>' +
 
       /* ---------------- HUD ---------------- */
       '<div class="ds-hud">' +
@@ -193,6 +208,7 @@
           '<div class="ds-hud-title"><span class="ds-led"></span>' +
             '<span data-i18n-ds="hud.title">Session de synchronisation sécurisée</span>' +
             '<span class="ds-chip" data-i18n-ds="hud.live">LIVE</span>' +
+            '<span class="ds-chip" data-i18n-ds="hud.premium">ÉDITION PREMIUM</span>' +
           '</div>' +
           '<div class="ds-hud-meta">' +
             '<span data-i18n-ds="hud.gateway">Passerelle</span>' +
@@ -254,19 +270,48 @@
         '</section>' +
       '</div>' +
 
-      /* ---------------- chart + pipeline ---------------- */
+      /* ---------------- vital trends + rings ---------------- */
+      '<section class="ds-panel">' +
+        '<div class="ds-panel-head"><div>' +
+          '<h3 data-i18n-ds="trends.title">Tendances vitales</h3>' +
+          '<p class="ds-hint" data-i18n-ds="trends.hint">Chaque catégorie autorisée est tracée en direct.</p>' +
+        '</div><span class="ds-count" id="dsTrendsState">—</span></div>' +
+        '<div class="ds-vitalgrid" id="dsVitalGrid"></div>' +
+      '</section>' +
+
       '<div class="ds-cols chart">' +
         '<section class="ds-panel">' +
           '<div class="ds-panel-head"><div>' +
-            '<h3 data-i18n-ds="chart.title">Flux normalisé</h3>' +
-            '<p class="ds-hint" data-i18n-ds="chart.hint">Glycémie et fréquence cardiaque.</p>' +
-          '</div><span class="ds-count" id="dsChartCount">0</span></div>' +
-          '<div class="ds-chart-legend">' +
-            '<span><i style="background:#08733f"></i><span data-i18n-ds="chart.glucose">Glycémie (mmol/L)</span></span>' +
-            '<span><i style="background:#b96c1b"></i><span data-i18n-ds="chart.hr">Fréquence cardiaque (bpm)</span></span>' +
-            '<span><i style="background:#08733f33;height:9px;border-radius:2px"></i><span data-i18n-ds="chart.target">Cible 3,9 – 7,8</span></span>' +
+            '<h3 data-i18n-ds="rings.title">Objectifs & bien-être</h3>' +
+            '<p class="ds-hint" data-i18n-ds="rings.hint">Anneaux d’activité, débit et score composite.</p>' +
+          '</div></div>' +
+          '<div class="ds-ringrow">' +
+            '<div class="ds-ringcard">' +
+              '<div class="ds-ring" id="dsRingSteps"></div>' +
+              '<small data-i18n-ds="rings.steps">Pas</small>' +
+              '<em data-i18n-ds="rings.stepsGoal">Objectif 8 000</em>' +
+            '</div>' +
+            '<div class="ds-ringcard">' +
+              '<div class="ds-ring" id="dsRingSleep"></div>' +
+              '<small data-i18n-ds="rings.sleep">Sommeil</small>' +
+              '<em data-i18n-ds="rings.sleepGoal">Objectif 7,5 h</em>' +
+            '</div>' +
+            '<div class="ds-ringcard">' +
+              '<div class="ds-ring" id="dsRingSignal"></div>' +
+              '<small data-i18n-ds="rings.active">Signal</small>' +
+              '<em data-i18n-ds="rings.activeGoal">Qualité flux</em>' +
+            '</div>' +
+            '<div class="ds-wellness">' +
+              '<div class="ds-ring" id="dsRingWellness"></div>' +
+              '<small data-i18n-ds="wellness.label">Score bien-être</small>' +
+              '<em id="dsWellnessStatus">—</em>' +
+            '</div>' +
+            '<div class="ds-throughput">' +
+              '<small data-i18n-ds="throughput.label">Débit d’ingestion</small>' +
+              '<b><span id="dsTickRate">0</span><em data-i18n-ds="throughput.sub">mesures / tick</em></b>' +
+              '<div class="ds-barswrap" id="dsThroughput"></div>' +
+            '</div>' +
           '</div>' +
-          '<div class="ds-chart" id="dsChart"></div>' +
         '</section>' +
 
         '<section class="ds-panel">' +
@@ -284,6 +329,20 @@
           '</div>' +
         '</section>' +
       '</div>' +
+
+      /* ---------------- hero chart (full width) ---------------- */
+      '<section class="ds-panel">' +
+        '<div class="ds-panel-head"><div>' +
+          '<h3 data-i18n-ds="chart.title">Flux normalisé</h3>' +
+          '<p class="ds-hint" data-i18n-ds="chart.hint">Glycémie et fréquence cardiaque.</p>' +
+        '</div><span class="ds-count" id="dsChartCount">0</span></div>' +
+        '<div class="ds-chart-legend">' +
+          '<span><i style="background:#2ee08a"></i><span data-i18n-ds="chart.glucose">Glycémie (mmol/L)</span></span>' +
+          '<span><i style="background:#e8b04b"></i><span data-i18n-ds="chart.hr">Fréquence cardiaque (bpm)</span></span>' +
+          '<span><i style="background:#12b76a33;height:9px;border-radius:2px"></i><span data-i18n-ds="chart.target">Cible 3,9 – 7,8</span></span>' +
+        '</div>' +
+        '<div class="ds-chart" id="dsChart"></div>' +
+      '</section>' +
 
       /* ---------------- log + consent ---------------- */
       '<div class="ds-cols log">' +
@@ -483,94 +542,45 @@
       '<span>' + esc(n.text) + '</span></div>';
   }
 
-  /* ------------------------------------------------------------------ chart -- */
-  var CHART = { w: 640, h: 190, l: 30, r: 36, t: 14, b: 22, n: 36, gMin: 2, gMax: 12, hMin: 50, hMax: 130 };
-  function chartShell() {
-    return '<svg viewBox="0 0 ' + CHART.w + ' ' + CHART.h + '" preserveAspectRatio="none" role="img" aria-label="' +
-      esc(T('chart.title')) + '">' +
-      '<defs><linearGradient id="dsGrad" x1="0" y1="0" x2="0" y2="1">' +
-      '<stop offset="0" stop-color="#08733f" stop-opacity=".28"></stop>' +
-      '<stop offset="1" stop-color="#08733f" stop-opacity="0"></stop></linearGradient></defs>' +
-      '<g id="dsGrid"></g>' +
-      '<rect class="ds-band" id="dsBand" x="0" y="0" width="0" height="0"></rect>' +
-      '<path class="ds-area" id="dsArea" d=""></path>' +
-      '<polyline class="ds-line-h" id="dsChartH" points=""></polyline>' +
-      '<polyline class="ds-line-g" id="dsChartG" points=""></polyline>' +
-      '<circle class="ds-dot" id="dsLastDot" r="3" cx="-10" cy="-10"></circle>' +
-      '<g id="dsAxis"></g>' +
-      '</svg>';
-  }
-  function plotW() { return CHART.w - CHART.l - CHART.r; }
-  function plotH() { return CHART.h - CHART.t - CHART.b; }
-  function yGlucose(v) {
-    var r = H.clamp((v - CHART.gMin) / (CHART.gMax - CHART.gMin), 0, 1);
-    return CHART.h - CHART.b - r * plotH();
-  }
-  function yHr(v) {
-    var r = H.clamp((v - CHART.hMin) / (CHART.hMax - CHART.hMin), 0, 1);
-    return CHART.h - CHART.b - r * plotH();
-  }
-  function xAt(i) { return CHART.l + (i / (CHART.n - 1)) * plotW(); }
+/* ------------------------------------------------------------------ chart -- */
+  /* Premium hero chart powered by NUTRI_DEVICES_CHARTS (glucose + HR, glow,
+     gradient areas, crosshair tooltip). Falls back silently if the engine
+     script was not loaded. */
+  var heroApi = null;
+  var HERO_N = 42;
 
   function makeChartStatic() {
     var box = $('#dsChart');
     if (!box) return;
-    box.innerHTML = chartShell();
-    var grid = $('#dsGrid');
-    var axis = $('#dsAxis');
-    var g = '';
-    for (var i = 0; i <= 4; i++) {
-      var y = CHART.t + (i / 4) * plotH();
-      g += '<line class="ds-grid" x1="' + CHART.l + '" y1="' + y + '" x2="' + (CHART.w - CHART.r) + '" y2="' + y + '"></line>';
+    if (!CHARTS || !CHARTS.heroChart) {
+      box.innerHTML = '';
+      return;
     }
-    grid.innerHTML = g;
-    var labels = [12, 9, 7, 4, 2];
-    var hLabels = [130, 110, 90, 70, 50];
-    var a = '';
-    for (var j = 0; j <= 4; j++) {
-      var y2 = CHART.t + (j / 4) * plotH() + 3;
-      a += '<text class="ds-axis" x="2" y="' + y2 + '">' + labels[j] + '</text>';
-      a += '<text class="ds-axis" x="' + (CHART.w - 24) + '" y="' + y2 + '">' + hLabels[j] + '</text>';
-    }
-    a += '<text class="ds-axis" x="' + CHART.l + '" y="' + (CHART.h - 6) + '">' + esc(T('chart.now')) + '</text>';
-    axis.innerHTML = a;
-    var band = $('#dsBand');
-    var yTop = yGlucose(DATA.thresholds.glucoseHigh);
-    var yBottom = yGlucose(DATA.thresholds.glucoseLow);
-    band.setAttribute('x', CHART.l);
-    band.setAttribute('width', plotW());
-    band.setAttribute('y', yTop);
-    band.setAttribute('height', Math.max(0, yBottom - yTop));
+    heroApi = CHARTS.heroChart(shadow, {
+      mount: '#dsChart',
+      glucoseMin: 2, glucoseMax: 12,
+      hrMin: 50, hrMax: 130,
+      targetLo: DATA.thresholds.glucoseLow,
+      targetHi: DATA.thresholds.glucoseHigh,
+      bandLabel: T('chart.target'),
+      nowLabel: T('chart.now'),
+      glucoseLabel: T('chart.cursorGlucose'),
+      hrLabel: T('chart.cursorHr'),
+      glucoseColor: '#2ee08a',
+      hrColor: '#e8b04b',
+      aria: T('chart.title')
+    });
   }
 
   function updateChart() {
-    var g = S.series.glucose.slice(-CHART.n);
-    var h = S.series.hr.slice(-CHART.n);
-    var gp = [], hp = [];
-    var gLine = $('#dsChartG'), hLine = $('#dsChartH'), area = $('#dsArea'), dot = $('#dsLastDot');
-    if (!gLine) return;
-    for (var i = 0; i < g.length; i++) gp.push(xAt(i) + ',' + yGlucose(g[i]).toFixed(1));
-    for (var j = 0; j < h.length; j++) hp.push(xAt(j) + ',' + yHr(h[j]).toFixed(1));
-    gLine.setAttribute('points', gp.join(' '));
-    hLine.setAttribute('points', hp.join(' '));
-    /* When the CGM is not paired yet, the area + cursor follow the heart-rate
-       series so the panel is never an empty frame. */
-    var primary = g.length > 1 ? gp : hp;
-    var lastValue = g.length > 1 ? yGlucose(g[g.length - 1]) : yHr(h[h.length - 1]);
-    if (primary.length > 1) {
-      var base = CHART.h - CHART.b;
-      area.setAttribute('d', 'M' + xAt(0) + ',' + base + ' L' + primary.join(' L') +
-        ' L' + xAt(primary.length - 1) + ',' + base + ' Z');
-      dot.setAttribute('cx', xAt(primary.length - 1));
-      dot.setAttribute('cy', lastValue);
-      dot.style.display = '';
-    } else {
-      dot.style.display = 'none';
-    }
+    if (heroApi) heroApi.update({ glucose: S.series.glucose, hr: S.series.hr });
     setText($('#dsChartCount'), String(S.readings));
-    if (primary.length < 2) {
-      var el = $('#dsChart');
-      if (el && !el.querySelector('.ds-chart-empty')) {
+    var el = $('#dsChart');
+    if (!el) return;
+    /* the hero chart plots glucose when available, HR alone otherwise */
+    var have = Math.max(S.series.glucose.length, S.series.hr.length) >= 2;
+    if (!have) {
+      if (!el.querySelector('.ds-chart-empty')) {
         var note = document.createElement('div');
         note.className = 'ds-chart-empty ds-empty-note';
         note.textContent = T('chart.empty');
@@ -578,11 +588,183 @@
         el.appendChild(note);
       }
     } else {
-      var old = $('#dsChart .ds-chart-empty');
+      var old = el.querySelector('.ds-chart-empty');
       if (old) old.remove();
     }
   }
 
+  /* ------------------------------------------------------ vital trend tiles -- */
+  var TREND_TILES = [
+    { id: 'glucose', icon: '🩸', key: 'tile.glucose', series: 'glucose', unit: 'mmol/L', digits: 1, color: '#2ee08a' },
+    { id: 'hr', icon: '❤️', key: 'tile.hr', series: 'hr', unit: 'bpm', digits: 0, color: '#e8b04b' },
+    { id: 'bp', icon: '🩺', key: 'tile.bp', series: 'bpSys', unit: 'mmHg', digits: 0, color: '#5aa2e8', paired: 'bpDia' },
+    { id: 'weight', icon: '⚖️', key: 'tile.weight', series: 'weight', unit: 'kg', digits: 1, color: '#c9a0e8' },
+    { id: 'steps', icon: '👣', key: 'tile.steps', series: 'steps', unit: '', digits: 0, color: '#c9ee59' },
+    { id: 'sleep', icon: '🌙', key: 'tile.sleep', series: 'sleep', unit: 'h', digits: 1, color: '#8f7ae8' }
+  ];
+
+  function renderVitalGrid() {
+    var box = $('#dsVitalGrid');
+    if (!box) return;
+    box.innerHTML = TREND_TILES.map(function (t) {
+      return '<article class="ds-vtile" data-vt="' + t.id + '">' +
+        '<div class="ds-vtile-head">' +
+          '<span class="ds-vtile-ico" aria-hidden="true">' + t.icon + '</span>' +
+          '<small data-i18n-ds="' + t.key + '">' + esc(T(t.key)) + '</small>' +
+          '<span class="ds-vtile-delta flat" id="vtd-' + t.id + '">—</span>' +
+        '</div>' +
+        '<div class="ds-vtile-val"><b id="vtv-' + t.id + '">—</b>' +
+          (t.unit ? '<span id="vtu-' + t.id + '">' + esc(t.unit) + '</span>' : '') +
+        '</div>' +
+        '<div class="ds-mini" id="vtm-' + t.id + '"></div>' +
+        '</article>';
+    }).join('');
+    TREND_TILES.forEach(function (t) {
+      if (CHARTS) CHARTS.miniTrend($('#vtm-' + t.id), [], { color: t.color, n: HERO_N });
+    });
+    setText($('#dsTrendsState'), connectedDevices().length + '/' + S.devices.length);
+  }
+
+  function tileValue(t) {
+    if (t.id === 'bp') {
+      if (!S.bp) return { text: '—', delta: null };
+      var txt = S.bp.sys + '/' + S.bp.dia;
+      var prev = S.series.bpSys.length > 1 ? S.series.bpSys[S.series.bpSys.length - 2] : null;
+      var delta = prev != null ? S.bp.sys - prev : null;
+      return { text: txt, delta: delta, digits: 0 };
+    }
+    var arr = S.series[t.series] || [];
+    if (!arr.length) return { text: '—', delta: null };
+    var v = arr[arr.length - 1];
+    var prevV = arr.length > 1 ? arr[arr.length - 2] : null;
+    return {
+      text: t.digits ? v.toFixed(t.digits) : Math.round(v).toLocaleString(),
+      raw: v,
+      delta: prevV != null ? v - prevV : null
+    };
+  }
+
+  function updateVitalGrid(flashIds) {
+    var box = $('#dsVitalGrid');
+    if (!box) return;
+    TREND_TILES.forEach(function (t) {
+      var info = tileValue(t);
+      var valEl = $('#vtv-' + t.id);
+      setText(valEl, info.text);
+      var dEl = $('#vtd-' + t.id);
+      if (dEl) {
+        if (info.delta == null) {
+          dEl.className = 'ds-vtile-delta flat';
+          dEl.textContent = '—';
+        } else {
+          var up = info.delta > 0;
+          var flat = Math.abs(info.delta) < (t.digits ? 0.05 : 1);
+          dEl.className = 'ds-vtile-delta ' + (flat ? 'flat' : (up ? 'up' : 'down'));
+          dEl.textContent = (flat ? '' : (up ? '▲ +' : '▼ ')) +
+            (t.digits ? Math.abs(info.delta).toFixed(t.digits) : Math.abs(Math.round(info.delta)));
+        }
+      }
+      var series = t.id === 'bp' ? S.series.bpSys : (S.series[t.series] || []);
+      if (CHARTS) {
+        CHARTS.miniTrend($('#vtm-' + t.id), series, {
+          color: t.color, n: HERO_N,
+          min: t.id === 'glucose' ? 2 : undefined,
+          max: t.id === 'glucose' ? 12 : undefined
+        });
+      }
+      if (flashIds && flashIds[t.id] && valEl) {
+        var tile = valEl.closest ? valEl.closest('.ds-vtile') : null;
+        if (tile) {
+          tile.classList.remove('is-flash');
+          void tile.offsetWidth;
+          tile.classList.add('is-flash');
+        }
+      }
+    });
+    setText($('#dsTrendsState'), connectedDevices().length + '/' + S.devices.length);
+  }
+
+  /* ----------------------------------------------------- rings & wellness -- */
+  var GOALS = { steps: 8000, sleep: 7.5 };
+  function updateRings() {
+    if (!CHARTS) return;
+    var stepsPct = S.steps ? clampPct(S.steps / GOALS.steps) : 0;
+    var sleepPct = S.sleep != null ? clampPct(S.sleep / GOALS.sleep) : 0;
+    var live = connectedDevices();
+    var signalAvg = live.length
+      ? live.reduce(function (a, d) { return a + d.signal; }, 0) / (live.length * 3)
+      : 0;
+    var streamingPct = live.length ? clampPct(live.length / S.devices.length) : 0;
+    var signalPct = live.length ? (signalAvg * 0.5 + streamingPct * 0.5) : 0;
+
+    var stepsEl = $('#dsRingSteps');
+    var stepsLabel = stepsEl && stepsEl.querySelector('b');
+    if (stepsEl && !stepsLabel) {
+      stepsEl.innerHTML = '<b>0</b>';
+      stepsLabel = stepsEl.querySelector('b');
+    }
+    if (stepsLabel) setText(stepsLabel, S.steps ? (Math.round(S.steps / 100) / 10).toFixed(1) + 'k' : '0');
+    CHARTS.ring(stepsEl, stepsPct, { color: '#c9ee59', size: 74, stroke: 7 });
+
+    var sleepEl = $('#dsRingSleep');
+    var sleepLabel = sleepEl && sleepEl.querySelector('b');
+    if (sleepEl && !sleepLabel) {
+      sleepEl.innerHTML = '<b>—</b>';
+      sleepLabel = sleepEl.querySelector('b');
+    }
+    if (sleepLabel) setText(sleepLabel, S.sleep != null ? S.sleep.toFixed(1) : '—');
+    CHARTS.ring(sleepEl, sleepPct, { color: '#8f7ae8', size: 74, stroke: 7 });
+
+    var sigEl = $('#dsRingSignal');
+    var sigLabel = sigEl && sigEl.querySelector('b');
+    var sigPctText = Math.round(signalPct * 100) + '%';
+    if (sigEl && !sigLabel) {
+      sigEl.innerHTML = '<b>' + sigPctText + '</b>';
+      sigLabel = sigEl.querySelector('b');
+    }
+    if (sigLabel) setText(sigLabel, sigPctText);
+    CHARTS.ring(sigEl, signalPct, { color: '#5aa2e8', size: 74, stroke: 7 });
+
+    var score = CHARTS.wellnessScore({
+      glucose: S.glucose, hr: S.hr, bp: S.bp,
+      steps: S.steps, sleep: S.sleep
+    });
+    var wEl = $('#dsRingWellness');
+    var wLabel = wEl && wEl.querySelector('b');
+    if (score == null) {
+      if (wEl && !wLabel) wEl.innerHTML = '<b>—</b>';
+      if (wLabel) setText(wLabel, '—');
+      CHARTS.ring(wEl, 0, { color: '#e8c877', size: 86, stroke: 8 });
+      setText($('#dsWellnessStatus'), T('wellness.waiting'));
+    } else {
+      if (wEl && !wLabel) wEl.innerHTML = '<b>' + score + '</b>';
+      if (wLabel) setText(wLabel, String(score));
+      CHARTS.ring(wEl, score / 100, { color: '#e8c877', size: 86, stroke: 8 });
+      var statusKey = score >= 85 ? 'wellness.excellent'
+        : score >= 70 ? 'wellness.good'
+          : score >= 50 ? 'wellness.fair' : 'wellness.low';
+      setText($('#dsWellnessStatus'), T(statusKey));
+    }
+  }
+  function clampPct(v) { return Math.max(0, Math.min(1, v)); }
+
+  /* ------------------------------------------------------------ throughput -- */
+  function updateThroughput() {
+    if (!CHARTS) return;
+    CHARTS.throughput($('#dsThroughput'), S.throughput, { n: 26, color: '#12b76a' });
+    setText($('#dsTickRate'), String(S.lastTickAccepted));
+  }
+
+  /* ----------------------------------------------------------- flash utils -- */
+  function flashValue(id) {
+    var el = $(id);
+    if (!el) return;
+    el.classList.remove('is-flash');
+    void el.offsetWidth;
+    el.classList.add('is-flash');
+  }
+
+  
   /* --------------------------------------------------------------- pipeline -- */
   var STAGES = ['collect', 'gateway', 'consent', 'normalize', 'graph'];
   function renderPipeline() {
@@ -777,17 +959,28 @@
       default: return null;
     }
   }
+  var SERIES_MAX = HERO_N * 2;
+  function pushSeries(name, v) {
+    if (!S.series[name]) S.series[name] = [];
+    S.series[name].push(v);
+    if (S.series[name].length > SERIES_MAX) S.series[name].shift();
+  }
+  /* Scopes touched since the last repaint — drives the tile flash effect. */
+  var flashScopes = {};
+  /* scope id → vital tile id (they differ for heart → hr). */
+  var SCOPE_TO_TILE = { heart: 'hr', glucose: 'glucose', bp: 'bp', weight: 'weight', steps: 'steps', sleep: 'sleep' };
+
   function applyReading(scope, r, dev) {
+    flashScopes[scope] = true;
     switch (scope) {
       case 'heart':
         S.hr = r.value; S.spo2 = S.gen.spo2();
-        S.series.hr.push(r.value);
-        if (S.series.hr.length > CHART.n * 2) S.series.hr.shift();
+        pushSeries('hr', r.value);
+        pushSeries('spo2', S.spo2);
         break;
       case 'glucose':
         S.glucose = r.value;
-        S.series.glucose.push(r.value);
-        if (S.series.glucose.length > CHART.n * 2) S.series.glucose.shift();
+        pushSeries('glucose', r.value);
         if (r.value < DATA.thresholds.glucoseLow) {
           pushAlert('hypo', { v: r.value.toFixed(1) }, 'critical', 'alert.hypo', 'alert.rec.hypo');
         } else if (r.value > DATA.thresholds.glucoseCriticalHigh) {
@@ -796,13 +989,24 @@
         break;
       case 'bp':
         S.bp = r.extra;
+        pushSeries('bpSys', r.extra.sys);
+        pushSeries('bpDia', r.extra.dia);
         if (r.extra.sys >= DATA.thresholds.sysHigh || r.extra.dia >= DATA.thresholds.diaHigh) {
           pushAlert('bp', { v: r.extra.sys + '/' + r.extra.dia }, 'warn', 'alert.bp', 'alert.rec.bp');
         }
         break;
-      case 'weight': S.weight = r.value; break;
-      case 'steps': S.steps = r.value; break;
-      case 'sleep': S.sleep = r.value; break;
+      case 'weight':
+        S.weight = r.value;
+        pushSeries('weight', r.value);
+        break;
+      case 'steps':
+        S.steps = r.value;
+        pushSeries('steps', r.value);
+        break;
+      case 'sleep':
+        S.sleep = r.value;
+        pushSeries('sleep', r.value);
+        break;
       default: break;
     }
     S.notifications.unshift({
@@ -910,6 +1114,11 @@
       if (Math.random() < 0.08) dev.signal = H.clamp(dev.signal + (Math.random() < 0.5 ? -1 : 1), 1, 3);
     });
 
+    /* premium: rolling ingestion throughput + live tile flashes */
+    S.lastTickAccepted = accepted;
+    S.throughput.push(accepted);
+    if (S.throughput.length > 30) S.throughput.shift();
+
     if (accepted && S.tick % 3 === 0) {
       log('data', 'log.tick', { n: accepted, d: L(live[0].name) });
     }
@@ -926,6 +1135,16 @@
     renderPhone();
     updateWatch();
     updateChart();
+    /* map scope ids onto tile ids so the right tile flashes */
+    var tileFlash = {};
+    Object.keys(flashScopes).forEach(function (sc) {
+      var tileId = SCOPE_TO_TILE[sc];
+      if (tileId) tileFlash[tileId] = true;
+    });
+    updateVitalGrid(tileFlash);
+    flashScopes = {};
+    updateRings();
+    updateThroughput();
     renderPipeline();
     refreshDeviceValues();
     updateHud();
@@ -976,6 +1195,7 @@
       S.pipelineStage = Math.min(STAGES.length - 1, Math.floor((pct / 100) * STAGES.length));
       setSyncBar(pct, T('pipe.running') + ' · ' + imported + ' / ' + target);
       renderPipeline();
+      updateVitalGrid(); updateRings(); updateThroughput(); updateChart();
       if (pct >= 100) {
         clearInterval(timer);
         finish();
@@ -1003,6 +1223,7 @@
       setSyncBar(100, T('pipe.done') + ' · ' + (imported || target) + ' ' + T('dev.imported'));
       toast(T('toast.sync', { n: imported || target }));
       renderDevices(); renderKpis(); renderHistory(); renderPipeline(); updateHud();
+      updateVitalGrid(); updateRings(); updateThroughput(); updateChart();
       if (!opts.silent) setTimeout(function () { setSyncBar(0, T('pipe.idle')); }, 2600);
     }
   }
@@ -1058,6 +1279,7 @@
       toast(T('toast.paired', { d: L(dev.name) }));
       pushHistory(L(dev.name), Math.max(1, Math.round(dev.imported)), Math.round(H.rnd(900, 1900)), false);
       renderKpis(); renderVitals(); renderPhone(); updateWatch(); updateChart();
+      updateVitalGrid(); updateRings(); updateThroughput();
       done && done(dev);
     }, 3050 / S.speed * pace);
   }
@@ -1343,6 +1565,7 @@
         pushHistory(L(dev.name), 128, Math.round(H.rnd(1800, 3200)), false);
         renderModal();
         renderKpis(); renderVitals(); updateWatch(); updateChart();
+        updateVitalGrid(); updateRings(); updateThroughput();
       }
     }, 130));
   }
@@ -1362,10 +1585,11 @@
     M = { open: false, dev: null, step: 0, pin: '', scopes: {}, agreed: false, imported: 0, done: false };
     var backdrop = $('#dsBackdrop');
     if (backdrop) backdrop.classList.remove('is-open');
+    flashScopes = {};
     setSyncBar(0, T('pipe.idle'));
     renderDevices(); renderKpis(); renderScopes(); renderAlerts(); renderHistory();
     renderFilters(); renderPipeline(); renderVitals(); renderPhone(); renderInterop();
-    renderLog(); updateChart(); updateHud();
+    renderVitalGrid(); renderLog(); updateChart(); updateRings(); updateThroughput(); updateHud();
     log('system', 'log.boot', { g: S.gateway.city, id: S.sessionId });
     log('system', 'log.reset');
     if (!silent) toast(T('toast.reset'));
@@ -1571,7 +1795,8 @@
     });
     renderDevices(); renderKpis(); renderScopes(); renderAlerts(); renderHistory();
     renderFilters(); renderVitals(); renderPhone(); renderInterop(); renderPipeline();
-    renderLog(); updateHud(); makeChartStatic(); updateChart();
+    renderVitalGrid(); renderLog(); updateHud(); makeChartStatic(); updateChart();
+    updateVitalGrid(); updateRings(); updateThroughput();
     if (M.open) renderModal();
   }
 
@@ -1579,7 +1804,13 @@
   shadow.innerHTML = shellHtml();
   renderDevices(); renderKpis(); renderScopes(); renderAlerts(); renderHistory();
   renderFilters(); renderVitals(); renderPhone(); renderInterop(); makeChartStatic();
-  renderPipeline(); renderLog(); updateHud(); setSyncBar(0, T('pipe.idle'));
+  renderVitalGrid(); renderPipeline(); renderLog(); updateHud(); setSyncBar(0, T('pipe.idle'));
+  updateRings(); updateThroughput();
+  /* premium ambience: aurora particle field behind the UI (rAF, paused off-screen) */
+  if (CHARTS && CHARTS.ambient) {
+    var ambCanvas = shadow.querySelector('.ds-ambient');
+    ambientCtl = CHARTS.ambient(ambCanvas, { count: 5, hues: [145, 92, 158, 48] });
+  }
   log('system', 'log.boot', { g: S.gateway.city, id: S.sessionId });
 
   shadow.addEventListener('click', onClick);

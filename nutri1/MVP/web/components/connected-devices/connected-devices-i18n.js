@@ -253,7 +253,44 @@
       'log.reconnect': 'Reprise de la connexion avec {d}',
       'log.offline': '{d} passé hors ligne — reconnexion automatique dans 30 s',
       'log.reset': 'Session réinitialisée',
-      'log.speed': 'Vitesse de simulation réglée sur ×{n}'
+      'log.speed': 'Vitesse de simulation réglée sur ×{n}',
+
+      /* ---- Premium : tendances vitales ---- */
+      'trends.title': 'Tendances vitales',
+      'trends.hint': 'Chaque catégorie autorisée est tracée en direct — courbes animées, fenêtre glissante.',
+      'trends.empty': 'En attente…',
+      'trends.delta': 'vs préc.',
+      'tile.glucose': 'Glycémie',
+      'tile.hr': 'Fréq. cardiaque',
+      'tile.bp': 'Tension',
+      'tile.weight': 'Poids',
+      'tile.steps': 'Pas',
+      'tile.sleep': 'Sommeil',
+      'tile.spo2': 'SpO₂',
+
+      /* ---- Premium : anneaux & score ---- */
+      'rings.title': 'Objectifs & bien-être',
+      'rings.hint': 'Anneaux d’activité, débit d’ingestion et score composite de bien-être.',
+      'rings.steps': 'Pas',
+      'rings.sleep': 'Sommeil',
+      'rings.active': 'Signal',
+      'rings.stepsGoal': 'Objectif 8 000',
+      'rings.sleepGoal': 'Objectif 7,5 h',
+      'rings.activeGoal': 'Qualité flux',
+      'wellness.label': 'Score bien-être',
+      'wellness.waiting': 'En attente de mesures…',
+      'wellness.excellent': 'Excellent',
+      'wellness.good': 'Bon',
+      'wellness.fair': 'Moyen',
+      'wellness.low': 'À surveiller',
+      'throughput.label': 'Débit d’ingestion',
+      'throughput.sub': 'mesures / tick',
+      'chart.glucoseShort': 'Glycémie',
+      'chart.hrShort': 'FC',
+      'chart.cursorGlucose': 'Glycémie',
+      'chart.cursorHr': 'FC',
+      'hud.premium': 'ÉDITION PREMIUM',
+      'live.spo2Short': 'SpO₂'
     },
 
     en: {
@@ -499,7 +536,44 @@
       'log.reconnect': 'Reconnecting to {d}',
       'log.offline': '{d} went offline — auto reconnect in 30 s',
       'log.reset': 'Session reset',
-      'log.speed': 'Simulation speed set to ×{n}'
+      'log.speed': 'Simulation speed set to ×{n}',
+
+      /* ---- Premium: vital trends ---- */
+      'trends.title': 'Vital trends',
+      'trends.hint': 'Every allowed category is plotted live — animated curves, rolling window.',
+      'trends.empty': 'Waiting…',
+      'trends.delta': 'vs prev.',
+      'tile.glucose': 'Glucose',
+      'tile.hr': 'Heart rate',
+      'tile.bp': 'Blood pressure',
+      'tile.weight': 'Weight',
+      'tile.steps': 'Steps',
+      'tile.sleep': 'Sleep',
+      'tile.spo2': 'SpO₂',
+
+      /* ---- Premium: rings & score ---- */
+      'rings.title': 'Goals & wellness',
+      'rings.hint': 'Activity rings, ingestion throughput and composite wellness score.',
+      'rings.steps': 'Steps',
+      'rings.sleep': 'Sleep',
+      'rings.active': 'Signal',
+      'rings.stepsGoal': 'Goal 8,000',
+      'rings.sleepGoal': 'Goal 7.5 h',
+      'rings.activeGoal': 'Stream quality',
+      'wellness.label': 'Wellness score',
+      'wellness.waiting': 'Waiting for readings…',
+      'wellness.excellent': 'Excellent',
+      'wellness.good': 'Good',
+      'wellness.fair': 'Fair',
+      'wellness.low': 'Watch closely',
+      'throughput.label': 'Ingestion throughput',
+      'throughput.sub': 'readings / tick',
+      'chart.glucoseShort': 'Glucose',
+      'chart.hrShort': 'HR',
+      'chart.cursorGlucose': 'Glucose',
+      'chart.cursorHr': 'HR',
+      'hud.premium': 'PREMIUM EDITION',
+      'live.spo2Short': 'SpO₂'
     }
   };
 
