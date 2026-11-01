@@ -28,6 +28,8 @@ npm run serve &                   # sert nutri1/MVP/web sur http://localhost:800
 | `npm run contrast:unicef` | audit WCAG AA : mini-moteur de cascade CSS sur le DOM réel (895 éléments texte, 0 sous le seuil) |
 | `npm run contrast:unicef:mobile` | même audit au breakpoint 390 px |
 | `npm run contrast:citizen` | même audit pour la section citoyenne |
+| `npm run ai-prevention` | module `#ai` « Moteur IA de Nutrition & de Prévention » : **132 assertions** — parcours nominal (`ai-prevention-suite.js`, 88) et cas de bord (`ai-prevention-edge-suite.js`, 44). Voir la section dédiée ci-dessous |
+| `npm run ai-prevention:i18n` | audit statique du dictionnaire du module : parité FR/EN et clés orphelines (aucun serveur requis) |
 | `npm run perf` | temps de rendu et de calcul (renderAll, forecast, simulate, exports, rebuild) |
 
 ## Fichiers
@@ -38,6 +40,33 @@ npm run serve &                   # sert nutri1/MVP/web sur http://localhost:800
 | `unicef-suite.js` | suite d'intégration `#unicef` |
 | `test-suite.js` | suite d'intégration `#citizen` |
 | `audit-contrast.js` | moteur de cascade + calcul de contraste WCAG (résout `var()`, dégradés, premier fond opaque ancêtre) |
+| `ai-prevention-suite.js` | parcours nominal du module `#ai` (montage, capteurs, scanner, prédictions, programme, impression, langues) |
+| `ai-prevention-edge-suite.js` | cas de bord `#ai` (accès direct aux étapes, clavier, invalidation, bascule de langue en pleine analyse, audit de contenu, reset, a11y) |
+| `ai-prevention-i18n-audit.js` | parité FR/EN et couverture du dictionnaire du module `#ai` |
+
+## Module `#ai` — Moteur IA de Nutrition & de Prévention
+
+```bash
+npm run serve &            # indispensable : la suite charge index.html en HTTP
+npm run ai-prevention      # 132 assertions (2 suites, ~50 s)
+npm run ai-prevention:i18n # 211 clés FR = 211 EN, aucune orpheline
+```
+
+Ce que la suite garantit :
+
+* **montage** — une seule racine `#aiPrevention`, 4 étapes, 3 capteurs, 8 curseurs, API
+  `AIPPrevention` / `AIP_MODEL` / `AIP_CHARTS` / `AIP_I18N` exposées ;
+* **parcours** — synchronisation des capteurs (valeurs, horodatage, mini-courbes redessinées),
+  curseurs et IMC recalculé, scanner (journal, progression, révélation des signaux), 4 cartes de
+  risque bornées (`2–96 %`), timeline interactive, mode « programme corrigé » (les probabilités
+  actuelles ne bougent pas), programme 7 × 4 repas, régénération **déterministe**, impression ;
+* **langues** — bascule FR/EN à tout moment (y compris en pleine analyse), programme et jour
+  consulté conservés, dictionnaire paritaire, aucun `data-i18n` dans le module (la couche de la
+  plateforme écraserait les textes dynamiques), suivi de la langue de la plateforme une fois la
+  fenêtre d’installation passée, résistance d’un choix explicite à la ré-assertion de démarrage ;
+* **robustesse** — accès direct à n’importe quelle étape, flèches clavier sur les jours, `Entrée`
+  sur les cartes de risque, invalidation des prédictions après modification, aucun `undefined`,
+  `NaN`, clé i18n brute ni HTML échappé dans le rendu, console propre.
 | `smoke-sections.js` | non-régression des autres sections |
 | `who-suite.js` | contrat du cockpit V62 `#who` : surface unique anti-superposition, invariants du modèle, tracés réels, fr/en, exports |
 | `perf-unicef.js` | mesures de performance |
