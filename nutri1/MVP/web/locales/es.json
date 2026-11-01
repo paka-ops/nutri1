@@ -807,5 +807,20 @@
   "ui.m_diabetes": "${m.diabetes}%",
   "ui.population_health_trend_requires_surveillance": "Population health trend requires surveillance.",
   "ui.connect_dietary_and_metabolic_indicators_to_the_evidence_graph": "Connect dietary and metabolic indicators to the Evidence Graph.",
-  "ui.this_label_x": "${this.label(x)}"
+  "ui.this_label_x": "${this.label(x)}",
+  "ui.host_unicef_aria": "UNICEF NutriChild — Child Nutrition Surveillance in West Africa",
+  "ui.host_who_aria": "WHO NutriTracker — Community Nutrition Surveillance in West Africa",
+  "ui.host_health_aria": "NutriApp Health · Clinical, Community & NCD Nutrition Surveillance",
+  "ui.host_agri_aria": "AgriNutri Intelligence — Agricultural & Nutrition Surveillance",
+  "ui.host_wfp_aria": "WFP NutriTracker — Food Security & Market Surveillance in West Africa",
+  "ui.host_fao_aria": "FAO AgriNutriApp · Food Systems Surveillance in West Africa",
+  "ui.host_fao_h1": "FAO AgriNutriApp · Food Systems Surveillance (West Africa)",
+  "ui.toggle_legacy_unicef": "Show historical UNICEF modules",
+  "ui.toggle_legacy_unicef_aria": "Show or hide historical UNICEF modules on the page",
+  "ui.toggle_legacy_who": "Show historical WHO NCD modules",
+  "ui.toggle_legacy_who_aria": "Show or hide historical WHO NCD modules on the page",
+  "ui.toggle_legacy_health": "Show historical Health modules",
+  "ui.toggle_legacy_health_aria": "Show or hide historical Health modules on the page",
+  "ui.toggle_legacy_wfp": "Show historical WFP modules",
+  "ui.toggle_legacy_wfp_aria": "Show or hide historical WFP modules on the page"
 }
