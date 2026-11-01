@@ -454,11 +454,12 @@
 <noscript><div class="card"><p data-i18n="ui.devsim_noscript">The connected-device simulation requires JavaScript. The platform remains fully readable without it.</p></div></noscript>
 </section>
 
-<section id="scanner" class="view"><div class="card"><h2 data-i18n="ui.ai_food_meal_scanner">📷 AI Food & Meal Scanner</h2><div class="grid3">
-<div class="card"><h3 data-i18n="ui.food">🥑 Food</h3><p data-i18n="ui.photo_identification_nutrients">Photo → identification → nutrients.</p><button class="btn primary" onclick="runScan('Food')" data-i18n="ui.scan_now">Scan now</button></div>
-<div class="card"><h3 data-i18n="ui.meal">🍲 Meal</h3><p data-i18n="ui.dish_recipe_ingredients_composition">Dish → recipe → ingredients → composition.</p><button class="btn primary" onclick="runScan('Meal')" data-i18n="ui.scan_now">Scan now</button></div>
-<div class="card"><h3 data-i18n="ui.product">🏷 Product</h3><p data-i18n="ui.barcode_label_product_data">Barcode / label → product data.</p><button class="btn primary" onclick="runScan('Product')" data-i18n="ui.scan_now">Scan now</button></div></div>
-<div class="card"><h3 data-i18n="ui.live_ai_pipeline">Live AI pipeline</h3><div class="wizard" id="scanWizard"><span class="step active" data-i18n="ui.capture">Capture</span><span class="step" data-i18n="ui.detect">Detect</span><span class="step" data-i18n="ui.ontology">Ontology</span><span class="step" data-i18n="ui.composition">Composition</span><span class="step" data-i18n="ui.portion">Portion</span><span class="step" data-i18n="ui.confirm">Confirm</span></div><p id="scanStatus" data-i18n="ui.ready">Ready.</p></div></div></section>
+<section id="scanner" class="view" aria-label="Scanner de repas">
+<h2 hidden data-i18n="ui.ai_food_meal_scanner">Scanner de repas</h2>
+<!-- Expérience isolée : photo, animation et bilan dans components/meal-scanner/. -->
+<div id="mealScanner"></div>
+<noscript><div class="card"><h2>Scanner de repas</h2><p>Activez JavaScript pour explorer la démonstration : capture d’un plat africain, composants, calories et bilan nutritionnel.</p></div></noscript>
+</section>
 
 <section id="ai" class="view">
 <h2 class="aip-visually-hidden">AI Nutrition &amp; Prevention Engine</h2>
@@ -3011,6 +3012,10 @@ const st=document.createElement('style');st.textContent=`.v57-clickable{cursor:p
 <script src="components/ai-prevention/ai-prevention-charts.js"></script>
 <script src="components/ai-prevention/ai-prevention-template.js"></script>
 <script src="components/ai-prevention/ai-prevention.js"></script>
+<!-- Scanner immersif : données, vue, styles et contrôleur séparés. -->
+<script src="components/meal-scanner/meal-scanner-data.js"></script>
+<script src="components/meal-scanner/meal-scanner-template.js"></script>
+<script src="components/meal-scanner/meal-scanner.js"></script>
 <script src="assets/institutional-i18n.js"></script>
 <script src="assets/institutional-i18n-engine.js"></script>
 <!-- Lien profond : index.html#unicef (ou #who, #fao…) ouvre directement la section demandée -->

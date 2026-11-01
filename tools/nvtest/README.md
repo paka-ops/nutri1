@@ -30,6 +30,7 @@ npm run serve &                   # sert nutri1/MVP/web sur http://localhost:800
 | `npm run contrast:citizen` | même audit pour la section citoyenne |
 | `npm run ai-prevention` | module `#ai` « Moteur IA de Nutrition & de Prévention » : **132 assertions** — parcours nominal (`ai-prevention-suite.js`, 88) et cas de bord (`ai-prevention-edge-suite.js`, 44). Voir la section dédiée ci-dessous |
 | `npm run ai-prevention:i18n` | audit statique du dictionnaire du module : parité FR/EN et clés orphelines (aucun serveur requis) |
+| `npm run meal-scanner` | scanner immersif `#scanner` : 16 vérifications déterministes (portions, bilans, animation, imports locaux, annulation, mouvement réduit). Aucun serveur requis |
 | `npm run perf` | temps de rendu et de calcul (renderAll, forecast, simulate, exports, rebuild) |
 
 ## Fichiers
