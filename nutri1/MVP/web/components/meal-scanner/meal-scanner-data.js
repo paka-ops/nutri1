@@ -72,7 +72,79 @@
       items.find((item) => item.id === "greens").grams / totals.grams;
     const starch =
       items.find((item) => item.id === "rice").grams / totals.grams;
-    return { items, totals, balanced: vegetables >= 0.4 && starch <= 0.4 };
+    // Arrondi par plus forts restes : les trois parts affichées totalisent 100 %.
+    const distribution = items.map((item) => ({
+      name: item.group,
+      grams: item.grams,
+      percent: Math.floor((item.grams / totals.grams) * 100),
+      remainder: ((item.grams / totals.grams) * 100) % 1,
+      color: item.color,
+    }));
+    const missing =
+      100 - distribution.reduce((sum, group) => sum + group.percent, 0);
+    [...distribution]
+      .sort((a, b) => b.remainder - a.remainder)
+      .slice(0, missing)
+      .forEach((group) => group.percent++);
+    return {
+      items,
+      totals,
+      balanced: vegetables >= 0.4 && starch <= 0.4,
+      distribution,
+    };
   }
-  window.NUTRI_MEAL_DATA = { meal };
+  // Conseils pédagogiques liés aux portions : pas de prescription personnalisée.
+  function recommendations(result) {
+    const rice = result.items.find((item) => item.id === "rice");
+    const standard = meal(false);
+    return {
+      summary: result.balanced
+        ? "Proportions variées dans cet exemple. Conservez la diversité et vérifiez les quantités réellement servies."
+        : "Priorité : revoir la place des féculents. La portion de riz représente " +
+          result.distribution.find((group) => group.name === "Féculents")
+            .percent +
+          " % de la masse de cette assiette.",
+      adjustable: rice.grams > 150,
+      items: [
+        result.balanced
+          ? {
+              category: "À maintenir",
+              title: "Conserver les trois groupes alimentaires",
+              detail:
+                "Cet exemple associe 150 g de riz, 120 g de tilapia et 200 g de légumes. Gardez cette diversité ; les quantités adaptées dépendent de vos besoins.",
+            }
+          : {
+              category: "Ajustement prioritaire",
+              title: "Comparer avec une portion de riz de 150 g",
+              detail:
+                "Passer de " +
+                rice.grams +
+                " g à 150 g de riz, sans modifier le poisson ni les légumes, fait passer l’exemple de " +
+                result.totals.kcal +
+                " à " +
+                standard.totals.kcal +
+                " kcal (−" +
+                (result.totals.kcal - standard.totals.kcal) +
+                " kcal). Il s’agit d’un scénario, pas d’un objectif calorique personnel.",
+            },
+        {
+          category: "Légumes et fibres",
+          title: result.balanced
+            ? "Varier les légumes au fil des repas"
+            : "Préserver la portion de légumes",
+          detail:
+            "Les 200 g de légumes de cet exemple contribuent aux " +
+            result.totals.fiber +
+            " g de fibres du repas. Alternez selon les disponibilités : feuilles locales, gombo, carotte ou tomate. Ne remplacez pas les légumes par du riz supplémentaire.",
+        },
+        {
+          category: "Préparation",
+          title: "Vérifier l’huile, le sel et les sauces",
+          detail:
+            "Privilégiez une cuisson grillée ou mijotée et mesurez l’huile ajoutée. Goûtez avant d’ajouter sel ou bouillon. Ces quantités ne sont pas déductibles de la photo et peuvent modifier les apports.",
+        },
+      ],
+    };
+  }
+  window.NUTRI_MEAL_DATA = { meal, recommendations };
 })();

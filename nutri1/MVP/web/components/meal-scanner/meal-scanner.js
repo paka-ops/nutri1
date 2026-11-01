@@ -43,7 +43,7 @@
     q(".ingredient-list").innerHTML = meal.items
       .map(
         (item, i) =>
-          `<li style="--item-color:${item.color};--delay:${i * 110}ms"><span class="ingredient-number">0${i + 1}</span><div><strong>${item.name}</strong><small>${item.group} · ${item.grams} g</small></div><b>${item.kcal} <small>kcal</small></b></li>`,
+          `<tr style="--delay:${i * 110}ms"><th scope="row"><div class="ingredient-name"><span class="ingredient-number">0${i + 1}</span><div><strong>${item.name}</strong><small>${item.group}</small></div></div></th><td>${item.grams} g</td><td>${item.kcal} kcal</td></tr>`,
       )
       .join("");
     // Les repères ne prétendent jamais localiser les aliments d'une photo importée.
@@ -73,10 +73,38 @@
           `<div><span>${label}</span><b>${meal.totals[key]} <small>g</small></b></div>`,
       )
       .join("");
+    q(".distribution").hidden = false;
+    q(".distribution-bar").innerHTML = meal.distribution
+      .map(
+        (group) =>
+          `<i style="flex:${group.grams};background:${group.color}"></i>`,
+      )
+      .join("");
+    q(".distribution-legend").innerHTML = meal.distribution
+      .map(
+        (group) =>
+          `<li><i style="background:${group.color}" aria-hidden="true"></i>${group.name} <strong>${group.percent} %</strong></li>`,
+      )
+      .join("");
+    renderRecommendations(meal);
     q(".verdict").hidden = false;
     q(".verdict").classList.toggle("warning", !meal.balanced);
     q(".verdict").innerHTML =
       `<span class="verdict-icon">${meal.balanced ? "✓" : "!"}</span><div><span>BILAN PÉDAGOGIQUE · PORTIONS D’EXEMPLE</span><h4>${meal.balanced ? "Une assiette plutôt équilibrée" : "Une assiette à rééquilibrer"}</h4><p>${meal.balanced ? "Féculents, protéines et légumes : les trois groupes sont présents dans des proportions variées." : "La portion de riz prend le dessus. Revenez à 150 g de riz ou augmentez la part de légumes pour retrouver les proportions de cet exemple."}</p></div>`;
+  }
+  function renderRecommendations(meal) {
+    const advice = window.NUTRI_MEAL_DATA.recommendations(meal);
+    q(".recommendations-empty").hidden = true;
+    q(".recommendations-content").hidden = false;
+    q(".recommendation-summary").textContent = advice.summary;
+    q(".recommendation-summary").classList.toggle("warning", !meal.balanced);
+    q(".recommendation-list").innerHTML = advice.items
+      .map(
+        (item) =>
+          `<li><span class="recommendation-category">${item.category}</span><h4>${item.title}</h4><p>${item.detail}</p></li>`,
+      )
+      .join("");
+    q(".recommendation-action").hidden = !advice.adjustable;
   }
   function idle(message) {
     cancel();
@@ -85,15 +113,18 @@
     q(".results").hidden = true;
     q(".nutrition").hidden = true;
     q(".verdict").hidden = true;
+    q(".distribution").hidden = true;
+    q(".recommendations-empty").hidden = false;
+    q(".recommendations-content").hidden = true;
     q(".empty-state").hidden = false;
     q(".markers").innerHTML = "";
     q(".analysis-tag").textContent = "EN ATTENTE";
-    q(".capture-title").textContent = "Une assiette, toute une histoire.";
-    q(".capture-sub").textContent = "Cadrez. Photographiez. Explorez.";
+    q(".capture-title").textContent = "Prêt pour la capture";
+    q(".capture-sub").textContent = "Riz jollof · tilapia · légumes";
     scanButton.querySelector("span").textContent = "Photographier & analyser";
     scanButton.disabled = false;
     q(".analysis-panel").setAttribute("aria-busy", "false");
-    progress(0, message || "Prêt à explorer votre plat ?", -1);
+    progress(0, message || "En attente de la capture du repas.", -1);
   }
   function scan() {
     if (busy) return;
@@ -111,7 +142,7 @@
     progress(8, "01 / Capture de la photo…", 0);
     later(() => {
       state.dataset.state = "scanning";
-      q(".capture-title").textContent = "Exploration des ingrédients";
+      q(".capture-title").textContent = "Analyse de la composition";
       progress(30, "02 / Identification simulée des composants…", 1);
     }, 850);
     later(() => {
@@ -120,7 +151,7 @@
     }, 2200);
     later(() => {
       progress(84, "03 / Calcul des valeurs pour les portions d’exemple…", 2);
-      q(".capture-title").textContent = "Chaque portion compte.";
+      q(".capture-title").textContent = "Calcul des apports nutritionnels";
     }, 3500);
     later(() => {
       renderNutrition();
@@ -130,17 +161,28 @@
       state.dataset.state = "complete";
       q(".analysis-panel").setAttribute("aria-busy", "false");
       q(".analysis-tag").textContent = "BILAN DISPONIBLE";
-      q(".capture-title").textContent = "Votre plat, décrypté.";
+      q(".capture-title").textContent = "Analyse simulée terminée";
       q(".capture-sub").textContent = "Valeurs illustratives · à confirmer";
-      progress(100, "Simulation terminée. Découvrez le bilan ci-dessous.", 3);
+      progress(
+        100,
+        "Analyse terminée. Bilan et recommandations disponibles.",
+        4,
+      );
       scanButton.disabled = false;
-      scanButton.querySelector("span").textContent = "Rejouer l’expérience";
+      scanButton.querySelector("span").textContent = "Relancer l’analyse";
     }, 4700);
   }
   root.addEventListener("click", (event) => {
     const button = event.target.closest("[data-action]");
     if (!button) return;
     if (button.dataset.action === "scan") scan();
+    if (button.dataset.action === "adjust-portion" && completed) {
+      q('input[value="standard"]').checked = true;
+      q('input[value="standard"]').dispatchEvent(
+        new Event("change", { bubbles: true }),
+      );
+      q("#recommendation-heading").focus({ preventScroll: true });
+    }
     if (button.dataset.action === "upload") q("#meal-file").click();
     if (button.dataset.action === "restore") {
       importVersion++;
@@ -149,7 +191,7 @@
       q(".meal-photo").src = asset("assets/african-meal.jpg");
       q(".meal-photo").alt =
         "Photo illustrative : riz jollof, tilapia grillé et légumes";
-      q(".image-tag").textContent = "AFRIQUE DE L’OUEST · PLAT D’EXEMPLE";
+      q(".image-tag").textContent = "PLAT D’EXEMPLE";
       q(".upload-feedback").replaceChildren();
       q("#meal-file").value = "";
       idle();
@@ -162,7 +204,7 @@
         renderIngredients();
         renderNutrition();
         q(".scan-status").textContent =
-          "Bilan recalculé avec la nouvelle portion de riz.";
+          "Bilan et recommandations recalculés avec la nouvelle portion de riz.";
       }
     }
   });

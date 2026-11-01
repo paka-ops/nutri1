@@ -98,6 +98,24 @@ async function setup(reduce = false) {
     assert(!generous.balanced);
     assert.equal(w.NUTRI_MEAL_DATA.meal(false).items[0].grams, 150);
   }, "totaux cohérents, deux bilans distincts, données non mutées");
+  check(() => {
+    assert(q(".recommendations-content").hidden);
+    assert(!q(".recommendations-empty").hidden);
+    assert.equal(s.root.querySelectorAll(".timeline li").length, 4);
+    assert.equal(s.root.querySelector("article"), null);
+  }, "interface de suivi et recommandations en attente avant l’analyse");
+  check(() => {
+    for (const large of [false, true]) {
+      const meal = w.NUTRI_MEAL_DATA.meal(large);
+      assert.equal(
+        meal.distribution.reduce((sum, group) => sum + group.percent, 0),
+        100,
+      );
+      const advice = w.NUTRI_MEAL_DATA.recommendations(meal);
+      assert.equal(advice.items.length, 3);
+      assert.equal(advice.adjustable, large);
+    }
+  }, "moteur : répartition à 100 % et recommandations adaptées aux deux portions");
   click('[data-action="scan"]');
   check(() => {
     assert(q('[data-action="scan"]').disabled);
@@ -109,19 +127,53 @@ async function setup(reduce = false) {
   check(() => {
     assert.equal(q(".scanner").dataset.state, "complete");
     assert.equal(q(".kcal").textContent, "500");
-    assert.equal(s.root.querySelectorAll(".ingredient-list li").length, 3);
+    assert.equal(s.root.querySelectorAll(".ingredient-list tr").length, 3);
     assert.equal(s.root.querySelectorAll(".marker").length, 3);
     assert(!q(".verdict").hidden);
     assert(!q(".verdict").classList.contains("warning"));
     assert.equal(q(".progress").getAttribute("aria-valuenow"), "100");
     assert.equal(q(".analysis-panel").getAttribute("aria-busy"), "false");
   }, "scan complet : ingrédients, repères, macros, calories et bilan");
+  check(() => {
+    assert(!q(".recommendations-content").hidden);
+    assert(q(".recommendations-empty").hidden);
+    assert.equal(s.root.querySelectorAll(".recommendation-list li").length, 3);
+    assert.match(
+      q(".recommendation-list").textContent,
+      /Conserver les trois groupes/,
+    );
+    assert(q(".recommendation-action").hidden);
+    assert.equal(s.root.querySelectorAll(".distribution-legend li").length, 3);
+    assert.equal(
+      s.root.querySelectorAll("table thead th[scope='col']").length,
+      3,
+    );
+  }, "résultats tabulaires, répartition et recommandations visibles après analyse");
   changePortion(true);
   check(() => {
     assert.equal(q(".kcal").textContent, "740");
     assert(q(".verdict").classList.contains("warning"));
     assert.match(q(".ingredient-list").textContent, /300 g/);
   }, "recalcul instantané et conseil pour portion généreuse");
+  check(() => {
+    assert(!q(".recommendation-action").hidden);
+    assert.match(q(".recommendation-list").textContent, /740 à 500 kcal/);
+    assert.match(q(".recommendation-list").textContent, /240 kcal/);
+    assert(q(".recommendation-summary").classList.contains("warning"));
+    assert.match(q(".professional-note").textContent, /professionnel de santé/);
+  }, "portion augmentée : recommandation prioritaire chiffrée et limites médicales");
+  click('[data-action="adjust-portion"]');
+  check(() => {
+    assert(q('input[value="standard"]').checked);
+    assert.equal(q(".kcal").textContent, "500");
+    assert(q(".recommendation-action").hidden);
+    assert.match(
+      q(".recommendation-list").textContent,
+      /Conserver les trois groupes/,
+    );
+    assert.match(q(".scan-status").textContent, /recommandations recalculés/);
+    assert.equal(s.root.activeElement, q("#recommendation-heading"));
+  }, "bouton de recommandation : nouvelle simulation cohérente et focus conservé");
   changePortion(false);
   click('[data-action="scan"]');
   changePortion(true);
@@ -130,6 +182,11 @@ async function setup(reduce = false) {
     assert.equal(q(".scanner").dataset.state, "ready");
     assert(q(".results").hidden);
   }, "changement de portion pendant le scan : séquence annulée");
+  check(() => {
+    assert(q(".recommendations-content").hidden);
+    assert(!q(".recommendations-empty").hidden);
+    assert(q(".distribution").hidden);
+  }, "aucun conseil périmé affiché après annulation");
   click('[data-action="scan"]');
   w.document.querySelector("#scanner").classList.remove("on");
   await new Promise((resolve) => setImmediate(resolve));
