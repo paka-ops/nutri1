@@ -1,0 +1,84 @@
+/* ============================================================================
+   NUTRI.N°1 — Citizen 360 · feuille HÔTE (light DOM)
+   ----------------------------------------------------------------------------
+   Cette feuille est chargée depuis index.html. Elle ne stylise QUE #citizen :
+   le dashboard premium est, lui, isolé dans un Shadow DOM (citizen-360.css).
+
+   Rôle principal : neutraliser les couches versionnées V38/V39/V44/V45 qui
+   injectent leurs KPI, barres « live » et formulaires historiques dans
+   #citizen. Ces couches restent actives pour les autres vues de la plateforme ;
+   elles sont simplement masquées ici pour laisser respirer le nouveau module.
+   ========================================================================== */
+
+#citizen.view {
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+/* Titre technique : lu par go() pour la barre supérieure, par les lecteurs
+   d'écran, et conservé en anglais pour la détection de la couche V39. */
+#citizen .c360-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+/* Ancre de compatibilité : garde l'identifiant textuel historique stable
+   quelle que soit la langue active (les traducteurs ne matchent pas cette
+   variante sans le symbole degré). */
+#citizen .c360-compat-anchor {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Bouclier : un champ « weight » empêche V45 de recréer son formulaire, un
+   canvas caché donne à V39 un hôte valide, sans aucun impact visuel. */
+#citizen > .c360-legacy-shield,
+#citizen > .v38-kpis,
+#citizen > .v38-controls,
+#citizen > .v44-livebar,
+#citizen > .v45-citizen-inputs,
+#citizen > #v45-metrics,
+#citizen > .v45-chart-card,
+#citizen > .v44-processing {
+  display: none !important;
+}
+
+#citizen360 {
+  display: block;
+  width: 100%;
+}
+
+#citizen > noscript {
+  display: block;
+  margin: 14px 0;
+  padding: 16px 18px;
+  border-radius: 16px;
+  border: 1px solid #dbe8df;
+  background: #fff;
+  color: #14251a;
+  font: 14px/1.6 Inter, system-ui, sans-serif;
+}
+
+@media (max-width: 980px) {
+  #citizen.view { padding: 0; }
+}
+
+@media print {
+  #citizen > .c360-sr-only,
+  #citizen > .c360-compat-anchor { display: none !important; }
+}

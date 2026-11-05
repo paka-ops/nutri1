@@ -23,6 +23,8 @@
 <link rel="stylesheet" href="components/ai-prevention/ai-prevention.css">
 <!-- Cadre mobile du scanner, limité à la section active. -->
 <link rel="stylesheet" href="components/meal-scanner/meal-scanner-host.css">
+<!-- Citizen 360 (#citizen) : feuille hôte + bouclier de compatibilité V39/V44/V45 -->
+<link rel="stylesheet" href="components/citizen-360/citizen-360-host.css">
 <style>
 :root{--g:#08733f;--d:#032d1a;--lime:#c9ee59;--bg:#f3f7f4;--card:#fff;--line:#dbe8df;--text:#14251a;--muted:#68776d;--blue:#2469aa;--orange:#b96c1b;--red:#a62f35}
 *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px Inter,system-ui,Arial}.side{position:fixed;left:0;top:0;bottom:0;width:300px;padding:18px;background:linear-gradient(155deg,var(--d),#08733f);color:#fff;overflow:auto}.brand{font-size:29px;font-weight:900}.brand b{color:var(--lime)}.sub{font-size:11px;opacity:.72;line-height:1.5}.nav{margin-top:16px}.nav button{display:block;width:100%;padding:10px 12px;margin:2px 0;border:0;border-radius:9px;background:transparent;color:#fff;text-align:left;cursor:pointer}.nav button:hover,.nav button.on{background:#ffffff1e}.main{margin-left:300px;padding:18px;max-width:1850px}.top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.controls{display:flex;gap:7px}select,input,textarea{border:1px solid var(--line);border-radius:9px;padding:9px;background:#fff}.view{display:none}.view.on{display:block}.hero{padding:30px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#032d1a,#08733f)}.hero h1{font-size:36px;margin:0 0 7px}.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-top:13px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:13px;margin-top:13px}.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:13px;margin-top:13px}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px;box-shadow:0 7px 25px #17351f0b}.metric{font-size:28px;font-weight:900;margin:4px 0}.muted,.kpi{color:var(--muted)}.pill{display:inline-block;padding:5px 8px;border-radius:20px;background:#edf6ef;color:var(--g);font-size:11px}.btn{border:0;border-radius:9px;padding:10px 14px;cursor:pointer}.primary{background:var(--g);color:#fff}.secondary{background:#edf6ef;color:var(--g)}.danger{background:#fff0f0;color:var(--red)}.form{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.form label{display:flex;flex-direction:column;gap:5px;font-weight:650}.chart{height:280px}.reference{background:#f3f7f4;border:1px solid var(--line);border-radius:10px;padding:10px;font-size:12px}.reference.good{border-left:4px solid var(--g)}.reference.warn{border-left:4px solid var(--orange)}.reference.info{border-left:4px solid var(--blue)}.progress{height:10px;background:#e6eee8;border-radius:10px;overflow:hidden}.progress i{display:block;height:100%;width:0;background:var(--g);transition:width .45s}.wizard{display:flex;gap:7px;flex-wrap:wrap}.step{padding:7px 10px;border-radius:20px;background:#edf6ef}.step.active{background:var(--g);color:#fff}.chat{height:270px;overflow:auto;background:#f4f8f5;padding:12px;border-radius:12px}.msg{padding:9px;margin:7px 0;background:#e3f1e7;border-radius:10px;max-width:80%}.msg.me{margin-left:auto;background:#d9edf9}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.day{padding:9px;background:#f2f6f3;border-radius:7px;min-height:65px}.slot{background:#dcefe2;padding:5px;border-radius:5px;margin-top:4px;font-size:11px}.accordion{border:1px solid var(--line);border-radius:11px;margin:7px 0;background:#fff;overflow:hidden}.accordion summary{padding:12px;font-weight:700;cursor:pointer;list-style:none}.accordion summary:after{content:'＋';float:right}.accordion[open] summary:after{content:'−'}.accordion .inner{padding:12px;border-top:1px solid var(--line)}.map{height:300px;border-radius:15px;background:linear-gradient(135deg,#e9f3eb,#c8dfce);position:relative;overflow:hidden}.pin{position:absolute;padding:9px 12px;background:var(--g);color:#fff;border-radius:30px}.toast{display:none;position:fixed;right:18px;bottom:18px;background:var(--d);color:#fff;padding:13px 16px;border-radius:10px;z-index:20}table{width:100%;border-collapse:collapse}th,td{padding:8px;border-bottom:1px solid var(--line);text-align:left}.mini{font-size:12px}.tag{font-size:11px;padding:4px 7px;border-radius:14px;background:#eef3f0;margin-right:4px;display:inline-block}.heat{display:grid;grid-template-columns:repeat(6,1fr);gap:5px}.heat div{height:30px;border-radius:5px;background:#dbece0}.heat div:nth-child(3n){background:#a7d2b3}.heat div:nth-child(4n){background:#67aa7f}.heat div:nth-child(5n){background:#08733f}.rank{display:flex;justify-content:space-between;padding:9px;border-bottom:1px solid var(--line)}@media(max-width:980px){.side{display:none}.main{margin:0}.grid,.grid3,.grid2,.form{grid-template-columns:1fr 1fr}}@media(max-width:600px){.grid,.grid3,.grid2,.form{grid-template-columns:1fr}}
@@ -391,50 +393,22 @@
 
 
 <section id="citizen" class="view">
-<div class="card family-access-panel" id="familyDashboard">
-  <div class="section-head">
-    <div>
-      <span class="pill" data-i18n="ui.family_subscription">FAMILY SUBSCRIPTION</span>
-      <h3 data-i18n="ui.family_minor_dashboard">👨‍👩‍👧 Family & Minor Dashboard</h3>
-      <p class="muted" data-i18n="ui.parents_or_legal_guardians_can_manage_authorized_profiles_for_their_mi">Parents or legal guardians can manage authorized profiles for their minor children and follow their nutrition and growth indicators.</p>
-    </div>
-    <div class="access-badge" data-i18n="ui.parent_guardian_access">🔐 Parent / Guardian access</div>
-  </div>
+<!-- ==========================================================================
+     CITIZEN 360 — tableau de bord nutrition premium.
+     Le markup, les styles, les données, les graphiques et la logique vivent dans
+     components/citizen-360/ ; index.html ne garde qu'un point de montage.
+     ========================================================================== -->
+<h2 class="c360-sr-only" data-i18n="ui.citizen_dashboard_360">👤 Citizen Dashboard 360°</h2>
+<!-- Ancre textuelle stable pour la couche V39, indépendante de la langue active. -->
+<span class="c360-compat-anchor" aria-hidden="true">Citizen Dashboard 360</span>
+<!-- Bouclier : V45 voit un champ « weight », V39 trouve son canvas, sans affichage. -->
+<div class="c360-legacy-shield" aria-hidden="true" hidden>
+  <input type="hidden" name="weight" value="68">
+  <canvas id="v38-citizen" width="320" height="160"></canvas>
+</div>
 
-  <div class="family-layout">
-    <div>
-      <label>Family member
-        <select id="familyMember" onchange="loadFamilyChildDashboard()">
-          <option value="child1" data-i18n="ui.ama_7_years">Ama — 7 years</option>
-          <option value="child2" data-i18n="ui.kofi_11_years">Kofi — 11 years</option>
-        </select>
-      </label>
-      <div class="guardian-controls">
-        <button class="btn primary" onclick="requestChildAccess()" data-i18n="ui.request_confirm_parental_access">Request / confirm parental access</button>
-        <button class="btn secondary" onclick="openChildNutritionPlan()" data-i18n="ui.view_nutrition_plan">View nutrition plan</button>
-      </div>
-    </div>
-    <div id="familyChildDashboard" class="family-child-dashboard"></div>
-  </div>
-</div>
-<h2 data-t="citizenTitle" data-i18n="ui.citizen_dashboard_360">👤 Citizen Dashboard 360°</h2>
-<div class="grid">
-<div class="card"><div class="kpi" data-i18n="ui.bmi">BMI</div><div class="metric" id="bmi">—</div><div class="reference info" id="bmiRef" data-i18n="ui.reference_will_adapt_to_sex_age">Reference will adapt to sex/age.</div></div>
-<div class="card"><div class="kpi" data-i18n="ui.weight">Weight</div><div class="metric" id="weight">—</div><div class="reference info" id="weightRef" data-i18n="ui.reference_depends_on_age_sex_height_and_growth">Reference depends on age, sex, height and growth.</div></div>
-<div class="card"><div class="kpi" data-i18n="ui.waist_circumference">Waist circumference</div><div class="metric" id="waist">—</div><div class="reference info" id="waistRef" data-i18n="ui.sex_context_specific_reference">Sex/context-specific reference.</div></div>
-<div class="card"><div class="kpi" data-i18n="ui.blood_pressure">Blood pressure</div><div class="metric" id="bp">—</div><div class="reference info" id="bpRef" data-i18n="ui.context_and_repeated_measurements_required">Context and repeated measurements required.</div></div>
-</div>
-<div class="grid2"><div class="card"><h3 data-i18n="ui.anthropometry_trends">Anthropometry trends</h3><div class="chart"><canvas id="anthroChart"></canvas></div></div><div class="card"><h3 data-i18n="ui.metabolic_clinical_trends">Metabolic & clinical trends</h3><div class="chart"><canvas id="clinicalChart"></canvas></div></div></div>
-<div class="grid2"><div class="card"><h3 data-i18n="ui.nutrition_linked_clinical_parameters">Nutrition-linked clinical parameters</h3><div class="chart"><canvas id="nutritionClinicalChart"></canvas></div></div><div class="card"><h3 data-i18n="ui.reference_comparison">Reference comparison</h3><div id="referenceCards"><div class="reference" data-i18n="ui.select_profile_and_enter_measurements_to_compare_parameters_with_the_a">Select profile and enter measurements to compare parameters with the appropriate reference framework.</div></div></div></div>
-<div class="card"><h3 data-i18n="ui.enter_update_your_data">Enter / update your data</h3><div class="form">
-<label>Profile<select id="profile" onchange="updateReferences()"><option value="female" data-i18n="ui.adult_female">Adult Female</option><option value="male" data-i18n="ui.adult_male">Adult Male</option><option value="child" data-i18n="ui.child">Child</option></select></label>
-<label>Age<input id="age" type="number" oninput="updateReferences()"></label><label>Weight (kg)<input id="w" type="number" step=".1"></label>
-<label>Height (cm)<input id="h" type="number"></label><label>Waist (cm)<input id="wa" type="number"></label><label>Hip (cm)<input id="hi" type="number"></label>
-<label>Glucose<input id="gl" type="number" step=".01"></label><label>HbA1c (%)<input id="a1c" type="number" step=".1"></label>
-<label>Systolic BP<input id="sys" type="number"></label><label>Diastolic BP<input id="dia" type="number"></label>
-<label>Total cholesterol<input id="chol" type="number" step=".01"></label><label>Creatinine / eGFR<input id="kidney" placeholder="value + unit"></label>
-</div><br><button class="btn primary" onclick="saveCitizen()" data-t="save" data-i18n="ui.save_calculate">Save & calculate</button></div>
-<div class="card"><h3 data-i18n="ui.personalized_recommendations">🤖 Personalized recommendations</h3><div id="recs"><p class="muted" data-i18n="ui.enter_your_profile_and_measurements_to_generate_personalized_recommend">Enter your profile and measurements to generate personalized recommendations.</p></div><button class="btn primary" onclick="generateRecommendations()" data-i18n="ui.generate_personalized_recommendations">Generate personalized recommendations</button></div>
+<div id="citizen360"></div>
+<noscript>Le tableau de bord Citizen 360 nécessite JavaScript. Les autres modules de la plateforme restent accessibles. / The Citizen 360 dashboard requires JavaScript. The rest of the platform remains available.</noscript>
 </section>
 
 <section id="devices" class="view">
@@ -2994,6 +2968,16 @@ const st=document.createElement('style');st.textContent=`.v57-clickable{cursor:p
 <script src="components/agri-nutriapp/agri-kpi-charts.js"></script>
 <script src="components/agri-nutriapp/agri-nutriapp-template.js"></script>
 <script src="components/agri-nutriapp/agri-nutriapp-dashboard.js"></script>
+<!-- ==========================================================================
+     CITIZEN 360 (#citizen) — données → modèle → i18n → graphiques SVG → gabarits → contrôleur
+     Module isolé dans un Shadow DOM : aucun style ni script ne sature index.html.
+     ========================================================================== -->
+<script src="components/citizen-360/citizen-360-data.js"></script>
+<script src="components/citizen-360/citizen-360-model.js"></script>
+<script src="components/citizen-360/citizen-360-i18n.js"></script>
+<script src="components/citizen-360/citizen-360-charts.js"></script>
+<script src="components/citizen-360/citizen-360-template.js"></script>
+<script src="components/citizen-360/citizen-360.js"></script>
 <!-- Couche i18n EN des tableaux de bord institutionnels (WHO/WFP/FAO/UNICEF/Santé/Agriculture) -->
 <!-- ============================================================
      CONNECTED DEVICES LAB (#devices) — data → i18n → engine
