@@ -1,0 +1,26 @@
+/* Ajustement du cadre de la plateforme uniquement quand le scanner est ouvert.
+   Les styles de l'expérience restent isolés dans son Shadow DOM. */
+@media (max-width: 760px) {
+  body:has(#scanner.on) .top {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+  body:has(#scanner.on) .top > div {
+    min-width: 0;
+    flex: 1 1 100%;
+  }
+  body:has(#scanner.on) .top .controls {
+    width: 100%;
+    flex-wrap: wrap;
+  }
+  body:has(#scanner.on) .top .controls select {
+    flex: 1 1 140px;
+    min-width: 0;
+    max-width: 100%;
+  }
+  body:has(#scanner.on) .top .v48-language-status,
+  body:has(#scanner.on) .top .v49-lang-status {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+}

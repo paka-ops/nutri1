@@ -11,6 +11,7 @@
     "who": "node who-suite.js",
     "perf": "node perf-unicef.js",
     "ai-prevention": "node ai-prevention-suite.js && node ai-prevention-edge-suite.js",
+    "meal-scanner": "node meal-scanner-suite.js",
     "ai-prevention:i18n": "node ai-prevention-i18n-audit.js",
     "contrast:unicef": "node audit-contrast.js unicef",
     "contrast:citizen": "node audit-contrast.js citizen",
