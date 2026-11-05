@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NUTRI.N°1 — Citizen Dashboard 360° (aperçu du module)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="citizen-dashboard.css">
+<style>
+  /* Aperçu autonome : contexte minimal proche de la plateforme. */
+  body {
+    margin: 0;
+    padding: 26px;
+    background: #f3f7f4;
+    color: #14251a;
+    font: 14px Inter, system-ui, Arial;
+  }
+  .preview-bar {
+    max-width: 1200px;
+    margin: 0 auto 14px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: #63776b;
+  }
+  .preview-bar b { color: #0a5a3a; }
+  .preview-bar code { background: #eaf3ed; padding: 2px 6px; border-radius: 6px; }
+  #citizen { max-width: 1200px; margin: 0 auto; }
+  .view { display: block; }
+</style>
+</head>
+<body>
+<div class="preview-bar">
+  <b>NUTRI.N°1</b> · aperçu autonome du module <code>#citizen</code> ·
+  les boutons FR / EN de l'en-tête du module sont actifs.
+</div>
+
+<section id="citizen" class="view" aria-label="Citizen Dashboard 360">
+  <div id="czdRoot" class="czd-root" data-czd-noscan></div>
+</section>
+
+<script src="citizen-dashboard-i18n.js"></script>
+<script src="citizen-dashboard-data.js"></script>
+<script src="citizen-dashboard-model.js"></script>
+<script src="citizen-dashboard-charts.js"></script>
+<script src="citizen-dashboard-template.js"></script>
+<script src="citizen-dashboard.js"></script>
+</body>
+</html>
