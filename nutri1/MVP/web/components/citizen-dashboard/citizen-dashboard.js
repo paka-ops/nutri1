@@ -74,6 +74,15 @@
       planSeed: 0,
       childDiversity: { child1: ['cereals', 'legumes', 'vegetables', 'animal'], child2: ['cereals', 'vegetables'] },
       eaten: {},
+      activities: [],
+      activityDone: {},
+      activityFilter: 'all',
+      activityPeriod: 'today',
+      searchQuery: '',
+      quickActionsOpen: false,
+      calendarDay: 15,
+      calendarMonth: null,
+      calendarYear: null,
       countries: (typeof countries !== 'undefined' && countries) ? countries.map(function (c) { return [c[0], c[1]]; }) : [['TG', 'Togo']]
     };
   }
@@ -85,7 +94,7 @@
     if (raw) {
       try {
         var saved = JSON.parse(raw);
-        ['profile', 'habits', 'familyAccess', 'activeChild', 'activeTab', 'activeDay', 'preset', 'eaten', 'childDiversity', 'sync'].forEach(function (k) {
+        ['profile', 'habits', 'familyAccess', 'activeChild', 'activeTab', 'activeDay', 'preset', 'eaten', 'childDiversity', 'sync', 'activities', 'activityDone', 'activityFilter', 'activityPeriod', 'calendarDay', 'calendarMonth', 'calendarYear'].forEach(function (k) {
           if (saved[k] != null) base[k] = saved[k];
         });
       } catch (e) { /* état corrompu : repartir des valeurs par défaut */ }
@@ -99,6 +108,27 @@
     base.activeDay = Math.max(0, Math.min(6, Number(base.activeDay) || 0));
     if (!base.childDiversity || typeof base.childDiversity !== 'object') base.childDiversity = freshState().childDiversity;
     if (!base.eaten || typeof base.eaten !== 'object') base.eaten = {};
+    if (!base.activityDone || typeof base.activityDone !== 'object' || Array.isArray(base.activityDone)) base.activityDone = {};
+    if (!Array.isArray(base.activities)) base.activities = [];
+    base.activities = base.activities.slice(0, 100).map(function (a, i) {
+      a = a && typeof a === 'object' ? a : {};
+      return {
+        id: String(a.id || 'restored-' + i).slice(0, 90),
+        name: String(a.name || 'Activity').slice(0, 80),
+        type: ['running', 'workout', 'meditation', 'walking', 'meal', 'other'].indexOf(a.type) === -1 ? 'other' : a.type,
+        time: /^\d{2}:\d{2}$/.test(a.time || '') ? a.time : '19:00',
+        duration: Math.max(1, Math.min(600, Number(a.duration) || 30)),
+        audience: a.audience === 'friends' ? 'friends' : 'alone',
+        notes: String(a.notes || '').slice(0, 180),
+        day: Math.max(0, Math.min(6, Number(a.day) || 0)),
+        done: !!a.done
+      };
+    });
+    if (['all', 'alone', 'friends'].indexOf(base.activityFilter) === -1) base.activityFilter = 'all';
+    if (['today', 'week'].indexOf(base.activityPeriod) === -1) base.activityPeriod = 'today';
+    base.calendarDay = Math.max(1, Math.min(31, Number(base.calendarDay) || 15));
+    if (base.calendarMonth != null) base.calendarMonth = Math.max(0, Math.min(11, Number(base.calendarMonth) || 0));
+    if (base.calendarYear != null) base.calendarYear = Math.max(2000, Math.min(2100, Number(base.calendarYear) || new Date().getFullYear()));
     return base;
   }
 
@@ -113,7 +143,14 @@
         activeDay: state.activeDay,
         preset: state.preset,
         eaten: state.eaten,
-        childDiversity: state.childDiversity
+        childDiversity: state.childDiversity,
+        activities: state.activities,
+        activityDone: state.activityDone,
+        activityFilter: state.activityFilter,
+        activityPeriod: state.activityPeriod,
+        calendarDay: state.calendarDay,
+        calendarMonth: state.calendarMonth,
+        calendarYear: state.calendarYear
       }));
     } catch (e) { /* quota / mode privé : la session reste fonctionnelle */ }
   }
@@ -166,7 +203,7 @@
     }
     if (scope === 'all' || scope === 'plan') {
       var pl = q('[data-czd-panel="plan"]');
-      if (pl) { pl.innerHTML = TPL.planPanel(state); C.animate(pl); }
+      if (pl) { pl.innerHTML = '<div class="czd-bento-rich-panel">' + TPL.planPanel(state) + '</div>'; C.animate(pl); }
     }
     if (scope === 'all' || scope === 'clinical') {
       paintClinicalDerived();
@@ -175,11 +212,11 @@
     }
     if (scope === 'all' || scope === 'family') {
       var fam = q('[data-czd-panel="family"]');
-      if (fam) { fam.innerHTML = TPL.familyPanel(state); C.animate(fam); }
+      if (fam) { fam.innerHTML = '<div class="czd-bento-rich-panel">' + TPL.familyPanel(state) + '</div>'; C.animate(fam); }
     }
     syncLegacyFields();
     /* En-tête : chip de score + libellé de synchronisation. */
-    var hero = q('.czd-hero');
+    var hero = q('.czd-bento-header');
     if (hero) {
       var fresh = document.createElement('div');
       fresh.innerHTML = TPL.header(state);
@@ -281,6 +318,74 @@
   var ACTIONS = {
     tab: function (el, data) {
       setTab(data.czdTarget);
+    },
+    'quick-actions': function () {
+      state.quickActionsOpen = !state.quickActionsOpen;
+      var drawer = q('[data-czd-drawer]');
+      if (drawer) {
+        if (state.quickActionsOpen) drawer.removeAttribute('hidden'); else drawer.setAttribute('hidden', '');
+      }
+      qa('[data-czd-act="quick-actions"]').forEach(function (button) {
+        button.setAttribute('aria-expanded', String(state.quickActionsOpen));
+        button.classList.toggle('is-on', state.quickActionsOpen && button.classList.contains('czd-bento-rail-btn'));
+      });
+    },
+    'calendar-day': function (el, data) {
+      var day = Math.max(1, Math.min(31, Number(data.czdCalendarDay) || 1));
+      state.calendarDay = day;
+      state.activeDay = (day - 1) % 7;
+      paint('overview');
+      paint('plan');
+      toast(t('czd.bento.day.selected', { n: day }));
+    },
+    'activity-filter': function (el, data) {
+      if (['all', 'alone', 'friends'].indexOf(data.czdFilter) === -1) return;
+      state.activityFilter = data.czdFilter;
+      qa('[data-czd-filter]').forEach(function (button) {
+        var on = button.getAttribute('data-czd-filter') === state.activityFilter;
+        button.classList.toggle('is-on', on);
+        button.setAttribute('aria-pressed', String(on));
+      });
+      updateActivityResults();
+      save();
+    },
+    'activity-toggle': function (el, data) {
+      if (data.czdSlot) {
+        ACTIONS['toggle-meal'](el, data);
+        return;
+      }
+      var id = data.czdActivity;
+      var custom = (state.activities || []).filter(function (a) { return a.id === id; })[0];
+      var done;
+      if (custom) {
+        custom.done = !custom.done;
+        done = custom.done;
+      } else {
+        state.activityDone[id] = !state.activityDone[id];
+        done = state.activityDone[id];
+      }
+      updateActivityResults();
+      save();
+      toast(t(done ? 'czd.bento.activity.done' : 'czd.bento.activity.undone'), done ? '' : 'warn');
+    },
+    'add-activity': function () {
+      openModal('activity');
+    },
+    'search-clear': function () {
+      state.searchQuery = '';
+      paint('overview');
+      var input = q('[data-czd-search]');
+      if (input) input.focus();
+    },
+    'sleep+': function () {
+      state.habits.sleep = Math.min(9, +((state.habits.sleep || 0) + 0.5).toFixed(1));
+      paint('overview');
+      toast(t('czd.bento.sleep.updated', { v: n(state.habits.sleep, 1) }));
+    },
+    'activity-adjust': function () {
+      state.habits.activityMin = Math.max(0, (state.habits.activityMin || 0) + 5);
+      paint('overview');
+      toast(t('czd.bento.minutes', { v: state.habits.activityMin }));
     },
     'plan-generate': function () {
       state.planSeed += 1;
@@ -423,6 +528,16 @@
     }
   };
 
+  function updateActivityResults() {
+    var grid = q('[data-czd-activities-grid]');
+    if (grid) {
+      grid.innerHTML = TPL.activityGrid(state);
+      C.animate(grid);
+    }
+    var count = q('[data-czd-activity-count]');
+    if (count) count.textContent = TPL.activityCountText(state);
+  }
+
   function adjustHabit(key, delta) {
     var h = state.habits;
     if (key === 'water') {
@@ -442,8 +557,15 @@
   }
 
   function setTab(tab) {
-    if (!tab) return;
+    if (['overview', 'plan', 'clinical', 'family'].indexOf(tab) === -1) return;
     state.activeTab = tab;
+    state.quickActionsOpen = false;
+    var drawer = q('[data-czd-drawer]');
+    if (drawer) drawer.setAttribute('hidden', '');
+    qa('[data-czd-act="quick-actions"]').forEach(function (button) {
+      button.setAttribute('aria-expanded', 'false');
+      if (button.classList.contains('czd-bento-rail-btn')) button.classList.remove('is-on');
+    });
     qa('[data-czd-tab]').forEach(function (el) {
       var on = el.getAttribute('data-czd-tab') === tab;
       el.classList.toggle('is-on', on);
@@ -471,6 +593,9 @@
     state._builtSeed = null;
     state.eaten = {};
     state.activeDay = 0;
+    state.calendarDay = 15;
+    state.searchQuery = '';
+    state.quickActionsOpen = false;
     compute();
     renderAll();
     save();
@@ -541,6 +666,8 @@
       },
       scores: state.scores,
       risks: state.risks,
+      activities: state.activities,
+      activityDone: state.activityDone,
       plan: state.plan ? state.plan.days.map(function (d) {
         return {
           day: d.index + 1,
@@ -627,6 +754,20 @@
 
   function onRootChange(e) {
     var el = e.target;
+    if (el && el.hasAttribute && el.hasAttribute('data-czd-period')) {
+      state.activityPeriod = el.value === 'week' ? 'week' : 'today';
+      paint('overview');
+      return;
+    }
+    if (el && el.hasAttribute && el.hasAttribute('data-czd-month')) {
+      var now = new Date();
+      state.calendarYear = Number(state.calendarYear) || now.getFullYear();
+      state.calendarMonth = Math.max(0, Math.min(11, Number(el.value) || 0));
+      var maxDay = new Date(state.calendarYear, state.calendarMonth + 1, 0).getDate();
+      state.calendarDay = Math.min(maxDay, Number(state.calendarDay) || 15);
+      paint('overview');
+      return;
+    }
     var key = el && el.getAttribute && el.getAttribute('data-czd-input');
     if (!key) return;
     if (key === 'goal' || key === 'country' || key === 'activity' || key === 'sex' || key === 'glucoseUnit') {
@@ -641,6 +782,11 @@
 
   function onRootInput(e) {
     var el = e.target;
+    if (el && el.hasAttribute && el.hasAttribute('data-czd-search')) {
+      state.searchQuery = el.value;
+      updateActivityResults();
+      return;
+    }
     var key = el && el.getAttribute && el.getAttribute('data-czd-input');
     if (!key) return;
     if (['goal', 'country', 'activity', 'sex', 'glucoseUnit'].indexOf(key) !== -1) return;
@@ -660,6 +806,37 @@
       paintClinicalDerived();
       save();
     }, 140);
+  }
+
+  function onRootSubmit(e) {
+    var form = e.target && e.target.closest ? e.target.closest('[data-czd-activity-form]') : null;
+    if (!form) return;
+    e.preventDefault();
+    var data = new global.FormData(form);
+    var name = String(data.get('name') || '').trim();
+    var duration = Number(data.get('duration'));
+    if (!name || !isFinite(duration) || duration < 1 || duration > 600) {
+      var error = form.querySelector('[data-czd-activity-error]');
+      if (error) error.textContent = t('czd.bento.required');
+      return;
+    }
+    if (state.activities.length >= 100) state.activities.shift();
+    state.activities.push({
+      id: 'custom-' + Date.now(),
+      name: name.slice(0, 80),
+      type: ['running', 'workout', 'meditation', 'walking', 'meal', 'other'].indexOf(data.get('type')) === -1 ? 'other' : String(data.get('type')),
+      time: /^\d{2}:\d{2}$/.test(data.get('time') || '') ? String(data.get('time')) : '19:00',
+      duration: Math.round(duration),
+      audience: data.get('audience') === 'friends' ? 'friends' : 'alone',
+      notes: String(data.get('notes') || '').trim().slice(0, 180),
+      day: state.activeDay,
+      done: false
+    });
+    state.activityFilter = 'all';
+    state.searchQuery = '';
+    closeModal();
+    paint('overview');
+    toast(t('czd.bento.activity.saved'));
   }
 
   function onKeydown(e) {
@@ -714,7 +891,7 @@
     }
     /* Montage idempotent : un second appel ne doit jamais réinitialiser l'état
        en cours de session (le module peut être rappelé par la sécurité de boot). */
-    if (!force && state && root.querySelector('.czd-hero')) {
+    if (!force && state && root.querySelector('.czd-bento-shell')) {
       hideLegacy();
       bind();
       markReady();
@@ -806,6 +983,7 @@
     root.addEventListener('click', onRootClick);
     root.addEventListener('change', onRootChange);
     root.addEventListener('input', onRootInput);
+    root.addEventListener('submit', onRootSubmit);
     root.addEventListener('keydown', onKeydown);
     /* Recalcul de l'encre au redimensionnement. */
     global.addEventListener('resize', function () { moveInk(); });

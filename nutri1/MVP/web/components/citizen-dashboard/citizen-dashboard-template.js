@@ -50,30 +50,25 @@
   /* ══════════════════════════════════════════════════════════════════ */
   function shell(state) {
     return '' +
-      '<div class="czd-aurora" aria-hidden="true"><i></i><i></i><i></i><i></i></div>' +
-      '<div class="czd-shell">' +
+      '<div class="czd-bento-shell" data-czd-noscan="true">' +
+        bentoRail(state) +
         header(state) +
-        presets(state) +
-        tabs(state) +
-        '<div class="czd-panels">' +
+        quickDrawer(state) +
+        '<div class="czd-bento-workspace">' +
           panel('overview', state.activeTab === 'overview', overview(state)) +
-          panel('plan', state.activeTab === 'plan', planPanel(state)) +
-          panel('clinical', state.activeTab === 'clinical', clinicalPanel(state)) +
-          panel('family', state.activeTab === 'family', familyPanel(state)) +
+          panel('plan', state.activeTab === 'plan', '<div class="czd-bento-rich-panel">' + planPanel(state) + '</div>') +
+          panel('clinical', state.activeTab === 'clinical', '<div class="czd-bento-rich-panel">' + clinicalPanel(state) + '</div>') +
+          panel('family', state.activeTab === 'family', '<div class="czd-bento-rich-panel">' + familyPanel(state) + '</div>') +
         '</div>' +
-        '<footer class="czd-foot">' +
-          '<span class="czd-foot__demo"><i></i>' + esc(t('czd.footer.demo')) + '</span>' +
-          '<span>' + esc(t('czd.footer.note')) + '</span>' +
-        '</footer>' +
       '</div>';
   }
 
   function panel(key, on, inner) {
-    return '<section class="czd-panel' + (on ? ' is-on' : '') + '" data-czd-panel="' + key + '" role="tabpanel" ' +
+    return '<section class="czd-panel czd-bento-panel' + (on ? ' is-on' : '') + '" id="czdPanel-' + key + '" data-czd-panel="' + key + '" role="tabpanel" ' +
       'aria-labelledby="czdTab-' + key + '"' + (on ? '' : ' hidden') + '>' + inner + '</section>';
   }
 
-  function header(state) {
+  function legacyHeader(state) {
     var s = state.scores;
     var bandColor = { excellent: '#1a9e63', good: '#3fa36b', watch: '#d98200', risk: '#c0453c' }[s.band];
     var syncLabel = state.sync.last
@@ -158,7 +153,7 @@
   /* ══════════════════════════════════════════════════════════════════ */
   /* 2. Vue d'ensemble                                                */
   /* ══════════════════════════════════════════════════════════════════ */
-  function overview(state) {
+  function legacyOverview(state) {
     return '' +
       '<div class="czd-grid czd-grid--top">' +
         scoreCard(state) +
@@ -555,6 +550,310 @@
         '<span class="czd-adherence__track"><i style="--w:' + (s.adherence || 0) + '%"></i></span>' +
       '</div>' +
     '</article>';
+  }
+
+  /* ══════════════════════════════════════════════════════════════════ */
+  /* 2b. Dark Bento workspace                                         */
+  /* ══════════════════════════════════════════════════════════════════ */
+  function bentoNumber(v, decimals) {
+    var value = n(v, decimals);
+    return I18N.lang === 'en' ? value.replace(/,/g, ' ') : value;
+  }
+
+  function bentoRail(state) {
+    var items = [
+      ['overview', 'home', 'czd.bento.nav.overview'],
+      ['plan', 'calendar', 'czd.bento.nav.plan'],
+      ['clinical', 'chart', 'czd.bento.nav.clinical'],
+      ['family', 'family', 'czd.bento.nav.family']
+    ];
+    return '<aside class="czd-bento-rail" aria-label="' + esc(t('czd.tab.aria')) + '">' +
+      '<div class="czd-bento-logo" aria-label="NUTRI.N°1"><svg viewBox="0 0 42 42" fill="none" aria-hidden="true">' +
+        '<path d="M7 31V11h7l7 11V11h7v20h-7l-7-11v11H7Z" fill="currentColor"/>' +
+        '<path d="M32 11h4v20h-4z" fill="#D2F85A"/></svg></div>' +
+      '<nav class="czd-bento-rail-nav" role="tablist" aria-label="' + esc(t('czd.tab.aria')) + '">' +
+        items.map(function (it) {
+          var on = state.activeTab === it[0];
+          return '<button type="button" class="czd-bento-rail-btn' + (on ? ' is-on' : '') + '" id="czdTab-' + it[0] + '" role="tab" ' +
+            'data-czd-tab="' + it[0] + '" data-tooltip="' + esc(t(it[2])) + '" aria-label="' + esc(t(it[2])) + '" aria-selected="' + on + '" ' +
+            'aria-controls="czdPanel-' + it[0] + '" tabindex="' + (on ? '0' : '-1') + '">' + icon(it[1]) + '</button>';
+        }).join('') +
+        '<button type="button" class="czd-bento-rail-btn' + (state.quickActionsOpen ? ' is-on' : '') + '" data-czd-act="quick-actions" ' +
+          'data-tooltip="' + esc(t('czd.bento.nav.actions')) + '" aria-label="' + esc(t('czd.bento.nav.actions')) + '" aria-expanded="' + !!state.quickActionsOpen + '">' + icon('bell') + '</button>' +
+      '</nav>' +
+      '<div class="czd-bento-rail-bottom">' +
+        '<button type="button" class="czd-bento-reset" data-czd-act="reset" aria-label="' + esc(t('czd.bento.reset')) + '" title="' + esc(t('czd.bento.reset')) + '">' + icon('logout') + '</button>' +
+        '<button type="button" class="czd-bento-avatar" data-czd-act="tab" data-czd-target="clinical" aria-label="' + esc(t('czd.bento.avatar', { name: state.profile.name })) + '">' +
+          esc((state.profile.name || 'A').trim().charAt(0)) + '</button>' +
+      '</div>' +
+    '</aside>';
+  }
+
+  function header(state) {
+    var names = ['balanced', 'risk', 'athlete', 'maternal'];
+    return '<header class="czd-bento-header">' +
+      '<div class="czd-bento-greeting">' +
+        '<h2>' + esc(t('czd.bento.greeting', { name: state.profile.name })) + '</h2>' +
+        '<p>' + esc(t('czd.bento.subtitle')) + '</p>' +
+        '<div class="czd-bento-preset-strip" role="group" aria-label="' + esc(t('czd.preset.title')) + '">' +
+          names.map(function (key) {
+            return '<button type="button" class="czd-bento-preset' + (state.preset === key ? ' is-on' : '') + '" data-czd-preset="' + key + '" aria-pressed="' + (state.preset === key) + '">' +
+              esc(D.PRESETS[key].profile.name) + '</button>';
+          }).join('') +
+          '<span class="czd-bento-langs" role="group" aria-label="Language">' +
+            '<button type="button" class="czd-bento-lang' + (I18N.lang === 'fr' ? ' is-on' : '') + '" data-czd-lang="fr" aria-pressed="' + (I18N.lang === 'fr') + '">FR</button>' +
+            '<button type="button" class="czd-bento-lang' + (I18N.lang === 'en' ? ' is-on' : '') + '" data-czd-lang="en" aria-pressed="' + (I18N.lang === 'en') + '">EN</button>' +
+          '</span>' +
+        '</div>' +
+      '</div>' +
+      '<div class="czd-bento-header-tools">' +
+        '<label class="czd-bento-search">' + icon('search') +
+          '<span class="czd-bento-sr-only">' + esc(t('czd.bento.search')) + '</span>' +
+          '<input type="search" data-czd-search value="' + esc(state.searchQuery || '') + '" placeholder="' + esc(t('czd.bento.search')) + '" autocomplete="off">' +
+          (state.searchQuery ? '<button type="button" class="czd-bento-search-clear" data-czd-act="search-clear" aria-label="' + esc(t('czd.bento.search.clear')) + '">' + icon('close') + '</button>' : '') +
+        '</label>' +
+        '<button type="button" class="czd-bento-sync" data-czd-act="sync" data-czd-idle="' + esc(t('czd.bento.premium')) + '" aria-label="' + esc(t('czd.sync')) + '">' +
+          '<span class="czd-bento-sync-dot" aria-hidden="true"></span><span class="czd-btn__label">' + esc(t('czd.bento.premium')) + '</span>' +
+          '<span class="czd-bento-sr-only" data-czd-sync>' + esc(state.sync.last ? t('czd.synced') : t('czd.sync.never')) + '</span>' +
+        '</button>' +
+      '</div>' +
+    '</header>';
+  }
+
+  function quickDrawer(state) {
+    return '<section class="czd-bento-drawer" data-czd-drawer aria-label="' + esc(t('czd.bento.quick.title')) + '"' + (state.quickActionsOpen ? '' : ' hidden') + '>' +
+      '<div class="czd-bento-drawer-head"><strong>' + esc(t('czd.bento.quick.title')) + '</strong>' +
+        '<button type="button" class="czd-bento-close" data-czd-act="quick-actions" aria-label="' + esc(t('czd.bento.quick.close')) + '">×</button></div>' +
+      '<div class="czd-bento-drawer-actions">' +
+        ['balanced', 'risk', 'athlete', 'maternal'].map(function (key) {
+          return '<button type="button" class="czd-bento-action' + (state.preset === key ? ' is-lime' : '') + '" data-czd-preset="' + key + '">' + esc(D.PRESETS[key].profile.name) + '</button>';
+        }).join('') +
+        '<button type="button" class="czd-bento-action" data-czd-act="export">' + icon('download') + esc(t('czd.export')) + '</button>' +
+        '<button type="button" class="czd-bento-action" data-czd-act="print">' + icon('print') + esc(t('czd.print')) + '</button>' +
+        '<button type="button" class="czd-bento-action is-blue" data-czd-act="sync">' + icon('refresh') + esc(t('czd.sync')) + '</button>' +
+        '<button type="button" class="czd-bento-action is-danger" data-czd-act="reset">' + icon('logout') + esc(t('czd.reset')) + '</button>' +
+      '</div>' +
+    '</section>';
+  }
+
+  function overview(state) {
+    return physicalCard(state) + calendarCard(state) +
+      '<div class="czd-bento-side-stack">' + sleepCard(state) + weightCard(state) + '</div>' + activitiesCard(state);
+  }
+
+  function physicalCard(state) {
+    var h = state.habits, history = state.history;
+    var steps = history.map(function (d) { return d.steps; });
+    var currentBurned = Math.max(0, Math.round(h.steps * .035 + h.activityMin * 6));
+    var burned = history.map(function (d) { return Math.max(0, Math.round(d.steps * .035 + h.activityMin * 6)); });
+    burned[burned.length - 1] = currentBurned;
+    var day = currentDay(state);
+    var intake = day ? day.totals.kcal : 0;
+    var consumed = history.map(function (_, i) { return Math.round(intake * (.92 + ((i * 3) % 7) * .018)); });
+    var minutes = history.map(function (d) { return Math.max(0, Math.round(h.activityMin * d.steps / Math.max(1, h.steps))); });
+    minutes[minutes.length - 1] = h.activityMin;
+    var week = state.activityPeriod === 'week';
+    var sum = function (values) { return values.slice(-7).reduce(function (a, v) { return a + v; }, 0); };
+    var avg = function (values) { return Math.round(values.reduce(function (a, v) { return a + v; }, 0) / Math.max(1, values.length)); };
+    var stepValue = week ? sum(steps) : h.steps;
+    var burnValue = week ? sum(burned) : currentBurned;
+    var minuteValue = week ? sum(minutes) : h.activityMin;
+    var burnGoal = Math.max(300, state.energy.tdee - state.energy.bmr);
+    var activityPeak = I18N.lang === 'fr' ? '18 h' : '6 PM';
+    return '<article class="czd-bento-card czd-bento-physical">' +
+      '<div class="czd-bento-card-head"><h3 class="czd-bento-card-title">' + esc(t('czd.bento.physical')) + '</h3>' +
+        '<select class="czd-bento-select" data-czd-period aria-label="' + esc(t('czd.bento.physical')) + '">' +
+          '<option value="today"' + (!week ? ' selected' : '') + '>' + esc(t('czd.bento.today')) + ' ⌄</option>' +
+          '<option value="week"' + (week ? ' selected' : '') + '>' + esc(t('czd.bento.week')) + ' ⌄</option></select></div>' +
+      '<div class="czd-bento-metrics">' +
+        bentoMetric(state, C.bentoSpline({ values: steps, color: '#D2F85A', aria: t('czd.bento.chart.steps') }),
+          'czd.bento.steps', bentoNumber(stepValue, 0), '', bentoNumber(h.stepsGoal * (week ? 7 : 1), 0), bentoNumber(avg(steps), 0), 'steps+') +
+        bentoMetric(state, C.bentoSpline({ series: [{ values: burned, color: '#F59B42' }, { values: consumed, color: '#8F88E8' }], aria: t('czd.bento.chart.calories') }) +
+          '<div class="czd-bento-legend"><span style="color:#F59B42"><i></i>' + esc(t('czd.bento.burned')) + '</span><span style="color:#8F88E8"><i></i>' + esc(t('czd.bento.consumed')) + '</span></div>',
+          'czd.bento.calories', bentoNumber(burnValue, 0), 'kcal', bentoNumber(burnGoal * (week ? 7 : 1), 0) + ' kcal', bentoNumber(avg(burned), 0) + ' kcal', 'activity-adjust') +
+        bentoMetric(state, C.bentoSpline({ values: minutes, color: '#4E65EC', area: true, peakLabel: activityPeak, badgeTextColor: '#FFFFFF', dropLine: false, aria: t('czd.bento.chart.activity') }),
+          'czd.bento.activityTime', formatMinutes(minuteValue), '', formatMinutes(h.activityGoal * (week ? 7 : 1)), formatMinutes(avg(minutes)), 'activity-adjust') +
+      '</div>' +
+    '</article>';
+  }
+
+  function bentoMetric(state, chart, labelKey, value, unit, goal, average, action) {
+    var amount = action === 'steps+' ? ' data-czd-amount="1000"' : '';
+    return '<div class="czd-bento-metric"><div class="czd-bento-chart">' + chart + '</div>' +
+      '<button type="button" class="czd-bento-metric-button" data-czd-act="' + action + '"' + amount + '>' +
+        '<span class="czd-bento-metric-label">' + esc(t(labelKey)) + '</span>' +
+        '<strong class="czd-bento-kpi">' + esc(value) + (unit ? '<small>' + esc(unit) + '</small>' : '') + '</strong>' +
+        '<span class="czd-bento-metric-foot"><span>' + esc(t('czd.bento.goal', { v: goal })) + '</span><span>' + esc(t('czd.bento.average')) + ' <b>' + esc(average) + '</b></span></span>' +
+      '</button></div>';
+  }
+
+  function formatMinutes(value) {
+    var v = Math.max(0, Math.round(value || 0));
+    if (v < 60) return v + 'min';
+    var hours = Math.floor(v / 60), mins = v % 60;
+    return hours + 'h' + (mins ? ' ' + mins + 'min' : '');
+  }
+
+  function calendarCard(state) {
+    var now = new Date();
+    var year = Number(state.calendarYear) || now.getFullYear();
+    var month = state.calendarMonth == null ? now.getMonth() : Number(state.calendarMonth);
+    month = Math.max(0, Math.min(11, month));
+    var selected = Number(state.calendarDay) || 15;
+    var offset = (new Date(year, month, 1).getDay() + 6) % 7;
+    var days = new Date(year, month + 1, 0).getDate();
+    var previousDays = new Date(year, month, 0).getDate();
+    var cells = Math.ceil((offset + days) / 7) * 7;
+    var weekdays = I18N.lang === 'fr' ? ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM'] : ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'];
+    var monthName = '';
+    try { monthName = new Date(year, month, 1).toLocaleDateString(I18N.lang === 'fr' ? 'fr-FR' : 'en-GB', { month: 'long' }); } catch (e) { monthName = String(month + 1); }
+    var html = weekdays.map(function (d) { return '<span class="czd-bento-weekday">' + d + '</span>'; }).join('');
+    for (var i = 0; i < cells; i++) {
+      var dayNumber = i - offset + 1;
+      if (dayNumber < 1 || dayNumber > days) {
+        var overflow = dayNumber < 1 ? previousDays + dayNumber : dayNumber - days;
+        html += '<span class="czd-bento-day is-overflow" aria-hidden="true">' + overflow + '</span>';
+      } else {
+        var historyPoint = state.history[dayNumber - 1];
+        var logged = !!(historyPoint && historyPoint.steps >= state.habits.stepsGoal * .75) || !!state.eaten[((dayNumber - 1) % 7) + ':breakfast'];
+        html += '<button type="button" class="czd-bento-day' + (dayNumber === selected ? ' is-active' : '') + (logged ? ' has-log' : '') + '" ' +
+          'data-czd-act="calendar-day" data-czd-calendar-day="' + dayNumber + '" aria-pressed="' + (dayNumber === selected) + '" aria-label="' + dayNumber + ' ' + esc(monthName) + '">' + dayNumber + '</button>';
+      }
+    }
+    return '<article class="czd-bento-card czd-bento-calendar">' +
+      '<div class="czd-bento-card-head"><h3 class="czd-bento-card-title">' + esc(t('czd.bento.activeDays')) + '</h3>' +
+        '<select class="czd-bento-select" data-czd-month aria-label="' + esc(t('czd.bento.calendar')) + '">' +
+          Array.apply(null, Array(12)).map(function (_, m) {
+            var label = '';
+            try { label = new Date(year, m, 1).toLocaleDateString(I18N.lang === 'fr' ? 'fr-FR' : 'en-GB', { month: 'long' }); } catch (e) { label = String(m + 1); }
+            return '<option value="' + m + '"' + (m === month ? ' selected' : '') + '>' + esc(label) + ' ⌄</option>';
+          }).join('') + '</select></div>' +
+      '<div class="czd-bento-calendar-grid" role="group" aria-label="' + esc(monthName + ' ' + year) + '">' + html + '</div>' +
+    '</article>';
+  }
+
+  function sleepCard(state) {
+    var h = state.habits;
+    return '<article class="czd-bento-card czd-bento-sleep">' +
+      '<div class="czd-bento-sleep-copy"><h3 class="czd-bento-card-title">' + esc(t('czd.bento.sleep')) + '</h3>' +
+        '<p class="czd-bento-sleep-status">' + esc(t('czd.bento.sleep.almost')) + '</p>' +
+        '<p class="czd-bento-sleep-goal">' + esc(t('czd.bento.sleep.goal', { v: n(h.sleepGoal, 1) })) + '</p>' +
+        '<button type="button" class="czd-bento-sleep-adjust" data-czd-act="sleep+">' + esc(t('czd.bento.sleep.adjust')) + ' +0,5</button></div>' +
+      '<div class="czd-bento-sleep-ring">' + C.sleepRing({ value: h.sleep, goal: h.sleepGoal, aria: t('czd.bento.chart.sleep', { value: n(h.sleep, 1), goal: n(h.sleepGoal, 1) }) }) + '</div>' +
+    '</article>';
+  }
+
+  function weightCard(state) {
+    var current = state.profile.weight;
+    var start = state.history.length ? state.history[0].weight : current;
+    var ideal = state.indicator.idealWeight;
+    var target = ideal ? ideal.max : current;
+    var completion = Math.max(0, Math.min(100, Math.round(100 - Math.abs(current - target) / Math.max(4, Math.abs(start - target)) * 100)));
+    return '<article class="czd-bento-card czd-bento-weight">' +
+      '<div class="czd-bento-card-head"><h3 class="czd-bento-card-title">' + esc(t('czd.bento.weightPlan')) + '</h3>' +
+        '<span class="czd-bento-completion"><b>' + esc(t('czd.bento.completed', { v: completion })) + '</b></span></div>' +
+      '<div class="czd-bento-progress" role="progressbar" aria-valuenow="' + completion + '" aria-valuemin="0" aria-valuemax="100"><i style="--bento-progress:' + completion + '%"></i></div>' +
+      '<div class="czd-bento-weight-labels"><span>' + esc(t('czd.bento.startWeight')) + '<b>' + n(start, 1) + 'kg</b></span>' +
+        '<span>' + esc(t('czd.bento.targetWeight')) + '<b>' + n(target, 1) + 'kg</b></span></div>' +
+    '</article>';
+  }
+
+  function activityIcon(type) {
+    return { running: '👟', workout: '🏋🏾', meditation: '🧘🏾', walking: '🚶🏾', meal: '🥘', other: '✨' }[type] || '✨';
+  }
+
+  function bentoActivities(state) {
+    var custom = (state.activities || []).filter(function (a) { return Number(a.day) === state.activeDay; }).map(function (a) {
+      return { id: a.id, name: a.name, type: a.type, time: a.time, duration: a.duration, audience: a.audience,
+        notes: a.notes, icon: activityIcon(a.type), done: !!a.done, custom: true };
+    });
+    var priorityNote = function (cta, fallback) {
+      var found = (state.priorities || []).filter(function (p) { return p.cta === cta; })[0];
+      return found ? t('czd.priority.' + found.key, { n: found.n }) : fallback;
+    };
+    var defaults = [
+      { id: 'daily-running', name: t('czd.bento.running'), type: 'running', time: I18N.lang === 'fr' ? '07:00' : '7:00 AM', audience: 'alone', icon: '👟', notes: priorityNote('steps', bentoNumber(state.habits.steps, 0) + ' / ' + bentoNumber(state.habits.stepsGoal, 0)) },
+      { id: 'daily-gym', name: t('czd.bento.gym'), type: 'workout', time: I18N.lang === 'fr' ? '20:00' : '8:00 PM', audience: 'alone', icon: '🏋🏾', notes: priorityNote('water', formatMinutes(state.habits.activityMin) + ' / ' + formatMinutes(state.habits.activityGoal)) },
+      { id: 'daily-meditation', name: t('czd.bento.meditation'), type: 'meditation', time: I18N.lang === 'fr' ? '22:30' : '10:30 PM', audience: 'alone', icon: '🧘🏾', notes: priorityNote('learn', n(state.habits.sleep, 1) + 'h · ' + t('czd.bento.sleep')) }
+    ];
+    var day = currentDay(state);
+    var times = I18N.lang === 'fr' ? ['07:30', '12:30', '19:30', '16:00'] : ['7:30 AM', '12:30 PM', '7:30 PM', '4:00 PM'];
+    var meals = day ? D.MEAL_SLOTS.map(function (slot, i) {
+      var first = (day.meals[slot] || [])[0];
+      var food = first ? D.FOODS[first.id] : null;
+      return { id: 'meal-' + state.activeDay + '-' + slot, name: food ? foodName(food) : slotLabel(slot), type: 'meal', time: times[i],
+        audience: 'friends', icon: food ? food.icon : '🥘', mealSlot: slot, done: !!(day.eaten && day.eaten[slot]), notes: slotLabel(slot) };
+    }) : [];
+    return custom.concat(defaults, meals).map(function (a) {
+      if (!a.custom && !a.mealSlot) a.done = !!(state.activityDone || {})[a.id];
+      return a;
+    });
+  }
+
+  function filteredActivities(state) {
+    var query = String(state.searchQuery || '').trim().toLocaleLowerCase();
+    return bentoActivities(state).filter(function (a) {
+      if (state.activityFilter === 'alone' && a.audience !== 'alone') return false;
+      if (state.activityFilter === 'friends' && a.audience !== 'friends') return false;
+      if (!query) return true;
+      return [a.name, a.type, a.notes, a.time, t('czd.bento.type.' + (a.type === 'workout' ? 'workout' : a.type))].join(' ').toLocaleLowerCase().indexOf(query) !== -1;
+    });
+  }
+
+  function activityCountText(state) {
+    return t('czd.bento.planned', { count: filteredActivities(state).length });
+  }
+
+  function activityGrid(state) {
+    var matches = filteredActivities(state);
+    var cards = matches.slice(0, 3).map(function (a, i) {
+      return '<button type="button" class="czd-bento-activity' + (i === 0 ? ' is-featured' : '') + (a.done ? ' is-complete' : '') + '" ' +
+        'data-czd-act="activity-toggle" data-czd-activity="' + esc(a.id) + '"' + (a.mealSlot ? ' data-czd-slot="' + a.mealSlot + '"' : '') + ' aria-pressed="' + !!a.done + '">' +
+        '<span class="czd-bento-activity-badges" aria-hidden="true"><span class="czd-bento-activity-badge">' + a.icon + '</span>' +
+          '<span class="czd-bento-activity-badge">' + (a.audience === 'friends' ? '👥' : '✓') + '</span></span>' +
+        '<span class="czd-bento-activity-arrow" aria-hidden="true">↗</span>' +
+        '<span class="czd-bento-activity-name">' + esc(a.name) + '</span><span class="czd-bento-activity-time">' + esc(a.time) + '</span>' +
+        (a.notes ? '<span class="czd-bento-activity-meta">' + esc(a.notes) + '</span>' : '') +
+      '</button>';
+    }).join('');
+    if (!matches.length) cards = '<div class="czd-bento-empty">' + esc(t('czd.bento.search.empty', { q: state.searchQuery || '' })) + '</div>';
+    return cards + '<button type="button" class="czd-bento-activity czd-bento-add" data-czd-act="add-activity">' +
+      '<span class="czd-bento-add-plus" aria-hidden="true">+</span><span class="czd-bento-add-label">' + esc(t('czd.bento.add')) + '</span></button>';
+  }
+
+  function activitiesCard(state) {
+    var filters = [['all', 'czd.bento.filter.all'], ['alone', 'czd.bento.filter.alone'], ['friends', 'czd.bento.filter.friends']];
+    return '<article class="czd-bento-card czd-bento-activities">' +
+      '<div class="czd-bento-card-head"><h3 class="czd-bento-card-title">' + esc(t('czd.bento.activities')) + '</h3>' +
+        '<span class="czd-bento-activity-count" data-czd-activity-count>' + esc(activityCountText(state)) + '</span></div>' +
+      '<div class="czd-bento-filters" role="group" aria-label="' + esc(t('czd.bento.activities')) + '">' + filters.map(function (f) {
+        var on = state.activityFilter === f[0];
+        return '<button type="button" class="czd-bento-filter' + (on ? ' is-on' : '') + '" data-czd-act="activity-filter" data-czd-filter="' + f[0] + '" aria-pressed="' + on + '">' + esc(t(f[1])) + '</button>';
+      }).join('') + '</div>' +
+      '<div class="czd-bento-activity-grid" data-czd-activities-grid>' + activityGrid(state) + '</div>' +
+    '</article>';
+  }
+
+  function activityModal() {
+    var types = ['running', 'workout', 'meditation', 'walking', 'meal', 'other'];
+    return '<div class="czd-bento-modal-layer">' +
+      '<div class="czd-bento-modal-backdrop" data-czd-act="modal-close"></div>' +
+      '<div class="czd-bento-modal" role="dialog" aria-modal="true" aria-labelledby="czdActivityModalTitle">' +
+        '<div class="czd-bento-modal-head"><div><h3 id="czdActivityModalTitle">' + esc(t('czd.bento.modal.title')) + '</h3><p>' + esc(t('czd.bento.modal.subtitle')) + '</p></div>' +
+          '<button type="button" class="czd-modal__close czd-bento-close" data-czd-act="modal-close" aria-label="' + esc(t('czd.modal.close')) + '">×</button></div>' +
+        '<form class="czd-bento-form" data-czd-activity-form>' +
+          '<label class="czd-bento-field"><span>' + esc(t('czd.bento.field.name')) + '</span><input name="name" required maxlength="80" placeholder="' + esc(t('czd.bento.field.namePlaceholder')) + '"></label>' +
+          '<div class="czd-bento-form-row"><label class="czd-bento-field"><span>' + esc(t('czd.bento.field.type')) + '</span><select name="type">' +
+            types.map(function (type) { return '<option value="' + type + '">' + esc(t('czd.bento.type.' + type)) + '</option>'; }).join('') + '</select></label>' +
+            '<label class="czd-bento-field"><span>' + esc(t('czd.bento.field.time')) + '</span><input name="time" type="time" value="19:00" required></label></div>' +
+          '<div class="czd-bento-form-row"><label class="czd-bento-field"><span>' + esc(t('czd.bento.field.duration')) + '</span><input name="duration" type="number" value="30" min="1" max="600" required></label>' +
+            '<label class="czd-bento-field"><span>' + esc(t('czd.bento.field.audience')) + '</span><select name="audience"><option value="alone">' + esc(t('czd.bento.filter.alone')) + '</option><option value="friends">' + esc(t('czd.bento.filter.friends')) + '</option></select></label></div>' +
+          '<label class="czd-bento-field"><span>' + esc(t('czd.bento.field.notes')) + '</span><textarea name="notes" maxlength="180" placeholder="' + esc(t('czd.bento.field.notesPlaceholder')) + '"></textarea></label>' +
+          '<p class="czd-bento-form-error" data-czd-activity-error role="alert"></p>' +
+          '<div class="czd-bento-modal-actions"><button type="button" class="czd-bento-action" data-czd-act="modal-close">' + esc(t('czd.bento.cancel')) + '</button>' +
+            '<button type="submit" class="czd-bento-action is-lime">' + esc(t('czd.bento.create')) + '</button></div>' +
+        '</form>' +
+      '</div></div>';
   }
 
   /* ══════════════════════════════════════════════════════════════════ */
@@ -982,6 +1281,7 @@
   /* 6. Modale explicative                                            */
   /* ══════════════════════════════════════════════════════════════════ */
   function modal(topic) {
+    if (topic === 'activity') return activityModal();
     var keys = {
       bmi: ['czd.modal.bmi.title', 'czd.modal.bmi.body'],
       waist: ['czd.modal.waist.title', 'czd.modal.waist.body'],
@@ -1053,6 +1353,9 @@
   global.CZD_TPL = {
     shell: shell,
     overview: overview,
+    legacyOverview: legacyOverview,
+    activityGrid: activityGrid,
+    activityCountText: activityCountText,
     planPanel: planPanel,
     clinicalPanel: clinicalPanel,
     clinicalSide: clinicalSide,
