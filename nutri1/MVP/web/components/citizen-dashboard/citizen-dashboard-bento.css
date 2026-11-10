@@ -1,0 +1,1475 @@
+/* ============================================================================
+ * NUTRI.N°1 — Citizen Dashboard 360° · Dark Bento workspace
+ * ----------------------------------------------------------------------------
+ * Additive presentation layer. Every component selector is scoped to #czdRoot
+ * and every new class is prefixed czd-bento-*: the platform shell and the
+ * existing citizen-dashboard.css components remain untouched.
+ * ========================================================================== */
+
+#czdRoot {
+  --bento-canvas: #1A1B1E;
+  --bento-card: #2B2C31;
+  --bento-card-inner: #37383F;
+  --bento-dark-slot: #1E1F23;
+  --bento-lime: #D2F85A;
+  --bento-blue: #4E65EC;
+  --bento-orange: #F59B42;
+  --bento-lavender: #8F88E8;
+  --bento-text: #FFFFFF;
+  --bento-muted: #9A9CA3;
+  --bento-on-lime: #18191C;
+  --bento-line: rgba(255, 255, 255, .075);
+  --bento-shadow: 0 20px 55px rgba(0, 0, 0, .20);
+  --bento-ease: cubic-bezier(.22, 1, .36, 1);
+}
+
+/* --------------------------------------------------------------------------
+ * Shell, navigation rail and shared controls
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-shell {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 24px;
+  width: 100%;
+  min-height: 780px;
+  padding: 24px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .025);
+  border-radius: 32px;
+  color: var(--bento-text);
+  background:
+    radial-gradient(circle at 8% 12%, rgba(92, 107, 48, .20) 0%, transparent 45%),
+    var(--bento-canvas);
+  box-shadow: var(--bento-shadow);
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.45;
+  color-scheme: dark;
+  -webkit-font-smoothing: antialiased;
+}
+
+#czdRoot .czd-bento-shell,
+#czdRoot .czd-bento-shell *,
+#czdRoot .czd-bento-shell *::before,
+#czdRoot .czd-bento-shell *::after {
+  box-sizing: border-box;
+}
+
+#czdRoot .czd-bento-shell button,
+#czdRoot .czd-bento-shell input,
+#czdRoot .czd-bento-shell select,
+#czdRoot .czd-bento-shell textarea {
+  font: inherit;
+}
+
+#czdRoot .czd-bento-shell button {
+  border: 0;
+  cursor: pointer;
+}
+
+#czdRoot .czd-bento-shell button:disabled {
+  cursor: not-allowed;
+  opacity: .48;
+}
+
+#czdRoot .czd-bento-shell :focus-visible {
+  outline: 2px solid var(--bento-lime);
+  outline-offset: 3px;
+}
+
+#czdRoot .czd-bento-sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+#czdRoot .czd-bento-rail {
+  grid-column: 1;
+  grid-row: 1 / span 2;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  min-height: 100%;
+  padding: 8px 0 2px;
+}
+
+#czdRoot .czd-bento-logo {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  color: var(--bento-text);
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -.08em;
+  line-height: 1;
+}
+
+#czdRoot .czd-bento-logo svg {
+  display: block;
+  width: 42px;
+  height: 42px;
+}
+
+#czdRoot .czd-bento-rail-nav {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 12px;
+  margin: auto 0;
+  padding: 14px 10px;
+  border: 1px solid var(--bento-line);
+  border-radius: 32px;
+  background: rgba(43, 44, 49, .76);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .16);
+}
+
+#czdRoot .czd-bento-rail-btn,
+#czdRoot .czd-bento-reset,
+#czdRoot .czd-bento-avatar {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 0 0 46px;
+  width: 46px;
+  height: 46px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--bento-muted);
+  background: transparent;
+  transition: color .2s ease, background .2s ease, transform .2s var(--bento-ease);
+}
+
+#czdRoot .czd-bento-rail-btn:hover,
+#czdRoot .czd-bento-reset:hover {
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+  transform: translateY(-1px);
+}
+
+#czdRoot .czd-bento-rail-btn.is-on,
+#czdRoot .czd-bento-rail-btn[aria-selected="true"] {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+  box-shadow: 0 8px 22px rgba(210, 248, 90, .16);
+}
+
+#czdRoot .czd-bento-rail-btn svg,
+#czdRoot .czd-bento-reset svg {
+  width: 21px;
+  height: 21px;
+}
+
+#czdRoot .czd-bento-rail-btn[data-tooltip]::after {
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  left: calc(100% + 15px);
+  padding: 7px 10px;
+  border-radius: 9px;
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, .28);
+  content: attr(data-tooltip);
+  font-size: 11px;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(4px, -50%);
+  transition: opacity .16s ease, transform .16s ease;
+  white-space: nowrap;
+}
+
+#czdRoot .czd-bento-rail-btn[data-tooltip]:hover::after,
+#czdRoot .czd-bento-rail-btn[data-tooltip]:focus-visible::after {
+  opacity: 1;
+  transform: translate(0, -50%);
+}
+
+#czdRoot .czd-bento-rail-bottom {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 14px;
+}
+
+#czdRoot .czd-bento-reset {
+  width: 38px;
+  height: 38px;
+  flex-basis: 38px;
+  border: 1px solid var(--bento-line);
+}
+
+#czdRoot .czd-bento-avatar {
+  border: 2px solid rgba(210, 248, 90, .55);
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+  font-size: 14px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+ * Header: greeting, compact presets, locale, search and synchronization
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-header {
+  grid-column: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 0;
+  min-height: 72px;
+}
+
+#czdRoot .czd-bento-greeting {
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-greeting h2 {
+  margin: 0;
+  color: var(--bento-text);
+  font-size: clamp(24px, 2vw, 31px);
+  font-weight: 700;
+  letter-spacing: -.045em;
+  line-height: 1.15;
+}
+
+#czdRoot .czd-bento-greeting > p {
+  margin: 7px 0 0;
+  color: var(--bento-muted);
+  font-size: 13px;
+}
+
+#czdRoot .czd-bento-header-tools {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-preset-strip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 12px;
+}
+
+#czdRoot .czd-bento-preset,
+#czdRoot .czd-bento-lang {
+  min-height: 26px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  color: var(--bento-muted);
+  background: transparent;
+  font-size: 10px;
+  font-weight: 700;
+  transition: color .18s ease, background .18s ease;
+}
+
+#czdRoot .czd-bento-preset:hover,
+#czdRoot .czd-bento-lang:hover {
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+}
+
+#czdRoot .czd-bento-preset.is-on {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+}
+
+#czdRoot .czd-bento-langs {
+  display: inline-flex;
+  gap: 2px;
+  margin-left: 5px;
+  padding-left: 7px;
+  border-left: 1px solid var(--bento-line);
+}
+
+#czdRoot .czd-bento-lang {
+  min-width: 30px;
+  padding-inline: 6px;
+}
+
+#czdRoot .czd-bento-lang.is-on {
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+}
+
+#czdRoot .czd-bento-search {
+  position: relative;
+  flex: 0 1 310px;
+  width: 310px;
+  height: 48px;
+}
+
+#czdRoot .czd-bento-search > svg {
+  position: absolute;
+  top: 15px;
+  left: 18px;
+  width: 18px;
+  height: 18px;
+  color: var(--bento-muted);
+  pointer-events: none;
+}
+
+#czdRoot .czd-bento-search input {
+  width: 100%;
+  height: 48px;
+  padding: 0 42px 0 48px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  outline: 0;
+  color: var(--bento-text);
+  background: var(--bento-card);
+  font-size: 12px;
+  transition: border-color .18s ease, background .18s ease;
+}
+
+#czdRoot .czd-bento-search input::placeholder {
+  color: var(--bento-muted);
+  opacity: 1;
+}
+
+#czdRoot .czd-bento-search input:focus {
+  border-color: rgba(210, 248, 90, .42);
+  background: var(--bento-card-inner);
+}
+
+#czdRoot .czd-bento-search-clear {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--bento-muted);
+  background: transparent;
+}
+
+#czdRoot .czd-bento-search-clear:hover {
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+}
+
+#czdRoot .czd-bento-sync {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  gap: 9px;
+  min-width: 116px;
+  height: 48px;
+  padding: 0 28px;
+  border-radius: 999px;
+  color: #fff;
+  background: var(--bento-blue);
+  box-shadow: 0 10px 25px rgba(78, 101, 236, .20);
+  font-size: 12px;
+  font-weight: 700;
+  transition: filter .18s ease, transform .18s var(--bento-ease);
+}
+
+#czdRoot .czd-bento-sync:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+}
+
+#czdRoot .czd-bento-sync.is-busy svg {
+  animation: czdBentoSpin .8s linear infinite;
+}
+
+#czdRoot .czd-bento-sync-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--bento-lime);
+  box-shadow: 0 0 0 4px rgba(210, 248, 90, .12);
+}
+
+/* --------------------------------------------------------------------------
+ * Workspace and shared Bento cards
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-workspace {
+  grid-column: 2;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  align-items: stretch;
+  gap: 24px;
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-card {
+  position: relative;
+  min-width: 0;
+  padding: 24px 28px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .025);
+  border-radius: 28px;
+  color: var(--bento-text);
+  background: var(--bento-card);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .10);
+}
+
+#czdRoot .czd-bento-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+#czdRoot .czd-bento-card-title {
+  margin: 0;
+  color: var(--bento-text);
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -.025em;
+}
+
+#czdRoot .czd-bento-card-subtitle,
+#czdRoot .czd-bento-muted {
+  color: var(--bento-muted);
+}
+
+#czdRoot .czd-bento-card-subtitle {
+  margin: 5px 0 0;
+  font-size: 11px;
+}
+
+#czdRoot .czd-bento-select {
+  min-height: 32px;
+  padding: 5px 28px 5px 12px;
+  border: 0;
+  border-radius: 999px;
+  outline: 0;
+  color: var(--bento-muted);
+  background: var(--bento-dark-slot);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+#czdRoot .czd-bento-physical {
+  grid-column: span 8;
+}
+
+#czdRoot .czd-bento-calendar {
+  grid-column: span 4;
+  border-color: rgba(255, 255, 255, .08);
+  background: var(--bento-blue);
+  box-shadow: 0 16px 36px rgba(43, 58, 170, .24);
+}
+
+#czdRoot .czd-bento-side-stack {
+  grid-column: span 4;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-activities {
+  grid-column: span 8;
+}
+
+#czdRoot .czd-bento-panel,
+#czdRoot .czd-bento-rich-panel {
+  grid-column: 1 / -1;
+  min-width: 0;
+}
+
+#citizen.view > #czdRoot .czd-bento-panel.is-on {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 24px;
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-panel .czd-bento-rich-panel {
+  grid-column: 1 / -1;
+}
+
+/* --------------------------------------------------------------------------
+ * Physical Activity: three metric splines, badges, KPI and footer values
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 28px;
+}
+
+#czdRoot .czd-bento-metric {
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-metric + .czd-bento-metric {
+  padding-left: 26px;
+  border-left: 1px solid var(--bento-line);
+}
+
+#czdRoot .czd-bento-chart {
+  position: relative;
+  height: 132px;
+  margin: -4px 0 14px;
+}
+
+#czdRoot .czd-bento-chart svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+#czdRoot .czd-bento-chart-line {
+  fill: none;
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+#czdRoot .czd-bento-chart-area {
+  pointer-events: none;
+}
+
+#czdRoot .czd-bento-peak-line {
+  stroke: var(--bento-lime);
+  stroke-width: 1.25;
+  stroke-dasharray: 4 5;
+  opacity: .72;
+  vector-effect: non-scaling-stroke;
+}
+
+#czdRoot .czd-bento-peak-dot {
+  stroke: var(--bento-card);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+#czdRoot .czd-bento-peak-glow {
+  opacity: .18;
+  filter: blur(3px);
+}
+
+#czdRoot .czd-bento-peak-badge {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+#czdRoot .czd-bento-legend {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  min-height: 18px;
+  margin: -4px 0 8px;
+  color: var(--bento-muted);
+  font-size: 9px;
+}
+
+#czdRoot .czd-bento-legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+#czdRoot .czd-bento-legend i {
+  display: block;
+  width: 13px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+}
+
+#czdRoot .czd-bento-metric-button {
+  display: block;
+  width: 100%;
+  padding: 0;
+  text-align: left;
+  color: inherit;
+  background: transparent;
+}
+
+#czdRoot .czd-bento-metric-label {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--bento-muted);
+  font-size: 11px;
+  font-weight: 500;
+}
+
+#czdRoot .czd-bento-kpi {
+  display: block;
+  color: var(--bento-text);
+  font-size: clamp(27px, 2.2vw, 37px);
+  font-weight: 700;
+  letter-spacing: -.055em;
+  line-height: 1.15;
+  white-space: nowrap;
+}
+
+#czdRoot .czd-bento-kpi small {
+  margin-left: 3px;
+  color: var(--bento-muted);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: -.02em;
+}
+
+#czdRoot .czd-bento-metric-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 15px;
+  color: var(--bento-muted);
+  font-size: 10px;
+}
+
+#czdRoot .czd-bento-metric-foot b {
+  color: var(--bento-text);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+ * Your Active Days calendar
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-calendar .czd-bento-card-head {
+  margin-bottom: 20px;
+}
+
+#czdRoot .czd-bento-calendar .czd-bento-select {
+  color: #fff;
+  background: rgba(30, 31, 35, .28);
+}
+
+#czdRoot .czd-bento-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(30px, 1fr));
+  justify-items: center;
+  gap: 9px 5px;
+}
+
+#czdRoot .czd-bento-weekday {
+  align-self: center;
+  padding-bottom: 5px;
+  color: rgba(255, 255, 255, .72);
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+
+#czdRoot .czd-bento-day {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1.5px solid transparent;
+  border-radius: 50%;
+  color: #fff;
+  background: var(--bento-dark-slot);
+  font-size: 10px;
+  font-weight: 600;
+  transition: transform .18s var(--bento-ease), background .18s ease;
+}
+
+#czdRoot .czd-bento-day:hover {
+  transform: scale(1.08);
+}
+
+#czdRoot .czd-bento-day.is-overflow {
+  color: rgba(255, 255, 255, .70);
+  border-color: rgba(255, 255, 255, .45);
+  border-style: dashed;
+  background: transparent;
+}
+
+#czdRoot .czd-bento-day.is-active,
+#czdRoot .czd-bento-day[aria-pressed="true"] {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+  box-shadow: 0 7px 18px rgba(32, 40, 8, .18);
+  font-weight: 800;
+}
+
+#czdRoot .czd-bento-day.has-log::after {
+  position: absolute;
+  bottom: -5px;
+  left: 50%;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--bento-lime);
+  content: '';
+  transform: translateX(-50%);
+}
+
+#czdRoot .czd-bento-day.is-active.has-log::after {
+  background: var(--bento-on-lime);
+}
+
+/* --------------------------------------------------------------------------
+ * Sleep and Weight Loss Plan
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-sleep {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1 1 0;
+  gap: 20px;
+}
+
+#czdRoot .czd-bento-sleep-copy {
+  min-width: 0;
+}
+
+#czdRoot .czd-bento-sleep-status {
+  margin: 12px 0 4px;
+  color: var(--bento-text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+#czdRoot .czd-bento-sleep-goal {
+  margin: 0;
+  color: var(--bento-muted);
+  font-size: 10px;
+}
+
+#czdRoot .czd-bento-sleep-adjust {
+  margin-top: 14px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  color: var(--bento-lime);
+  background: var(--bento-card-inner);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+#czdRoot .czd-bento-sleep-ring {
+  flex: 0 0 105px;
+  width: 105px;
+  height: 105px;
+}
+
+#czdRoot .czd-bento-sleep-ring svg {
+  display: block;
+  width: 105px;
+  height: 105px;
+  transform: rotate(-90deg);
+}
+
+#czdRoot .czd-bento-sleep-ring-value {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -.05em;
+}
+
+#czdRoot .czd-bento-weight {
+  flex: 1 1 0;
+}
+
+#czdRoot .czd-bento-weight .czd-bento-card-head {
+  margin-bottom: 20px;
+}
+
+#czdRoot .czd-bento-completion {
+  color: var(--bento-muted);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+#czdRoot .czd-bento-completion b {
+  color: var(--bento-text);
+  font-weight: 700;
+}
+
+#czdRoot .czd-bento-progress {
+  height: 14px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--bento-dark-slot);
+}
+
+#czdRoot .czd-bento-progress > i {
+  display: block;
+  width: var(--bento-progress, 0%);
+  min-width: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--bento-lime);
+  box-shadow: 0 0 14px rgba(210, 248, 90, .15);
+  transition: width .8s var(--bento-ease);
+}
+
+#czdRoot .czd-bento-weight-labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 13px;
+  color: var(--bento-muted);
+  font-size: 10px;
+}
+
+#czdRoot .czd-bento-weight-labels b {
+  display: block;
+  margin-top: 3px;
+  color: var(--bento-text);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#czdRoot .czd-bento-weight-labels span:last-child {
+  text-align: right;
+}
+
+/* --------------------------------------------------------------------------
+ * My Activities, segmented filters and activity cards
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-activity-count {
+  color: var(--bento-muted);
+  font-size: 10px;
+}
+
+#czdRoot .czd-bento-filters {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: -2px 0 20px;
+  padding: 4px;
+  border-radius: 999px;
+  background: var(--bento-dark-slot);
+}
+
+#czdRoot .czd-bento-filter {
+  min-height: 30px;
+  padding: 6px 16px;
+  border-radius: 999px;
+  color: var(--bento-muted);
+  background: transparent;
+  font-size: 10px;
+  font-weight: 600;
+  transition: color .18s ease, background .18s ease;
+}
+
+#czdRoot .czd-bento-filter:hover {
+  color: var(--bento-text);
+}
+
+#czdRoot .czd-bento-filter.is-on,
+#czdRoot .czd-bento-filter[aria-pressed="true"] {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+}
+
+#czdRoot .czd-bento-activity-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  min-height: 155px;
+}
+
+#czdRoot .czd-bento-activity {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-width: 0;
+  min-height: 155px;
+  padding: 18px;
+  overflow: hidden;
+  border-radius: 22px;
+  text-align: left;
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+  transition: transform .22s var(--bento-ease), filter .22s ease;
+}
+
+#czdRoot .czd-bento-activity:hover {
+  filter: brightness(1.055);
+  transform: translateY(-3px);
+}
+
+#czdRoot .czd-bento-activity.is-featured {
+  background: var(--bento-blue);
+}
+
+#czdRoot .czd-bento-activity.is-complete {
+  box-shadow: inset 0 0 0 1.5px rgba(210, 248, 90, .55);
+}
+
+#czdRoot .czd-bento-activity-badges {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  display: flex;
+  align-items: center;
+}
+
+#czdRoot .czd-bento-activity-badge {
+  display: grid;
+  place-items: center;
+  width: 31px;
+  height: 31px;
+  margin-right: -7px;
+  border: 2px solid var(--bento-card-inner);
+  border-radius: 50%;
+  color: var(--bento-text);
+  background: var(--bento-dark-slot);
+  font-size: 12px;
+}
+
+#czdRoot .czd-bento-activity.is-featured .czd-bento-activity-badge {
+  border-color: var(--bento-blue);
+}
+
+#czdRoot .czd-bento-activity-arrow {
+  position: absolute;
+  top: 14px;
+  right: 15px;
+  color: var(--bento-muted);
+  font-size: 18px;
+  line-height: 1;
+}
+
+#czdRoot .czd-bento-activity.is-featured .czd-bento-activity-arrow {
+  color: #fff;
+}
+
+#czdRoot .czd-bento-activity-name {
+  display: block;
+  overflow: hidden;
+  font-size: 13px;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#czdRoot .czd-bento-activity-time {
+  display: block;
+  margin-top: 5px;
+  color: var(--bento-muted);
+  font-size: 10px;
+}
+
+#czdRoot .czd-bento-activity.is-featured .czd-bento-activity-time {
+  color: rgba(255, 255, 255, .74);
+}
+
+#czdRoot .czd-bento-activity-meta {
+  display: block;
+  margin-top: 8px;
+  overflow: hidden;
+  color: var(--bento-muted);
+  font-size: 9px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#czdRoot .czd-bento-add {
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1.5px dashed rgba(210, 248, 90, .55);
+  color: var(--bento-lime);
+  background: transparent;
+  text-align: center;
+}
+
+#czdRoot .czd-bento-add:hover {
+  background: rgba(210, 248, 90, .035);
+}
+
+#czdRoot .czd-bento-add-plus {
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+#czdRoot .czd-bento-add-label {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+#czdRoot .czd-bento-empty {
+  grid-column: 1 / -1;
+  display: grid;
+  place-items: center;
+  min-height: 155px;
+  padding: 24px;
+  border: 1px dashed var(--bento-line);
+  border-radius: 22px;
+  color: var(--bento-muted);
+  text-align: center;
+  font-size: 11px;
+}
+
+/* --------------------------------------------------------------------------
+ * Quick-action drawer and activity creation dialog
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-drawer {
+  position: absolute;
+  z-index: 45;
+  top: 82px;
+  left: 88px;
+  width: min(320px, calc(100% - 110px));
+  padding: 18px;
+  border: 1px solid var(--bento-line);
+  border-radius: 22px;
+  background: rgba(43, 44, 49, .98);
+  box-shadow: 0 24px 70px rgba(0, 0, 0, .48);
+}
+
+#czdRoot .czd-bento-drawer[hidden] {
+  display: none;
+}
+
+#czdRoot .czd-bento-drawer-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+#czdRoot .czd-bento-drawer-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+#czdRoot .czd-bento-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 9px 12px;
+  border-radius: 14px;
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+#czdRoot .czd-bento-action:hover {
+  background: #41424a;
+}
+
+#czdRoot .czd-bento-action.is-lime {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+}
+
+#czdRoot .czd-bento-action.is-blue {
+  background: var(--bento-blue);
+}
+
+#czdRoot .czd-bento-action.is-danger {
+  color: #FFAF9F;
+}
+
+#czdRoot .czd-bento-close {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 50%;
+  color: var(--bento-muted);
+  background: var(--bento-card-inner);
+  font-size: 19px;
+}
+
+#czdRoot .czd-bento-modal-layer {
+  position: fixed;
+  z-index: 1000;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: rgba(10, 11, 13, .74);
+  backdrop-filter: blur(8px);
+}
+
+#czdRoot .czd-bento-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  cursor: pointer;
+}
+
+#czdRoot .czd-bento-modal {
+  position: relative;
+  z-index: 1;
+  width: min(480px, 100%);
+  max-height: min(720px, calc(100vh - 48px));
+  padding: 26px;
+  overflow: auto;
+  border: 1px solid var(--bento-line);
+  border-radius: 28px;
+  color: var(--bento-text);
+  background: var(--bento-card);
+  box-shadow: 0 30px 100px rgba(0, 0, 0, .58);
+}
+
+#czdRoot .czd-bento-modal-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+#czdRoot .czd-bento-modal-head h3 {
+  margin: 0;
+  font-size: 21px;
+  letter-spacing: -.035em;
+}
+
+#czdRoot .czd-bento-modal-head p {
+  margin: 7px 0 0;
+  color: var(--bento-muted);
+  font-size: 11px;
+}
+
+#czdRoot .czd-bento-form {
+  display: grid;
+  gap: 15px;
+}
+
+#czdRoot .czd-bento-form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+#czdRoot .czd-bento-field {
+  display: grid;
+  gap: 7px;
+  color: var(--bento-muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+#czdRoot .czd-bento-field input,
+#czdRoot .czd-bento-field select,
+#czdRoot .czd-bento-field textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 13px;
+  border: 1px solid var(--bento-line);
+  border-radius: 14px;
+  outline: 0;
+  color: var(--bento-text);
+  background: var(--bento-dark-slot);
+  font-size: 12px;
+}
+
+#czdRoot .czd-bento-field textarea {
+  min-height: 76px;
+  resize: vertical;
+}
+
+#czdRoot .czd-bento-field input:focus,
+#czdRoot .czd-bento-field select:focus,
+#czdRoot .czd-bento-field textarea:focus {
+  border-color: rgba(210, 248, 90, .50);
+}
+
+#czdRoot .czd-bento-form-error {
+  min-height: 18px;
+  margin: 0;
+  color: #FFAF9F;
+  font-size: 11px;
+}
+
+#czdRoot .czd-bento-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+/* --------------------------------------------------------------------------
+ * Existing rich Plan / Clinical / Family panels inside the dark workspace
+ * ----------------------------------------------------------------------- */
+
+#czdRoot .czd-bento-rich-panel .czd-planbar,
+#czdRoot .czd-bento-rich-panel .czd-card {
+  border-color: var(--bento-line);
+  color: var(--bento-text);
+  background: var(--bento-card);
+  box-shadow: none;
+}
+
+#czdRoot .czd-bento-rich-panel .czd-planbar {
+  padding: 22px 24px;
+  border-radius: 24px;
+}
+
+#czdRoot .czd-bento-rich-panel .czd-card h3,
+#czdRoot .czd-bento-rich-panel .czd-card h4,
+#czdRoot .czd-bento-rich-panel .czd-planbar h3,
+#czdRoot .czd-bento-rich-panel .czd-food__name,
+#czdRoot .czd-bento-rich-panel .czd-table td b,
+#czdRoot .czd-bento-rich-panel .czd-pm b,
+#czdRoot .czd-bento-rich-panel .czd-day__kcal,
+#czdRoot .czd-bento-rich-panel .czd-childstat b {
+  color: var(--bento-text);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-note,
+#czdRoot .czd-bento-rich-panel .czd-hint,
+#czdRoot .czd-bento-rich-panel .czd-food__name small,
+#czdRoot .czd-bento-rich-panel .czd-table__ref,
+#czdRoot .czd-bento-rich-panel .czd-chart__tick,
+#czdRoot .czd-bento-rich-panel .czd-chart__legend,
+#czdRoot .czd-bento-rich-panel .czd-radar__label {
+  color: var(--bento-muted);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-pm,
+#czdRoot .czd-bento-rich-panel .czd-day,
+#czdRoot .czd-bento-rich-panel .czd-meal,
+#czdRoot .czd-bento-rich-panel .czd-subcard,
+#czdRoot .czd-bento-rich-panel .czd-childstat,
+#czdRoot .czd-bento-rich-panel .czd-shop__group,
+#czdRoot .czd-bento-rich-panel .czd-refchip {
+  border-color: var(--bento-line);
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-day.is-on,
+#czdRoot .czd-bento-rich-panel .czd-child.is-on {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-field input,
+#czdRoot .czd-bento-rich-panel .czd-field select {
+  border-color: var(--bento-line);
+  color: var(--bento-text);
+  background: var(--bento-dark-slot);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-table th,
+#czdRoot .czd-bento-rich-panel .czd-table td {
+  border-color: var(--bento-line);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-chart__grid,
+#czdRoot .czd-bento-rich-panel .czd-radar__ring,
+#czdRoot .czd-bento-rich-panel .czd-radar__spoke {
+  stroke: rgba(255, 255, 255, .10);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-btn--soft,
+#czdRoot .czd-bento-rich-panel .czd-meal__toggle,
+#czdRoot .czd-bento-rich-panel .czd-group {
+  border-color: var(--bento-line);
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-group.is-on {
+  color: var(--bento-on-lime);
+  background: var(--bento-lime);
+}
+
+#czdRoot .czd-bento-rich-panel .czd-lock {
+  color: var(--bento-muted);
+  background: var(--bento-dark-slot);
+}
+
+/* Toasts are controller-created siblings of the Bento shell. */
+#czdRoot .czd-toast {
+  border-color: var(--bento-line);
+  color: var(--bento-text);
+  background: var(--bento-card-inner);
+  box-shadow: 0 18px 48px rgba(0, 0, 0, .35);
+}
+
+/* --------------------------------------------------------------------------
+ * Motion and responsive behavior
+ * ----------------------------------------------------------------------- */
+
+@keyframes czdBentoSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes czdBentoEnter {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+#czdRoot .czd-bento-card,
+#czdRoot .czd-bento-rich-panel {
+  animation: czdBentoEnter .55s var(--bento-ease) both;
+}
+
+#czdRoot .czd-bento-calendar { animation-delay: 60ms; }
+#czdRoot .czd-bento-side-stack { animation-delay: 100ms; }
+#czdRoot .czd-bento-activities { animation-delay: 140ms; }
+
+@media (max-width: 1500px) {
+  #czdRoot .czd-bento-shell { gap: 18px; padding: 20px; }
+  #czdRoot .czd-bento-workspace { gap: 20px; }
+  #czdRoot .czd-bento-card { padding: 22px; }
+  #czdRoot .czd-bento-side-stack { gap: 20px; }
+  #czdRoot .czd-bento-header { gap: 16px; }
+  #czdRoot .czd-bento-header-tools { gap: 10px; }
+  #czdRoot .czd-bento-search { flex-basis: 250px; width: 250px; }
+  #czdRoot .czd-bento-metrics { gap: 18px; }
+  #czdRoot .czd-bento-metric + .czd-bento-metric { padding-left: 17px; }
+  #czdRoot .czd-bento-activity-grid { gap: 12px; }
+  #czdRoot .czd-bento-activity { padding: 15px; }
+}
+
+@media (max-width: 1280px) {
+  #czdRoot .czd-bento-header { align-items: flex-start; }
+  #czdRoot .czd-bento-header-tools { flex-wrap: wrap; }
+  #czdRoot .czd-bento-search { flex-basis: 230px; width: 230px; }
+  #czdRoot .czd-bento-physical { grid-column: span 12; }
+  #czdRoot .czd-bento-calendar { grid-column: span 5; }
+  #czdRoot .czd-bento-side-stack { grid-column: span 7; }
+  #czdRoot .czd-bento-activities { grid-column: span 12; }
+  #czdRoot .czd-bento-activity-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (max-width: 1080px) {
+  #czdRoot .czd-bento-shell { grid-template-columns: 70px minmax(0, 1fr); }
+  #czdRoot .czd-bento-header { flex-direction: column; }
+  #czdRoot .czd-bento-header-tools { justify-content: flex-start; width: 100%; }
+  #czdRoot .czd-bento-search { flex: 1 1 280px; width: auto; }
+  #czdRoot .czd-bento-calendar,
+  #czdRoot .czd-bento-side-stack { grid-column: span 12; }
+  #czdRoot .czd-bento-side-stack { display: grid; grid-template-columns: 1fr 1fr; }
+  #czdRoot .czd-bento-calendar-grid { gap: 12px 7px; }
+}
+
+@media (max-width: 820px) {
+  #czdRoot .czd-bento-shell {
+    display: block;
+    min-height: 0;
+    padding: 18px;
+    border-radius: 26px;
+  }
+  #czdRoot .czd-bento-rail {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    min-height: 0;
+    margin-bottom: 20px;
+    padding: 0;
+  }
+  #czdRoot .czd-bento-rail-nav {
+    flex-direction: row;
+    justify-self: center;
+    gap: 6px;
+    margin: 0;
+    padding: 7px;
+  }
+  #czdRoot .czd-bento-rail-bottom { flex-direction: row; }
+  #czdRoot .czd-bento-reset { display: none; }
+  #czdRoot .czd-bento-rail-btn[data-tooltip]::after { display: none; }
+  #czdRoot .czd-bento-header { margin-bottom: 20px; }
+  #czdRoot .czd-bento-workspace { gap: 18px; }
+  #czdRoot .czd-bento-drawer { top: 72px; left: 18px; }
+}
+
+@media (max-width: 640px) {
+  #czdRoot .czd-bento-shell { padding: 14px; }
+  #czdRoot .czd-bento-logo { width: 38px; }
+  #czdRoot .czd-bento-rail-nav { gap: 3px; }
+  #czdRoot .czd-bento-rail-btn { width: 40px; height: 40px; flex-basis: 40px; }
+  #czdRoot .czd-bento-avatar { width: 40px; height: 40px; flex-basis: 40px; }
+  #czdRoot .czd-bento-header-tools { align-items: stretch; flex-direction: column; }
+  #czdRoot .czd-bento-search { flex: 0 0 48px; width: 100%; }
+  #czdRoot .czd-bento-sync { align-self: flex-start; }
+  #czdRoot .czd-bento-card { padding: 20px; border-radius: 24px; }
+  #czdRoot .czd-bento-metrics { grid-template-columns: 1fr; gap: 24px; }
+  #czdRoot .czd-bento-metric + .czd-bento-metric { padding: 22px 0 0; border-top: 1px solid var(--bento-line); border-left: 0; }
+  #czdRoot .czd-bento-chart { height: 145px; }
+  #czdRoot .czd-bento-side-stack { display: flex; }
+  #czdRoot .czd-bento-activity-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #czdRoot .czd-bento-calendar-grid { gap: 11px 3px; }
+  #czdRoot .czd-bento-day { width: 34px; height: 34px; }
+  #czdRoot .czd-bento-form-row { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 390px) {
+  #czdRoot .czd-bento-rail { grid-template-columns: minmax(0, 1fr) auto; }
+  #czdRoot .czd-bento-logo { display: none; }
+  #czdRoot .czd-bento-rail-nav { justify-self: start; }
+  #czdRoot .czd-bento-activity-grid { grid-template-columns: 1fr; }
+  #czdRoot .czd-bento-sleep { align-items: flex-start; }
+  #czdRoot .czd-bento-day { width: 31px; height: 31px; }
+  #czdRoot .czd-bento-weekday { font-size: 7px; }
+}
+
+@media print {
+  #czdRoot .czd-bento-shell {
+    display: block;
+    min-height: 0;
+    padding: 0;
+    border: 0;
+    color: #18191C;
+    background: #fff;
+    box-shadow: none;
+  }
+  #czdRoot .czd-bento-rail,
+  #czdRoot .czd-bento-header-tools,
+  #czdRoot .czd-bento-preset-strip,
+  #czdRoot .czd-bento-filters,
+  #czdRoot .czd-bento-add,
+  #czdRoot .czd-bento-drawer,
+  #czdRoot .czd-bento-modal-layer { display: none !important; }
+  #czdRoot .czd-bento-header { margin-bottom: 16px; }
+  #czdRoot .czd-bento-workspace { display: block; }
+  #czdRoot .czd-bento-card,
+  #czdRoot .czd-bento-rich-panel {
+    margin-bottom: 14px;
+    break-inside: avoid;
+    border: 1px solid #D8DADF;
+    box-shadow: none;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #czdRoot .czd-bento-shell *,
+  #czdRoot .czd-bento-shell *::before,
+  #czdRoot .czd-bento-shell *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}

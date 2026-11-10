@@ -51,7 +51,18 @@
     alert: '<path d="M12 4 3 20h18L12 4Z"/><path d="M12 10v4.5M12 17.2v.6"/>',
     download: '<path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"/>',
     refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',
-    print: '<path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="2"/><path d="M7 14h10v6H7z"/>'
+    print: '<path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="2"/><path d="M7 14h10v6H7z"/>',
+    home: '<path d="m3 11 9-8 9 8"/><path d="M5 10v10h14V10M9 20v-6h6v6"/>',
+    calendar: '<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M8 3v4m8-4v4M3 10h18"/>',
+    bell: '<path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4"/>',
+    search: '<circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    close: '<path d="m6 6 12 12M18 6 6 18"/>',
+    arrow: '<path d="M7 17 17 7M8 7h9v9"/>',
+    users: '<circle cx="9" cy="8" r="3"/><path d="M3 20c0-4 2-6 6-6s6 2 6 6M16 5a3 3 0 0 1 0 6m2 4c2 1 3 2.5 3 5"/>',
+    activity: '<path d="M3 12h4l2-6 4 12 2-6h6"/>',
+    logout: '<path d="M10 4H5v16h5m4-4 4-4-4-4m4 4H9"/>',
+    chevron: '<path d="m8 10 4 4 4-4"/>'
   };
   function icon(name, cls) {
     var body = ICONS[name] || ICONS.spark;
@@ -461,6 +472,106 @@
   }
 
   /* ------------------------------------------------------------------ */
+  /* Dark Bento — smooth metric splines                                 */
+  /* ------------------------------------------------------------------ */
+  function bentoSpline(o) {
+    o = o || {};
+    var source = o.series || [{ values: o.values || [], color: o.color, area: o.area }];
+    var series = source.map(function (s) {
+      return {
+        values: (s.values || []).map(Number).filter(function (v) { return isFinite(v); }),
+        color: s.color || o.color || '#D2F85A',
+        area: s.area != null ? s.area : o.area
+      };
+    }).filter(function (s) { return s.values.length > 1; });
+    var id = uid('bento');
+    var W = o.width || 300, H = o.height || 132;
+    var pad = { t: o.peak === false ? 12 : 32, r: 8, b: 10, l: 8 };
+    var iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
+    var defs = '', body = '', overlays = '';
+
+    series.forEach(function (s, si) {
+      var min = o.min != null ? o.min : Math.min.apply(null, s.values);
+      var max = o.max != null ? o.max : Math.max.apply(null, s.values);
+      if (o.sharedScale && series.length) {
+        var all = [];
+        series.forEach(function (x) { all = all.concat(x.values); });
+        min = o.min != null ? o.min : Math.min.apply(null, all);
+        max = o.max != null ? o.max : Math.max.apply(null, all);
+      }
+      var spread = max - min;
+      var lo = o.min != null ? min : min - (spread || Math.max(1, Math.abs(min) * .1)) * .16;
+      var hi = o.max != null ? max : max + (spread || Math.max(1, Math.abs(max) * .1)) * .16;
+      var pts = s.values.map(function (v, i) {
+        return [
+          pad.l + (i * iw) / Math.max(1, s.values.length - 1),
+          pad.t + ih - ((v - lo) / ((hi - lo) || 1)) * ih
+        ];
+      });
+      var d = smoothPath(pts);
+      if (s.area) {
+        var gid = id + 'area' + si;
+        defs += '<linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
+          '<stop offset="0%" stop-color="' + s.color + '" stop-opacity=".35"/>' +
+          '<stop offset="100%" stop-color="' + s.color + '" stop-opacity="0"/></linearGradient>';
+        var area = d + ' L' + pts[pts.length - 1][0].toFixed(1) + ' ' + (H - pad.b) +
+          ' L' + pts[0][0].toFixed(1) + ' ' + (H - pad.b) + ' Z';
+        body += '<path class="czd-bento-chart-area" d="' + area + '" fill="url(#' + gid + ')"/>';
+      }
+      body += '<path class="czd-bento-chart-line" d="' + d + '" stroke="' + s.color + '" pathLength="1" data-delay="' + (si * 120) + '"/>';
+
+      if (si === 0 && o.peak !== false) {
+        var peakIndex = typeof o.peakIndex === 'number' ? Math.max(0, Math.min(pts.length - 1, o.peakIndex)) : s.values.indexOf(max);
+        if (peakIndex < 0) peakIndex = 0;
+        var pt = pts[peakIndex];
+        var peakValue = s.values[peakIndex];
+        var label = o.peakLabel != null ? String(o.peakLabel) :
+          (global.CZD_I18N ? global.CZD_I18N.num(peakValue, o.peakDecimals || 0) : fmtTick(peakValue, o.peakDecimals || 0));
+        var bw = Math.max(40, Math.min(76, label.length * 7 + 16));
+        var bx = Math.max(2, Math.min(W - bw - 2, pt[0] - bw / 2));
+        var by = Math.max(0, pt[1] - 29);
+        var badgeColor = o.badgeColor || s.color;
+        var badgeText = o.badgeTextColor || '#18191C';
+        if (o.dropLine !== false) {
+          overlays += '<line class="czd-bento-peak-line" x1="' + pt[0].toFixed(1) + '" y1="' + (pt[1] + 5).toFixed(1) +
+            '" x2="' + pt[0].toFixed(1) + '" y2="' + (H - pad.b) + '"/>';
+        }
+        overlays += '<g class="czd-bento-peak">' +
+          '<circle class="czd-bento-peak-glow" cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="11" fill="' + s.color + '"/>' +
+          '<circle class="czd-bento-peak-dot" cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="4.5" fill="' + s.color + '"/>' +
+          '<rect x="' + bx.toFixed(1) + '" y="' + by.toFixed(1) + '" width="' + bw + '" height="21" rx="10.5" fill="' + badgeColor + '"/>' +
+          '<text class="czd-bento-peak-badge" x="' + (bx + bw / 2).toFixed(1) + '" y="' + (by + 14.5).toFixed(1) +
+            '" text-anchor="middle" fill="' + badgeText + '">' + esc(label) + '</text></g>';
+      }
+    });
+
+    if (!series.length) {
+      return '<svg class="czd-bento-chart-svg" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.aria || '') + '"></svg>';
+    }
+    return '<svg class="czd-bento-chart-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none" role="img" aria-label="' + esc(o.aria || 'Activity chart') + '">' +
+      '<defs>' + defs + '</defs>' + body + overlays + '</svg>';
+  }
+
+  /* ------------------------------------------------------------------ */
+  /* Dark Bento — 105 px circular sleep gauge                           */
+  /* ------------------------------------------------------------------ */
+  function sleepRing(o) {
+    o = o || {};
+    var value = Number(o.value) || 0;
+    var goal = Number(o.goal) || 1;
+    var progress = o.percent != null ? Number(o.percent) / 100 : value / goal;
+    progress = Math.max(0, Math.min(1, isFinite(progress) ? progress : 0));
+    var display = o.display != null ? o.display :
+      (global.CZD_I18N ? global.CZD_I18N.num(value, 1) : String(value)) + 'h';
+    return '<svg viewBox="0 0 105 105" role="img" aria-label="' + esc(o.aria || display) + '">' +
+      '<circle cx="52.5" cy="52.5" r="43" fill="none" stroke="#37383F" stroke-width="10"/>' +
+      '<circle class="czd-bento-sleep-arc" cx="52.5" cy="52.5" r="43" fill="none" stroke="' + (o.color || '#D2F85A') +
+        '" stroke-width="10" stroke-linecap="round" pathLength="1" stroke-dasharray="' + progress.toFixed(4) + ' 1" data-progress="' + progress.toFixed(4) + '"/>' +
+      '<text class="czd-bento-sleep-ring-value" x="52.5" y="59" text-anchor="middle" fill="#FFFFFF" transform="rotate(90 52.5 52.5)">' + esc(display) + '</text>' +
+      '<title>' + esc(o.aria || display) + '</title></svg>';
+  }
+
+  /* ------------------------------------------------------------------ */
   /* Animations                                                         */
   /* ------------------------------------------------------------------ */
   function raf(fn) {
@@ -484,7 +595,7 @@
     var slow = reduced();
 
     /* 1. Tracés : dasharray animé via requestAnimationFrame (fiable partout). */
-    Array.prototype.forEach.call(root.querySelectorAll('.czd-chart__line, .czd-gauge__fill, .czd-ring__main'), function (el) {
+    Array.prototype.forEach.call(root.querySelectorAll('.czd-chart__line, .czd-gauge__fill, .czd-ring__main, .czd-bento-chart-line'), function (el) {
       if (!claim(el)) return;
       var delay = Number(el.getAttribute('data-delay') || 0);
       el.style.strokeDasharray = '1 1';
@@ -496,6 +607,18 @@
           el.style.strokeDashoffset = '0';
         });
       }, slow ? 0 : Math.min(delay, 500));
+    });
+
+    /* 1b. Anneau de sommeil : conserve sa progression au lieu de remplir le
+       cercle complet comme les simples tracés pathLength="1". */
+    Array.prototype.forEach.call(root.querySelectorAll('.czd-bento-sleep-arc'), function (el) {
+      if (!claim(el)) return;
+      var progress = el.getAttribute('data-progress') || '0';
+      el.style.strokeDasharray = '0 1';
+      setTimeout(function () {
+        el.style.transition = slow ? 'none' : 'stroke-dasharray 1s cubic-bezier(.22,1,.36,1)';
+        el.style.strokeDasharray = progress + ' 1';
+      }, slow ? 0 : 100);
     });
 
     /* 2. Sous-anneaux (dasharray déjà calculé) : fondu + rotation. */
@@ -591,10 +714,10 @@
         el.style.strokeDashoffset = '0';
       }, 60);
     });
-    Array.prototype.forEach.call(root.querySelectorAll('.czd-spark__area'), function (el) {
+    Array.prototype.forEach.call(root.querySelectorAll('.czd-spark__area, .czd-bento-chart-area, .czd-bento-peak'), function (el) {
       if (!claim(el)) return;
       el.style.opacity = '0';
-      setTimeout(function () { el.style.transition = 'opacity .7s ease'; el.style.opacity = '1'; }, 260);
+      setTimeout(function () { el.style.transition = slow ? 'none' : 'opacity .7s ease'; el.style.opacity = '1'; }, slow ? 0 : 260);
     });
   }
 
@@ -626,6 +749,8 @@
     gauge: gauge,
     diverging: diverging,
     growth: growth,
+    bentoSpline: bentoSpline,
+    sleepRing: sleepRing,
     animate: animate,
     resetAnimation: resetAnimation,
     fmt: fmtTick,
