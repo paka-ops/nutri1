@@ -1,0 +1,24 @@
+/* ============================================================================
+ * UNICEF NutriChild · unicef-nutrichild-host.css
+ * Seule feuille chargée dans le <head> de index.html (tout le reste des styles
+ * vit dans le Shadow DOM du composant). Rôle :
+ *   1. Réserver la place du composant avant son initialisation (évite le saut
+ *      de mise en page sur la section #unicef).
+ *   2. Lorsque le tableau de bord est actif dans la section #unicef, masquer
+ *      les anciens modules « UNICEF Nutrition Intelligence Center » : ils
+ *      restent dans le DOM car d'autres scripts globaux de la page les
+ *      utilisent (renderUNICEF, recherche, simulations…). Le bouton
+ *      « Afficher les modules UNICEF historiques » de la sidebar du composant
+ *      ajoute .nc-show-legacy pour les réafficher.
+ * ========================================================================== */
+unicef-nutrichild-dashboard { display: block; min-height: 100vh; }
+
+/* Placeholder pendant le chargement (squelette aux couleurs UNICEF) */
+unicef-nutrichild-dashboard:not(:defined) {
+  border-radius: 24px; border: 1px solid #BAE6FD;
+  background: linear-gradient(90deg, #002952 0 240px, #F0F9FF 240px);
+}
+
+/* Prise de contrôle de la section : masque les modules historiques */
+#unicef.nc-takeover:not(.nc-show-legacy) > :not(unicef-nutrichild-dashboard) { display: none !important; }
+#unicef.nc-takeover.nc-show-legacy > unicef-nutrichild-dashboard { margin-bottom: 24px; }

@@ -1,0 +1,22 @@
+/* AgriNutri Intelligence (#agri) : feuille hôte légère, chargée dans le <head> de index.html.
+ * Le tableau de bord complet est rendu dans le Shadow DOM de <agri-nutriapp-dashboard>. */
+agri-nutriapp-dashboard { display: block; min-height: 100vh; }
+
+/* Avant l'enregistrement du composant (JavaScript désactivé ou en chargement) */
+agri-nutriapp-dashboard:not(:defined) {
+  display: block;
+  min-height: 420px;
+  border: 1px solid #BBF7D0;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #052E16 0 260px, #F7FFF7 260px);
+}
+
+/* Plein écran natif : le composant devient son propre conteneur défilant */
+agri-nutriapp-dashboard:fullscreen,
+agri-nutriapp-dashboard:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #F7FFF7;
+}

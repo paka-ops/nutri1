@@ -1,0 +1,19 @@
+/* FAO AgriNutriApp : feuille légère requise dans le <head> de index.html.
+ * L'interface complète est chargée dans le Shadow DOM du Custom Element. */
+fao-nutritracker-dashboard { display: block; min-height: 100vh; }
+fao-nutritracker-dashboard:not(:defined) {
+  min-height: 100vh;
+  border: 1px solid #BBF7D0;
+  border-radius: 20px;
+  background: linear-gradient(90deg, #052E16 0 240px, #F0FDF4 240px);
+}
+
+/* Le composant devient son propre conteneur défilant en plein écran. */
+fao-nutritracker-dashboard:fullscreen,
+fao-nutritracker-dashboard:-webkit-full-screen {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: #F0FDF4;
+}
