@@ -1223,3 +1223,19 @@
   .view .vi .vi-scale__seg:not(.is-on) span { visibility: hidden; }
   .view .vi .vi-scale__seg.is-on span { overflow: visible; }
 }
+
+/* 12b. INSTITUTION VIEWS — additions (SESSION 13: WHO) ------------------------ */
+.view .vi .vi-hero > .vi-note:last-child { margin-top: 14px; }
+.view .vi .vi-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.view .vi .vi-chip { min-height: 44px; width: auto; padding: 0 16px; border: 1px solid var(--border-strong); border-radius: 9999px; background: transparent; color: var(--text-primary); font: inherit; font-weight: 600; cursor: pointer; }
+.view .vi .vi-chip:hover { background: var(--bg-card-secondary); }
+.view .vi .vi-chip[aria-pressed="true"] { background: var(--accent-lime); border-color: var(--accent-lime); color: var(--text-on-lime, #18191C); }
+.view .vi .vi-chip:focus-visible { outline: 2px solid var(--accent-lime); outline-offset: 2px; }
+.view .vi .vi-bars--rank > li { padding: 10px 14px; gap: 6px; }
+.view .vi .vi-bars--rank > li.is-on { box-shadow: inset 0 0 0 1px var(--accent-lime); }
+.view .vi .vi-bars--rank .vi-bars__top strong { font-size: 1.05rem; }
+.view .vi .vi-signal--info strong { color: #A9B5FF; }
+.view .vi .vi-flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.view .vi .vi-flow li { display: inline-flex; align-items: center; gap: 8px; }
+.view .vi .vi-flow li span { padding: 10px 14px; border-radius: 9999px; background: var(--bg-card-secondary); font-weight: 600; }
+.view .vi .vi-flow .bento-icon { color: #B0B2B9; width: 16px; height: 16px; }
