@@ -1239,3 +1239,15 @@
 .view .vi .vi-flow li { display: inline-flex; align-items: center; gap: 8px; }
 .view .vi .vi-flow li span { padding: 10px 14px; border-radius: 9999px; background: var(--bg-card-secondary); font-weight: 600; }
 .view .vi .vi-flow .bento-icon { color: #B0B2B9; width: 16px; height: 16px; }
+
+/* 12c. INSTITUTION VIEWS — additions (SESSION 14: WFP) ------------------------ */
+.view .vi .vi-head .pill { flex: none; }
+.view .vi .vi-kpi b { overflow-wrap: anywhere; }
+.view .vi .vi-products { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.view .vi .vi-products > li { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 14px; border-radius: var(--radius-inner, 18px); background: var(--bg-card-secondary); }
+.view .vi .vi-products span { display: grid; gap: 4px; min-width: 0; }
+.view .vi .vi-products b { font-weight: 600; }
+.view .vi .vi-products small { color: #C4C6CC; font-size: var(--fs-meta); line-height: 1.45; }
+.view .vi .vi-products em { flex: none; padding: 3px 10px; border-radius: 9999px; background: var(--bg-well); color: #A9B5FF; font-style: normal; font-size: var(--fs-meta); font-weight: 600; }
+@media (max-width: 1100px) { .view .vi .vi-products { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 640px) { .view .vi .vi-products { grid-template-columns: minmax(0, 1fr); } }

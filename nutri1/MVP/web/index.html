@@ -139,40 +139,8 @@
 <section id="agri" class="view" aria-label="Ministry of Agriculture Food Intelligence" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="agri"></section>
 <script src="views/view-agri.js"></script>
 
-<section id="wfp" class="view">
-  <div class="hero institution-hero"><span class="pill">WFP • FOOD SECURITY & NUTRITION</span>
-  <h1>🍚 WFP Food Security Intelligence Center</h1>
-  <p>Localized intelligence connecting food access, markets, vulnerability, nutrition, climate shocks and program impact — complementary to existing WFP global systems.</p></div>
-  <div class="card"><div class="section-head"><div><h2>🌍 Country & Food Security Explorer</h2><p class="muted">Explore food-security indicators by country and geography.</p></div>
-  <div class="institution-filters"><label>Country<select id="wfpCountry" onchange="renderWFP()"></select></label><label>Level<select id="wfpLevel" onchange="renderWFP()"><option>National</option><option>Region</option><option>District</option><option>Market</option></select></label><label>Year<select id="wfpYear" onchange="renderWFP()"><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select></label></div></div></div>
-  <div class="institution-kpis">
-    <div class="card inst-kpi"><span>Food Security Risk</span><b id="wfpRisk">—</b></div>
-    <div class="card inst-kpi"><span>Healthy Diet Affordability</span><b id="wfpAfford">—</b></div>
-    <div class="card inst-kpi"><span>Dietary Diversity</span><b id="wfpDiversity">—</b></div>
-    <div class="card inst-kpi"><span>Price Pressure</span><b id="wfpPrice">—</b></div>
-    <div class="card inst-kpi"><span>Nutrition Risk</span><b id="wfpNutrition">—</b></div>
-  </div>
-  <div class="grid3">
-    <div class="card"><h3>🚨 Food Security Early Warning</h3><div id="wfpEarly"></div></div>
-    <div class="card"><h3>💰 Food Price & Access</h3><div id="wfpMarket"></div></div>
-    <div class="card"><h3>🥗 Food Consumption & Nutrition</h3><div id="wfpDiet"></div></div>
-  </div>
-  <div class="grid2">
-    <div class="card"><h3>🏫 School Feeding & Local Procurement</h3><div id="wfpSchool"></div></div>
-    <div class="card"><h3>🌦️ Climate → Food Security Risk</h3><div id="wfpClimate"></div></div>
-  </div>
-  <div class="card"><h3>🗺️ Vulnerability & Priority Intervention Map</h3><div class="gis-demo" id="wfpGIS"></div></div>
-  <div class="card"><h3>📊 WFP Program Impact Engine</h3><div id="wfpImpact"></div></div>
-  <div class="card"><h3>📦 WFP Data Products</h3>
-  <table><tr><th>Product</th><th>Data generated</th><th>Operational use</th></tr>
-  <tr><td>Household Food Security Monitor</td><td>Consumption, diversity, access, coping</td><td>Vulnerability targeting</td></tr>
-  <tr><td>Food Price Intelligence</td><td>Prices, availability, anomalies</td><td>Market monitoring</td></tr>
-  <tr><td>Healthy Diet Affordability</td><td>Food basket cost + access gap</td><td>Program design</td></tr>
-  <tr><td>School Feeding Intelligence</td><td>Meals, quality, local sourcing, waste</td><td>School meal optimization</td></tr>
-  <tr><td>Climate Food-Security Early Warning</td><td>Shock signals + localized risk</td><td>Early action</td></tr>
-  <tr><td>Intervention Impact</td><td>Baseline, follow-up, outcomes</td><td>Evaluation & scale-up</td></tr>
-  </table></div>
-</section>
+<section id="wfp" class="view" aria-label="WFP Food Security Intelligence Center" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="wfp"></section>
+<script src="views/view-wfp.js"></script>
 <section id="fao" class="view">
 <div class="hero institution-hero"><span class="pill">FAO • FOOD SYSTEMS & AGRIFOOD INTELLIGENCE</span><h1>🌾 FAO Food Systems Intelligence Center</h1><p>End-to-end intelligence connecting production, post-harvest losses, markets, prices, food availability, processing, food safety, climate and nutrition-sensitive agriculture.</p></div>
 <div class="card"><div class="section-head"><div><h2>🌍 Country & Food Systems Explorer</h2><p class="muted">Explore agrifood indicators by country, geography, value chain and year.</p></div><div class="institution-filters"><label>Country<select id="faoCountry" onchange="renderFAO()"></select></label><label>Level<select id="faoLevel" onchange="renderFAO()"><option>National</option><option>Region</option><option>District</option><option>Market</option><option>Value chain</option></select></label><label>Year<select id="faoYear" onchange="renderFAO()"><option>2026</option><option>2025</option><option>2024</option><option>2023</option></select></label></div></div></div>
@@ -400,7 +368,7 @@ let whoCondition="diabetes";
 const demoCountryMetrics={TG:{children:184000,stunting:18,wasting:7,anaemia:42,ebf:58,diabetes:5.8,hypertension:27,obesity:9,cvd:14,stroke:4},GH:{children:620000,stunting:16,wasting:6,anaemia:39,ebf:55,diabetes:6.4,hypertension:29,obesity:11,cvd:15,stroke:5},SN:{children:510000,stunting:17,wasting:5,anaemia:41,ebf:57,diabetes:6.1,hypertension:26,obesity:10,cvd:13,stroke:4},NG:{children:2200000,stunting:29,wasting:8,anaemia:46,ebf:32,diabetes:7.2,hypertension:31,obesity:12,cvd:17,stroke:6},BF:{children:430000,stunting:25,wasting:9,anaemia:45,ebf:47,diabetes:5.1,hypertension:24,obesity:8,cvd:12,stroke:4},CI:{children:740000,stunting:22,wasting:7,anaemia:43,ebf:50,diabetes:6.3,hypertension:28,obesity:10,cvd:14,stroke:5},default:{children:300000,stunting:20,wasting:7,anaemia:42,ebf:55,diabetes:6,hypertension:27,obesity:10,cvd:14,stroke:5}};
 function fillInstCountries(){if(typeof countries==='undefined')return;['unicefCountry','whoCountry','wfpCountry','faoCountry'].forEach(id=>{const e=document.getElementById(id);if(e){e.innerHTML=countries.map(x=>`<option value="${x[0]}" data-i18n="ui.x_1">${x[1]}</option>`).join('');e.value=document.getElementById('country')?.value||countries[0][0]}});renderUNICEF();renderWFP();renderWHO();renderFAO();renderMonitoring()}
 
-function renderWFP(){
+function renderWFP(){if(window.NutriBentoViews&&NutriBentoViews.wfp){return NutriBentoViews.wfp.renderWFP()}
  const c=document.getElementById('wfpCountry')?.value||'TG',m=demoCountryMetrics[c]||demoCountryMetrics.default;
  const risk=Math.min(95,Math.round((m.obesity+m.diabetes+m.hypertension)*1.15));
  const afford=Math.max(28,Math.round(100-m.obesity*1.2-m.diabetes*.5));
