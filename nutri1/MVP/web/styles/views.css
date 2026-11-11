@@ -1257,3 +1257,28 @@
 .view .vi .vi-rows--two b { color: var(--text-primary); font-size: inherit; overflow-wrap: anywhere; }
 .view .vi .vi-rows--two small { color: #C4C6CC; font-size: var(--fs-meta); overflow-wrap: anywhere; }
 .view .vi .vi-rows--two strong { font-weight: 700; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+
+/* 12e. INSTITUTION VIEWS — additions (SESSION 16: MONITORING) ----------------- */
+.view .vi .vi-status { min-height: 0; color: var(--accent-lime); font-size: var(--fs-meta); font-weight: 600; }
+.view .vi .vi-status:not(:empty) { margin-bottom: 12px; }
+.view .vi .vi-reg { display: grid; gap: 10px; }
+.view .vi .vi-reg__item { display: grid; gap: 10px; padding: 14px; border-radius: var(--radius-inner, 18px); background: var(--bg-card-secondary); }
+.view .vi .vi-reg__top span { display: grid; gap: 2px; min-width: 0; }
+.view .vi .vi-reg__top b { font-weight: 600; overflow-wrap: anywhere; }
+.view .vi .vi-reg__top small { color: #C4C6CC; font-size: var(--fs-meta); }
+.view .vi .vi-reg__stage { color: #C4C6CC; font-size: var(--fs-meta); }
+.view .vi .vi-reg__actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.view .vi .vi-reg__actions .btn[disabled] { opacity: .45; cursor: not-allowed; }
+.view .vi .vi-btn-danger { background: var(--accent-red, #FF8A8A); border-color: transparent; color: #18191C; font-weight: 700; }
+.view .vi .vi-steps { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 4px; }
+.view .vi .vi-steps i { height: 8px; border-radius: 9999px; background: var(--bg-well); }
+.view .vi .vi-steps i.is-done { background: var(--accent-lavender); }
+.view .vi .vi-steps i.is-on { background: var(--accent-lime); }
+.view .vi .vi-form { display: grid; gap: 12px; }
+.view .vi .vi-form__field { display: grid; gap: 4px; }
+.view .vi .vi-form__field label { color: #C4C6CC; font-size: var(--fs-meta); font-weight: 600; }
+.view .vi .vi-form__field input, .view .vi .vi-form__field select { width: 100%; min-height: 44px; }
+.view .vi .vi-form__field small { color: #B0B2B9; font-size: var(--fs-meta); }
+.view .vi .vi-form__field [aria-invalid="true"] { border-color: var(--accent-red, #FF8A8A); }
+.view .vi .vi-form__err { color: var(--accent-red, #FF8A8A); font-size: var(--fs-meta); font-weight: 600; }
+.view .vi .vi-form .btn { justify-self: start; }
