@@ -51,7 +51,28 @@
     alert: '<path d="M12 4 3 20h18L12 4Z"/><path d="M12 10v4.5M12 17.2v.6"/>',
     download: '<path d="M12 4v10m0 0 4-4m-4 4-4-4M5 19h14"/>',
     refresh: '<path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 5v6h-6"/>',
-    print: '<path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="2"/><path d="M7 14h10v6H7z"/>'
+    print: '<path d="M7 9V4h10v5"/><rect x="4" y="9" width="16" height="7" rx="2"/><path d="M7 14h10v6H7z"/>',
+    /* Dark Bento set (SESSION 2): replaces every emoji formerly used as an icon */
+    user: '<circle cx="12" cy="8" r="3.6"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/>',
+    child: '<circle cx="12" cy="7.5" r="3"/><path d="M6.5 20c0-3.3 2.4-5.5 5.5-5.500s5.5 2.2 5.5 5.500M9.5 4.5 12 3l2.5 1.5"/>',
+    steps: '<path d="M7 4c1.7 0 2.5 1.8 2.5 4.500S8.7 13 7.5 13 5 11.5 5 8.5 5.5 4 7 4Zm.3 11.500c1 0 1.8.800 1.8 1.800S8.3 19 7.3 19s-1.8-.7-1.8-1.7.800-1.8 1.8-1.800ZM17 6c1.5 0 2 1.5 2 4.500s-1.3 4.5-2.5 4.5-2-1.8-2-4.500S15.3 6 17 6Zm-.3 11.500c1 0 1.8.800 1.8 1.800s-.8 1.7-1.8 1.7-1.8-.7-1.8-1.7.800-1.8 1.8-1.800Z"/>',
+    moon: '<path d="M20 14.500A8 8 0 0 1 9.5 4 8 8 0 1 0 20 14.500Z"/>',
+    bowl: '<path d="M3.5 11h17a8.5 8.5 0 0 1-17 0Z"/><path d="M9 20h6M9 7c0-1.5 1.5-1.5 1.5-3M13.5 7c0-1.5 1.5-1.5 1.5-3"/>',
+    wheat: '<path d="M12 21V8M12 8c-2 0-3-1.5-3-3.500C11 4.5 12 6 12 8Zm0 0c2 0 3-1.5 3-3.500C13 4.5 12 6 12 8Zm0 5c-2 0-3.5-1.5-3.5-3.500C10.5 9.5 12 11 12 13Zm0 0c2 0 3.5-1.5 3.5-3.500C13.5 9.5 12 11 12 13Zm0 5c-2 0-3.5-1.5-3.5-3.5 2 0 3.5 1.5 3.5 3.500Zm0 0c2 0 3.5-1.5 3.5-3.5-2 0-3.5 1.5-3.5 3.500Z"/>',
+    bean: '<path d="M8 4.500c3.5-1.5 7.5 1 8.5 5 .700 2.8-.5 4-.5 6s.5 3-1.5 4c-3.5 1.5-7.5-1-8.5-5-.7-2.8.500-4 .5-6S6 5.5 8 4.500Z"/>',
+    fish: '<path d="M3 12s3.5-5.5 9.5-5.500S21 12 21 12s-2.5 5.5-8.5 5.500S3 12 3 12Z"/><path d="m3 7 3 5-3 5M16 11v.5"/>',
+    milk: '<path d="M9 3h6v3l2 3.500V19a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V9.500L9 6V3ZM7 13h10"/>',
+    ruler: '<rect x="3" y="8" width="18" height="8" rx="2"/><path d="M7 8v3M11 8v4M15 8v3M19 8v0"/>',
+    sprout: '<path d="M12 21v-9M12 12c0-3.5-2.5-5.5-6.5-5.500C5.5 10 8 12 12 12Zm0 2c0-3 2-5 6.5-5 0 3.5-2.5 5-6.5 5Z"/>',
+    calendar: '<rect x="4" y="5" width="16" height="15" rx="3"/><path d="M4 10h16M8.5 3v4M15.5 3v4"/>',
+    target: '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r=".8"/>',
+    bolt: '<path d="M13 3 5 13.500h6L10 21l8-10.500h-6L13 3Z"/>',
+    run: '<circle cx="14.5" cy="4.5" r="2"/><path d="m8 21 3-5.5-2.5-3 2-4.5 4 1.5 2 3.500h3M11 8 7.5 9.5 6 13M13.5 15.5 16 21"/>',
+    bike: '<circle cx="6" cy="16.5" r="3.5"/><circle cx="18" cy="16.5" r="3.5"/><path d="M6 16.5 9.5 9h5l3.5 7.500M9.5 9 8.5 6.500H6.500M14.5 9l-3.5 7.500H6M15 6h2.5"/>',
+    dumbbell: '<path d="M6.5 7.500v9M3.5 9.500v5M17.5 7.500v9M20.5 9.500v5M6.5 12h11"/>',
+    yoga: '<circle cx="12" cy="5" r="2"/><path d="M12 7v6M5 10.500l7 1 7-1M12 13l-5 3.5 3.5 2.500M12 13l5 3.5-3.5 2.5"/>',
+    plus: '<path d="M12 5v14M5 12h14"/>',
+    globe: '<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>'
   };
   function icon(name, cls) {
     var body = ICONS[name] || ICONS.spark;
@@ -62,46 +83,22 @@
   /* ------------------------------------------------------------------ */
   /* Anneau de score principal                                          */
   /* ------------------------------------------------------------------ */
+  /* Dark Bento ring (SESSION 2): one flat arc, value centred, nothing drawn under the label. */
   function ring(opts) {
     opts = opts || {};
     var value = Math.max(0, Math.min(100, opts.value || 0));
-    var parts = opts.parts || [];
-    var id = uid('ring');
-    var R = 86, C = 2 * Math.PI * R;
-    var inner = [];
-    parts.forEach(function (p, i) {
-      var r = 64 - i * 13;
-      var c = 2 * Math.PI * r;
-      var dash = (Math.max(0, Math.min(100, p.value)) / 100) * c;
-      inner.push(
-        '<circle class="czd-ring__track" cx="110" cy="110" r="' + r + '" fill="none" stroke="rgba(15,45,30,.09)" stroke-width="6" />' +
-        '<circle class="czd-ring__sub" cx="110" cy="110" r="' + r + '" fill="none" stroke="' + (p.color || '#0f9d58') + '" ' +
-        'stroke-width="6" stroke-linecap="round" pathLength="1" stroke-dasharray="' + (dash / c).toFixed(4) + ' 1" ' +
-        'transform="rotate(-90 110 110)" data-delay="' + (240 + i * 110) + '" />'
-      );
-    });
+    var R = 92;
     return '' +
       '<div class="czd-ring" role="img" aria-label="' + esc(opts.aria || ('Score ' + value)) + '">' +
         '<svg viewBox="0 0 220 220" class="czd-ring__svg">' +
-          '<defs>' +
-            '<linearGradient id="' + id + '" x1="0" y1="0" x2="1" y2="1">' +
-              '<stop offset="0%" stop-color="#1a9e63"/><stop offset="55%" stop-color="#8fd14f"/><stop offset="100%" stop-color="#f2c94c"/>' +
-            '</linearGradient>' +
-            '<filter id="' + id + 'glow" x="-40%" y="-40%" width="180%" height="180%">' +
-              '<feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>' +
-            '</filter>' +
-          '</defs>' +
-          '<circle cx="110" cy="110" r="' + R + '" fill="none" stroke="rgba(15,45,30,.07)" stroke-width="15" />' +
-          '<circle class="czd-ring__main" cx="110" cy="110" r="' + R + '" fill="none" stroke="url(#' + id + ')" stroke-width="15" ' +
+          '<circle cx="110" cy="110" r="' + R + '" fill="none" stroke="#1E1F23" stroke-width="18" />' +
+          '<circle class="czd-ring__main" cx="110" cy="110" r="' + R + '" fill="none" stroke="' + (opts.color || '#D2F85A') + '" stroke-width="18" ' +
             'stroke-linecap="round" pathLength="1" stroke-dasharray="' + (value / 100).toFixed(4) + ' 1" ' +
-            'transform="rotate(-90 110 110)" filter="url(#' + id + 'glow)" data-delay="0" />' +
-          inner.join('') +
-          '<g class="czd-ring__ticks">' + tickMarks(110, 110, 97, 108) + '</g>' +
+            'transform="rotate(-90 110 110)" data-delay="0" />' +
         '</svg>' +
         '<div class="czd-ring__center">' +
           '<span class="czd-ring__value" data-count="' + value + '" data-count-key="score">0</span>' +
           '<span class="czd-ring__unit">/ 100</span>' +
-          (opts.label ? '<span class="czd-ring__label">' + esc(opts.label) + '</span>' : '') +
         '</div>' +
       '</div>';
   }
@@ -135,7 +132,7 @@
     });
     var d = pts.map(function (pt, i) { return (i ? 'L' : 'M') + pt[0].toFixed(1) + ' ' + pt[1].toFixed(1); }).join(' ');
     var area = d + ' L' + pts[pts.length - 1][0].toFixed(1) + ' ' + h + ' L' + pts[0][0].toFixed(1) + ' ' + h + ' Z';
-    var color = opts.color || '#0f9d58';
+    var color = opts.color || '#D2F85A';
     var last = pts[pts.length - 1];
     return '<svg class="czd-spark" viewBox="0 0 ' + w + ' ' + h + '" preserveAspectRatio="none" aria-hidden="true">' +
       '<defs><linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1">' +
@@ -185,7 +182,7 @@
     });
 
     series.forEach(function (s, si) {
-      var color = s.color || '#0f9d58';
+      var color = s.color || '#D2F85A';
       defs += '<linearGradient id="' + id + 'g' + si + '" x1="0" y1="0" x2="0" y2="1">' +
         '<stop offset="0%" stop-color="' + color + '" stop-opacity=".26"/><stop offset="100%" stop-color="' + color + '" stop-opacity="0"/></linearGradient>';
       var pts = s.values.map(function (v, i) { return [x(i), y(v)]; });
@@ -199,7 +196,7 @@
         'pathLength="1" data-delay="' + (si * 140) + '" />';
       if (opts.dots !== false) {
         pts.forEach(function (pt, i) {
-          body += '<circle class="czd-chart__dot" cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="3.4" fill="#fff" stroke="' + color + '" stroke-width="2" ' +
+          body += '<circle class="czd-chart__dot" cx="' + pt[0].toFixed(1) + '" cy="' + pt[1].toFixed(1) + '" r="3.4" fill="#2B2C31" stroke="' + color + '" stroke-width="2" ' +
             'data-delay="' + (400 + i * 22) + '"><title>' + esc((s.label || '') + ' · ' + labels[i] + ' : ' + fmtTick(s.values[i], opts.valueDecimals)) + '</title></circle>';
         });
       }
@@ -208,13 +205,13 @@
       body += '<circle class="czd-chart__pulse" cx="' + lastPt[0].toFixed(1) + '" cy="' + lastPt[1].toFixed(1) + '" r="7" fill="' + color + '" opacity=".18" />';
       if (si === series.length - 1 && opts.valueTag !== false) {
         body += '<g class="czd-chart__tag"><rect x="' + (lastPt[0] - 30).toFixed(1) + '" y="' + (lastPt[1] - 26).toFixed(1) + '" width="60" height="19" rx="9" fill="' + color + '"/>' +
-          '<text x="' + lastPt[0].toFixed(1) + '" y="' + (lastPt[1] - 12.5).toFixed(1) + '" text-anchor="middle" fill="#fff" font-size="10.5" font-weight="700">' +
+          '<text x="' + lastPt[0].toFixed(1) + '" y="' + (lastPt[1] - 12.5).toFixed(1) + '" text-anchor="middle" fill="#18191C" font-size="13" font-weight="700">' +
           fmtTick(s.values[s.values.length - 1], opts.valueDecimals) + (opts.unit ? ' ' + esc(opts.unit) : '') + '</text></g>';
       }
     });
 
     var legend = opts.legend === false ? '' : '<div class="czd-chart__legend">' + series.map(function (s) {
-      return '<span class="czd-chart__legend-item"><i style="background:' + (s.color || '#0f9d58') + '"></i>' + esc(s.label || '') + '</span>';
+      return '<span class="czd-chart__legend-item"><i style="background:' + (s.color || '#D2F85A') + '"></i>' + esc(s.label || '') + '</span>';
     }).join('') + '</div>';
 
     return '<div class="czd-chart" role="img" aria-label="' + esc(opts.aria || 'Chart') + '">' +
@@ -256,7 +253,7 @@
       var p = Math.max(0, Math.min(100, (it.value / max) * 100));
       return '<div class="czd-bars__row" data-delay="' + (i * 70) + '">' +
         '<span class="czd-bars__label">' + esc(it.label) + '</span>' +
-        '<span class="czd-bars__track"><i class="czd-bars__fill" style="--w:' + p.toFixed(1) + '%;--c:' + (it.color || '#0f9d58') + '"></i></span>' +
+        '<span class="czd-bars__track"><i class="czd-bars__fill" style="--w:' + p.toFixed(1) + '%;--c:' + (it.color || '#D2F85A') + '"></i></span>' +
         '<span class="czd-bars__value">' + esc(it.display != null ? it.display : fmtTick(it.value, it.decimals)) + '</span>' +
       '</div>';
     }).join('') + '</div>';
@@ -271,23 +268,25 @@
     var labels = o.labels || values.map(function (_, i) { return String(i + 1); });
     var colors = o.colors || [];
     var target = o.target;
-    var max = Math.max.apply(null, values.concat([target || 0, 1])) * 1.15;
-    var W = 640, H = 200, pad = { t: 22, r: 10, b: 26, l: 10 };
+    var max = Math.max.apply(null, values.concat([target || 0, 1])) * 1.12;
+    var W = 640, H = 220, pad = { t: 28, r: 44, b: 30, l: 12 };
     var iw = W - pad.l - pad.r, ih = H - pad.t - pad.b;
-    var bw = Math.min(52, (iw / values.length) * 0.55);
+    var bw = Math.min(52, (iw / Math.max(1, values.length)) * 0.55);
     var body = '';
     if (target) {
       var ty = pad.t + ih - (target / max) * ih;
       body += '<line class="czd-col__target" x1="' + pad.l + '" y1="' + ty.toFixed(1) + '" x2="' + (W - pad.r) + '" y2="' + ty.toFixed(1) + '" />' +
-        '<text class="czd-col__target-label" x="' + (W - pad.r) + '" y="' + (ty - 5).toFixed(1) + '" text-anchor="end">' + fmtTick(target, 0) + '</text>';
+        '<text class="czd-col__target-label" x="' + (W - pad.r + 8) + '" y="' + (ty + 4.5).toFixed(1) + '" text-anchor="start">' + fmtTick(target, 0) + '</text>';
     }
     values.forEach(function (v, i) {
       var cx = pad.l + (iw / values.length) * (i + 0.5);
-      var h = Math.max(3, (v / max) * ih);
-      var color = colors[i] || (v > 130 ? '#c0453c' : v > 100 ? '#d98200' : '#0f9d58');
-      body += '<rect class="czd-col__bar" x="' + (cx - bw / 2).toFixed(1) + '" y="' + (pad.t + ih).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="0" rx="6" fill="' + color + '" ' +
-        'style="--h:' + h.toFixed(1) + 'px" data-delay="' + (i * 75) + '"><title>' + esc(labels[i] + ' · ' + v) + '</title></rect>' +
-        '<text class="czd-col__value" x="' + cx.toFixed(1) + '" y="' + (pad.t + ih - h - 6).toFixed(1) + '" text-anchor="middle" data-delay="' + (i * 75 + 160) + '">' + fmtTick(v, 0) + '</text>' +
+      /* Height is clamped to the plot area and written as real geometry: no script-driven
+         y/height animation, so a bar can never overflow the card (SESSION 2 fix). */
+      var h = Math.max(3, Math.min(ih, (Math.max(0, v) / max) * ih));
+      var color = colors[i] || (v > 130 ? '#FF8A8A' : v > 100 ? '#F59B42' : '#D2F85A');
+      body += '<rect class="czd-col__bar czd-col__bar--static" x="' + (cx - bw / 2).toFixed(1) + '" y="' + (pad.t + ih - h).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + h.toFixed(1) + '" rx="8" fill="' + color + '" ' +
+        'style="animation-delay:' + (i * 60) + 'ms"><title>' + esc(labels[i] + ' · ' + v) + '</title></rect>' +
+        '<text class="czd-col__value" x="' + cx.toFixed(1) + '" y="' + (pad.t + ih - h - 7).toFixed(1) + '" text-anchor="middle" data-delay="' + (i * 60 + 160) + '">' + fmtTick(v, 0) + '</text>' +
         '<text class="czd-col__label" x="' + cx.toFixed(1) + '" y="' + (H - 8) + '" text-anchor="middle">' + esc(labels[i]) + '</text>';
     });
     return '<div class="czd-chart czd-chart--cols" role="img" aria-label="' + esc(o.aria || 'Columns') + '">' +
@@ -317,17 +316,17 @@
         ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + x1.toFixed(2) + ' ' + y1.toFixed(2) +
         ' L' + x2.toFixed(2) + ' ' + y2.toFixed(2) +
         ' A' + r + ' ' + r + ' 0 ' + large + ' 0 ' + x3.toFixed(2) + ' ' + y3.toFixed(2) + ' Z';
-      body += '<path class="czd-donut__slice" d="' + d + '" fill="' + (s.color || '#0f9d58') + '" data-delay="' + (i * 90) + '">' +
+      body += '<path class="czd-donut__slice" d="' + d + '" fill="' + (s.color || '#D2F85A') + '" data-delay="' + (i * 90) + '">' +
         '<title>' + esc(s.label + ' : ' + fmtTick(s.value, 0) + (s.unit ? ' ' + s.unit : '')) + '</title></path>';
     });
     return '<div class="czd-donut">' +
       '<svg viewBox="0 0 160 160" class="czd-donut__svg" role="img" aria-label="' + esc(o.aria || 'Distribution') + '">' +
-        '<circle cx="80" cy="80" r="51" fill="rgba(15,45,30,.035)" />' + body +
+        '<circle cx="80" cy="80" r="51" fill="#1E1F23" />' + body +
         '<text x="80" y="76" text-anchor="middle" class="czd-donut__center">' + esc(o.centerValue != null ? o.centerValue : '') + '</text>' +
         '<text x="80" y="94" text-anchor="middle" class="czd-donut__sub">' + esc(o.centerLabel || '') + '</text>' +
       '</svg>' +
       '<div class="czd-donut__legend">' + (o.slices || []).map(function (s) {
-        return '<div class="czd-donut__item"><i style="background:' + (s.color || '#0f9d58') + '"></i>' +
+        return '<div class="czd-donut__item"><i style="background:' + (s.color || '#D2F85A') + '"></i>' +
           '<span>' + esc(s.label) + '</span><b>' + (s.share != null ? fmtTick(s.share, 0) + ' %' : fmtTick(s.value, 0) + ' ' + esc(s.unit || '')) + '</b></div>';
       }).join('') + '</div>' +
     '</div>';
@@ -364,7 +363,7 @@
       var ratio = Math.max(0.08, Math.min(1.1, (a.value || 0) / (a.max || 100)));
       var p = pt(i, ratio);
       poly.push(p[0].toFixed(1) + ',' + p[1].toFixed(1));
-      dots += '<circle class="czd-radar__dot" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.2" fill="#0f9d58" data-delay="' + (320 + i * 60) + '"><title>' + esc(a.label + ' : ' + fmtTick(a.value, 0)) + '</title></circle>';
+      dots += '<circle class="czd-radar__dot" cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.2" fill="#D2F85A" data-delay="' + (320 + i * 60) + '"><title>' + esc(a.label + ' : ' + fmtTick(a.value, 0)) + '</title></circle>';
       var lp = pt(i, 1.22);
       var anchor = Math.abs(lp[0] - cx) < 8 ? 'middle' : (lp[0] > cx ? 'start' : 'end');
       labels += '<text class="czd-radar__label" x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 3).toFixed(1) + '" text-anchor="' + anchor + '">' + esc(a.label) + '</text>';
@@ -373,13 +372,13 @@
     return '<div class="czd-radar" role="img" aria-label="' + esc(o.aria || 'Radar') + '">' +
       '<svg viewBox="0 0 260 250" class="czd-radar__svg">' +
         '<defs><radialGradient id="' + radId + '" cx="50%" cy="50%" r="50%">' +
-          '<stop offset="0%" stop-color="#22c07a" stop-opacity=".42"/><stop offset="100%" stop-color="#8fd14f" stop-opacity=".16"/>' +
+          '<stop offset="0%" stop-color="#D2F85A" stop-opacity=".42"/><stop offset="100%" stop-color="#D2F85A" stop-opacity=".16"/>' +
         '</radialGradient></defs>' +
         rings + spokes + labels +
         '<polygon class="czd-radar__shape" points="' + poly.join(' ') + '" fill="url(#' + radId + ')" />' +
         '<polygon class="czd-radar__shape-line" points="' + poly.join(' ') + '" />' +
         dots +
-        '<circle cx="' + cx + '" cy="' + cy + '" r="2.5" fill="#0f9d58" opacity=".5"/>' +
+        '<circle cx="' + cx + '" cy="' + cy + '" r="2.5" fill="#D2F85A" opacity=".5"/>' +
       '</svg></div>';
   }
 
@@ -389,7 +388,7 @@
   function gauge(o) {
     o = o || {};
     var v = Math.max(0, Math.min(1, o.value || 0));
-    var color = o.color || '#d98200';
+    var color = o.color || '#F59B42';
     var W = 120, H = 70, cx = 60, cy = 62, R = 48;
     var a0 = Math.PI, a1 = Math.PI + Math.PI * v;
     var x0 = cx + Math.cos(a0) * R, y0 = cy + Math.sin(a0) * R;
@@ -399,7 +398,7 @@
       '<path class="czd-gauge__track" d="M' + (cx - R) + ' ' + cy + ' A' + R + ' ' + R + ' 0 0 1 ' + (cx + R) + ' ' + cy + '" fill="none" stroke-width="8" stroke-linecap="round"/>' +
       (v > 0.01 ? '<path class="czd-gauge__fill" d="M' + x0.toFixed(1) + ' ' + y0.toFixed(1) + ' A' + R + ' ' + R + ' 0 ' + large + ' 1 ' + x1.toFixed(1) + ' ' + y1.toFixed(1) + '" ' +
         'fill="none" stroke="' + color + '" stroke-width="8" stroke-linecap="round" pathLength="1" data-delay="120"/>' : '') +
-      '<circle cx="' + cx + '" cy="' + cy + '" r="3" fill="' + color + '" opacity=".55"/>' +
+      '<circle cx="' + cx + '" cy="' + cy + '" r="0" fill="' + color + '" opacity="0"/>' +
     '</svg>';
   }
 
@@ -411,7 +410,7 @@
     var value = o.value || 0;
     var max = Math.max(1, o.max || 1000);
     var p = Math.max(-1, Math.min(1, value / max));
-    var color = value >= 0 ? '#0f9d58' : '#c0453c';
+    var color = value >= 0 ? '#D2F85A' : '#FF8A8A';
     return '<div class="czd-div">' +
       '<div class="czd-div__axis"></div>' +
       '<div class="czd-div__bar" style="--p:' + (Math.abs(p) * 50).toFixed(1) + '%;--c:' + color + ';' + (value < 0 ? 'right:50%' : 'left:50%') + '"></div>' +
@@ -437,7 +436,7 @@
     var refPath = curve.map(function (c, i) { return (i ? 'L' : 'M') + x(c.age).toFixed(1) + ' ' + y(c.bmi).toFixed(1); }).join(' ');
     var ptPath = points.map(function (p, i) { return (i ? 'L' : 'M') + x(p.age).toFixed(1) + ' ' + y(p.bmi).toFixed(1); }).join(' ');
     var dots = points.map(function (p, i) {
-      return '<circle class="czd-chart__dot" cx="' + x(p.age).toFixed(1) + '" cy="' + y(p.bmi).toFixed(1) + '" r="4" fill="#0f9d58" stroke="#fff" stroke-width="2" data-delay="' + (300 + i * 90) + '"><title>' + p.age + ' ' + fmtTick(p.bmi, 1) + '</title></circle>';
+      return '<circle class="czd-chart__dot" cx="' + x(p.age).toFixed(1) + '" cy="' + y(p.bmi).toFixed(1) + '" r="4" fill="#D2F85A" stroke="#2B2C31" stroke-width="2" data-delay="' + (300 + i * 90) + '"><title>' + p.age + ' ' + fmtTick(p.bmi, 1) + '</title></circle>';
     }).join('');
     var axis = '';
     curve.forEach(function (c, i) {
@@ -451,12 +450,12 @@
     });
     return '<div class="czd-chart czd-chart--growth" role="img" aria-label="' + esc(o.aria || 'Growth') + '">' +
       '<svg viewBox="0 0 ' + W + ' ' + H + '" class="czd-chart__svg">' + axis +
-        '<path class="czd-chart__ref" d="' + refPath + '" fill="none" stroke="#8a9a90" stroke-width="2" stroke-dasharray="6 6" />' +
-        '<path class="czd-chart__line" d="' + ptPath + '" fill="none" stroke="#0f9d58" stroke-width="2.8" stroke-linecap="round" pathLength="1" data-delay="120" />' +
+        '<path class="czd-chart__ref" d="' + refPath + '" fill="none" stroke="#9A9CA3" stroke-width="2" stroke-dasharray="6 6" />' +
+        '<path class="czd-chart__line" d="' + ptPath + '" fill="none" stroke="#D2F85A" stroke-width="2.8" stroke-linecap="round" pathLength="1" data-delay="120" />' +
         dots +
       '</svg>' +
-      '<div class="czd-chart__legend"><span class="czd-chart__legend-item"><i style="background:#0f9d58"></i>' + esc(o.label || '') + '</span>' +
-      '<span class="czd-chart__legend-item"><i style="background:#8a9a90"></i>' + esc(o.refLabel || '') + '</span></div>' +
+      '<div class="czd-chart__legend"><span class="czd-chart__legend-item"><i style="background:#D2F85A"></i>' + esc(o.label || '') + '</span>' +
+      '<span class="czd-chart__legend-item"><i style="background:#9A9CA3"></i>' + esc(o.refLabel || '') + '</span></div>' +
     '</div>';
   }
 
@@ -543,7 +542,7 @@
     });
 
     /* 5. Colonnes : hauteur. */
-    Array.prototype.forEach.call(root.querySelectorAll('.czd-col__bar'), function (bar) {
+    Array.prototype.forEach.call(root.querySelectorAll('.czd-col__bar:not(.czd-col__bar--static)'), function (bar) {
       if (!claim(bar)) return;
       var delay = Number(bar.getAttribute('data-delay') || 0);
       var h = bar.style.getPropertyValue('--h') || '0px';

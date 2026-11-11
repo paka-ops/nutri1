@@ -151,3 +151,17 @@ node -e "…CZD_I18N.parity()…"        # 360 / 360, 0 clé manquante
 node -e "…CZD_TPL.shell/overview/planPanel/clinicalPanel/familyPanel…"
 # → aucune occurrence de NaN, undefined ou [object Object]
 ```
+
+
+## Session 2/19 — thème Dark Bento
+
+Le module suit désormais le design system de la plateforme (`styles/bento-design-system.css`).
+
+- **Thème** : `citizen-dashboard.css` mappe ses variables (`--surface`, `--ink`, `--muted`, `--green-*`…) sur les jetons Dark Bento ; cartes plates à rayon 28 px, sans ombre ni halo ; texte toujours quasi noir sur fond lime ; taille de police minimale 13 px. Les sections 13 et 14 en fin de fichier portent la rangée d'activité et les corrections de composants.
+- **Nouveau fichier `citizen-dashboard-bento.js`** (`CZD_BENTO.render(state)`) : rangée d'ouverture de la vue d'ensemble — Activité physique (3 courbes lissées), Jours actifs (calendrier cobalt), Sommeil (anneau), Plan de poids, Mes activités. Ordre de chargement : i18n → data → model → charts → **bento** → template → contrôleur.
+- **Données de démonstration** : les séries hebdomadaires, le calendrier des jours actifs, les séances et les heures de coucher / réveil sont dérivés de façon déterministe du profil et des habitudes ; ce ne sont pas des mesures réelles.
+- **Icônes** : plus aucun emoji ; tout passe par `CZD_CHARTS.icon(name)`. Les champs `icon` de `-data.js` / `-model.js` ne sont plus affichés (tables `PRIORITY_ICON` / `BADGE_ICON` dans le template).
+- **Couleurs des données** : les couleurs issues de `-data.js` / `-model.js` sont converties vers la palette au rendu (`theme()` dans le template) ; ces deux fichiers ne sont pas modifiés.
+- **Langue** : le sélecteur FR / EN propre au module est masqué ; la langue est pilotée par l'en-tête de la plateforme (`NUTRI_BENTO_I18N`). Les clés `czd.bento.*` existent en FR et EN.
+- **Famille & mineurs** : tant que l'accès parental n'est pas confirmé, seul l'écran de consentement est rendu — aucune donnée de l'enfant n'est présente dans le DOM.
+- **Graphique en colonnes** : la géométrie finale est écrite dans le SVG (hauteur bornée à la zone de tracé), l'animation est une simple mise à l'échelle CSS.
