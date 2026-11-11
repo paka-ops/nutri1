@@ -113,7 +113,7 @@
   function num(v, d) { try { return Number(v).toLocaleString(I18N.lang === 'fr' ? 'fr-FR' : 'en-GB', { maximumFractionDigits: d == null ? 1 : d }); } catch (e) { return String(v); } }
   function tonnes(v) { return num(v, v < 100 ? 1 : 0) + '\u00a0t'; }
   /* short form for the headline tile: 1 200 000 t does not fit a narrow tile */
-  function tonnesShort(v) { if (v < 10000) return tonnes(v); try { return Number(v).toLocaleString(I18N.lang === 'fr' ? 'fr-FR' : 'en-GB', { notation: 'compact', maximumFractionDigits: 1 }) + '\u00a0t'; } catch (e) { return tonnes(v); } }
+  function tonnesShort(v) { if (v < 10000) return tonnes(v); try { return Number(v).toLocaleString(I18N.lang === 'fr' ? 'fr-FR' : 'en-US', { notation: 'compact', maximumFractionDigits: 1 }) + '\u00a0t'; } catch (e) { return tonnes(v); } }
   function pct(v) { return num(v, 0) + (I18N.lang === 'fr' ? '\u00a0%' : '%'); }
   function model() {
     var raw = [];
