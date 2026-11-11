@@ -147,7 +147,8 @@
 <section id="monitoring" class="view" aria-label="Projects, Surveys &amp; Nutrition Surveillance" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="monitoring"></section>
 <script src="views/view-monitoring.js"></script>
 
-<section id="research" class="view"><div class="card"><h2 data-i18n="ui.research_evidence_graph">🔬 Research & Evidence Graph</h2><div class="grid3"><div class="card"><h3 data-i18n="ui.evidence_growth">Evidence growth</h3><div class="chart"><canvas id="rEvidence"></canvas></div></div><div class="card"><h3 data-i18n="ui.food_composition_growth">Food composition growth</h3><div class="chart"><canvas id="rFood"></canvas></div></div><div class="card"><h3 data-i18n="ui.recipe_validation">Recipe validation</h3><div class="chart"><canvas id="rRecipe"></canvas></div></div></div><div class="grid2"><div class="card"><h3 data-i18n="ui.evidence_intensity_heatmap">Evidence intensity heatmap</h3><div class="heat" id="heat"></div><p class="muted mini" data-i18n="ui.illustrative_visualization_for_research_coverage_by_food_evidence_dime">Illustrative visualization for research coverage by food / evidence dimension.</p></div><div class="card"><h3 data-i18n="ui.evidence_graph_explorer">Evidence graph explorer</h3><div class="rank"><span data-i18n="ui.food_nutrient">Food → Nutrient</span><b>1,240</b></div><div class="rank"><span data-i18n="ui.diet_biomarker">Diet → Biomarker</span><b>680</b></div><div class="rank"><span data-i18n="ui.diet_outcome">Diet → Outcome</span><b>420</b></div><div class="rank"><span data-i18n="ui.recipe_nutrient">Recipe → Nutrient</span><b>1,980</b></div></div></div></div></section>
+<section id="research" class="view" aria-label="Research &amp; Evidence Graph" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="research"></section>
+<script src="views/view-research.js"></script>
 
 <section id="market" class="view"><div class="card"><h2 data-i18n="ui.data_marketplace_apis">☁ Data Marketplace & APIs</h2><table><tr><th data-i18n="ui.api">API</th><th data-i18n="ui.customer">Customer</th><th data-i18n="ui.purpose">Purpose</th></tr><tr><td data-i18n="ui.food_api">Food API</td><td data-i18n="ui.apps_industry">Apps / industry</td><td data-i18n="ui.food_resolution">Food resolution</td></tr><tr><td data-i18n="ui.composition_api">Composition API</td><td data-i18n="ui.research_food_industry">Research / food industry</td><td data-i18n="ui.nutrient_data">Nutrient data</td></tr><tr><td data-i18n="ui.recipe_api">Recipe API</td><td data-i18n="ui.apps_institutions">Apps / institutions</td><td data-i18n="ui.traditional_recipes">Traditional recipes</td></tr><tr><td data-i18n="ui.consumption_api">Consumption API</td><td data-i18n="ui.governments">Governments</td><td data-i18n="ui.dietary_patterns">Dietary patterns</td></tr><tr><td data-i18n="ui.national_intelligence_api">National Intelligence API</td><td data-i18n="ui.government">Government</td><td data-i18n="ui.indicators_gis">Indicators + GIS</td></tr></table></div></section>
 </main>
@@ -1191,7 +1192,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  }
 
  function research(){
-   const v=$('#research');if(!v)return;
+   const v=$('#research');if(!v||v.hasAttribute('data-bento-view'))return;
    if(!v.querySelector('.v47-research-live')){
     const h=v.querySelector('h1,h2,h3');if(!h)return;
     const live=document.createElement('div');live.className='v47-research-live';

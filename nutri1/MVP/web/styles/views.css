@@ -1282,3 +1282,8 @@
 .view .vi .vi-form__field [aria-invalid="true"] { border-color: var(--accent-red, #FF8A8A); }
 .view .vi .vi-form__err { color: var(--accent-red, #FF8A8A); font-size: var(--fs-meta); font-weight: 600; }
 .view .vi .vi-form .btn { justify-self: start; }
+
+/* 12f. INSTITUTION VIEWS — additions (SESSION 17: RESEARCH) ------------------- */
+.view .vi .vi-link { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.view .vi .vi-link .bento-icon { width: 16px; height: 16px; color: var(--accent-lime); }
+.view .vi .vi-reg__ref { overflow-wrap: anywhere; }
