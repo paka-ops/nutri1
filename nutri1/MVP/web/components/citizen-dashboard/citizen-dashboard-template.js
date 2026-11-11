@@ -32,6 +32,16 @@
     high: 'alert', obesity: 'alert', diabetes: 'alert', hypertension: 'alert', central: 'alert',
     neutral: 'muted', unknown: 'muted', info: 'info'
   };
+  /* Emoji-free icon lookups (the data / model files keep their own `icon` fields untouched). */
+  var PRIORITY_ICON = { hydrate: 'drop', walk: 'steps', veggies: 'leaf', sugar: 'alert', salt: 'alert', fiber: 'wheat', sleep: 'moon', protein: 'fish', screen: 'pulse', consult: 'user' };
+  var BADGE_ICON = { hydration: 'drop', steps: 'steps', fiber: 'wheat', diversity: 'leaf', sleep: 'moon', sugar: 'check' };
+  /* Colours coming from the data / model files, mapped onto the Dark Bento palette. */
+  var PALETTE = { '#0f9d58': '#D2F85A', '#1f7ae0': '#4E65EC', '#8b5cf6': '#8F88E8', '#0ea5b7': '#7FD6E2', '#d98200': '#F59B42', '#c0453c': '#FF8A8A',
+    '#5b6b7c': '#9A9CA3', '#a4453f': '#FF8A8A', '#e07a1f': '#F59B42', '#c68a0a': '#F2C94C', '#3c7f9a': '#7FD6E2' };
+  function theme(html) {
+    return String(html).replace(/#(?:0f9d58|1f7ae0|8b5cf6|0ea5b7|d98200|c0453c|5b6b7c|a4453f|e07a1f|c68a0a|3c7f9a)\b/gi, function (m) { return PALETTE[m.toLowerCase()] || m; });
+  }
+
   function tone(x) { return TONE[x] || 'muted'; }
 
   function statusText(key) {
@@ -75,7 +85,7 @@
 
   function header(state) {
     var s = state.scores;
-    var bandColor = { excellent: '#1a9e63', good: '#3fa36b', watch: '#d98200', risk: '#c0453c' }[s.band];
+    var bandColor = { excellent: '#D2F85A', good: '#D2F85A', watch: '#F59B42', risk: '#FF8A8A' }[s.band];
     var syncLabel = state.sync.last
       ? t('czd.sync.updated', { s: Math.max(1, Math.round((Date.now() - state.sync.last) / 1000)) })
       : t('czd.sync.never');
@@ -84,8 +94,8 @@
         '<div class="czd-hero__main">' +
           '<span class="czd-kicker"><i class="czd-kicker__dot"></i>' + esc(t('czd.kicker')) + '</span>' +
           '<h2 class="czd-title">' +
-            '<span class="czd-title__emoji" aria-hidden="true">👤</span>' +
-            '<span class="czd-title__text">' + esc(t('czd.title').replace(/^👤\s*/, '')) + '</span>' +
+            '<span class="czd-title__emoji" aria-hidden="true">' + icon('user') + '</span>' +
+            '<span class="czd-title__text">' + esc(t('czd.title')) + '</span>' +
           '</h2>' +
           '<p class="czd-sub">' + esc(t('czd.subtitle')) + '</p>' +
           '<div class="czd-badges">' +
@@ -121,16 +131,16 @@
 
   function presets(state) {
     var items = [
-      ['balanced', '⚖️', 'czd.preset.balanced'],
-      ['risk', '⚠️', 'czd.preset.risk'],
-      ['athlete', '🏃🏾‍♀️', 'czd.preset.athlete'],
-      ['maternal', '🤰🏾', 'czd.preset.maternal']
+      ['balanced', 'scale', 'czd.preset.balanced'],
+      ['risk', 'alert', 'czd.preset.risk'],
+      ['athlete', 'run', 'czd.preset.athlete'],
+      ['maternal', 'heart', 'czd.preset.maternal']
     ];
     return '<div class="czd-presets" role="group" aria-label="' + esc(t('czd.preset.title')) + '">' +
       '<span class="czd-presets__label">' + esc(t('czd.preset.title')) + '</span>' +
       items.map(function (it) {
         return '<button type="button" class="czd-preset' + (state.preset === it[0] ? ' is-on' : '') + '" data-czd-preset="' + it[0] + '">' +
-          '<span aria-hidden="true">' + it[1] + '</span>' + esc(t(it[2])) + '</button>';
+          icon(it[1]) + '<span>' + esc(t(it[2])) + '</span></button>';
       }).join('') +
     '</div>';
   }
@@ -160,6 +170,7 @@
   /* ══════════════════════════════════════════════════════════════════ */
   function overview(state) {
     return '' +
+      (global.CZD_BENTO ? global.CZD_BENTO.render(state) : '') +
       '<div class="czd-grid czd-grid--top">' +
         scoreCard(state) +
         profileCard(state) +
@@ -230,7 +241,7 @@
       '<div class="czd-fields">' +
         '<label class="czd-field"><span>' + esc(t('czd.profile.goal')) + '</span>' +
           '<select data-czd-input="goal">' + (D.GOALS || []).map(function (g) {
-            return '<option value="' + g.key + '"' + (g.key === p.goal ? ' selected' : '') + '>' + g.icon + ' ' + esc(t(g.labelKey)) + '</option>';
+            return '<option value="' + g.key + '"' + (g.key === p.goal ? ' selected' : '') + '>' + esc(t(g.labelKey)) + '</option>';
           }).join('') + '</select>' +
         '</label>' +
         '<label class="czd-field"><span>' + esc(t('czd.profile.country')) + '</span>' +
@@ -271,7 +282,7 @@
       var k = 0;
       if (day) (day.meals[slot] || []).forEach(function (it) { k += D.FOODS[it.id].kcal * it.portion; });
       var tgt = slice[slot] || 1;
-      return { label: t(slot === 'breakfast' ? 'czd.plan.breakfast' : slot === 'lunch' ? 'czd.plan.lunch' : slot === 'dinner' ? 'czd.plan.dinner' : 'czd.plan.snack'), value: Math.round(k), max: Math.round(tgt), color: k > tgt * 1.15 ? '#d98200' : '#0f9d58', display: Math.round(k) + ' / ' + Math.round(tgt) + ' kcal' };
+      return { label: t(slot === 'breakfast' ? 'czd.plan.breakfast' : slot === 'lunch' ? 'czd.plan.lunch' : slot === 'dinner' ? 'czd.plan.dinner' : 'czd.plan.snack'), value: Math.round(k), max: Math.round(tgt), color: k > tgt * 1.15 ? '#F59B42' : '#D2F85A', display: Math.round(k) + ' / ' + Math.round(tgt) + ' kcal' };
     });
     return '<article class="czd-card czd-card--energy">' +
       '<div class="czd-card__head">' +
@@ -307,12 +318,12 @@
     var bpSpark = h.map(function (d) { return d.sys; });
     var waistSpark = sp('waist');
     return '<div class="czd-kpis">' +
-      kpi('bmi', esc(t('czd.kpi.bmi')), n(ind.bmi, 1), 'kg/m²', statusText(ind.bmiStatus.key), tone(ind.bmiStatus.tone), C.spark(bmiSpark, { color: ind.bmiStatus.color }), '18,5–24,9', 'bmi') +
+      kpi('bmi', esc(t('czd.kpi.bmi')), n(ind.bmi, 1), 'kg/m²', statusText(ind.bmiStatus.key), tone(ind.bmiStatus.tone), C.spark(bmiSpark, { color: ind.bmiStatus.color }), n(18.5, 1) + '–' + n(24.9, 1), 'bmi') +
       kpi('waist', esc(t('czd.kpi.waist')), n(p.waist, 0), 'cm', statusText(ind.waistStatus.key), tone(ind.waistStatus.tone), C.spark(waistSpark, { color: ind.waistStatus.color }), '≤ ' + (ind.waistStatus.max || 80) + ' cm', 'waist') +
-      kpi('glucose', esc(t('czd.kpi.glucose')), n(state.vitals.glucose, 1), 'mmol/L', statusText(state.vitals.glucoseStatus.key), tone(state.vitals.glucoseStatus.tone), C.spark(glSpark, { color: '#1f7ae0' }), '3,9–5,5', 'glucose') +
-      kpi('bp', esc(t('czd.kpi.bp')), (p.sys || '—') + '/' + (p.dia || '—'), 'mmHg', statusText(state.vitals.bpStatus.key), tone(state.vitals.bpStatus.tone), C.spark(bpSpark, { color: '#c0453c' }), '< 120/80', 'bp') +
-      kpi('weight', esc(t('czd.kpi.weight')), n(p.weight, 1), 'kg', t('czd.kpi.target') + ' ' + n(ind.idealWeight ? ind.idealWeight.min : 0, 0) + '–' + n(ind.idealWeight ? ind.idealWeight.max : 0, 0), 'info', C.spark(sp('weight'), { color: '#0f9d58' }), t('czd.kpi.trend'), 'weight') +
-      kpi('whtr', esc(t('czd.kpi.whtr')), n(ind.whtr, 2), '', statusText(ind.whtrStatus.tone === 'good' ? 'normal' : 'watch'), tone(ind.whtrStatus.tone), C.spark(h.map(function (d) { return d.waist / p.height; }), { color: '#8b5cf6' }), '≤ 0,50', 'whtr') +
+      kpi('glucose', esc(t('czd.kpi.glucose')), n(state.vitals.glucose, 1), 'mmol/L', statusText(state.vitals.glucoseStatus.key), tone(state.vitals.glucoseStatus.tone), C.spark(glSpark, { color: '#4E65EC' }), n(3.9, 1) + '–' + n(5.5, 1), 'glucose') +
+      kpi('bp', esc(t('czd.kpi.bp')), (p.sys || '—') + '/' + (p.dia || '—'), 'mmHg', statusText(state.vitals.bpStatus.key), tone(state.vitals.bpStatus.tone), C.spark(bpSpark, { color: '#FF8A8A' }), '< 120/80', 'bp') +
+      kpi('weight', esc(t('czd.kpi.weight')), n(p.weight, 1), 'kg', t('czd.kpi.target') + ' ' + n(ind.idealWeight ? ind.idealWeight.min : 0, 0) + '–' + n(ind.idealWeight ? ind.idealWeight.max : 0, 0), 'info', C.spark(sp('weight'), { color: '#D2F85A' }), t('czd.kpi.trend'), 'weight') +
+      kpi('whtr', esc(t('czd.kpi.whtr')), n(ind.whtr, 2), '', statusText(ind.whtrStatus.tone === 'good' ? 'normal' : 'watch'), tone(ind.whtrStatus.tone), C.spark(h.map(function (d) { return d.waist / p.height; }), { color: '#8F88E8' }), '≤ ' + n(0.5, 2), 'whtr') +
     '</div>';
   }
 
@@ -335,8 +346,8 @@
       C.line({
         labels: labels14(state),
         series: [
-          { label: t('czd.kpi.weight') + ' (kg)', values: h.map(function (d) { return d.weight; }), color: '#0f9d58' },
-          { label: t('czd.kpi.waist') + ' (cm)', values: h.map(function (d) { return d.waist; }), color: '#1f7ae0' }
+          { label: t('czd.kpi.weight') + ' (kg)', values: h.map(function (d) { return d.weight; }), color: '#D2F85A' },
+          { label: t('czd.kpi.waist') + ' (cm)', values: h.map(function (d) { return d.waist; }), color: '#4E65EC' }
         ],
         height: 210, valueDecimals: 1, smooth: true,
         aria: t('czd.clin.trend.weight')
@@ -352,8 +363,8 @@
       C.line({
         labels: labels14(state),
         series: [
-          { label: t('czd.kpi.glucose') + ' (mmol/L)', values: h.map(function (d) { return d.glucose; }), color: '#c0453c' },
-          { label: t('czd.kpi.bp') + ' (mmHg)', values: h.map(function (d) { return d.sys; }), color: '#8b5cf6' }
+          { label: t('czd.kpi.glucose') + ' (mmol/L)', values: h.map(function (d) { return d.glucose; }), color: '#FF8A8A' },
+          { label: t('czd.kpi.bp') + ' (mmHg)', values: h.map(function (d) { return d.sys; }), color: '#8F88E8' }
         ],
         height: 210, valueDecimals: 1, smooth: true,
         aria: t('czd.clin.trend.metabolic')
@@ -373,17 +384,17 @@
     var h = state.habits;
     return '<article class="czd-card czd-card--habits">' +
       '<div class="czd-card__head"><h3>' + esc(t('czd.habit.title')) + '</h3><span class="czd-pill">' + icon('sun') + ' ' + esc(t('czd.plan.today')) + '</span></div>' +
-      habitRow('water', '💧', t('czd.habit.water'), h.water, h.waterGoal, t('czd.habit.water.unit', { a: h.water, b: h.waterGoal }), 'blue', true) +
-      habitRow('steps', '👟', t('czd.habit.steps'), h.steps, h.stepsGoal, n(h.steps, 0) + ' / ' + n(h.stepsGoal, 0), 'violet', false) +
-      habitRow('veggies', '🥦', t('czd.habit.veggies'), h.veggies, h.veggiesGoal, t('czd.habit.veggies.unit', { a: h.veggies, b: h.veggiesGoal }), 'green', true) +
-      habitRow('sleep', '😴', t('czd.habit.sleep'), h.sleep, h.sleepGoal, n(h.sleep, 1) + ' h / ' + n(h.sleepGoal, 1) + ' h', 'amber', false) +
+      habitRow('water', 'drop', t('czd.habit.water'), h.water, h.waterGoal, t('czd.habit.water.unit', { a: h.water, b: h.waterGoal }), 'blue', true) +
+      habitRow('steps', 'steps', t('czd.habit.steps'), h.steps, h.stepsGoal, n(h.steps, 0) + ' / ' + n(h.stepsGoal, 0), 'violet', false) +
+      habitRow('veggies', 'leaf', t('czd.habit.veggies'), h.veggies, h.veggiesGoal, t('czd.habit.veggies.unit', { a: h.veggies, b: h.veggiesGoal }), 'green', true) +
+      habitRow('sleep', 'moon', t('czd.habit.sleep'), h.sleep, h.sleepGoal, n(h.sleep, 1) + ' h / ' + n(h.sleepGoal, 1) + ' h', 'amber', false) +
     '</article>';
   }
 
   function habitRow(key, emoji, label, value, goal, display, color, adjustable) {
     var pct = Math.max(0, Math.min(100, Math.round((value / goal) * 100)));
     return '<div class="czd-habit czd-habit--' + color + '" data-czd-habit="' + key + '">' +
-      '<span class="czd-habit__emoji" aria-hidden="true">' + emoji + '</span>' +
+      '<span class="czd-habit__emoji" aria-hidden="true">' + icon(emoji) + '</span>' +
       '<div class="czd-habit__main">' +
         '<span class="czd-habit__top"><b>' + esc(label) + '</b><small>' + esc(display) + '</small></span>' +
         '<span class="czd-habit__track" role="progressbar" aria-valuenow="' + pct + '" aria-valuemin="0" aria-valuemax="100" aria-label="' + esc(label) + '">' +
@@ -393,9 +404,9 @@
       '<div class="czd-habit__ctrl">' +
         (adjustable
           ? '<button type="button" class="czd-step" data-czd-act="habit-" data-czd-habitkey="' + key + '" aria-label="' + esc(t('czd.habit.removeWater')) + '">−</button>' +
-            '<button type="button" class="czd-step czd-step--plus" data-czd-act="habit+" data-czd-habitkey="' + key + '" aria-label="' + esc(t('czd.habit.addWater')) + '">＋</button>'
+            '<button type="button" class="czd-step czd-step--plus" data-czd-act="habit+" data-czd-habitkey="' + key + '" aria-label="' + esc(t('czd.habit.addWater')) + '">' + icon('plus') + '</button>'
           : (key === 'steps'
-            ? '<button type="button" class="czd-step czd-step--wide" data-czd-act="steps+">＋ 1 000</button>'
+            ? '<button type="button" class="czd-step czd-step--wide" data-czd-act="steps+">+ ' + n(1000, 0) + '</button>'
             : '<span class="czd-habit__ok">' + icon('check') + '</span>')) +
       '</div>' +
     '</div>';
@@ -408,9 +419,9 @@
     var eP = tot.protein * 4, eC = tot.carbs * 4, eF = tot.fat * 9;
     var eTot = eP + eC + eF || 1;
     var slices = [
-      { label: t('czd.macro.protein'), value: Math.round(eP / eTot * 100), color: '#1f7ae0', unit: '%', share: Math.round(eP / eTot * 100) },
-      { label: t('czd.macro.carbs'), value: Math.round(eC / eTot * 100), color: '#e0a92b', unit: '%', share: Math.round(eC / eTot * 100) },
-      { label: t('czd.macro.fat'), value: Math.round(eF / eTot * 100), color: '#8b5cf6', unit: '%', share: Math.round(eF / eTot * 100) }
+      { label: t('czd.macro.protein'), value: Math.round(eP / eTot * 100), color: '#4E65EC', unit: '%', share: Math.round(eP / eTot * 100) },
+      { label: t('czd.macro.carbs'), value: Math.round(eC / eTot * 100), color: '#F59B42', unit: '%', share: Math.round(eC / eTot * 100) },
+      { label: t('czd.macro.fat'), value: Math.round(eF / eTot * 100), color: '#8F88E8', unit: '%', share: Math.round(eF / eTot * 100) }
     ];
     return '<article class="czd-card czd-card--macro">' +
       '<div class="czd-card__head"><h3>' + esc(t('czd.macro.title')) + '</h3></div>' +
@@ -483,7 +494,7 @@
       var ctaLabel = 'czd.priority.cta.' + (p.cta || 'learn');
       var act = { water: 'add-water', steps: 'steps+', meal: 'log-meal', plan: 'tab', learn: 'explain' }[p.cta] || 'explain';
       return '<li class="czd-prio czd-prio--' + p.tone + '">' +
-        '<span class="czd-prio__ico" aria-hidden="true">' + p.icon + '</span>' +
+        '<span class="czd-prio__ico" aria-hidden="true">' + icon(PRIORITY_ICON[String(p.key).split('.')[0]] || 'spark') + '</span>' +
         '<span class="czd-prio__txt">' + esc(text) + '</span>' +
         '<button type="button" class="czd-btn czd-btn--mini" data-czd-act="' + act + '"' +
           (act === 'tab' ? ' data-czd-target="plan"' : '') +
@@ -523,7 +534,7 @@
     var plan = state.plan;
     var values = plan ? plan.days.map(function (d) { return M.glycemicLoad(d); }) : [];
     var labels = dayShortLabels();
-    var colors = values.map(function (v) { return v > 130 ? '#c0453c' : v > 100 ? '#d98200' : '#0f9d58'; });
+    var colors = values.map(function (v) { return v > 130 ? '#FF8A8A' : v > 100 ? '#F59B42' : '#D2F85A'; });
     return '<article class="czd-card czd-card--gl">' +
       '<div class="czd-card__head"><h3>' + esc(t('czd.gi.title')) + '</h3>' +
         '<span class="czd-pill">' + esc(t('czd.gi.low')) + ' · ' + esc(t('czd.gi.medium')) + ' · ' + esc(t('czd.gi.high')) + '</span></div>' +
@@ -538,7 +549,7 @@
     var badges = (D.ACHIEVEMENTS || []).map(function (b) {
       var on = achievementOn(b, state);
       return '<span class="czd-achievement' + (on ? ' is-on' : '') + '" title="' + esc(t(b.labelKey)) + '">' +
-        '<i aria-hidden="true">' + (on ? b.icon : '🔒') + '</i>' + esc(t(b.labelKey)) + '</span>';
+        '<i aria-hidden="true">' + icon(on ? (BADGE_ICON[b.key] || 'check') : 'lock') + '</i>' + esc(t(b.labelKey)) + '</span>';
     }).join('');
     var earned = (D.ACHIEVEMENTS || []).filter(function (b) { return achievementOn(b, state); }).length;
     var bars = s.parts.map(function (p) {
@@ -598,7 +609,7 @@
           var f = D.FOODS[it.id];
           var scorePct = M.foodScore(f);
           return '<li class="czd-food" data-czd-food="' + it.id + '">' +
-            '<span class="czd-food__ico" aria-hidden="true">' + f.icon + '</span>' +
+            '<span class="czd-food__ico" aria-hidden="true">' + icon('bowl') + '</span>' +
             '<span class="czd-food__name">' + esc(foodName(f)) +
               '<small>' + n(Math.round(f.kcal * it.portion), 0) + ' kcal · ' + n(Math.round(f.protein * it.portion), 0) + ' g ' + esc(t('czd.plan.protein').toLowerCase()) +
               ' · ' + n(Math.round(f.fiber * it.portion), 0) + ' g ' + esc(t('czd.plan.fiber').toLowerCase()) + '</small>' +
@@ -622,7 +633,7 @@
     var shopping = Object.keys(plan.shopping || {}).map(function (g) {
       return '<div class="czd-shop__group"><b>' + esc(groceryLabel(g)) + '</b>' +
         plan.shopping[g].map(function (f) {
-          return '<span class="czd-shop__item">' + f.icon + ' ' + esc(f.name[I18N.lang] || f.name.en) + '</span>';
+          return '<span class="czd-shop__item">' + esc(f.name[I18N.lang] || f.name.en) + '</span>';
         }).join('') + '</div>';
     }).join('');
 
@@ -646,7 +657,7 @@
         planMetric('czd.plan.fiber', n(totals.fiber, 0) + ' g', '/ ' + n(e.fiberTarget, 0) + ' g', totals.fiber >= e.fiberTarget * 0.9 ? 'ok' : 'warn') +
         planMetric('czd.plan.iron', n(totals.iron, 1) + ' mg', '/ 18 mg', totals.iron >= 16 ? 'ok' : 'warn') +
         planMetric('czd.plan.budget', n(Math.round(totals.cost), 0), t('czd.plan.budget.unit'), 'info') +
-        planMetric('czd.plan.localFoods', n(countFoods(day), 0), '🥘', 'info') +
+        planMetric('czd.plan.localFoods', n(countFoods(day), 0), '', 'info') +
       '</div>' +
       '<div class="czd-days" role="tablist" aria-label="' + esc(t('czd.plan.title')) + '">' + dayTabs + '</div>' +
       '<div class="czd-grid czd-grid--plan">' +
@@ -680,7 +691,7 @@
           C.columnWeek({
             values: plan.days.map(function (d) { return M.glycemicLoad(d); }),
             labels: dayShortLabels(),
-            colors: plan.days.map(function (d) { return M.glycemicLoad(d) > 130 ? '#c0453c' : M.glycemicLoad(d) > 100 ? '#d98200' : '#0f9d58'; }),
+            colors: plan.days.map(function (d) { return M.glycemicLoad(d) > 130 ? '#FF8A8A' : M.glycemicLoad(d) > 100 ? '#F59B42' : '#D2F85A'; }),
             target: 100, aria: t('czd.gi.title')
           }) +
         '</article>' +
@@ -733,11 +744,11 @@
     var rows = [
       row('czd.kpi.bmi', n(ind.bmi, 1) + ' kg/m²', I18N.lang === 'fr' ? '18,5 – 24,9' : '18.5 – 24.9', ind.bmiStatus, positionBmi(ind.bmi)),
       row('czd.kpi.waist', n(p.waist, 0) + ' cm', '≤ ' + (ind.waistStatus.max || 80) + ' cm', ind.waistStatus, positionRatio(p.waist, ind.waistStatus.max || 80)),
-      row('czd.kpi.whtr', n(ind.whtr, 2), '≤ 0,50', ind.whtrStatus, positionRatio(ind.whtr, 0.5)),
+      row('czd.kpi.whtr', n(ind.whtr, 2), '≤ ' + n(0.5, 2), ind.whtrStatus, positionRatio(ind.whtr, 0.5)),
       row('czd.kpi.glucose', n(vit.glucose, 1) + ' mmol/L', I18N.lang === 'fr' ? '3,9 – 5,5' : '3.9 – 5.5', vit.glucoseStatus, positionBand(vit.glucose, 3.9, 5.5, 7)),
-      row('czd.kpi.hba1c', n(vit.hba1c, 1) + ' %', '< 5,7', vit.hba1cStatus, positionRatio(vit.hba1c, 6.5)),
+      row('czd.kpi.hba1c', n(vit.hba1c, 1) + ' %', '< ' + n(5.7, 1), vit.hba1cStatus, positionRatio(vit.hba1c, 6.5)),
       row('czd.kpi.bp', (p.sys || '—') + '/' + (p.dia || '—') + ' mmHg', '< 120/80', vit.bpStatus, positionBand(p.sys, 110, 120, 160)),
-      row('czd.kpi.whr', n(ind.whr, 2), p.sex === 'male' ? '< 0,90' : '< 0,85', ind.whrStatus, positionRatio(ind.whr, 0.95)),
+      row('czd.kpi.whr', n(ind.whr, 2), p.sex === 'male' ? '< ' + n(0.9, 2) : '< ' + n(0.85, 2), ind.whrStatus, positionRatio(ind.whr, 0.95)),
       row('czd.kpi.fiber', n(state.plan ? state.plan.days[state.activeDay].totals.fiber : 0, 0) + ' g', n(state.energy.fiberTarget, 0) + ' g', { key: 'normal', tone: 'good' }, positionRatio(state.plan ? state.plan.days[state.activeDay].totals.fiber : 0, state.energy.fiberTarget))
     ].join('');
 
@@ -781,7 +792,7 @@
           numField('dia', t('czd.clin.dia'), p.dia, 40, 150, 1) +
           numField('chol', t('czd.clin.chol'), p.chol, 1, 15, 0.1) +
           numField('creatinine', t('czd.clin.creat'), p.creatinine, 20, 900, 1) +
-          field('activity', t('czd.clin.activity'), 'select', p.activity, (D.ACTIVITY_LEVELS || []).map(function (a) { return [a.key, a.icon + ' ' + t(a.labelKey)]; })) +
+          field('activity', t('czd.clin.activity'), 'select', p.activity, (D.ACTIVITY_LEVELS || []).map(function (a) { return [a.key, t(a.labelKey)]; })) +
         '</form>' +
         '<div class="czd-form__foot">' +
           '<span class="czd-live-stamp" data-czd-stamp>' + esc(t('czd.clin.live.at', { t: I18N.date(Date.now()) })) + '</span>' +
@@ -796,11 +807,11 @@
     var rows = [
       row('czd.kpi.bmi', n(ind.bmi, 1) + ' kg/m²', I18N.lang === 'fr' ? '18,5 – 24,9' : '18.5 – 24.9', ind.bmiStatus, positionBmi(ind.bmi)),
       row('czd.kpi.waist', n(p.waist, 0) + ' cm', '≤ ' + (ind.waistStatus.max || 80) + ' cm', ind.waistStatus, positionRatio(p.waist, ind.waistStatus.max || 80)),
-      row('czd.kpi.whtr', n(ind.whtr, 2), '≤ 0,50', ind.whtrStatus, positionRatio(ind.whtr, 0.5)),
+      row('czd.kpi.whtr', n(ind.whtr, 2), '≤ ' + n(0.5, 2), ind.whtrStatus, positionRatio(ind.whtr, 0.5)),
       row('czd.kpi.glucose', n(vit.glucose, 1) + ' mmol/L', I18N.lang === 'fr' ? '3,9 – 5,5' : '3.9 – 5.5', vit.glucoseStatus, positionBand(vit.glucose, 3.9, 5.5, 7)),
-      row('czd.kpi.hba1c', n(vit.hba1c, 1) + ' %', '< 5,7', vit.hba1cStatus, positionRatio(vit.hba1c, 6.5)),
+      row('czd.kpi.hba1c', n(vit.hba1c, 1) + ' %', '< ' + n(5.7, 1), vit.hba1cStatus, positionRatio(vit.hba1c, 6.5)),
       row('czd.kpi.bp', (p.sys || '—') + '/' + (p.dia || '—') + ' mmHg', '< 120/80', vit.bpStatus, positionBand(p.sys, 110, 120, 160)),
-      row('czd.kpi.whr', n(ind.whr, 2), p.sex === 'male' ? '< 0,90' : '< 0,85', ind.whrStatus, positionRatio(ind.whr, 0.95)),
+      row('czd.kpi.whr', n(ind.whr, 2), p.sex === 'male' ? '< ' + n(0.9, 2) : '< ' + n(0.85, 2), ind.whrStatus, positionRatio(ind.whr, 0.95)),
       row('czd.clin.creat', n(p.creatinine, 0) + ' µmol/L', '> 60 mL/min', vit.egfrStatus, positionRatio(vit.egfr || 90, 120))
     ].join('');
     var radarAxes = [
@@ -836,10 +847,10 @@
     }).join('');
     return '<div class="czd-grid">' +
         '<article class="czd-card czd-card--chart"><div class="czd-card__head"><h3>' + esc(t('czd.clin.trend.weight')) + '</h3></div>' +
-          C.line({ labels: labels14(state), series: [{ label: t('czd.kpi.weight'), values: h.map(function (d) { return d.weight; }), color: '#0f9d58' }, { label: t('czd.kpi.waist'), values: h.map(function (d) { return d.waist; }), color: '#1f7ae0' }], height: 200, valueDecimals: 1 }) +
+          C.line({ labels: labels14(state), series: [{ label: t('czd.kpi.weight'), values: h.map(function (d) { return d.weight; }), color: '#D2F85A' }, { label: t('czd.kpi.waist'), values: h.map(function (d) { return d.waist; }), color: '#4E65EC' }], height: 200, valueDecimals: 1 }) +
         '</article>' +
         '<article class="czd-card czd-card--chart"><div class="czd-card__head"><h3>' + esc(t('czd.clin.trend.metabolic')) + '</h3></div>' +
-          C.line({ labels: labels14(state), series: [{ label: t('czd.kpi.glucose'), values: h.map(function (d) { return d.glucose; }), color: '#c0453c' }, { label: t('czd.kpi.bp') + ' (sys)', values: h.map(function (d) { return d.sys; }), color: '#8b5cf6' }], height: 200, valueDecimals: 1 }) +
+          C.line({ labels: labels14(state), series: [{ label: t('czd.kpi.glucose'), values: h.map(function (d) { return d.glucose; }), color: '#FF8A8A' }, { label: t('czd.kpi.bp') + ' (sys)', values: h.map(function (d) { return d.sys; }), color: '#8F88E8' }], height: 200, valueDecimals: 1 }) +
         '</article>' +
       '</div>' +
       '<article class="czd-card czd-card--notes">' +
@@ -847,9 +858,9 @@
           '<button type="button" class="czd-info" data-czd-act="explain" data-czd-topic="score">?</button></div>' +
         '<ul class="czd-clinenotes">' + notes + '</ul>' +
         '<div class="czd-refs">' +
-          refChip('czd.kpi.bmi', '18,5–24,9 kg/m²') + refChip('czd.kpi.waist', '≤ 80 / 94 cm') +
-          refChip('czd.kpi.glucose', '3,9–5,5 mmol/L') + refChip('czd.kpi.bp', '< 120/80 mmHg') +
-          refChip('czd.kpi.hba1c', '< 5,7 %') + refChip('czd.kpi.chol', '< 5,0 mmol/L') +
+          refChip('czd.kpi.bmi', n(18.5, 1) + '–' + n(24.9, 1) + ' kg/m²') + refChip('czd.kpi.waist', '≤ 80 / 94 cm') +
+          refChip('czd.kpi.glucose', n(3.9, 1) + '–' + n(5.5, 1) + ' mmol/L') + refChip('czd.kpi.bp', '< 120/80 mmHg') +
+          refChip('czd.kpi.hba1c', '< ' + n(5.7, 1) + ' %') + refChip('czd.kpi.chol', '< ' + n(5, 1) + ' mmol/L') +
         '</div>' +
       '</article>';
   }
@@ -891,7 +902,28 @@
   /* ══════════════════════════════════════════════════════════════════ */
   /* 5. Famille & mineurs                                             */
   /* ══════════════════════════════════════════════════════════════════ */
+  /* Locked state: the consent gate only. No child name, measurement, chart or food data
+     reaches the DOM before the parent / guardian grants access (SESSION 2 fix). */
+  function familyGate() {
+    return '' +
+      '<article class="czd-card czd-card--family czd-card--gate">' +
+        '<div class="czd-card__head">' +
+          '<div><span class="czd-pill">' + esc(t('czd.family.pill')) + '</span>' +
+            '<h3>' + esc(t('czd.family.title')) + '</h3>' +
+            '<p class="czd-note">' + esc(t('czd.family.sub')) + '</p></div>' +
+          '<span class="czd-badge czd-badge--lock">' + icon('lock') + esc(t('czd.family.badge')) + '</span>' +
+        '</div>' +
+        '<div class="czd-gate">' +
+          '<span class="czd-gate__ico">' + icon('lock') + '</span>' +
+          '<p class="czd-gate__txt">' + esc(t('czd.family.locked')) + '</p>' +
+          '<button type="button" class="czd-btn czd-btn--primary" data-czd-act="consent">' + icon('check') + esc(t('czd.family.request')) + '</button>' +
+          '<span class="czd-consent"><i></i>' + esc(t('czd.family.consent')) + '</span>' +
+        '</div>' +
+      '</article>';
+  }
+
   function familyPanel(state) {
+    if (!state.familyAccess) return familyGate();
     var child = M.childAnalysis(state.activeChild);
     var ref = child.ref;
     var granted = state.familyAccess;
@@ -901,22 +933,22 @@
     var selector = '<div class="czd-childsel" role="tablist" aria-label="' + esc(t('czd.family.member')) + '">' +
       children.map(function (c) {
         return '<button type="button" class="czd-child' + (state.activeChild === c[0] ? ' is-on' : '') + '" data-czd-child="' + c[0] + '" role="tab" aria-selected="' + (state.activeChild === c[0]) + '">' +
-          '<span aria-hidden="true">' + (c[0] === 'child1' ? '👧🏾' : '👦🏾') + '</span>' + esc(t(c[1])) + '</button>';
+          icon('child') + '<span>' + esc(t(c[1])) + '</span></button>';
       }).join('') + '</div>';
 
     var groups = [
-      ['cereals', '🌾', 'czd.family.group.cereals'],
-      ['legumes', '🫘', 'czd.family.group.legumes'],
-      ['vegetables', '🥬', 'czd.family.group.vegetables'],
-      ['animal', '🐟', 'czd.family.group.animal'],
-      ['fats', '🫒', 'czd.family.group.fats'],
-      ['dairy', '🥛', 'czd.family.group.dairy']
+      ['cereals', 'wheat', 'czd.family.group.cereals'],
+      ['legumes', 'bean', 'czd.family.group.legumes'],
+      ['vegetables', 'leaf', 'czd.family.group.vegetables'],
+      ['animal', 'fish', 'czd.family.group.animal'],
+      ['fats', 'drop', 'czd.family.group.fats'],
+      ['dairy', 'milk', 'czd.family.group.dairy']
     ];
     var diversity = state.childDiversity[state.activeChild] || [];
     var groupHtml = groups.map(function (g) {
       var on = diversity.indexOf(g[0]) !== -1;
       return '<button type="button" class="czd-group' + (on ? ' is-on' : '') + '" data-czd-group="' + g[0] + '" aria-pressed="' + on + '">' +
-        '<span aria-hidden="true">' + g[1] + '</span>' + esc(t(g[2])) + (on ? icon('check') : '') + '</button>';
+        icon(g[1]) + '<span>' + esc(t(g[2])) + '</span>' + (on ? icon('check') : '') + '</button>';
     }).join('');
 
     return '' +
@@ -940,10 +972,10 @@
           '<span>' + esc(t('czd.family.locked')) + '</span></div>') +
         '<div class="czd-family ' + (granted ? '' : 'is-locked') + '">' +
           '<div class="czd-childstats">' +
-            childStat('👧🏾', t('czd.family.member'), ref.name + ' · ' + ref.age + ' ' + (I18N.lang === 'fr' ? 'ans' : 'yrs'), '') +
-            childStat('📏', t('czd.kpi.bmi'), n(ref.bmi, 1), t('czd.family.bmiAge')) +
-            childStat('🌱', t('czd.family.zscore'), (child.zscore > 0 ? '+' : '') + n(child.zscore, 1), child.band === 'good' ? t('czd.family.growth.onTrack') : t('czd.family.growth.watch')) +
-            childStat('📅', t('czd.family.nextVisit'), t('czd.family.nextVisit.value'), '') +
+            childStat('child', t('czd.family.member'), ref.name + ' · ' + ref.age + ' ' + (I18N.lang === 'fr' ? 'ans' : 'yrs'), '') +
+            childStat('ruler', t('czd.kpi.bmi'), n(ref.bmi, 1), t('czd.family.bmiAge')) +
+            childStat('sprout', t('czd.family.zscore'), (child.zscore > 0 ? '+' : '') + n(child.zscore, 1), child.band === 'good' ? t('czd.family.growth.onTrack') : t('czd.family.growth.watch')) +
+            childStat('calendar', t('czd.family.nextVisit'), t('czd.family.nextVisit.value'), '') +
           '</div>' +
           '<div class="czd-grid czd-grid--family">' +
             '<article class="czd-subcard">' +
@@ -973,7 +1005,7 @@
   }
 
   function childStat(emoji, label, value, sub) {
-    return '<div class="czd-childstat"><span class="czd-childstat__ico" aria-hidden="true">' + emoji + '</span>' +
+    return '<div class="czd-childstat"><span class="czd-childstat__ico" aria-hidden="true">' + icon(emoji) + '</span>' +
       '<span class="czd-childstat__label">' + esc(label) + '</span>' +
       '<b>' + esc(value) + '</b>' + (sub ? '<small>' + esc(sub) + '</small>' : '') + '</div>';
   }
@@ -1050,15 +1082,16 @@
     return (map[g] || map.other)[I18N.lang] || g;
   }
 
+  function themed(fn) { return function () { return theme(fn.apply(null, arguments)); }; }
   global.CZD_TPL = {
-    shell: shell,
-    overview: overview,
-    planPanel: planPanel,
-    clinicalPanel: clinicalPanel,
-    clinicalSide: clinicalSide,
-    clinicalCharts: clinicalCharts,
-    familyPanel: familyPanel,
-    modal: modal,
-    header: header
+    shell: themed(shell),
+    overview: themed(overview),
+    planPanel: themed(planPanel),
+    clinicalPanel: themed(clinicalPanel),
+    clinicalSide: themed(clinicalSide),
+    clinicalCharts: themed(clinicalCharts),
+    familyPanel: themed(familyPanel),
+    modal: themed(modal),
+    header: themed(header)
   };
 })(window);
