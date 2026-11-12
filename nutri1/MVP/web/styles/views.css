@@ -708,7 +708,7 @@
 #ai .vp-kpi__ring b small { display: inline; font-size: .75rem; }
 #ai .vp-kpi__ring--blue { --tone: var(--accent-blue); }
 #ai .vp-kpi--hz { flex-direction: column; align-items: stretch; justify-content: center; gap: 10px; }
-#ai .vp-segs { display: flex; gap: 4px; padding: 4px; border-radius: var(--radius-pill); background: var(--bg-well); border: 1px solid var(--border-subtle); }
+#ai .vp .vp-kpi--hz .vp-segs { display: flex; gap: 4px; padding: 4px; border-radius: var(--radius-pill); background: var(--bg-well); border: 1px solid var(--border-subtle); }
 #ai .vp-seg { flex: 1 1 0; width: auto; min-width: 0; min-height: 40px; padding: 0 10px; border: 0; border-radius: var(--radius-pill); background: none; color: var(--text-secondary); font-weight: 600; transition: background .2s, color .2s; }
 #ai .vp-seg:hover { color: var(--text-primary); }
 #ai .vp-seg[aria-pressed="true"] { background: var(--accent-lime); color: var(--text-on-lime); }
