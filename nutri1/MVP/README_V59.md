@@ -11,6 +11,8 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `styles/bento-design-system.css` | Tokens, shell, cards, buttons, form controls |
 | `styles/views.css` | One block per view, plus the shared institution block |
 | `styles/legacy-layout.css` | What is left of the old layout rules (selectors still in use only) |
+| `styles/theme-light.css`, `js/bento-theme.js` | Optional light theme (`<html data-theme="light">`), toggle in the header, stored in `localStorage` (`nutri_theme`). Dark stays the default |
+| `assets/scanner/*.jpg` | AI-generated sample photos used by the scanner simulation |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |

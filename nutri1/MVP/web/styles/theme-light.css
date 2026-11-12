@@ -1,0 +1,120 @@
+/* ==========================================================================
+   NUTRI.N°1 — Light theme for the Dark Bento design system
+   Loaded last. Nothing here applies unless <html data-theme="light"> is set
+   (js/bento-theme.js, toggle in the header). Dark stays the default theme.
+
+   1. Tokens   2. Shell & shared components   3. Inline SVG charts   4. Modules
+   ========================================================================== */
+
+/* 1. TOKENS --------------------------------------------------------------- */
+html[data-theme="light"] {
+  --bg-canvas: #F3F4EE;
+  --bg-card-primary: #FFFFFF;
+  --bg-card-secondary: #EEF0E7;
+  --bg-well: #F5F6F0;
+  --accent-lime: #5C7A00;           /* lime deepened so it stays readable as text and as a fill */
+  --accent-blue: #4E65EC;
+  --accent-blue-text: #3A4FD0;
+  --accent-orange: #B45F06;
+  --accent-lavender: #5F56CF;
+  --accent-red: #C73A3A;
+  --text-primary: #18191C;
+  --text-secondary: #5D6068;
+  --text-soft: #3F424A;
+  --text-soft-2: #50535B;
+  --text-on-lime: #FFFFFF;
+  --border-subtle: rgba(24, 25, 28, 0.09);
+  --border-strong: rgba(24, 25, 28, 0.20);
+  color-scheme: light;
+}
+
+/* 2. SHELL & SHARED COMPONENTS -------------------------------------------- */
+html[data-theme="light"] body { background-image: radial-gradient(circle at 8% 12%, rgba(140, 180, 30, 0.16) 0%, transparent 45%); }
+html[data-theme="light"] * { scrollbar-color: #B9BCB0 transparent; }
+html[data-theme="light"] .card { box-shadow: 0 1px 2px rgba(24, 25, 28, .04), 0 8px 24px rgba(24, 25, 28, .04); }
+html[data-theme="light"] .btn.primary:hover { background: #4B6400; }
+html[data-theme="light"] .btn.secondary:hover,
+html[data-theme="light"] .hero-center-btn:hover,
+html[data-theme="light"] .v56-btn:hover { background: #E2E5D9; }
+html[data-theme="light"] .btn.danger { background: rgba(199, 58, 58, .08); border-color: rgba(199, 58, 58, .35); }
+html[data-theme="light"] .bento-lang, html[data-theme="light"] #citizen .czd-lang { border-color: var(--border-subtle); }
+html[data-theme="light"] .bento-lang button:hover { color: var(--text-primary); }
+html[data-theme="light"] .bento-lang button.is-on:hover,
+html[data-theme="light"] .bento-lang button[aria-pressed="true"]:hover { color: var(--text-on-lime); }
+html[data-theme="light"] .nav .bento-dock-btn:hover { background: rgba(24, 25, 28, .06); }
+html[data-theme="light"] .v51-live { color: var(--text-primary); }
+html[data-theme="light"] .v56-line { background: repeating-linear-gradient(to bottom, transparent 0, transparent 41px, rgba(24, 25, 28, .07) 42px); }
+html[data-theme="light"] .v38-period, html[data-theme="light"] .v38-chart-wrap, html[data-theme="light"] .v47-plan { border-color: var(--border-subtle); }
+html[data-theme="light"] .bento-drawer, html[data-theme="light"] .bento-search-results, html[data-theme="light"] .toast,
+html[data-theme="light"] .v56-workspace, html[data-theme="light"] .v51-result { box-shadow: 0 24px 60px rgba(24, 25, 28, .18); }
+
+/* Theme toggle (header) — same pill as the EN/FR switch */
+.bento-theme {
+  display: inline-grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border-radius: var(--radius-pill);
+  background: var(--bg-well); border: 1px solid var(--border-subtle); color: var(--text-secondary); transition: color .15s, border-color .15s;
+}
+.bento-theme:hover { color: var(--text-primary); border-color: var(--border-strong); }
+.bento-theme svg { display: block; }
+.bento-theme .bento-theme__sun { display: none; }
+html[data-theme="light"] .bento-theme .bento-theme__sun { display: block; }
+html[data-theme="light"] .bento-theme .bento-theme__moon { display: none; }
+
+/* 3. INLINE SVG CHARTS (colours written as attributes by the chart adapter) -- */
+html[data-theme="light"] svg [fill="#1E1F23"] { fill: var(--bg-well); }
+html[data-theme="light"] svg [stroke="#1E1F23"] { stroke: var(--bg-card-secondary); }
+html[data-theme="light"] svg [fill="#2B2C31"] { fill: var(--bg-card-primary); }
+html[data-theme="light"] svg [stroke="rgba(255,255,255,.07)"] { stroke: var(--border-subtle); }
+html[data-theme="light"] svg [fill="#D2F85A"] { fill: var(--accent-lime); }
+html[data-theme="light"] svg [stroke="#D2F85A"] { stroke: var(--accent-lime); }
+html[data-theme="light"] svg [fill="#F59B42"] { fill: var(--accent-orange); }
+html[data-theme="light"] svg [stroke="#F59B42"] { stroke: var(--accent-orange); }
+html[data-theme="light"] svg [fill="#8F88E8"] { fill: var(--accent-lavender); }
+html[data-theme="light"] svg [stroke="#8F88E8"] { stroke: var(--accent-lavender); }
+html[data-theme="light"] svg [fill="#9A9CA3"] { fill: var(--text-secondary); }
+html[data-theme="light"] .nbc-legend i[style*="#D2F85A"] { background: var(--accent-lime) !important; }
+
+/* 4. MODULES --------------------------------------------------------------- */
+html[data-theme="light"] #czdRoot.czd-root {
+  --ink-2: #2A2C31; --red: #C73A3A; --teal: #0E7C8B; --lime-soft: rgba(92, 122, 0, .12);
+  --shadow-l: 0 30px 80px rgba(24, 25, 28, .18);
+}
+
+/* Keep the header controls on one row on small screens now that the toggle is there */
+@media (max-width: 980px) {
+  .controls.bento-controls #country { flex: 1 1 0; width: 0; min-width: 0; }
+  .controls.bento-controls { min-width: 0; max-width: 100%; }
+  .controls.bento-controls .bento-premium { flex: none; }
+}
+
+/* Citizen Dashboard 360° — values hard-coded for the dark canvas */
+html[data-theme="light"] #czdRoot.czd-root { --muted: #5D6068; --faint: #5D6068; }
+html[data-theme="light"] #czdRoot .czd-tab.is-on, html[data-theme="light"] #czdRoot .czd-tab.is-on:hover,
+html[data-theme="light"] #czdRoot .czd-btn--primary .czd-ico,
+html[data-theme="light"] #czdRoot .czd-day.is-on .czd-day__name, html[data-theme="light"] #czdRoot .czd-day.is-on .czd-day__kcal,
+html[data-theme="light"] #czdRoot .czd-child.is-on, html[data-theme="light"] #czdRoot .czd-child.is-on *,
+html[data-theme="light"] #czdRoot .czd-btn--save, html[data-theme="light"] #czdRoot .czd-btn--save * { color: var(--text-on-lime); }
+html[data-theme="light"] #czdRoot .czdb-badge { fill: var(--text-on-lime); }
+html[data-theme="light"] #czdRoot .czdb-axis { fill: var(--text-secondary); }
+html[data-theme="light"] #czdRoot .czdb-axis.is-today { fill: var(--text-primary); }
+html[data-theme="light"] #czdRoot .czdb-goal, html[data-theme="light"] #czdRoot .czd-col__target,
+html[data-theme="light"] #czdRoot .czd-radar__ring, html[data-theme="light"] #czdRoot .czd-radar__spoke,
+html[data-theme="light"] #czdRoot .czd-chart__grid, html[data-theme="light"] #czdRoot .czd-ring__ticks line { stroke: rgba(24, 25, 28, .2); }
+html[data-theme="light"] #czdRoot .czd-gauge__track { stroke: var(--bg-card-secondary); }
+html[data-theme="light"] #czdRoot .czd-col__label, html[data-theme="light"] #czdRoot .czd-col__target-label { fill: var(--text-secondary); }
+html[data-theme="light"] #czdRoot .czdb-chip--short { color: var(--accent-red); }
+html[data-theme="light"] #czdRoot .czd-habit--blue .czd-habit__track i { background: #0E7C8B; }
+html[data-theme="light"] #czdRoot .czd-chip, html[data-theme="light"] #czdRoot .czd-iconbtn { border-color: var(--border-subtle); }
+html[data-theme="light"] #czdRoot .czd-preset, html[data-theme="light"] #czdRoot .czd-tabs,
+html[data-theme="light"] #czdRoot .czd-meal__head { background: var(--bg-card-primary); }
+html[data-theme="light"] #czdRoot .czd-planbar { background: var(--bg-card-primary); }
+html[data-theme="light"] #czdRoot .czd-preset.is-on, html[data-theme="light"] #czdRoot .czd-preset[aria-pressed="true"] { background: var(--accent-lime); color: var(--text-on-lime); }
+html[data-theme="light"] #czdRoot .czdb-calendar, html[data-theme="light"] #czdRoot .czdb-day,
+html[data-theme="light"] #czdRoot .czdb-cal-foot b { color: var(--text-primary); }
+html[data-theme="light"] #czdRoot .czdb-calendar .czdb-head p, html[data-theme="light"] #czdRoot .czdb-dow,
+html[data-theme="light"] #czdRoot .czdb-day.is-future, html[data-theme="light"] #czdRoot .czdb-cal-foot { color: var(--text-secondary); }
+html[data-theme="light"] #czdRoot .czdb-day.is-on { background: var(--accent-blue); color: #FFFFFF; }
+html[data-theme="light"] #czdRoot .czdb-day.is-today { background: var(--accent-lime); color: var(--text-on-lime); box-shadow: 0 0 0 3px rgba(92, 122, 0, .22); }
+html[data-theme="light"] #czdRoot .czdb-chip--light { background: var(--bg-card-secondary); color: var(--text-primary); }
+html[data-theme="light"] #czdRoot .czdb-legend i { background: var(--accent-blue); }
+html[data-theme="light"] #czdRoot .czdb-legend i.is-today, html[data-theme="light"] #czdRoot .czdb-legend i:last-of-type { background: var(--accent-lime); }
+@media (max-width: 980px) { html[data-theme="light"] .bento-dock { background: rgba(255, 255, 255, .82); } }
