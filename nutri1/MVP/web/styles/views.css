@@ -1664,6 +1664,134 @@ html.vt-lock { overflow: hidden; }
   #foodcloud .vf-kpi b { font-size: 1.375rem; }
 }
 
+/* 9b. DISH CARDS inside #foodcloud (TASK 5 · views/view-foodcloud-cards.js) ------- */
+html.vc-lock { overflow: hidden; }
+#foodcloud .vc-head { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+#foodcloud .vc-head > div { flex: 1 1 280px; min-width: 0; }
+#foodcloud .vc-head p { color: var(--text-secondary); margin-top: 2px; }
+#foodcloud .vc-kicker { display: block; color: var(--accent-lime); font-size: var(--fs-meta); font-weight: 700; letter-spacing: .08em; }
+#foodcloud .vc-badge { background: var(--bg-well); color: var(--accent-orange); }
+#foodcloud .vc-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; scrollbar-width: thin; }
+#foodcloud .vc-chip { flex: none; width: auto; min-height: 44px; padding: 0 16px; border-radius: 9999px; border: 1px solid var(--border-subtle); background: var(--bg-card-secondary); color: var(--text-soft, #C4C6CC); font: inherit; font-weight: 600; white-space: nowrap; cursor: pointer; }
+#foodcloud .vc-chip:hover { color: var(--text-primary); border-color: var(--border-strong); }
+#foodcloud .vc-chip[aria-pressed="true"] { background: var(--accent-lime); border-color: transparent; color: var(--text-on-lime); }
+#foodcloud .vc-card > .vc-note { display: flex; gap: 8px; margin-top: 14px; color: var(--text-secondary); font-size: var(--fs-meta); line-height: 1.5; }
+#foodcloud .vc-note .bento-icon { width: 16px; height: 16px; margin-top: 2px; }
+
+/* Rank palette (the card is an object: same colours in dark and light themes) */
+#foodcloud .vc-rank--icon   { --vc-a: #E6FF8A; --vc-b: #B9E33A; --vc-ink: #18191C; }
+#foodcloud .vc-rank--gold   { --vc-a: #FFD98A; --vc-b: #F59B42; --vc-ink: #18191C; }
+#foodcloud .vc-rank--silver { --vc-a: #D5D9FB; --vc-b: #8F88E8; --vc-ink: #18191C; }
+#foodcloud .vc-rank--bronze { --vc-a: #E9B48E; --vc-b: #B9744A; --vc-ink: #18191C; }
+
+#foodcloud .vc-tiles { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 12px; }
+#foodcloud .vc-tiles li { min-width: 0; animation: vcIn .45s ease both; animation-delay: calc(var(--i, 0) * 45ms); }
+@keyframes vcIn { from { opacity: 0; transform: translateY(12px) scale(.97); } }
+#foodcloud .vc-tile { position: relative; display: block; width: 100%; aspect-ratio: 4 / 5; padding: 0; border: 2px solid transparent; border-radius: var(--radius-inner, 22px); overflow: hidden; background: var(--bg-well); color: #fff; font: inherit; text-align: left; cursor: pointer; transition: transform .25s ease, border-color .25s; }
+#foodcloud .vc-tile:hover, #foodcloud .vc-tile:focus-visible { transform: translateY(-4px); border-color: var(--vc-b); }
+#foodcloud .vc-tile:focus-visible { outline: 2px solid var(--accent-lime); outline-offset: 2px; }
+#foodcloud .vc-tile__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+#foodcloud .vc-tile:hover .vc-tile__img { transform: scale(1.07); }
+#foodcloud .vc-tile::after { content: ""; position: absolute; inset: 35% 0 0; background: linear-gradient(180deg, transparent, rgba(10, 10, 12, .88)); pointer-events: none; }
+#foodcloud .vc-tile__ovr { position: absolute; z-index: 1; left: 10px; top: 10px; display: grid; justify-items: center; min-width: 50px; padding: 6px 8px 5px; border-radius: 14px; background: linear-gradient(160deg, var(--vc-a), var(--vc-b)); color: var(--vc-ink); line-height: 1; box-shadow: 0 6px 16px rgba(0, 0, 0, .35); }
+#foodcloud .vc-tile__ovr b { font-size: 1.5rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+#foodcloud .vc-tile__ovr small { margin-top: 2px; font-size: .75rem; font-weight: 800; letter-spacing: .06em; }
+#foodcloud .vc-tile__rank { position: absolute; z-index: 1; right: 10px; top: 10px; padding: 3px 10px; border-radius: 9999px; background: rgba(17, 18, 20, .72); color: var(--vc-a); font-size: var(--fs-meta); font-weight: 700; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+#foodcloud .vc-tile__txt { position: absolute; z-index: 1; left: 12px; right: 12px; bottom: 12px; display: grid; gap: 2px; }
+#foodcloud .vc-tile__txt b { font-size: 1rem; line-height: 1.25; }
+#foodcloud .vc-tile__txt small { font-size: var(--fs-meta); opacity: .85; }
+
+/* Dialog */
+#foodcloud .vc-overlay { position: fixed; inset: 0; z-index: 9990; display: grid; place-items: center; padding: 16px; background: rgba(10, 10, 12, .78); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px); animation: vcFade .2s ease both; }
+@keyframes vcFade { from { opacity: 0; } }
+#foodcloud .vc-dialog { width: min(880px, 100%); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); overflow-y: auto; padding: 18px 22px 22px; border-radius: var(--radius-card, 28px); background: var(--bg-card-primary); border: 1px solid var(--border-strong); box-shadow: 0 30px 80px rgba(0, 0, 0, .5); outline: none; animation: vcPop .3s cubic-bezier(.2, .9, .3, 1.15) both; }
+@keyframes vcPop { from { opacity: 0; transform: translateY(18px) scale(.96); } }
+#foodcloud .vc-dialog.is-next { animation: vcNext .3s ease both; }
+#foodcloud .vc-dialog.is-prev { animation: vcPrev .3s ease both; }
+@keyframes vcNext { from { opacity: .3; transform: translateX(28px); } }
+@keyframes vcPrev { from { opacity: .3; transform: translateX(-28px); } }
+#foodcloud .vc-overlay.is-still, #foodcloud .vc-overlay.is-still .vc-dialog { animation: none; }
+#foodcloud .vc-dialog.is-next, #foodcloud .vc-dialog.is-prev { }
+#foodcloud .vc-overlay:has(.is-next), #foodcloud .vc-overlay:has(.is-prev) { animation: none; }
+#foodcloud .vc-dialog__bar { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; }
+#foodcloud .vc-dialog__pos { flex: 1; color: var(--text-secondary); font-size: var(--fs-meta); font-weight: 600; font-variant-numeric: tabular-nums; }
+#foodcloud .vc-ibtn { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid var(--border-subtle); background: var(--bg-card-secondary); color: var(--text-primary); cursor: pointer; }
+#foodcloud .vc-ibtn:hover { border-color: var(--border-strong); }
+#foodcloud .vc-ibtn:focus-visible, #foodcloud .vc-how summary:focus-visible, #foodcloud .vc-chip:focus-visible { outline: 2px solid var(--accent-lime); outline-offset: 2px; }
+#foodcloud .vc-dialog__body { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 24px; align-items: center; }
+
+/* The player card */
+#foodcloud .vc-fut-wrap { perspective: 900px; justify-self: center; width: 100%; max-width: 300px; filter: drop-shadow(0 18px 30px rgba(0, 0, 0, .45)); }
+#foodcloud .vc-fut { position: relative; display: grid; justify-items: center; padding: 26px 20px 46px; color: var(--vc-ink); text-align: center; overflow: hidden;
+  background: radial-gradient(circle at 20% 0%, rgba(255, 255, 255, .55), transparent 45%), linear-gradient(160deg, var(--vc-a) 0%, var(--vc-b) 100%);
+  clip-path: polygon(8% 0, 92% 0, 100% 6%, 100% 86%, 50% 100%, 0 86%, 0 6%);
+  transition: transform .15s ease-out; transform-style: preserve-3d; animation: vcFlip .7s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes vcFlip { from { transform: rotateY(-70deg) scale(.9); opacity: 0; } }
+#foodcloud .vc-fut::before { content: ""; position: absolute; inset: 6px; clip-path: polygon(8% 0, 92% 0, 100% 6%, 100% 86%, 50% 100%, 0 86%, 0 6%); border: 0; background: repeating-linear-gradient(135deg, rgba(255, 255, 255, .10) 0 2px, transparent 2px 12px); pointer-events: none; }
+#foodcloud .vc-fut__shine { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, .55) 50%, transparent 70%); background-size: 250% 100%; background-position: var(--sx, 120%) 0; mix-blend-mode: soft-light; animation: vcShine 1.6s ease .5s both; }
+@keyframes vcShine { from { background-position: -80% 0; } to { background-position: 120% 0; } }
+#foodcloud .vc-fut__top { position: relative; display: grid; grid-template-columns: 66px minmax(0, 1fr); gap: 8px; align-items: start; width: 100%; }
+#foodcloud .vc-fut__ovr { display: grid; justify-items: center; gap: 2px; padding-top: 4px; line-height: 1; }
+#foodcloud .vc-fut__ovr b { font-size: 3rem; font-weight: 800; letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+#foodcloud .vc-fut__ovr span { font-size: 1rem; font-weight: 800; letter-spacing: .06em; }
+#foodcloud .vc-fut__ovr i { width: 34px; height: 2px; margin: 6px 0; background: currentColor; opacity: .45; }
+#foodcloud .vc-fut__ovr em { font-style: normal; font-size: var(--fs-meta); font-weight: 800; text-transform: uppercase; letter-spacing: .04em; }
+#foodcloud .vc-fut__pic { aspect-ratio: 1; border-radius: 50%; overflow: hidden; border: 4px solid rgba(24, 25, 28, .85); box-shadow: 0 8px 20px rgba(0, 0, 0, .3); }
+#foodcloud .vc-fut__img { display: block; width: 100%; height: 100%; object-fit: cover; }
+#foodcloud .vc-dialog .vc-fut__name { position: relative; flex: none; width: 100%; margin: 12px 0 2px; padding-bottom: 8px; border-bottom: 2px solid rgba(24, 25, 28, .35); font-size: 1.1875rem; font-weight: 800; line-height: 1.2; text-transform: uppercase; letter-spacing: .01em; color: var(--vc-ink); }
+#foodcloud .vc-dialog .vc-fut__origin { position: relative; display: inline-flex; align-items: center; gap: 5px; margin: 6px 0 8px; font-size: var(--fs-meta); font-weight: 700; color: var(--vc-ink); }
+#foodcloud .vc-fut__origin .bento-icon { width: 14px; height: 14px; }
+#foodcloud .vc-dialog .vc-fut__stats { position: relative; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3px 18px; width: 86%; }
+#foodcloud .vc-fut__stats li { display: flex; align-items: baseline; gap: 7px; font-variant-numeric: tabular-nums; }
+#foodcloud .vc-fut__stats b { min-width: 28px; text-align: right; font-size: 1.25rem; font-weight: 800; }
+#foodcloud .vc-fut__stats span { font-size: .9375rem; font-weight: 600; letter-spacing: .04em; }
+#foodcloud .vc-dialog .vc-fut__foot { position: relative; margin-top: 8px; font-size: var(--fs-meta); font-weight: 700; opacity: .8; color: var(--vc-ink); max-width: 70%; }
+
+/* Radar + bars */
+#foodcloud .vc-detail { display: grid; gap: 8px; min-width: 0; }
+#foodcloud .vc-detail__hex { justify-self: center; width: min(300px, 100%); }
+#foodcloud .vc-hex { display: block; width: 100%; height: auto; overflow: visible; }
+#foodcloud .vc-hex__ring { fill: none; stroke: var(--border-strong); stroke-width: 1; }
+#foodcloud .vc-hex__grow { transform-origin: 150px 140px; animation: vcHex .9s cubic-bezier(.2, .9, .3, 1.15) .15s both; }
+@keyframes vcHex { from { transform: scale(0) rotate(-40deg); opacity: 0; } }
+#foodcloud .vc-hex__shape { fill: color-mix(in srgb, var(--vc-b) 34%, transparent); stroke: var(--vc-b); stroke-width: 2.5; stroke-linejoin: round; }
+#foodcloud .vc-hex__dot { fill: var(--bg-card-primary); stroke: var(--vc-b); stroke-width: 2.5; }
+#foodcloud .vc-hex__lab { fill: var(--text-secondary); font: 700 13px var(--font); letter-spacing: .05em; }
+#foodcloud .vc-hex__val { fill: var(--text-primary); font: 700 14px var(--font); }
+#foodcloud .vc-dialog .vc-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 18px; }
+#foodcloud .vc-stat { display: grid; gap: 4px; min-width: 0; align-content: start; }
+#foodcloud .vc-stat__top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+#foodcloud .vc-stat__top span { font-weight: 600; }
+#foodcloud .vc-stat__top b { font-size: 1.0625rem; font-variant-numeric: tabular-nums; color: var(--tone); }
+#foodcloud .vc-stat small { color: var(--text-secondary); font-size: var(--fs-meta); line-height: 1.35; }
+#foodcloud .vc-stat--hi { --tone: var(--accent-lime); }
+#foodcloud .vc-stat--mid { --tone: var(--accent-orange); }
+#foodcloud .vc-stat--lo { --tone: var(--accent-red); }
+#foodcloud .vc-bar { display: block; height: 8px; border-radius: 8px; background: var(--bg-well); overflow: hidden; }
+#foodcloud .vc-bar > i { display: block; height: 100%; width: var(--w); border-radius: 8px; background: var(--tone); animation: vcGrow .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(.25s + var(--i, 0) * 70ms); }
+@keyframes vcGrow { from { width: 0; } }
+#foodcloud .vc-how { margin-top: 16px; border-radius: 18px; background: var(--bg-well); }
+#foodcloud .vc-how summary { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border-radius: 18px; cursor: pointer; color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); font-weight: 600; list-style: none; }
+#foodcloud .vc-how summary::-webkit-details-marker { display: none; }
+#foodcloud .vc-how summary .bento-icon { width: 16px; height: 16px; }
+#foodcloud .vc-dialog .vc-how p { padding: 0 14px 14px; color: var(--text-secondary); font-size: var(--fs-meta); line-height: 1.5; }
+
+@media (max-width: 1280px) { #foodcloud .vc-tiles { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (max-width: 980px) { #foodcloud .vc-tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 760px) {
+  #foodcloud .vc-dialog__body { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  #foodcloud .vc-dialog { padding: 14px 16px 18px; }
+  #foodcloud .vc-fut-wrap { max-width: 270px; }
+}
+@media (max-width: 600px) {
+  #foodcloud .vc-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  #foodcloud .vc-tile__rank { display: none; }
+  #foodcloud .vc-dialog .vc-stats { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #foodcloud .vc-host *, #foodcloud .vc-host *::before { animation: none !important; transition: none !important; }
+}
+
 /* 10. MINISTRY OF HEALTH (SESSION 10) ------------------------------------------ */
 #health .vg { display: grid; gap: var(--gap); }
 #health .vg > *, #health .vg-grid > * { margin: 0; min-width: 0; }

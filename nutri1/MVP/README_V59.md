@@ -17,7 +17,9 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `views/view-network-team.js` | Medical team mounted inside the Network view (`#vnTeam`): fictional doctors, simulated presence, appointment booking and teleconsultation room |
 | `assets/doctors/*.jpg` | AI-generated doctor portraits (not real people) |
 | `views/view-marketplace-lab.js` | Nutrition lab mounted inside the Healthy Food Marketplace (`#vmLab`) + product photos: indicative hand-entered composition, glycaemic / bioavailability / density simulations, comparator, ranking by physiological need |
-| `assets/market/*.jpg` | AI-generated product photos (`fruits`, `legflour`, `grainmix` are temporary stand-ins) |
+| `assets/market/*.jpg` | AI-generated product photos |
+| `views/view-foodcloud-cards.js` | African dish grid + football-style nutrition card dialog mounted inside the Food Cloud (`#vfCards`); indicative per-serving estimates, playful 0–99 ratings |
+| `assets/dishes/*.jpg` | AI-generated dish photos |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |
