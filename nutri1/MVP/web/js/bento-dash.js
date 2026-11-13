@@ -323,6 +323,7 @@
 
   /* ---- Board: a complete dashboard (mandate, live KPIs, overview panels, flow map, explorer) ----
      cfg = { ns, root (the view <section>), slot (id of the placeholder re-emitted by the host view),
+             countrySelect (id of the view's own country <select>; default: the header #country),
              defs (15 indicators), families, over (overview chart defs), layout ([{ o: index in over | 'flows', cls }]),
              flows ({ left, right, links }), kpis ([{ k, base, step }]) }
      Dictionary keys: <ns>.mandate(.t), <ns>.kN, <ns>.oN.t/.s (N = position in layout), <ns>.fam.*, <ns>.l.*, <ns>.iN.t/.c/.a
@@ -330,7 +331,7 @@
   function Board(cfg) {
     var NS = cfg.ns, seed = '', model = null, over = null, explorer = null, kpi = [], paused = false;
     var host = doc.createElement('div'); host.className = 'nd-host';
-    function country() { var sel = doc.getElementById('country'); return (sel && sel.value) || 'TG'; }
+    function country() { var sel = doc.getElementById(cfg.countrySelect || 'country') || doc.getElementById('country'); return (sel && sel.value) || 'TG'; }
     function build() {
       seed = NS + ':' + country();
       model = new Model(cfg.defs, seed); over = new Model(cfg.over, seed + ':o');
