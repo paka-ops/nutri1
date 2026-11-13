@@ -1978,16 +1978,16 @@ html.vc-lock { overflow: hidden; }
   #agri .vr-table td::before { content: attr(data-label) " : "; color: var(--text-soft-2, #B0B2B9); font-size: var(--fs-meta); }
 }
 
-/* 11b. AGRI DASHBOARD layout (TASK 6 · views/view-agri-dash.js) -------------------- */
-#agri .vrd-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: stretch; }
-#agri .vrd-grid > * { margin: 0; min-width: 0; }
-#agri .vrd-p--wide { grid-column: span 8; }
-#agri .vrd-p--gauge { grid-column: span 4; }
-#agri .vrd-p--third { grid-column: span 4; }
-#agri .vrd-p--third + .vrd-p--third { grid-column: span 8; }
-#agri .vrd-p--third:last-child { grid-column: 1 / -1; }
-#agri .vrd-p--third:last-child .nd-svg { max-width: 860px; margin: 0 auto; }
-@media (max-width: 1100px) { #agri .vrd-grid > .vrd-p { grid-column: 1 / -1; } }
+/* 11b. DASHBOARD PANEL GRID (TASKS 6–11 · .vrd-*, shared by the institutional dashboards) -------------------- */
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: stretch; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-grid > * { margin: 0; min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-p--wide { grid-column: span 8; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-p--gauge { grid-column: span 4; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-p--third { grid-column: span 4; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-p--third + .vrd-p--third { grid-column: span 8; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-p--third:last-child { grid-column: 1 / -1; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-p--third:last-child .nd-svg { max-width: 860px; margin: 0 auto; }
+@media (max-width: 1100px) { :is(#agri, #health, #unicef, #fao, #wfp, #who) .vrd-grid > .vrd-p { grid-column: 1 / -1; } }
 
 /* 12. INSTITUTION VIEWS — shared components (.vi-*)  (SESSION 12: UNICEF) -------
    Used by views/view-unicef.js and the institution views that follow. */

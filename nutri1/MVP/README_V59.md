@@ -22,6 +22,7 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `assets/dishes/*.jpg` | AI-generated dish photos |
 | `js/bento-dash.js` | Shared engine for the animated institutional dashboards (`NutriBentoDash`: seeded live model, SVG/CSS charts, 15-indicator explorer); styles `.nd-*` (views.css block 12h) |
 | `views/view-agri-dash.js` | Agriculture: data mandate, simulated real-time dashboard and 15 indicators, mounted into `#vrDash`; all texts in its dictionary (`agd.*`) |
+| `views/view-health-dash.js` | Health: data mandate, simulated real-time dashboard and 15 indicators (`NutriBentoDash.Board`), mounted into `#vgDash`; texts in its dictionary (`hsd.*`) |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |

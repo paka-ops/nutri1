@@ -73,7 +73,7 @@
        { id, type: line|bars|stack|donut|gauge|radar|heat, value, min, max, vol, dec, unit, good: 'up'|'down',
          labels: [...], vals: [...]            (bars, donut, radar, gauge parts)
          series: [...], cols: [...], grid: [[...]]   (stack: series × cols; heat: rows = labels, cols)
-         s2: { off, name }                     (line: second series = first + off) }                              */
+         s2: { off, name, flat }               (line: second series = first + off, or the constant `flat`, e.g. a threshold) }                              */
   function Model(defs, seed) {
     var self = this, N = 28;
     this.defs = defs; this.st = {}; this.rand = rng(seed);
@@ -82,7 +82,7 @@
       var v = clamp(d.value + (r() - 0.5) * span * 0.08, d.min, d.max), hist = [];
       for (var i = 0; i < N; i++) { hist.unshift(v); v = clamp(v + (r() - 0.5) * 2 * vol - (d.trend || 0) * vol * 0.25, d.min, d.max); }
       var s = { v: hist[N - 1], prev: hist[N - 2], hist: hist, vol: vol };
-      if (d.s2) { s.hist2 = hist.map(function (x, i) { return x + d.s2.off + Math.sin(i / 3 + r() * 6) * vol * 1.5; }); }
+      if (d.s2) { s.hist2 = hist.map(function (x, i) { return d.s2.flat != null ? d.s2.flat : x + d.s2.off + Math.sin(i / 3 + r() * 6) * vol * 1.5; }); }
       if (d.vals) s.vals = d.vals.map(function (x) { return x * (0.94 + r() * 0.12); });
       if (d.grid) s.grid = d.grid.map(function (row) { return row.map(function (x) { return x * (0.92 + r() * 0.16); }); });
       self.st[d.id] = s;
@@ -95,7 +95,7 @@
       s.prev = s.v;
       s.v = clamp(s.v + (r() - 0.5) * 2 * s.vol + pull, d.min, d.max);
       s.hist.push(s.v); s.hist.shift();
-      if (s.hist2) { s.hist2.push(s.v + d.s2.off + (r() - 0.5) * s.vol * 3); s.hist2.shift(); }
+      if (s.hist2) { s.hist2.push(d.s2.flat != null ? d.s2.flat : s.v + d.s2.off + (r() - 0.5) * s.vol * 3); s.hist2.shift(); }
       if (s.vals) s.vals = s.vals.map(function (x, i) { return Math.max(0, x + (d.vals[i] - x) * 0.15 + (r() - 0.5) * d.vals[i] * 0.07); });
       if (s.grid) s.grid = s.grid.map(function (row, i) { return row.map(function (x, j) { return Math.max(0, x + (d.grid[i][j] - x) * 0.15 + (r() - 0.5) * d.grid[i][j] * 0.1); }); });
     });
@@ -321,8 +321,68 @@
   }
   function note() { return '<p class="nd-note">' + ico('info') + '<span>' + esc(t('nd.note')) + '</span></p>'; }
 
+  /* ---- Board: a complete dashboard (mandate, live KPIs, overview panels, flow map, explorer) ----
+     cfg = { ns, root (the view <section>), slot (id of the placeholder re-emitted by the host view),
+             defs (15 indicators), families, over (overview chart defs), layout ([{ o: index in over | 'flows', cls }]),
+             flows ({ left, right, links }), kpis ([{ k, base, step }]) }
+     Dictionary keys: <ns>.mandate(.t), <ns>.kN, <ns>.oN.t/.s (N = position in layout), <ns>.fam.*, <ns>.l.*, <ns>.iN.t/.c/.a
+     Returns { mount, tick, pause, state }. Every figure is simulated and seeded per country. */
+  function Board(cfg) {
+    var NS = cfg.ns, seed = '', model = null, over = null, explorer = null, kpi = [], paused = false;
+    var host = doc.createElement('div'); host.className = 'nd-host';
+    function country() { var sel = doc.getElementById('country'); return (sel && sel.value) || 'TG'; }
+    function build() {
+      seed = NS + ':' + country();
+      model = new Model(cfg.defs, seed); over = new Model(cfg.over, seed + ':o');
+      var r = rng(seed + ':k');
+      kpi = cfg.kpis.map(function (k) { return Math.round(k.base * (0.85 + r() * 0.3)); });
+      if (explorer) explorer.cfg.model = model;   /* one explorer for the page: its click handler is bound once */
+      else explorer = new Explorer({ ns: NS, defs: cfg.defs, families: cfg.families, model: model });
+    }
+    function oChart(n) { var d = cfg.over[cfg.layout[n].o]; return chart(d, over.st[d.id], NS, { label: t(NS + '.o' + (n + 1) + '.t'), h: n === 0 ? 220 : 230 }); }
+    function html() {
+      var panels = cfg.layout.map(function (L, n) {
+        var body = L.o === 'flows' ? flows({ left: cfg.flows.left, right: cfg.flows.right, links: cfg.flows.links, label: t(NS + '.o' + (n + 1) + '.t') }, NS) : oChart(n);
+        return panel('vrd-p vrd-p--' + L.cls, t(NS + '.o' + (n + 1) + '.t'), t(NS + '.o' + (n + 1) + '.s'), body, L.o === 'flows' ? '' : 'data-nd-o="' + n + '"');
+      }).join('');
+      return '<div class="nd">' + mandate(NS) +
+        '<ul class="nd-kpis">' + cfg.kpis.map(function (k, i) { return '<li><span>' + esc(t(NS + '.' + k.k)) + '</span><b data-nd-kpi="' + i + '">' + fmt(kpi[i], 0) + '</b></li>'; }).join('') + '</ul>' +
+        '<div class="vrd-grid">' + panels + '</div>' + explorer.html() + note() + '</div>';
+    }
+    function paint() { host.innerHTML = html(); }
+    function mount() {
+      var slot = doc.getElementById(cfg.slot);
+      if (!slot) return;
+      if (seed !== NS + ':' + country()) { build(); paint(); }
+      if (host.parentNode !== slot) slot.appendChild(host);
+    }
+    function tick() {
+      if (paused || !host.firstChild) return;
+      model.tick(); over.tick();
+      cfg.kpis.forEach(function (k, i) {
+        kpi[i] += Math.round(k.step * (0.5 + model.rand() * 1.5));
+        var el = host.querySelector('[data-nd-kpi="' + i + '"]'); if (el) el.textContent = fmt(kpi[i], 0);
+      });
+      cfg.layout.forEach(function (L, n) {
+        var el = host.querySelector('[data-nd-o="' + n + '"]');
+        if (el) { el.classList.add('is-live'); el.innerHTML = oChart(n); }
+      });
+      explorer.tick();
+    }
+    build(); explorer.bind(host); paint();
+    live(cfg.root, tick, 2600);
+    I18N.onChange(function () { paint(); });
+    doc.addEventListener('nutri:countryChanged', function () { mount(); });
+    return {
+      mount: mount, tick: tick,
+      pause: function (v) { paused = v !== false; },
+      state: function () { return { country: country(), fam: explorer.fam, sel: explorer.sel, shown: explorer.list().length, value: model.st[explorer.sel].v }; }
+    };
+  }
+
+
   global.NutriBentoDash = {
-    Model: Model, Explorer: Explorer, chart: chart, flows: flows, spark: spark, value: value, delta: delta, live: live,
+    Board: Board, Model: Model, Explorer: Explorer, chart: chart, flows: flows, spark: spark, value: value, delta: delta, live: live,
     mandate: mandate, panel: panel, note: note, ico: ico, fmt: fmt, esc: esc, rng: rng, reduced: reduced
   };
 })(window);

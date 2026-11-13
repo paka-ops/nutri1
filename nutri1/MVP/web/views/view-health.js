@@ -6,6 +6,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js, js/bento-sample-data.js
    Styles     : styles/views.css  (.vg-*)
+   Hosts      : #vgDash — simulated real-time dashboard and the 15 indicators (views/view-health-dash.js)
    Note       : the figures are the illustrative sample values of the original prototype
                 (demoCountryMetrics, six countries + one placeholder). They are NOT official
                 statistics. The prototype's trend charts, "Health GIS" pins, live KPI bar and
@@ -191,6 +192,7 @@
         '<p class="vg-sub">' + esc(t('moh.sub', { country: name })) + '</p></div></div><span class="pill vg-demo">' + esc(t('moh.demo')) + '</span></div>' +
         (own ? '' : '<p class="vg-note vg-note--warn">' + ico('info') + '<span>' + esc(t('moh.placeholder', { country: name })) + '</span></p>') +
         '<ul class="vg-kpis" aria-label="' + esc(t('moh.kpis')) + '">' + kpisHtml() + '</ul></section>' +
+      '<div id="vgDash" class="vg-dash"></div>' +
       '<div class="vg-grid">' +
         '<section class="card vg-half">' + head('child', t('moh.child.title')) + '<p class="vg-sub">' + esc(t('moh.child.sub')) + '</p>' + barsHtml(CHILD, 100) + '</section>' +
         '<section class="card vg-half">' + head('heart', t('moh.ncd.title')) + '<p class="vg-sub">' + esc(t('moh.ncd.sub')) + '</p>' + barsHtml(NCD, 40) + '</section>' +
@@ -207,6 +209,8 @@
             return '<tr><th scope="row">' + esc(t('moh.prod.' + i)) + '</th><td data-label="' + esc(t('moh.prod.c2')) + '">' + esc(t('moh.prod.' + i + '.o')) + '</td><td data-label="' + esc(t('moh.prod.c3')) + '">' + esc(t('moh.prod.' + i + '.u')) + '</td></tr>'; }).join('') +
           '</tbody></table></div><p class="vg-note">' + ico('info') + '<span>' + esc(t('moh.note')) + '</span></p></section>' +
       '</div></div>';
+    var dash = global.NutriBentoViews && global.NutriBentoViews.healthDash;   /* TASK 7: animated dashboard + 15 indicators */
+    if (dash) dash.mount();
   }
 
   root.addEventListener('change', function (ev) {
