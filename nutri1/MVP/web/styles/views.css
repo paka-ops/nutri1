@@ -1102,7 +1102,7 @@ html.vt-lock { overflow: hidden; }
 #network .vt-stage__name { bottom: 12px; max-width: calc(100% - 150px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block; }
 #network .vt-self { position: absolute; right: 12px; bottom: 12px; display: grid; place-content: center; justify-items: center; gap: 2px; width: 112px; aspect-ratio: 4 / 3; border-radius: 14px; border: 2px solid rgba(255, 255, 255, .5); background: linear-gradient(135deg, #4E65EC, #8F88E8); color: #fff; }
 #network .vt-self b { font-size: 1rem; }
-#network .vt-self small { font-size: .75rem; opacity: .85; }
+#network .vt-self small { font-size: .75rem; opacity: .85; text-align: center; padding: 0 4px; }
 #network .vt-self b:not(:empty) + small { display: none; }
 #network .vt-self.is-off { background: #2B2C31; }
 #network .vt-wave { position: absolute; right: 12px; top: 12px; display: inline-flex; align-items: center; gap: 3px; height: 28px; padding: 0 10px; border-radius: 9999px; background: rgba(17, 18, 20, .72); }
