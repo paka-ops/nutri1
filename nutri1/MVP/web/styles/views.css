@@ -1418,6 +1418,7 @@ html.vt-lock { overflow: hidden; }
 #marketplace .vl-cols--3, #marketplace .vl-macro { grid-template-columns: minmax(0, 1fr) 76px 76px; }
 #marketplace .vl-cols--4, #marketplace .vl-micro { grid-template-columns: minmax(0, 1fr) 76px 76px 72px; }
 #marketplace .vl-micros { margin-bottom: 0; }
+#marketplace .vl-cols--4 { align-items: end; }
 #marketplace .vl-macros { margin-bottom: 14px; }
 #marketplace .vl-macro, #marketplace .vl-micro { display: grid; gap: 3px 8px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--border-subtle); font-variant-numeric: tabular-nums; }
 #marketplace .vl-macro--sub > span { padding-left: 14px; color: var(--text-secondary); }
