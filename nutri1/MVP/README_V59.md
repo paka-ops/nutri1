@@ -14,6 +14,8 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `styles/theme-light.css`, `js/bento-theme.js` | Optional light theme (`<html data-theme="light">`), toggle in the header, stored in `localStorage` (`nutri_theme`). Dark stays the default |
 | `assets/scanner/*.jpg` | AI-generated sample photos used by the scanner simulation |
 | `views/view-ai-predict.js` | Predictive health lab mounted inside the AI view (`#vaPredict`): illustrative, hand-weighted risk model — not a trained or validated model |
+| `views/view-network-team.js` | Medical team mounted inside the Network view (`#vnTeam`): fictional doctors, simulated presence, appointment booking and teleconsultation room |
+| `assets/doctors/*.jpg` | AI-generated doctor portraits (not real people) |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |
