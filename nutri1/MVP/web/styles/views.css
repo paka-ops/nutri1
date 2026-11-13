@@ -1978,6 +1978,17 @@ html.vc-lock { overflow: hidden; }
   #agri .vr-table td::before { content: attr(data-label) " : "; color: var(--text-soft-2, #B0B2B9); font-size: var(--fs-meta); }
 }
 
+/* 11b. AGRI DASHBOARD layout (TASK 6 · views/view-agri-dash.js) -------------------- */
+#agri .vrd-grid { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: stretch; }
+#agri .vrd-grid > * { margin: 0; min-width: 0; }
+#agri .vrd-p--wide { grid-column: span 8; }
+#agri .vrd-p--gauge { grid-column: span 4; }
+#agri .vrd-p--third { grid-column: span 4; }
+#agri .vrd-p--third + .vrd-p--third { grid-column: span 8; }
+#agri .vrd-p--third:last-child { grid-column: 1 / -1; }
+#agri .vrd-p--third:last-child .nd-svg { max-width: 860px; margin: 0 auto; }
+@media (max-width: 1100px) { #agri .vrd-grid > .vrd-p { grid-column: 1 / -1; } }
+
 /* 12. INSTITUTION VIEWS — shared components (.vi-*)  (SESSION 12: UNICEF) -------
    Used by views/view-unicef.js and the institution views that follow. */
 .view .vi { display: grid; gap: var(--gap); }
@@ -2165,6 +2176,195 @@ html.vc-lock { overflow: hidden; }
 .view .vi .vi-api .btn { justify-self: start; text-align: left; height: auto; padding-top: 10px; padding-bottom: 10px; white-space: normal; }
 @media (max-width: 1100px) { .view .vi .vi-apis { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (max-width: 640px) { .view .vi .vi-apis { grid-template-columns: minmax(0, 1fr); } }
+
+/* 12h. SHARED ANIMATED DASHBOARDS (.nd-*) (TASKS 6–11 · js/bento-dash.js) --------- */
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd { display: grid; gap: var(--gap); min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd > * { margin: 0; min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd h3 { flex: none; margin: 0; font-size: var(--fs-card-title); font-weight: 600; line-height: 1.3; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd h4 { margin: 0; font-size: 1.0625rem; font-weight: 700; line-height: 1.3; outline: none; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd h5 { display: flex; align-items: center; gap: 8px; margin: 0 0 6px; font-size: var(--fs-meta); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd p { margin: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd ul { list-style: none; margin: 0; padding: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd .bento-icon { flex: none; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-tone--lime { --tone: var(--accent-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-tone--blue { --tone: var(--accent-blue); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-tone--orange { --tone: var(--accent-orange); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-tone--lav { --tone: var(--accent-lavender); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-tone--red { --tone: var(--accent-red); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-tone--sky { --tone: var(--accent-blue-text); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-simtag { background: var(--bg-well); color: var(--accent-orange); white-space: nowrap; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kicker { display: block; margin-bottom: 4px; color: var(--accent-lime); font-size: var(--fs-meta); font-weight: 700; letter-spacing: .08em; }
+
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-mandate { display: flex; align-items: flex-start; gap: 14px; flex-wrap: wrap; background-image: radial-gradient(circle at 0% 0%, color-mix(in srgb, var(--accent-lime) 14%, transparent), transparent 46%), radial-gradient(circle at 100% 100%, color-mix(in srgb, var(--accent-blue) 20%, transparent), transparent 52%); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-mandate > div { flex: 1 1 420px; min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-mandate h3 { font-size: var(--fs-section); font-weight: 700; margin-bottom: 6px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-mandate p { max-width: 86ch; color: var(--text-soft, #C4C6CC); font-size: 1rem; line-height: 1.55; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-mandate__ico { display: grid; place-items: center; flex: none; width: 48px; height: 48px; border-radius: 50%; background: var(--accent-lime); color: var(--text-on-lime); animation: ndBeat 2.6s ease-in-out infinite; }
+@keyframes ndBeat { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent-lime) 45%, transparent); } 50% { box-shadow: 0 0 0 12px transparent; } }
+
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--gap); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis li { display: grid; gap: 4px; padding: 16px 18px; border-radius: var(--radius-inner, 22px); background: var(--bg-card-primary); border: 1px solid var(--border-subtle); min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis span { color: var(--text-secondary); font-size: var(--fs-meta); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis b { font-size: clamp(1.5rem, 2.2vw, 2.125rem); font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis li:first-child { background: var(--accent-lime); border-color: transparent; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis li:first-child span, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis li:first-child b { color: var(--text-on-lime); }
+
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel { display: flex; flex-direction: column; min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__head { margin-bottom: 12px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__head p { margin-top: 2px; color: var(--text-secondary); font-size: var(--fs-meta); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body { flex: 1; display: grid; align-content: center; gap: 8px; min-width: 0; }
+
+/* Charts */
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-svg { display: block; width: 100%; height: auto; overflow: visible; }
+/* SVG text scales with the drawing: keep wide charts at a readable size and let their box scroll sideways. */
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart { overflow-x: auto; scrollbar-width: thin; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-svg:not(.nd-gauge):not(.nd-radar):not(.nd-spark) { min-width: 560px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-donut .nd-svg { min-width: 0 !important; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-grid { stroke: var(--border-subtle); stroke-width: 1; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-axis { fill: var(--text-secondary); font: 500 13px var(--font); font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-big { fill: var(--text-primary); font: 700 22px var(--font); font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-path { fill: none; stroke: var(--tone); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-area { fill: var(--tone); opacity: .12; stroke: none; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-dot { fill: var(--bg-card-primary); stroke: var(--tone); stroke-width: 3; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-ping { fill: var(--tone); opacity: 0; transform-box: fill-box; transform-origin: center; animation: ndPing 2.6s ease-out infinite; }
+@keyframes ndPing { 0% { opacity: .5; transform: scale(.4); } 80%, 100% { opacity: 0; transform: scale(2.2); } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-track { fill: none; stroke: var(--bg-well); stroke-width: 14; stroke-linecap: round; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-ring { fill: none; stroke: var(--border-strong); stroke-width: 1; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-shape { fill: color-mix(in srgb, var(--tone) 26%, transparent); stroke: var(--tone); stroke-width: 2.5; stroke-linejoin: round; transition: all .8s ease; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-seg { fill: var(--tone); transition: y .8s ease, height .8s ease; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-arc { fill: none; stroke: var(--tone); stroke-width: 16; transition: stroke-dasharray .8s ease, stroke-dashoffset .8s ease; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-spin { transform: rotate(-90deg); transform-origin: 80px 80px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-gauge__fg { fill: none; stroke: var(--tone); stroke-width: 14; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: calc(100 - var(--p)); transition: stroke-dashoffset .9s cubic-bezier(.2, .8, .2, 1), stroke .4s; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-needle { transform: rotate(var(--a)); transform-origin: 120px 125px; transition: transform .9s cubic-bezier(.2, .8, .2, 1.2); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-needle line { stroke: var(--text-primary); stroke-width: 3; stroke-linecap: round; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-needle circle { fill: var(--text-primary); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-gauge { max-width: 320px; margin: 0 auto; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-radarbox { display: flex; align-items: center; justify-content: center; gap: 12px 24px; flex-wrap: wrap; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-radar { flex: 0 1 270px; width: 270px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-radar .nd-axis { font-size: 14px; font-weight: 700; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend--num { flex: 1 1 150px; flex-direction: column; margin: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend--num i { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; background: var(--bg-well); color: var(--text-primary); font-size: var(--fs-meta); font-style: normal; font-weight: 700; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 8px; color: var(--text-secondary); font-size: var(--fs-meta); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend li { display: inline-flex; align-items: center; gap: 8px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend i { flex: none; width: 12px; height: 12px; border-radius: 4px; background: var(--tone); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend b { color: var(--text-primary); font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-legend--col { flex-direction: column; margin: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-donut { display: flex; align-items: center; justify-content: center; gap: 22px; flex-wrap: wrap; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-donut svg { width: min(210px, 100%); flex: none; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bars { display: grid; gap: 10px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bars li { display: grid; grid-template-columns: minmax(84px, 26%) minmax(0, 1fr) auto; gap: 10px; align-items: center; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bars span { color: var(--text-soft, #C4C6CC); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bars b { min-width: 56px; text-align: right; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bar { display: block; height: 12px; border-radius: 12px; background: var(--bg-well); overflow: hidden; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bar > i { display: block; height: 100%; width: var(--w); border-radius: 12px; background: var(--tone); transition: width .8s cubic-bezier(.2, .8, .2, 1); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-heat { display: grid; grid-template-columns: minmax(70px, auto) repeat(var(--cols), minmax(0, 1fr)); gap: 6px; align-items: center; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-heat__col { text-align: center; color: var(--text-secondary); font-size: var(--fs-meta); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-heat__row { color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cell { display: grid; place-items: center; min-height: 38px; border-radius: 10px; font-style: normal; background: color-mix(in srgb, var(--tone) calc(var(--k) * 40% + 6%), var(--bg-well)); transition: background .8s ease; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cell b { font-size: var(--fs-meta); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-flow__bg { fill: none; stroke: var(--tone); opacity: .18; stroke-linecap: round; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-flow__fg { fill: none; stroke: var(--tone); stroke-linecap: round; stroke-dasharray: 3 15; animation: ndFlow 1.3s linear infinite; animation-delay: calc(var(--i) * -170ms); }
+@keyframes ndFlow { to { stroke-dashoffset: -18; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-node { fill: var(--tone); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-node--sink { fill: var(--bg-card-primary); stroke: var(--text-primary); stroke-width: 3; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-spark { display: block; width: 100%; height: 24px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-spark path { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+
+/* Entry animations (first paint of a chart only) */
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-path, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-path { stroke-dasharray: 100; animation: ndDraw 1.3s ease-out both; }
+@keyframes ndDraw { from { stroke-dashoffset: 100; } to { stroke-dashoffset: 0; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-area, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-area { animation: ndFade .8s ease .6s both; }
+@keyframes ndFade { from { opacity: 0; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-shape, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-shape { transform-box: fill-box; transform-origin: center; animation: ndPop .9s cubic-bezier(.2, .9, .3, 1.15) both; }
+@keyframes ndPop { from { transform: scale(0); opacity: 0; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-seg, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-seg { transform-box: fill-box; transform-origin: bottom; animation: ndRise .8s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i) * 70ms); }
+@keyframes ndRise { from { transform: scaleY(0); } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-gauge__fg, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-gauge__fg { animation: ndGauge 1.2s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes ndGauge { from { stroke-dashoffset: 100; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-needle, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-needle { animation: ndNeedle 1.2s cubic-bezier(.2, .8, .2, 1.2) both; }
+@keyframes ndNeedle { from { transform: rotate(-90deg); } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-bar > i { animation: ndGrow .9s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 70ms); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-bars li { --i: inherit; }
+@keyframes ndGrow { from { width: 0; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-cell { animation: ndCell .5s ease both; animation-delay: calc(var(--i) * 45ms); }
+@keyframes ndCell { from { opacity: 0; transform: scale(.6); } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart.is-in .nd-spin, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body:not(.is-live) .nd-spin { animation: ndSpin 1s cubic-bezier(.2, .8, .2, 1) both; }
+@keyframes ndSpin { from { transform: rotate(-270deg); opacity: 0; } }
+
+/* Explorer */
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-head { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-head > div { flex: 1 1 300px; min-width: 0; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-head p { margin-top: 2px; color: var(--text-secondary); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; margin-bottom: 14px; scrollbar-width: thin; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chip { flex: none; display: inline-flex; align-items: center; gap: 8px; width: auto; min-height: 44px; padding: 0 16px; border-radius: 9999px; border: 1px solid var(--border-subtle); background: var(--bg-card-secondary); color: var(--text-soft, #C4C6CC); font: inherit; font-weight: 600; white-space: nowrap; cursor: pointer; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chip b { padding: 1px 8px; border-radius: 9999px; background: var(--bg-well); color: var(--text-secondary); font-size: var(--fs-meta); font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chip:hover { color: var(--text-primary); border-color: var(--border-strong); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chip[aria-pressed="true"] { background: var(--accent-lime); border-color: transparent; color: var(--text-on-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chip[aria-pressed="true"] b { background: color-mix(in srgb, var(--text-on-lime) 16%, transparent); color: var(--text-on-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-split { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--gap); align-items: start; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail { display: grid; gap: 14px; min-width: 0; padding: 18px; border-radius: var(--radius-inner, 22px); background: var(--bg-card-secondary); scroll-margin-top: 12px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail__top { display: flex; align-items: flex-start; gap: 12px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail__n { flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 16px; background: var(--accent-lime); color: var(--text-on-lime); font-size: 1.375rem; font-weight: 800; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail__ttl { flex: 1; min-width: 0; display: grid; gap: 3px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-fam { color: var(--accent-lime); font-size: var(--fs-meta); font-weight: 700; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-ibtn { display: grid; place-items: center; flex: none; width: 44px; height: 44px; padding: 0; border-radius: 50%; border: 1px solid var(--border-subtle); background: var(--bg-card-primary); color: var(--text-primary); cursor: pointer; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-ibtn:hover { border-color: var(--border-strong); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-read { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-read__v { font-size: var(--fs-kpi); font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-read__v small, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card__v small { margin-left: 4px; font-size: .5em; font-weight: 600; color: var(--text-secondary); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card__v small { font-size: .8125rem; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-read__v.is-tick { animation: ndTick .5s ease; }
+@keyframes ndTick { 0% { color: var(--accent-lime); } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-delta { display: inline-flex; align-items: center; gap: 3px; padding: 3px 10px; border-radius: 9999px; background: var(--bg-well); color: var(--text-secondary); font-size: var(--fs-meta); font-weight: 700; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-delta .bento-icon { width: 14px; height: 14px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-delta.is-good { color: var(--accent-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-delta.is-bad { color: var(--accent-red); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-livetag { display: inline-flex; align-items: center; gap: 7px; margin-left: auto; color: var(--accent-red); font-size: var(--fs-meta); font-weight: 700; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-livetag i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: ndBlink 1.4s ease-in-out infinite; }
+@keyframes ndBlink { 50% { opacity: .25; } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart { min-height: 250px; display: grid; align-content: center; gap: 8px; padding: 14px; border-radius: 18px; background: var(--bg-card-primary); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-texts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-text { padding: 14px 16px; border-radius: 18px; background: var(--bg-well); border-left: 4px solid var(--accent-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-text p { color: var(--text-soft, #C4C6CC); line-height: 1.5; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-text--capt h5 { color: var(--accent-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-text--blind { border-left-color: var(--accent-orange); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-text--blind h5 { color: var(--accent-orange); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cards li { min-width: 0; animation: ndUp .4s ease both; animation-delay: calc(var(--i) * 30ms); }
+@keyframes ndUp { from { opacity: 0; transform: translateY(8px); } }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 10px; align-items: start; width: 100%; height: 100%; min-height: 96px; padding: 12px; border-radius: 18px; border: 1px solid transparent; background: var(--bg-card-secondary); color: var(--text-primary); font: inherit; text-align: left; cursor: pointer; transition: border-color .2s, transform .2s, background .2s; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card:hover { transform: translateY(-2px); border-color: var(--border-strong); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card[aria-pressed="true"] { border-color: var(--accent-lime); background: var(--bg-well); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card__n { grid-row: span 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 11px; background: var(--bg-well); color: var(--text-secondary); font-size: var(--fs-meta); font-weight: 800; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card[aria-pressed="true"] .nd-card__n { background: var(--accent-lime); color: var(--text-on-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card__t { font-size: var(--fs-meta); font-weight: 600; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card__v { grid-column: 2; font-size: 1.125rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-card__s { grid-column: 1 / -1; align-self: end; color: var(--accent-lime); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-note { display: flex; gap: 8px; color: var(--text-secondary); font-size: var(--fs-meta); line-height: 1.5; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-note .bento-icon { width: 16px; height: 16px; margin-top: 2px; }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd button:focus-visible { outline: 2px solid var(--accent-lime); outline-offset: 2px; }
+
+@media (max-width: 1100px) {
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-split { grid-template-columns: minmax(0, 1fr); }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cards { order: -1; display: flex; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cards li { flex: 0 0 200px; scroll-snap-align: start; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-texts { grid-template-columns: minmax(0, 1fr); }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail { padding: 14px; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail__top { flex-wrap: wrap; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail__ttl { order: 3; flex: 1 1 100%; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail__n { margin-right: auto; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart { padding: 10px; min-height: 0; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bars li { grid-template-columns: minmax(70px, 30%) minmax(0, 1fr) auto; gap: 8px; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-bars b { min-width: 44px; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-kpis li { padding: 12px 14px; }
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cell { min-height: 34px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd *, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd *::before, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd *::after { animation: none !important; transition: none !important; }
+}
 
 /* 13. FINAL QA FIXES (SESSION 19) ---------------------------------------------
    Touch targets of at least 44px and readable secondary text on card-secondary. */
