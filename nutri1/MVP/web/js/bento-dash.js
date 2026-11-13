@@ -188,7 +188,7 @@
   }
   /* Bipartite flow map: sources on the left, sinks on the right, animated dashes on the links. */
   function flows(cfg, ns) {
-    var W = 560, H = cfg.h || 250, L = cfg.left, R = cfg.right, lx = 120, rx = W - 120;
+    var W = 720, H = cfg.h || 270, L = cfg.left, R = cfg.right, lx = 200, rx = 450;   /* room for long labels on both sides */
     var ly = function (i) { return 26 + (H - 52) * (L.length === 1 ? 0.5 : i / (L.length - 1)); }, ry = function (j) { return 26 + (H - 52) * (R.length === 1 ? 0.5 : j / (R.length - 1)); };
     var max = Math.max.apply(null, cfg.links.map(function (k) { return k[2]; })) || 1, out = '';
     cfg.links.forEach(function (k, i) {

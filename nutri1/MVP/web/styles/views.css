@@ -2262,6 +2262,7 @@ html.vc-lock { overflow: hidden; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-heat__row { color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cell { display: grid; place-items: center; min-height: 38px; border-radius: 10px; font-style: normal; background: color-mix(in srgb, var(--tone) calc(var(--k) * 40% + 6%), var(--bg-well)); transition: background .8s ease; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-cell b { font-size: var(--fs-meta); font-weight: 700; font-variant-numeric: tabular-nums; color: var(--text-primary); }
+:is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-flows .nd-axis { font-size: 16.5px; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-flow__bg { fill: none; stroke: var(--tone); opacity: .18; stroke-linecap: round; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-flow__fg { fill: none; stroke: var(--tone); stroke-linecap: round; stroke-dasharray: 3 15; animation: ndFlow 1.3s linear infinite; animation-delay: calc(var(--i) * -170ms); }
 @keyframes ndFlow { to { stroke-dashoffset: -18; } }
