@@ -16,6 +16,8 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `views/view-ai-predict.js` | Predictive health lab mounted inside the AI view (`#vaPredict`): illustrative, hand-weighted risk model — not a trained or validated model |
 | `views/view-network-team.js` | Medical team mounted inside the Network view (`#vnTeam`): fictional doctors, simulated presence, appointment booking and teleconsultation room |
 | `assets/doctors/*.jpg` | AI-generated doctor portraits (not real people) |
+| `views/view-marketplace-lab.js` | Nutrition lab mounted inside the Healthy Food Marketplace (`#vmLab`) + product photos: indicative hand-entered composition, glycaemic / bioavailability / density simulations, comparator, ranking by physiological need |
+| `assets/market/*.jpg` | AI-generated product photos (`fruits`, `legflour`, `grainmix` are temporary stand-ins) |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |
