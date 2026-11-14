@@ -1,258 +1,406 @@
 /* ==========================================================================
-   NUTRI.N°1 — Agriculture & food sovereignty dashboard  (TASK 6)
-   Mounts into #vrDash (placeholder emitted by views/view-agri.js): the real-time data
-   mandate, live KPIs, five animated overview charts (streaming curve, gauge, radar,
-   stacked columns, flow map) and the explorer of the 15 indicators with, for each one,
-   a live chart, "Captation App" and "Angle mort comblé".
+   NUTRI.N°1 — Agriculture & food sovereignty data dashboard  (TASK 6)
+   Mounts into #vrDash (placeholder emitted by views/view-agri.js): the data mandate,
+   a period selector (by year 2021–2026 or by month), the data volumes, five overview
+   charts and the explorer of the 15 indicators. Each indicator shows its series over
+   time, a breakdown for the selected period, a data table with CSV export, the
+   "Captation App" and the "Angle mort comblé".
 
-   Depends on : js/bento-dash.js (NutriBentoDash), js/bento-i18n.js, views/view-agri.js
-   Styles     : styles/views.css  (.nd-* shared block 12h, .vrd-* in block 11b)
-   Note       : ALL figures are simulated in the browser (seeded per country). The rest of
-                the Agri view keeps showing only what was really entered in the Food Cloud.
-                The mandate and indicator texts below are editable in the dictionary
-                (keys agd.mandate, agd.iN.t / .c / .a).
+   Depends on : js/bento-dash.js (NutriBentoDash.Board), js/bento-i18n.js, views/view-agri.js
+   Styles     : styles/views.css  (.nd-* block 12h, .vrd-* block 11b)
+   Texts      : mandate, indicator titles, "Captation App" and "Angle mort comblé" are the
+                product owner's wording (French); English is a translation. Keys agd.mandate,
+                agd.iN.t / .c / .a  (.b = title of the breakdown chart).
+   Note       : ALL figures of this dashboard are simulated demonstration series (seeded per
+                country) and are NOT official statistics. The cards below the dashboard are
+                unchanged.
    ========================================================================== */
 (function (global) {
   'use strict';
   var doc = global.document;
   var I18N = global.NUTRI_BENTO_I18N, D = global.NutriBentoDash;
   var root = doc.getElementById('agri');
-  if (!root || !I18N || !D) return;
-  var NS = 'agd';
+  if (!root || !I18N || !D || !D.Board) return;
 
   /* ---- 1. Dictionary (EN/FR, strict parity) ---------------------------- */
   I18N.register({
     en: {
-      'agd.mandate.t': 'Agriculture & food sovereignty',
-      'agd.mandate': 'Steer food sovereignty from what households really eat: link, at high frequency and at sub-national level, what is consumed to what is produced, imported, stored and lost.',
-      'agd.k1': 'Meals captured today', 'agd.k2': 'Contributing households', 'agd.k3': 'Markets covered', 'agd.k4': 'Reporting producers',
-      'agd.o1.t': 'Captured demand vs declared local supply', 'agd.o1.s': 'Index, base 100 · streaming',
-      'agd.o2.t': 'Overall self-sufficiency', 'agd.o2.s': 'Share of captured demand covered by local production',
-      'agd.o3.t': 'Sovereignty by value chain', 'agd.o3.s': 'Coverage of demand, %',
-      'agd.o4.t': 'Declared production by region', 'agd.o4.s': 'Thousand tonnes, by food group',
-      'agd.o5.t': 'Flows from production basins to markets', 'agd.o5.s': 'Relative volumes inferred from purchase origins',
-      'agd.fam.demand': 'Demand', 'agd.fam.market': 'Markets', 'agd.fam.prod': 'Production', 'agd.fam.resil': 'Resilience',
-      'agd.l.value': 'Captured demand', 'agd.l.supply': 'Declared local supply', 'agd.l.farm': 'Farm-gate price', 'agd.l.retail': 'Retail price paid',
-      'agd.l.cereals': 'Cereals', 'agd.l.tubers': 'Tubers', 'agd.l.legumes': 'Legumes', 'agd.l.veg': 'Vegetables', 'agd.l.animal': 'Animal products', 'agd.l.fruits': 'Fruit',
-      'agd.l.maize': 'Maize', 'agd.l.rice': 'Rice', 'agd.l.cassava': 'Cassava', 'agd.l.yam': 'Yam', 'agd.l.cowpea': 'Cowpea', 'agd.l.sorghum': 'Sorghum', 'agd.l.millet': 'Millet',
-      'agd.l.local': 'Local', 'agd.l.regional': 'Regional (ECOWAS)', 'agd.l.imported': 'Imported',
-      'agd.l.r1': 'Coastal', 'agd.l.r2': 'Plateaux', 'agd.l.r3': 'Central', 'agd.l.r4': 'Kara', 'agd.l.r5': 'Savanna',
-      'agd.l.m1': 'Capital markets', 'agd.l.m2': 'Secondary towns', 'agd.l.m3': 'Border markets',
-      'agd.l.q1': 'Jan–Mar', 'agd.l.q2': 'Apr–Jun', 'agd.l.q3': 'Jul–Sep', 'agd.l.q4': 'Oct–Dec',
-      'agd.l.w1': 'W-5', 'agd.l.w2': 'W-4', 'agd.l.w3': 'W-3', 'agd.l.w4': 'W-2', 'agd.l.w5': 'W-1', 'agd.l.w6': 'This week',
-      'agd.l.t1': 'M-5', 'agd.l.t2': 'M-4', 'agd.l.t3': 'M-3', 'agd.l.t4': 'M-2', 'agd.l.t5': 'M-1', 'agd.l.t6': 'This month',
-      'agd.l.trad': 'Traditional cereals', 'agd.l.imp': 'Imported rice & wheat',
-      'agd.l.field': 'Field', 'agd.l.storage': 'Storage', 'agd.l.transport': 'Transport', 'agd.l.marketloss': 'Market', 'agd.l.home': 'Household',
-      'agd.l.own': 'Own production', 'agd.l.bought': 'Market purchase', 'agd.l.gift': 'Gift & barter', 'agd.l.aid': 'Assistance',
-      'agd.l.last': 'Last season', 'agd.l.intent': 'Intended',
-      'agd.l.c1': 'Self-sufficiency', 'agd.l.c2': 'Local calories', 'agd.l.c3': 'Affordable prices', 'agd.l.c4': 'Availability', 'agd.l.c5': 'Crop diversity',
-      'agd.i1.t': 'Self-sufficiency rate per staple, measured against real demand',
-      'agd.i1.c': 'Quantities eaten per food, declared or scanned in meals, aggregated by area and matched with the production declared by producers.',
-      'agd.i1.a': 'Annual food balance sheets estimate demand as a residual; here it is measured at the plate, every month and per region.',
-      'agd.i2.t': 'Share of calories of local, regional and imported origin',
-      'agd.i2.c': 'Origin of scanned products (barcode, brand, market) and of the ingredients of logged dishes.',
-      'agd.i2.a': 'Customs see volumes entering the country, not what ends up on the plate, nor in which households.',
-      'agd.i3.t': 'Effective demand per value chain',
-      'agd.i3.c': 'Frequency and portion sizes per food group in food diaries (cereals, tubers, legumes, vegetables, animal products).',
-      'agd.i3.a': 'Value chains are planned from supply; disaggregated final demand is unknown between two household surveys.',
-      'agd.i4.t': 'Prices actually paid by households for the basic basket',
-      'agd.i4.c': 'Prices entered at purchase or read from scanned receipts, geolocated by market.',
-      'agd.i4.a': 'Official price collection covers a few reference markets weekly; neighbourhood and rural prices are invisible.',
-      'agd.i5.t': 'Seasonality of consumption and early detection of the lean season',
-      'agd.i5.c': 'Weekly change in meals per day, portion sizes and dietary diversity, per region.',
-      'agd.i5.a': 'The lean season is declared after the fact; here it is detected from the first weeks of decline.',
-      'agd.i6.t': 'Local availability: stock-outs reported at the point of purchase',
-      'agd.i6.c': '“Not found / out of stock” reports and forced substitutions logged during purchases.',
-      'agd.i6.a': 'No statistic tracks local supply disruptions in near real time.',
-      'agd.i7.t': 'Substitution between traditional cereals and imported rice and wheat',
-      'agd.i7.c': 'Composition of staple dishes: millet, sorghum, fonio and maize versus rice, bread and pasta.',
-      'agd.i7.a': 'The shift in preferences is invisible in production statistics until imports surge.',
-      'agd.i8.t': 'Declared post-harvest losses and household waste',
-      'agd.i8.c': 'Producer and household modules: quantities lost in the field, in storage, in transport, at market and as leftovers.',
-      'agd.i8.a': 'Losses are estimated with flat coefficients; no measurement per stage and per area.',
-      'agd.i9.t': 'Self-consumption and non-market channels',
-      'agd.i9.c': 'Source declared for each food: own field, gift, barter, market or assistance.',
-      'agd.i9.a': 'Self-consumed production escapes market statistics and distorts the real food balance.',
-      'agd.i10.t': 'Diversity of crops actually eaten (neglected species included)',
-      'agd.i10.c': 'Number of distinct local species and varieties recorded in meals per household and per month.',
-      'agd.i10.a': 'Agricultural censuses follow the main crops only; neglected and underutilised species are not counted.',
-      'agd.i11.t': 'Adoption of biofortified and fortified foods',
-      'agd.i11.c': 'Scans and entries of biofortified products (orange-fleshed sweet potato, orange maize) and fortified flours and oils.',
-      'agd.i11.a': 'Seed and product distribution is known; actual consumption is not.',
-      'agd.i12.t': 'Sowing intentions and on-farm stocks',
-      'agd.i12.c': 'Producers declare in the app the areas they plan to sow and the stocks they still hold.',
-      'agd.i12.a': 'Season forecasts arrive late; stocks held by farmers are a black box.',
-      'agd.i13.t': 'Smallholder market access: farm-gate price versus retail price',
-      'agd.i13.c': 'Selling prices declared by producers matched with the prices households pay for the same product in the same area.',
-      'agd.i13.a': 'The margin captured along the chain is unknown per product and per territory.',
-      'agd.i14.t': 'Climate shocks felt on the plate',
-      'agd.i14.c': 'Geolocated drops in consumption crossed with rainfall and drought alerts.',
-      'agd.i14.a': 'The impact of a shock is measured on yields months later, not on what people actually eat.',
-      'agd.i15.t': 'Territorial food sovereignty index (composite)',
-      'agd.i15.c': 'Aggregation of indicators 1, 2, 4, 6 and 10 per commune and region, recomputed continuously.',
-      'agd.i15.a': 'No up-to-date sub-national indicator exists to target agricultural investment.'
+      "agd.l.r1": "Coastal",
+      "agd.l.r2": "Plateaux",
+      "agd.l.r3": "Central",
+      "agd.l.r4": "Kara",
+      "agd.l.r5": "Savanna",
+      "agd.l.q1": "Jan–Mar",
+      "agd.l.q2": "Apr–Jun",
+      "agd.l.q3": "Jul–Sep",
+      "agd.l.q4": "Oct–Dec",
+      "agd.mandate.t": "Agriculture & food sovereignty",
+      "agd.mandate": "Read consumers’ real food demand to adjust local value chains, seasonality, prices and food sovereignty day by day.",
+      "agd.k1": "Meals analysed",
+      "agd.k2": "Contributing households",
+      "agd.k3": "Price records collected",
+      "agd.k4": "Markets covered",
+      "agd.o1.t": "Captured demand vs declared local supply",
+      "agd.o1.s": "Index, base 100 in January 2021",
+      "agd.o2.t": "Needs covered by local production",
+      "agd.o2.s": "Share of captured demand, selected period",
+      "agd.o3.t": "Coverage of demand by value chain",
+      "agd.o3.s": "Local supply as % of captured demand",
+      "agd.o4.t": "Declared production by region",
+      "agd.o4.s": "Thousand tonnes, by food group",
+      "agd.o5.t": "Flows from production basins to markets",
+      "agd.o5.s": "Relative volumes inferred from the origin of purchases",
+      "agd.fam.demand": "Demand & preferences",
+      "agd.fam.market": "Markets & prices",
+      "agd.fam.prod": "Production & losses",
+      "agd.fam.resil": "Shocks & lean season",
+      "agd.l.value": "Captured demand",
+      "agd.l.supply": "Declared local supply",
+      "agd.l.cereals": "Cereals",
+      "agd.l.tubers": "Tubers",
+      "agd.l.legumes": "Pulses",
+      "agd.l.veg": "Vegetables",
+      "agd.l.animal": "Animal products",
+      "agd.l.fruits": "Fruit",
+      "agd.l.m1": "Capital markets",
+      "agd.l.m2": "Secondary towns",
+      "agd.l.m3": "Border markets",
+      "agd.l.local": "Local",
+      "agd.l.imported": "Imported",
+      "agd.l.rice": "Rice",
+      "agd.l.wheat": "Wheat (bread, pasta)",
+      "agd.l.poultry": "Poultry",
+      "agd.l.fish": "Fish",
+      "agd.l.maize": "Maize",
+      "agd.l.yam": "Yam",
+      "agd.l.tomato": "Tomato",
+      "agd.l.mango": "Mango",
+      "agd.l.onion": "Onion",
+      "agd.l.orange": "Orange",
+      "agd.l.okra": "Okra",
+      "agd.l.chili": "Chilli",
+      "agd.l.plantain": "Plantain",
+      "agd.l.app": "Price paid (app)",
+      "agd.l.sima": "Official market survey",
+      "agd.l.v1": "Local rice",
+      "agd.l.v2": "Imported fragrant rice",
+      "agd.l.v3": "White maize",
+      "agd.l.v4": "Yellow maize",
+      "agd.l.v5": "Sweet cassava",
+      "agd.l.v6": "Bitter cassava",
+      "agd.l.own": "Family field or garden",
+      "agd.l.livestock": "Family livestock",
+      "agd.l.bought": "Purchase",
+      "agd.l.gift": "Gift",
+      "agd.l.leaves": "Leafy vegetables",
+      "agd.l.freshfish": "Fresh fish",
+      "agd.l.bread": "Bread",
+      "agd.l.beef": "Beef",
+      "agd.l.chicken": "Chicken",
+      "agd.l.egg": "Eggs",
+      "agd.l.pulses": "Pulses",
+      "agd.l.why1": "Price",
+      "agd.l.why2": "Availability",
+      "agd.l.why3": "Health",
+      "agd.l.why4": "Taste & habit",
+      "agd.l.informal": "Informal market",
+      "agd.l.farmgate": "Farm gate",
+      "agd.l.minimarket": "Mini-market",
+      "agd.l.ecommerce": "E-commerce",
+      "agd.l.canteen": "Canteen",
+      "agd.l.meat": "Meat",
+      "agd.l.s1": "Yam → cassava",
+      "agd.l.s2": "Fish → soya",
+      "agd.l.s3": "Rice → maize",
+      "agd.l.s4": "Beef → chicken",
+      "agd.l.s5": "Other",
+      "agd.l.p0": "Same price",
+      "agd.l.p10": "+10% price",
+      "agd.l.p20": "+20% price",
+      "agd.l.p30": "+30% price",
+      "agd.l.p50": "+50% price",
+      "agd.l.cowpea": "Cowpea",
+      "agd.l.localleaves": "Local leaves",
+      "agd.l.moringa": "Moringa",
+      "agd.l.fonio": "Fonio",
+      "agd.l.bambara": "Bambara groundnut",
+      "agd.i1.t": "Real food sovereignty rate on the plate (local vs imported)",
+      "agd.i1.c": "Origin inferred per product (scan + label + photographed variety) + declaration of local market vs supermarket.",
+      "agd.i1.a": "Customs balances do not say what is actually eaten; makes it possible to set import quotas for rice, wheat and poultry on consumption data.",
+      "agd.i1.b": "Local share by product (%)",
+      "agd.i2.t": "Index of consumed seasonality vs the official crop calendar",
+      "agd.i2.c": "Dating of photographed fruit and vegetables, crossed with the regional agricultural calendar and geolocation.",
+      "agd.i2.a": "Calendars are theoretical; makes it possible to detect out-of-season consumption, forcing or counter-season imports and to adjust support to producers.",
+      "agd.i2.b": "Share eaten in season, by product and quarter (%)",
+      "agd.i3.t": "Real consumer purchase price of fresh produce, crowdsourced",
+      "agd.i3.c": "OCR of till receipts + price per kg entered at the market + photo of stalls + geolocation of the point of sale.",
+      "agd.i3.a": "Market information system (SIMA) surveys are weekly and urban; allows daily anti-speculation regulation and dynamic floor and ceiling prices.",
+      "agd.i3.b": "Average price paid by product (FCFA/kg)",
+      "agd.i4.t": "Stock-outs and unavailability perceived at the point of purchase",
+      "agd.i4.c": "“Product searched for but not found” button + substitution chosen + place and time.",
+      "agd.i4.a": "Invisible before a crisis; makes it possible to reroute stocks, open subsidised sales and anticipate localised hunger riots.",
+      "agd.i4.b": "Reports per 1,000 purchases, by region and quarter",
+      "agd.i5.t": "Revealed varietal preferences (local/fragrant rice, white/yellow maize, sweet/bitter cassava)",
+      "agd.i5.c": "Variety recognition on photo + scan + rating of taste, cooking and price by the user.",
+      "agd.i5.a": "Agronomic research disseminates without feedback; makes it possible to steer seeds, subsidies and extension towards the varieties actually adopted.",
+      "agd.i5.b": "Variety chosen within each crop (% of choices)",
+      "agd.i6.t": "Rate of self-consumption and own production of rural and peri-urban households",
+      "agd.i6.c": "Source tag of the meal: family garden/field/livestock vs purchase/gift + declared areas + photos of harvests.",
+      "agd.i6.a": "Agricultural censuses are ten-yearly; makes it possible to measure real resilience and to target inputs and micro-irrigation.",
+      "agd.i6.b": "Source of meals (%)",
+      "agd.i7.t": "Post-purchase household losses by perishable product (proxy for post-harvest losses)",
+      "agd.i7.c": "Declaration of weight thrown away or rotten + photo of leftovers/bin + storage time + preservation method.",
+      "agd.i7.a": "Losses are estimated, never measured on the consumer side; makes it possible to prioritise cold chain, processing and packaging by value chain.",
+      "agd.i7.b": "Share thrown away by product (%)",
+      "agd.i8.t": "Protein trade-offs (beef, chicken, fish, egg, pulses) and shifts between species",
+      "agd.i8.c": "Longitudinal tracking of photographed proteins + reason for the trade-off: price, availability or health.",
+      "agd.i8.a": "Slaughter figures do not capture the informal sector; makes it possible to support local poultry and fish farming when beef drops.",
+      "agd.i8.b": "Declared reason for the trade-off (%)",
+      "agd.i9.t": "Mapping of supply channels (informal market, farm gate, mini-market, e-commerce, canteen)",
+      "agd.i9.c": "Geolocation of purchase + receipt scan + type of seller tagged at each meal.",
+      "agd.i9.a": "The informal sector accounts for 70–80% and escapes statistics; makes it possible to secure food corridors and to develop wholesale markets.",
+      "agd.i9.b": "Share of purchases by channel (%)",
+      "agd.i10.t": "Rating of perceived freshness and quality of local produce",
+      "agd.i10.c": "Score of 1–5 stars + photo of the defect (bruising, ripeness) + transcribed voice comment.",
+      "agd.i10.a": "Quality control is occasional; allows a ranking of suppliers, quality premiums and targeted training on harvest and transport.",
+      "agd.i10.b": "Average rating by product family (out of 5)",
+      "agd.i11.t": "Crisis substitutions revealing supply shocks (e.g. yam → cassava, fish → soya)",
+      "agd.i11.c": "AI detection of a break in the usual food pattern + question on the cause: price, absence, income.",
+      "agd.i11.a": "Shocks are known after harvest; allows an agricultural response within 2 weeks: destocking, targeted imports, aid to affected producers.",
+      "agd.i11.b": "Most frequent substitutions (% of cases)",
+      "agd.i12.t": "Lived calendar of the lean season in farming households",
+      "agd.i12.c": "Tracking of declared granary stocks + reduction in diversity and portions + recourse to the market.",
+      "agd.i12.a": "The lean season is modelled, not lived; makes it possible to trigger cash transfers and cereal banks in the right month, in the right village.",
+      "agd.i12.b": "Farming households in the lean season, by region and quarter (%)",
+      "agd.i13.t": "Willingness to pay for organic/agroecological food and sustainable purchase intention",
+      "agd.i13.c": "Discrete choices in the app (basket A conventional vs basket B agroecological + price gap) + actual purchases.",
+      "agd.i13.a": "Willingness-to-pay studies are declarative and dated; makes it possible to size labels, subsidies and remunerative outlets.",
+      "agd.i13.b": "Share choosing the agroecological basket, by price gap (%)",
+      "agd.i14.t": "Consumption of neglected and underutilised species (fonio, cowpea, moringa, local leaves)",
+      "agd.i14.c": "Specific recognition of neglected species on photos + recipe searches + frequency of consumption.",
+      "agd.i14.a": "Absent from food balance sheets; makes it possible to revive nutritious, climate-resilient value chains with proof of demand.",
+      "agd.i14.b": "Households eating each species every week (%)",
+      "agd.i15.t": "Revealed inter-regional consumption flows (real food corridors)",
+      "agd.i15.c": "Anonymised aggregation of purchase geolocation + declared or scanned product origin on a map.",
+      "agd.i15.a": "Informal cross-border flows are unknown; makes it possible to plan roads, storage and checkpoints without blocking vital trade.",
+      "agd.i15.b": "Corridors: from producing regions to markets"
     },
     fr: {
-      'agd.mandate.t': 'Agriculture & souveraineté alimentaire',
-      'agd.mandate': 'Piloter la souveraineté alimentaire à partir de ce que les ménages mangent réellement : relier, à haute fréquence et à l’échelle infranationale, ce qui est consommé à ce qui est produit, importé, stocké et perdu.',
-      'agd.k1': 'Repas captés aujourd’hui', 'agd.k2': 'Ménages contributeurs', 'agd.k3': 'Marchés couverts', 'agd.k4': 'Producteurs déclarants',
-      'agd.o1.t': 'Demande captée vs offre locale déclarée', 'agd.o1.s': 'Indice base 100 · flux continu',
-      'agd.o2.t': 'Autosuffisance globale', 'agd.o2.s': 'Part de la demande captée couverte par la production locale',
-      'agd.o3.t': 'Souveraineté par filière', 'agd.o3.s': 'Couverture de la demande, %',
-      'agd.o4.t': 'Production déclarée par région', 'agd.o4.s': 'Milliers de tonnes, par groupe d’aliments',
-      'agd.o5.t': 'Flux des bassins de production vers les marchés', 'agd.o5.s': 'Volumes relatifs déduits de l’origine des achats',
-      'agd.fam.demand': 'Demande', 'agd.fam.market': 'Marchés', 'agd.fam.prod': 'Production', 'agd.fam.resil': 'Résilience',
-      'agd.l.value': 'Demande captée', 'agd.l.supply': 'Offre locale déclarée', 'agd.l.farm': 'Prix bord champ', 'agd.l.retail': 'Prix payé au détail',
-      'agd.l.cereals': 'Céréales', 'agd.l.tubers': 'Tubercules', 'agd.l.legumes': 'Légumineuses', 'agd.l.veg': 'Maraîchage', 'agd.l.animal': 'Produits animaux', 'agd.l.fruits': 'Fruits',
-      'agd.l.maize': 'Maïs', 'agd.l.rice': 'Riz', 'agd.l.cassava': 'Manioc', 'agd.l.yam': 'Igname', 'agd.l.cowpea': 'Niébé', 'agd.l.sorghum': 'Sorgho', 'agd.l.millet': 'Mil',
-      'agd.l.local': 'Local', 'agd.l.regional': 'Régional (CEDEAO)', 'agd.l.imported': 'Importé',
-      'agd.l.r1': 'Maritime', 'agd.l.r2': 'Plateaux', 'agd.l.r3': 'Centrale', 'agd.l.r4': 'Kara', 'agd.l.r5': 'Savanes',
-      'agd.l.m1': 'Marchés de la capitale', 'agd.l.m2': 'Villes secondaires', 'agd.l.m3': 'Marchés frontaliers',
-      'agd.l.q1': 'Janv.–mars', 'agd.l.q2': 'Avr.–juin', 'agd.l.q3': 'Juil.–sept.', 'agd.l.q4': 'Oct.–déc.',
-      'agd.l.w1': 'S-5', 'agd.l.w2': 'S-4', 'agd.l.w3': 'S-3', 'agd.l.w4': 'S-2', 'agd.l.w5': 'S-1', 'agd.l.w6': 'Cette sem.',
-      'agd.l.t1': 'M-5', 'agd.l.t2': 'M-4', 'agd.l.t3': 'M-3', 'agd.l.t4': 'M-2', 'agd.l.t5': 'M-1', 'agd.l.t6': 'Ce mois',
-      'agd.l.trad': 'Céréales traditionnelles', 'agd.l.imp': 'Riz & blé importés',
-      'agd.l.field': 'Champ', 'agd.l.storage': 'Stockage', 'agd.l.transport': 'Transport', 'agd.l.marketloss': 'Marché', 'agd.l.home': 'Ménage',
-      'agd.l.own': 'Propre production', 'agd.l.bought': 'Achat au marché', 'agd.l.gift': 'Don & troc', 'agd.l.aid': 'Assistance',
-      'agd.l.last': 'Campagne passée', 'agd.l.intent': 'Intentions',
-      'agd.l.c1': 'Autosuffisance', 'agd.l.c2': 'Calories locales', 'agd.l.c3': 'Prix abordables', 'agd.l.c4': 'Disponibilité', 'agd.l.c5': 'Diversité cultivée',
-      'agd.i1.t': 'Taux d’autosuffisance par produit de base, mesuré sur la demande réelle',
-      'agd.i1.c': 'Quantités consommées par aliment, déclarées ou scannées dans les repas, agrégées par zone et rapprochées de la production déclarée par les producteurs.',
-      'agd.i1.a': 'Les bilans alimentaires annuels estiment la demande par solde ; ici elle est mesurée dans l’assiette, chaque mois et par région.',
-      'agd.i2.t': 'Part des calories d’origine locale, régionale et importée',
-      'agd.i2.c': 'Origine des produits scannés (code-barres, marque, marché) et des ingrédients des plats saisis.',
-      'agd.i2.a': 'Les douanes voient les volumes qui entrent dans le pays, pas ce qui finit dans l’assiette ni dans quels ménages.',
-      'agd.i3.t': 'Demande effective par filière',
-      'agd.i3.c': 'Fréquences et portions par groupe d’aliments dans les journaux alimentaires (céréales, tubercules, légumineuses, maraîchage, produits animaux).',
-      'agd.i3.a': 'Les filières sont planifiées à partir de l’offre ; la demande finale désagrégée est inconnue entre deux enquêtes ménages.',
-      'agd.i4.t': 'Prix réellement payés par les ménages pour le panier de base',
-      'agd.i4.c': 'Prix saisis au moment de l’achat ou lus sur les tickets scannés, géolocalisés par marché.',
-      'agd.i4.a': 'Les relevés officiels couvrent quelques marchés de référence, chaque semaine ; les prix de quartier et ruraux sont invisibles.',
-      'agd.i5.t': 'Saisonnalité de la consommation et détection précoce de la soudure',
-      'agd.i5.c': 'Variation hebdomadaire du nombre de repas par jour, des portions et de la diversité alimentaire, par région.',
-      'agd.i5.a': 'La soudure est constatée après coup ; ici elle est détectée dès les premières semaines de baisse.',
-      'agd.i6.t': 'Disponibilité de proximité : ruptures signalées au point d’achat',
-      'agd.i6.c': 'Signalements « introuvable / en rupture » et substitutions forcées enregistrés lors des achats.',
-      'agd.i6.a': 'Aucune statistique ne suit les ruptures locales d’approvisionnement en quasi temps réel.',
-      'agd.i7.t': 'Substitution entre céréales traditionnelles et riz ou blé importés',
-      'agd.i7.c': 'Composition des plats de base : mil, sorgho, fonio et maïs face au riz, au pain et aux pâtes.',
-      'agd.i7.a': 'Le glissement des préférences est invisible dans les statistiques de production jusqu’à l’envolée des importations.',
-      'agd.i8.t': 'Pertes post-récolte et gaspillage des ménages déclarés',
-      'agd.i8.c': 'Modules producteurs et ménages : quantités perdues au champ, au stockage, au transport, au marché et en restes.',
-      'agd.i8.a': 'Les pertes sont estimées par coefficients forfaitaires ; aucune mesure par étape ni par zone.',
-      'agd.i9.t': 'Autoconsommation et circuits non marchands',
-      'agd.i9.c': 'Source déclarée pour chaque aliment : propre champ, don, troc, marché ou assistance.',
-      'agd.i9.a': 'La production autoconsommée échappe aux statistiques marchandes et fausse le bilan alimentaire réel.',
-      'agd.i10.t': 'Diversité des cultures réellement consommées (espèces négligées incluses)',
-      'agd.i10.c': 'Nombre d’espèces et de variétés locales distinctes relevées dans les repas, par ménage et par mois.',
-      'agd.i10.a': 'Les recensements agricoles ne suivent que les grandes cultures ; les espèces négligées et sous-utilisées ne sont pas comptées.',
-      'agd.i11.t': 'Adoption des aliments biofortifiés et fortifiés',
-      'agd.i11.c': 'Scans et saisies de produits biofortifiés (patate douce à chair orange, maïs orange) et de farines et huiles enrichies.',
-      'agd.i11.a': 'La distribution de semences et de produits est connue ; la consommation effective ne l’est pas.',
-      'agd.i12.t': 'Intentions de semis et stocks paysans',
-      'agd.i12.c': 'Les producteurs déclarent dans l’application les surfaces qu’ils prévoient de semer et les stocks qu’ils détiennent encore.',
-      'agd.i12.a': 'Les prévisions de campagne arrivent tard ; les stocks détenus par les paysans sont une boîte noire.',
-      'agd.i13.t': 'Accès des petits producteurs au marché : prix bord champ face au prix de détail',
-      'agd.i13.c': 'Prix de vente déclarés par les producteurs, rapprochés des prix payés par les ménages pour le même produit dans la même zone.',
-      'agd.i13.a': 'La marge captée le long de la chaîne est inconnue par produit et par territoire.',
-      'agd.i14.t': 'Chocs climatiques ressentis dans l’assiette',
-      'agd.i14.c': 'Baisses de consommation géolocalisées, croisées avec les alertes de pluviométrie et de sécheresse.',
-      'agd.i14.a': 'L’impact d’un choc est mesuré sur les rendements des mois plus tard, pas sur ce que les gens mangent réellement.',
-      'agd.i15.t': 'Indice de souveraineté alimentaire territoriale (composite)',
-      'agd.i15.c': 'Agrégation des indicateurs 1, 2, 4, 6 et 10 par commune et par région, recalculée en continu.',
-      'agd.i15.a': 'Il n’existe aucun indicateur infranational à jour pour cibler l’investissement agricole.'
+      "agd.l.r1": "Maritime",
+      "agd.l.r2": "Plateaux",
+      "agd.l.r3": "Centrale",
+      "agd.l.r4": "Kara",
+      "agd.l.r5": "Savanes",
+      "agd.l.q1": "Janv.–mars",
+      "agd.l.q2": "Avr.–juin",
+      "agd.l.q3": "Juil.–sept.",
+      "agd.l.q4": "Oct.–déc.",
+      "agd.mandate.t": "Agriculture & Souveraineté Alimentaire",
+      "agd.mandate": "Lire la demande alimentaire réelle des consommateurs pour ajuster filières locales, saisonnalité, prix et souveraineté alimentaire au jour le jour.",
+      "agd.k1": "Repas analysés",
+      "agd.k2": "Ménages contributeurs",
+      "agd.k3": "Relevés de prix collectés",
+      "agd.k4": "Marchés couverts",
+      "agd.o1.t": "Demande captée vs offre locale déclarée",
+      "agd.o1.s": "Indice base 100 en janvier 2021",
+      "agd.o2.t": "Besoins couverts par la production locale",
+      "agd.o2.s": "Part de la demande captée, période sélectionnée",
+      "agd.o3.t": "Couverture de la demande par filière",
+      "agd.o3.s": "Offre locale en % de la demande captée",
+      "agd.o4.t": "Production déclarée par région",
+      "agd.o4.s": "Milliers de tonnes, par groupe d’aliments",
+      "agd.o5.t": "Flux des bassins de production vers les marchés",
+      "agd.o5.s": "Volumes relatifs déduits de l’origine des achats",
+      "agd.fam.demand": "Demande & préférences",
+      "agd.fam.market": "Marchés & prix",
+      "agd.fam.prod": "Production & pertes",
+      "agd.fam.resil": "Chocs & soudure",
+      "agd.l.value": "Demande captée",
+      "agd.l.supply": "Offre locale déclarée",
+      "agd.l.cereals": "Céréales",
+      "agd.l.tubers": "Tubercules",
+      "agd.l.legumes": "Légumineuses",
+      "agd.l.veg": "Maraîchage",
+      "agd.l.animal": "Produits animaux",
+      "agd.l.fruits": "Fruits",
+      "agd.l.m1": "Marchés de la capitale",
+      "agd.l.m2": "Villes secondaires",
+      "agd.l.m3": "Marchés frontaliers",
+      "agd.l.local": "Local",
+      "agd.l.imported": "Importé",
+      "agd.l.rice": "Riz",
+      "agd.l.wheat": "Blé (pain, pâtes)",
+      "agd.l.poultry": "Volaille",
+      "agd.l.fish": "Poisson",
+      "agd.l.maize": "Maïs",
+      "agd.l.yam": "Igname",
+      "agd.l.tomato": "Tomate",
+      "agd.l.mango": "Mangue",
+      "agd.l.onion": "Oignon",
+      "agd.l.orange": "Orange",
+      "agd.l.okra": "Gombo",
+      "agd.l.chili": "Piment",
+      "agd.l.plantain": "Banane plantain",
+      "agd.l.app": "Prix payé (app)",
+      "agd.l.sima": "Relevé officiel des marchés",
+      "agd.l.v1": "Riz local",
+      "agd.l.v2": "Riz parfumé importé",
+      "agd.l.v3": "Maïs blanc",
+      "agd.l.v4": "Maïs jaune",
+      "agd.l.v5": "Manioc doux",
+      "agd.l.v6": "Manioc amer",
+      "agd.l.own": "Champ ou jardin familial",
+      "agd.l.livestock": "Élevage familial",
+      "agd.l.bought": "Achat",
+      "agd.l.gift": "Don",
+      "agd.l.leaves": "Légumes feuilles",
+      "agd.l.freshfish": "Poisson frais",
+      "agd.l.bread": "Pain",
+      "agd.l.beef": "Bœuf",
+      "agd.l.chicken": "Poulet",
+      "agd.l.egg": "Œufs",
+      "agd.l.pulses": "Légumineuses",
+      "agd.l.why1": "Prix",
+      "agd.l.why2": "Disponibilité",
+      "agd.l.why3": "Santé",
+      "agd.l.why4": "Goût & habitude",
+      "agd.l.informal": "Marché informel",
+      "agd.l.farmgate": "Bord-champ",
+      "agd.l.minimarket": "Supérette",
+      "agd.l.ecommerce": "E-commerce",
+      "agd.l.canteen": "Cantine",
+      "agd.l.meat": "Viande",
+      "agd.l.s1": "Igname → manioc",
+      "agd.l.s2": "Poisson → soja",
+      "agd.l.s3": "Riz → maïs",
+      "agd.l.s4": "Bœuf → poulet",
+      "agd.l.s5": "Autres",
+      "agd.l.p0": "Même prix",
+      "agd.l.p10": "+10 % de prix",
+      "agd.l.p20": "+20 % de prix",
+      "agd.l.p30": "+30 % de prix",
+      "agd.l.p50": "+50 % de prix",
+      "agd.l.cowpea": "Niébé",
+      "agd.l.localleaves": "Feuilles locales",
+      "agd.l.moringa": "Moringa",
+      "agd.l.fonio": "Fonio",
+      "agd.l.bambara": "Voandzou",
+      "agd.i1.t": "Taux de souveraineté alimentaire réelle dans l’assiette (local vs importé)",
+      "agd.i1.c": "Origine inférée par produit (scan + label + variété photographiée) + déclaration marché local vs supermarché.",
+      "agd.i1.a": "Les bilans douaniers ne disent pas ce qui est réellement mangé ; permet de fixer quotas d’importation riz/blé/volaille sur données de consommation.",
+      "agd.i1.b": "Part locale par produit (%)",
+      "agd.i2.t": "Indice de saisonnalité consommée vs calendrier cultural officiel",
+      "agd.i2.c": "Datation des fruits/légumes photographiés croisée au calendrier agricole régional et à la géoloc.",
+      "agd.i2.a": "Les calendriers sont théoriques ; permet de détecter désaisonnalisation, forçage ou importations de contre-saison et d’ajuster l’appui aux producteurs.",
+      "agd.i2.b": "Part consommée en saison, par produit et trimestre (%)",
+      "agd.i3.t": "Prix d’achat consommateur réel des produits frais en crowdsourcing",
+      "agd.i3.c": "OCR tickets de caisse + saisie prix/kg au marché + photo étals + géoloc point de vente.",
+      "agd.i3.a": "Les relevés SIMA sont hebdomadaires et urbains ; permet une régulation anti-spéculation quotidienne et des prix planchers/plafonds dynamiques.",
+      "agd.i3.b": "Prix moyen payé par produit (FCFA/kg)",
+      "agd.i4.t": "Ruptures et indisponibilités perçues au point d’achat",
+      "agd.i4.c": "Bouton produit recherché non trouvé + substitution choisie + lieu et heure.",
+      "agd.i4.a": "Invisible avant crise ; permet de rerouter les stocks, ouvrir ventes subventionnées et anticiper les émeutes de la faim localisées.",
+      "agd.i4.b": "Signalements pour 1 000 achats, par région et trimestre",
+      "agd.i5.t": "Préférences variétales révélées (riz local/parfumé, maïs blanc/jaune, manioc doux/amer)",
+      "agd.i5.c": "Reconnaissance variétale sur photo + scan + notation goût/cuisson/prix par l’utilisateur.",
+      "agd.i5.a": "La recherche agronomique diffuse sans feedback ; permet d’orienter semences, subventions et vulgarisation vers les variétés réellement adoptées.",
+      "agd.i5.b": "Variété choisie au sein de chaque culture (% des choix)",
+      "agd.i6.t": "Taux d’autoconsommation et d’autoproduction des ménages ruraux et périurbains",
+      "agd.i6.c": "Tag source du repas : jardin/champ/élevage familial vs achat/don + surfaces déclarées + photos récoltes.",
+      "agd.i6.a": "Les recensements agricoles sont décennaux ; permet de mesurer la résilience réelle et de cibler intrants et micro-irrigation.",
+      "agd.i6.b": "Source des repas (%)",
+      "agd.i7.t": "Pertes domestiques post-achat par produit périssable (proxy pertes post-récolte)",
+      "agd.i7.c": "Déclaration poids jeté/pourri + photo restes/poubelle + durée stockage + mode conservation.",
+      "agd.i7.a": "Les pertes sont estimées, jamais mesurées côté consommateur ; permet de prioriser chaîne du froid, transformation et emballages par filière.",
+      "agd.i7.b": "Part jetée par produit (%)",
+      "agd.i8.t": "Arbitrages protéiques (bœuf, poulet, poisson, œuf, légumineuses) et reports d’espèces",
+      "agd.i8.c": "Suivi longitudinal des protéines photographiées + motif d’arbitrage prix/disponibilité/santé.",
+      "agd.i8.a": "Les abattages ne captent pas l’informel ; permet de soutenir filières avicole/piscicole locales quand le bœuf décroche.",
+      "agd.i8.b": "Motif déclaré de l’arbitrage (%)",
+      "agd.i9.t": "Cartographie des circuits d’approvisionnement (marché informel, bord-champ, supérette, e-commerce, cantine)",
+      "agd.i9.c": "Géoloc d’achat + scan ticket + type de vendeur tagué à chaque repas.",
+      "agd.i9.a": "L’informel représente 70-80% et échappe aux stats ; permet de sécuriser les corridors vivriers et d’aménager les marchés de gros.",
+      "agd.i9.b": "Part des achats par circuit (%)",
+      "agd.i10.t": "Notation fraîcheur/qualité perçue des produits locaux",
+      "agd.i10.c": "Score 1-5 étoiles + photo défaut (meurtrissure, maturité) + commentaire vocal retranscrit.",
+      "agd.i10.a": "Le contrôle qualité est ponctuel ; permet un classement fournisseurs, des primes qualité et des formations ciblées récolte/transport.",
+      "agd.i10.b": "Note moyenne par famille de produits (sur 5)",
+      "agd.i11.t": "Substitutions de crise révélatrices de chocs d’offre (ex: igname → manioc, poisson → soja)",
+      "agd.i11.c": "Détection IA de rupture de pattern alimentaire habituel + question cause : prix, absence, revenu.",
+      "agd.i11.a": "Les chocs sont connus après récolte ; permet une réponse agricole en 2 semaines : déstockage, importation ciblée, aide aux producteurs affectés.",
+      "agd.i11.b": "Substitutions les plus fréquentes (% des cas)",
+      "agd.i12.t": "Calendrier vécu de la soudure alimentaire des ménages agricoles",
+      "agd.i12.c": "Suivi stocks greniers déclarés + réduction diversité/portions + recours au marché.",
+      "agd.i12.a": "La soudure est modélisée, pas vécue ; permet de déclencher transferts monétaires et banques de céréales au bon mois, au bon village.",
+      "agd.i12.b": "Ménages agricoles en soudure, par région et trimestre (%)",
+      "agd.i13.t": "Consentement à payer pour le bio/agroécologique et intention d’achat durable",
+      "agd.i13.c": "Choix discrets in-app (panier A conventionnel vs panier B agroécologique + écart prix) + achats réels.",
+      "agd.i13.a": "Les études de willingness-to-pay sont déclaratives et datées ; permet de dimensionner labels, subventions et débouchés rémunérateurs.",
+      "agd.i13.b": "Part choisissant le panier agroécologique, selon l’écart de prix (%)",
+      "agd.i14.t": "Consommation d’espèces négligées et sous-utilisées (fonio, niébé, moringa, feuilles locales)",
+      "agd.i14.c": "Reconnaissance spécifique NUS sur photos + recherche recettes + fréquence de consommation.",
+      "agd.i14.a": "Absentes des bilans alimentaires ; permet de relancer filières nutritionnelles et résilientes au climat avec preuve de demande.",
+      "agd.i14.b": "Ménages consommant chaque espèce chaque semaine (%)",
+      "agd.i15.t": "Flux interrégionaux de consommation révélés (corridors vivriers réels)",
+      "agd.i15.c": "Agrégation anonymisée géoloc d’achat + origine produit déclarée/scannée sur carte.",
+      "agd.i15.a": "Les flux informels transfrontaliers sont inconnus ; permet de planifier routes, stockage et postes de contrôle sans bloquer le commerce vital.",
+      "agd.i15.b": "Corridors : des régions de production vers les marchés"
     }
   });
 
-  /* ---- 2. Definitions (base levels of the simulated series) ----------------- */
-  var REG = ['r1', 'r2', 'r3', 'r4', 'r5'];
+  /* ---- 2. Definitions (levels, yearly trend and seasonal cycle of the simulated series) ---- */
+  var REG = ['r1', 'r2', 'r3', 'r4', 'r5'], QT = ['q1', 'q2', 'q3', 'q4'];
+  var FLOWS = { left: REG, right: ['m1', 'm2', 'm3'], links: [[0, 0, 9], [1, 0, 7], [1, 1, 4], [2, 1, 5], [2, 0, 3], [3, 1, 4], [3, 2, 2], [4, 2, 5], [4, 1, 3]] };
   var DEFS = [
-    { id: 'i1', fam: 'demand', type: 'bars', value: 71, min: 40, max: 98, dec: 0, unit: '%', good: 'up', labels: ['maize', 'cassava', 'yam', 'sorghum', 'cowpea', 'rice'], vals: [96, 104, 101, 88, 79, 34], vunit: ' %', barMax: 110 },
-    { id: 'i2', fam: 'demand', type: 'donut', value: 68, min: 45, max: 90, dec: 0, unit: '%', good: 'up', labels: ['local', 'regional', 'imported'], vals: [68, 9, 23] },
-    { id: 'i3', fam: 'demand', type: 'radar', value: 104, min: 80, max: 130, dec: 0, unit: '', good: 'up', labels: ['cereals', 'tubers', 'legumes', 'veg', 'animal'], vals: [92, 78, 54, 61, 43] },
-    { id: 'i4', fam: 'market', type: 'line', value: 112, min: 90, max: 140, dec: 1, unit: '', good: 'down', vol: 0.9 },
-    { id: 'i5', fam: 'resil', type: 'heat', value: 2.6, min: 1.6, max: 3, dec: 1, unit: '', good: 'up', vol: 0.03, labels: REG, cols: ['q1', 'q2', 'q3', 'q4'], grid: [[2.8, 2.6, 2.5, 2.9], [2.8, 2.5, 2.4, 2.9], [2.7, 2.3, 2.2, 2.8], [2.6, 2.1, 2.0, 2.8], [2.5, 1.9, 1.8, 2.7]], vdec: 1, heatMax: 3, heatTone: 'lime' },
-    { id: 'i6', fam: 'market', type: 'line', value: 38, min: 10, max: 90, dec: 0, unit: '‰', good: 'down', vol: 2.4 },
-    { id: 'i7', fam: 'demand', type: 'stack', value: 57, min: 35, max: 80, dec: 0, unit: '%', good: 'up', series: ['trad', 'imp'], cols: ['t1', 't2', 't3', 't4', 't5', 't6'], grid: [[61, 60, 59, 58, 57, 57], [39, 40, 41, 42, 43, 43]] },
-    { id: 'i8', fam: 'prod', type: 'bars', value: 21, min: 8, max: 40, dec: 1, unit: '%', good: 'down', vol: 0.3, labels: ['field', 'storage', 'transport', 'marketloss', 'home'], vals: [4.2, 7.8, 3.1, 2.6, 3.4], vdec: 1, vunit: ' %' },
-    { id: 'i9', fam: 'prod', type: 'donut', value: 34, min: 15, max: 60, dec: 0, unit: '%', good: 'up', labels: ['own', 'bought', 'gift', 'aid'], vals: [34, 55, 8, 3] },
-    { id: 'i10', fam: 'prod', type: 'line', value: 23, min: 12, max: 40, dec: 1, unit: '', good: 'up', vol: 0.25 },
-    { id: 'i11', fam: 'prod', type: 'gauge', value: 18, min: 0, max: 100, dec: 1, unit: '%', good: 'up', vol: 0.5 },
-    { id: 'i12', fam: 'prod', type: 'stack', value: 106, min: 85, max: 125, dec: 0, unit: '', good: 'up', series: ['last', 'intent'], cols: ['maize', 'rice', 'sorghum', 'cowpea', 'cassava', 'yam'], grid: [[100, 100, 100, 100, 100, 100], [108, 121, 96, 112, 103, 99]] },
-    { id: 'i13', fam: 'market', type: 'line', value: 46, min: 25, max: 75, dec: 0, unit: '%', good: 'up', vol: 0.8, s1: 'farm', s2: { off: 52, name: 'retail' } },
-    { id: 'i14', fam: 'resil', type: 'heat', value: 12, min: 0, max: 45, dec: 0, unit: '%', good: 'down', vol: 1, labels: REG, cols: ['w1', 'w2', 'w3', 'w4', 'w5', 'w6'], grid: [[2, 3, 2, 4, 3, 2], [3, 4, 6, 5, 4, 3], [4, 6, 9, 12, 10, 8], [5, 9, 14, 19, 17, 13], [7, 13, 21, 28, 26, 22]], heatMax: 30, vunit: ' %' },
-    { id: 'i15', fam: 'resil', type: 'radar', value: 63, min: 30, max: 95, dec: 0, unit: '/100', good: 'up', labels: ['c1', 'c2', 'c3', 'c4', 'c5'], vals: [71, 68, 52, 66, 58] }
+    { id: 'i1', fam: 'demand', value: 64, min: 40, max: 90, dec: 0, unit: '%', good: 'up', trend: 1.4, season: { amp: 3, peak: 11 }, tchart: 'stack', shares: { labels: ['local', 'imported'], vals: [64, 36], lead: true },
+      type: 'bars', b: true, scale: false, labels: ['yam', 'maize', 'fish', 'poultry', 'rice', 'wheat'], vals: [98, 94, 55, 41, 38, 6], vunit: ' %', barMax: 100 },
+    { id: 'i2', fam: 'prod', value: 78, min: 50, max: 98, dec: 0, unit: '/100', good: 'up', trend: -1.2, season: { amp: 4, peak: 5 }, tchart: 'cols',
+      type: 'heat', b: true, scale: false, labels: ['tomato', 'mango', 'onion', 'orange', 'okra'], cols: QT, grid: [[88, 71, 64, 90], [35, 96, 82, 12], [91, 84, 58, 66], [86, 62, 41, 79], [60, 78, 93, 81]], heatMax: 100, heatTone: 'lime', vunit: ' %' },
+    { id: 'i3', fam: 'market', value: 615, min: 350, max: 900, dec: 0, unit: 'FCFA/kg', good: 'down', trend: 42, season: { amp: 55, peak: 7 }, noise: 9, tchart: 'line', s1: 'app', s2: { off: -48, name: 'sima' },
+      type: 'bars', b: true, labels: ['chili', 'tomato', 'okra', 'onion', 'yam', 'plantain'], vals: [1250, 680, 560, 470, 430, 390], vunit: ' F', barMax: 1400 },
+    { id: 'i4', fam: 'market', value: 43, min: 10, max: 110, dec: 0, unit: '‰', good: 'down', trend: -2.5, season: { amp: 16, peak: 7 }, tchart: 'cols',
+      type: 'heat', b: true, labels: REG, cols: QT, grid: [[22, 28, 35, 20], [26, 34, 44, 24], [31, 43, 58, 29], [36, 52, 71, 33], [44, 66, 88, 40]], heatMax: 100, heatTone: 'orange' },
+    { id: 'i5', fam: 'demand', value: 54, min: 35, max: 80, dec: 0, unit: '%', good: 'up', trend: 1.1, season: { amp: 2, peak: 12 }, tchart: 'line',
+      type: 'bars', b: true, scale: false, labels: ['v1', 'v2', 'v3', 'v4', 'v5', 'v6'], vals: [42, 58, 67, 33, 61, 39], vunit: ' %', barMax: 100 },
+    { id: 'i6', fam: 'prod', value: 36, min: 15, max: 60, dec: 0, unit: '%', good: 'up', trend: -0.8, season: { amp: 6, peak: 11 }, tchart: 'cols',
+      type: 'donut', b: true, lead: false, labels: ['bought', 'own', 'gift', 'livestock'], vals: [56, 29, 8, 7] },
+    { id: 'i7', fam: 'prod', value: 12.4, min: 5, max: 25, dec: 1, unit: '%', good: 'down', trend: -0.3, season: { amp: 2.2, peak: 4 }, tchart: 'line',
+      type: 'bars', b: true, labels: ['leaves', 'tomato', 'fruits', 'freshfish', 'bread', 'tubers'], vals: [26, 22, 18, 15, 9, 7], vunit: ' %', barMax: 36 },
+    { id: 'i8', fam: 'demand', value: 16, min: 6, max: 30, dec: 0, unit: '%', good: 'none', trend: -1.3, season: { amp: 1.5, peak: 12 }, tchart: 'stack', shares: { labels: ['beef', 'chicken', 'fish', 'egg', 'pulses'], vals: [16, 22, 31, 9, 22], lead: true },
+      type: 'donut', b: true, lead: false, labels: ['why1', 'why2', 'why3', 'why4'], vals: [58, 21, 13, 8] },
+    { id: 'i9', fam: 'market', value: 72, min: 50, max: 88, dec: 0, unit: '%', good: 'none', trend: -0.9, season: { amp: 1.5, peak: 8 }, tchart: 'line',
+      type: 'donut', b: true, labels: ['informal', 'minimarket', 'farmgate', 'canteen', 'ecommerce'], vals: [72, 12, 8, 6, 2] },
+    { id: 'i10', fam: 'market', value: 3.7, min: 1, max: 5, dec: 1, unit: '/5', good: 'up', trend: 0.05, season: { amp: 0.2, peak: 12 }, noise: 0.04, tchart: 'cols',
+      type: 'radar', b: true, radarMax: 5, vdec: 1, labels: ['tubers', 'fruits', 'meat', 'tomato', 'freshfish', 'leaves'], vals: [4.2, 3.9, 3.6, 3.5, 3.4, 3.2] },
+    { id: 'i11', fam: 'resil', value: 8.6, min: 2, max: 25, dec: 1, unit: '%', good: 'down', trend: -0.2, season: { amp: 3, peak: 7 }, tchart: 'line',
+      type: 'bars', b: true, scale: false, labels: ['s1', 's2', 's3', 's4', 's5'], vals: [31, 22, 19, 17, 11], vunit: ' %', barMax: 40 },
+    { id: 'i12', fam: 'resil', value: 21, min: 2, max: 60, dec: 0, unit: '%', good: 'down', trend: -0.9, season: { amp: 17, peak: 7 }, noise: 1.2, tchart: 'cols',
+      type: 'heat', b: true, labels: REG, cols: QT, grid: [[6, 14, 19, 5], [8, 19, 27, 6], [11, 27, 38, 8], [14, 36, 49, 10], [19, 47, 62, 13]], heatMax: 70, heatTone: 'red', vunit: ' %' },
+    { id: 'i13', fam: 'demand', value: 17, min: 5, max: 35, dec: 0, unit: '%', good: 'up', trend: 1.2, season: { amp: 1, peak: 12 }, tchart: 'line',
+      type: 'bars', b: true, scale: false, oneTone: true, labels: ['p0', 'p10', 'p20', 'p30', 'p50'], vals: [81, 58, 36, 19, 7], vunit: ' %', barMax: 100 },
+    { id: 'i14', fam: 'demand', value: 24, min: 8, max: 50, dec: 0, unit: '%', good: 'up', trend: 1.6, season: { amp: 3, peak: 9 }, tchart: 'cols',
+      type: 'bars', b: true, labels: ['cowpea', 'localleaves', 'moringa', 'fonio', 'bambara'], vals: [61, 48, 17, 9, 6], vunit: ' %', barMax: 100 },
+    { id: 'i15', fam: 'market', value: 39, min: 20, max: 60, dec: 0, unit: '%', good: 'none', trend: 0.7, season: { amp: 4, peak: 6 }, tchart: 'line',
+      type: 'flows', b: true, left: FLOWS.left, right: FLOWS.right, links: FLOWS.links }
   ];
   var OVER = [
-    { id: 'o1', type: 'line', value: 104, min: 88, max: 122, dec: 0, vol: 1.1, s1: 'value', s2: { off: -9, name: 'supply' } },
-    { id: 'o2', type: 'gauge', value: 71, min: 0, max: 100, dec: 0, unit: '%', good: 'up', vol: 0.5 },
+    { id: 'o1', value: 131, min: 90, max: 150, dec: 0, trend: 6, season: { amp: 4, peak: 12 }, noise: 1.2, s1: 'value', s2: { off: -34, name: 'supply' } },
+    { id: 'o2', type: 'gauge', value: 71, min: 0, max: 100, dec: 0, unit: '%', good: 'up', trend: 1.1, season: { amp: 5, peak: 11 } },
     { id: 'o3', type: 'radar', value: 0, min: 0, max: 1, labels: ['cereals', 'tubers', 'legumes', 'veg', 'animal', 'fruits'], vals: [78, 102, 81, 66, 47, 73], radarMax: 110 },
     { id: 'o4', type: 'stack', value: 0, min: 0, max: 1, series: ['cereals', 'tubers', 'legumes'], cols: REG, grid: [[180, 240, 160, 150, 210], [260, 310, 190, 120, 60], [30, 45, 40, 55, 70]] }
   ];
-  var FLOWS = { left: REG, right: ['m1', 'm2', 'm3'], links: [[0, 0, 9], [1, 0, 7], [1, 1, 4], [2, 1, 5], [2, 0, 3], [3, 1, 4], [3, 2, 2], [4, 2, 5], [4, 1, 3]] };
-  var KPIS = [{ k: 'k1', base: 18400, step: 9 }, { k: 'k2', base: 6120, step: 1 }, { k: 'k3', base: 214, step: 0 }, { k: 'k4', base: 1385, step: 0.4 }];
 
-  /* ---- 3. State & render ------------------------------------------------------ */
-  function country() { var sel = doc.getElementById('country'); return (sel && sel.value) || 'TG'; }
-  var seed = '', model = null, over = null, explorer = null, kpi = [], paused = false;
-  function build() {
-    seed = NS + ':' + country();
-    model = new D.Model(DEFS, seed); over = new D.Model(OVER, seed + ':o');
-    var r = D.rng(seed + ':k');
-    kpi = KPIS.map(function (k) { return Math.round(k.base * (0.85 + r() * 0.3)); });
-    /* One explorer for the life of the page (its click handler is bound once): only its data model is swapped. */
-    if (explorer) explorer.cfg.model = model;
-    else explorer = new D.Explorer({ ns: NS, defs: DEFS, families: ['demand', 'market', 'prod', 'resil'], model: model });
-  }
-  function t(k, p) { return I18N.t(k, p); }
-  function kpisHtml() {
-    return KPIS.map(function (k, i) { return '<li><span>' + D.esc(t(NS + '.' + k.k)) + '</span><b data-vrd-kpi="' + i + '">' + D.fmt(kpi[i], 0) + '</b></li>'; }).join('');
-  }
-  function oChart(i) { var d = OVER[i]; return D.chart(d, over.st[d.id], NS, { label: t(NS + '.o' + (i + 1) + '.t'), h: i === 0 ? 220 : 230 }); }
-  function html() {
-    var P = function (i, cls, extra) { return D.panel('vrd-p vrd-p--' + cls, t(NS + '.o' + (i + 1) + '.t'), t(NS + '.o' + (i + 1) + '.s'), (extra || '') + oChart(i), 'data-vrd-o="' + i + '"'); };
-    return '<div class="nd vrd">' + D.mandate(NS) +
-      '<ul class="nd-kpis">' + kpisHtml() + '</ul>' +
-      '<div class="vrd-grid">' + P(0, 'wide') + P(1, 'gauge') + P(2, 'third') + P(3, 'third') +
-        D.panel('vrd-p vrd-p--third', t(NS + '.o5.t'), t(NS + '.o5.s'), D.flows({ left: FLOWS.left, right: FLOWS.right, links: FLOWS.links, label: t(NS + '.o5.t') }, NS)) + '</div>' +
-      explorer.html() + D.note() + '</div>';
-  }
-  var host = doc.createElement('div'); host.className = 'vrd-host';
-  function paint() { host.innerHTML = html(); }
-  function mount() {
-    var slot = doc.getElementById('vrDash');
-    if (!slot) return;
-    if (seed !== NS + ':' + country()) { build(); paint(); }
-    if (host.parentNode !== slot) slot.appendChild(host);
-  }
-  function tick() {
-    if (paused || !host.firstChild) return;
-    model.tick(); over.tick();
-    KPIS.forEach(function (k, i) {
-      kpi[i] += Math.round(k.step * (0.5 + model.rand() * 1.5));
-      var el = host.querySelector('[data-vrd-kpi="' + i + '"]'); if (el) el.textContent = D.fmt(kpi[i], 0);
-    });
-    [0, 1, 2, 3].forEach(function (i) {
-      var el = host.querySelector('[data-vrd-o="' + i + '"]');
-      if (el) { el.classList.add('is-live'); el.innerHTML = oChart(i); }
-    });
-    explorer.tick();
-  }
-
-  build();
-  explorer.bind(host);
-  paint();
-  D.live(root, tick, 2600);
+  /* ---- 3. Board ------------------------------------------------------------- */
+  var board = D.Board({
+    ns: 'agd', root: root, slot: 'vrDash', defs: DEFS, families: ['demand', 'market', 'prod', 'resil'], over: OVER,
+    layout: [{ o: 0, cls: 'wide' }, { o: 1, cls: 'gauge' }, { o: 2, cls: 'third' }, { o: 3, cls: 'third' }, { o: 'flows', cls: 'third' }],
+    flows: FLOWS,
+    kpis: [{ k: 'k1', base: 1284000, flow: true, growth: 1.34 }, { k: 'k2', base: 18400, growth: 1.28 }, { k: 'k3', base: 412000, flow: true, growth: 1.3 }, { k: 'k4', base: 236, growth: 1.12 }]
+  });
 
   global.NutriBentoViews = global.NutriBentoViews || {};
-  global.NutriBentoViews.agriDash = {
-    mount: mount, tick: tick,
-    pause: function (v) { paused = v !== false; },
-    state: function () { return { country: country(), fam: explorer.fam, sel: explorer.sel, shown: explorer.list().length, value: model.st[explorer.sel].v }; }
-  };
-  I18N.onChange(function () { paint(); });
-  doc.addEventListener('nutri:countryChanged', function () { mount(); });
-  var ag = global.NutriBentoViews.agri;
-  if (ag && ag.render) ag.render();
-  mount();
+  global.NutriBentoViews.agriDash = board;
+  var hv = global.NutriBentoViews.agri;
+  if (hv && hv.render) hv.render();
+  board.mount();
 })(window);
