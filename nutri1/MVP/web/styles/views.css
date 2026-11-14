@@ -2395,6 +2395,7 @@ html.vc-lock { overflow: hidden; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-figs .nd-chart { margin: 0; min-width: 0; align-content: start; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart figcaption { color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); font-weight: 700; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart figcaption, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-chart > .nd-legend, :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-panel__body > .nd-legend { position: sticky; left: 0; }
+@media (max-width: 640px) { :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-detail .nd-chart > .nd-legend { justify-self: start; max-width: calc(100vw - 120px); } }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-ptag { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 4px 12px; border-radius: 9999px; background: var(--bg-well); color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); font-weight: 700; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-ptag .bento-icon { width: 15px; height: 15px; }
 :is(#agri, #health, #unicef, #fao, #wfp, #who) .nd-delta i { font-style: normal; font-weight: 600; color: var(--text-secondary); }

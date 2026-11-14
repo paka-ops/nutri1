@@ -22,7 +22,7 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `assets/dishes/*.jpg` | AI-generated dish photos |
 | `js/bento-dash.js` | Shared engine of the institutional data dashboards (`NutriBentoDash.Board`): simulated monthly series 2021–2026, period selector (by year / by month), curves, columns, stacked columns, donuts, bars, radar, gauge, heat map, flow map, data table + CSV export, 15-indicator explorer; styles `.nd-*` (views.css block 12h) |
 | `views/view-agri-dash.js` | Agriculture: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vrDash`; dictionary `agd.*` |
-| `views/view-health-dash.js` | Health: data mandate, simulated real-time dashboard and 15 indicators (`NutriBentoDash.Board`), mounted into `#vgDash`; texts in its dictionary (`hsd.*`) |
+| `views/view-health-dash.js` | Public health: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vgDash`; dictionary `hsd.*` |
 | `views/view-unicef-dash.js` | UNICEF: data mandate, simulated real-time dashboard and 15 indicators (`NutriBentoDash.Board`), mounted into `#viuDash`; texts in its dictionary (`ucd.*`) |
 | `views/view-fao-dash.js` | FAO: data mandate, simulated real-time dashboard and the 15 FAO indicators (`NutriBentoDash.Board`), mounted into `#vifDash`; texts in its dictionary (`fad.*`) |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |

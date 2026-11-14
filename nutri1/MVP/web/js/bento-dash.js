@@ -206,7 +206,7 @@
       acc += p;
     });
     return '<div class="nd-donut"><svg class="nd-svg" viewBox="0 0 160 160" role="img" aria-label="' + esc(o.label || '') + '"><circle class="nd-track" cx="80" cy="80" r="62"/><g class="nd-spin">' + segs + '</g>' +
-      '<text class="nd-big" x="80" y="80" text-anchor="middle">' + fmt(s.vals[0] / sum * 100, 0) + ' %</text><text class="nd-axis" x="80" y="100" text-anchor="middle">' + esc(lab(ns, d.labels[0])) + '</text></svg>' +
+      '<text class="nd-big" x="80" y="' + (lab(ns, d.labels[0]).length > 13 ? 88 : 80) + '" text-anchor="middle">' + fmt(s.vals[0] / sum * 100, 0) + ' %</text>' + (function (t) { return t.length > 13 ? '' : '<text class="nd-axis" x="80" y="100" text-anchor="middle">' + esc(t) + '</text>'; })(lab(ns, d.labels[0])) + '</svg>' +
       '<ul class="nd-legend nd-legend--col">' + s.vals.map(function (v, i) { return '<li class="nd-tone--' + TONES[i % TONES.length] + '"><i></i>' + esc(lab(ns, d.labels[i])) + ' <b>' + fmt(v / sum * 100, 0) + ' %</b></li>'; }).join('') + '</ul></div>';
   }
   function gauge(d, s, ns, o) {

@@ -6,7 +6,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js, js/bento-sample-data.js
    Styles     : styles/views.css  (.vg-*)
-   Hosts      : #vgDash — simulated real-time dashboard and the 15 indicators (views/view-health-dash.js)
+   Hosts      : #vgDash — yearly/monthly data dashboard and the 15 indicators (views/view-health-dash.js)
    Note       : the figures are the illustrative sample values of the original prototype
                 (demoCountryMetrics, six countries + one placeholder). They are NOT official
                 statistics. The prototype's trend charts, "Health GIS" pins, live KPI bar and
