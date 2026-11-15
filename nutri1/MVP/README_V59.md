@@ -21,6 +21,7 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `views/view-foodcloud-cards.js` | African dish grid + football-style nutrition card dialog mounted inside the Food Cloud (`#vfCards`); indicative per-serving estimates, playful 0–99 ratings |
 | `assets/dishes/*.jpg` | AI-generated dish photos |
 | `js/bento-dash.js` | Shared engine of the institutional data dashboards (`NutriBentoDash.Board`): simulated monthly series 2021–2026, period selector (by year / by month), curves, columns, stacked columns, donuts, bars, radar, gauge, heat map, flow map, data table + CSV export, 15-indicator explorer; styles `.nd-*` (views.css block 12h) |
+| `views/view-devices-data.js` | Connected devices: curves of the data sent by each synchronised source (24 hours / 7 days / 30 days), min / average / max and measurements sent per day, mounted into `#vdData`; dictionary `devx.*`, styles `.vdx-*` (views.css block 3b) |
 | `views/view-agri-dash.js` | Agriculture: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vrDash`; dictionary `agd.*` |
 | `views/view-health-dash.js` | Public health: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vgDash`; dictionary `hsd.*` |
 | `views/view-unicef-dash.js` | UNICEF: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#viuDash`; dictionary `ucd.*` |

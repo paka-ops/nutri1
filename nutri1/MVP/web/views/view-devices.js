@@ -4,6 +4,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Styles     : styles/views.css  (.vd-*)
+   Hosts      : #vdData — curves of the data sent (views/view-devices-data.js)
    Preserves  : connectDevice(name), runSync(), #syncbar, #syncText
                 (legacy device names: 'Apple Health', 'Health Connect', 'Glucose',
                  'Blood Pressure', 'Wearable', 'Smart Scale')
@@ -145,6 +146,8 @@
 
   /* Sample readings: stable per day, so repeated syncs do not invent a new history. */
   function sample(scope) {
+    var dx = global.NutriBentoViews && global.NutriBentoViews.devicesData;   /* same series as the "Data sent" curves */
+    if (dx && dx.latest) { var v = dx.latest(scope); if (v) return v; }
     var day = Math.floor(Date.now() / 864e5), h = (day * 2654435761 + scope.length * 97) >>> 0;
     var r = function (min, max) { h = (Math.imul(h ^ (h >>> 15), 2246822507) ^ 0x9e3779b9) >>> 0; return min + (h % 1000) / 1000 * (max - min); };
     switch (scope) {
@@ -286,6 +289,7 @@
         '<span class="pill vd-demo">' + esc(t('devices.demo')) + '</span></div></div></article>' +
       '<div class="vd-devices" role="list" aria-label="' + esc(t('devices.list.title')) + '">' + DEVICES.map(function (d) { return '<div role="listitem">' + deviceCard(d) + '</div>'; }).join('') + '</div>' +
       '<div class="vd-side">' + syncCard() + readingsCard() + '</div>' +
+      '<article id="vdData" class="card vdx"></article>' +
       logCard() + privacyCard() +
       '</div>';
   }
@@ -302,6 +306,8 @@
       var next = root.querySelector(sel) || (key.id && root.querySelector('[data-vd-device="' + key.id + '"] button'));
       if (next && !next.disabled) { try { next.focus({ preventScroll: true }); } catch (e) { next.focus(); } }
     }
+    var dx = global.NutriBentoViews && global.NutriBentoViews.devicesData;   /* curves of the data sent (views/view-devices-data.js) */
+    if (dx) dx.mount();
   }
   /* During a sync only the bar and its label change: no full re-render per tick. */
   function paintSync() {
@@ -404,6 +410,8 @@
   global.NutriBentoViews = global.NutriBentoViews || {};
   global.NutriBentoViews.devices = {
     render: render, devices: DEVICES.map(function (d) { return d.id; }),
+    /* data types a connected and synchronised source has sent: [{ scope, device, last }] */
+    sent: function () { return readings().map(function (r) { return { scope: r.scope, device: r.device.id, last: state.connected[r.device.id].last }; }); },
     state: function () { return JSON.parse(JSON.stringify({ connected: state.connected, auto: state.auto, pending: state.pending, sync: state.sync, log: state.log })); }
   };
 })(window);
