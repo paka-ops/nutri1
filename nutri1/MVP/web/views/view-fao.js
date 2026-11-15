@@ -7,7 +7,7 @@
    Depends on : js/bento-i18n.js, js/bento-shell.js
    Reads      : localStorage.nutri_foodcloud (written by views/view-foodcloud.js)
    Styles     : styles/views.css  (shared .vi-* institution components)
-   Hosts      : #vifDash — simulated real-time dashboard and the 15 indicators (views/view-fao-dash.js)
+   Hosts      : #vifDash — yearly/monthly data dashboard and the 15 indicators (views/view-fao-dash.js)
    Preserves  : renderFAO(), #faoCountry, #faoProduction, #faoLoss, #faoPrice,
                 #faoAvailability, #faoSafety, #faoProductionPanel,
                 #faoNutritionPanel, #faoSafetyPanel, #faoMarketPanel
