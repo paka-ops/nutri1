@@ -6,7 +6,7 @@
 
    Depends on : js/bento-i18n.js, js/bento-shell.js, js/bento-sample-data.js
    Styles     : styles/views.css  (shared .vi-* institution components)
-   Hosts      : #viuDash — simulated real-time dashboard and the 15 indicators (views/view-unicef-dash.js)
+   Hosts      : #viuDash — yearly/monthly data dashboard and the 15 indicators (views/view-unicef-dash.js)
    Preserves  : renderUNICEF(), #unicefCountry, #unicefStunting, #unicefWasting,
                 #unicefAnaemia, #unicefEBF, #unicefFeedingIndicators, #unicefAlerts
    Note       : illustrative sample values, not official statistics (see
