@@ -8,6 +8,7 @@
    Depends on : js/bento-i18n.js, js/bento-shell.js, js/bento-sample-data.js
    Reads      : localStorage.nutri_foodcloud (written by views/view-foodcloud.js)
    Styles     : styles/views.css  (shared .vi-* institution components)
+   Hosts      : #viwDash — yearly/monthly data dashboard and the 15 indicators (views/view-wfp-dash.js)
    Preserves  : renderWFP(), #wfpCountry, #wfpRisk, #wfpAfford, #wfpDiversity,
                 #wfpPrice, #wfpNutrition, #wfpEarly, #wfpMarket, #wfpDiet
    Note       : removed because they were invented: the five "/ 100" scores (food
@@ -171,6 +172,7 @@
         '<div class="vi-toolbar"><label class="vi-field"><span>' + esc(t('wfp.country')) + '</span><select id="wfpCountry">' + codes().map(function (c) {
           return '<option value="' + c + '"' + (c === state.country ? ' selected' : '') + '>' + esc(cname(c)) + '</option>'; }).join('') + '</select></label></div>' +
         '<ul class="vi-kpis vi-kpis--5" aria-label="' + esc(t('wfp.kpis')) + '">' + kpis + '</ul></section>' +
+      '<div id="viwDash" class="vi-dash"></div>' +
       '<div class="vi-grid">' +
         '<section class="card vi-wide">' + head('grid', t('wfp.diet.title', { country: name })) + '<p class="vi-sub">' + esc(t('wfp.diet.sub')) + '</p>' + diet + addBtn +
           '<p class="vi-note">' + ico('info') + '<span>' + esc(t('wfp.diet.note')) + '</span></p></section>' +
@@ -182,6 +184,8 @@
         '<section class="card vi-half">' + head('list', t('wfp.cov.title')) + '<p class="vi-sub">' + esc(t('wfp.cov.sub')) + '</p><ul class="vi-rows" id="wfpMarket">' + cov + '</ul></section>' +
         '<section class="card vi-full">' + head('box', t('wfp.prod.title')) + '<p class="vi-sub">' + esc(t('wfp.prod.sub')) + '</p><ul class="vi-products">' + prods + '</ul></section>' +
       '</div></div>';
+    var dash = global.NutriBentoViews && global.NutriBentoViews.wfpDash;   /* TASK 10: yearly/monthly dashboard + 15 indicators */
+    if (dash) dash.mount();
   }
 
   root.addEventListener('change', function (ev) {
