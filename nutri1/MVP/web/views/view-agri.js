@@ -8,6 +8,7 @@
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Reads      : localStorage.nutri_foodcloud (written by views/view-foodcloud.js)
    Styles     : styles/views.css  (.vr-*)
+   Hosts      : #vrDash — simulated real-time dashboard and the 15 indicators (views/view-agri-dash.js)
    Note       : the prototype had no agricultural data (every tile showed "—") and its
                 charts drew invented series; those were removed. This view shows only what
                 was entered locally. "National needs" and "Production gap" need a population
@@ -199,6 +200,7 @@
       '<section class="card vr-hero"><div class="vh-head"><div class="vr-hero__title"><span class="vh-ico">' + ico('agri') + '</span><div><span class="vr-kicker">' + esc(t('agri.kicker')) + '</span><h2>' + esc(t('agri.title')) + '</h2>' +
         '<p class="vr-sub">' + esc(t('agri.sub', { country: name })) + '</p></div></div><span class="pill vr-demo">' + esc(t('agri.demo')) + '</span></div>' +
         '<ul class="vr-kpis" aria-label="' + esc(t('agri.kpis')) + '">' + kpis + '</ul></section>' +
+      '<div id="vrDash" class="vr-dash"></div>' +
       '<div class="vr-grid">' +
         '<section class="card vr-wide">' + prodCard + '</section>' +
         '<section class="card vr-side">' + consCard + '</section>' + cropsCard +
@@ -212,6 +214,8 @@
             return '<tr><th scope="row">' + esc(t('agri.p.' + i)) + '</th><td data-label="' + esc(t('agri.p.c2')) + '">' + esc(t('agri.p.' + i + '.o')) + '</td><td data-label="' + esc(t('agri.p.c3')) + '">' + esc(t('agri.p.' + i + '.u')) + '</td></tr>'; }).join('') +
           '</tbody></table></div></section>' +
       '</div></div>';
+    var dash = global.NutriBentoViews && global.NutriBentoViews.agriDash;   /* TASK 6: animated dashboard + 15 indicators */
+    if (dash) dash.mount();
   }
 
   root.addEventListener('click', function (ev) {

@@ -4,6 +4,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Styles     : styles/views.css  (.va-*)
+   Hosts      : #vaPredict — predictive lab mounted by views/view-ai-predict.js
    Preserves  : generatePlan(), #aiWizard (.step / .active / .done), #aiProgress,
                 #aiStatus, #planCards
    Storage    : nutri_ai_profile  (the form values, this browser only)
@@ -350,8 +351,15 @@
         '<span class="pill va-demo">' + esc(t('ai.demo')) + '</span></div>' +
         '<p class="va-hero__note">' + esc(t('ai.demo.note')) + '</p></article>' +
       formCard() + pipeCard() +
+      '<div id="vaPredict" class="va-predict"></div>' +                 /* predictive lab: views/view-ai-predict.js */
       '<div id="planCards" class="va-plan' + (state.stale ? ' is-stale' : '') + '">' + planCards() + '</div>' +
       '</div>';
+  }
+
+  /* Hook for the predictive lab (views/view-ai-predict.js), which keeps its own DOM across renders. */
+  function predict(method) {
+    var api = global.NutriBentoViews && global.NutriBentoViews.aiPredict;
+    if (api && typeof api[method] === 'function') { try { return api[method](); } catch (e) { /* ignore */ } }
   }
 
   /* ---- 6. Render ----------------------------------------------------------- */
@@ -364,6 +372,7 @@
       else if (active.type === 'submit') keep = '.va-generate';
     }
     root.innerHTML = template();
+    predict('mount');
     var target = root.querySelector(focusSel || keep || 'x-none');
     if (target && !target.disabled) { try { target.focus({ preventScroll: !focusSel }); } catch (e) { target.focus(); } }
   }
@@ -386,6 +395,7 @@
     save();
     var plan = compute();
     state.step = 0; state.stale = false;
+    predict('run');
     var reduce = global.matchMedia && global.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var hadFocus = root.contains(doc.activeElement);
     if (reduce) { state.plan = plan; state.step = 8; render(hadFocus ? '[data-va-focus]' : null); return true; }

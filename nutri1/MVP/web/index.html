@@ -6,12 +6,15 @@
 <link rel="stylesheet" href="styles/legacy-layout.css">
 <link rel="stylesheet" href="components/citizen-dashboard/citizen-dashboard.css">
 <link rel="stylesheet" href="styles/bento-design-system.css">
-<link rel="stylesheet" href="styles/views.css">
+<link rel="stylesheet" href="styles/views.css?v=20261125">
+<link rel="stylesheet" href="styles/theme-light.css">
+<script src="js/bento-theme.js"></script>
 <!-- Core modules (SESSION 0): dictionaries → EN/FR bus → shell, charts & click guard. Must load before the legacy scripts. -->
 <script src="js/bento-locales.js"></script>
 <script src="js/bento-i18n.js"></script>
 <script src="js/bento-shell.js"></script>
 <script src="js/bento-sample-data.js"></script>
+<script src="js/bento-dash.js?v=20261125"></script>
 </head><body>
 <a class="bento-skip" href="#bentoMain" data-b-i18n="shell.skip">Skip to content</a>
 
@@ -43,6 +46,10 @@
     <div class="bento-lang" role="group" aria-label="Language" data-b-i18n-aria="shell.language">
       <button type="button" data-bento-lang="en" aria-pressed="true">EN</button><button type="button" data-bento-lang="fr" aria-pressed="false">FR</button>
     </div>
+    <button type="button" class="bento-theme" id="bentoTheme" aria-pressed="false" aria-label="Switch to light theme" data-no-i18n>
+      <svg class="bento-theme__moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+      <svg class="bento-theme__sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
     <select id="country" onchange="countryChanged()" aria-label="Country" data-b-i18n-aria="shell.country"></select>
     <select id="language" onchange="languageChanged()" aria-label="Language" data-b-i18n-aria="shell.language"></select>
     <button type="button" class="bento-premium" id="bentoPremium"><span data-bento-icon="spark" aria-hidden="true"></span><span data-b-i18n="shell.premium">Premium</span></button>
@@ -109,40 +116,52 @@
 </section>
 
 <section id="devices" class="view" aria-label="Connected Devices" data-no-i18n data-no-sim data-v44bar="1"></section>
-<script src="views/view-devices.js"></script>
+<script src="views/view-devices.js?v=20261125"></script>
+<script src="views/view-devices-data.js?v=20261125"></script>
 
 <section id="scanner" class="view" aria-label="AI Food &amp; Meal Scanner" data-no-i18n data-no-sim data-v44bar="1"></section>
-<script src="views/view-scanner.js"></script>
+<script src="views/view-scanner.js?v=20261125"></script>
+<script src="views/view-scanner-balance.js?v=20261125"></script>
 
 <section id="ai" class="view" aria-label="AI Nutrition &amp; Prevention" data-no-i18n data-no-sim data-v44bar="1"></section>
 <script src="views/view-ai.js"></script>
+<script src="views/view-ai-predict.js"></script>
 
 <section id="network" class="view" aria-label="Nutritionist Network" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="network"></section>
 <script src="views/view-network.js"></script>
+<script src="views/view-network-team.js"></script>
 
 <section id="payments" class="view" aria-label="Payments" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="payments"></section>
 <script src="views/view-payments.js"></script>
 
 <section id="marketplace" class="view" aria-label="Healthy Food Marketplace" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="marketplace"></section>
 <script src="views/view-marketplace.js"></script>
+<script src="views/view-marketplace-lab.js"></script>
 
 <section id="unicef" class="view" aria-label="UNICEF Nutrition Intelligence Center" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="unicef"></section>
 <script src="views/view-unicef.js"></script>
+<script src="views/view-unicef-dash.js?v=20261125"></script>
 <section id="who" class="view" aria-label="WHO Nutrition &amp; NCD Intelligence Center" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="who"></section>
-<script src="views/view-who.js"></script>
+<script src="views/view-who.js?v=20261125"></script>
+<script src="views/view-who-dash.js?v=20261125"></script>
 <section id="foodcloud" class="view" aria-label="African Food Cloud" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="foodcloud"></section>
 <script src="views/view-foodcloud.js"></script>
+<script src="views/view-foodcloud-cards.js"></script>
 
 <section id="health" class="view" aria-label="Ministry of Health Command Center" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="health"></section>
 <script src="views/view-health.js"></script>
+<script src="views/view-health-dash.js?v=20261125"></script>
 
 <section id="agri" class="view" aria-label="Ministry of Agriculture Food Intelligence" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="agri"></section>
-<script src="views/view-agri.js"></script>
+<script src="views/view-agri.js?v=20261125"></script>
+<script src="views/view-agri-dash.js?v=20261125"></script>
 
 <section id="wfp" class="view" aria-label="WFP Food Security Intelligence Center" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="wfp"></section>
-<script src="views/view-wfp.js"></script>
+<script src="views/view-wfp.js?v=20261125"></script>
+<script src="views/view-wfp-dash.js?v=20261125"></script>
 <section id="fao" class="view" aria-label="FAO Food Systems Intelligence Center" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="fao"></section>
 <script src="views/view-fao.js"></script>
+<script src="views/view-fao-dash.js?v=20261125"></script>
 
 <section id="monitoring" class="view" aria-label="Projects, Surveys &amp; Nutrition Surveillance" data-no-i18n data-no-sim data-v44bar="1" data-bento-view="monitoring"></section>
 <script src="views/view-monitoring.js"></script>

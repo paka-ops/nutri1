@@ -6,6 +6,7 @@
 
    Depends on : js/bento-i18n.js, js/bento-shell.js, js/bento-sample-data.js
    Styles     : styles/views.css  (shared .vi-* institution components)
+   Hosts      : #viuDash — yearly/monthly data dashboard and the 15 indicators (views/view-unicef-dash.js)
    Preserves  : renderUNICEF(), #unicefCountry, #unicefStunting, #unicefWasting,
                 #unicefAnaemia, #unicefEBF, #unicefFeedingIndicators, #unicefAlerts
    Note       : illustrative sample values, not official statistics (see
@@ -145,6 +146,7 @@
           return '<option value="' + c + '"' + (c === state.country ? ' selected' : '') + '>' + esc(cname(c)) + '</option>'; }).join('') + '</select></label></div>' +
         (own ? '' : '<p class="vi-note vi-note--warn">' + ico('info') + '<span>' + esc(t('unicef.placeholder', { country: name })) + '</span></p>') +
         '<ul class="vi-kpis" aria-label="' + esc(t('unicef.kpis')) + '">' + kpis + '</ul></section>' +
+      '<div id="viuDash" class="vi-dash"></div>' +
       '<div class="vi-grid">' +
         '<section class="card vi-wide">' + head('scale', t('unicef.scale.title', { country: name })) + '<p class="vi-sub">' + esc(t('unicef.scale.sub')) + '</p><ul class="vi-scales">' + SCALED.map(function (k) { return scaleHtml(k, m[k]); }).join('') + '</ul></section>' +
         '<section class="card vi-side">' + head('target', t('unicef.target.title')) + '<p class="vi-sub">' + esc(t('unicef.target.sub')) + '</p><ul class="vi-bars">' + targets + '</ul>' +
@@ -153,6 +155,8 @@
         '<section class="card vi-half">' + head('list', t('unicef.cov.title')) + '<p class="vi-sub">' + esc(t('unicef.cov.sub')) + '</p><ul class="vi-rows" id="unicefFeedingIndicators">' + cov + '</ul></section>' +
         '<p class="vi-note vi-full">' + ico('info') + '<span>' + esc(t('unicef.note')) + '</span></p>' +
       '</div></div>';
+    var dash = global.NutriBentoViews && global.NutriBentoViews.unicefDash;   /* TASK 8: animated dashboard + 15 indicators */
+    if (dash) dash.mount();
   }
 
   root.addEventListener('change', function (ev) {

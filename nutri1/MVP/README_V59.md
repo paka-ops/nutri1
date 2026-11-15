@@ -11,6 +11,24 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `styles/bento-design-system.css` | Tokens, shell, cards, buttons, form controls |
 | `styles/views.css` | One block per view, plus the shared institution block |
 | `styles/legacy-layout.css` | What is left of the old layout rules (selectors still in use only) |
+| `styles/theme-light.css`, `js/bento-theme.js` | Optional light theme (`<html data-theme="light">`), toggle in the header, stored in `localStorage` (`nutri_theme`). Dark stays the default |
+| `assets/scanner/*.jpg` | AI-generated sample photos used by the scanner simulation |
+| `views/view-ai-predict.js` | Predictive health lab mounted inside the AI view (`#vaPredict`): illustrative, hand-weighted risk model — not a trained or validated model |
+| `views/view-network-team.js` | Medical team mounted inside the Network view (`#vnTeam`): fictional doctors, simulated presence, appointment booking and teleconsultation room |
+| `assets/doctors/*.jpg` | AI-generated doctor portraits (not real people) |
+| `views/view-marketplace-lab.js` | Nutrition lab mounted inside the Healthy Food Marketplace (`#vmLab`) + product photos: indicative hand-entered composition, glycaemic / bioavailability / density simulations, comparator, ranking by physiological need |
+| `assets/market/*.jpg` | AI-generated product photos |
+| `views/view-foodcloud-cards.js` | African dish grid + football-style nutrition card dialog mounted inside the Food Cloud (`#vfCards`); indicative per-serving estimates, playful 0–99 ratings |
+| `assets/dishes/*.jpg` | AI-generated dish photos |
+| `js/bento-dash.js` | Shared engine of the institutional data dashboards (`NutriBentoDash.Board`): simulated monthly series 2021–2026, period selector (by year / by month), curves, columns, stacked columns, donuts, bars, radar, gauge, heat map, flow map, data table + CSV export, 15-indicator explorer; styles `.nd-*` (views.css block 12h) |
+| `views/view-devices-data.js` | Connected devices: curves of the data sent by each synchronised source (24 hours / 7 days / 30 days), min / average / max and measurements sent per day, mounted into `#vdData`; dictionary `devx.*`, styles `.vdx-*` (views.css block 3b) |
+| `views/view-scanner-balance.js` | Scanner: meal balance (share of energy from proteins 12–35 %, carbohydrates 45–65 %, fats 20–35 %), named food recommendations with quantities, and lock of the "I eat this meal" button until the meal is balanced. Indicative demonstration targets. |
+| `views/view-agri-dash.js` | Agriculture: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vrDash`; dictionary `agd.*` |
+| `views/view-health-dash.js` | Public health: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vgDash`; dictionary `hsd.*` |
+| `views/view-unicef-dash.js` | UNICEF: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#viuDash`; dictionary `ucd.*` |
+| `views/view-fao-dash.js` | FAO: data mandate, yearly/monthly dashboard and the 15 indicators (titles from the product owner; mandate, capture and blind-spot texts are drafts), mounted into `#vifDash`; dictionary `fad.*` |
+| `views/view-wfp-dash.js` | WFP: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#viwDash`; dictionary `wfd.*` |
+| `views/view-who-dash.js` | WHO: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vioDash`; dictionary `whd.*` |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |

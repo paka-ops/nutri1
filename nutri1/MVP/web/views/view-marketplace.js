@@ -6,6 +6,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Styles     : styles/views.css  (.vm-*)
+   Hosts      : #vmLab — nutrition lab + product photos (views/view-marketplace-lab.js)
    Preserves  : populateGeneralStoreCountry(), selectGeneralCategory(), renderGeneralHealthyStore(),
                 renderPatientFoodBridge(), openPatientFoodMarketplace(), populateClinicalFoodCountry(),
                 selectFoodContext(), renderClinicalFood(), recommendClinicalFood(), viewClinicalFood(),
@@ -287,6 +288,9 @@
         (state.price === 'all' || (state.price === 'low' && p.price < 8) || (state.price === 'mid' && p.price >= 8 && p.price <= 15) || (state.price === 'high' && p.price > 15));
     });
   }
+  /* TASK 4: product photo + energy badge, provided by views/view-marketplace-lab.js when loaded */
+  function lab() { return global.NutriBentoViews && global.NutriBentoViews.marketplaceLab; }
+  function labMedia(id) { var l = lab(); return l ? l.cardMedia(id) : ''; }
   function productsHtml() {
     var list = filtered();
     var count = '<p class="vm-count" role="status">' + esc(t('market.count', { n: list.length })) + '</p>';
@@ -297,7 +301,7 @@
     }
     return count + '<ul class="vm-products">' + list.map(function (p) {
       var open = state.open === p.id;
-      return '<li class="vm-product product-card"><div class="vm-product__top"><span class="vm-product__ico">' + ico(p.cat) + '</span>' +
+      return '<li class="vm-product product-card">' + labMedia(p.id) + '<div class="vm-product__top"><span class="vm-product__ico">' + ico(p.cat) + '</span>' +
         '<div><h4>' + esc(tr(p.name)) + '</h4><small>' + ico('pin') + esc(cname(p.country)) + '</small></div></div>' + tags(p.tags) +
         '<p class="vm-price product-price">' + esc(money(p.price)) + '</p>' +
         '<div class="vm-actions"><button type="button" class="btn primary" data-vm-act="add" data-vm-id="' + p.id + '">' + esc(t('market.add')) + '</button>' +
@@ -343,7 +347,8 @@
           return '<option value="' + p + '"' + (p === state.price ? ' selected' : '') + '>' + esc(t('market.price.' + p)) + '</option>'; }).join('') + '</select></label>' +
       '</div><div class="vm-chips healthy-store-tabs" id="vmChips" role="group" aria-label="' + esc(t('market.cats')) + '">' + chipsHtml() + '</div>' +
       '<div id="generalHealthyProducts" class="vm-results">' + productsHtml() + '</div></section>' +
-      '<section class="card vm-cart" id="vmCart" aria-label="' + esc(t('market.cart.title')) + '">' + cartHtml() + '</section>';
+      '<section class="card vm-cart" id="vmCart" aria-label="' + esc(t('market.cart.title')) + '">' + cartHtml() + '</section>' +
+      '<div id="vmLab" class="vm-lab"></div>';
   }
 
   /* ---- 6. Health context ---------------------------------------------------- */
@@ -417,6 +422,7 @@
         '<div class="vm-tabs" role="tablist" aria-label="' + esc(t('market.tabs')) + '">' + tabBtn('store', 'store') + tabBtn('context', 'target') + '</div></section>' +
       '<div class="vm-panel vm-panel--store" id="vmPanel-store" role="tabpanel" aria-labelledby="vmTab-store"' + (state.tab === 'store' ? '' : ' hidden') + '>' + storeHtml() + '</div>' +
       '<div class="vm-panel vm-panel--context" id="vmPanel-context" role="tabpanel" aria-labelledby="vmTab-context"' + (state.tab === 'context' ? '' : ' hidden') + '>' + contextHtml() + '</div></div>';
+    if (lab()) lab().mount();
   }
   function paint(id, html) { var el = $(id); if (el) el.innerHTML = html; else render(); }
   function paintProducts() { paint('generalHealthyProducts', productsHtml()); }

@@ -5,6 +5,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Styles     : styles/views.css  (.vf-*)
+   Hosts      : #vfCards — African dish cards (views/view-foodcloud-cards.js)
    Preserves  : #foodCountry (country select of the food form), runScan('Food Cloud')
    Storage    : localStorage.nutri_foodcloud  [{ id, type, at, data }]  (newest first, max 200)
    Read by    : views/view-agri.js (production and consumption entries of the selected country)
@@ -252,6 +253,7 @@
       '<section class="card vf-hero"><div class="vh-head"><div class="vf-hero__title"><span class="vh-ico">' + ico('cloud') + '</span><div><span class="vf-kicker">' + esc(t('cloud.kicker')) + '</span><h2>' + esc(t('cloud.title')) + '</h2>' +
         '<p class="vf-sub">' + esc(t('cloud.sub')) + '</p></div></div><span class="pill vf-demo">' + esc(t('cloud.demo')) + '</span></div>' +
         '<div class="vf-kpis" id="vfKpis">' + kpisHtml() + '</div></section>' +
+      '<div id="vfCards" class="vf-cards"></div>' +
       '<div class="vf-grid">' +
         '<section class="card vf-entry" aria-labelledby="vfFormTitle"><div class="vf-types" id="vfTypes" role="group" aria-label="' + esc(t('cloud.types')) + '">' + typesHtml() + '</div>' +
           '<div id="vfFormBox">' + formHtml() + '</div></section>' +
@@ -260,6 +262,8 @@
           return '<li><i>' + i + '</i><div><b>' + esc(t('cloud.next.' + i)) + '</b><p>' + esc(t('cloud.next.' + i + '.d')) + '</p></div></li>'; }).join('') + '</ol>' +
           '<p class="vf-note">' + ico('info') + '<span>' + esc(t('cloud.next.note')) + '</span></p></section>' +
       '</div></div>';
+    var cards = global.NutriBentoViews && global.NutriBentoViews.foodcloudCards;   /* TASK 5: dish cards */
+    if (cards) cards.mount();
   }
   function paint(id, html) { var el = $(id); if (el) el.innerHTML = html; }
   function paintData() { paint('vfKpis', kpisHtml()); paint('vfTypes', typesHtml()); paint('vfQueue', queueHtml()); }

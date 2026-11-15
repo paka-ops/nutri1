@@ -7,6 +7,7 @@
    Depends on : js/bento-i18n.js, js/bento-shell.js
    Reads      : localStorage.nutri_foodcloud (written by views/view-foodcloud.js)
    Styles     : styles/views.css  (shared .vi-* institution components)
+   Hosts      : #vifDash — yearly/monthly data dashboard and the 15 indicators (views/view-fao-dash.js)
    Preserves  : renderFAO(), #faoCountry, #faoProduction, #faoLoss, #faoPrice,
                 #faoAvailability, #faoSafety, #faoProductionPanel,
                 #faoNutritionPanel, #faoSafetyPanel, #faoMarketPanel
@@ -189,6 +190,7 @@
         '<div class="vi-toolbar"><label class="vi-field"><span>' + esc(t('fao.country')) + '</span><select id="faoCountry">' + codes().map(function (c) {
           return '<option value="' + c + '"' + (c === state.country ? ' selected' : '') + '>' + esc(cname(c)) + '</option>'; }).join('') + '</select></label></div>' +
         '<ul class="vi-kpis vi-kpis--5" aria-label="' + esc(t('fao.kpis')) + '">' + kpis + '</ul></section>' +
+      '<div id="vifDash" class="vi-dash"></div>' +
       '<div class="vi-grid">' +
         '<section class="card vi-wide">' + head('bars', t('fao.sys.title', { country: name })) + '<p class="vi-sub">' + esc(d.year ? t('fao.sys.subyear', { year: d.year }) : t('fao.sys.sub')) + '</p>' + sys +
           '<div class="vi-actions">' + btn('production', 'fao.add.prod', !any) + btn('consumption', 'fao.add.cons') + '</div>' +
@@ -200,6 +202,8 @@
         '<section class="card vi-half">' + head('list', t('fao.cov.title')) + '<p class="vi-sub">' + esc(t('fao.cov.sub')) + '</p><ul class="vi-rows" id="faoMarketPanel">' + cov + '</ul></section>' +
         '<section class="card vi-full">' + head('box', t('fao.prod.title')) + '<p class="vi-sub">' + esc(t('fao.prod.sub')) + '</p><ul class="vi-products">' + prods + '</ul></section>' +
       '</div></div>';
+    var dash = global.NutriBentoViews && global.NutriBentoViews.faoDash;   /* TASK 9: animated dashboard + 15 indicators */
+    if (dash) dash.mount();
   }
 
   root.addEventListener('change', function (ev) {

@@ -5,6 +5,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Styles     : styles/views.css  (.vn-*)
+   Hosts      : #vnTeam — medical team, booking and teleconsultation (views/view-network-team.js)
    Preserves  : renderNutritionists(), populateNutritionistCountries(), loadPatientDashboard(),
                 sendChat(), startTeleconsultation(), manageAppointments(),
                 #patientCareDashboard #nutritionistPatient #patientAccessScope #patientPeriod
@@ -391,7 +392,7 @@
         '<span class="pill vn-demo">' + esc(t('network.demo')) + '</span></div>' +
         '<div class="vn-tabs" role="tablist" aria-label="' + esc(t('network.tabs')) + '">' + tab('patient') + tab('pro') + '</div></article>' +
       '<div class="vn-panel vn-panel--patient" role="tabpanel" id="vnPanel-patient" aria-labelledby="vnTab-patient"' + (state.tab === 'patient' ? '' : ' hidden') + '>' +
-        findCard() + chatCard() + flowCard() + '</div>' +
+        '<div id="vnTeam" class="vn-team"></div>' + findCard() + chatCard() + flowCard() + '</div>' +
       '<div class="vn-panel vn-panel--pro" role="tabpanel" id="vnPanel-pro" aria-labelledby="vnTab-pro"' + (state.tab === 'pro' ? '' : ' hidden') + '>' +
         careCard() + workspaceCard() + '</div>' +
       '</div>';
@@ -410,6 +411,7 @@
     var keep = focusSel || selectorOf(doc.activeElement);
     var input = doc.getElementById('chatInput'), draft = input ? input.value : '';
     root.innerHTML = template();
+    if (global.NutriBentoViews && global.NutriBentoViews.networkTeam) global.NutriBentoViews.networkTeam.mount();   /* TASK 3: medical team card */
     input = doc.getElementById('chatInput'); if (input && draft) input.value = draft;
     scrollChat();
     var target = keep ? root.querySelector(keep) : null;
