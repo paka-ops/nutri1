@@ -586,6 +586,63 @@
   #scanner .vs *, #scanner .vs *::after { animation: none !important; transition: none !important; }
 }
 
+/* 4b. SCANNER · meal balance, recommendations and confirm lock (views/view-scanner-balance.js) */
+#scanner .vsb:empty { display: none; }
+#scanner .vsb { margin-top: 12px; padding: 16px; border-radius: var(--radius-inner, 18px); background: var(--bg-card-secondary); border: 1px solid transparent; }
+#scanner .vsb.is-ok { border-color: color-mix(in srgb, var(--accent-lime) 55%, transparent); }
+#scanner .vsb.is-ko { border-color: color-mix(in srgb, var(--accent-orange) 55%, transparent); }
+#scanner .vsb.is-nudge { animation: vsb-nudge .5s ease; }
+@keyframes vsb-nudge { 0%, 100% { transform: none; } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+#scanner .vsb-tone--lime { --tone: var(--accent-lime); }
+#scanner .vsb-tone--blue { --tone: var(--accent-blue); }
+#scanner .vsb-tone--orange { --tone: var(--accent-orange); }
+#scanner .vsb-head { display: flex; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+#scanner .vsb-ico { display: grid; place-items: center; flex: none; width: 40px; height: 40px; border-radius: 50%; background: var(--bg-well); color: var(--accent-lime); }
+#scanner .vsb.is-ko .vsb-ico { color: var(--accent-orange); }
+#scanner .vsb-head__txt { flex: 1 1 200px; min-width: 0; }
+#scanner .vs .vsb h5 { margin: 0 0 2px; font-size: 1rem; font-weight: 700; outline: none; }
+#scanner .vs .vsb-head p { margin: 0; color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
+#scanner .vsb-verdict { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: 9999px; font-size: var(--fs-meta); font-weight: 700; white-space: nowrap; }
+#scanner .vsb.is-ok .vsb-verdict { background: var(--accent-lime); color: var(--text-on-lime); }
+#scanner .vsb.is-ko .vsb-verdict { background: var(--bg-well); color: var(--accent-orange); }
+#scanner .vsb-verdict .bento-icon, #scanner .vsb-chip .bento-icon { width: 16px; height: 16px; }
+#scanner .vs .vsb-rows { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 12px; }
+#scanner .vsb-row__top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+#scanner .vsb-row__name { font-weight: 700; flex: 0 0 auto; min-width: 92px; }
+#scanner .vsb-row__val { display: flex; align-items: baseline; gap: 8px; flex: 1 1 160px; flex-wrap: wrap; font-variant-numeric: tabular-nums; }
+#scanner .vsb-row__val small { color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
+#scanner .vsb-chip { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 9999px; background: var(--bg-well); font-size: var(--fs-meta); font-weight: 600; white-space: nowrap; }
+#scanner .vsb-chip--ok { color: var(--accent-lime); }
+#scanner .vsb-chip--low, #scanner .vsb-chip--high { color: var(--accent-orange); }
+#scanner .vsb-track { position: relative; height: 12px; border-radius: 9999px; background: var(--bg-well); overflow: hidden; }
+#scanner .vsb-zone { position: absolute; top: 0; bottom: 0; background: color-mix(in srgb, var(--tone) 28%, transparent); border-left: 2px solid var(--tone); border-right: 2px solid var(--tone); }
+#scanner .vsb-track i { position: absolute; left: 0; top: 3px; bottom: 3px; border-radius: 9999px; background: var(--tone); transition: width .5s cubic-bezier(.2, .7, .2, 1); }
+#scanner .vsb-row.is-low .vsb-track i, #scanner .vsb-row.is-high .vsb-track i { background: var(--accent-orange); }
+#scanner .vsb-row.is-low .vsb-zone, #scanner .vsb-row.is-high .vsb-zone { --tone: var(--text-soft, #C4C6CC); }
+#scanner .vsb-recos { margin-top: 16px; padding: 14px; border-radius: 16px; background: var(--bg-well); }
+#scanner .vsb-recos__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+#scanner .vs .vsb-recos h6 { margin: 0; font-size: .95rem; font-weight: 700; }
+#scanner .vs .vsb-recos ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+#scanner .vsb-reco { display: grid; gap: 10px; padding: 12px; border-radius: 14px; background: var(--bg-card-secondary); border-left: 3px solid var(--tone); }
+#scanner .vsb-reco__txt { display: grid; gap: 2px; }
+#scanner .vsb-reco__txt small { color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
+#scanner .vsb-reco__act { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+#scanner .vs .vsb-add { min-height: 44px; padding: 0 16px; }
+#scanner .vsb-or { color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
+#scanner .vs .vsb-alt, #scanner .vs .vsb-auto { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border: 1px solid color-mix(in srgb, currentColor 28%, transparent); border-radius: 9999px; background: transparent; color: var(--text-primary); font: inherit; font-size: var(--fs-meta); font-weight: 600; cursor: pointer; }
+#scanner .vsb-alt:hover, #scanner .vsb-auto:hover { border-color: var(--accent-lime); }
+#scanner .vsb-auto .bento-icon { width: 16px; height: 16px; color: var(--accent-lime); }
+#scanner .vsb-alt:focus-visible, #scanner .vsb-auto:focus-visible, #scanner .vsb-add:focus-visible { outline: 2px solid var(--accent-lime); outline-offset: 2px; }
+#scanner .vs .vsb-note { margin: 12px 0 0; color: var(--text-soft, #C4C6CC); font-size: var(--fs-meta); }
+#scanner .vs-actions .btn.primary.is-locked { background: var(--bg-well); color: var(--text-soft, #C4C6CC); box-shadow: none; cursor: not-allowed; }
+#scanner .vs .vsb-locknote { margin: 8px 0 0; color: var(--accent-orange); font-size: var(--fs-meta); font-weight: 600; }
+@media (max-width: 600px) {
+  #scanner .vsb { padding: 12px; }
+  #scanner .vs .vsb-add { width: 100%; }
+  #scanner .vs #vsAdd { min-width: 0; flex: 1 1 0; width: 0; }
+}
+@media (prefers-reduced-motion: reduce) { #scanner .vsb.is-nudge { animation: none; } #scanner .vsb-track i { transition: none; } }
+
 /* 5. AI NUTRITION & PREVENTION (SESSION 5) ------------------------------------ */
 #ai .va { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: var(--gap); align-items: start; }
 #ai .va > * { margin: 0; min-width: 0; }

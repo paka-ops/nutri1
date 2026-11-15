@@ -4,6 +4,7 @@
 
    Depends on : js/bento-i18n.js (NUTRI_BENTO_I18N), js/bento-shell.js
    Styles     : styles/views.css  (.vs-*)
+   Hosts      : #vsBalance — meal balance, recommendations and confirm lock (views/view-scanner-balance.js)
    Preserves  : runScan(type)  — 'Food' | 'Meal' | 'Product' | 'Food Cloud',
                 #scanWizard (.step / .active / .done), #scanStatus
    Storage    : nutri_scans  [{ t, id, grams, kcal, score, conf }]   (confirmed scans, newest first)
@@ -445,6 +446,7 @@
         '<div class="vs-score" data-vs-p="score" data-vs-grade><div class="vs-score__ring">' + ring() + '<div class="vs-gauge__in"><b data-vs-t="score"></b><small>/100</small></div></div>' +
           '<div class="vs-score__txt"><span>' + esc(t('scanner.score.title')) + '</span><b data-vs-t="score.label"></b><small>' + esc(t('scanner.score.note')) + '</small></div></div>' +
       '</div>' +
+      '<div id="vsBalance" class="vsb"></div>' +
       '<h5>' + esc(t('scanner.macro.title')) + '</h5>' +
       '<div class="vs-gauges">' + MACROS.map(function (m) { return gauge(m[0], m[2], t('scanner.n.' + m[0])); }).join('') + '</div>' +
       '<h5>' + esc(t('scanner.limit.title')) + '</h5>' +
@@ -589,6 +591,8 @@
     var fl = flags(per100(tot)), box = doc.getElementById('vsFlags');
     if (box) box.innerHTML = fl.length ? fl.map(function (f) { return '<span class="vs-flag vs-flag--' + f[1] + '">' + ico(f[1] === 'good' ? 'check' : 'alert') + esc(t('scanner.flag.' + f[0])) + '</span>'; }).join('') +
       '<small>' + esc(t('scanner.flag.note')) + '</small>' : '';
+    var bal = global.NutriBentoViews && global.NutriBentoViews.scannerBalance;   /* balanced or not + what to add (views/view-scanner-balance.js) */
+    if (bal) bal.paint(tot);
   }
   function paintParts(focusSel) {
     var list = doc.getElementById('vsParts'), add = doc.getElementById('vsAdd');
@@ -619,6 +623,8 @@
   function confirm() {
     var it = byId(state.itemId); if (state.step !== 4 || !it) return;
     var st = stats();
+    var bal = global.NutriBentoViews && global.NutriBentoViews.scannerBalance;
+    if (bal && !bal.allow(st.tot)) return;   /* the meal can only be confirmed once it is balanced */
     state.history.unshift({ t: Date.now(), id: it.id, grams: Math.round(st.tot.grams), kcal: Math.round(st.tot.kcal), score: st.score, conf: Math.round(st.conf * 100) });
     state.history = state.history.slice(0, 8);
     state.last = { item: it, grams: Math.round(st.tot.grams), kcal: st.tot.kcal };
@@ -699,6 +705,17 @@
   global.NutriBentoViews = global.NutriBentoViews || {};
   global.NutriBentoViews.scanner = {
     render: render, items: ITEMS.map(function (it) { return it.id; }),
+    /* used by views/view-scanner-balance.js */
+    food: function (id) { var r = ING[id]; return r ? { kcal: r[0], protein: r[1], carbs: r[2], fat: r[4] } : null; },
+    totals: function () { return state.step === 4 ? totals(state.parts) : null; },
+    addPart: function (id, g) {
+      if (state.step !== 4 || !ING[id] || !(g > 0)) return false;
+      var p = state.parts.filter(function (x) { return x.id === id; })[0];
+      if (p) { p.g = Math.round(p.g + g); p.v = true; }
+      else state.parts.push({ id: id, g: g, base: g, c: VERIFIED, hidden: false, v: true, added: true });
+      paintParts('#vsBalance [data-vsb-first], #vsBalance [data-vsb-focus]');
+      return true;
+    },
     state: function () {
       var st = state.step === 4 ? stats() : null;
       return { step: state.step, mode: state.mode, itemId: state.itemId, grams: state.grams, note: state.note, history: state.history.slice(),
