@@ -6,6 +6,7 @@
 
    Depends on : js/bento-i18n.js, js/bento-shell.js, js/bento-sample-data.js
    Styles     : styles/views.css  (shared .vi-* institution components)
+   Hosts      : #vioDash — yearly/monthly data dashboard and the 15 indicators (views/view-who-dash.js)
    Preserves  : renderWHO(), selectWHOCondition(), #whoCountry, #whoDiabetes,
                 #whoHypertension, #whoObesity, #whoCVD, #whoStroke,
                 #whoConditionTitle, #whoConditionSummary, #whoRiskFactors, #whoAlerts
@@ -141,6 +142,7 @@
         (own ? '' : '<p class="vi-note vi-note--warn">' + ico('info') + '<span>' + esc(t('who.placeholder', { country: name })) + '</span></p>') +
         '<ul class="vi-kpis vi-kpis--5" aria-label="' + esc(t('who.kpis')) + '">' + kpis + '</ul>' +
         '<p class="vi-note">' + ico('info') + '<span>' + esc(t('who.def')) + '</span></p></section>' +
+      '<div id="vioDash" class="vi-dash"></div>' +
       '<div class="vi-grid">' +
         '<section class="card vi-wide">' + head('bars', t('who.cmp.title', { name: t('who.i.' + k) }), 'whoConditionTitle') + '<p class="vi-sub">' + esc(t('who.cmp.sub')) + '</p>' +
           '<div class="vi-chips" role="group" aria-label="' + esc(t('who.cmp.pick')) + '">' + chips + '</div><ul class="vi-bars vi-bars--rank">' + bars + '</ul>' +
@@ -151,6 +153,8 @@
           '<p class="vi-note">' + ico('info') + '<span>' + esc(t('who.flow.note')) + '</span></p></section>' +
         '<p class="vi-note vi-full">' + ico('info') + '<span>' + esc(t('who.note')) + '</span></p>' +
       '</div></div>';
+    var dash = global.NutriBentoViews && global.NutriBentoViews.whoDash;   /* TASK 11: yearly/monthly dashboard + 15 indicators */
+    if (dash) dash.mount();
   }
   function setCondition(c, focus) {
     if (KEYS.indexOf(c) < 0) return;

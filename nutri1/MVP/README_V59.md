@@ -26,6 +26,7 @@ front-end demonstrator: nothing is sent to a server and no API is online.
 | `views/view-unicef-dash.js` | UNICEF: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#viuDash`; dictionary `ucd.*` |
 | `views/view-fao-dash.js` | FAO: data mandate, yearly/monthly dashboard and the 15 indicators (titles from the product owner; mandate, capture and blind-spot texts are drafts), mounted into `#vifDash`; dictionary `fad.*` |
 | `views/view-wfp-dash.js` | WFP: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#viwDash`; dictionary `wfd.*` |
+| `views/view-who-dash.js` | WHO: data mandate, yearly/monthly dashboard and the 15 indicators (product-owner texts), mounted into `#vioDash`; dictionary `whd.*` |
 | `js/bento-i18n.js`, `js/bento-locales.js` | English / French strings, country names |
 | `js/bento-shell.js` | Rail, dock, drawer, header, SVG chart adapter |
 | `js/bento-sample-data.js` | Illustrative nutrition / NCD indicators for six countries |
