@@ -336,7 +336,7 @@
   function delta(d, V) {
     if (V.prev == null) return '<span class="nd-delta">' + esc(t('nd.first')) + '</span>';
     var diff = V.v - V.prev, up = diff >= 0, good = (d.good === 'down') ? !up : up;
-    return '<span class="nd-delta ' + (Math.abs(diff) < 1e-9 || d.good === 'none' ? '' : good ? 'is-good' : 'is-bad') + '">' + ico(up ? 'up' : 'down') + fmt(Math.abs(diff), Math.max(1, d.dec || 0)) + ' <i>' + esc(t('nd.vs', { p: V.prevLabel })) + '</i></span>';
+    return '<span class="nd-delta ' + (Math.abs(diff) < 1e-9 || d.good === 'none' ? '' : good ? 'is-good' : 'is-bad') + '">' + ico(up ? 'up' : 'down') + fmt(Math.abs(diff), Math.abs(V.v) >= 1000 ? (d.dec || 0) : Math.max(1, d.dec || 0)) + ' <i>' + esc(t('nd.vs', { p: V.prevLabel })) + '</i></span>';
   }
   function value(d, V) { return fmt(V.v, d.dec) + (d.unit ? '<small>' + esc(d.unit) + '</small>' : ''); }
   function table(d, V, ns) {
@@ -443,8 +443,9 @@
     [].forEach.call(rootEl.querySelectorAll('.nd-chart, .nd-panel__body, .nd-tablewrap'), function (box) {
       if (box.scrollWidth <= box.clientWidth + 2) return;
       var el = box.querySelector('.nd-axis.is-sel, th.is-sel'); if (!el) return;
-      var a = el.getBoundingClientRect(), b = box.getBoundingClientRect();
-      box.scrollLeft = Math.max(0, box.scrollLeft + (a.left + a.width / 2) - (b.left + b.width / 2));
+      var a = el.getBoundingClientRect(), b = box.getBoundingClientRect(), st = box.querySelector('th[scope="row"]');
+      var pad = st ? st.getBoundingClientRect().width : 0;   /* sticky first column of the data table */
+      box.scrollLeft = Math.max(0, box.scrollLeft + (a.left + a.width / 2) - (b.left + pad + (b.width - pad) / 2));
     });
   }
   function csvCell(v) { v = String(v); return /[";\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
