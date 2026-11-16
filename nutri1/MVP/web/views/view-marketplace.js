@@ -37,7 +37,7 @@
       'market.tabs': 'Marketplace space', 'market.tab.store': 'Store', 'market.tab.context': 'By health context',
       'market.store.pill': 'FOR EVERY HOUSEHOLD', 'market.store.title': 'Healthy Food Store',
       'market.f.country': 'Country of origin', 'market.f.all': 'All countries', 'market.f.search': 'Search', 'market.f.search.ph': 'Search healthy foods',
-      'market.f.price': 'Price', 'market.price.all': 'All prices', 'market.price.low': 'Under $8', 'market.price.mid': '$8 to $15', 'market.price.high': 'Above $15',
+      'market.f.price': 'Price', 'market.price.all': 'All prices', 'market.price.low': 'Under 4,500 FCFA', 'market.price.mid': '4,500 to 6,500 FCFA', 'market.price.high': 'Above 6,500 FCFA',
       'market.cats': 'Categories',
       'market.cat.all': 'All foods', 'market.cat.cereals': 'Cereals & grains', 'market.cat.tubers': 'Roots & tubers', 'market.cat.fruits': 'Fruits & vegetables',
       'market.cat.legumes': 'Legumes & seeds', 'market.cat.oils': 'Healthy oils', 'market.cat.biofortified': 'Biofortified foods',
@@ -48,7 +48,7 @@
       'market.d.trace.none': 'No batch record is attached in this demonstration.',
       'market.toast.add': 'Added to cart: {name}',
       'market.cart.title': 'Cart', 'market.cart.empty': 'Your cart is empty.', 'market.cart.items': '{n} item(s)',
-      'market.cart.total': 'Estimated total', 'market.cart.note': 'Sample prices in US dollars. No order is placed.',
+      'market.cart.total': 'Estimated total', 'market.cart.note': 'Sample prices in CFA francs (FCFA). No order is placed.',
       'market.cart.checkout': 'Go to payment', 'market.cart.clear': 'Empty cart', 'market.cart.need': 'Add a product before going to payment.',
       'market.cart.less': 'Decrease quantity: {name}', 'market.cart.more': 'Increase quantity: {name}', 'market.cart.remove': 'Remove: {name}', 'market.cart.qty': 'Quantity',
       'market.toast.checkout': 'Payment opened for your cart.',
@@ -97,7 +97,7 @@
       'market.tabs': 'Espace du marché', 'market.tab.store': 'Boutique', 'market.tab.context': 'Par contexte de santé',
       'market.store.pill': 'POUR CHAQUE FOYER', 'market.store.title': 'Boutique d’aliments sains',
       'market.f.country': 'Pays d’origine', 'market.f.all': 'Tous les pays', 'market.f.search': 'Recherche', 'market.f.search.ph': 'Rechercher un aliment sain',
-      'market.f.price': 'Prix', 'market.price.all': 'Tous les prix', 'market.price.low': 'Moins de 8 $', 'market.price.mid': 'De 8 à 15 $', 'market.price.high': 'Plus de 15 $',
+      'market.f.price': 'Prix', 'market.price.all': 'Tous les prix', 'market.price.low': 'Moins de 4 500 FCFA', 'market.price.mid': 'De 4 500 à 6 500 FCFA', 'market.price.high': 'Plus de 6 500 FCFA',
       'market.cats': 'Catégories',
       'market.cat.all': 'Tous les aliments', 'market.cat.cereals': 'Céréales et grains', 'market.cat.tubers': 'Racines et tubercules', 'market.cat.fruits': 'Fruits et légumes',
       'market.cat.legumes': 'Légumineuses et graines', 'market.cat.oils': 'Huiles saines', 'market.cat.biofortified': 'Aliments biofortifiés',
@@ -108,7 +108,7 @@
       'market.d.trace.none': 'Aucune fiche de lot n’est associée dans cette démonstration.',
       'market.toast.add': 'Ajouté au panier : {name}',
       'market.cart.title': 'Panier', 'market.cart.empty': 'Votre panier est vide.', 'market.cart.items': '{n} article(s)',
-      'market.cart.total': 'Total estimé', 'market.cart.note': 'Prix d’exemple en dollars américains. Aucune commande n’est passée.',
+      'market.cart.total': 'Total estimé', 'market.cart.note': 'Prix d’exemple en francs CFA (FCFA). Aucune commande n’est passée.',
       'market.cart.checkout': 'Aller au paiement', 'market.cart.clear': 'Vider le panier', 'market.cart.need': 'Ajoutez un produit avant d’aller au paiement.',
       'market.cart.less': 'Diminuer la quantité : {name}', 'market.cart.more': 'Augmenter la quantité : {name}', 'market.cart.remove': 'Retirer : {name}', 'market.cart.qty': 'Quantité',
       'market.toast.checkout': 'Paiement ouvert pour votre panier.',
@@ -154,19 +154,19 @@
 
   /* ---- 2. Sample data (carried over from the original prototype) -------- */
   var PRODUCTS = [
-    ['Orange-fleshed sweet potato', 'TG', 'tubers', 3.9, 'Provitamin A • local'],
-    ['Biofortified sweet potato flour', 'TG', 'biofortified', 6.5, 'Provitamin A • biofortified'],
-    ['Whole sorghum grain', 'TG', 'cereals', 4.8, 'Whole grain • local'],
-    ['Millet family pack', 'SN', 'cereals', 5.5, 'Whole grain • local'],
-    ['Baobab fruit powder', 'SN', 'fruits', 8.9, 'Vitamin C • fiber'],
-    ['Fresh leafy vegetable basket', 'GH', 'fruits', 7.5, 'Fresh • nutrient-rich'],
-    ['Cowpea family pack', 'BF', 'legumes', 6.2, 'Protein • fiber • local'],
-    ['Groundnut & seed mix', 'NG', 'legumes', 7.8, 'Protein • healthy fats'],
-    ['Cold-pressed local seed oil', 'CI', 'oils', 11.5, 'Quality fats'],
-    ['Moringa leaf powder', 'GH', 'biofortified', 7.2, 'Micronutrients'],
-    ['Family fruit basket', 'CI', 'fruits', 12.5, 'Seasonal • fresh'],
-    ['Nutrient-rich legume flour', 'NG', 'legumes', 10.2, 'Protein • fiber'],
-    ['Healthy whole-grain mix', 'SN', 'cereals', 8.7, 'Fiber • whole grain']
+    ['Orange-fleshed sweet potato', 'TG', 'tubers', 2400, 'Provitamin A • local'],
+    ['Biofortified sweet potato flour', 'TG', 'biofortified', 3900, 'Provitamin A • biofortified'],
+    ['Whole sorghum grain', 'TG', 'cereals', 2900, 'Whole grain • local'],
+    ['Millet family pack', 'SN', 'cereals', 3300, 'Whole grain • local'],
+    ['Baobab fruit powder', 'SN', 'fruits', 5400, 'Vitamin C • fiber'],
+    ['Fresh leafy vegetable basket', 'GH', 'fruits', 4500, 'Fresh • nutrient-rich'],
+    ['Cowpea family pack', 'BF', 'legumes', 3700, 'Protein • fiber • local'],
+    ['Groundnut & seed mix', 'NG', 'legumes', 4700, 'Protein • healthy fats'],
+    ['Cold-pressed local seed oil', 'CI', 'oils', 6900, 'Quality fats'],
+    ['Moringa leaf powder', 'GH', 'biofortified', 4300, 'Micronutrients'],
+    ['Family fruit basket', 'CI', 'fruits', 7500, 'Seasonal • fresh'],
+    ['Nutrient-rich legume flour', 'NG', 'legumes', 6100, 'Protein • fiber'],
+    ['Healthy whole-grain mix', 'SN', 'cereals', 5200, 'Fiber • whole grain']
   ].map(function (p, i) { return { id: i, name: p[0], country: p[1], cat: p[2], price: p[3], tags: p[4].split(' • ') }; });
   var CATS = ['all', 'cereals', 'tubers', 'fruits', 'legumes', 'oils', 'biofortified'];
   var PRICES = ['all', 'low', 'mid', 'high'];
@@ -239,7 +239,7 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
   function cname(code) { return typeof I18N.countryName === 'function' ? I18N.countryName(code) : code; }
   function money(v) {
-    try { return Number(v).toLocaleString(I18N.lang === 'fr' ? 'fr-FR' : 'en-US', { style: 'currency', currency: 'USD' }); } catch (e) { return '$' + Number(v).toFixed(2); }
+    try { return Math.round(Number(v)).toLocaleString(I18N.lang === 'fr' ? 'fr-FR' : 'en-US') + ' FCFA'; } catch (e) { return Math.round(Number(v)) + ' FCFA'; }
   }
   function notify(msg) { if (typeof global.toast === 'function') { try { global.toast(msg); } catch (e) { /* ignore */ } } }
   function nav(id) { if (typeof global.go === 'function') global.go(id); }
@@ -285,7 +285,7 @@
     return PRODUCTS.filter(function (p) {
       return (state.country === 'all' || p.country === state.country) && (state.cat === 'all' || p.cat === state.cat) &&
         (!q || p.name.toLowerCase().indexOf(q) >= 0 || (FR[p.name.toLowerCase()] || '').toLowerCase().indexOf(q) >= 0) &&
-        (state.price === 'all' || (state.price === 'low' && p.price < 8) || (state.price === 'mid' && p.price >= 8 && p.price <= 15) || (state.price === 'high' && p.price > 15));
+        (state.price === 'all' || (state.price === 'low' && p.price < 4500) || (state.price === 'mid' && p.price >= 4500 && p.price <= 6500) || (state.price === 'high' && p.price > 6500));
     });
   }
   /* TASK 4: product photo + energy badge, provided by views/view-marketplace-lab.js when loaded */
